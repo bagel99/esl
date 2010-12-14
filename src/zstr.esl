@@ -1,0 +1,69 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: zstr.esl 366 2010-05-17 20:56:14Z bgl $
+
+// handle zero terminated strings
+
+package zstr
+{
+    proc eq(s1:@_memory, s2:@_memory, max:_uint): boolean
+    {   var i: _uint;
+	i = 0;
+	while i < max && s1[i] == s2[i] do
+	{
+	    if (s1[i] == 0) then
+		return true;
+	    i += 1;
+	}
+	return false;
+    }
+
+    proc len(s:@_memory, max:_uint): _uint
+    {   var i: _uint;
+	i = 0;
+	while i < max && s[i] != 0 do
+	    i += 1;
+	return i;
+    }
+
+    proc find(s:@_memory, c:_byte, max:_uint): _uint
+    {   var i: _uint;
+	i = 0;
+	while i < max && s[i] != c && s[i] != 0 do
+	    i += 1;
+	return i;
+    }
+
+    proc rfind(s:@_memory, c:_byte, max:_uint): _uint
+    {   var i: _uint;
+	i = len(s, max);
+	while s[i] != c do
+	{
+	  exit i == 0 with i = max;
+	    i -= 1;
+	}
+	return i;
+    }
+
+    proc copy(to:@_memory, fm:@_memory,  max:_uint)
+    {   var i: _uint;
+	i = 0;
+	while i < max do
+	{   to[i] = fm[i];
+	  exit fm[i] == 0;
+	    i += 1;
+	}
+    }
+
+    proc cat(to:@_memory, fm:@_memory,  max:_uint)
+    {   var i, j: _uint;
+	i = len(to, max);
+	j = 0;
+	while i < max do
+	{   to[i] = fm[j];
+	  exit fm[j] == 0;
+	    i += 1;
+	    j += 1;
+	}
+    }
+}
+

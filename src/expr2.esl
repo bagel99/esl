@@ -1,0 +1,1434 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: expr2.esl 473 2010-12-13 19:44:59Z bgl $
+
+package expr
+{
+    const skiplist:[4]TokenT = { PEND, GEND, SEMI, NONE };
+
+    proc Const(t: Type): Ast;		// forward
+
+    proc ForceBoolean(tree: Ast): Ast
+    {   var zero: Ast;
+
+	if tree@.size > 1 then		// llvm wants a 1-bit boolean
+	{   zero = ast.Const(tree@.type, 0);
+	    tree = ast.New2(NE, type.booltype, tree, zero);
+	    tree@.kind = ENUM;
+	    tree@.size = 1;
+	}
+	return tree;
+    }
+
+    const proplist:[]TokenT = { KMIN, KMAX, KBITSZ, KMEMSZ, NONE };
+    proc Property(t:Type): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+
+	tree = 0;
+	tok = Token;
+	if tok == ID then
+	{   tok = lex.Keyword(proplist);
+	    if tok
+	    is KMIN then tree = ast.Const(t, t@.lo);
+	    is KMAX then tree = ast.Const(t, t@.hi);
+	    is KBITSZ then tree = ast.Const(type.wordtype, t@.size);
+	    is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/Target.membits);
+	    else
+	    	lex.Error(PROPID);
+	}
+	else
+	   lex.Error(PROPID);
+	tok = Next();
+	return tree;					
+    }
+
+    var strid: Valu = 0;
+
+    proc String(): Ast
+    {   var tree: Ast;
+	var t: Type;
+
+	t = type.New(ARRAY);
+	t@.base = type.bytetype;
+	t@.index = type.wordtype;
+	t@.lo = 0;
+	t@.hi = lex.StringLen;
+	tree = ast.New(SCON, t);
+	tree@.kind = REF;		// FIXME: should be REF?
+	tree@.symb = Symb(sys.memdup(lex.StringBuf, lex.StringLen));
+	strid += 1;
+	tree@.valu = strid;
+	return tree;
+    }
+
+    proc EnumConst(t: Type): Ast
+    {   var s: Symb;
+
+	// assert t@.kind == ENUM
+	s = t@.list;
+	while s != 0 do
+	{   if zstr.eq(s@.ident, lex.Ident, lex.IdentMax) then
+		return ast.Const(t, s@.valu);
+	    s = s@.next;
+	}
+	lex.ErrorI(UNDEFID, lex.Ident);
+	return 0;
+    }
+
+    // FIXME: move to ast.esl
+    proc Extend(tree: Ast, size: type.BitSize): Ast
+    {
+
+	if tree@.size < size then
+	{   if tree@.op != CONST then
+	    {   if tree@.kind == SINT then
+		    tree = ast.New1(SEXT, tree@.type, tree);
+		else
+		    tree = ast.New1(ZEXT, tree@.type, tree);
+	    }
+	    tree@.size = size;
+	}
+	else if tree@.size > size then
+	{   if tree@.op != CONST then
+		tree = ast.New1(TRUNC, tree@.type, tree);
+	    tree@.size = size;
+	}
+	return tree;
+    }
+
+    proc ExtendT(tree: Ast, t: Type): Ast
+    {
+
+	tree = Extend(tree, t@.width);
+//	tree@.type = t;
+	return tree;
+    }
+
+    proc Cast(tree: Ast, t: Type): Ast
+    {
+/*
+out.str(2, "Cast to: kind=");
+out.str(2, type.KindName[t@.kind]);
+type.DumpT(t, true); out.nl(2);
+out.str(2, "from: kind=");
+out.str(2, type.KindName[tree@.kind]); out.nl(2);
+ast.Dump(tree);
+*/
+	if tree == 0 then return tree;
+	if t@.kind
+	is ENUM then
+	    if tree@.kind == UINT then		// UINT -> ENUM
+	    {
+		tree = ExtendT(tree, t);
+		tree@.type = t;
+		tree@.kind = t@.kind;
+//		tree@.size = t@.size;	// width?
+	    }
+	    else
+		lex.Error(BADCAST);
+	is UINT then
+	{   if tree@.kind
+	    is ENUM, UINT, SINT then		// ENUM|UINT|SINT -> UINT
+	    {   tree = ExtendT(tree, t);
+		tree@.type = t;
+		tree@.kind = t@.kind;
+//		tree@.size = t@.size;	// width?
+	    }
+	    is REF then				// REF -> UINT
+	    {   tree = ast.New1(CAST, t, tree);
+		tree@.kind = t@.kind;
+		tree@.size = t@.size;	// FIXME: width?
+	    }
+	    is RECORD, ARRAY then		// PACKED -> UINT
+	    {
+		if tree@.type@.packed == BIT && tree@.size == t@.size then
+		{   tree@.type = t;
+		    tree@.kind = t@.kind;
+		}
+		else
+		    lex.Error(BADCAST);
+	    }
+	    else
+		lex.Error(BADCAST);
+	}
+	is SINT then
+	{   if tree@.kind
+	    is UINT, SINT then			// UINT|SINT -> SINT
+	    {   tree = ExtendT(tree, t);
+		tree@.type = t;
+		tree@.kind = t@.kind;
+//		tree@.size = t@.size;	// width?
+	    }
+	    else
+	        lex.Error(BADCAST);
+	}
+	is REF then
+	{   if tree@.kind
+	    is REF then				// REF -> REF
+	    {   tree = ast.New1(CAST, t, tree);
+		tree@.type = t@.base;
+		tree@.kind = t@.kind;
+		tree@.size = t@.size;	// width?
+	    }
+	    is UINT then			// UINT -> REF
+	    {   tree = ast.New1(CAST, t, tree);
+		tree@.type = t@.base;
+		tree@.kind = t@.kind;
+		tree@.size = t@.size;	// FIXME: width?
+	    }
+	    is ARRAY then	// cast from slice of memory
+	    {   if tree@.op == LOAD then
+		    tree = tree@.child[0];	// undo load
+		// Should check for large enough slice?
+		if tree@.op == SLICE && tree@.type@.base == type.bytetype then
+		{   tree = ast.New1(CAST, t, tree);
+		    tree@.type = t@.base;
+		    tree@.kind = t@.kind;
+		    tree@.size = t@.size;	// width?
+		}
+	        else
+		    lex.Error(BADCAST);
+	    }
+	    else
+		lex.Error(BADCAST);
+	}
+	is RECORD, ARRAY then
+	{   if t@.packed == BIT &&
+	       tree@.kind == UINT && tree@.size == t@.size then
+	    {					// UINT -> PACKED
+		tree@.type = t;
+		tree@.kind = t@.kind;
+	    }
+	    else
+		lex.Error(BADCAST);
+	}
+	return tree;
+    }
+
+    proc ArrayConst(t: Type): Ast
+    {   var tree, stree: Ast;
+	var i, m, n: ast.NSubNodes;	// what type should this be
+	var tok: TokenT;
+	var once: boolean;
+
+	tree = 0;
+	tok = Token;
+	if tok == GBEG then
+	{   tree = ast.New(CLIST, t);
+	    strid += 1;
+	    tree@.valu = strid;
+	    once = false;
+	    n = t@.hi;
+	    if t@.flex then n = 0;
+	    i = 0;
+	    m = 0;
+	    loop
+	    {   tok = Next();
+		if tok == ABEG then	// designated initializer
+		{   tok = Next();
+		    i = ConstScalar(t@.index);
+		    tok = lex.Expect(AEND);
+		    tok = lex.Expect(ASGN);
+		}
+		stree = Const(t@.base);
+		if n == 0 || i < n then	// still room
+		{   tree = ast.ChildIndexed(tree, i, stree);
+		    i += 1;
+		    if i > m then m = i;
+		}
+		else if !once then
+		{   once = true;
+		    lex.Error(INITHI);
+		}
+		tok = Token;
+	      exit tok != COMMA;
+	    }
+	    tok = lex.Expect(GEND);
+	    if n == 0 then	// flex array becomes a static array
+	    {   var nt: Type;
+		n = m;
+		nt = type.New(ARRAY);
+		nt@.base = t@.base;
+		nt@.index = t@.index;
+		nt@.hi = n;
+		t = nt;
+	    }
+	    // make sure all elements are initialized in gaps
+	    i = 0;
+	    while i < m do
+	    {	if tree@.child[i] == 0 then
+		    tree@.child[i] = ast.Const(t@.base, 0);
+		i += 1;
+	    }
+	    // make sure all fields are initialized at end
+	    while i < n do
+	    {   tree = ast.ChildIndexed(tree, i, ast.Const(t@.base, 0));
+		i += 1;
+	    }
+	    tree@.type = t;
+	}
+	else if tok == STR then
+	{   tree = String();
+	    tree@.kind = REF;
+	    tok = Next();
+	}
+	else
+	    lex.ErrorT(EXPECT, GBEG);
+	return tree;
+    }
+
+    proc RecordConst(t: Type): Ast
+    {   var tree, stree: Ast;
+	var fs: Symb;
+	var ft: Type;
+	var max: symb.OffsT;
+	var tok: TokenT;
+	var once: boolean;
+
+	tree = 0;
+	tok = Token;
+	if tok == GBEG then
+	{   tree = ast.New(CLIST, t);
+	    strid += 1;
+	    tree@.valu = strid;
+	    once = false;
+	    max = 0;
+	    fs = t@.list;
+	    loop
+	    {   tok = Next();
+		if tok == DOT then	// designated initializer
+		{   tok = Next();
+		    if tok == ID then
+		    {   fs = symb.FindLocal(t@.list, lex.Ident);
+			if fs == 0 then
+			    lex.ErrorI(UNDEFID, lex.Ident);
+			tok = Next();
+		    }
+		    else
+			lex.Error(EXPECTID);
+		    tok = lex.Expect(ASGN);
+		}
+		ft = 0;
+		if fs != 0 then ft = fs@.type;
+		stree = Const(ft);
+		if fs != 0 then
+		{   tree = ast.ChildIndexed(tree, fs@.addr, stree);
+		    if fs@.addr > max then max = fs@.addr;
+		    fs = fs@.next;
+		}
+		else if !once then
+		{   once = true;
+		    lex.Error(INITHI);
+		}
+		tok = Token;
+	      exit tok != COMMA;
+	    }
+	    tok = lex.Expect(GEND);
+	    // make sure all fields are initialized in gaps
+	    fs = t@.list;
+	    while fs != 0 && fs@.addr <= max do
+	    {	if tree@.child[fs@.addr] == 0 then
+		    tree@.child[fs@.addr] = ast.Const(fs@.type, 0);
+		fs = fs@.next;
+	    }
+	    // make sure all fields are initialized at end
+	    while fs != 0 do
+	    {   tree = ast.ChildIndexed(tree, fs@.addr, ast.Const(fs@.type, 0));
+		fs = fs@.next;
+	    }
+	}
+	else
+	    lex.ErrorT(EXPECT, GBEG);
+	return tree;
+    }
+
+    proc RecordPack(t:Type, intree:Ast): Ast
+    {
+	var f: Symb;
+	var offs, tsize, fsize: type.BitSize;
+	var i: ast.NSubNodes;
+	var tree, node: Ast;
+	var ftype: Type;
+
+	tree = 0;
+	if intree@.op != CLIST then
+	{   lex.Error(BADPACKREC);
+	    return tree;
+	}
+	tsize = t@.width;
+//out.str(2, "Small initialized record: sz="); out.uid(2, tsize); out.nl(2);
+	f = t@.list;
+	i = 0;
+	if t@.bitorder == MSB then offs = tsize; else offs = 0;
+	while f != 0 do
+	{   if f@.type != 0 then
+	    {   ftype = f@.type;
+		fsize = ftype@.size;
+		if t@.bitorder == MSB then offs -= fsize;
+//out.chr(2, '\t'); out.uid(2, i);
+//out.str(2, ": sz="); out.uid(2, fsize);
+//out.str(2, " os="); out.uid(2, offs);
+//out.nl(2);
+		if i >= intree@.num then
+		{   lex.Error(BADLIST);
+		    return tree;
+		}
+		node = intree@.child[i];
+		if node@.op != CONST || node@.valu != 0 then
+		{   node = expr.Extend(node, tsize);
+		    node = ast.New2(LSL, ftype, node,
+			            ast.Const(type.wordtype, offs));
+		    if tree == 0 then
+			tree = node;
+		    else
+			tree = ast.New2(OR, ftype, tree, node);
+		}
+		if t@.bitorder != MSB then offs += fsize;
+	    }
+	    f = f@.next;
+	    i += 1;
+	}
+	if tree == 0 then
+	    tree = expr.Extend(ast.Const(type.wordtype, 0), tsize);
+	tree@.type = t;
+	tree@.kind = RECORD;
+	return tree;
+    }
+
+    proc CompositeValue(t: Type): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if t != 0 then
+	{   if t@.kind
+	    is RECORD then
+	    {   tree = RecordConst(t);
+		if t@.width <= Target.regsize then // record fits in a register
+		    tree = RecordPack(t, tree);
+	    }
+	    is ARRAY then
+	    {   tree = ArrayConst(t);
+	    }
+	    is REF then
+	    {   tree = CompositeValue(t@.base);
+//		tree = ast.New1(BYREF, t@.base, tree);
+	    }
+	    else
+		lex.Error(BADCOMPV);
+	}
+	else
+	    lex.Error(UNDFCOMPV);
+	return tree;
+    }
+
+    proc Slice(array: Ast, inx: Ast, len: Ast): Ast
+    {   var at, st: Type;
+	var tree: Ast;
+	var blen, slen: type.BitSize;
+
+	at = array@.type;
+	st = type.New(ARRAY);
+	st@.base = at@.base;
+	if at@.flex then blen = 0; else blen = type.BitSize(at@.hi);
+	if len != 0 && len@.op == CONST then slen = len@.valu; else slen = 0;
+	if blen == 0 && slen == 0 then
+	    st@.flex = true;
+	else
+	{   if slen == 0 then
+	    {	slen = blen;	// worst case
+		if inx@.op == CONST then
+		    slen = blen - type.BitSize(inx@.valu);
+	    }
+	    else
+	    {   // check slen < blen unless olen == 0
+	    }
+	    st@.hi = slen;
+	    st@.size = at@.base@.size * slen;
+	    st@.width = st@.size;
+	}
+	tree = ast.New2(SLICE, st, array, inx);
+	tree = ast.Child(tree, len);
+	return tree;
+    }
+
+    proc Load(tree: Ast): Ast
+    {   var t: Type;
+
+	if tree == 0 then return tree;
+//out.str(2, "Load: "); ast.Print(tree);
+	if tree@.op
+	is TYPE then
+	{   lex.ErrorI(BADTYPE, tree@.type@.name@.ident);
+	    tree = 0;
+	}
+	is VAR, INDEX, OFFSET, SLICE, LOAD:
+	{   t = tree@.type;
+	    if t@.kind
+	    is REF then
+	    {   t = t@.base;
+		tree = ast.New1(LOAD, t, tree);
+		tree@.kind = REF;
+		tree@.size = Target.ptr.size;
+	    }
+	    else
+	    {   tree = ast.New1(LOAD, t, tree);
+		tree@.kind = t@.kind;
+		tree@.size = t@.width;
+	    }
+	}
+	return tree;
+    }
+
+    proc RProc(t: Type): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+	var s: Symb;
+
+	tok = Token;
+	if tok == ID then
+	{   s = symb.Find(lex.Ident);
+	    if s != 0 then
+	    {   if s@.kind == PROC then
+		{   tree = ast.New(VAR, t);
+		    tree@.symb = s;
+		    tree@.kind = REFPROC;
+		}
+		else lex.ErrorI(BADID, s@.ident);
+	    }
+	    else lex.ErrorI(UNDEFID, s@.ident);
+	    tok = Next();
+	}
+	else lex.Error(EXPECTID);
+	return tree;
+    }
+
+    proc Actual(tree: Ast, to: Type): Ast
+    {   var fm: Type;
+	var ok: boolean;
+
+	if to@.kind == REFPROC then
+	    return RProc(to);
+	if tree == 0 then
+	{   tree = Bool(to);
+	    if tree == 0 then	// invalid expression
+		return tree;
+	}
+	fm = tree@.type;
+	if fm == 0 then		// undefined type
+	    return tree;
+/*
+out.str(2, "Formal kind=");
+out.str(2, type.KindName[to@.kind]); out.nl(2);
+type.DumpT(to, true); out.nl(2);
+out.str(2, "Actual(initial) kind=");
+out.str(2, type.KindName[fm@.kind]); out.nl(2);
+type.DumpT(fm, true); out.nl(2);
+out.str(2, "Actual tree=");
+ast.Dump(tree); out.nl(2);
+*/
+	ok = true;
+	if to@.kind
+	is REF then
+	{   if to@.base == 0 then
+	    {   lex.Error(BADREF);
+		return tree;
+	    }
+	    if tree@.kind != REF then
+	    {   if tree@.op == LOAD then
+		    tree = tree@.child[0];	// undo the load
+		if tree@.op != CLIST then
+		    tree = ast.New1(BYREF, tree@.type, tree);
+		tree@.kind = REF;
+		ok = type.Compat(fm, to@.base);
+	    }
+	    else
+	    {   if to@.base != fm then
+		{   if type.Compat(to@.base, fm) then
+			tree = Cast(tree, to);
+		    else lex.Error(TYPEASSIGN);
+		}
+	    }
+	    // Fix types when formal is a flex
+	    if to@.base@.flex && !tree@.type@.flex then
+		tree = ast.New1(CAST, to@.base, tree);
+	}
+	is ENUM, UINT, SINT then
+	{   ok = type.Compat(fm, to);
+	    if to@.width > tree@.size then
+		tree = ExtendT(tree, to);
+	    // NeedSwap?
+	}
+	is RECORD, ARRAY then ok = type.Compat(fm, to);
+	if !ok then
+{
+	    lex.Error(PARMTYPE);
+//out.str(2, "Actual(final) kind=");
+//out.str(2, type.KindName[fm@.kind]); out.nl(2);
+//type.DumpT(fm, true); out.nl(2);
+//ast.Dump(tree);
+}
+	return tree;
+    }
+
+    proc UnOp(op:ast.Op, rhs:Ast): Ast
+    {   var tree: Ast;
+
+	if rhs@.op == CONST then	// constant folding
+	{   tree = rhs;			// assume nop
+	    if op
+	    is NEG: tree@.valu = -tree@.valu;
+	    is NOT: tree@.valu = ~tree@.valu;
+	    is BNOT: tree@.valu = tree@.valu ^ 1;
+	}
+	else
+	    tree = ast.New1(op, rhs@.type, rhs);
+	return tree; 
+    }
+
+    proc IsSignedBinOp(lhs: Ast, rhs: Ast): boolean
+    {
+	if lhs@.kind == SINT || rhs@.kind == SINT then
+	    return true;
+	return false;
+    }
+
+    proc BinOp(op:ast.Op, lhs:Ast, rhs:Ast): Ast
+    {   var tree: Ast;
+	var sl, sr: 0..255;
+	var fold, swap: boolean;
+
+	fold = false; swap = false;
+	if lhs@.op == CONST then
+	{   if rhs@.op == CONST then	// constant folding
+	    {   if op
+		is ADD then { lhs@.valu += rhs@.valu; return lhs; }
+		is SUB then { lhs@.valu -= rhs@.valu; return lhs; }
+		is OR then  { lhs@.valu = lhs@.valu | rhs@.valu; return lhs; }
+		is XOR then { lhs@.valu = lhs@.valu ^ rhs@.valu; return lhs; }
+		is AND then { lhs@.valu = lhs@.valu & rhs@.valu; return lhs; }
+		is UMIN then
+		{   if rhs@.valu < lhs.valu then lhs.valu = rhs.valu;
+		    return lhs;
+		}
+		is UMAX then
+		{   if rhs@.valu > lhs.valu then lhs.valu = rhs.valu;
+		    return lhs;
+		}
+		is SMIN then
+		{   if type.SValu(rhs@.valu) < type.SValu(lhs.valu) then
+			lhs.valu = rhs.valu;
+		    return lhs;
+		}
+		is SMAX then
+		{   if type.SValu(rhs@.valu) > type.SValu(lhs.valu) then
+			lhs.valu = rhs.valu;
+		    return lhs;
+		}
+	    }
+	    else	// possible swap arms to get constant on rhs
+		swap = true;
+	}
+	// FIXME: all the kinds should be examined for legality
+	// for the various ops
+	if lhs@.kind == REF then
+	{   if rhs@.op == CONST then
+	    {   if op == EQ || op == NE then
+		{   rhs@.kind = REF;
+		    rhs@.size = Target.ptr.size;
+		}
+	    }
+	}
+	sl = lhs@.size;
+	sr = rhs@.size;
+	if sl > sr then
+	    rhs = Extend(rhs, sl);
+	else
+	{   if sr > sl then
+		lhs = Extend(lhs, sr);
+	}
+	tree = ast.New2(op, lhs@.type, lhs, rhs);
+	return tree;
+    }
+
+    proc Intrinsic(ps: Symb): Ast
+    {   var tree, lhs, rhs: Ast;
+	var tok: TokenT;
+	var which: symb.IntrinsicT;
+	var op: ast.Op;
+
+	tree = 0;
+	tok = Token;
+	if tok == PBEG then
+	{   tok = Next();
+	    which = symb.IntrinsicT(ps@.valu);
+	    if which
+	    is ABS then
+	    {
+out.str(2, "Intrinsic ABS\n");
+		rhs = Bool(0);
+		if rhs != 0 then
+		{   if rhs@.op == CONST then	// constant folding
+		    {   if rhs@.kind == SINT && type.SValu(rhs@.valu) < 0 then
+			    rhs@.valu = type.Valu(-type.SValu(rhs@.valu));
+			tree = rhs;
+		    }
+		    else	// generate expression tree
+		    {   lhs = ast.New1(NEG, rhs@.type, rhs);
+			tree = ast.New2(SLT, type.booltype, rhs,
+					ast.Const(rhs@.type, 0));
+			tree = ast.New3(IFEXPR, rhs@.type, tree, lhs, rhs);
+		    }
+		}
+		if tree@.kind == SINT then
+		{   var i: _uint;
+		    i = 0;
+		    while i < type.NINTS &&
+			  tree@.size > type.inttypes[i]@.size do
+			i += 1;
+		    tree@.type = type.uinttypes[i];
+		    tree@.kind = UINT;
+		}
+	    }
+	    is MIN, MAX then
+	    {
+out.str(2, "Intrinsic MIN/MAX\n");
+		lhs = Bool(0);
+		lex.Expect(COMMA);
+		rhs = Bool(0);
+		if lhs != 0 && rhs != 0 then
+		{   if IsSignedBinOp(lhs, rhs) then
+			if which == MIN then op = SMIN; else op = SMAX;
+		    else
+			if which == MIN then op = UMIN; else op = UMAX;
+		    tree = BinOp(op, lhs, rhs);
+		    if tree@.op != CONST then	// rewrite
+		    {   lhs = tree@.child[0];
+			rhs = tree@.child[1];
+			if op
+			is SMIN then tree@.op = SLT;
+			is SMAX then tree@.op = SGT;
+			is UMIN then tree@.op = ULT;
+			is UMAX then tree@.op = UGT;
+			tree = ast.New3(IFEXPR, lhs@.type, tree, lhs, rhs);
+		    }
+		}
+	    }
+	    else
+	    {
+out.str(2, "Intrinsic unknown\n");
+	    }
+	    tok = lex.Expect(PEND);
+	}
+	else lex.ErrorT(EXPECT, PBEG);
+	return tree;
+    }
+
+    proc Call(ps:Symb, tree: Ast, arg: Ast): Ast
+    {   var t: Type;
+	var s: Symb;
+	var tok: TokenT;
+
+	t = ps@.type;
+	if tree == 0 then	// direct call
+	{   tree = ast.New(CALL, t);
+	    tree@.symb = ps;
+	}
+	else			// indirect call
+	{   tree = ast.New1(CALLI, t, tree);
+	    if t != 0 then tree@.kind = t@.kind; else tree@.kind = UTYPE;
+	    tree@.symb = ps;
+	}
+	if t != 0 then		// has returned value
+	{   tree@.kind = t@.kind;
+	    tree@.size = t@.width;
+	    if t@.kind == REF then
+	    {   tree@.type = t@.base;
+		tree@.size = Target.ptr.size;
+	    }
+	}
+	s = ps@.parmlist;
+	if arg != 0 then	// method call
+	{   // assert s != 0
+	    arg = Load(arg);
+	    arg = Actual(arg, s@.type);
+	    tree = ast.Child(tree, arg);
+	    s = s@.next;
+	}
+	tok = Token;
+	if tok == PBEG then
+	{   tok = Next();
+	    if tok != PEND then
+	    {   loop
+		{
+		  exit s == 0 with
+		    {   lex.Error(ARGSHI);
+			tok = lex.Skip(skiplist);
+		    }
+		    arg = Actual(0, s@.type);
+		    tree = ast.Child(tree, arg);
+		    s = s@.next;
+		    tok = Token;
+		  exit tok != COMMA;
+		    tok = Next();
+		}
+	    }
+	    tok = lex.Expect(PEND);
+	}
+	else
+	    lex.ErrorT(EXPECT, PBEG);
+	if s != 0 then
+	    lex.Error(ARGSLO);
+	return tree;
+    }
+
+    proc Atom(s:Symb): Ast
+    {   var tree: Ast;
+	var t: Type;
+
+	tree = 0;
+	if s != 0 then
+	{
+		t = s@.type;
+	        if s@.kind
+		is VAR then
+		{   tree = ast.New(VAR, t);
+		    tree@.symb = s;
+		    tree@.kind = REF;
+		    tree@.size = t@.width;
+		}
+	        is CONSTANT then
+		{   if t@.kind > REF then	// treat like a var
+		    {   tree = ast.New(VAR, t);
+			tree@.symb = s;
+			tree@.kind = REF;
+			tree@.size = t@.width;
+		    }
+		    else
+			tree = ast.Const(t, s@.valu);
+		    if t@.kind == REF then
+		    {	tree@.type = t@.base;
+		    }
+		}
+	        is PROC then
+		{   if s@.valu != 0 then
+			tree = Intrinsic(s);
+		    else
+			tree = Call(s, 0, 0);
+	        }
+	        is TYPE then
+		    tree = ast.New(TYPE, t);
+		else lex.ErrorI(BADID, s@.ident);	// FIXME; need better message
+	}
+	return tree;
+    }
+
+    proc Primary(s: Symb): Ast
+    {   var tree: Ast;
+	var t, bt: Type;
+	var tok: TokenT;
+	var done: boolean;
+
+	tree = Atom(s);
+	tok = Token;
+	done = false;
+	while !done && tree != 0 && tree@.type != 0 do
+	{   t = tree@.type;
+	    if tok
+	    is DOT then
+	    {   tok = Next();
+		if tree@.op == TYPE then
+		{   if t@.kind == ENUM then
+		    {   tree = EnumConst(t);
+			tok = Next();
+		    }
+		    else
+			lex.ErrorI(BADTYPE, s@.ident);
+		}
+		else
+		{   if tok == ID then
+		    {   s = 0;
+			bt = t;
+			if t@.kind == REF then bt = t@.base;
+			if bt != 0 then	// don't bother with invalid base type
+			{   loop
+			    {   s = symb.FindMethod(bt@.meths, lex.Ident);
+			      exit s != 0 || bt@.base == 0;
+				bt = bt@.base;
+			    }
+			}
+			if s != 0 then		// method call
+			{   tok = Next();
+//out.str(2, "Method call: "); out.str(2, lex.Ident); out.nl(2);
+			    tree = Call(s, 0, tree);
+			}
+			else
+			{   if t@.kind == REF then
+			    {   if t@.base != 0 then
+			        {   t = t@.base;	// FIXME: subroutine
+				    tree = ast.New1(LOAD, t, tree);
+				    tree@.kind = REF;
+				    tree@.size = Target.ptr.size;
+				}
+				else
+				{   lex.Error(BADREF);
+				    tree = 0;	// give up
+				}
+		    	    }
+			    if t@.kind == RECORD then
+			    {   s = symb.FindLocal(t@.list, lex.Ident);
+				if s != 0 then
+				{   tok = Next();
+				    t = s@.type;
+				    tree = ast.New1(OFFSET, t, tree);
+				    tree@.valu = s@.addr;
+				    tree@.kind = REF;
+				    tree@.size = t@.width;
+				}
+				else
+			        {   lex.ErrorI(UNDEFFIELD, lex.Ident);
+				    tok = Next();
+				}
+			    }
+			}
+		    }
+		    else lex.Error(EXPECTID);
+		}
+	    }
+	    is AT then
+	    {   tok = Next();
+		if t@.kind == REF then
+		{   if t@.base != 0 then
+		    {	t = t@.base;			// FIXME: subroutine
+			tree = ast.New1(LOAD, t, tree);
+			tree@.kind = REF;
+			tree@.size = Target.ptr.size;
+		    }
+		    else
+		    {   lex.Error(BADREF);
+			tree = 0;	// give up
+		    }
+		}
+		else if t@.kind == REFPROC then
+		{   tree = ast.New1(LOAD, t, tree);
+		    tree@.kind = REFPROC;
+		    tree = Call(t@.list, tree, 0);
+		}
+		else lex.Error(NOTREF);
+	    }
+	    is ABEG then
+	    {   tok = Next();
+		if t@.kind == REF then
+		{   if t@.base != 0 then
+		    {	t = t@.base;			// FIXME: subroutine
+			tree = ast.New1(LOAD, t, tree);
+			tree@.kind = REF;
+			tree@.size = Target.ptr.size;
+		    }
+		    else
+		    {   lex.Error(BADREF);
+			tree = 0;	// give up
+		    }
+		}
+		if t@.kind == ARRAY then
+		{   var index: Ast;
+		    index = Bool(t@.index);
+		    tok = Token;
+		    if tok == COLON then	// array slice
+		    {   var len: Ast;
+			tok = Next();
+			len = Bool(t@.index);	// index type?
+			tree = Slice(tree, index, len);
+			done = true;
+		    }
+		    else
+		    {   t = t@.base;
+			tree = ast.New2(INDEX, t, tree, index);
+			tree@.kind = REF;
+			tree@.size = t@.width;
+		    }			
+		}
+		else
+		    lex.Error(NOTARRAY);
+		tok = lex.Expect(AEND);
+	    }
+	    is QUEST then
+	    {   tok = Next();
+		tree = Property(t);
+	    }
+	    else done = true;
+	}
+	return tree;
+    }
+
+    proc Term(et:Type): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+	var t: Type;
+	var s: Symb;
+
+	tree = 0;
+	tok = Token;
+	if tok
+	is ID then
+	    {   s = symb.Find(lex.Ident);
+		if s != 0 then
+		{   tok = Next();
+		    if s@.kind == PROC && et != 0 && et@.kind == REFPROC then
+		    {   tree = ast.New(VAR, et);
+			tree@.symb = s;
+			tree@.kind = REFPROC;
+		    }
+		    else
+		    {
+			tree = Primary(s);
+			if tree != 0 then
+			{   if tree@.op == TYPE then
+			    {   if tok 
+			    	is PBEG then		// cast
+		    		{   tok = Next();
+		    		    t = tree@.type;
+				    tree = Bool(0);	// FIXME: is this right?
+				    tree = Cast(tree, t);
+				    tok = lex.Expect(PEND);
+				}
+				is GBEG then		// composite
+				    tree = CompositeValue(tree@.type);
+			    }
+			    else
+			    {   tree = Load(tree);
+				if tree != 0 && tree@.type != 0 &&
+				   type.NeedSwap(tree@.type, Target.order) then
+				{   tree = ast.New1(REVB, tree@.type, tree);
+				    tree@.type =
+				      type.ChangeOrder(tree@.type, Target.order);
+				}
+			    }
+			}
+		    }
+		}
+	        else
+		{   if et != 0 && et@.kind == ENUM then	// enum context
+			tree = EnumConst(et);
+		    else lex.ErrorI(UNDEFID, lex.Ident);
+		    tok = Next();
+		}
+	    }
+	is NUM then
+	{   tree = ast.New(CONST, et);
+	    tree@.valu = lex.Number;
+	    tree@.kind = UINT;
+	    if et == 0 then
+	    {   tree@.type = type.wordtype;	// FIXME: ?
+		tree@.size = type.bitsize(lex.Number);
+	    }
+	    else
+	    {   tree@.size = et@.size;
+		if et@.kind == REF then		// want pointer constant
+		{   tree@.type = et@.base;
+		    tree@.kind = REF;
+		    tree@.size = Target.ptr.size;
+		}
+	    }
+	    tok = Next();
+	}
+	is STR then
+	{   tree = String();
+	    tok = Next();
+	}
+	is PBEG then
+	{   tok = Next();
+	    tree = Bool(et);
+	    tok = Token;
+	    lex.Expect(PEND);
+	}
+	is GBEG then
+	    tree = CompositeValue(et);
+	return tree;
+    }
+
+    proc Unary(t:Type): Ast
+    {   var tree: Ast;
+	var tl: Type;
+	var tok, savetok: TokenT;
+
+	tok = Token;
+	savetok = tok;
+	if tok
+	is MINUS, PLUS, INV, NOT then tok = Next();
+	tree = Term(t);
+	if tree != 0 then
+	{   tl = tree@.type;
+	    if savetok
+	    is MINUS then
+	    {   tree = UnOp(NEG, tree);
+		if tree@.kind == UINT then
+		{   var i: _uint;
+		    i = 0;
+		    while i < type.NINTS &&
+			  tree@.size > type.uinttypes[i]@.size do
+			i += 1;
+		    tree@.type = type.inttypes[i];
+		    tree@.kind = SINT;
+		}
+	    }
+	    is INV then
+		tree = UnOp(NOT, tree);
+	    is NOT then
+	    {   tree = ForceBoolean(tree);
+		tree = UnOp(BNOT, tree);
+	    }
+	}
+	return tree;
+    }
+
+    const mulop: []ast.Op = { MUL, DIV, MOD, LSL, LSR, AND };
+    proc Mul(t:Type): Ast
+    {   var tree, rhs: Ast;
+	var op: ast.Op;
+	var tok: TokenT;
+
+	tree = Unary(t);
+	if tree != 0 then
+	{   loop
+	    {   tok = Token;
+	      exit tok < STAR || tok > AND;
+		op = mulop[tok - STAR];
+		tok = Next();
+		rhs = Unary(tree@.type);
+	      exit rhs == 0;
+		if tree@.kind == SINT then
+		{   if op
+		    is LSL then op = ASL;
+		    is LSR then op = ASR;
+		}
+		tree = BinOp(op, tree, rhs);
+	    }
+	}
+	return tree;
+    }
+
+    const addop: []ast.Op = { ADD, SUB, OR, XOR };
+    proc Add(t:Type): Ast
+    {   var tree, rhs: Ast;
+	var op: ast.Op;
+	var tok: TokenT;
+
+	tree = Mul(t);
+	if tree != 0 then
+	{   loop
+	    {   tok = Token;
+	      exit tok < PLUS || tok > XOR;
+		op = addop[tok - PLUS];
+		tok = Next();
+		rhs = Mul(tree@.type);
+	      exit rhs == 0;
+		tree = BinOp(op, tree, rhs);
+	    }
+	}
+	return tree;
+    }
+
+
+    const ucmpop: []ast.Op = { EQ, NE, ULT, UGT, ULE, UGE };
+    const scmpop: []ast.Op = { EQ, NE, SLT, SGT, SLE, SGE };
+    proc ScalarCompare(tok: TokenT, lhs: Ast, rhs: Ast): Ast
+    {   var tree: Ast;
+	var op: ast.Op;
+ 
+	if IsSignedBinOp(lhs, rhs) then
+	    op = scmpop[tok - EQ];
+	else
+	    op = ucmpop[tok - EQ];
+	// constant folding
+	if lhs@.op == CONST && rhs@.op == CONST then
+	{   var cval: boolean;
+	    if op
+	    is EQ then  cval = lhs@.valu == rhs@.valu;
+	    is NE then  cval = lhs@.valu != rhs@.valu;
+	    is ULT then cval = lhs@.valu <  rhs@.valu;
+	    is UGT then cval = lhs@.valu >  rhs@.valu;
+	    is ULE then cval = lhs@.valu <= rhs@.valu;
+	    is UGE then cval = lhs@.valu >= rhs@.valu;
+	    is SLT then cval = type.SValu(lhs@.valu) <  type.SValu(rhs@.valu);
+	    is SGT then cval = type.SValu(lhs@.valu) >  type.SValu(rhs@.valu);
+	    is SLE then cval = type.SValu(lhs@.valu) <= type.SValu(rhs@.valu);
+	    is SGE then cval = type.SValu(lhs@.valu) >= type.SValu(rhs@.valu);
+	    tree = ast.Const(type.booltype, _uint(cval));
+	}
+	else
+	{   tree = BinOp(op, lhs, rhs);
+	    tree@.type = type.booltype;
+	    tree@.kind = ENUM;
+	    tree@.size = 1;
+	}
+	return tree;
+    }
+
+    proc OffsetAlign(base: _uint, disp: _uint): _uint
+    {   var new, tz: _uint;
+
+
+//out.str(2, "OffsetAlign: base="); out.uint(2, base); out.str(2, " disp="); out.uint(2, disp);
+	new = base + disp;
+	tz = 0;
+	while new&1 == 0 do	// count trailing zeros
+	{   new = new >> 1;
+	    tz += 1;
+	}
+	new = 1 << tz;
+	if new > base then new = base;	// can't improve alignment
+//out.str(2, " new="); out.uint(2, new); out.nl(2);
+	return new;
+    }
+
+    proc FieldAlign(base: _uint, record: Type, fieldno: _uint): _uint
+    {   var offs, i: _uint;
+	var s: Symb;
+
+	if record@.kind != RECORD then return 0;	// can't happen?
+//out.str(2, "FieldAlign: base="); out.uint(2, base); out.str(2, " fieldno="); out.uint(2, fieldno);
+	offs = 0;
+	i = 0;
+	s = record@.list;
+	while i < fieldno && s != 0 do
+	{   if record@.packed == BIT then
+		offs += s@.type@.size;
+	    else
+		offs += s@.type@.width / Target.membits;
+	    i += 1;
+	    s = s@.next;
+	}
+//out.str(2, " offs="); out.uint(2, offs); out.nl(2);
+	return OffsetAlign(base, offs);
+    }
+
+    proc GetAlignment(tree:Ast): _uint
+    {   var alignment: _uint;
+
+	if tree == 0 then return 0;
+	if tree@.op
+	is VAR then 		// direct variable, use its alignment
+	    if tree@.type != 0 then
+		alignment = tree@.type@.align/Target.membits;
+	    else
+		alignment = 0;
+	is LOAD then 		// via a pointer
+	{   if tree@.kind == REF && tree@.type != 0 then
+		alignment = tree@.type@.align/Target.membits;
+	    else
+		alignment = 0;
+	}
+	is OFFSET then 		// fixed offset
+	{   alignment = GetAlignment(tree@.child[0]);
+	    if alignment != 0 then
+		alignment = FieldAlign(alignment, 
+				       tree@.child[0]@.type, _uint(tree@.valu));
+	}
+	is INDEX then 		// possible variable offset
+	{   alignment = GetAlignment(tree@.child[0]);
+	    if alignment != 0 then
+	    {   if tree@.child[1]@.op == CONST then
+		    alignment = OffsetAlign(alignment,
+				    _uint(tree@.child[1]@.valu));
+		else
+		    alignment = 0;
+	    }
+	}
+	is SLICE then 
+	{   alignment = GetAlignment(tree@.child[0]);
+	    if alignment != 0 then
+	    {   if tree@.child[1]@.op == CONST then
+		    alignment = OffsetAlign(alignment,
+				    _uint(tree@.child[1]@.valu));
+		else
+		    alignment = 0;
+	    }
+	}
+	is CLIST, SCON then	// constant aggregate
+	    alignment = tree@.type@.align;
+	else
+	    out.str(2, "GetAlignment: unexpected node\n");
+//out.str(2, "GetAlignment: align="); out.uint(2, alignment); out.nl(2);
+	return alignment;
+    }
+
+    proc ArrayCompare(tok: TokenT, lhs: Ast, rhs: Ast): Ast
+    {   var tree: Ast;
+	var op: ast.Op;
+	var lsize, rsize, align: Ast;
+	var lalign, ralign: _uint;
+
+	if tok
+	is EQ then op = AEQ;
+	is NE then op = ANE;
+	else
+	{   lex.Error(BADCOMPARE);
+	    return lhs;			// what to return on error?
+	}
+	// FIXME: share code with stmt.AssignArray?
+	if lhs@.op == LOAD && lhs@.kind == ARRAY then
+	    lhs = lhs@.child[0];
+	if rhs@.op == LOAD && rhs@.kind == ARRAY then
+	    rhs = rhs@.child[0];
+	lalign = GetAlignment(lhs);
+	ralign = GetAlignment(rhs);
+	if ralign < lalign then lalign = ralign;
+	if lhs@.op == SLICE then
+	    lsize = lhs@.child[2];
+	else
+	    lsize = ast.Const(type.wordtype, lhs@.type@.hi);
+	if rhs@.op == SLICE then
+	    rsize = rhs@.child[2];
+	else
+	    rsize = ast.Const(type.wordtype, rhs@.type@.hi);
+	tree = ast.New2(op, type.booltype, lhs, rhs);
+	tree@.kind = ENUM;
+	tree@.size = 1;
+	tree = ast.Child(tree, lsize);
+	align = ast.Const(type.wordtype, lalign);
+	tree = ast.Child(tree, align);
+	return tree;
+    }
+ 
+    // This is a complete hack because Ast node kinds and type kinds
+    // are inconsistent.
+    proc NodeKind(node: Ast): TypeT
+    {   var kind: TypeT;
+
+//out.str(2, "NodeKind\n");
+//ast.Dump(node);
+	if node@.op
+	is VAR, SLICE then
+	{   if node@.type != 0 then
+		kind = node@.type@.kind;
+	    else
+		kind = UTYPE;
+	}
+	else
+	    kind = node@.kind;
+	return kind;
+    }
+
+    proc Compare(t:Type): Ast
+    {   var tree, rhs: Ast;
+	var tok, savetok: TokenT;
+
+	tree = Add(t);
+	tok = Token;
+	if tok >= EQ && tok <= GE then
+	{   savetok = tok;
+	    tok = Next();
+	    if tree != 0 then
+	    {   rhs = Add(tree@.type);
+		if rhs != 0 then
+		{   // FIXME: check lhs and rhs are compatible
+		    if NodeKind(tree)
+		    is ENUM, UINT, SINT, REF then
+			tree = ScalarCompare(savetok, tree, rhs);
+		    is ARRAY then
+			tree = ArrayCompare(savetok, tree, rhs);
+		    else lex.Error(BADCOMPARE);
+		}
+	    }
+	}
+	return tree;
+    }
+
+    proc BoolAnd(t:Type): Ast
+    {   var tree, rhs: Ast;
+	var tok: TokenT;
+
+        tree = Compare(t);
+	loop
+        {   tok = Token;
+          exit tok != BAND;
+	    tok = Next();
+	    rhs = Compare(tree@.type);
+	    if tree != 0 && rhs != 0 then
+	    {
+		tree = ForceBoolean(tree);
+		rhs = ForceBoolean(rhs);
+		// constant folding
+		if tree@.op == CONST && rhs@.op == CONST then
+		    tree@.valu = tree@.valu & rhs@.valu;
+		else
+	            tree = ast.New2(BAND, type.booltype, tree, rhs);
+	    }
+	}
+	return tree;
+    }
+
+    proc Bool(t:Type): Ast
+    {   var tree, rhs: Ast;
+	var tok: TokenT;
+
+        tree = BoolAnd(t);
+	loop
+        {   tok = Token;
+          exit tok != BOR;
+	    tok = Next();
+	    rhs = BoolAnd(tree@.type);
+	    if tree != 0 && rhs != 0 then
+	    {
+		tree = ForceBoolean(tree);
+		rhs = ForceBoolean(rhs);
+		// constant folding
+		if tree@.op == CONST && rhs@.op == CONST then
+	            tree@.valu = tree@.valu | rhs@.valu;
+		else
+	            tree = ast.New2(BOR, type.booltype, tree, rhs);
+	    }
+	}
+	return tree;
+    }
+
+
+    proc Const(t: Type): Ast
+    {   var tree: Ast;
+	var base: Type;
+
+	if t != 0 then
+	{
+//out.str(2, "Const: "); out.uid(2, t@.kind); out.nl(2); 
+	    if t@.kind
+	    is REF then
+	    {	base = t@.base;
+		if Token
+		is GBEG, STR then
+		{   tree = Const(t@.base);
+		    tree = ast.New1(BYREF, t@.base, tree);
+		}
+		else
+		{
+		    tree = Bool(t);	// FIXME: Bool(0)?
+		    tree@.type = t;
+		}
+	    }
+	    is RECORD then tree = RecordConst(t);
+	    is ARRAY then  tree = ArrayConst(t);
+	    else
+		tree = Bool(t);
+	}
+	else
+	    tree = Bool(t);
+	return tree;
+    }
+
+    proc ConstScalar(t: Type): Valu
+    {   var tree: Ast;
+	var rv: Valu;
+
+	rv = 0;
+	tree = Bool(t);
+	if tree != 0 && tree@.op == CONST then
+	{   // FIXME: should check that types are compatable
+	    rv = tree@.valu;
+	    // free(tree)
+	}
+	else
+	    lex.Error(EXPCONST);
+	return rv;
+    }
+
+}
+

@@ -1,0 +1,31 @@
+#!/bin/sh
+# Run a .ll file through the LLVM backend
+LLVM=$HOME/work/llvm/Release+Asserts/bin		# !!!FIX THIS!!!
+DEBUG=
+ARCH=
+INLINE=
+OPT="-asm-verbose=0"
+while getopts "Im:O:" flags
+do
+  case $flags in
+    I) INLINE="-disable-inlining" ;; 	# disable inlining
+    m) ARCH=$OPTARG ;;
+    O) OPT="$OPT -O$OPTARG" ;;
+    *) echo "bad flag"; exit 1 ;;
+  esac
+done
+if [ "$ARCH" == "" ]
+then
+  case `uname -m` in
+      i686)   ARCH=x86;;
+      x86_64) ARCH=x86-64;;
+      *) echo "unknown target architecture"; exit 1;;
+  esac
+fi
+shift $(($OPTIND-1))
+file=$1
+j=`basename $file .ll`
+$LLVM/llvm-as -o - $file | \
+$LLVM/opt -std-compile-opts ${INLINE} -o -| \
+$LLVM/llc ${DEBUG} -march=${ARCH} ${CPU} ${ATTR} ${OPT}  -o ${j}.s
+

@@ -1,0 +1,230 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: out.esl 455 2010-12-01 17:44:35Z bgl $
+
+// Formatted Output
+// This is a temporary hack.
+
+package out
+{
+    proc nl(chan: _int)
+    {
+	sys.write(chan, "\n", 1);
+    }
+
+    proc chr(chan: _int, c:_byte)
+    {   var buf: [1]_byte;
+	buf[0] = c;
+	sys.write(chan, buf, 1);
+    }
+
+    proc str(chan:_int, s:@[]_byte)
+    {   var len:_uint;
+
+	len = zstr.len(s, 0xFFFF);
+	sys.write(chan, s, len);
+    }
+
+    proc strn(chan:_int, s:@[]_byte, len:_uint)
+    {
+	sys.write(chan, s, len);
+    }
+
+    const hex: [16]_byte =
+	{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+    proc hex8(chan:_int, in:_byte)
+    {   var buf: [2]_byte;
+
+	buf[0] = hex[(in>>4)&0xF];
+	buf[1] = hex[in&0xF];
+	sys.write(chan, buf, 2);
+    }
+
+    proc hex16(chan:_int, in:_uint16)
+    {   var buf: [4]_byte;
+
+	buf[0] = hex[(in>>12)&0xF];
+	buf[1] = hex[(in>>8)&0xF];
+	buf[2] = hex[(in>>4)&0xF];
+	buf[3] = hex[in&0xF];
+	sys.write(chan, buf, 4);
+    }
+
+    proc hex32(chan:_int, in:_uint32)
+    {   var buf: [8]_byte;
+
+	buf[0] = hex[(in>>28)&0xF];
+	buf[1] = hex[(in>>24)&0xF];
+	buf[2] = hex[(in>>20)&0xF];
+	buf[3] = hex[(in>>16)&0xF];
+	buf[4] = hex[(in>>12)&0xF];
+	buf[5] = hex[(in>>8)&0xF];
+	buf[6] = hex[(in>>4)&0xF];
+	buf[7] = hex[in&0xF];
+	sys.write(chan, buf, 8);
+    }
+
+    proc hex64(chan: _int, in: _uint64)
+    {   var buf: [16]_byte;
+	var i: 0..16;
+	var shf: 0..63;
+
+	i = 0;
+	shf = 60;
+	loop
+	{   buf[i] = hex[(in>>shf)&0xF];
+	  exit shf == 0;
+	    i += 1;
+	    shf -= 4;
+	}
+	sys.write(chan, buf, 16);
+    }  
+
+
+    const digits32: [35]_uint32 =
+    {
+           4000000000,  // 0xEE6B2800
+           2000000000,	// 0x77359400
+           1000000000,	// 0x3B9ACA00
+            500000000,	// 0x1DCD6500
+            400000000,	// 0x17D78400
+            200000000,	// 0x0BEBC200
+            100000000,	// 0x05F5E100
+             50000000,	// 0x02FAF080
+             40000000,	// 0x02625A00
+             20000000,	// 0x01312D00
+             10000000,	// 0x00989680
+              5000000,	// 0x004C4B40
+              4000000,	// 0x003D0900
+              2000000,	// 0x001E8480
+              1000000,	// 0x000F4240
+               500000,	// 0x0007A120
+               400000,	// 0x00061A80
+               200000,	// 0x00030D40
+               100000,	// 0x000186A0
+                50000,	// 0x0000C350
+                40000,	// 0x00009C40
+                20000,	// 0x00004E20
+                10000,	// 0x00002710
+                 5000,	// 0x00001388
+                 4000,	// 0x00000FA0
+                 2000,	// 0x000007D0
+                 1000,	// 0x000003E8
+                  500,	// 0x000001F4
+                  400,	// 0x00000190
+                  200,	// 0x000000C8
+                  100,	// 0x00000064
+                   50,	// 0x00000032
+                   40,	// 0x00000028
+                   20,	// 0x00000014
+                   10	// 0x0000000A
+    };
+
+    // can produce 10 digits from 32 bit unsigned
+    proc uint32(chan:_int, in:_uint32)
+    {   var buf:[11]_byte;
+	var i: 0..35;
+	var c: 0..9;
+	var j: 0..5;
+	var n: _uint; // really 0..11;
+	var prefix: boolean;
+
+	n = 0;
+	prefix = true;
+	j = 4;
+	c = 0;
+	i = 0;
+	while i < 35 do
+	{   if digits32[i] <= in then
+	    {   in -= digits32[i];
+		c += j;
+	    }
+	    if j
+	    is 5 then  j = 4;
+	    is 4 then  j = 2;
+	    is 2 then  j = 1;
+	    is 1 then 
+	    {   if c != 0 || !prefix then
+		{   prefix = false;
+		    buf[n] = c + '0';
+		    n += 1;
+		}
+		c = 0;
+		j = 5;
+	    }
+	    i += 1;
+	} 
+	buf[n] = in + '0';
+	sys.write(chan, buf, n+1);
+    }
+
+    proc int32(chan:_int, in:_int32)
+    {   var ui: _uint32;
+
+	if in < 0 then
+	{   sys.write(chan, "-", 1);
+	    ui = -in;
+	}
+	else
+	    ui = in;
+	uint32(chan, ui);
+    }
+
+    proc uint16(chan: _int, in: _uint16):: inline
+    {
+	uint32(chan, _uint32(in));
+    }
+
+    proc int16(chan: _int, in: _int16):: inline
+    {
+	int32(chan, _int32(in));
+    }
+
+    proc uint64(chan: _int, in: _uint64)
+    {   var buf: [20]_byte;
+	var i: 0..19;
+
+	i = 20;
+	if in == 0 then
+	{   i -= 1;
+	    buf[i] = '0';
+	}
+	else
+	{   while in != 0 do
+	    {   i -= 1;
+		buf[i] = (in % 10) + '0';
+	        in = in / 10;
+	    }
+	}
+	sys.write(chan, buf[i:], 20-i);
+    }
+
+    proc int64(chan: _int, in: _int64)
+    {   var ui: _uint64;
+
+	if in < 0 then
+	{   sys.write(chan, "-", 1);
+	    ui = -in;
+	}
+	else
+	    ui = in;
+	uint64(chan, ui);
+    }	
+
+    proc uint(chan: _int, in: _uint):: inline
+    {
+	if _uint?size == 64 then
+	    uint64(chan, in);
+	else
+	    uint32(chan, _uint32(in));
+    }
+
+    proc int(chan: _int, in: _int):: inline
+    {
+	if _int?size == 64 then
+	    int64(chan, in);
+	else
+	    int32(chan, _int32(in));
+    }
+}
+
