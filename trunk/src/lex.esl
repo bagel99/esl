@@ -1,0 +1,885 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: lex.esl 471 2010-12-12 01:27:11Z bgl $
+
+package lex
+{
+    // Order is warnings, errors, internal errors
+    type Errors:
+    (
+	NOTIMPL,
+	USETHEN,
+	BADNL,		// first Error
+	CMTEOF,
+	BADEOF,
+	BADCHR,
+	BADHEXESC,
+	IDLONG,
+	STRLONG,
+	EXPECT,
+	EXPECTID,
+	UNDEFID,
+	DEFID,
+	UNDEFFIELD,
+	BADID,
+	BADREF,
+	BADINDEX,
+	NOIDTYPE,
+	NOTTYPE,
+	NOTYPE,
+	NOTENUM,
+	BADTYPE,
+	OPTYPE,
+	BADTYPDEF,
+	BADATTR,
+	UNDEFSTMT,
+	BADSTMTI,
+	BADSTMTT,
+	BADCOMPARE,
+	BADASSIGN,
+	ILLASSIGN,
+	LHSASSIGN,
+	RHSASSIGN,
+	TYPEASSIGN,
+	RHSLESS,
+	RHSMORE,
+	BADRETURN,
+	WANTBOOL,
+	WANTUINT,
+	BADCAST,
+	UNDFCOMPV,
+	BADCOMPV,
+	PROPID,
+	BADIF,
+	BADIS,
+	NOPROC,
+	NOLOOP,
+	NOPACK,
+	NOTREF,
+	NOTRECORD,
+	NOTARRAY,
+	BADRECORD,
+	BASERECORD,
+	BASEENUM,
+	ARGSLO,
+	ARGSHI,
+	PARMTYPE,
+	INITHI,
+	BADCONST,
+	EXPCONST,
+	BADIMPORT,
+	BADLIST,	// first Internal Error
+	BADPACKREC,
+	ASSIGNCONST,
+	BADPTRCONST
+    );
+    const FirstError:Errors = BADNL;
+    const InternalError:Errors = BADLIST;
+    const ErrMsg:[Errors]@[]Char =
+    {
+	[NOTIMPL] =	"Feature not yet implemented: ",
+	[USETHEN] =	"Use of ':' deprecated, use 'then' instead",
+	[BADNL] =	"End of line in string or character constant",
+	[CMTEOF] =	"End of file in comment",
+	[BADEOF] =	"Unexpected end of file",
+	[BADCHR] =	"Malformed character constant",
+	[BADHEXESC] =	"Malformed hex escape in string or character constant",
+	[IDLONG] =	"Identifier too long",
+	[STRLONG] =	"String too long",
+	[EXPECT] =	"Expected: ",
+	[EXPECTID] =	"Expected identifier",
+	[UNDEFID] =	"Undefined identifier: ",
+	[DEFID] =	"Identifier already in use: ",
+	[UNDEFFIELD] =	"Undefined field: ",
+	[BADID] =	"Unexpected identifier: ",
+	[BADREF] =	"Cannot dereference incomplete type",
+	[BADINDEX] =	"Illegal index specification",
+	[NOIDTYPE] =	"Identifier has no type: ",
+	[NOTTYPE] =	"Expected type identifier",
+	[NOTYPE] =	"Error in type definition",
+	[NOTENUM] =	"Enumeration type required",
+	[BADTYPE] =	"Illegal use of type identifier: ",
+	[OPTYPE] =	"Operation not suppported for type",
+	[BADTYPDEF] =	"Error in type definition",
+	[BADATTR] =	"Unknown attribute: ",
+	[UNDEFSTMT] =	"Statement begins with undefined identifier: ",
+	[BADSTMTI] =	"Statement begins with inappropriate identifier: ",
+	[BADSTMTT] =	"Statement begins with inappropriate token: ",
+	[BADCOMPARE] =	"Illegal comparison, bad type perhaps",
+	[BADASSIGN] =	"Syntax error in possible assignment statement",
+	[ILLASSIGN] =	"Illegal assignment",
+	[LHSASSIGN] =	"Illegal lhs in assignment",
+	[RHSASSIGN] =	"Illegal rhs in assignment",
+	[TYPEASSIGN] =	"Type mismatch in assignment",
+	[RHSLESS] =	"Not enough rhs values in assignment",
+	[RHSMORE] =	"Too many rhs values in assignment",
+	[BADRETURN] =	"Return with no value in procedure that expects one",
+	[WANTBOOL] =	"Boolean expression required",
+	[WANTUINT] =	"Unsigned integer expression required",
+	[BADCAST] =	"Illegal cast",
+	[UNDFCOMPV] =	"Missing type for composite value",
+	[BADCOMPV] =	"Illegal type for composite value",
+	[PROPID] =	"Missing or undefined property identifier",
+	[BADIF] =	"Expecting \"then\" or \"is\"",
+	[BADIS] =	"Error in \"is\" clause",
+	[NOPROC] =	"Return statement not in procedure",
+	[NOLOOP] =	"Exit statement not in a loop",
+	[NOPACK] =	"Unknown statement in package",
+	[NOTREF] =	"Not a pointer",
+	[NOTRECORD] =	"Not a record",
+	[NOTARRAY] =	"Not an array",
+	[BADRECORD] =	"Syntax error in record declaration",
+	[BASERECORD] =	"Base type must be a record",
+	[BASEENUM] =	"Base type must be an enumeration",
+	[ARGSLO] =	"Insufficient arguments to procedure call",
+	[ARGSHI] =	"Too many arguments to procedure call",
+	[PARMTYPE] =	"Actual parameter type not compatible with formal",
+	[INITHI] =	"Too many initializers",
+	[BADCONST] =	"Const requires a constant value",
+	[EXPCONST] =	"Expression must be a compile-time constant",
+	[BADIMPORT] =	"Unable to import: ",
+	[BADPACKREC] =	"Expecting LIST for packed record",
+	[ASSIGNCONST] = "Assignment to constant",
+	[BADPTRCONST] = "Illegal pointer constant"
+    };
+    // Lines commented ** must have the tokens consecutive
+    type TokenT:
+    (   NONE,	ENDF,
+	DOT,	COLON,	SEMI,	COMMA,	RANGE,	AT,	QUEST,
+	ASGN,	INCR,	DECR,				// **
+	NOT,	INV,    PLUS,	MINUS,	OR,	XOR,	// must be contiguous
+	STAR,	DIV,	MOD,	SHL,	SHR,	AND,	// must be contiguous
+	EQ,	NE,	LT,	GT,	LE,	GE,	// must be contiguous
+	BAND,	BOR,					// **
+	PBEG,	PEND,	ABEG,	AEND,	GBEG,	GEND,
+	NUM,	STR,
+	ID,		// all keywords follow this
+	KTYPE,	KVAR,	KCONST,	KPROC,	KPACKAGE,
+	KRET,
+	KIF,	KTHEN,	KELSE,	KIS,
+	KFOR,	KWHILE,	KDO,	KLOOP,	KEXIT,	KWITH,
+	KIMPORT,KALIAS,	KAS,    KWHEN,	KASM,
+	// attributes begin here
+	KPACK,	KMPACK,	KLSB,	KMSB,	KLE,	KBE,
+	KRO,	KWO,	KINPUT,	KOUTPUT,
+	KEXTERN,KGLOBAL,KSECTION,KALIGN,
+	KINLINE,KINTR,
+	// type properties begin here
+	KMIN,	KMAX,	KBITSZ,	KMEMSZ
+    );
+    const keywords:[TokenT]@[]Char =
+    {	[NONE] =	"",		// none
+	[ENDF] =	"ENDOFFILE",
+	[DOT] =		".",
+	[COLON] =	":",
+	[SEMI] =	";",
+	[COMMA] =	",",
+	[RANGE] =	"..",
+	[AT] =		"@",
+	[QUEST] =	"?",
+	[ASGN] =	"=",
+	[INCR] =	"+=",
+	[DECR] =	"-=",
+	[NOT] =		"!",
+	[INV] =		"~",
+	[PLUS] =	"+",
+	[MINUS] =	"-",
+	[OR] =		"|",
+	[XOR] =		"^",
+	[STAR] =	"*",
+	[DIV] =		"/",
+	[MOD] =		"%",
+	[SHL] =		"<<",
+	[SHR] =		">>",
+	[AND] =		"&",
+	[EQ] =		"==",
+	[NE] =		"!=",
+	[LT] =		"<",
+	[GT] =		">",
+	[LE] =		"<=",
+	[GE] =		">=",
+	[BAND] =	"&&",
+	[BOR] =		"||",
+	[PBEG] =	"(",
+	[PEND] =	")",
+	[ABEG] =	"[",
+	[AEND] =	"]",
+	[GBEG] =	"{",
+	[GEND] =	"}",
+	[NUM] =		"NUMBER",
+	[STR] =		"STRING",
+	[ID] =		"IDENT",
+	[KTYPE] =	"type",
+	[KVAR] =	"var",
+	[KCONST] =	"const",
+	[KPROC] =	"proc",
+	[KPACKAGE] =	"package",
+	[KRET] =	"return",
+	[KIF] =		"if",
+	[KTHEN] =	"then",
+	[KELSE] =	"else",
+	[KIS] =		"is",
+	[KFOR] =	"for",
+	[KWHILE] =	"while",
+	[KDO] =		"do",
+	[KLOOP] =	"loop",
+	[KEXIT] =	"exit",
+	[KWITH] =	"with",
+	[KIMPORT] =	"import",
+	[KALIAS] =	"alias",
+	[KAS] =		"as",
+	[KWHEN] =	"when",
+	[KASM] =	"asm",
+	[KPACK] =	"packed",       // attributes for types
+	[KMPACK] =	"mempacked",
+	[KLSB] =	"lsb",
+	[KMSB] =	"msb",
+	[KLE] =		"le",
+	[KBE] =		"be",
+	[KRO] =		"ro",
+	[KWO] =		"wo",
+	[KINPUT] =	"in",
+	[KOUTPUT] =	"out",
+	[KEXTERN] =	"external",	// attributes for vars and procs
+	[KGLOBAL] =	"global",
+	[KSECTION] =	"section",
+	[KALIGN] =	"align",
+	[KINLINE] =	"inline",	// attributes for procs
+	[KINTR] =	"interrupt",
+	[KMIN] =	"min",		// properties
+	[KMAX] =	"max",
+	[KBITSZ] =	"bits",
+	[KMEMSZ] =	"size"
+    }; 
+    type TokenList: []TokenT;
+    const StringMax = 127;
+    const IdentMax = 63;
+    const BufSize = 4096;
+    const PathMax = 1024;	// Max chars in a pathname
+    const NameMax =  256;	// Max chars in filename
+    const LinesMax = 0xFFFF;	// Max lines in a file, files in a program
+    const ErrorMax = 10;	// Max errors before terminate
+    type SearchPathEntry:
+    {   next:		@SearchPathEntry;
+	pathname:	[PathMax]Char;		// FIXME: make flexible
+    };
+    type Path: @SearchPathEntry;
+    var  pathhead, pathtail:Path;
+
+    type FileListEntry:
+    {   next:		@FileListEntry;
+	fileno:		0..LinesMax;
+	filename:	[NameMax]Char;		// FIXME: make flexible
+    };
+    type FileList: @FileListEntry;
+    var  filehead, filetail: FileList;
+
+    type FileContext:
+    {
+        prev:		@FileContext;
+	fd:		sys.fildes;
+	lineno:		0..LinesMax;
+	cchar:		0..BufSize;		// index into buf
+	nchar:		0..BufSize;		// num valid chars in buf
+	filepath:	Path;
+	filename:	[NameMax]Char;		// FIXME: point to FileList
+	buf:		[BufSize]Char;
+    };
+    type File: @FileContext;
+    var f: File;
+
+    type Identifier: []Char;
+    var ErrorCount: 0..ErrorMax;
+    var Token: TokenT;			// current token
+    var Ident: [IdentMax+1]Char;	// if token is an IDENT
+    var Number: _uint64;		// if token is a NUM
+    var StringLen: 0..StringMax;	// if token is a STR
+    var StringBuf: [StringMax+1]Char;	// if token is a STR
+    type State:
+      ( FIRST,	// first character
+	DIV,	// seen "/"
+	CMTLN,	// seen "//", skipping to EOL
+	CMTBK,	// seen "/*", skipping to "*"
+	CMTBE,	// seen "*" in a block comment
+	DOT,	// seen "."
+	PLUS,
+	MINUS,
+	LT,
+	GT,
+	ASGN,
+	NOT,
+	AND,
+	OR,
+	ZERO,	// seen "0"
+	BIN,
+	OCT,
+	HEX,
+	DEC,
+	ID,
+	CHR0,
+	CHR1,
+	CHRESC0,
+	CHRESC1,
+	STR,
+	STRESC0,
+	STRESC1
+      );
+
+    // These are for error message use
+    proc Filename(): []Char;
+
+    proc Lineno():0..LinesMax
+    {
+	if f == 0 then
+	    return 0;
+        return f@.lineno;
+    }
+
+    proc ErrorSub(error: Errors)
+    {
+	if f@.filepath != 0 then
+	{   out.str(2, f@.filepath@.pathname);
+	    out.chr(2, '/');
+	}
+	out.str(2, f@.filename);
+	out.chr(2, ':');
+	out.uint(2, Lineno());
+	out.str(2, ": ");
+	if error >= FirstError then
+	{   if error >= InternalError then
+		out.str(2, "Internal ");
+	    out.str(2, "Error: ");
+	    ErrorCount += 1;
+	}
+	else
+	    out.str(2, "Warning: ");
+	out.str(2, ErrMsg[error]);
+	if ErrorCount >= ErrorMax then
+	{
+	    out.str(2, "Too many errors, quiting.\n");
+	    sys.exit(1);
+	}
+    }
+
+    // Print error message, no parameters
+    proc Error(error: Errors)
+    {
+	ErrorSub(error);
+	out.nl(2);
+    }
+
+    // Print error message, parameter is arbitrary string
+    proc ErrorS(error: Errors, msg: @[]_byte)
+    {
+	ErrorSub(error);
+	out.str(2, msg);
+	out.nl(2);
+    }
+
+    // Print error message, parameter is identifer
+    proc ErrorI(error: Errors, ident: @Identifier)
+    {
+	ErrorSub(error);
+	out.str(2, ident);
+	out.nl(2);
+    }
+
+    // Print error message, parameter is token
+    proc ErrorT(error: Errors, tok: TokenT)
+    {
+	ErrorSub(error);
+	out.chr(2, '\'');
+	out.str(2, keywords[tok]);
+	out.chr(2, '\'');
+	out.nl(2);
+    }
+
+    proc SearchPathAdd(newpath: @[]Char, prepend: boolean): Path
+    {   var np: Path;
+
+        np = Path(sys.malloc(SearchPathEntry?size));
+        zstr.copy(np@.pathname, newpath, PathMax);
+	if pathhead == 0 then
+	{   np@.next = 0;
+	    pathhead = np;
+	    pathtail = np;
+	}
+	else
+	{   if prepend then
+	    {   np@.next = pathhead;
+		pathhead = np;
+	    }
+	    else
+	    {   np@.next = 0;
+		pathtail@.next = np;
+		pathtail = np;
+	    }
+	}
+	if debug.files then
+	{   var pp: Path;
+	    out.str(2, "New search path \"");
+	    pp = pathhead;
+	    while (pp != 0) do
+	    {   out.str(2, pp@.pathname);
+		out.chr(2, ':');
+		pp = pp@.next;
+	    }
+	    out.str(2, "\"\n");
+	}
+	return np;
+    }
+
+    // Search to see if we have not imported this yet
+    proc FileCheck(filename: @[]Char): boolean
+    {   var fp: FileList;
+
+	fp = filehead;
+	while fp != 0 do
+	{   if zstr.eq(fp@.filename, filename, NameMax) then
+		return false;	// already imported
+	    fp = fp@.next;
+	}
+	return true;
+    }
+
+    proc FileOpen(filename: @[]Char): boolean
+    {   var nf: File;
+	var fd: sys.fildes;
+	var pp: Path;
+	var fp: FileList;
+	var i: 0..PathMax;
+	var pathbuf: [PathMax]Char;
+
+	nf = File(sys.malloc(FileContext?size));
+        if f != 0 then		// this is a nested file
+        {   // search SearchPath trying to open file
+	    pp = pathhead;
+	    while pp != 0 do
+	    {
+		zstr.copy(pathbuf, pp@.pathname, PathMax);
+		zstr.cat(pathbuf, "/", PathMax);
+		i = zstr.len(pathbuf, PathMax);
+		zstr.cat(pathbuf, filename, PathMax);
+		zstr.cat(pathbuf, ".esl", PathMax);
+		fd = sys.open(pathbuf, sys.O_RDONLY, 0);
+	      exit fd >= 0;
+		pp = pp@.next;
+	    }
+	    if fd >= 0 then
+	    {   fp = FileList(sys.malloc(FileListEntry?size));
+		zstr.copy(fp@.filename, filename, NameMax);
+		if filehead == 0 then
+		    filehead = fp;
+		else
+		    filetail@.next = fp;
+		filetail = fp;
+	    }
+        }
+	else			// this is the outer file
+	{   zstr.copy(pathbuf, filename, PathMax);
+	    fd = sys.open(pathbuf, sys.O_RDONLY, 0);
+	    i = zstr.rfind(pathbuf, '/', PathMax);
+	    if i == PathMax then		// '/' not found
+	    {   pp = SearchPathAdd(".", true);
+		i = 0;
+	    }
+	    else
+	    {   pathbuf[i] = 0;	// terminate
+		pp = SearchPathAdd(pathbuf, true);
+		i += 1;
+	    }
+	}
+	if debug.files then
+	{   out.str(2, "Open  file \"");
+	    if pp != 0 then
+	    {   out.str(2, pp@.pathname);
+		out.chr(2, '/');
+	    }
+	    out.str(2, pathbuf[i:]);
+	    out.str(2, "\"\n");
+	}
+	if feature.mflag then
+	{
+	    out.str(1, " \\\n ");
+	    if pp != 0 && (pp@.pathname[0] != '.' || pp@.pathname[1] != 0) then
+	    {   out.str(1, pp@.pathname);
+		out.chr(1, '/');
+	    }
+	    out.str(1, pathbuf[i:]);
+	}
+	if fd < 0 then
+	{
+	    // free(nf)
+	    return false;
+	}
+	zstr.copy(nf@.filename, pathbuf[i:], NameMax);
+	nf@.filepath = pp;
+	nf@.fd = fd;
+	nf@.lineno = 1;
+	nf@.cchar = 0;
+	nf@.nchar = 0;
+	nf@.prev = f;
+	f = nf;
+	return true;        
+    }
+
+    proc FileClose()
+    {   var of: File;
+
+        if f != 0 then
+	{   sys.close(f@.fd);
+	    if debug.files then
+	    {   out.str(2, "Close file \"");
+		if f@.filepath != 0 then
+		{   out.str(2, f@.filepath@.pathname);
+		    out.chr(2, '/');
+		}
+		out.str(2, f@.filename);
+		out.str(2, "\"\n");
+	    }
+	    of = f;
+	    f = of@.prev;
+	    // sys.free(of)
+	}
+    }
+
+    proc FillBuf()
+    {   var k: _int;
+
+	k = sys.read(f@.fd, f@.buf, BufSize);
+	if k < 0 then
+	    k = 0;
+	f@.cchar = 0;
+	f@.nchar = k;
+    }
+
+    proc EscChar(c: Char): Char
+    {
+	if c
+	is 'n' then c = '\n';	// LF
+	is 'r' then c = '\r';	// CR
+	is 't' then c = '\t';	// HT
+	return c;
+    }
+
+    proc EscHex(c: Char): Char
+    {
+	if c
+	is '0'..'9' then c -= '0';
+	is 'A'..'F' then c -= 'A';
+	is 'a'..'f' then c -= 'a';
+	return c;
+    }
+
+    proc Next():TokenT
+    {   var state: State;
+	var c, h: Char;
+	var tok: TokenT;
+	var i: 0..BufSize;
+	var e: 0..BufSize;
+	var j: 0..StringMax;
+	var n: _uint64;	// for numbers
+
+	state = FIRST;
+	tok = NONE;
+	i = f@.cchar;
+	e = f@.nchar;
+	loop
+	{   if i >= e then
+	    {   FillBuf();
+		i = f@.cchar;
+		e = f@.nchar;
+	        exit e == 0 with
+		{   if state
+		    is FIRST then {}	// as it should be
+		    is CMTLN, CMTBK, CMTBE then
+			Error(CMTEOF);
+		    else
+			Error(BADEOF);
+		    tok = ENDF;
+		}		 
+	    }
+	    c = f@.buf[i];
+	    if state
+	    is FIRST then
+	    {	if c
+		is ':' then { tok = COLON;  i += 1; }
+		is ';' then { tok = SEMI;   i += 1; }
+		is ',' then { tok = COMMA;  i += 1; }
+		is '@' then { tok = AT;     i += 1; }
+		is '~' then { tok = INV;    i += 1; }
+		is '^' then { tok = XOR;    i += 1; }
+		is '*' then { tok = STAR;   i += 1; }
+		is '%' then { tok = MOD;    i += 1; }
+		is '(' then { tok = PBEG;   i += 1; }
+		is ')' then { tok = PEND;   i += 1; }
+		is '{' then { tok = GBEG;   i += 1; }
+		is '}' then { tok = GEND;   i += 1; }
+		is '?' then { tok = QUEST;  i += 1; }
+		is '[' then { tok = ABEG;   i += 1; }
+		is ']' then { tok = AEND;   i += 1; }
+		is '.' then state = DOT;
+		is '/' then state = DIV;
+		is '!' then state = NOT;
+		is '<' then state = LT;
+		is '>' then state = GT;
+		is '=' then state = ASGN;
+		is '+' then state = PLUS;
+		is '-' then state = MINUS;
+		is '&' then state = AND;
+		is '|' then state = OR;
+		is '0' then      { n = 0;     state = ZERO; }
+		is '1'..'9' then { n = c-'0'; state = DEC; }
+		is '\'' then state = CHR0;
+		is '"' then { j = 0; state = STR; }
+		is 'A'..'Z', 'a'..'z', '_' then
+		{   Ident[0] = c;  j = 1; state = ID; }
+	    }
+	    is DIV then
+		if c
+		is '/' then state = CMTLN;
+		is '*' then state = CMTBK;
+		else    tok = DIV;
+	    is CMTLN then
+		if c == '\n' then state = FIRST;
+	    is CMTBK then
+		if c == '*' then state = CMTBE;
+	    is CMTBE then
+		if c == '/' then state = FIRST; else state = CMTBK;
+	    is DOT then
+		if c
+		is '.' then { tok = RANGE; i += 1; }
+		else    tok = DOT;
+	    is PLUS then
+		if c
+		is '=' then { tok = INCR; i += 1; }
+		else    tok = PLUS;
+	    is MINUS then
+		if c
+		is '=' then { tok = DECR; i += 1; }
+		else    tok = MINUS;
+	    is LT then
+		if c
+		is '=' then { tok = LE; i += 1; }
+		is '<' then { tok = SHL; i += 1; }
+		else    tok = LT;
+	    is GT then
+		if c
+		is '=' then { tok = GE; i += 1; }
+		is '>' then { tok = SHR; i += 1; }
+		else    tok = GT;
+	    is ASGN then
+		if c
+		is '=' then { tok = EQ; i += 1; }
+		else    tok = ASGN;
+	    is NOT then
+		if c
+		is '=' then { tok = NE; i += 1; }
+		else    tok = NOT;
+	    is AND then
+		if c
+		is '&' then { tok = BAND; i += 1; }
+		else    tok = AND;
+	    is OR then
+		if c
+		is '|' then { tok = BOR; i += 1; }
+		else    tok = OR;
+	    is ZERO then
+	    {   if c
+		is 'b' then state = BIN;
+		is 'o' then state = OCT;
+		is 'x' then state = HEX;
+		is '0'..'9' then { n = c-'0'; state = DEC; }
+		is '_' then state = DEC;
+		else    { Number = n; tok = NUM; }
+	    }
+	    is DEC then
+		if c
+		is '0'..'9' then n = n*10 + (c-'0');
+		is '_' then {}
+		else    { Number = n; tok = NUM; }
+	    is BIN then
+		if c
+		is '0'..'1' then n = (n<<1) + (c-'0');
+		is '_' then {}
+		else    { Number = n; tok = NUM; }
+	    is OCT then
+		if c
+		is '0'..'7' then n = (n<<3) + (c-'0');
+		is '_' then {}
+		else    { Number = n; tok = NUM; }
+	    is HEX then
+		if c
+		is '0'..'9' then n = (n<<4) + (c-'0');
+		is 'A'..'F' then n = (n<<4) + (c-'A'+10);
+		is 'a'..'f' then n = (n<<4) + (c-'a'+10);
+		is '_' then {}
+		else    { Number = n; tok = NUM; }
+	    is ID then
+		if c
+		is 'A'..'Z', 'a'..'z', '0'..'9', '_' then
+		{   Ident[j] = c;
+		    j += 1;
+		}
+		else
+		{   Ident[j] = 0;
+		    tok = ID;
+		}
+	    is CHR0 then
+		if c
+		is '\'' then { Error(BADCHR); state = FIRST; }
+		is '\n' then { Error(BADNL); state = FIRST; }	
+		is '\\' then state = CHRESC0;
+		else     { n = c; state = CHR1; }
+	    is CHR1 then
+		if c
+		is '\'' then { Number = n; tok = NUM; i += 1; }
+		else     { Error(BADCHR); state = FIRST; }
+	    is CHRESC0 then
+		if c
+		is '\n' then { Error(BADNL); state = FIRST; }	
+		else     { n = EscChar(c); state= CHR1; }
+	    is STR then
+		if c
+		is '"' then
+		{   StringBuf[j] = 0;	// terminate
+		    StringLen = j+1;
+		    tok = STR; i += 1;
+		}
+		is '\n' then { Error(BADNL); state = FIRST; }
+		is '\\' then state = STRESC0;
+		else
+		{   if j < StringMax then
+		    {   StringBuf[j] = c;
+			j += 1;
+		    }
+		    else
+			Error(Errors.STRLONG);
+		}
+	    is STRESC0 then
+		if c
+		is '\n' then { Error(BADNL); state = FIRST; }	// NL in escape
+		is '0'..'9','a'..'f','A'..'F' then
+		{   h = EscHex(c);
+		    state = STRESC1;
+		}
+ 		else
+		{   if j < StringMax then
+		    {   StringBuf[j] = EscChar(c);
+			j += 1;
+		    }
+		    else
+			Error(STRLONG);
+		    state = STR;
+		}
+	    is STRESC1 then
+		if c
+		is '\n' then { Error(BADNL); state = FIRST; }	// NL in escape
+		is '0'..'9','a'..'f','A'..'F' then
+		{   c = EscHex(c) | (h << 4);
+		    state = STRESC1;
+		}
+		else
+		    Error(BADHEXESC);
+	  exit tok != NONE;
+	    if c == '\n' then
+		f@.lineno += 1;
+	    i += 1;
+	}
+	f@.cchar = i;
+	Token = tok;
+	return tok;
+    }
+
+
+    proc Expect(expect: TokenT): TokenT
+    {   var tok: TokenT;
+
+	if Token == expect then
+	    tok = Next();
+	else
+	    ErrorT(EXPECT, expect);
+	return tok;
+    }
+
+    proc Keyword(toklist: @TokenList): TokenT
+    {   var tok: TokenT;
+	var i: _uint;
+
+	if Token == ID then
+	{   i = 0;
+	    loop
+	    {   tok = toklist[i];
+	      exit tok == NONE;
+		if zstr.eq(Ident, keywords[tok]@, IdentMax) then
+		    return tok;
+		i += 1;
+	    }
+	}
+	return Token;
+    }
+
+    // FIXME: temporary debugging aid
+    proc WhereAmI(msg: @[]_byte)
+    {
+	out.str(2, msg);
+	out.str(2, " tok=");
+	out.str(2, keywords[Token]);
+        if Token == ID then
+	{   out.str(2, " \"");
+	    out.str(2, Ident);
+	    out.chr(2, '"');
+	}
+        out.nl(2);
+    }
+
+    const plist: []TokenT = { PEND, NONE };
+    const alist: []TokenT = { AEND, NONE };
+    const glist: []TokenT = { GEND, NONE };
+
+    proc Skip(toklist: @TokenList): TokenT
+    {   var tok, ttok: TokenT;
+	var i: _uint;
+
+	tok = Next();
+//WhereAmI("Skip start:");
+//out.str(2, "\tlineno="); out.uid(2, Lineno());
+//out.str(2, "\tlist=");
+//i = 0; loop
+//{  ttok = toklist[i];
+//  exit ttok == NONE;
+//   out.chr(2, '"'); out.str(2, keywords[ttok]); out.str(2, "\" ");
+//   i += 1;
+//}
+//out.nl(2);
+	while tok != ENDF do
+	{   i = 0;
+	    loop
+	    {   ttok = toklist[i];
+	      exit ttok == NONE || tok == ttok;
+		i += 1;
+	    }
+	  exit ttok != NONE;
+	    if tok	// handle nested constructs
+	    is PBEG then tok = Skip(plist);
+	    is ABEG then tok = Skip(alist);
+	    is GBEG then tok = Skip(glist);
+	    tok = Next();
+	}
+//WhereAmI("Skip end:");
+//out.str(2, "\tlineno="); out.uid(2, Lineno()); out.nl(2);
+	return tok;
+    }
+
+    proc Want(toklist: @TokenList): TokenT
+    {   var tok: TokenT;
+
+	tok = Token;
+	if tok != toklist[0] then
+	{   ErrorT(EXPECT, toklist[0]);
+	    tok = Skip(toklist);
+	}
+	return tok;
+    }
+
+}
+

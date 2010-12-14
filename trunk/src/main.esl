@@ -1,0 +1,142 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: main.esl 466 2010-12-09 19:00:00Z bgl $
+
+var debug:
+    {	symb:
+	    {   univ: boolean;
+		prog: boolean;
+		pack: boolean;
+		proc: boolean;
+	    };
+	ast:   boolean;
+	files: boolean;
+	tests: boolean;
+	meths: boolean;
+    };
+var feature:
+    {   size:  boolean;
+	then:  boolean;
+	unused:boolean;
+	mflag: boolean;
+	gflag: boolean;
+    };
+
+import sys;
+import zstr;
+import out;
+alias	_byte as Char;
+import lex;
+alias   lex.Next as Next, lex.TokenT as TokenT, lex.Token as Token;
+import type1;
+alias	type.Type as Type, type.TypeT as TypeT, type.Valu as Valu;
+import target;
+alias	target.Target as Target;
+import symb;
+alias	symb.Symb as Symb, symb.SymbT as SymbT;
+import ast;
+alias	ast.Ast as Ast, ast.Op as Op;
+import expr1;
+import type2;
+import expr2;
+import stmt;
+import llvm;
+
+
+proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
+{
+    var tree: Ast;
+    var i: _uint;
+    var outfile: @[]_byte;
+    var outfd: sys.fildes;
+
+    outfile = 0;
+    outfd = 1;
+    i = 1;
+    while i < argc && argv[i]@[0] == '-' do
+    {   if argv[i]@[1]
+	is 'D' then 
+	{   if argv[i]@[2]
+	    is 'a' then debug.ast = true;
+	    is 's' then 
+	    {   // FIXME: allow individual selection
+		debug.symb.univ = true;
+		debug.symb.prog = true;
+		debug.symb.pack = true;
+		debug.symb.proc = true;
+	    }
+	    is 'f' then  debug.files = true;
+	    is 't' then  debug.tests = true;
+	    is 'm' then  debug.meths = true;
+	}
+	is 'm' then 
+	{   i += 1;
+	    if !target.set(argv[i]@) then
+	    {   out.str(2, "Unsupported target: ");
+		out.str(2, argv[i]@);
+		out.nl(2);
+	    }
+	}
+	is 'I' then lex.SearchPathAdd(argv[i]@[2:], false);
+	is 'o' then
+	{   i += 1;
+	    outfile = argv[i];
+	}
+	is 'O' then 
+	{   if argv[i]@[2]
+	    is 's' then feature.size = true;
+	}
+	is 'F' then 
+	{   if argv[i]@[2]
+	    is 't' then feature.then = true;
+	    is 'u' then feature.unused = true;
+	}
+	is 'M' then feature.mflag = true;
+	is 'g' then feature.gflag = true;
+	i += 1;
+    }
+    if i >= argc then
+	return 1;
+    if feature.mflag then
+    {   var n: _uint;
+	n = zstr.len(argv[i]@, lex.PathMax);
+	if zstr.eq(argv[i]@[n-4:4], ".esl", lex.PathMax) then
+	{   argv[i]@[n-4] = 0;		// nul terminate
+	    out.str(1, argv[i]@);
+	    out.str(1, ".o: ");
+	    argv[i]@[n-4] = '.';	// remove nul terminate
+	}
+    }
+    if !lex.FileOpen(argv[i]@) then
+    {   out.str(2, "Unable to open input file: ");
+	out.str(2, argv[i]@);
+	out.nl(2);
+	return 2;
+    }
+    if outfile != 0 then
+    {   outfd = sys.open(outfile, sys.O_CREAT|sys.O_TRUNC|sys.O_WRONLY, 0o640);
+	if outfd < 0 then
+	{   out.str(2, "Unable to create output file: ");
+	    out.str(2, outfile@);
+	    out.nl(2);
+	    return 2;
+	}
+    }
+    symb.Init();
+    symb.Push(0);	// preserve universal level
+    tree = stmt.Program(argv[i]@);
+    if debug.symb.prog then
+	symb.Dump(1);
+    symb.Pop();
+    if debug.symb.univ then
+	symb.Dump(1);
+    if debug.ast then
+	ast.Dump(tree);
+    if lex.ErrorCount != 0 then
+	return 3;
+    if feature.mflag then
+	out.nl(1);
+    else
+	llvm.Gen(outfd, tree);
+    return 0;
+}
+

@@ -1,0 +1,386 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: ast.esl 474 2010-12-13 19:45:47Z bgl $
+
+package ast
+{
+    type Op:
+    (
+	NULL,
+	NOP,
+	TYPE,		// temporary placeholder
+	FILE,		// source file boundary
+	PACKAGE,	// package boundary
+	DCLVAR,		// variable declaration
+	DCLCON,		// constant declaration (for aggregates)
+	CONST,
+	SCON,
+	VAR,
+	CALL,	CALLI,	ASM,
+	CRANGE,
+	CLIST,
+	CAST,
+	OFFSET,
+	INDEX,
+	SLICE,
+	BYREF,
+	COPY,	ACOPY,	AEQ,	ANE,	// record and array operators
+	GETRV,
+	LOAD,
+	STORE,		// assignment
+	ZEXT,   SEXT,   TRUNC,	REVB,
+	NEG,	NOT,
+	ADD,    SUB,
+	MUL,    DIV,    MOD,
+	EQ,     NE,
+	ULT,    UGT,    ULE,    UGE,
+	SLT,    SGT,    SLE,    SGE,
+	UMIN,	UMAX,	SMIN,	SMAX,	// temporary, get replaced by expansion
+	LSL,    LSR,
+	ASL,    ASR,
+	AND,    OR,     XOR,
+	BAND,   BOR,	BNOT,
+	IFEXPR,		// select expression
+	SEQ,		// sequence
+	LOOP,
+	EXIT,
+	IF,		// one or two arm if
+	SEL,		// select, multi-arm if
+	IS,		// one arm of a select
+	RET,		// return value
+	PROC		// procedure
+    );
+    const NumChildDefault: [Op]0..255 =
+    {
+	[NOP]=	  1,
+	[TYPE]=   1,	[FILE]=   1,	[PACKAGE]=1,
+	[DCLVAR]= 1,
+	[DCLCON]= 1,
+	[CALL]=   4,	[CALLI]=  5,	[ASM]=    5,
+	[CLIST]=  8,
+	[CAST]=   1,	[OFFSET]= 1,	[INDEX]=  2,
+	[SLICE]=  3,	[BYREF]=  1,
+	[COPY]=   4,	[ACOPY]=  4,	[AEQ]=    4,	[ANE]=    4,
+	[GETRV]=  1,	[LOAD]=   1,	[STORE]=  2,
+	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,	[REVB]=   1,
+	[NEG]=    1,	[NOT]=    1,
+	[ADD]=	  2,	[SUB]=    2,
+	[MUL]=	  2,    [DIV]=	  2,    [MOD]=	  2,
+	[EQ]=	  2,    [NE]=     2,
+	[ULT]=	  2,    [UGT]=	  2,    [ULE]=	  2,    [UGE]=	  2,
+	[SLT]=	  2,	[SGT]=	  2,    [SLE]=	  2,    [SGE]=	  2,
+	[UMIN]=   2,	[UMAX]=   2,	[SMIN]=   2,	[SMAX]=   2,  
+	[LSL]=	  2,    [LSR]=	  2,
+	[ASL]=	  2,    [ASR]=	  2,
+	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
+	[BAND]=	  2,	[BOR]=	  2,	[BNOT]=	  2,
+	[IFEXPR]= 3,
+	[SEQ]=    8,	[LOOP]=   1,	[EXIT]=   2,
+	[IF]=     3,	[SEL]=    8,	[IS]=     4,
+	[RET]=    1,
+	[PROC]=   3
+    };
+    type NSubNodes: 0..0xFFFF;
+    type AstNode:
+    {
+	op:	Op;		// what kind of node is this
+	kind:   type.TypeT;
+	size:	_uint8;
+	scale:	_uint8;
+	lineno:	_uint16;	// source code line number
+	num:	NSubNodes;	// number of subnodes
+	max:	NSubNodes;	// maximum allocated slots for subnode
+	seqno:	_uint16;	// used by LLVM
+	valu:	type.Valu;
+	type:	Type;
+	symb:	Symb;
+	child:	[]@AstNode;
+    };
+    type Ast: @AstNode;
+
+    proc Alloc(op:Op, nc:NSubNodes): Ast
+    {   var pa: Ast;
+
+        pa = Ast(sys.zalloc(AstNode?size + nc * Ast?size));
+	pa@.op = op;
+	pa@.lineno = lex.Lineno();
+	pa@.num = 0;
+	pa@.max = nc;
+	return pa;
+    }
+
+    proc Expand(po: Ast, newsize:NSubNodes): Ast
+    {   var pn: Ast;
+	var size, i: NSubNodes;
+
+	size = po@.max;
+	while size < newsize do
+	{   if size >= 16 then
+	        size += 16;
+	    else
+		size = 2 * size;
+	}
+	pn = Alloc(po@.op, size);
+	// Record copy?
+	pn@.op =    po@.op;
+	pn@.kind =  po@.kind;
+	pn@.size =  po@.size;
+	pn@.scale = po@.scale;
+	pn@.lineno= po@.lineno;
+	pn@.num =   po@.num;
+	pn@.seqno = po@.seqno;
+	pn@.valu =  po@.valu;
+	pn@.type =  po@.type;
+	pn@.symb =  po@.symb;
+	i = 0;
+	while i < po@.max do
+	{   pn@.child[i] = po@.child[i];
+	    i += 1;
+	}
+	pn@.max =   size;
+	return pn;
+    }
+
+    proc New(op:Op, t:type.Type): Ast
+    {   var pa: Ast;
+
+	pa = Alloc(op, NumChildDefault[op]);
+        pa@.type = t;
+	if t != 0 then
+	{
+	    pa@.kind = t@.kind;
+	    pa@.size = t@.width;
+	}
+	return pa;
+    }
+
+    proc New1(op:Op, t:type.Type, pc0:Ast): Ast
+    {   var pa: Ast;
+	var n: NSubNodes;
+
+	n = NumChildDefault[op];
+	if n < 1 then
+	    n = 1;
+	pa = Alloc(op, n);
+	pa@.child[0] = pc0;
+	pa@.num = 1;
+	pa@.type = t;
+	pa@.kind = pc0@.kind;
+	pa@.size = pc0@.size;
+	return pa;
+    }
+
+    proc New2(op:Op, t:type.Type, pc0:Ast, pc1:Ast): Ast
+    {   var pa: Ast;
+	var n: NSubNodes;
+
+	n = NumChildDefault[op];
+	if n < 2 then
+	    n = 2;
+	pa = Alloc(op, n);
+	pa@.child[0] = pc0;
+	pa@.child[1] = pc1;
+	pa@.num = 2;
+	pa@.type = t;
+	pa@.kind = pc0@.kind;
+	pa@.size = pc0@.size;
+	return pa;
+    }
+
+    proc New3(op:Op, t:type.Type, pc0:Ast, pc1:Ast, pc2:Ast): Ast
+    {   var pa: Ast;
+	var n: NSubNodes;
+
+	n = NumChildDefault[op];
+	if n < 3 then
+	    n = 3;
+	pa = Alloc(op, n);
+	pa@.child[0] = pc0;
+	pa@.child[1] = pc1;
+	pa@.child[2] = pc2;
+	pa@.num = 3;
+	pa@.type = t;
+	pa@.kind = pc0@.kind;
+	pa@.size = pc0@.size;
+	return pa;
+    }
+
+    proc Child(pp:Ast, pc:Ast): Ast
+    {   var n: NSubNodes;
+
+	if pp != 0 then
+	{   n = pp@.num + 1;
+	    if n > pp@.max then
+		pp = Expand(pp, n);
+	    pp@.child[pp@.num] = pc;
+	    pp@.num = n;
+	}
+	return pp;
+    }
+
+    proc ChildIndexed(pp:Ast, n:NSubNodes, pc:Ast): Ast
+    {
+	n += 1;
+	if n > pp@.max then
+	    pp = Expand(pp, n);
+	pp@.child[n-1] = pc;
+	pp@.num = n;
+	return pp;
+    }
+
+    proc Const(t: Type, value: type.Valu): Ast
+    {   var pa: Ast;
+
+	pa = New(CONST, t);
+	pa@.valu = value;
+	if t != 0 then
+	{   pa@.kind = t@.kind;
+	    pa@.size = t@.width;
+	}
+        return pa;
+    }
+
+
+    const OpName: [Op]@[]Char =
+    {   [NULL]=  "NULL",
+	[NOP]=   "NOP",
+	[TYPE]=  "TYPE",
+	[FILE]=  "FILE",
+	[PACKAGE]="PACKAGE",
+	[DCLVAR]="DCLVAR",
+	[DCLCON]="DCLCON",
+	[CONST]= "CONST",
+	[SCON]=  "STRCON",
+	[VAR]=   "VAR",
+	[CALL]=  "CALL",
+	[CALLI]= "CALLI",
+	[ASM]=   "ASM",
+	[CRANGE]="CRANGE",
+	[CLIST]= "CLIST",
+	[CAST]=  "CAST",
+	[OFFSET]="OFFSET",
+	[INDEX]= "INDEX",
+	[SLICE]= "SLICE",
+	[BYREF]= "BYREF",
+	[COPY]=  "COPY",
+	[ACOPY]= "ACOPY",
+	[AEQ]=   "AEQ",
+	[ANE]=   "ANE",
+	[GETRV]= "GETRV",
+	[LOAD]=  "LOAD",
+	[STORE]= "STORE",
+	[ZEXT]=  "ZEXT",
+	[SEXT]=  "SEXT",
+	[TRUNC]= "TRUNC",
+	[REVB]=  "REVB",
+	[NEG]=   "NEG",
+	[NOT]=   "NOT",
+	[ADD]=   "ADD",		[SUB]=   "SUB",
+	[MUL]=   "MUL",		[DIV]=   "DIV",		[MOD]=   "MOD",
+	[EQ]=    "EQ",		[NE]=    "NE",
+	[ULT]=   "ULT",		[UGT]=   "UGT",
+	[ULE]=   "ULE",		[UGE]=   "UGE",
+	[SLT]=   "SLT",		[SGT]=   "SGT",
+	[SLE]=   "SLE",		[SGE]=   "SGE",
+	[UMIN]=  "UMIN",	[UMAX]=  "UMAX",
+	[SMIN]=  "SMIN",	[SMAX]=  "SMAX",
+	[LSL]=   "LSL",		[LSR]=   "LSR",
+	[ASL]=   "ASL",		[ASR]=   "ASR",
+	[AND]=   "AND",		[OR]=    "OR",		[XOR]=   "XOR",
+	[BAND]=  "BAND",	[BOR]=   "BOR",		[BNOT]=  "BNOT",
+	[IFEXPR]="IFEXPR",
+	[SEQ]=   "SEQ",
+	[LOOP]=  "LOOP",
+	[EXIT]=  "EXIT",
+	[IF]=    "IF",
+	[SEL]=   "SEL",
+	[IS]=    "IS",
+	[RET]=   "RET",
+	[PROC]=  "PROC"
+    };
+
+    const KindName:[TypeT]@[]Char =
+    {	[UTYPE]=  "UNKN",
+	[ENUM]=   "ENUM",
+	[UINT]=   "UINT",
+	[SINT]=   "SINT",
+	[REF]=    "REF",
+	[ARRAY]=  "ARRAY",
+	[RECORD]= "RECORD",
+	[REFPROC]="REFPROC"
+    };
+
+    proc Print(node: Ast)
+    {   var s: Symb;
+	var t: Type;
+
+	out.str(2, OpName[node@.op]);
+	out.chr(2, '(');
+	out.str(2, KindName[node@.kind]);
+	out.str(2, " sz=");
+	out.uint(2, node@.size);
+	out.str(2, " ln=");
+	out.uint(2, node@.lineno);
+	out.str(2, " nc=");
+	out.uint(2, node@.num);
+	t = node@.type;
+	if node@.op
+	is CONST, OFFSET, COPY, GETRV then
+	{   out.str(2, " value ");
+	    if node@.op == CONST && node@.kind == SINT then
+		out.int64(2, _int64(node@.valu));
+	    else
+	        out.uint64(2, node@.valu);
+	}
+	is SCON then
+	{   type pstring: @[]_byte;
+	    out.str(2, " id ");
+	    out.uint32(2, _uint32(node@.valu));
+	    out.str(2, " value \"");
+	    out.strn(2, pstring(node@.symb), _uint32(node@.type@.hi-1));
+	    out.chr(2, '"');
+	}
+	is DCLVAR, VAR, PROC, CALL, FILE, PACKAGE then
+	{
+	    out.str(2, " name ");
+	    s = node@.symb;
+	    if s != 0 then
+		out.str(2, s@.ident);
+	    else
+		out.str(2, "*NULL*");
+	}
+	is ASM then t = 0;	// FIXME: temporarily don't dump type
+	out.chr(2, ')');
+	if t != 0 then
+	{   out.chr(2, ':');
+	    type.DumpT(t, false);
+	}
+	out.nl(2);
+    }
+
+    const blanks:[]_byte =
+	"                                                                ";
+
+    proc DumpSub(tree: Ast, level:_uint)
+    {   var i: NSubNodes;
+
+	sys.write(2, blanks, level);
+	if tree == 0 then
+	    out.str(2, "*NULL*\n");
+	else
+	{   Print(tree);
+	    i = 0;
+	    while i < tree@.num do
+	    {
+		DumpSub(tree@.child[i], level+1);
+		i += 1;
+	    }
+	}
+    }
+
+    proc Dump(tree: Ast)
+    {
+	DumpSub(tree, 0);
+    }
+
+}
+

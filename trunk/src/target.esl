@@ -1,0 +1,130 @@
+// Copyright (c) 2009, Brian G. Lucas.  See LICENSE file.
+// $Id: target.esl 450 2010-11-23 23:18:45Z bgl $
+
+package target
+{
+    const IntSizesMax = 8;
+    const TargetsMax = 31;
+    type SizeAlign:
+      { size:	0..255;
+	align:	0..255;
+      };
+    type TargetT:
+      {
+	name:		@[]Char;
+	triple:		@[]Char;
+	order:		type.OrderT;
+	membits:	0..255;		// number of bits in smallest addressable
+	regsize:	0..255;		// width of integer registers
+	mustalign:	boolean;
+	rsvd:		0..255;
+	nisize:		0..IntSizesMax-1;
+	ptr:		SizeAlign;
+	isizes:		[IntSizesMax]SizeAlign;
+      };
+
+    const NumTargets = 7;
+    const Targets: [NumTargets]TargetT =
+    {   {   "x86", "i386-unknown-linux-gnu",
+	    LSB, 8, 32, false, 0,
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,32},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "x86-64", "x86_64-unknown-linux-gnu",
+	    LSB, 8, 64, false, 0,
+	    4,
+	    {64, 64},
+	    {   {8, 8}, {16,16}, {32,32}, {64,64},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "msp430", "msp430-generic-generic",
+	    LSB, 8, 16, true, 0,
+	    3,
+	    {16, 16},
+	    {   {8, 8}, {16,16}, {32,16}, {0,0},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "cortex-m3", "thumb2-unknown-unknown",
+	    LSB, 8, 32, true, 0,	// need a version with no alignment
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,32},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "ppc32", "ppc-unknown-unknown",
+	    MSB, 8, 32, true, 0,
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,32},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "ppc64", "ppc64-unknown-unknown",
+	    MSB, 8, 64, true, 0,
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,64},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "mips", "mips-unknown-unknown",
+	    MSB, 8, 32, true, 0,
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,32},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	}
+    };
+    var Target: TargetT =
+    {   "x86", "i386-unknown-linux-gnu",
+	LSB, 8, 32, false, 0,
+	4,
+	{32, 32},
+	{   {8, 8}, {16,16}, {32,32}, {64,32},
+	    {0,0},  {0,0},   {0,0},   {0,0}
+	}
+    };
+
+    proc set(name: @[]_byte): boolean
+    {   var i: 0..TargetsMax;
+
+	i = 0;
+	while i < NumTargets do
+	{
+	    if zstr.eq(name, Targets[i].name, lex.IdentMax) then
+	    {
+		Target = Targets[i];
+		return true;
+	    }
+	    i += 1;
+	}
+	return false;
+    }
+
+    proc isize(bits: type.BitSize): type.BitSize
+    {   var i: 0..IntSizesMax;
+
+	i = 0;
+	while i < Target.nisize && Target.isizes[i].size < bits do
+	    i += 1;
+	return Target.isizes[i].size;
+    }
+
+    proc ialign(bits: type.BitSize): type.BitSize
+    {   var i: 0..IntSizesMax;
+
+	i = 0;
+	while i < Target.nisize && Target.isizes[i].size < bits do
+	    i += 1;
+	return Target.isizes[i].align;
+    }
+   
+}
+

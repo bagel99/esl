@@ -1,0 +1,62 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: type1.esl 463 2010-12-08 20:27:39Z bgl $
+
+package type
+{
+    type Valu: _uint64;
+    type SValu: _int64;
+    type TypeT: (UTYPE, ENUM, UINT, SINT, REF, ARRAY, RECORD, REFPROC);
+    type OrderT: (NATIVE, MSB, LSB);
+    type AlignT: (NATIVE, MEM, BIT);
+    type AccessT: (RW, RO, WO);
+    type BitSize: 0..0xFFFFFFFF;
+    type TypeNode:
+    {
+	base:	@TypeNode;	// for derived types
+	index:  @TypeNode;	// for arrays
+	name:	@SymbNode;	// for named types
+	list:	@SymbNode;	// for enums, records
+	meths:	@SymbNode;	// list of methods for this type
+	lo:	Valu;
+	hi:	Valu;
+	size:	BitSize;	// size in bits
+	width:  BitSize;	// size in bits when in memory
+	align:	BitSize;	// alignment in bits when in memory
+	dbtag:	_uint16;	// tag for debug information
+	kind:	TypeT;		// ENUM, UINT, ...
+	packed:	AlignT;		// packed or not
+	bitorder: OrderT;	// lsb, msb
+	memorder: OrderT;	// le, be
+	access:	AccessT;	// access restrictions
+	flex:   boolean;	// flexible array
+	input:  boolean;	// external state changes (like C volatile)	
+	output: boolean;	// changes external state (like C volatile)	
+	printed:boolean;	// llvm defined printed	
+	dumped:	boolean;	// type dump printed
+	final:	boolean;	// type properties are final, do not modify	
+    };
+    type Type: @TypeNode;
+
+    type TypeListEntry:
+    {   next:   @TypeListEntry;
+	type:   @TypeNode;
+    };
+    type TypeList: @TypeListEntry;
+
+    var unkntype: Type;		// the "unknown" type
+    var booltype: Type;
+    var bytetype: Type;
+    var wordtype: Type;
+    var swordtype: Type;
+    var memtype: Type;
+    const NINTS = 4;		// number of integer types supported
+    var uinttypes: [NINTS]Type;
+    var inttypes:  [NINTS]Type;
+
+    proc New(kind: TypeT): Type;
+    proc NewBuiltin(kind: TypeT, name: @lex.Identifier, size: BitSize): Type;
+    proc Final(t: Type);
+
+    proc DumpT(t: Type, full: boolean);
+}
+

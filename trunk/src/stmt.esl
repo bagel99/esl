@@ -1,0 +1,1253 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: stmt.esl 474 2010-12-13 19:45:47Z bgl $
+
+package stmt
+{
+    const isthenlist:[3]TokenT = { KIS, KTHEN, NONE };
+    const thenlist:[2]TokenT = { KTHEN, NONE };
+    const elselist:[2]TokenT = { KELSE, NONE };
+    const aslist:[2]TokenT = { KAS, NONE };
+    const dolist:[2]TokenT = { KDO, NONE };
+    const withlist:[2]TokenT = { KWITH, NONE };
+    const skiplist:[3]TokenT = { GEND, SEMI, NONE };
+    type NestType: (PROGRAM, PACKAGE, PROCEDURE);
+    const LoopMax = 32;
+    var   LoopLevel: 0..LoopMax-1;
+    var   CurFile: Symb;
+
+    proc Program(file:@[]_byte): Ast;	// forward
+    proc ProgStmt(): Ast;		// forward
+    proc PkgStmt(): Ast;		// forward
+    proc Statement(): Ast;		// forward
+
+    const skipgroup: [2]TokenT = { GEND, NONE };
+    const skipstmt: [2]TokenT = { SEMI, NONE };
+
+    proc WhenSkip(tok: TokenT)
+    {
+//out.str(2, "Beg skip line="); out.uid(2, lex.Lineno());
+//out.str(2, " tok="); out.str(2, lex.keywords[tok]);
+//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+	if tok == GBEG then
+	{   lex.Skip(skipgroup);
+	    lex.Expect(GEND);
+	}
+	else
+	{   lex.Skip(skipstmt);
+	    lex.Expect(SEMI);
+	}
+//out.str(2, "End skip line="); out.uid(2, lex.Lineno());
+//out.str(2, " tok="); out.str(2, lex.keywords[Token]);
+//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+    }
+
+    proc WhenDo(nest: NestType): Ast
+    {   var tree, stree: Ast;
+	var tok: TokenT;
+
+//out.str(2, "Beg do line="); out.uid(2, lex.Lineno());
+//out.str(2, " tok="); out.str(2, lex.keywords[Token]);
+//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+	tree = 0;
+	if Token == GBEG then
+	{   tok = Next();
+	    tree = ast.New(SEQ, 0);
+	    while tok != GEND && tok != ENDF do
+	    {   if nest
+		is PROGRAM then    stree = ProgStmt();
+		is PACKAGE then    stree = PkgStmt();
+		is PROCEDURE then  stree = Statement();
+		if stree != 0 then
+		    tree = ast.Child(tree, stree);
+		tok = Token;
+//out.str(2, "\tline="); out.uid(2, lex.Lineno());
+//out.str(2, " tok="); out.str(2, lex.keywords[Token]);
+//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+	    }
+	    lex.Expect(GEND);
+	}
+	else
+	{   if nest
+	    is PROGRAM then    tree = ProgStmt();
+	    is PACKAGE then    tree = PkgStmt();
+	    is PROCEDURE then  tree = Statement();
+	}
+//out.str(2, "End do line="); out.uid(2, lex.Lineno());
+//out.str(2, " tok="); out.str(2, lex.keywords[Token]);
+//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+	return tree;
+    }
+
+    proc WhenStmt(nest: NestType): Ast
+    {   var tree: Ast;
+	var val: Valu;
+	var tok: TokenT;
+	var ctree: Ast;
+
+        tree = 0;
+	ctree = expr.Bool(0);
+//out.str(2, "When:\n"); ast.Dump(ctree);
+	if ctree@.op != CONST then
+	{
+	    lex.Error(EXPCONST);
+	    return tree;
+	}
+	val = ctree@.valu;
+//out.str(2, "WhenStmt1: val="); out.uid(2, _word(val)); out.nl(2);
+	tok = lex.Keyword(thenlist);
+	if tok == KTHEN then
+	{   tok = Next();
+	    if val == 0 then
+		WhenSkip(tok);
+	    else
+		tree = WhenDo(nest);
+	    tok = lex.Keyword(elselist);
+//out.str(2, "WhenStmt2: tok="); out.str(2, lex.keywords[tok]); out.nl(2);
+	    if tok == KELSE then
+	    {   tok = Next();
+		if val == 0 then
+		    tree = WhenDo(nest);
+		else
+		    WhenSkip(tok);
+	    }	    
+	}
+	else
+	{   lex.ErrorT(EXPECT, KTHEN);
+	}
+	return tree;
+    }
+
+    proc TypeDecl(): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+	var s, bs: Symb;
+	var t, bt: Type;
+
+        tree = 0;
+	tok = Token;
+	if tok == ID then
+	{
+	    // FIXME: maybe handle package.symbol as type-identifier
+	    s = symb.New(TYPE, lex.Ident, false);
+	    bt = 0;	// assume not a derived type
+	    tok = Next();
+	    if tok == PBEG then
+	    {   tok = Next();
+		if tok == ID then
+		{   bs = symb.Find(lex.Ident);
+		    if bs != 0 then
+		    {   if bs@.kind == TYPE then
+			    bt = bs@.type;
+			else
+			    lex.Error(NOTTYPE);
+		    }
+		    else
+			lex.ErrorI(UNDEFID, lex.Ident);
+		    tok = Next();
+		}
+		tok = lex.Expect(PEND);
+	    }
+	    if tok == COLON then
+	    {   tok = Next();
+		t = type.Def(tok, bt);
+		if t != 0 && t@.name == 0 then
+		    t@.name = s;
+      		tok = Token;
+		if tok == COLON then
+		    t = type.TypeAttributes(t);
+		s@.type = t;
+		if s@.forward then
+		    type.FwdFix(s, t);		// fix any forward references
+		type.Final(t);
+            }
+            tok = lex.Expect(SEMI);
+	}
+	else
+	    lex.Error(EXPECTID);
+        return tree;
+    }
+
+    proc VarNew(s: Symb, t: Type, iv: Ast): Ast
+    {   var node: Ast;
+
+        s@.type = t;
+        node = ast.New(DCLVAR, t);
+        if iv != 0 then
+	    node = ast.Child(node, iv);
+	node@.kind = t@.kind;
+	node@.size = t@.width;
+	node@.symb = s;
+	return node;
+    }
+
+    proc VarDecl(): Ast
+    {   var tree, stree, iv: Ast;
+	var tok: TokenT;
+	var t: Type;
+	var s, ss: Symb;
+
+        tree = 0;
+	tok = Token;
+	if tok == ID then
+	{   s = symb.New(VAR, lex.Ident, false);
+	    ss = s;
+	    tok = Next();
+	    // Warning: this works because the symbols list is singly linked
+	    while tok == COMMA do
+	    {   tok = Next();
+		if tok == ID then
+		{   s = symb.New(VAR, lex.Ident, false);
+		    tok = Next();
+		}
+		else
+		    lex.Error(EXPECTID);
+	    }
+	    if tok == COLON then
+	    {   tok = Next();
+		t = type.Def(tok, 0);
+		tok = Token;
+		if tok == COLON then
+		    t = type.VarAttributes(s, t);
+		type.Final(t);
+		iv = 0;	// assume no initial value
+		tok = Token;
+		if tok == ASGN then
+		{   tok = Next();
+		    iv = expr.Const(t);
+		    s@.hasdef = true;
+		}
+	    }
+	    else
+		lex.ErrorT(EXPECT, COLON);
+	    if ss@.next == 0 then	// just one
+		tree = VarNew(ss, t, iv);
+	    else
+	    {   tree = ast.New(SEQ, 0);
+		loop
+		{   stree = VarNew(ss, t, iv);
+		    tree = ast.Child(tree, stree);
+		  exit ss == s || ss@.next == 0;
+		    ss = ss@.next;
+		}
+	    }
+	    tok = lex.Expect(SEMI);
+	}
+        return tree;
+    }
+
+    proc ConstDecl(): Ast
+    {   var tree: Ast;
+	var s: Symb;
+	var t: Type;
+	var tok: TokenT;
+
+        tree = 0;
+	tok = Token;
+	if tok == ID then
+	{   s = symb.New(CONSTANT, lex.Ident, false);
+	    tok = Next();
+	    t = 0;
+	    if tok == COLON then	// optional type
+	    {   tok = Next();
+		t = type.Def(tok, 0);
+		tok = Token;
+		if tok == COLON then	// optional attributes
+		{   t = type.TypeAttributes(t);
+		    tok = Token;
+		}
+		type.Final(t);
+	    }
+	    if tok == ASGN then
+	    {   tok = Next();
+		tree = expr.Const(t);
+		if t == 0 || t@.kind <= REF then
+		{   if tree@.op == CONST then
+		    {   s@.valu = tree@.valu;
+			if t == 0 then t = tree@.type;
+			tree = 0;	// delete AST
+		    }
+		    else
+			lex.Error(BADCONST);
+		}
+		else
+		{   t = tree@.type;
+		    tree = ast.New1(DCLCON, t, tree);
+		    tree@.symb = s;
+		}
+		s@.hasdef = true;
+	    }
+	    else
+		lex.Error(BADCONST);
+	    s@.type = t;
+	}
+	else
+	    lex.Error(EXPECTID);
+	tok = lex.Expect(SEMI);
+        return tree;
+    }
+
+    proc GetLHS(): Ast
+    {   var s: Symb;
+	var tok: TokenT;
+	var tree: Ast;
+
+	tree = 0;
+	tok = Token;
+	if tok == ID then
+	{   s = symb.Find(lex.Ident);
+	    tok = Next();
+	    if s != 0 then
+		tree = expr.Primary(s);
+	    else lex.ErrorI(UNDEFID, lex.Ident);
+	}
+	else lex.Error(EXPECTID);
+	return tree;
+    }
+
+    proc Asm(): Ast
+    {   var tree, node, temp: Ast;
+	var narg, nout: ast.NSubNodes;
+	var tok: TokenT;
+	type pstring: @[]_byte;
+	var what: pstring;		// constraint list
+	var i: 0..lex.StringMax;	// index into constraint string
+	const MaxArg = 9;
+	type ArgRange: 0..MaxArg;
+	var na, no: ArgRange;		// index into constraint array
+	type constraintT: (IN=10, OUT);	// 0..9 are indirects
+	var constraints: [ArgRange] constraintT;
+	var outputs: [ArgRange]Ast;
+	var tlhead, tltail, tl: type.TypeList;
+
+	tree = ast.New(ASM, 0);
+	tok = Token;
+	// First is string of assembly language pattern
+	if tok == STR then
+	{   tree = ast.Child(tree, expr.String());
+	    tok = Next();
+	    if tok == COMMA then
+	    {   tok = Next();
+		narg = 0;
+		nout = 0;
+		// Next is string of constraints
+		// Must be here if any operands, could be here even if none.
+		if tok == STR then
+		{   node = expr.String();
+		    what = pstring(node@.symb);
+		    tree = ast.Child(tree, node);
+		    tok = Next();
+		    // Parse the constraint string
+		    i = 0;
+		    while what@[i] != 0 && narg < MaxArg-1 do
+		    {   if what@[i]
+			is '=' then
+			{   i += 1;
+			    nout += 1;
+			    constraints[narg] = OUT;
+			    narg += 1;
+			}
+			is '0'..'9' then
+			{   constraints[narg] = constraintT(what@[i]-'0');
+			    narg += 1;
+			}
+			is '~' then	// FIXME: handle this
+			{
+			}
+			else
+			{   constraints[narg] = IN;
+			    narg += 1;
+			}
+			i += 1;
+		      exit what@[i] != ',';
+		   	i += 1;
+		    }
+		}
+		else lex.ErrorT(EXPECT, STR);
+		// Now the list of operands
+		na = 0;  no = 0;
+		while na < narg do
+		{
+		    if constraints[na] < IN then	// reuse output as input
+		    {
+//		        node = expr.Load(outputs[ArgRange(constraints[na])]);
+		        node = expr.Load(outputs[_uint8(constraints[na])]);
+			tree = ast.Child(tree, node);
+		    }
+		    else	// need a new argument
+		    {   if tok == COMMA then
+			{   tok = Next();
+			    if constraints[na] == OUT then
+			    {   outputs[no] = GetLHS();
+				no += 1;
+			    }
+			    else				// IN
+			    {   node = expr.Bool(0);
+				tree = ast.Child(tree, node);
+			    }
+			    tok = Token;
+			}
+			else lex.ErrorT(EXPECT, COMMA);
+		    }
+		    na += 1;
+		}
+		// Set the return value type
+		tlhead = 0;
+		tltail = 0;
+		no = 0;
+		while no < nout do
+		{   tl = type.TypeList(sys.zalloc(type.TypeListEntry?size));
+		    tl@.type = outputs[no]@.type;
+		    if tltail == 0 then
+			tlhead = tl;
+		    else
+			tltail@.next = tl;
+		    tltail = tl;
+		    no += 1;
+		}
+		tree@.type = Type(tlhead);	// WARNING: unioning
+		// Now store the outputs
+		if nout > 0 then
+		{   node = tree;
+		    tree = ast.New(STORE, 0);
+		    // do LHS first
+		    no = 0;
+		    while no < nout do
+		    {   tree = ast.Child(tree, outputs[no]);
+			no += 1;
+		    }
+		    if nout > 1 then
+		    {   no = 0;
+			while no < nout do
+			{   temp = ast.New1(GETRV, outputs[no]@.type, node);
+			    temp@.kind = temp@.type@.kind;
+			    temp@.size = temp@.type@.width;
+			    temp@.valu = no;
+			    tree = ast.Child(tree, temp);
+			    no += 1;
+			}
+		    }
+		    else
+		    {   // This is a hack because the ASM node overloads type
+			// to point to a TypeList instead of Type, so we need
+			// a node with a real Type.
+			temp = ast.New1(NOP, outputs[0]@.type, node);
+			temp@.kind = temp@.type@.kind;
+			temp@.size = temp@.type@.width;
+			tree = ast.Child(tree, temp);
+		    }
+		}
+	    }
+	}
+	else lex.ErrorT(EXPECT, STR);
+	return tree;
+    }
+
+    proc AssignRecord(lhs:Ast): Ast
+    {   var tree: Ast;
+	var t:Type;
+
+	t = lhs@.type;
+	tree = expr.Term(t);
+	if t@.packed == BIT then
+	{   tree@.kind = UINT;		// FIXME: necessary?
+	    if type.NeedSwap(t, Target.order) then
+		tree = ast.New1(REVB, tree@.type, tree);
+	}
+	// FIXME: copy or store depending on size?
+	tree = ast.New2(STORE, 0, lhs, tree);
+	return tree;
+    }
+
+    proc ArrayFix(tree:Ast): Ast
+    {
+	if tree@.op
+	is VAR then
+	    tree = ast.New1(BYREF, tree@.type, tree);
+	is CLIST then
+	    tree@.kind = REF;
+	if tree@.type@.base != type.bytetype || !tree@.type@.flex then
+	    tree = ast.New1(CAST, type.memtype, tree);
+	return tree;
+    }
+
+    proc AssignArray(t:Type, lhs:Ast): Ast
+    {   var tree, lsize, rsize, align: Ast;
+	var lalign, ralign: _uint;
+
+	lalign = expr.GetAlignment(lhs);
+	if lhs@.op == SLICE then
+	    lsize = lhs@.child[2];
+	else
+	    lsize = ast.Const(type.wordtype, lhs@.type@.hi);
+	tree = expr.Term(t);
+	if tree@.op == LOAD && tree@.kind == ARRAY then	// undo the load
+	    tree = tree@.child[0];
+	ralign = expr.GetAlignment(tree);
+	if ralign < lalign then
+	    lalign = ralign;
+	if tree@.op == SLICE then
+	    rsize = tree@.child[2];
+	else
+	    rsize = ast.Const(type.wordtype, tree@.type@.hi);
+/*
+	if lsize@.op == CONST && rsize@.op == CONST then
+	{   // FIXME: check lhs <= rhs
+out.str(2, "Array copy: nl="); out.uid(2, _uint(lsize@.valu));
+out.str(2, " nr="); out.uid(2, _uint(rsize@.valu)); out.nl(2);
+	}
+*/
+	lhs = ArrayFix(lhs);
+	tree = ArrayFix(tree);
+	tree = ast.New2(COPY, lhs@.type, lhs, tree);
+        tree = ast.Child(tree, lsize);
+	align = ast.Const(type.wordtype, lalign);
+	tree = ast.Child(tree, align);
+	return tree;
+    }
+
+    proc AdjustRHS(lhs: Ast, rhs: Ast): Ast
+    {   var tl, tr: Type;
+
+        tl = lhs@.type;		// target type
+	tr = rhs@.type;
+/*
+out.str(2, "TL kind="); out.str(2, type.KindName[tl@.kind]); out.nl(2);
+type.DumpT(tl, true); out.nl(2);
+if tl@.base != 0 then
+{ out.str(2, "TL.base kind="); out.str(2, type.KindName[tl@.base@.kind]); out.nl(2);
+  type.DumpT(tl@.base, true); out.nl(2);
+}
+out.str(2, "TR kind="); out.str(2, type.KindName[tr@.kind]); out.nl(2);
+type.DumpT(tr, true); out.nl(2);
+*/
+	if rhs@.op == LOAD && rhs@.kind == ARRAY then
+	{   rhs = rhs@.child[0];
+	}
+	if rhs@.kind != REF then
+	{   if lhs@.size != rhs@.size then
+		rhs = expr.ExtendT(rhs, tl);
+	}
+	else
+	{   if tl@.kind == REF then
+	    {   if tl@.base != tr then
+		{   if type.Compat(tl@.base, tr) then
+		    {
+			rhs = expr.Cast(rhs, tl);
+		    }
+		    else lex.Error(TYPEASSIGN);
+		}
+	    }
+	    else lex.Error(TYPEASSIGN);
+	}	
+	if type.NeedSwap(tr, tl@.memorder) then
+	    rhs = ast.New1(REVB, tr, rhs);
+	return rhs;
+    }
+
+    proc Assign(lhs: Ast): Ast
+    {   var tree, rhs, lrhs: Ast;
+	var t: Type;
+	var op: ast.Op;
+	var tok, optok: TokenT;
+	var nl, nr, i: ast.NSubNodes;
+	var s: Symb;
+	var tl: type.TypeList;
+
+	tree = ast.New1(STORE, 0, lhs);
+	nl = 1;
+	tok = Token;
+	loop
+	{
+	  exit tok != COMMA;
+	    tok = Next();
+	    lhs = GetLHS();
+	    tree = ast.Child(tree, lhs);
+	    nl += 1;
+	    tok = Token;
+	}
+	if tok >= ASGN && tok <= DECR then
+	{   optok = tok;
+	    tok = Next();
+	    nr = 0;
+	    loop
+	    {   lhs = tree@.child[nr];
+		if lhs != 0 then t = lhs@.type; else t = 0;
+	        if t != 0 && t@.kind == RECORD then
+		{   if optok == ASGN && nl == 1 then
+			tree = AssignRecord(lhs);
+		    else
+			lex.Error(ILLASSIGN);
+		    nr += 1;
+		}
+		else if t != 0 && t@.kind == ARRAY then
+		{   if optok == ASGN && nl == 1 then
+			tree = AssignArray(t, lhs);
+		    else
+			lex.Error(ILLASSIGN);
+		    nr += 1;
+		}
+		else
+		{   rhs = expr.Bool(t);	// right-hand side
+		    if rhs != 0 then
+		    {   if rhs@.op == CALL || rhs@.op == CALLI then
+			{   tl = rhs@.symb@.retvlist;
+			    if tl != 0 then
+			    {   if tl@.next != 0 then	// multiple ret. values
+				{   i = 0;
+				    loop
+				    {   lrhs = ast.New1(GETRV, tl@.type, rhs);
+					lrhs@.kind = tl@.type@.kind;
+					if lrhs@.kind == REF then
+					{   lrhs@.type = tl@.type@.base;
+					    lrhs@.size = Target.ptr.size;
+					}
+					else
+					    lrhs@.size = tl@.type@.width;
+					lrhs@.valu = i;
+					tree = ast.Child(tree, lrhs);
+					i += 1;
+					tl = tl@.next;
+				      exit tl == 0;
+				    }
+				    nr += i;
+				}
+				else			// single ret. value
+				{   rhs = AdjustRHS(lhs, rhs);
+				    tree = ast.Child(tree, rhs);
+				    nr += 1;
+				}
+			    }
+			    else lex.Error(RHSASSIGN);
+			}
+			else 
+			{   if rhs@.type != 0 then
+			    {   if optok != ASGN then
+				{   lrhs = expr.Load(lhs);
+				    if optok == INCR then op = ADD; else op = SUB;
+				    rhs = expr.BinOp(op, lrhs, rhs);
+				}
+			        rhs = AdjustRHS(lhs, rhs);
+			    }
+			    else lex.Error(RHSASSIGN);
+			    tree = ast.Child(tree, rhs);
+			    nr += 1;
+			}
+		    }
+		}
+		tok = Token;
+	      exit tok != COMMA;
+		tok = Next();
+	    }
+	    if nl != nr then
+	    {	if nl < nr then lex.Error(RHSLESS); else lex.Error(RHSMORE);
+	    }
+	}
+	else
+	    lex.Error(BADASSIGN);
+	return tree;
+    }
+
+    proc AssignOrCall(s:Symb): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+
+	tree = 0;
+	if s@.kind == PACK then
+	{   s = symb.FindPackage(s);
+	    tok = Next();
+	}
+	if s != 0 then
+	{   tree = expr.Primary(s);
+	    if tree != 0 && tree@.op != CALL &&
+			    tree@.op != CALLI && tree@.op != ASM then
+		tree = Assign(tree);
+	}
+	else
+	{   lex.ErrorI(UNDEFID, lex.Ident);
+	    tok = lex.Skip(skiplist);
+	}
+	tok = lex.Expect(SEMI);
+	return tree;
+    }
+
+    proc Return(): Ast
+    {   var tree, rval: Ast;
+	var t: Type;
+	var tl: type.TypeList;
+	var tok: TokenT;
+
+        tree = 0;
+	tl = 0;
+	if symb.curproc != 0 then
+	    tl = symb.curproc@.retvlist;
+	else
+	    lex.Error(NOPROC);
+	tree = ast.New(RET, 0);
+	tok = Token;
+	loop
+	{
+	  exit tok == SEMI;
+	    if tl != 0 then
+		t = tl@.type;
+	    else
+	    {   lex.Error(BADRETURN);
+		t = 0;
+	    }
+	    rval = expr.Bool(t);
+	    if rval != 0 then
+	    {   if t != 0 then
+		{   rval = expr.Actual(rval, t);
+		    tree = ast.Child(tree, rval);
+		    if t@.kind == REF then
+		    {   tree@.type = t@.base;
+			tree@.size = Target.ptr.size;
+		    }
+		    else
+			tree@.size = t@.width;
+		}
+		else
+		    lex.Error(BADRETURN);
+	    }
+	    if tl != 0 then tl = tl@.next;
+	    tok = Token;
+	  exit tok != COMMA;
+	    tok = Next();
+	}
+	if tree@.num != 0 then	// FIXME: fix in llvm?
+	{   tree@.type = tree@.child[0]@.type;	// first returned value
+	    tree@.kind = tree@.child[0]@.kind;
+	    tree@.size = tree@.child[0]@.size;
+	}
+	lex.Expect(SEMI);
+        return tree;
+    }
+
+    proc If(): Ast
+    {   var tree, ctree, stree, vlo, vhi: Ast;
+	var t: Type;
+	var s: Symb;
+	var tok, tok2: TokenT;
+
+        tree = 0;
+	tok = Token;
+	ctree = expr.Bool(0);
+	if ctree != 0 then
+	{   t = ctree@.type;
+	    if type.Same(t, type.booltype) then
+	    {   ctree = expr.ForceBoolean(ctree);
+		tree = ast.New(IF, 0);
+	    }
+	    else
+		tree = ast.New(SEL, 0);
+	    tree = ast.Child(tree, ctree);
+	}
+	tok = lex.Keyword(isthenlist);
+	if tok
+	is KIS then 
+	{   loop
+	    {   ctree = ast.New(IS, 0);
+		loop
+		{   tok = Next();
+		    vlo = expr.Bool(t);
+		    if vlo@.op != CONST then
+			lex.Error(EXPCONST);
+		    tok = Token;
+		    if tok == RANGE then
+		    {   tok = Next();
+			vhi = expr.Bool(t);
+			if vlo@.op != CONST then
+			    lex.Error(EXPCONST);
+			vlo = ast.New2(CRANGE, vlo@.type, vlo, vhi);
+		    }
+		    ctree = ast.Child(ctree, vlo);
+		    tok = Token;
+		  exit tok != COMMA;
+		}
+		if tok == COLON then
+		{   tok = Next();
+		    if feature.then then
+			lex.Error(USETHEN); // FIXME enable warning some day
+		}
+		else if lex.Keyword(thenlist) == KTHEN then
+		{   tok = Next();
+		}
+		else lex.ErrorT(EXPECT, KTHEN);
+		stree = Statement();
+		ctree = ast.Child(ctree, stree);
+		tree = ast.Child(tree, ctree);
+		tok = Token;
+		if tok == ID then tok = lex.Keyword(isthenlist);
+	      exit tok != KIS;
+	    }
+	}
+	is KTHEN then 
+	{   if tree@.op == SEL then lex.Error(WANTBOOL);
+	    tok = Next();
+	    stree = Statement();
+	    tree = ast.Child(tree, stree);
+	}
+	else
+	    lex.Error(BADIF);
+	tok = lex.Keyword(elselist);
+	if tok == KELSE then	// "else" is abiguous, could be assignment
+	{   s = symb.FindTop(lex.Ident);
+	    tok2 = Next();
+	    if s != 0 then	// else is also a valid symbol, disabiguate
+	    {   if tok2
+		is ASGN, INCR, DECR, ABEG, DOT, AT, PBEG then 
+		    tok = ID;	// assignment or procedure call
+	    }
+	    if tok == ID then
+	    {   stree = AssignOrCall(s);
+		tree = ast.Child(tree, 0);	// no else
+		// Put the current if-tree and the assignment/call tree
+		// under a SEQ node and return that.
+		if stree != 0 then
+		    tree = ast.New2(SEQ, 0, tree, stree);
+	    }
+	    else	// really the else part
+	    {   stree = Statement();
+		tree = ast.Child(tree, stree);
+	    }
+	}
+	else
+	    tree = ast.Child(tree, 0);	// no else
+        return tree;
+    }
+
+    proc For(): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+
+        tree = 0;
+	tok = Token;
+        return tree;
+    }
+
+    proc While(): Ast
+    {   var tree, ctree: Ast;
+	var tok: TokenT;
+
+	tok = Token;
+	ctree = expr.Bool(type.booltype);
+	if type.Same(ctree@.type, type.booltype) then
+	    ctree = expr.ForceBoolean(ctree);
+	else
+	    lex.Error(WANTBOOL);
+	ctree = ast.New1(BNOT, 0, ctree);
+	ctree = ast.New1(EXIT, 0, ctree);
+	LoopLevel += 1;
+	tok = lex.Keyword(dolist);
+	if tok == KDO then
+	    tok = Next();
+	else
+	    lex.ErrorT(EXPECT, KDO);
+	tree = Statement();
+	tree = ast.New2(SEQ, 0, ctree, tree);
+	tree = ast.New1(LOOP, 0, tree);
+	if LoopLevel > 0 then
+	    LoopLevel -= 1;	
+        return tree;
+    }
+
+    proc Loop(): Ast
+    {   var tree, stree: Ast;
+	var tok: TokenT;
+
+        tree = 0;
+	tok = Token;
+	LoopLevel += 1;
+        tree = ast.New(LOOP, 0);
+	stree = Statement();
+	tree = ast.Child(tree, stree);
+	if LoopLevel > 0 then
+	    LoopLevel -= 1;
+        return tree;
+    }
+
+    proc Exit(): Ast
+    {   var tree, wtree, ctree: Ast;
+	var tok: TokenT;
+
+        tree = 0;
+	tok = Token;
+	if LoopLevel == 0 then
+	    lex.Error(NOLOOP);
+	tree = ast.New(EXIT, 0);
+	ctree = expr.Bool(type.booltype);
+	if type.Same(ctree@.type, type.booltype) then
+	    ctree = expr.ForceBoolean(ctree);
+	else
+	    lex.Error(WANTBOOL);
+	tree = ast.Child(tree, ctree);
+	tok = lex.Keyword(withlist);
+	if tok == KWITH then
+	{   tok = Next();
+	    wtree = Statement();
+	    ast.Child(tree, wtree);
+	}
+	else
+	    lex.Expect(SEMI);
+        return tree;
+    }
+
+    proc Alias(): Ast
+    {   var s, ns: Symb;
+	var tok: TokenT;
+
+	tok = Token;
+	loop
+	{   if tok == ID then
+	    {   s = symb.Find(lex.Ident);
+		if s == 0 then
+		    lex.ErrorI(UNDEFID, lex.Ident);
+		tok = Next();
+		tok = lex.Keyword(aslist);
+		if tok == KAS then
+		{   tok = Next();
+		    if tok == ID then
+		    {   ns = symb.FindTop(lex.Ident);
+			if ns == 0 then		// name unused, normal case
+			{   s = symb.Clone(s, lex.Ident);
+			    tok = Next();
+			}
+			else
+			{   tok = Next();
+			    if ns@.kind == PACK then
+			    {   if tok == DOT then
+				{   tok = Next();
+				    if tok == ID then
+				    {   ns = symb.FindLocal(ns@.symblist, lex.Ident);
+					if ns != 0 then
+					{   if s@.kind == TYPE && 
+					       ns@.kind == TYPE then
+				    		// fix inter-package fwd type
+						type.FwdFix(ns, s@.type);
+				    	    else lex.Error(NOTTYPE);
+					}
+					else lex.ErrorI(UNDEFID, lex.Ident);
+					tok = Next();
+				    }
+				    else lex.Error(EXPECTID);
+				}
+				else lex.ErrorI(DEFID, lex.Ident);
+			    }
+			    else lex.ErrorI(DEFID, lex.Ident);
+			}
+		    }
+		    else lex.Error(EXPECTID);
+		}
+		else lex.ErrorT(EXPECT, KAS);
+	    }
+	    else lex.Error(EXPECTID);
+	  exit tok != COMMA;
+	    tok = Next();
+	}
+	tok = lex.Expect(SEMI);
+        return 0;
+    }
+
+    const stmtlist:[12]TokenT =
+    { KTYPE, KVAR, KCONST, KIF, KFOR, KWHILE, KLOOP, KEXIT, KRET, KWHEN, KASM, NONE };
+
+    proc Statement(): Ast
+    {   var tree, stree: Ast;
+	var tok, tok2: TokenT;
+	var s: Symb;
+
+        tree = 0;
+        tok = Token;
+	if tok == GBEG then	// statement group
+	{   tok = Next();
+	    tree = ast.New(SEQ, 0);
+	    while tok != GEND && tok != ENDF do
+	    {   stree = Statement();
+		if stree != 0 then
+		   tree = ast.Child(tree, stree);
+//out.str(2, "Stmt:\n");
+//ast.Dump(tree);
+		tok = Token;
+	    }
+	    tok = lex.Expect(GEND);
+	}
+	else
+	{   // Here is where no reserved words makes things tough.
+	    // Need to distinguish statements starting with keywords
+	    // from assignments and procedure calls that start with
+	    // the same identifier.
+	    tok = lex.Keyword(stmtlist);
+	    s = symb.FindTop(lex.Ident);
+	    tok2 = Next();
+	    if tok > ID && s != 0 then	// both keyword and valid identifer
+	    {   // Need to disambiguate
+		if tok2
+		is ASGN, INCR, DECR, ABEG, DOT, AT, PBEG, COMMA then 
+		    tok = ID;	// assignment or procedure call
+	    }
+	    if tok
+	    is ID then 
+	    {   if s != 0 then
+		    tree = AssignOrCall(s);
+		else
+		{   lex.ErrorI(BADSTMTI, lex.Ident);
+		    tok = lex.Skip(stmtlist);
+		}
+	    }
+	    is KTYPE then   tree = TypeDecl();
+	    is KVAR then    tree = VarDecl();
+	    is KCONST then  tree = ConstDecl();
+	    is KIF then     tree = If();
+	    is KFOR then    tree = For();
+	    is KWHILE then  tree = While();
+	    is KLOOP then   tree = Loop();
+	    is KEXIT then   tree = Exit();
+	    is KRET then    tree = Return();
+	    is KASM then    tree = Asm();
+	    is KWHEN then   tree = WhenStmt(PROCEDURE);
+	    is SEMI then    {}		// ignore extra semicolons
+	    else lex.ErrorT(BADSTMTT, tok);
+	}
+        return tree;
+    }
+
+    proc Procedure(): Ast
+    {   var tree, stree: Ast;
+	var tok: TokenT;
+	var t, mt: Type;
+	var s, ms: Symb;
+
+        tree = 0;
+	mt = 0;
+	ms = 0;
+	tok = Token;
+	if tok == PBEG then
+	{   // method
+	    tok = Next();
+	    if tok == ID then
+	    {   // method parameter
+		ms = symb.New(VAR, lex.Ident, true);
+		ms@.isparam = true;
+		ms@.linkage = LOCAL;
+		t = 0;
+		tok = Next();
+		if tok == COLON then
+		{   tok = Next();
+		    if tok
+		    is AT then 
+		    {   t = type.Ref();
+			mt = t@.base;
+		    }
+		    is ID then 
+		    {   s = type.Name();
+			tok = Next();
+			if s != 0 then
+			{   t = s@.type;
+			    mt = t;
+			    if t != 0 && t@.kind == REF then
+				mt = t@.base;
+			}
+			else lex.Error(NOTTYPE);
+		    }
+		    else lex.ErrorT(EXPECT, ID);
+		}
+		else lex.ErrorT(EXPECT, COLON);
+		ms@.type = t;
+	    }
+	    else lex.ErrorT(EXPECT, ID);
+	    tok = lex.Expect(PEND);
+	}
+	if tok == ID then
+	{
+	    s = symb.New(PROC, lex.Ident, true);
+	    if mt != 0 then
+	    {   if !symb.IsUniqueMethod(mt@.meths, lex.Ident) ||
+		   !symb.IsUniqueLocal(mt@.list, lex.Ident) then
+		    lex.ErrorI(DEFID, lex.Ident);
+		// Order doesn't matter, just put on top of list
+		s@.methnext = mt@.meths;
+		mt@.meths = s;
+	    }
+	    else
+		symb.MakeVisable(s);
+	    tok = Next();
+	    type.DefProc(s, ms);
+	    tok = Token;
+	    if tok == COLON then
+	    {   type.ProcAttributes(s);
+		tok = Token;
+	    }
+	    if tok != SEMI then
+	    {   t = s@.type;
+		symb.curproc = s;
+		symb.Push(s@.parmlist);	// make parameters visable
+		symb.Push(0);		// another level for locals
+		LoopLevel = 0;
+		tree = ast.New(PROC, t);
+		tree@.symb = s;
+		if t != 0 && t@.kind == REF then
+		{   tree@.type = t@.base;
+		    tree@.size = Target.ptr.size;
+		}
+		stree = Statement();
+		if debug.symb.proc then
+		    symb.Dump(2);
+		symb.Pop();		// remove locals
+		symb.Pop();		// remove parameters
+	        symb.curproc = 0;
+		tree = ast.Child(tree, stree);
+	    }
+	    else
+	    {   tok = Next();
+		s@.forward = true;
+	    }
+	}
+	else lex.ErrorT(EXPECT, ID);
+        return tree;
+    }
+
+    const packlist:[7]TokenT =
+    { KTYPE, KVAR, KCONST, KPROC, KALIAS, KWHEN, NONE };
+
+    proc PkgStmt(): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+
+	tree = 0;
+	tok = lex.Keyword(packlist);
+	if tok
+	is KALIAS then  { tok = Next();  tree = Alias(); }
+	is KTYPE then   { tok = Next();  tree = TypeDecl(); }
+	is KVAR then    { tok = Next();  tree = VarDecl(); }
+	is KCONST then  { tok = Next();  tree = ConstDecl(); }
+	is KPROC then   { tok = Next();  tree = Procedure(); }
+	is KWHEN then   { tok = Next();  tree = WhenStmt(PACKAGE); }
+	else
+	{   if tok == ID then
+	    {   lex.Error(NOPACK);
+		tok = lex.Skip(skiplist);
+	    }
+	    else
+	    {   if tok != SEMI then
+		    lex.ErrorT(BADSTMTT, tok);
+		tok = Next();
+	    }
+	}
+        return tree;
+    }
+
+    proc Package(): Ast
+    {   var tree, stree: Ast;
+	var tok: TokenT;
+	var s: Symb;
+	
+	tree = 0;
+	tok = Token;
+	if tok == ID then
+	{   s = symb.FindTop(lex.Ident);
+	    if s == 0 then
+	        s = symb.New(PACK, lex.Ident, false);
+	    else if s@.kind != PACK then
+		lex.ErrorI(DEFID, lex.Ident);
+	    s@.forward = true;
+	    tok = Next();
+	    if tok == GBEG then
+	    {   tok = Next();
+		symb.curpack = s;
+		tree = ast.New(SEQ, 0);
+		symb.Push(s@.symblist);
+		while tok != GEND && tok != ENDF do
+		{   stree = PkgStmt();
+		    if stree != 0 then
+			tree = ast.Child(tree, stree);
+		    tok = Token;
+		}
+		tree = ast.New1(PACKAGE, 0, tree);
+		tree@.symb = s;
+	    }
+	    tok = lex.Expect(GEND);
+	    s@.symblist = symb.Save();
+	    if debug.symb.pack then
+		symb.Dump(1);
+	    symb.Pop();
+	    symb.curpack = 0;
+	}
+        return tree;
+    }
+
+    proc Import(): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+
+	tok = Token;
+        tree = 0;
+	if tok == ID then
+	{
+	    if lex.FileCheck(lex.Ident) then
+	    {   if lex.FileOpen(lex.Ident) then
+		{   tree = Program(lex.Ident);
+	            lex.FileClose();
+		}
+		else
+		    lex.ErrorI(BADIMPORT, lex.Ident);
+	    }
+	    tok = Next();
+	    tok = lex.Expect(SEMI);
+	}
+        return tree;
+    }
+
+    const proglist:[9]TokenT = 
+    { KIMPORT, KALIAS, KPACKAGE, KTYPE, KVAR, KCONST, KPROC, KWHEN, NONE };
+
+    proc ProgStmt(): Ast
+    {   var tree: ast.Ast;
+	var tok: TokenT;
+
+	tree = 0;
+	tok = lex.Keyword(proglist);
+	if tok
+	is KIMPORT then   { tok = Next(); tree = Import(); }
+	is KALIAS then    { tok = Next(); tree = Alias(); }
+	is KPACKAGE then  { tok = Next(); tree = Package(); }
+	is KTYPE then     { tok = Next(); tree = TypeDecl(); }
+	is KVAR then      { tok = Next(); tree = VarDecl(); }
+	is KCONST then    { tok = Next(); tree = ConstDecl(); }
+	is KPROC then     { tok = Next(); tree = Procedure(); }
+	is KWHEN then     { tok = Next(); tree = WhenStmt(PROGRAM); }
+	else
+	{   if tok == SEMI then
+		tok = Next();
+	    else
+	    {   if tok == ID then
+		    lex.ErrorI(BADSTMTI, lex.Ident);
+		else
+		    lex.ErrorT(BADSTMTT, tok);
+		tok = lex.Skip(skiplist);
+	    }
+	}
+	return tree;
+    }
+
+    proc Program(file: @[]_byte): Ast
+    {   var tree, stree: ast.Ast;
+	var tok: TokenT;
+	var s: Symb;
+
+	s = symb.NewFile(lex.f@.filepath@.pathname, lex.f@.filename);
+	s@.package = CurFile;
+	CurFile = s;
+	tree = ast.New(SEQ, 0);
+	tok = Next();
+	while tok != ENDF do
+	{   stree = ProgStmt();
+	    if stree != 0 then
+		tree = ast.Child(tree, stree);
+	    tok = Token;
+	}
+	tree = ast.New1(FILE, 0, tree);
+	tree@.symb = s;
+	return tree;
+    }
+
+}
+

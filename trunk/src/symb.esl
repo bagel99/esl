@@ -1,0 +1,424 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: symb.esl 471 2010-12-12 01:27:11Z bgl $
+
+package symb
+{
+    type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS);
+    type LinkT: (LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE);
+    type OffsT: 0..0xFFFF;
+    type IntrinsicT: (NONE, ABS, MIN, MAX);
+    type SymbNode:
+    {
+	next:	  @SymbNode;		// for lists
+	type:	  Type;
+        package:  @SymbNode;		// containing package/file or alias to
+	parmlist: @SymbNode;		// for procedures
+	retvlist: type.TypeList;	// for procedures, retval types
+	symblist: @SymbNode;		// for packages, procedures
+	methnext: @SymbNode;		// for list of methods
+	valu:	  Valu;			// for constants and default values
+	xaddr:    Valu;			// externally fixed address
+	addr:	  OffsT;		// e.g. field offset
+	lineno:   _uint16;		// line number where declared
+	dbtag:    _uint16;		// tag for debug information
+	kind:	  SymbT;		// TYPE, VAR, ...
+	linkage:  LinkT;		// internal, external, forward
+	forward:  boolean;		// forward declared
+	hasdef:   boolean;		// has default value
+	isparam:  boolean;		// is a formal parameter
+	used:	  boolean;		// was ever used (looked up)
+	declared: boolean;		// used in llvm generation
+	ident:	  []Char;
+    };
+    type Symb: @SymbNode;
+    alias SymbNode as type.SymbNode;	// fixup forward references
+
+    const NestMax = 31;
+    type levels: 0..NestMax;
+    var  level: levels;
+    var  curpack: Symb;		// current package, 0 if not in a package
+    var  curproc: Symb;		// current procedure, 0 if not in a procedure
+    type symblist:
+      { frst:	Symb;
+	last:	Symb;
+      };
+    var  symbs: [NestMax+1]symblist;
+
+    // Check for anonymous identifier
+    proc IsAnon(id: @lex.Identifier): boolean
+    {
+	return zstr.eq(id, "_", lex.IdentMax);
+    }
+
+    // Check for uniqueness, fields, enum constants
+    proc IsUniqueLocal(s: Symb, id: @lex.Identifier): boolean
+    {
+	if IsAnon(id) then return true;
+	while s != 0 do
+	{   if zstr.eq(s@.ident, id, lex.IdentMax) then return false;
+	    s = s@.next;
+	}
+	return true;
+    }
+	
+    // Check for uniqueness, methods
+    proc IsUniqueMethod(s: Symb, id: @lex.Identifier): boolean
+    {
+	while s != 0 do
+	{   if zstr.eq(s@.ident, id, lex.IdentMax) then return false;
+	    s = s@.methnext;
+	}
+	return true;
+    }
+	
+    // Install symbol in symbol table
+    proc MakeVisable(s: Symb)
+    {
+	if symbs[level].frst == 0 then
+	    symbs[level].frst = s;
+	else
+	    symbs[level].last@.next = s;
+	symbs[level].last = s;
+    }
+
+    proc New(kind: SymbT, name: @lex.Identifier, private: boolean): Symb
+    {   var s: Symb;
+
+	s = 0;
+	if !private then	// not private, see if already in use
+	{    s = symbs[level].frst;
+	     while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
+		s = s@.next;
+	}
+	if s != 0 then
+	{   if !s@.forward then
+		lex.ErrorI(DEFID, name);
+	    return s;
+	}
+	s = Symb(sys.malloc(SymbNode?size + zstr.len(name, lex.IdentMax)));
+	zstr.copy(s@.ident, name, lex.IdentMax);
+	s@.kind = kind;
+	s@.next = 0;
+	s@.package = curpack;
+	if curproc != 0 then
+	    s@.linkage = LOCAL;
+	else
+	{   if curpack != 0 then
+		s@.linkage = NORMAL;
+	    else
+		s@.linkage = GLOBAL;
+	}
+	s@.lineno = lex.Lineno();
+	if !private then	// not private, install in symbol table
+	{   if symbs[level].frst == 0 then	// FIXME: use MakeVisable
+		symbs[level].frst = s;
+            else
+		symbs[level].last@.next = s;
+	    symbs[level].last = s;
+	}
+        return s;
+    }
+
+    alias lex.PathMax as PathMax;
+    proc NewFile(path: @[]_byte, file: @[]_byte): Symb
+    {   var full: [PathMax]Char;
+
+	zstr.copy(full, path, PathMax);
+	zstr.cat(full, "/", PathMax);
+	zstr.cat(full, file, PathMax);
+	return New(FILE, full, true);
+    }
+	
+    proc Clone(os: Symb, name: @lex.Identifier): Symb
+     {  var ns: Symb;
+
+        ns = New(ALIAS, name, false);
+        ns@.package = os;
+        return ns;
+    }
+
+    proc FindLocal(as: Symb, name: @lex.Identifier): Symb
+    {   var s: Symb;
+
+	s = as;
+	while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
+	    s = s@.next;
+	return s;
+    }
+
+    proc FindMethod(as: Symb, name: @lex.Identifier): Symb
+    {   var s: Symb;
+
+	s = as;
+	while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
+	    s = s@.methnext;
+	return s;
+    }
+
+    proc FindPackage(ps: Symb): Symb
+    {   var s: Symb;
+	var tok: TokenT;
+
+	s = 0;
+	tok = Token;
+	if tok == ID then // usually true
+	    tok = Next();
+	if tok == DOT then
+	{   tok = Next();
+	    if tok == ID then
+		s = FindLocal(ps@.symblist, lex.Ident);
+	}
+	else
+	    lex.Expect(DOT);
+        return s;
+    }
+
+    proc FindTop(name: @lex.Identifier): Symb
+    {   var s: Symb;
+	var i: levels;
+
+        i = level;
+	loop
+	{   s = symbs[i].frst;
+	    while s != 0 do
+	    {   if zstr.eq(s@.ident, name, lex.IdentMax) then
+		{   if s@.kind == ALIAS then
+			s = s@.package;
+		    s@.used = true;
+		    return s;
+		}
+		s = s@.next;
+	    }
+	  exit i == 0;
+	    i -= 1;
+	}
+        return 0;
+    }
+
+    proc Find(name: @lex.Identifier): Symb
+    {   var s: Symb;
+
+	s = FindTop(name);
+	if s != 0 && s@.kind == PACK then
+	    s = FindPackage(s);
+        return s;
+    }
+
+    proc Save(): Symb
+    {
+	return symbs[level].frst;
+    }
+
+    proc Push(init: Symb)
+    {
+	if level < NestMax then
+	{   level += 1;
+	    if init == 0 then
+	    {
+		symbs[level].frst = 0;
+		symbs[level].last = 0;
+	    }
+	    else
+	    {
+		symbs[level].frst = init;
+		while init@.next != 0 do
+		    init = init@.next;
+		symbs[level].last = init;
+	    }
+	}
+	else
+	{	// FIXME: error
+	}
+    }
+
+    proc Pop()
+    {
+	if level > 0 then
+	{
+	    if feature.unused && curproc != 0 then
+	    {   var s: Symb;
+		s = symbs[level].frst;
+		while s != 0 do
+		{   if !s@.used && !s@.isparam then
+		    {   out.str(2, "In ");
+			if curpack != 0 then
+			{   out.str(2, curpack@.ident);
+			    out.chr(2, '.');
+			}
+			out.str(2, curproc@.ident);
+			out.str(2, " unused: ");
+			out.str(2, s@.ident);
+			out.nl(2);
+		    }
+		    s = s@.next;
+		}
+	    }
+	    level -= 1;
+	}
+	else
+	{	// FIXME: error
+	}
+    }
+
+    proc NewIntrinsic(name: @lex.Identifier, valu: IntrinsicT)
+    {   var s: Symb;
+
+	s = New(PROC, name, false);
+	s@.valu = _uint64(valu);
+    }
+
+    proc InitDecl()
+    {   var t: Type;
+	var s, s0, s1: Symb;
+
+	// predefined _boolean
+	t = type.New(ENUM);
+	t@.size = 1;
+	s1 = New(CONSTANT, "true", true);
+	s1@.valu = 1;
+	s0 = New(CONSTANT, "false", true);
+	s0@.valu = 0;
+	s0@.next = s1;
+	t@.list = s0;
+	type.Final(t);
+	s = New(TYPE, "_boolean", false);
+	s@.type = t;
+	t@.name = s;
+	type.booltype = t;	// internal use by compiler
+	s = Clone(s, "boolean");	// user convenience 
+	// now expose the constants false and true
+	s = New(CONSTANT, "false", false);
+	s@.type = t;
+	s@.valu = 0;
+	s = New(CONSTANT, "true", false);
+	s@.type = t;
+	s@.valu = 1;
+
+	// predefined _byte, _memory, _address
+	type.bytetype = type.NewBuiltin(UINT, "_byte", Target.membits);
+	type.memtype = type.NewBuiltin(ARRAY, "_memory", 0);
+	type.memtype@.base = type.bytetype;
+	type.memtype@.align = Target.membits;	// Fixup alignment
+	type.memtype@.flex = true;
+	t = type.NewBuiltin(REF, "_address", Target.ptr.size);
+	t@.base = type.memtype;
+	t@.align = Target.ptr.align;
+	
+	// predefined _uint*, _int*
+	type.wordtype = type.NewBuiltin(UINT, "_uint", Target.regsize);
+	type.swordtype = type.NewBuiltin(SINT, "_int", Target.regsize);
+	type.uinttypes[0] = type.NewBuiltin(UINT, "_uint8",   8);
+	type.inttypes[0]  = type.NewBuiltin(SINT, "_int8",    8);
+	type.uinttypes[1] = type.NewBuiltin(UINT, "_uint16", 16);
+	type.inttypes[1]  = type.NewBuiltin(SINT, "_int16",  16);
+	type.uinttypes[2] = type.NewBuiltin(UINT, "_uint32", 32);
+	type.inttypes[2]  = type.NewBuiltin(SINT, "_int32",  32);
+	type.uinttypes[3] = type.NewBuiltin(UINT, "_uint64", 64);
+	type.inttypes[3]  = type.NewBuiltin(SINT, "_int64",  64);
+
+	// the "unknown" type
+	type.unkntype = type.New(UTYPE);
+
+	// intrinsics
+	NewIntrinsic("_abs", ABS);
+	NewIntrinsic("_min", MIN);
+	NewIntrinsic("_max", MAX);
+    }
+
+    proc Init()
+    {
+	level = 0;
+	symbs[0].frst = 0;
+	symbs[0].last = 0;
+        InitDecl();
+    }
+
+    proc DumpST(s: Symb, full: boolean)
+    {
+	out.str(2, s@.ident);
+	out.chr(2, ':');
+	type.DumpT(s@.type, full);
+    }
+
+    proc DumpFormals(ss: Symb)
+    {
+	out.chr(2, '(');
+	if ss != 0 then
+	{   loop
+	    {   DumpST(ss, false);
+		ss = ss@.next;
+	      exit ss == 0;
+		out.str(2, ", ");
+	    }
+	}
+	out.chr(2, ')');
+    }
+
+    proc DumpS(s: Symb)
+    {   var tl: type.TypeList;
+
+	if s@.kind
+	is CONSTANT then 
+	{   out.str(2, "constant "); DumpST(s, false);
+	    out.chr(2, '='); out.hex64(2, s@.valu);
+	}
+	is TYPE then      { out.str(2, "type ");     DumpST(s, true); }
+	is VAR then       { out.str(2, "var ");      DumpST(s, false);
+//	    DumpLinkage(s);
+	             }
+	is FIELD then     { out.str(2, "field "); out.str(2, s@.ident);}
+	is PROC then 
+	{   if s@.valu == 0 then
+	    {   out.str(2, "proc ");
+		out.str(2, s@.ident);
+		DumpFormals(s@.parmlist);
+		tl = s@.retvlist;
+		if tl != 0 then
+		{   out.chr(2, ':');
+		    loop
+		    {   type.DumpT(tl@.type, false);
+			tl = tl@.next;
+		      exit tl == 0;
+			out.chr(2, ',');
+		    }
+		}
+	    }
+	    else
+	    {   out.str(2, "intrinsic ");
+	        out.str(2, s@.ident);
+	        out.str(2, "()");
+	    }
+	}
+	is PACK then      { out.str(2, "package "); out.str(2, s@.ident);}
+	is ALIAS then     { out.str(2, "alias ");   out.str(2, s@.ident);}
+	else 
+	{   out.str(2, "undefined "); out.str(2, s@.ident); out.nl(2);
+	}
+	out.nl(2);
+    }
+
+    proc Dump(n: levels)
+    {   var stop, i: _uint; // FIXME levels;
+	var s: Symb;
+
+	if level < n then
+	   stop = 0;
+	else
+	   stop = level + 1 - n;
+	i = level;
+	loop
+	{
+	    out.str(2, "*** level "); out.uint(2, i); out.str(2, " ***\n");
+	    s = symbs[i].frst;
+	    while s != 0 do
+	    {   DumpS(s);
+		s = s@.next;
+	    }
+	  exit i <= stop;
+	    i -= 1;
+	}
+	
+    } 
+}
+
+

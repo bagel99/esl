@@ -1,0 +1,852 @@
+// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
+// $Id: type2.esl 458 2010-12-05 01:45:34Z bgl $
+
+package type
+{
+    type fwd:
+	{   next: @fwd;
+	    symb: Symb;
+	    type: Type;
+	};
+    type pfwd: @fwd;
+    var fwdlist: pfwd;
+
+    proc FwdAdd(s: Symb, t: Type)
+    {   var f: pfwd;
+
+	f = pfwd(sys.zalloc(fwd?size));
+	f@.symb = s;
+	f@.type = t;
+	f@.next = fwdlist;
+	fwdlist = f;
+	s@.forward = true;
+    }
+
+    proc FwdFix(s: Symb, bt: Type)
+    {   var f, fn, fp: pfwd;
+
+	fp = 0;
+	f = fwdlist;
+	while f != 0 do
+	{   fn = f@.next;
+	    if s == f@.symb then
+	    {   f@.type@.base = bt;
+		if fp != 0 then fp@.next = fn; else fwdlist = fn;
+		// free(f)
+	    }
+	    fp = f;
+	    f = fn;
+	}
+	s@.forward = false;
+    }
+
+    proc Def(tok: TokenT, bt: Type): Type;		// forward
+    proc ParmList(procs: Symb, meths: Symb);		// forward
+
+    proc Same(a:Type, b:Type): boolean
+    {
+	if a == b || a@.name == b@.name then
+	    return true;
+	return false;
+    }
+
+    // FIXME: This should be in the type package
+    const KindName: [TypeT]@[]Char =
+    {   "UKNOWN", "ENUM", "UINT", "SINT", "REF", "ARRAY", "RECORD", "REFPROC" };
+
+    proc Compat(t1: Type, t2: Type): boolean
+    {
+	if t1 == 0 || t2 == 0 then return true;	// what should this be?
+	if t1 == t2 then return true;		// the trivial case
+	if t1@.kind != t2@.kind then return false;
+	if t2@.kind
+	is UINT, SINT then return true;
+	is ENUM, RECORD then 
+	{   // if t2 is a superset of t1 then they are compatable
+	    if t2@.base != 0 then return Compat(t1, t2@.base);
+	    return false;
+	}
+	is REF then    return Compat(t1@.base, t2@.base);
+	is ARRAY then  return Compat(t1@.base, t2@.base);	// FIXME: check index?
+	return false;
+    }
+
+    proc NeedSwap(t: Type, to: OrderT): boolean
+    {   var fm: OrderT;
+
+	if t@.size <= Target.membits then return false;
+        fm = t@.memorder;
+	if fm == NATIVE then fm = Target.order;
+	if to == NATIVE then to = Target.order;
+	return fm != to;
+    }
+
+    proc New(kind: TypeT): Type
+    {   var t: Type;
+
+	t = Type(sys.zalloc(TypeNode?size));
+	t@.kind = kind;
+	return t;
+    }
+
+    proc Clone(ot: Type): Type
+    {   var nt: Type;
+
+	nt = New(ot@.kind);
+	nt@ = ot@;	// record copy
+	nt@.name = 0;
+	nt@.final = false;
+    }
+	
+    proc ChangeOrder(told: Type, neworder: OrderT): Type
+    {   var t: Type;
+
+        t = Clone(told);
+	t@.memorder = neworder;
+	t@.final = true;
+	return t;
+    }
+
+    const askip1:[4]TokenT = { PEND, SEMI, NONE };
+    const askip2:[5]TokenT = { COMMA, PEND, SEMI, NONE };
+
+    const tattrlist:[]TokenT =
+    {	KPACK, KMPACK,
+	KLSB, KMSB,
+	KLE, KBE,
+	KRO, KWO,
+	KINPUT, KOUTPUT,
+	KMEMSZ, KBITSZ, KALIGN,
+	NONE
+    };
+    proc Attributes(s: Symb, t: Type,  sattrlist:@[]TokenT): Type
+    {   var tok, atok: TokenT;
+
+	// assert Token == COLON
+	loop
+	{   tok = Next();
+	    if tok == ID then
+	    {   atok = lex.Keyword(tattrlist);
+		if atok != tok then
+		{   // Handle type attribute
+		    tok = Next();
+		    if t@.final then
+			t = Clone(t);	// Will not be the same type
+		    if atok
+		    is KPACK then   t@.packed = BIT;
+		    is KMPACK then  t@.packed = MEM;
+		    is KLSB then    t@.bitorder = LSB;
+		    is KMSB then    t@.bitorder = MSB;
+		    is KLE then     t@.memorder = LSB;
+		    is KBE then     t@.memorder = MSB;
+		    is KRO then     t@.access = RO;
+		    is KWO then     t@.access = WO;
+		    is KINPUT then  t@.input = true;
+		    is KOUTPUT then t@.output = true;
+		    is KMEMSZ then 
+		    {   if tok == PBEG then
+			{   tok = Next();
+			    t@.width = expr.ConstScalar(type.wordtype) *
+					Target.membits;
+			    lex.Expect(PEND);
+			}
+		    }		
+		    is KBITSZ then 
+		    {   if tok == PBEG then
+			{   tok = Next();
+			    t@.size = expr.ConstScalar(type.wordtype);
+			    lex.Expect(PEND);
+			}
+		    }		
+		    is KALIGN then 
+		    {   if tok == PBEG then
+			{   tok = Next();
+			    t@.align = expr.ConstScalar(type.wordtype) *
+					Target.membits;
+			    lex.Expect(PEND);
+			}
+		    }		
+		}
+		else
+		{   // Not a type attribute
+		    if s != 0 then
+		    {   // Perhaps a symbol attribute
+			atok = lex.Keyword(sattrlist);
+			if atok != tok then
+			{   // Handle symbol attribute
+			    tok = Next();
+			    if atok
+			    is KINLINE then  s@.linkage = INLINE;
+			    is KGLOBAL then  s@.linkage = GLOBAL;
+			    is KEXTERN then 
+			    {   if tok == PBEG then
+				{   tok = Next();
+				    s@.xaddr = expr.ConstScalar(type.wordtype);
+				    lex.Expect(PEND);
+				    s@.linkage = FIXED;
+				}
+				else
+				    s@.linkage = EXTERN;
+			    }
+			    is KSECTION then 
+			    {   lex.ErrorI(BADATTR, lex.Ident);
+				if tok == PBEG then
+				{   tok = Next();
+				    tok = lex.Skip(askip1);
+				}
+			    }
+			}
+			else
+			    lex.ErrorI(BADATTR, lex.Ident);
+		    }
+		    else
+		    {   lex.ErrorI(BADATTR, lex.Ident);
+			tok = Next();
+		    }
+		}
+	    }
+	    else
+	    {   lex.Error(EXPECTID);
+		tok = lex.Skip(askip2);
+	    }
+	    tok = Token;
+	  exit tok != COMMA;
+	}
+	return t;
+    }
+
+    const nattrlist:[]TokenT = { NONE };
+
+    proc TypeAttributes(t: Type): Type
+    {
+	return Attributes(0, t, nattrlist);
+    }
+
+    const vattrlist:[4]TokenT = { KEXTERN, KGLOBAL, NONE };
+    proc VarAttributes(s: Symb, t: Type): Type
+    {
+	return Attributes(s, t, vattrlist);
+    }
+
+    const pattrlist:[3]TokenT = { KEXTERN, KINLINE, NONE };
+    proc ProcAttributes(s: Symb)
+    {   var t: Type;
+
+	t = Attributes(s, s@.type, pattrlist);
+	s@.type = t;
+    }
+
+    // replace with something clever
+    proc bitsize(x: _uint64): 0..255
+    {   var t: _uint64;
+	var n: 0..255;
+
+        n = 1;
+	t = 1;
+	while t < x do
+	{   t = t<<1;
+	    t += 1;
+	    n += 1;
+	}
+	return n;
+    }
+
+    proc FieldPad(prev: Symb, pad: BitSize, index: symb.OffsT): symb.OffsT
+    {   var last, s: Symb;
+
+	last = prev@.next;
+	while pad > 0 do
+	{   s = symb.New(FIELD, "_", true);
+	    s@.type = bytetype;
+	    s@.addr = index;
+	    prev@.next = s;
+	    prev = s;
+	    index += 1;    
+	    pad -= 1;
+	}
+	prev@.next = last;
+	return index;	
+    }
+
+    proc Final(t: Type)
+    {   var align: BitSize;
+	var tlo, thi: BitSize;
+	var f, prev: Symb;
+	var index: symb.OffsT;
+	var offs, mod: BitSize;
+
+	if t != 0 && !t@.final then
+	{
+	    if t@.bitorder == NATIVE then
+		t@.bitorder = Target.order;
+	    if t@.memorder == NATIVE then
+		t@.memorder = Target.order;
+	    if t@.kind
+	    is ENUM, UINT then 
+	    {   if t@.size == 0 then
+		    t@.size = bitsize(t@.hi);
+		if t@.width == 0 then
+		    t@.width = target.isize(t@.size);
+		if t@.align == 0 then
+		    t@.align = target.ialign(t@.size);
+	    }
+	    is SINT then 
+	    {   if t@.size == 0 then
+		{   tlo = bitsize(~t@.lo);
+		    thi = bitsize(t@.hi);
+		    if tlo > thi then
+			t@.size = tlo+1;
+		    else
+			t@.size = thi+1;
+		}
+		if t@.width == 0 then
+		    t@.width = target.isize(t@.size);
+		if t@.align == 0 then
+		    t@.align = target.ialign(t@.size);
+	    }
+	    is REF, REFPROC then 
+	    {   t@.size  = Target.ptr.size;
+		t@.width = Target.ptr.size;
+		t@.align = Target.ptr.align;
+	    }
+	    is RECORD then 
+	    {   index = 0;
+		offs = 0;
+		align = 0;
+		prev = 0;
+		f = t@.list;
+		while f != 0 do
+		{   if f@.type != 0 then
+		    {	Final(f@.type);
+			if t@.packed == BIT then
+			{
+			    offs += f@.type@.size;
+			}
+			else
+			{   var falign: BitSize;
+			    falign = f@.type@.align;
+			    mod = offs % falign;
+//out.str(2, "field: "); out.str(2, f@.ident);
+//out.chr(2, '('); out.uid(2, f@.addr);
+//out.str(2, ") offs=");  out.uid(2, offs);
+//out.str(2, " align="); out.uid(2, falign);
+			    if mod != 0 then
+			    {
+				index = FieldPad(prev,
+					         (falign-mod)/Target.membits,
+						 index);
+//out.str(2, " pad="); out.uid(2, falign - mod);
+				offs += falign - mod;
+			    }
+//out.str(2, "==> ("); out.uid(2, index);
+//out.str(2, ") offs="); out.uid(2, offs); out.nl(2);
+			    offs += f@.type@.width;
+			    if falign > align then
+				align = falign;
+			}
+		    }
+		    f@.addr = index;
+		    index += 1;
+		    prev = f;
+		    f = f@.next;
+		}
+		t@.size = offs;
+		if offs <= Target.regsize then
+		    t@.width = target.isize(offs);
+		else
+		    t@.width = offs;
+//out.str(2, "initial width="); out.uid(2, t@.width); out.nl(2);
+//out.str(2, "initial align="); out.uid(2, align); out.nl(2);
+		if align > 0 then
+		{   mod = t@.width % align;
+		    if mod != 0 then	// pad to alignment
+			t@.width += align - mod;
+		}
+		else  
+		    align = target.ialign(t@.size);
+		if t@.align == 0 then
+		    t@.align = align;
+//out.str(2, "final width="); out.uid(2, t@.width); out.nl(2);
+//out.str(2, "final align="); out.uid(2, t@.align); out.nl(2);
+	    }
+	    is ARRAY then 
+	    {   if t@.base != 0 then
+		{   Final(t@.base);
+		    if t@.size == 0 then
+			t@.size = t@.base@.size * t@.hi;
+		    if t@.width == 0 then
+			t@.width = t@.size;
+		    if t@.align == 0 then
+		    {   if t@.packed != BIT then
+			    t@.align = t@.base@.align;
+			else
+			    t@.align = 1;
+		    }
+		}
+	    }
+	    t@.final = true;
+	}
+    }
+
+    proc Enum(bt: Type): Type
+    {   var tok: TokenT;
+        var t: Type;
+	var vn, pvn: Symb;
+	var v, vmax: 0..0xFFFFFFFF;
+
+        tok = Next();
+	t = New(ENUM);
+	v = 0;
+	vmax = 0;
+	pvn = 0;
+	if bt != 0 then
+	{   var vb: Symb;
+	    if bt@.kind == ENUM then
+	    {	// for each field in base type, copy to new type
+		vb = bt@.list;
+		while vb != 0 do
+		{   vn = symb.New(CONSTANT, vb@.ident, true);
+		    if pvn != 0 then pvn@.next = vn;
+				else t@.list = vn;
+		    pvn = vn;
+		    v = vb@.valu;
+		    vn@.valu = v;
+		    if v > vmax then vmax = v;
+		    vb = vb@.next;
+		}
+		v += 1;		// start with next value
+	    }
+	    else lex.Error(BASEENUM);
+	}
+	loop
+	{   if tok == ID then
+	    {   if !symb.IsUniqueLocal(t@.list, lex.Ident) then
+		    lex.ErrorI(DEFID, lex.Ident);
+		vn = symb.New(CONSTANT, lex.Ident, true);
+		if pvn != 0 then pvn@.next = vn;
+			    else t@.list = vn;
+		pvn = vn;
+		tok = Next();
+		if tok == ASGN then
+		{   tok = Next();
+		    v = expr.ConstScalar(type.wordtype);
+		    tok = Token;
+		}
+		vn@.valu = v;
+	    }
+	    else
+		lex.Error(EXPECTID);
+	    if v > vmax then vmax = v;
+	  exit tok != COMMA;
+	    tok = Next();
+	    v += 1;
+	}
+	t@.lo = 0;
+	t@.hi = vmax;
+	lex.Expect(PEND);
+        return t;
+    }
+
+    proc Record(bt: Type): Type
+    {   var tok: TokenT;
+        var t, ft: Type;
+	var s, ps, bs: Symb;
+
+        tok = Next();
+	t = type.New(RECORD);
+	ps = 0;
+	t@.base = bt;
+	if bt != 0 then
+	{   if bt@.kind == RECORD then
+	    {	// copy the record type
+		bs = bt@.list;
+		while bs != 0 do
+		{   s = symb.New(FIELD, bs@.ident, true);
+		    if ps != 0 then ps@.next = s; else t@.list = s;
+		    ps = s;
+		    s@.type = bs@.type;
+		    bs = bs@.next;
+		}
+	    }
+	    else
+	    {   bt = 0;
+		lex.Error(BASERECORD);
+	    }
+	}
+	while tok == ID do
+	{   // look ahead before dealing with ident
+	    tok = Next();
+	    if tok
+	    is COLON then 
+	    {   if !symb.IsUniqueLocal(t@.list, lex.Ident) then
+		    lex.ErrorI(DEFID, lex.Ident);
+		s = symb.New(FIELD, lex.Ident, true);
+		if ps != 0 then ps@.next = s; else t@.list = s;
+		ps = s;
+		tok = Next();
+		ft = Def(tok, 0);
+		s@.type = ft;
+		tok = Token;
+		if tok == COLON then
+		{   s@.type = TypeAttributes(ft);
+		    tok = Token;
+		}
+		if tok == ASGN then
+		{   tok = Next();
+		    lex.ErrorS(NOTIMPL, "field inital values");
+		}
+
+	    }
+	    else
+		lex.Error(BADRECORD);
+	    tok = lex.Expect(SEMI);
+	}
+	tok = lex.Expect(GEND);
+        return t;
+    }
+
+    proc Array(): Type
+    {   var tok: TokenT;
+        var t, bt: Type;
+
+        tok = Next();
+	t = type.New(ARRAY);
+	if tok != AEND then
+	{
+	    var tree: Ast;
+	    tree = expr.Bool(0);
+	    if tree != 0 then
+	    {   if tree@.op
+		is CONST:
+		{   t@.hi = tree@.valu;
+		    t@.index = type.wordtype;
+		}
+		is TYPE:
+		{   if tree@.type@.kind
+		    is ENUM, UINT then
+		    {   t@.hi = tree@.type@.hi + 1;
+			t@.index = tree@.type;
+		    }
+		    else lex.Error(BADINDEX);
+		}
+		else lex.Error(BADINDEX);
+	    }
+	}
+	else
+	    t@.flex = true;
+	tok = lex.Expect(AEND);
+	bt = Def(tok, 0);
+	t@.base  = bt;
+        return t;
+    }
+
+    proc Name(): Symb
+    {   var s: Symb;
+
+	s = symb.Find(lex.Ident);
+	if s != 0 && s@.kind != TYPE then
+	    lex.Error(NOTTYPE);
+	return s;
+    }
+
+    proc DefProc(procs: Symb, meths: Symb)
+    {   var s, prevs: Symb;
+	var t: Type;
+	var tl, tlprev: TypeList;
+	var tok: TokenT;
+
+	tok = Token;
+	if tok == PBEG then
+	{   tok = Next();
+	    if meths != 0 then
+		procs@.parmlist = meths;
+	    if tok != PEND then
+	    {   prevs = meths;	// 0 if not a method
+		loop
+		{   if tok == ID then
+		    {   if !symb.IsUniqueLocal(procs@.parmlist, lex.Ident) then
+			    lex.ErrorI(DEFID, lex.Ident);
+			s = symb.New(VAR, lex.Ident, true);
+			tok = Next();
+			s@.isparam = true;
+			s@.linkage = LOCAL;
+			if tok == COLON then
+			{   tok = Next();
+			    t = type.Def(tok, 0);
+			    type.Final(t);
+			    s@.type = t;
+			    tok = Token;
+			}
+			else lex.ErrorT(EXPECT, COLON);
+			if procs@.parmlist == 0 then
+			    procs@.parmlist = s;
+			if prevs != 0 then
+			    prevs@.next = s;
+			prevs = s;
+		    }
+		    else lex.Error(EXPECTID);
+		  exit tok != COMMA;
+		    tok = Next();
+		}
+	    }
+	    tok = lex.Expect(PEND);
+	}
+	else lex.ErrorT(EXPECT, PBEG);
+	if tok == COLON then	// parse returned value type
+	{   tok = Next();
+            if tok != COLON then    // not an empty return type
+	    {   tlprev = 0;
+		loop
+		{   t = type.Def(tok, 0);
+		    type.Final(t);
+		    tl = TypeList(sys.zalloc(TypeListEntry?size));
+		    tl@.type = t;
+		    if tlprev == 0 then
+			procs@.retvlist = tl;
+		    else
+			tlprev@.next = tl;
+		    tlprev = tl; 
+		    tok = Token;
+		  exit tok != COMMA;
+		    tok = Next();
+		}
+		procs@.type = procs@.retvlist@.type;	// first ret type
+            }
+	}
+    }
+
+    proc Ref(): Type
+    {   var tok: TokenT;
+        var t: Type;
+	var bs: Symb;
+
+        tok = Next();
+	if tok == ID then
+	{
+	    if symb.IsAnon(lex.Ident) then
+	    {
+		t = New(REFPROC);
+	        bs = symb.New(PROC, lex.Ident, true);
+		tok = Next();
+		DefProc(bs, 0);
+		t@.list = bs;
+	    }
+	    else
+	    {   t = New(REF);
+		bs = Name();
+		if bs != 0 then
+		{   if bs@.type != 0 then
+			t@.base = bs@.type;
+		    else	// already forward, add another reference
+			FwdAdd(bs, t);
+		}
+		else	// undefined, make forward and make reference
+		{   bs = symb.New(TYPE, lex.Ident, false);
+		    FwdAdd(bs, t);
+		}
+		tok = Next();
+	    }
+	}
+	else
+	{   t = New(REF);
+	    t@.base = Def(tok, 0);
+	}
+        return t;
+    }
+
+
+    proc Def(tok: TokenT, bt: Type): Type
+    {   var t: Type;
+	var s: Symb;
+	var vlo, vhi: Ast;
+
+        t = unkntype;		// in case all goes wrong
+	if tok
+	is NUM, PLUS, MINUS then 
+	{   vlo = expr.Bool(0);
+	    if Token == RANGE then
+	    {   tok = Next();
+		vhi = expr.Bool(0);
+		if vlo@.op == CONST && vhi@.op == CONST then
+		{   if vlo@.kind
+		    is UINT, SINT then 
+		    {	t = type.New(vlo@.kind);
+			t@.lo = vlo@.valu;
+			t@.hi = vhi@.valu;
+		    }
+		    else
+			lex.Error(BADTYPDEF);
+		}
+		else
+		    lex.Error(EXPCONST);
+	    }
+	    else
+		lex.ErrorT(EXPECT, RANGE);
+	}
+	is ID then 
+	{
+	    s = Name();
+	    if s != 0 then
+		t = s@.type;
+	    else
+		lex.ErrorI(UNDEFID, lex.Ident);
+	    tok = Next();
+	}
+	is AT then    t = Ref();
+	is PBEG then  t = Enum(bt);
+	is GBEG then  t = Record(bt);
+	is ABEG then  t = Array();
+	else
+	{
+	    lex.Error(NOTYPE);
+	}
+	return t;
+    }
+
+    proc NewBuiltin(kind: TypeT, name: @lex.Identifier, size: BitSize): Type
+    {   var t: Type;
+	var s: Symb;
+	var levelsave: symb.levels;
+
+	t = New(kind);
+	t@.size = size;
+	if kind
+	is ENUM, UINT then 
+	{   t@.lo = 0;
+	    t@.hi = (((1 << (size-1)) - 1) << 1) | 1;
+	}
+	is SINT then 
+	{   t@.hi = (1 << (size-1)) - 1;
+	    t@.lo = ~t@.hi;
+	}
+	Final(t);
+	levelsave = symb.level;
+	symb.level = 0;
+	s = symb.New(TYPE, name, false);
+	symb.level = levelsave;
+	s@.type = t;
+	t@.name = s;
+	return t;
+    }
+
+    const packedstr:[AlignT]@[]Char = {"", "memory", "packed"};
+    const bitorderstr:[OrderT]@[]Char = {"", "msb", "lsb"};
+    const memorderstr:[OrderT]@[]Char = {"", "be", "le"};
+    const accessstr:[AccessT]@[]Char = {"RW", "RO", "WO"};
+    const blanks:[]_byte =
+	"                                                                ";
+
+    proc Dump2(t: Type, indent:_uint, full: boolean)
+    {   var s: Symb;
+	var offs: symb.OffsT;
+
+	if t != 0 then
+	{
+	    if t@.name != 0 && (!full /* || t@.dumped */) then
+		out.str(2, t@.name@.ident);
+	    else
+	    {   if t@.kind
+		is UINT then 
+		{
+		    out.uint64(2, t@.lo); out.str(2, ".."); out.uint64(2, t@.hi);
+		}
+		is SINT then 
+		{
+		    out.int64(2, _int64(t@.lo)); out.str(2, "..");
+		    out.int64(2, _int64(t@.hi));
+		}
+		is ENUM then 
+		{   out.chr(2, '(');
+		    s = t@.list;
+		    while s != 0 do
+		    {   out.str(2, s@.ident);
+			out.chr(2, '=');
+			out.uint32(2, _uint32(s@.valu));
+			s = s@.next;
+		      exit s == 0;
+			out.str(2, ", ");
+		    }
+		    out.chr(2, ')');
+		}
+		is RECORD then 
+		{   out.str(2, "{\n");
+		    offs = 0;
+		    s = t@.list;
+		    while s != 0 do
+		    {   out.strn(2, blanks, indent+2);
+		        out.str(2, s@.ident);
+			out.str(2, " (");
+			out.uint(2, offs);
+			out.str(2, "): ");
+			Dump2(s@.type, indent+2, full);
+			if t@.packed == BIT then
+			    offs += s@.type@.size;
+			else
+			    offs += s@.type@.width / Target.membits;
+			out.nl(2);
+			s = s@.next;
+		    }
+		    out.chr(2, '}');
+		}
+		is ARRAY then 
+		{   out.chr(2, '[');
+		    if t@.flex then
+			out.chr(2, '*');
+		    else
+			out.uint32(2, _uint32(t@.hi));
+		    out.chr(2, ']');
+		    Dump2(t@.base, indent, full);
+		}
+		is REF then 
+		{   out.chr(2, '@');
+		    if t@.base != 0 && t@.base@.name != 0 then
+			out.str(2, t@.base@.name@.ident);
+		    else
+			Dump2(t@.base, indent, full);
+		}
+		is REFPROC then 
+		{   out.str(2, "@_");
+		    symb.DumpFormals(t@.list@.parmlist);
+		}
+		else
+		    out.str(2, "*UNKNOWN*");
+		out.str(2, " size=");
+		out.uint(2, t@.size);
+		out.chr(2, ':');
+		out.uint(2, t@.width);
+		out.chr(2, ':');
+		out.uint(2, t@.align);
+		out.str(2, " attr="); out.str(2, packedstr[t@.packed]);
+		out.chr(2, ':');
+		if t@.memorder != Target.order then
+		    out.str(2, memorderstr[t@.memorder]);
+		out.chr(2, ':');
+		if t@.bitorder != Target.order then
+		    out.str(2, bitorderstr[t@.bitorder]);
+		out.chr(2, ':');
+		if t@.access != RW then
+		    out.str(2, accessstr[t@.access]);
+		out.chr(2, ':');
+		if t@.input then out.chr(2, 'I');
+		if t@.output then out.chr(2, 'O');
+		t@.dumped = true;
+		if t@.meths != 0 then
+		{   s = t@.meths;
+		    out.str(2, "\n\tmethods:\n\t");
+		    loop
+		    {   symb.DumpS(s);
+			s = s@.methnext;
+		      exit s == 0;
+			out.chr(2, '\t');
+		    }
+		}
+	    }
+	}
+    }
+
+    proc DumpT(t: Type, full: boolean)
+    {
+	Dump2(t, 0, full);
+    }
+}
+
