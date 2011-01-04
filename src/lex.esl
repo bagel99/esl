@@ -13,6 +13,7 @@ package lex
 	BADEOF,
 	BADCHR,
 	BADHEXESC,
+	BADUTF8,
 	IDLONG,
 	STRLONG,
 	EXPECT,
@@ -83,6 +84,7 @@ package lex
 	[BADEOF] =	"Unexpected end of file",
 	[BADCHR] =	"Malformed character constant",
 	[BADHEXESC] =	"Malformed hex escape in string or character constant",
+	[BADUTF8] =	"Malformed unicode escape",
 	[IDLONG] =	"Identifier too long",
 	[STRLONG] =	"String too long",
 	[EXPECT] =	"Expected: ",
@@ -315,13 +317,12 @@ package lex
 	HEX,
 	DEC,
 	ID,
-	CHR0,
-	CHR1,
-	CHRESC0,
-	CHRESC1,
+	CHR, CHREND,
 	STR,
-	STRESC0,
-	STRESC1
+	ESC,
+	HEX1, HEX2,					// must be consecutive
+	U161, U162, U163, U164,				// must be consecutive
+	U321, U322, U323, U324, U325, U326, U327, U328	// must be consecutive
       );
 
     // These are for error message use
@@ -555,29 +556,74 @@ package lex
     proc EscChar(c: Char): Char
     {
 	if c
-	is 'n' then c = '\n';	// LF
-	is 'r' then c = '\r';	// CR
-	is 't' then c = '\t';	// HT
+	is 'n' then c = 0x0A;	// LF
+	is 'r' then c = 0x0D;	// CR
+	is 't' then c = 0x09;	// HT
+	is 'b' then c = 0x08;	// BS
+	is 'v' then c = 0x0B;	// VT
+	is 'f' then c = 0x0C;	// FF
 	return c;
     }
 
-    proc EscHex(c: Char): Char
+    proc EscHex(c: Char, h: _uint32): _uint32
     {
 	if c
 	is '0'..'9' then c -= '0';
-	is 'A'..'F' then c -= 'A';
-	is 'a'..'f' then c -= 'a';
-	return c;
+	is 'A'..'F' then c = (c - 'A') + 10;
+	is 'a'..'f' then c = (c - 'a') + 10;
+	else
+	{   Error(BADHEXESC);
+	    return h;
+	} 
+	return (h << 4) | c;
+    }
+
+    const unicodemax: [4]_uint32 =
+	{ 0x0000_007F, 0x0000_07FF, 0x0000_FFFF, 0x0010_FFFF };
+    const utf8pfx: [5]_uint8 = { 0x00, 0xC0, 0xE0, 0xF0, 0xF8 };
+
+    proc EscUTF8(unicode: _uint32, j:_uint): _uint
+    {   var n, i, k: _uint;
+
+	n = 0;
+	loop
+	{
+	  exit unicode <= unicodemax[n];
+	    n += 1;
+	  exit n > 3;
+	}
+	if n >= 4 then		// illegal unicode
+	{   Error(BADUTF8);
+	    return 0;
+	}
+	else
+	{   k = j+n+1;		// need n+1 bytes
+	    if k >= StringMax then
+	    {   Error(STRLONG);
+		return 0;
+	    }
+	    i = n;
+	    while i > 0 do
+	    {   StringBuf[j+i] = 0x80 | 0x3F & _uint8(unicode);
+		unicode = unicode >> 6;
+		i -= 1;
+	    }
+	    StringBuf[j] = utf8pfx[n] | _uint8(unicode);
+	}
+	return k;	
     }
 
     proc Next():TokenT
     {   var state: State;
-	var c, h: Char;
+	var c: Char;
 	var tok: TokenT;
 	var i: 0..BufSize;
 	var e: 0..BufSize;
 	var j: 0..StringMax;
-	var n: _uint64;	// for numbers
+	var err: boolean;
+	var str: boolean;
+	var h: _uint32;		// for hex and unicode escapes
+	var n: _uint64;		// for numbers
 
 	state = FIRST;
 	tok = NONE;
@@ -629,7 +675,7 @@ package lex
 		is '|' then state = OR;
 		is '0' then      { n = 0;     state = ZERO; }
 		is '1'..'9' then { n = c-'0'; state = DEC; }
-		is '\'' then state = CHR0;
+		is '\'' then state = CHR;
 		is '"' then { j = 0; state = STR; }
 		is 'A'..'Z', 'a'..'z', '_' then
 		{   Ident[0] = c;  j = 1; state = ID; }
@@ -717,28 +763,23 @@ package lex
 	    is ID then
 		if c
 		is 'A'..'Z', 'a'..'z', '0'..'9', '_' then
-		{   Ident[j] = c;
-		    j += 1;
-		}
+		{   Ident[j] = c; j += 1; }
 		else
-		{   Ident[j] = 0;
-		    tok = ID;
-		}
-	    is CHR0 then
+		{   Ident[j] = 0; tok = ID; }
+	    is CHR then
+	    {	str = false;
 		if c
 		is '\'' then { Error(BADCHR); state = FIRST; }
 		is '\n' then { Error(BADNL); state = FIRST; }	
-		is '\\' then state = CHRESC0;
-		else     { n = c; state = CHR1; }
-	    is CHR1 then
+		is '\\' then state = ESC;
+		else     { h = c; state = CHREND; }
+	    }
+	    is CHREND then
 		if c
-		is '\'' then { Number = n; tok = NUM; i += 1; }
+		is '\'' then { Number = h; tok = NUM; i += 1; }
 		else     { Error(BADCHR); state = FIRST; }
-	    is CHRESC0 then
-		if c
-		is '\n' then { Error(BADNL); state = FIRST; }	
-		else     { n = EscChar(c); state= CHR1; }
 	    is STR then
+	    {   str = true;
 		if c
 		is '"' then
 		{   StringBuf[j] = 0;	// terminate
@@ -746,40 +787,56 @@ package lex
 		    tok = STR; i += 1;
 		}
 		is '\n' then { Error(BADNL); state = FIRST; }
-		is '\\' then state = STRESC0;
+		is '\\' then state = ESC;
 		else
-		{   if j < StringMax then
-		    {   StringBuf[j] = c;
-			j += 1;
-		    }
-		    else
-			Error(Errors.STRLONG);
+		{   if j < StringMax then { StringBuf[j] = c; j += 1; }
+		    else Error(Errors.STRLONG);
 		}
-	    is STRESC0 then
+	    }
+	    is ESC then
 		if c
 		is '\n' then { Error(BADNL); state = FIRST; }	// NL in escape
-		is '0'..'9','a'..'f','A'..'F' then
-		{   h = EscHex(c);
-		    state = STRESC1;
-		}
+		is 'x' then { h = 0; state = HEX1; }
+		is 'u' then { h = 0; state = U161; }
+		is 'U' then { h = 0; state = U321; }
  		else
-		{   if j < StringMax then
-		    {   StringBuf[j] = EscChar(c);
-			j += 1;
+		{   if str then
+		    {   if j < StringMax then { StringBuf[j] = EscChar(c); j += 1; }
+			else Error(STRLONG);
+			state = STR;
 		    }
-		    else
-			Error(STRLONG);
-		    state = STR;
+		    else { h = EscChar(c); state= CHREND; }
 		}
-	    is STRESC1 then
+	    is HEX1, U161 .. U163, U321 .. U327 then
 		if c
 		is '\n' then { Error(BADNL); state = FIRST; }	// NL in escape
-		is '0'..'9','a'..'f','A'..'F' then
-		{   c = EscHex(c) | (h << 4);
-		    state = STRESC1;
-		}
 		else
-		    Error(BADHEXESC);
+		{   h = EscHex(c, h);
+		    state += 1;	// WARNING: depends on consecutive state
+		}
+	    is HEX2 then
+		if c
+		is '\n' then { Error(BADNL); state = FIRST; }	// NL in escape
+		else
+		{   h = EscHex(c, h);
+		    if str then
+		    {   if j < StringMax then { StringBuf[j] = Char(h); j += 1; }
+			else Error(STRLONG);
+			state = STR;
+		    }
+		    else state = CHREND;
+		}
+	    is U164, U328 then
+		if c
+		is '\n' then { Error(BADNL); state = FIRST; }	// NL in escape
+		else
+		{   h = EscHex(c, h);
+		    if str then
+		    {   j = EscUTF8(h, j);
+			state = STR;
+		    }
+		    else state = CHREND;
+		}
 	  exit tok != NONE;
 	    if c == '\n' then
 		f@.lineno += 1;

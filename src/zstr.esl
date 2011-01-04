@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: zstr.esl 366 2010-05-17 20:56:14Z bgl $
+// $Id: zstr.esl 478 2011-01-03 01:58:59Z bgl $
 
 // handle zero terminated strings
 
