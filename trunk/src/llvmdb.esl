@@ -1,5 +1,5 @@
 // Copyright (c) 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvmdb.esl 469 2010-12-09 20:02:37Z bgl $
+// $Id: llvmdb.esl 478 2011-01-03 01:58:59Z bgl $
 
 package llvmdb
 {
