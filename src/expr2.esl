@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: expr2.esl 484 2011-01-05 22:28:18Z bgl $
 
 package expr
 {
@@ -597,6 +597,14 @@ ast.Dump(tree); out.nl(2);
 	var sl, sr: 0..255;
 	var fold, swap: boolean;
 
+	if lhs@.op == TYPE then
+	{   lex.ErrorI(BADTYPE, lhs@.type@.name@.ident);
+	    return 0;
+	}
+	if rhs@.op == TYPE then
+	{   lex.ErrorI(BADTYPE,rhs@.type@.name@.ident);
+	    return 0;
+	}
 	fold = false; swap = false;
 	if lhs@.op == CONST then
 	{   if rhs@.op == CONST then	// constant folding
@@ -622,6 +630,46 @@ ast.Dump(tree); out.nl(2);
 		is SMAX then
 		{   if type.SValu(rhs@.valu) > type.SValu(lhs.valu) then
 			lhs.valu = rhs.valu;
+		    return lhs;
+		}
+		is EQ then
+		{   lhs@.valu = _uint(lhs@.valu == rhs@.valu);
+		    return lhs;
+		}
+		is NE then
+		{   lhs@.valu = _uint(lhs@.valu != rhs@.valu);
+		    return lhs;
+		}
+		is ULT then
+		{   lhs@.valu = _uint(lhs@.valu < rhs@.valu);
+		    return lhs;
+		}
+		is UGT then
+		{   lhs@.valu = _uint(lhs@.valu > rhs@.valu);
+		    return lhs;
+		}
+		is ULE then
+		{   lhs@.valu = _uint(lhs@.valu <= rhs@.valu);
+		    return lhs;
+		}
+		is UGE then
+		{   lhs@.valu = _uint(lhs@.valu >= rhs@.valu);
+		    return lhs;
+		}
+		is SLT then
+		{   lhs@.valu = _uint(type.SValu(lhs@.valu) < type.SValu(rhs@.valu));
+		    return lhs;
+		}
+		is SGT then
+		{   lhs@.valu = _uint(type.SValu(lhs@.valu) > type.SValu(rhs@.valu));
+		    return lhs;
+		}
+		is SLE then
+		{   lhs@.valu = _uint(type.SValu(lhs@.valu) <= type.SValu(rhs@.valu));
+		    return lhs;
+		}
+		is SGE then
+		{   lhs@.valu = _uint(type.SValu(lhs@.valu) >= type.SValu(rhs@.valu));
 		    return lhs;
 		}
 	    }
@@ -1139,25 +1187,9 @@ out.str(2, "Intrinsic unknown\n");
 	    op = scmpop[tok - EQ];
 	else
 	    op = ucmpop[tok - EQ];
-	// constant folding
-	if lhs@.op == CONST && rhs@.op == CONST then
-	{   var cval: boolean;
-	    if op
-	    is EQ then  cval = lhs@.valu == rhs@.valu;
-	    is NE then  cval = lhs@.valu != rhs@.valu;
-	    is ULT then cval = lhs@.valu <  rhs@.valu;
-	    is UGT then cval = lhs@.valu >  rhs@.valu;
-	    is ULE then cval = lhs@.valu <= rhs@.valu;
-	    is UGE then cval = lhs@.valu >= rhs@.valu;
-	    is SLT then cval = type.SValu(lhs@.valu) <  type.SValu(rhs@.valu);
-	    is SGT then cval = type.SValu(lhs@.valu) >  type.SValu(rhs@.valu);
-	    is SLE then cval = type.SValu(lhs@.valu) <= type.SValu(rhs@.valu);
-	    is SGE then cval = type.SValu(lhs@.valu) >= type.SValu(rhs@.valu);
-	    tree = ast.Const(type.booltype, _uint(cval));
-	}
-	else
-	{   tree = BinOp(op, lhs, rhs);
-	    tree@.type = type.booltype;
+	tree = BinOp(op, lhs, rhs);
+	if tree != 0 then
+	{   tree@.type = type.booltype;
 	    tree@.kind = ENUM;
 	    tree@.size = 1;
 	}

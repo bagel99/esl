@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: symb.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: symb.esl 481 2011-01-05 21:37:47Z bgl $
 
 package symb
 {
@@ -318,6 +318,8 @@ package symb
 
 	// the "unknown" type
 	type.unkntype = type.New(UTYPE);
+	type.unkntype@.size = Target.membits;	// give it non-zero size
+	type.unkntype@.align = Target.membits;	// and alignment	
 
 	// intrinsics
 	NewIntrinsic("_abs", ABS);

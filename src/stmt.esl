@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: stmt.esl 484 2011-01-05 22:28:18Z bgl $
 
 package stmt
 {
@@ -727,18 +727,19 @@ type.DumpT(tr, true); out.nl(2);
 	var t: Type;
 	var s: Symb;
 	var tok, tok2: TokenT;
+	var op: ast.Op;
 
-        tree = 0;
+	tree = 0;
 	tok = Token;
+	op = IF;	// arbitrary default
 	ctree = expr.Bool(0);
 	if ctree != 0 then
 	{   t = ctree@.type;
 	    if type.Same(t, type.booltype) then
-	    {   ctree = expr.ForceBoolean(ctree);
-		tree = ast.New(IF, 0);
-	    }
+	        ctree = expr.ForceBoolean(ctree);
 	    else
-		tree = ast.New(SEL, 0);
+		op = SEL;
+	    tree = ast.New(op, 0);
 	    tree = ast.Child(tree, ctree);
 	}
 	tok = lex.Keyword(isthenlist);
@@ -781,7 +782,7 @@ type.DumpT(tr, true); out.nl(2);
 	    }
 	}
 	is KTHEN then 
-	{   if tree@.op == SEL then lex.Error(WANTBOOL);
+	{   if op == SEL then lex.Error(WANTBOOL);
 	    tok = Next();
 	    stree = Statement();
 	    tree = ast.Child(tree, stree);

@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: out.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: out.esl 480 2011-01-05 21:36:59Z bgl $
 
 // Formatted Output
 // This is a temporary hack.
@@ -213,7 +213,7 @@ package out
 
     proc uint(chan: _int, in: _uint):: inline
     {
-	if _uint?size == 64 then
+	if _uint?size == _uint64?size then
 	    uint64(chan, in);
 	else
 	    uint32(chan, _uint32(in));
@@ -221,7 +221,7 @@ package out
 
     proc int(chan: _int, in: _int):: inline
     {
-	if _int?size == 64 then
+	if _int?size == _int64?size then
 	    int64(chan, in);
 	else
 	    int32(chan, _int32(in));
