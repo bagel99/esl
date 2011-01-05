@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: llvm.esl 482 2011-01-05 21:39:03Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -690,10 +690,10 @@ package llvm
 	out.nl(f);
     }
 
-    proc BranchConditional(temp: seqnoT, ntrue: seqnoT, nfalse: seqnoT)
+    proc BranchConditional(node: Ast, ntrue: seqnoT, nfalse: seqnoT)
     {
 	out.str(f, "\tbr i1 ");
-	PTempName(temp);
+	NodeSrc(node);
 	out.str(f, ", ");
 	RefLabel(ntrue);
 	out.str(f, ", ");
@@ -713,7 +713,7 @@ package llvm
 	}
 	else
 	    labfalse = labend;
-	BranchConditional(node@.child[0]@.seqno, labtrue, labfalse);
+	BranchConditional(node@.child[0], labtrue, labfalse);
 	Label(labtrue);
 	term = GenSub(node@.child[1]);
 	if !term then Branch(labend);
@@ -813,14 +813,14 @@ package llvm
 	GenSub(node@.child[0]);
 	if (node@.child[1] != 0) then	// has "with" clause
 	{   labtrue = Lseqno;  Lseqno += 1;
-	    BranchConditional(node@.child[0]@.seqno, labtrue, labfalse);
+	    BranchConditional(node@.child[0], labtrue, labfalse);
 	    Label(labtrue);		// exit with ...
 	    term = GenSub(node@.child[1]);
 	    if !term then
 		Branch(loopexit);	// exit loop
 	}
 	else				// no "with" clause
-	    BranchConditional(node@.child[0]@.seqno, loopexit, labfalse);
+	    BranchConditional(node@.child[0], loopexit, labfalse);
 	Label(labfalse);		// come here if continuing
 	return false;	
     }
@@ -832,9 +832,9 @@ package llvm
 	labend = Lseqno;  Lseqno += 1;
 	GenSub(node@.child[0]);
 	if isand then
-	    BranchConditional(node@.child[0]@.seqno, labrhs, labend);
+	    BranchConditional(node@.child[0], labrhs, labend);
 	else
-	    BranchConditional(node@.child[0]@.seqno, labend, labrhs);
+	    BranchConditional(node@.child[0], labend, labrhs);
 	lablhs = labthis;	// left hand side final basic block
 	Label(labrhs);
 	GenSub(node@.child[1]);
