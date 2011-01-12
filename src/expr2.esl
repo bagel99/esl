@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 484 2011-01-05 22:28:18Z bgl $
+// $Id: expr2.esl 485 2011-01-12 21:54:38Z bgl $
 
 package expr
 {
@@ -712,7 +712,7 @@ ast.Dump(tree); out.nl(2);
 	    if which
 	    is ABS then
 	    {
-out.str(2, "Intrinsic ABS\n");
+//out.str(2, "Intrinsic ABS\n");
 		rhs = Bool(0);
 		if rhs != 0 then
 		{   if rhs@.op == CONST then	// constant folding
@@ -739,7 +739,7 @@ out.str(2, "Intrinsic ABS\n");
 	    }
 	    is MIN, MAX then
 	    {
-out.str(2, "Intrinsic MIN/MAX\n");
+//out.str(2, "Intrinsic MIN/MAX\n");
 		lhs = Bool(0);
 		lex.Expect(COMMA);
 		rhs = Bool(0);

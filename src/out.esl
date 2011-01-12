@@ -1,8 +1,10 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: out.esl 480 2011-01-05 21:36:59Z bgl $
+// $Id: out.esl 486 2011-01-12 22:00:05Z bgl $
 
 // Formatted Output
 // This is a temporary hack.
+import sys;
+import zstr;
 
 package out
 {
@@ -52,30 +54,28 @@ package out
 
     proc hex32(chan:_int, in:_uint32)
     {   var buf: [8]_byte;
+	var i: 0..7;
 
-	buf[0] = hex[(in>>28)&0xF];
-	buf[1] = hex[(in>>24)&0xF];
-	buf[2] = hex[(in>>20)&0xF];
-	buf[3] = hex[(in>>16)&0xF];
-	buf[4] = hex[(in>>12)&0xF];
-	buf[5] = hex[(in>>8)&0xF];
-	buf[6] = hex[(in>>4)&0xF];
-	buf[7] = hex[in&0xF];
+	i = 7;
+	loop
+	{   buf[i] = hex[in&0xF];
+	  exit i == 0;
+	    i -= 1;
+	    in = in >> 4;
+	}
 	sys.write(chan, buf, 8);
     }
 
     proc hex64(chan: _int, in: _uint64)
     {   var buf: [16]_byte;
-	var i: 0..16;
-	var shf: 0..63;
+	var i: 0..15;
 
-	i = 0;
-	shf = 60;
+	i = 15;
 	loop
-	{   buf[i] = hex[(in>>shf)&0xF];
-	  exit shf == 0;
-	    i += 1;
-	    shf -= 4;
+	{   buf[i] = hex[in&0xF];
+	  exit i == 0;
+	    i -= 1;
+	    in = in >> 4;
 	}
 	sys.write(chan, buf, 16);
     }  
