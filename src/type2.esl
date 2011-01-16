@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: type2.esl 490 2011-01-16 00:25:09Z bgl $
 
 package type
 {
@@ -75,7 +75,7 @@ package type
     {   var fm: OrderT;
 
 	if t@.size <= Target.membits then return false;
-        fm = t@.memorder;
+	fm = t@.memorder;
 	if fm == NATIVE then fm = Target.order;
 	if to == NATIVE then to = Target.order;
 	return fm != to;
@@ -101,7 +101,7 @@ package type
     proc ChangeOrder(told: Type, neworder: OrderT): Type
     {   var t: Type;
 
-        t = Clone(told);
+	t = Clone(told);
 	t@.memorder = neworder;
 	t@.final = true;
 	return t;
@@ -241,7 +241,7 @@ package type
     {   var t: _uint64;
 	var n: 0..255;
 
-        n = 1;
+	n = 1;
 	t = 1;
 	while t < x do
 	{   t = t<<1;
@@ -333,7 +333,7 @@ package type
 			    if mod != 0 then
 			    {
 				index = FieldPad(prev,
-					         (falign-mod)/Target.membits,
+						 (falign-mod)/Target.membits,
 						 index);
 //out.str(2, " pad="); out.uid(2, falign - mod);
 				offs += falign - mod;
@@ -390,11 +390,11 @@ package type
 
     proc Enum(bt: Type): Type
     {   var tok: TokenT;
-        var t: Type;
+	var t: Type;
 	var vn, pvn: Symb;
 	var v, vmax: 0..0xFFFFFFFF;
 
-        tok = Next();
+	tok = Next();
 	t = New(ENUM);
 	v = 0;
 	vmax = 0;
@@ -444,15 +444,15 @@ package type
 	t@.lo = 0;
 	t@.hi = vmax;
 	lex.Expect(PEND);
-        return t;
+	return t;
     }
 
     proc Record(bt: Type): Type
     {   var tok: TokenT;
-        var t, ft: Type;
+	var t, ft: Type;
 	var s, ps, bs: Symb;
 
-        tok = Next();
+	tok = Next();
 	t = type.New(RECORD);
 	ps = 0;
 	t@.base = bt;
@@ -502,14 +502,14 @@ package type
 	    tok = lex.Expect(SEMI);
 	}
 	tok = lex.Expect(GEND);
-        return t;
+	return t;
     }
 
     proc Array(): Type
     {   var tok: TokenT;
-        var t, bt: Type;
+	var t, bt: Type;
 
-        tok = Next();
+	tok = Next();
 	t = type.New(ARRAY);
 	if tok != AEND then
 	{
@@ -517,11 +517,11 @@ package type
 	    tree = expr.Bool(0);
 	    if tree != 0 then
 	    {   if tree@.op
-		is CONST:
+		is CONST then
 		{   t@.hi = tree@.valu;
 		    t@.index = type.wordtype;
 		}
-		is TYPE:
+		is TYPE then
 		{   if tree@.type@.kind
 		    is ENUM, UINT then
 		    {   t@.hi = tree@.type@.hi + 1;
@@ -537,7 +537,7 @@ package type
 	tok = lex.Expect(AEND);
 	bt = Def(tok, 0);
 	t@.base  = bt;
-        return t;
+	return t;
     }
 
     proc Name(): Symb
@@ -594,7 +594,7 @@ package type
 	else lex.ErrorT(EXPECT, PBEG);
 	if tok == COLON then	// parse returned value type
 	{   tok = Next();
-            if tok != COLON then    // not an empty return type
+	    if tok != COLON then    // not an empty return type
 	    {   tlprev = 0;
 		loop
 		{   t = type.Def(tok, 0);
@@ -611,22 +611,22 @@ package type
 		    tok = Next();
 		}
 		procs@.type = procs@.retvlist@.type;	// first ret type
-            }
+	    }
 	}
     }
 
     proc Ref(): Type
     {   var tok: TokenT;
-        var t: Type;
+	var t: Type;
 	var bs: Symb;
 
-        tok = Next();
+	tok = Next();
 	if tok == ID then
 	{
 	    if symb.IsAnon(lex.Ident) then
 	    {
 		t = New(REFPROC);
-	        bs = symb.New(PROC, lex.Ident, true);
+		bs = symb.New(PROC, lex.Ident, true);
 		tok = Next();
 		DefProc(bs, 0);
 		t@.list = bs;
@@ -651,7 +651,7 @@ package type
 	{   t = New(REF);
 	    t@.base = Def(tok, 0);
 	}
-        return t;
+	return t;
     }
 
 
@@ -660,7 +660,7 @@ package type
 	var s: Symb;
 	var vlo, vhi: Ast;
 
-        t = unkntype;		// in case all goes wrong
+	t = unkntype;		// in case all goes wrong
 	if tok
 	is NUM, PLUS, MINUS then 
 	{   vlo = expr.Bool(0);
@@ -774,7 +774,7 @@ package type
 		    s = t@.list;
 		    while s != 0 do
 		    {   out.strn(2, blanks, indent+2);
-		        out.str(2, s@.ident);
+			out.str(2, s@.ident);
 			out.str(2, " (");
 			out.uint(2, offs);
 			out.str(2, "): ");

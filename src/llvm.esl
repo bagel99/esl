@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 482 2011-01-05 21:39:03Z bgl $
+// $Id: llvm.esl 488 2011-01-15 23:47:59Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -106,7 +106,7 @@ package llvm
 		}
 		else
 		{   if t@.printed then
-		        PTypeName(t);
+			PTypeName(t);
 		}
 	    }
 	    is ARRAY then
@@ -435,14 +435,41 @@ package llvm
 	out.chr(f, '"');
     }
 
-    // LLVM doesn't handle bitfields (packed records)
+    // LLVM doesn't handle bitfields (packed records or arrays)
     // so we have to turn them into integers.
+    proc ConstantPackArray(node: Ast, t: Type)
+    {   var offs, tsize, fsize: type.BitSize;
+	var bt: Type;		// base type
+	var i: ast.NSubNodes;
+	var vnode: Ast;
+	var value: type.Valu;
+
+	bt = t@.base;
+	tsize = t@.width;
+	fsize = bt@.size;
+//out.str(2, "Constant packed array: tsz="); out.uint(2, tsize);
+//out.str(2, " fsz="); out.uint(2, fsize);
+//out.nl(2);
+	if t@.bitorder == MSB then offs = tsize; else offs = 0;
+	value = 0;
+	i = 0;
+	while i < node@.num do
+	{
+	    if t@.bitorder == MSB then offs -= fsize;
+	    vnode = node@.child[i];
+	    if vnode != 0 && vnode@.op == CONST then
+		value = value | (vnode@.valu << offs);
+	    if t@.bitorder != MSB then offs += fsize;
+	    i += 1;
+	}
+	out.uint32(f, _uint32(value));
+    }
+
     proc ConstantPackRecord(node: Ast, t: Type)
-    {
-	var offs, tsize, fsize: type.BitSize;
+    {   var offs, tsize, fsize: type.BitSize;
 	var s: Symb;
 	var i: ast.NSubNodes;
-	var ftype: Type;
+	var ft: Type;		// field type
 	var vnode: Ast;
 	var value: type.Valu;
 
@@ -454,8 +481,8 @@ package llvm
 	s = t@.list;
 	while s != 0 do
 	{   if s@.type != 0 then
-	    {   ftype = s@.type;
-		fsize = ftype@.size;
+	    {   ft = s@.type;
+		fsize = ft@.size;
 		if t@.bitorder == MSB then offs -= fsize;
 //out.chr(2, '\t'); out.uint(2, i);
 //out.str(2, ": sz="); out.uint(2, fsize);
@@ -522,17 +549,21 @@ package llvm
 	    {   if node != 0 then
 		{   if node@.op
 		    is CLIST then
-		    {   out.str(f, "[ ");
-			i = 0;
-			loop
-			{   PType(node@.child[i]@.type, NONE);
-			    out.str(f, " ");
-			    Constant(node@.child[i], node@.child[i]@.type);
-			    i += 1;
-			  exit i >= node@.num;
-			   out.str(f, ", ");
+		    {   if t@.packed == BIT then
+			    ConstantPackArray(node, t);
+			else
+			{   out.str(f, "[ ");
+			    i = 0;
+			    loop
+			    {   PType(node@.child[i]@.type, NONE);
+				out.str(f, " ");
+				Constant(node@.child[i], node@.child[i]@.type);
+				i += 1;
+			      exit i >= node@.num;
+				out.str(f, ", ");
+			    }
+			    out.str(f, " ]");
 			}
-			out.str(f, " ]");
 		    }
 		    is BYREF then
 		    {   if node@.child[0]@.op == SCON then
@@ -563,8 +594,8 @@ package llvm
     {   var n: type.BitSize;
 
 	n = t@.align;
-	if n > 0 then
-        {   out.str(f, ", align ");
+	if n >= Target.membits then
+	{   out.str(f, ", align ");
 	    out.uint(f, n / Target.membits);
 	}
     }
@@ -588,7 +619,7 @@ package llvm
 		Alignment(s@.type);
 	    }
 	    is EXTERN then
-	    	Print("%I = external global %B", node);
+		Print("%I = external global %B", node);
 	    out.nl(f);
 	    if feature.gflag then llvmdb.DefVar(s);
 	}
@@ -1013,7 +1044,7 @@ out.nl(2);
 	    
     proc GetRV(node: Ast)
     {   var tl: type.TypeList;
-        var ps: Symb;
+	var ps: Symb;
 
 	if node@.valu == 0 then
 	    GenSub(node@.child[0]);
@@ -1055,7 +1086,7 @@ out.nl(2);
 	if node@.num > i then
 	{   loop
 	    {
-	        Print("%T %N", node@.child[i]);
+		Print("%T %N", node@.child[i]);
 		i += 1;
 	      exit i >= node@.num;
 		out.str(f, ", ");
@@ -1090,7 +1121,7 @@ out.nl(2);
 	if node@.num > i then
 	{   loop
 	    {
-	        Print("%T %N", node@.child[i]);
+		Print("%T %N", node@.child[i]);
 		i += 1;
 	      exit i >= node@.num;
 		out.str(f, ", ");
@@ -1109,7 +1140,7 @@ out.nl(2);
     proc DclProcSearch(node: Ast)
     {   var i: ast.NSubNodes;
 
-        if node != 0 then
+	if node != 0 then
 	{   if node@.op
 	    is LOOP, SEQ then
 	    {   i = 0;
@@ -1155,7 +1186,7 @@ out.str(2, "DCLCON in proc\n");
 
 	ps = node@.symb;
 	if ps != 0 then
-        {
+	{
 	    // Make sure all parameter types are declared
 	    s = ps@.parmlist;
 	    while s != 0 do
@@ -1322,8 +1353,8 @@ out.str(2, "DCLCON in proc\n");
 	var mask: type.Valu;
 	var wt: Type;
 
-        // LLVM doesn't handle bitfields (packed records or arrays)
-        // so we expand bitfield extract
+	// LLVM doesn't handle bitfields (packed records or arrays)
+	// so we expand bitfield extract
 	offs = load@.child[0];
 	if (offs@.op == OFFSET || offs@.op == INDEX) &&
 	    offs@.child[0]@.type@.packed == BIT then
@@ -1376,7 +1407,7 @@ out.str(2, "DCLCON in proc\n");
 		tree = expr.Extend(tree, ww);
 	    // shift item rightward
 	    if varb != 0 then
-	        tree = ast.New2(LSR, wt, tree, varb);
+		tree = ast.New2(LSR, wt, tree, varb);
 	    // mask off the parts we don't want
 	    tree = ast.New2(AND, wt, tree, ast.Const(wt, mask));
 	    if tree@.size != w then	// adjust width of final result
@@ -1410,8 +1441,8 @@ out.str(2, "DCLCON in proc\n");
 	{
 	    lhs = store@.child[i];
 	    rhs = store@.child[n+i];
-            // LLVM doesn't handle bitfields (packed records or arrays)
-            // so we expand bitfield insert
+	    // LLVM doesn't handle bitfields (packed records or arrays)
+	    // so we expand bitfield insert
 	    if (lhs@.op == OFFSET || lhs@.op == INDEX) &&
 		lhs@.child[0]@.type@.packed == BIT then
 	    {   // We are dealing with a packed record or array (aka bitfield).
@@ -1492,7 +1523,7 @@ out.str(2, "DCLCON in proc\n");
 	    {   GenSub(lhs);	// then lhs
 		out.chr(f, '\t');
 		if store@.child[i]@.type@.output then
-	           out.str(f, "volatile ");
+		   out.str(f, "volatile ");
 		out.str(f, "store ");
 		NodeType(rhs); out.chr(f, ' ');
 		NodeSrc(rhs);  out.str(f, ", ");
@@ -1512,7 +1543,7 @@ out.str(2, "DCLCON in proc\n");
 	{   i = 0;
 	    while i < node@.num do
 	    {   rnode = node@.child[i];
-	        GenSub(rnode);
+		GenSub(rnode);
 		Print("\tstore %T %N, %T* ", rnode);
 		PRetValName(i);
 		PEndLine(node);
@@ -1688,7 +1719,7 @@ out.str(2, "DCLCON in proc\n");
 		    Label(Lseqno);  Lseqno += 1;
 		    term = false;
 		}
-	        term = GenSub(node@.child[i]);
+		term = GenSub(node@.child[i]);
 		i += 1;
 	    }
 	}

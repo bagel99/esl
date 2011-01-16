@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 484 2011-01-05 22:28:18Z bgl $
+// $Id: stmt.esl 490 2011-01-16 00:25:09Z bgl $
 
 package stmt
 {
@@ -84,7 +84,7 @@ package stmt
 	var tok: TokenT;
 	var ctree: Ast;
 
-        tree = 0;
+	tree = 0;
 	ctree = expr.Bool(0);
 //out.str(2, "When:\n"); ast.Dump(ctree);
 	if ctree@.op != CONST then
@@ -123,7 +123,7 @@ package stmt
 	var s, bs: Symb;
 	var t, bt: Type;
 
-        tree = 0;
+	tree = 0;
 	tok = Token;
 	if tok == ID then
 	{
@@ -152,27 +152,27 @@ package stmt
 		t = type.Def(tok, bt);
 		if t != 0 && t@.name == 0 then
 		    t@.name = s;
-      		tok = Token;
+		tok = Token;
 		if tok == COLON then
 		    t = type.TypeAttributes(t);
 		s@.type = t;
 		if s@.forward then
 		    type.FwdFix(s, t);		// fix any forward references
 		type.Final(t);
-            }
-            tok = lex.Expect(SEMI);
+	    }
+	    tok = lex.Expect(SEMI);
 	}
 	else
 	    lex.Error(EXPECTID);
-        return tree;
+	return tree;
     }
 
     proc VarNew(s: Symb, t: Type, iv: Ast): Ast
     {   var node: Ast;
 
-        s@.type = t;
-        node = ast.New(DCLVAR, t);
-        if iv != 0 then
+	s@.type = t;
+	node = ast.New(DCLVAR, t);
+	if iv != 0 then
 	    node = ast.Child(node, iv);
 	node@.kind = t@.kind;
 	node@.size = t@.width;
@@ -186,7 +186,7 @@ package stmt
 	var t: Type;
 	var s, ss: Symb;
 
-        tree = 0;
+	tree = 0;
 	tok = Token;
 	if tok == ID then
 	{   s = symb.New(VAR, lex.Ident, false);
@@ -232,7 +232,7 @@ package stmt
 	    }
 	    tok = lex.Expect(SEMI);
 	}
-        return tree;
+	return tree;
     }
 
     proc ConstDecl(): Ast
@@ -241,7 +241,7 @@ package stmt
 	var t: Type;
 	var tok: TokenT;
 
-        tree = 0;
+	tree = 0;
 	tok = Token;
 	if tok == ID then
 	{   s = symb.New(CONSTANT, lex.Ident, false);
@@ -283,7 +283,7 @@ package stmt
 	else
 	    lex.Error(EXPECTID);
 	tok = lex.Expect(SEMI);
-        return tree;
+	return tree;
     }
 
     proc GetLHS(): Ast
@@ -359,7 +359,7 @@ package stmt
 			}
 			i += 1;
 		      exit what@[i] != ',';
-		   	i += 1;
+			i += 1;
 		    }
 		}
 		else lex.ErrorT(EXPECT, STR);
@@ -370,7 +370,7 @@ package stmt
 		    if constraints[na] < IN then	// reuse output as input
 		    {
 //		        node = expr.Load(outputs[ArgRange(constraints[na])]);
-		        node = expr.Load(outputs[_uint8(constraints[na])]);
+			node = expr.Load(outputs[_uint8(constraints[na])]);
 			tree = ast.Child(tree, node);
 		    }
 		    else	// need a new argument
@@ -480,15 +480,22 @@ package stmt
 	else
 	    lsize = ast.Const(type.wordtype, lhs@.type@.hi);
 	tree = expr.Term(t);
-	if tree@.op == LOAD && tree@.kind == ARRAY then	// undo the load
-	    tree = tree@.child[0];
-	ralign = expr.GetAlignment(tree);
-	if ralign < lalign then
-	    lalign = ralign;
-	if tree@.op == SLICE then
-	    rsize = tree@.child[2];
+	if t@.packed == BIT then
+	{   tree@.kind = UINT;		// FIXME: necessary?
+	    if type.NeedSwap(t, Target.order) then
+		tree = ast.New1(REVB, tree@.type, tree);
+	    tree = ast.New2(STORE, 0, lhs, tree);
+	}
 	else
-	    rsize = ast.Const(type.wordtype, tree@.type@.hi);
+	{   if tree@.op == LOAD && tree@.kind == ARRAY then // undo the load
+		tree = tree@.child[0];
+	    ralign = expr.GetAlignment(tree);
+	    if ralign < lalign then
+		lalign = ralign;
+	    if tree@.op == SLICE then
+		rsize = tree@.child[2];
+	    else
+		rsize = ast.Const(type.wordtype, tree@.type@.hi);
 /*
 	if lsize@.op == CONST && rsize@.op == CONST then
 	{   // FIXME: check lhs <= rhs
@@ -496,19 +503,20 @@ out.str(2, "Array copy: nl="); out.uid(2, _uint(lsize@.valu));
 out.str(2, " nr="); out.uid(2, _uint(rsize@.valu)); out.nl(2);
 	}
 */
-	lhs = ArrayFix(lhs);
-	tree = ArrayFix(tree);
-	tree = ast.New2(COPY, lhs@.type, lhs, tree);
-        tree = ast.Child(tree, lsize);
-	align = ast.Const(type.wordtype, lalign);
-	tree = ast.Child(tree, align);
+	    lhs = ArrayFix(lhs);
+	    tree = ArrayFix(tree);
+	    tree = ast.New2(COPY, lhs@.type, lhs, tree);
+	    tree = ast.Child(tree, lsize);
+	    align = ast.Const(type.wordtype, lalign);
+	    tree = ast.Child(tree, align);
+	}
 	return tree;
     }
 
     proc AdjustRHS(lhs: Ast, rhs: Ast): Ast
     {   var tl, tr: Type;
 
-        tl = lhs@.type;		// target type
+	tl = lhs@.type;		// target type
 	tr = rhs@.type;
 /*
 out.str(2, "TL kind="); out.str(2, type.KindName[tl@.kind]); out.nl(2);
@@ -550,7 +558,6 @@ type.DumpT(tr, true); out.nl(2);
 	var op: ast.Op;
 	var tok, optok: TokenT;
 	var nl, nr, i: ast.NSubNodes;
-	var s: Symb;
 	var tl: type.TypeList;
 
 	tree = ast.New1(STORE, 0, lhs);
@@ -572,7 +579,7 @@ type.DumpT(tr, true); out.nl(2);
 	    loop
 	    {   lhs = tree@.child[nr];
 		if lhs != 0 then t = lhs@.type; else t = 0;
-	        if t != 0 && t@.kind == RECORD then
+		if t != 0 && t@.kind == RECORD then
 		{   if optok == ASGN && nl == 1 then
 			tree = AssignRecord(lhs);
 		    else
@@ -626,7 +633,7 @@ type.DumpT(tr, true); out.nl(2);
 				    if optok == INCR then op = ADD; else op = SUB;
 				    rhs = expr.BinOp(op, lrhs, rhs);
 				}
-			        rhs = AdjustRHS(lhs, rhs);
+				rhs = AdjustRHS(lhs, rhs);
 			    }
 			    else lex.Error(RHSASSIGN);
 			    tree = ast.Child(tree, rhs);
@@ -676,7 +683,7 @@ type.DumpT(tr, true); out.nl(2);
 	var tl: type.TypeList;
 	var tok: TokenT;
 
-        tree = 0;
+	tree = 0;
 	tl = 0;
 	if symb.curproc != 0 then
 	    tl = symb.curproc@.retvlist;
@@ -719,7 +726,7 @@ type.DumpT(tr, true); out.nl(2);
 	    tree@.size = tree@.child[0]@.size;
 	}
 	lex.Expect(SEMI);
-        return tree;
+	return tree;
     }
 
     proc If(): Ast
@@ -736,7 +743,7 @@ type.DumpT(tr, true); out.nl(2);
 	if ctree != 0 then
 	{   t = ctree@.type;
 	    if type.Same(t, type.booltype) then
-	        ctree = expr.ForceBoolean(ctree);
+		ctree = expr.ForceBoolean(ctree);
 	    else
 		op = SEL;
 	    tree = ast.New(op, 0);
@@ -766,8 +773,7 @@ type.DumpT(tr, true); out.nl(2);
 		}
 		if tok == COLON then
 		{   tok = Next();
-		    if feature.then then
-			lex.Error(USETHEN); // FIXME enable warning some day
+		    lex.Error(USETHEN); // FIXME make illegal some day
 		}
 		else if lex.Keyword(thenlist) == KTHEN then
 		{   tok = Next();
@@ -813,16 +819,16 @@ type.DumpT(tr, true); out.nl(2);
 	}
 	else
 	    tree = ast.Child(tree, 0);	// no else
-        return tree;
+	return tree;
     }
 
     proc For(): Ast
     {   var tree: Ast;
 	var tok: TokenT;
 
-        tree = 0;
+	tree = 0;
 	tok = Token;
-        return tree;
+	return tree;
     }
 
     proc While(): Ast
@@ -848,29 +854,29 @@ type.DumpT(tr, true); out.nl(2);
 	tree = ast.New1(LOOP, 0, tree);
 	if LoopLevel > 0 then
 	    LoopLevel -= 1;	
-        return tree;
+	return tree;
     }
 
     proc Loop(): Ast
     {   var tree, stree: Ast;
 	var tok: TokenT;
 
-        tree = 0;
+	tree = 0;
 	tok = Token;
 	LoopLevel += 1;
-        tree = ast.New(LOOP, 0);
+	tree = ast.New(LOOP, 0);
 	stree = Statement();
 	tree = ast.Child(tree, stree);
 	if LoopLevel > 0 then
 	    LoopLevel -= 1;
-        return tree;
+	return tree;
     }
 
     proc Exit(): Ast
     {   var tree, wtree, ctree: Ast;
 	var tok: TokenT;
 
-        tree = 0;
+	tree = 0;
 	tok = Token;
 	if LoopLevel == 0 then
 	    lex.Error(NOLOOP);
@@ -889,7 +895,7 @@ type.DumpT(tr, true); out.nl(2);
 	}
 	else
 	    lex.Expect(SEMI);
-        return tree;
+	return tree;
     }
 
     proc Alias(): Ast
@@ -922,9 +928,9 @@ type.DumpT(tr, true); out.nl(2);
 					if ns != 0 then
 					{   if s@.kind == TYPE && 
 					       ns@.kind == TYPE then
-				    		// fix inter-package fwd type
+						// fix inter-package fwd type
 						type.FwdFix(ns, s@.type);
-				    	    else lex.Error(NOTTYPE);
+					    else lex.Error(NOTTYPE);
 					}
 					else lex.ErrorI(UNDEFID, lex.Ident);
 					tok = Next();
@@ -945,7 +951,7 @@ type.DumpT(tr, true); out.nl(2);
 	    tok = Next();
 	}
 	tok = lex.Expect(SEMI);
-        return 0;
+	return 0;
     }
 
     const stmtlist:[12]TokenT =
@@ -956,8 +962,8 @@ type.DumpT(tr, true); out.nl(2);
 	var tok, tok2: TokenT;
 	var s: Symb;
 
-        tree = 0;
-        tok = Token;
+	tree = 0;
+	tok = Token;
 	if tok == GBEG then	// statement group
 	{   tok = Next();
 	    tree = ast.New(SEQ, 0);
@@ -1008,7 +1014,7 @@ type.DumpT(tr, true); out.nl(2);
 	    is SEMI then    {}		// ignore extra semicolons
 	    else lex.ErrorT(BADSTMTT, tok);
 	}
-        return tree;
+	return tree;
     }
 
     proc Procedure(): Ast
@@ -1017,7 +1023,7 @@ type.DumpT(tr, true); out.nl(2);
 	var t, mt: Type;
 	var s, ms: Symb;
 
-        tree = 0;
+	tree = 0;
 	mt = 0;
 	ms = 0;
 	tok = Token;
@@ -1094,7 +1100,7 @@ type.DumpT(tr, true); out.nl(2);
 		    symb.Dump(2);
 		symb.Pop();		// remove locals
 		symb.Pop();		// remove parameters
-	        symb.curproc = 0;
+		symb.curproc = 0;
 		tree = ast.Child(tree, stree);
 	    }
 	    else
@@ -1103,7 +1109,7 @@ type.DumpT(tr, true); out.nl(2);
 	    }
 	}
 	else lex.ErrorT(EXPECT, ID);
-        return tree;
+	return tree;
     }
 
     const packlist:[7]TokenT =
@@ -1133,7 +1139,7 @@ type.DumpT(tr, true); out.nl(2);
 		tok = Next();
 	    }
 	}
-        return tree;
+	return tree;
     }
 
     proc Package(): Ast
@@ -1146,7 +1152,7 @@ type.DumpT(tr, true); out.nl(2);
 	if tok == ID then
 	{   s = symb.FindTop(lex.Ident);
 	    if s == 0 then
-	        s = symb.New(PACK, lex.Ident, false);
+		s = symb.New(PACK, lex.Ident, false);
 	    else if s@.kind != PACK then
 		lex.ErrorI(DEFID, lex.Ident);
 	    s@.forward = true;
@@ -1172,7 +1178,7 @@ type.DumpT(tr, true); out.nl(2);
 	    symb.Pop();
 	    symb.curpack = 0;
 	}
-        return tree;
+	return tree;
     }
 
     proc Import(): Ast
@@ -1180,13 +1186,13 @@ type.DumpT(tr, true); out.nl(2);
 	var tok: TokenT;
 
 	tok = Token;
-        tree = 0;
+	tree = 0;
 	if tok == ID then
 	{
 	    if lex.FileCheck(lex.Ident) then
 	    {   if lex.FileOpen(lex.Ident) then
 		{   tree = Program(lex.Ident);
-	            lex.FileClose();
+		    lex.FileClose();
 		}
 		else
 		    lex.ErrorI(BADIMPORT, lex.Ident);
@@ -1194,7 +1200,7 @@ type.DumpT(tr, true); out.nl(2);
 	    tok = Next();
 	    tok = lex.Expect(SEMI);
 	}
-        return tree;
+	return tree;
     }
 
     const proglist:[9]TokenT = 

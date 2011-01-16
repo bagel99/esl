@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: main.esl 490 2011-01-16 00:25:09Z bgl $
 
 var debug:
     {	symb:
@@ -15,7 +15,6 @@ var debug:
     };
 var feature:
     {   size:  boolean;
-	then:  boolean;
 	unused:boolean;
 	mflag: boolean;
 	gflag: boolean;
@@ -87,7 +86,6 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	}
 	is 'F' then 
 	{   if argv[i]@[2]
-	    is 't' then feature.then = true;
 	    is 'u' then feature.unused = true;
 	}
 	is 'M' then feature.mflag = true;
