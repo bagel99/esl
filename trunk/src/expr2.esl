@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 485 2011-01-12 21:54:38Z bgl $
+// $Id: expr2.esl 490 2011-01-16 00:25:09Z bgl $
 
 package expr
 {
@@ -34,7 +34,7 @@ package expr
 	    is KBITSZ then tree = ast.Const(type.wordtype, t@.size);
 	    is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/Target.membits);
 	    else
-	    	lex.Error(PROPID);
+		lex.Error(PROPID);
 	}
 	else
 	   lex.Error(PROPID);
@@ -160,7 +160,7 @@ ast.Dump(tree);
 //		tree@.size = t@.size;	// width?
 	    }
 	    else
-	        lex.Error(BADCAST);
+		lex.Error(BADCAST);
 	}
 	is REF then
 	{   if tree@.kind
@@ -186,7 +186,7 @@ ast.Dump(tree);
 		    tree@.kind = t@.kind;
 		    tree@.size = t@.size;	// width?
 		}
-	        else
+		else
 		    lex.Error(BADCAST);
 	    }
 	    else
@@ -342,13 +342,11 @@ ast.Dump(tree);
 	return tree;
     }
 
-    proc RecordPack(t:Type, intree:Ast): Ast
-    {
-	var f: Symb;
-	var offs, tsize, fsize: type.BitSize;
+    proc ArrayPack(t:Type, intree:Ast): Ast
+    {   var offs, tsize, fsize: type.BitSize;
 	var i: ast.NSubNodes;
 	var tree, node: Ast;
-	var ftype: Type;
+	var bt: Type;		// base type
 
 	tree = 0;
 	if intree@.op != CLIST then
@@ -356,14 +354,58 @@ ast.Dump(tree);
 	    return tree;
 	}
 	tsize = t@.width;
-//out.str(2, "Small initialized record: sz="); out.uid(2, tsize); out.nl(2);
-	f = t@.list;
-	i = 0;
+	bt = t@.base;
+	fsize = bt@.size;
+//out.str(2, "Small initialized array: tsz="); out.uint(2, tsize);
+//out.str(2, " fsz="); out.uint(2, fsize);
+//out.str(2, " n="); out.uint(2, intree@.num);
+//out.nl(2);
 	if t@.bitorder == MSB then offs = tsize; else offs = 0;
+	i = 0;
+	while i < intree@.num do
+	{
+	    if t@.bitorder == MSB then offs -= fsize;
+	    node = intree@.child[i];
+	    if node@.op != CONST || node@.valu != 0 then
+	    {   node = expr.Extend(node, tsize);
+		node = ast.New2(LSL, bt, node,
+				ast.Const(type.wordtype, offs));
+		if tree == 0 then
+		    tree = node;
+		else
+		    tree = ast.New2(OR, bt, tree, node);
+	    }
+	    if t@.bitorder != MSB then offs += fsize;
+	    i += 1;
+	}
+	if tree == 0 then
+	    tree = expr.Extend(ast.Const(type.wordtype, 0), tsize);
+	tree@.type = t;
+	tree@.kind = ARRAY;	
+	return tree;
+    }
+
+    proc RecordPack(t:Type, intree:Ast): Ast
+    {   var offs, tsize, fsize: type.BitSize;
+	var f: Symb;
+	var i: ast.NSubNodes;
+	var tree, node: Ast;
+	var ft: Type;		// field type
+
+	tree = 0;
+	if intree@.op != CLIST then
+	{   lex.Error(BADPACKREC);
+	    return tree;
+	}
+	tsize = t@.width;
+//out.str(2, "Small initialized record: sz="); out.uint(2, tsize); out.nl(2);
+	f = t@.list;
+	if t@.bitorder == MSB then offs = tsize; else offs = 0;
+	i = 0;
 	while f != 0 do
 	{   if f@.type != 0 then
-	    {   ftype = f@.type;
-		fsize = ftype@.size;
+	    {   ft = f@.type;
+		fsize = ft@.size;
 		if t@.bitorder == MSB then offs -= fsize;
 //out.chr(2, '\t'); out.uid(2, i);
 //out.str(2, ": sz="); out.uid(2, fsize);
@@ -376,12 +418,12 @@ ast.Dump(tree);
 		node = intree@.child[i];
 		if node@.op != CONST || node@.valu != 0 then
 		{   node = expr.Extend(node, tsize);
-		    node = ast.New2(LSL, ftype, node,
-			            ast.Const(type.wordtype, offs));
+		    node = ast.New2(LSL, ft, node,
+				    ast.Const(type.wordtype, offs));
 		    if tree == 0 then
 			tree = node;
 		    else
-			tree = ast.New2(OR, ftype, tree, node);
+			tree = ast.New2(OR, ft, tree, node);
 		}
 		if t@.bitorder != MSB then offs += fsize;
 	    }
@@ -408,6 +450,8 @@ ast.Dump(tree);
 	    }
 	    is ARRAY then
 	    {   tree = ArrayConst(t);
+		if t@.width <= Target.regsize then // array fits in a register
+		    tree = ArrayPack(t, tree);
 	    }
 	    is REF then
 	    {   tree = CompositeValue(t@.base);
@@ -461,7 +505,7 @@ ast.Dump(tree);
 	{   lex.ErrorI(BADTYPE, tree@.type@.name@.ident);
 	    tree = 0;
 	}
-	is VAR, INDEX, OFFSET, SLICE, LOAD:
+	is VAR, INDEX, OFFSET, SLICE, LOAD then
 	{   t = tree@.type;
 	    if t@.kind
 	    is REF then
@@ -576,9 +620,9 @@ ast.Dump(tree); out.nl(2);
 	if rhs@.op == CONST then	// constant folding
 	{   tree = rhs;			// assume nop
 	    if op
-	    is NEG: tree@.valu = -tree@.valu;
-	    is NOT: tree@.valu = ~tree@.valu;
-	    is BNOT: tree@.valu = tree@.valu ^ 1;
+	    is NEG  then tree@.valu = -tree@.valu;
+	    is NOT  then tree@.valu = ~tree@.valu;
+	    is BNOT then tree@.valu = tree@.valu ^ 1;
 	}
 	else
 	    tree = ast.New1(op, rhs@.type, rhs);
@@ -837,14 +881,14 @@ out.str(2, "Intrinsic unknown\n");
 	if s != 0 then
 	{
 		t = s@.type;
-	        if s@.kind
+		if s@.kind
 		is VAR then
 		{   tree = ast.New(VAR, t);
 		    tree@.symb = s;
 		    tree@.kind = REF;
 		    tree@.size = t@.width;
 		}
-	        is CONSTANT then
+		is CONSTANT then
 		{   if t@.kind > REF then	// treat like a var
 		    {   tree = ast.New(VAR, t);
 			tree@.symb = s;
@@ -857,13 +901,13 @@ out.str(2, "Intrinsic unknown\n");
 		    {	tree@.type = t@.base;
 		    }
 		}
-	        is PROC then
+		is PROC then
 		{   if s@.valu != 0 then
 			tree = Intrinsic(s);
 		    else
 			tree = Call(s, 0, 0);
-	        }
-	        is TYPE then
+		}
+		is TYPE then
 		    tree = ast.New(TYPE, t);
 		else lex.ErrorI(BADID, s@.ident);	// FIXME; need better message
 	}
@@ -912,7 +956,7 @@ out.str(2, "Intrinsic unknown\n");
 			else
 			{   if t@.kind == REF then
 			    {   if t@.base != 0 then
-			        {   t = t@.base;	// FIXME: subroutine
+				{   t = t@.base;	// FIXME: subroutine
 				    tree = ast.New1(LOAD, t, tree);
 				    tree@.kind = REF;
 				    tree@.size = Target.ptr.size;
@@ -921,7 +965,7 @@ out.str(2, "Intrinsic unknown\n");
 				{   lex.Error(BADREF);
 				    tree = 0;	// give up
 				}
-		    	    }
+			    }
 			    if t@.kind == RECORD then
 			    {   s = symb.FindLocal(t@.list, lex.Ident);
 				if s != 0 then
@@ -933,7 +977,7 @@ out.str(2, "Intrinsic unknown\n");
 				    tree@.size = t@.width;
 				}
 				else
-			        {   lex.ErrorI(UNDEFFIELD, lex.Ident);
+				{   lex.ErrorI(UNDEFFIELD, lex.Ident);
 				    tok = Next();
 				}
 			    }
@@ -1032,9 +1076,9 @@ out.str(2, "Intrinsic unknown\n");
 			if tree != 0 then
 			{   if tree@.op == TYPE then
 			    {   if tok 
-			    	is PBEG then		// cast
-		    		{   tok = Next();
-		    		    t = tree@.type;
+				is PBEG then		// cast
+				{   tok = Next();
+				    t = tree@.type;
 				    tree = Bool(0);	// FIXME: is this right?
 				    tree = Cast(tree, t);
 				    tok = lex.Expect(PEND);
@@ -1054,7 +1098,7 @@ out.str(2, "Intrinsic unknown\n");
 			}
 		    }
 		}
-	        else
+		else
 		{   if et != 0 && et@.kind == ENUM then	// enum context
 			tree = EnumConst(et);
 		    else lex.ErrorI(UNDEFID, lex.Ident);
@@ -1370,10 +1414,10 @@ out.str(2, "Intrinsic unknown\n");
     {   var tree, rhs: Ast;
 	var tok: TokenT;
 
-        tree = Compare(t);
+	tree = Compare(t);
 	loop
-        {   tok = Token;
-          exit tok != BAND;
+	{   tok = Token;
+	  exit tok != BAND;
 	    tok = Next();
 	    rhs = Compare(tree@.type);
 	    if tree != 0 && rhs != 0 then
@@ -1384,7 +1428,7 @@ out.str(2, "Intrinsic unknown\n");
 		if tree@.op == CONST && rhs@.op == CONST then
 		    tree@.valu = tree@.valu & rhs@.valu;
 		else
-	            tree = ast.New2(BAND, type.booltype, tree, rhs);
+		    tree = ast.New2(BAND, type.booltype, tree, rhs);
 	    }
 	}
 	return tree;
@@ -1394,10 +1438,10 @@ out.str(2, "Intrinsic unknown\n");
     {   var tree, rhs: Ast;
 	var tok: TokenT;
 
-        tree = BoolAnd(t);
+	tree = BoolAnd(t);
 	loop
-        {   tok = Token;
-          exit tok != BOR;
+	{   tok = Token;
+	  exit tok != BOR;
 	    tok = Next();
 	    rhs = BoolAnd(tree@.type);
 	    if tree != 0 && rhs != 0 then
@@ -1406,9 +1450,9 @@ out.str(2, "Intrinsic unknown\n");
 		rhs = ForceBoolean(rhs);
 		// constant folding
 		if tree@.op == CONST && rhs@.op == CONST then
-	            tree@.valu = tree@.valu | rhs@.valu;
+		    tree@.valu = tree@.valu | rhs@.valu;
 		else
-	            tree = ast.New2(BOR, type.booltype, tree, rhs);
+		    tree = ast.New2(BOR, type.booltype, tree, rhs);
 	    }
 	}
 	return tree;

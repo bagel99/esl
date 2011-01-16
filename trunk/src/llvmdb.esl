@@ -1,5 +1,5 @@
 // Copyright (c) 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvmdb.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: llvmdb.esl 488 2011-01-15 23:47:59Z bgl $
 
 package llvmdb
 {
@@ -77,7 +77,7 @@ package llvmdb
     }
     proc PMetaSeq(n: seqnoT)
     {
-        PSeq(n);
+	PSeq(n);
 	out.str(f, " = metadata !{ ");
     }
 
@@ -290,7 +290,7 @@ package llvmdb
 	return formals;
 */
     }
-    	
+	
     proc DefRetvs(ps: Symb): seqnoT
     {   var retvs, tag: seqnoT;
 	var tl: type.TypeList;
@@ -346,10 +346,10 @@ package llvmdb
 	PMetaSeq(list);
 	tl = ps@.retvlist;
 	if formals then
- 	    s = ps@.parmlist;
- 	else
- 	    s = 0;
- 	if s == 0 then term = BRACE; else term = COMMA;
+	    s = ps@.parmlist;
+	else
+	    s = 0;
+	if s == 0 then term = BRACE; else term = COMMA;
 	if tl == 0 then				// not return value
 	    PNull(term);
 	else
@@ -619,7 +619,7 @@ package llvmdb
 
     proc PLine(lineno: _uint16)
     {   var tag: seqnoT;
-        var ln: Line;
+	var ln: Line;
 
 	if lntail != 0 && lntail@.lineno == lineno then
 	    tag = lntail@.tag;
@@ -829,7 +829,7 @@ package llvmdb
 	    out.str(f, "!llvm.dbg.sp = !{ ");
 	    while s != 0 do
 	    {   tag = s@.dbtag;
-	    	s = s@.next;
+		s = s@.next;
 		PSeq(tag);
 		if s == 0 then out.str(f, " }\n"); else out.str(f, ", ");
 	    }
