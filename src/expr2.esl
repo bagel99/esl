@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 490 2011-01-16 00:25:09Z bgl $
+// $Id: expr2.esl 491 2011-01-16 22:28:22Z bgl $
 
 package expr
 {
@@ -445,12 +445,12 @@ ast.Dump(tree);
 	{   if t@.kind
 	    is RECORD then
 	    {   tree = RecordConst(t);
-		if t@.width <= Target.regsize then // record fits in a register
+		if t@.packed == BIT then
 		    tree = RecordPack(t, tree);
 	    }
 	    is ARRAY then
 	    {   tree = ArrayConst(t);
-		if t@.width <= Target.regsize then // array fits in a register
+		if t@.packed == BIT then
 		    tree = ArrayPack(t, tree);
 	    }
 	    is REF then
@@ -473,6 +473,7 @@ ast.Dump(tree);
 	at = array@.type;
 	st = type.New(ARRAY);
 	st@.base = at@.base;
+	st@.packed = at@.packed;
 	if at@.flex then blen = 0; else blen = type.BitSize(at@.hi);
 	if len != 0 && len@.op == CONST then slen = len@.valu; else slen = 0;
 	if blen == 0 && slen == 0 then

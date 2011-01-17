@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 490 2011-01-16 00:25:09Z bgl $
+// $Id: stmt.esl 491 2011-01-16 22:28:22Z bgl $
 
 package stmt
 {
@@ -474,20 +474,25 @@ package stmt
     {   var tree, lsize, rsize, align: Ast;
 	var lalign, ralign: _uint;
 
-	lalign = expr.GetAlignment(lhs);
-	if lhs@.op == SLICE then
-	    lsize = lhs@.child[2];
-	else
-	    lsize = ast.Const(type.wordtype, lhs@.type@.hi);
 	tree = expr.Term(t);
 	if t@.packed == BIT then
 	{   tree@.kind = UINT;		// FIXME: necessary?
+	    if lhs@.op == SLICE then
+	    {   lex.ErrorS(NOTIMPL, "packed array slices");
+		return 0;
+	    }
 	    if type.NeedSwap(t, Target.order) then
 		tree = ast.New1(REVB, tree@.type, tree);
 	    tree = ast.New2(STORE, 0, lhs, tree);
 	}
 	else
-	{   if tree@.op == LOAD && tree@.kind == ARRAY then // undo the load
+	{
+	    lalign = expr.GetAlignment(lhs);
+	    if lhs@.op == SLICE then
+		lsize = lhs@.child[2];
+	    else
+		lsize = ast.Const(type.wordtype, lhs@.type@.hi);
+	    if tree@.op == LOAD && tree@.kind == ARRAY then // undo the load
 		tree = tree@.child[0];
 	    ralign = expr.GetAlignment(tree);
 	    if ralign < lalign then
