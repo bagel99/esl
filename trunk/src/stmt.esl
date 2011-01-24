@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 491 2011-01-16 22:28:22Z bgl $
+// $Id: stmt.esl 498 2011-01-24 01:46:29Z bgl $
 
 package stmt
 {
@@ -479,7 +479,7 @@ package stmt
 	{   tree@.kind = UINT;		// FIXME: necessary?
 	    if lhs@.op == SLICE then
 	    {   lex.ErrorS(NOTIMPL, "packed array slices");
-		return 0;
+//		return 0;
 	    }
 	    if type.NeedSwap(t, Target.order) then
 		tree = ast.New1(REVB, tree@.type, tree);

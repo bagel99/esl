@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 488 2011-01-15 23:47:59Z bgl $
+// $Id: llvm.esl 497 2011-01-21 22:39:26Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -282,6 +282,7 @@ package llvm
 	    is ENUM, UINT then out.uint64(f, node@.valu);
 	    is SINT then       out.int64(f, _int64(node@.valu));
 	    is REF then	       ConstantRef(0, node);
+	    is ARRAY, RECORD then out.uint64(f, node@.valu);	// packed?
 	}
 	is VAR then NodeName(node);
 	else        PTempName(node@.seqno);
@@ -435,71 +436,6 @@ package llvm
 	out.chr(f, '"');
     }
 
-    // LLVM doesn't handle bitfields (packed records or arrays)
-    // so we have to turn them into integers.
-    proc ConstantPackArray(node: Ast, t: Type)
-    {   var offs, tsize, fsize: type.BitSize;
-	var bt: Type;		// base type
-	var i: ast.NSubNodes;
-	var vnode: Ast;
-	var value: type.Valu;
-
-	bt = t@.base;
-	tsize = t@.width;
-	fsize = bt@.size;
-//out.str(2, "Constant packed array: tsz="); out.uint(2, tsize);
-//out.str(2, " fsz="); out.uint(2, fsize);
-//out.nl(2);
-	if t@.bitorder == MSB then offs = tsize; else offs = 0;
-	value = 0;
-	i = 0;
-	while i < node@.num do
-	{
-	    if t@.bitorder == MSB then offs -= fsize;
-	    vnode = node@.child[i];
-	    if vnode != 0 && vnode@.op == CONST then
-		value = value | (vnode@.valu << offs);
-	    if t@.bitorder != MSB then offs += fsize;
-	    i += 1;
-	}
-	out.uint32(f, _uint32(value));
-    }
-
-    proc ConstantPackRecord(node: Ast, t: Type)
-    {   var offs, tsize, fsize: type.BitSize;
-	var s: Symb;
-	var i: ast.NSubNodes;
-	var ft: Type;		// field type
-	var vnode: Ast;
-	var value: type.Valu;
-
-	tsize = t@.width;
-//out.str(2, "Constant packed record: sz="); out.uint(2, tsize); out.nl(2);
-	if t@.bitorder == MSB then offs = tsize; else offs = 0;
-	value = 0;
-	i = 0;
-	s = t@.list;
-	while s != 0 do
-	{   if s@.type != 0 then
-	    {   ft = s@.type;
-		fsize = ft@.size;
-		if t@.bitorder == MSB then offs -= fsize;
-//out.chr(2, '\t'); out.uint(2, i);
-//out.str(2, ": sz="); out.uint(2, fsize);
-//out.str(2, " os="); out.uint(2, offs);
-//out.nl(2);
-		vnode = node@.child[i];
-		if vnode != 0 && vnode@.op == CONST then
-		{   value = value | (vnode@.valu << offs);
-		}
-		if t@.bitorder != MSB then offs += fsize;
-	    }
-	    s = s@.next;
-	    i += 1;
-	}
-	out.uint32(f, _uint32(value));
-    }
-
     proc Constant(node: Ast, t: Type)
     {   var i: ast.NSubNodes;
 
@@ -525,10 +461,10 @@ package llvm
 		    ConstantRef(t, node);
 	    }
 	    is RECORD then
-	    {   if node != 0 then	// assert node@.op == CLIST
-		{   if t@.packed == BIT then
-			ConstantPackRecord(node, t);
-		    else
+	    {   if node != 0 then
+		{   if t@.packed == BIT then	// assert node@.op == CONST
+			out.uint64(f, _uint64(node@.valu));
+		    else			// assert node@.op == CLIST
 		    {   out.str(f, "{ ");
 			i = 0;
 			loop
@@ -547,23 +483,21 @@ package llvm
 	    }
 	    is ARRAY then
 	    {   if node != 0 then
-		{   if node@.op
+		{   if t@.packed == BIT then	// assert node@.op == CONST
+			out.uint64(f, _uint64(node@.valu));
+		    else if node@.op
 		    is CLIST then
-		    {   if t@.packed == BIT then
-			    ConstantPackArray(node, t);
-			else
-			{   out.str(f, "[ ");
-			    i = 0;
-			    loop
-			    {   PType(node@.child[i]@.type, NONE);
-				out.str(f, " ");
-				Constant(node@.child[i], node@.child[i]@.type);
-				i += 1;
-			      exit i >= node@.num;
-				out.str(f, ", ");
-			    }
-			    out.str(f, " ]");
+		    {   out.str(f, "[ ");
+			i = 0;
+			loop
+			{   PType(node@.child[i]@.type, NONE);
+			    out.str(f, " ");
+			    Constant(node@.child[i], node@.child[i]@.type);
+			    i += 1;
+			  exit i >= node@.num;
+			    out.str(f, ", ");
 			}
+			out.str(f, " ]");
 		    }
 		    is BYREF then
 		    {   if node@.child[0]@.op == SCON then
@@ -1347,71 +1281,79 @@ out.str(2, "DCLCON in proc\n");
 	return foffs;
     }
 
+    proc BitfieldIndex(node: Ast, tree: Ast): Ast
+    {   var indx: Ast;
+
+	// FIXME: what about bitorder?
+	indx = expr.Extend(node@.child[1], type.wordtype@.size);
+	indx = ast.New2(MUL, type.wordtype, indx,
+                        ast.Const(type.wordtype, node@.type@.size));
+	if tree != 0 then
+	    tree = ast.New2(ADD, type.wordtype, tree, indx);
+	else
+	    tree = indx;
+	return tree;
+    }
+
+    proc BitfieldRewrite(offs: Ast): Ast, Ast, Ast
+    {   var varb, tree: Ast;
+	var shft: type.BitSize;
+
+	shft = 0;
+	varb = 0;
+	loop
+	{   if offs@.op
+	    is OFFSET then shft += BitfieldOffset(offs@.child[0]@.type, offs@.valu);
+	    is INDEX then varb = BitfieldIndex(offs, varb);
+	    is SLICE then {}// what to do???
+	    offs = offs@.child[0];
+	  exit (offs@.op < OFFSET || offs@.op > SLICE) ||
+	    offs@.child[0]@.type@.packed != BIT;
+	}
+	if shft != 0 then
+	{   tree = ast.Const(type.wordtype, shft);
+	    if varb != 0 then
+		varb = ast.New2(ADD, type.wordtype, varb, tree);
+	    else
+		varb = tree;
+	}
+	// load the container of the bitfield
+	tree = ast.New1(LOAD, offs@.type, offs);
+	tree@.kind = UINT;
+	// make register sized, this simplifies things
+	tree = expr.Extend(tree, type.wordtype@.size);
+	// make sure the endian is correct
+	if tree@.size > Target.membits && 
+	   tree@.type@.memorder != Target.order then
+	    tree = ast.New1(REVB, tree@.type, tree);
+	// return the loaded container, the shift computation and remaining offs
+	return tree, varb, offs;
+    }
+
     proc Load(load: Ast)
-    {   var offs, indx, tree, varb: Ast;
-	var shft, size, w, ww: type.BitSize;
+    {   var offs, tree, varb: Ast;
+	var size: type.BitSize;
 	var mask: type.Valu;
-	var wt: Type;
+	var t: Type;
 
 	// LLVM doesn't handle bitfields (packed records or arrays)
 	// so we expand bitfield extract
 	offs = load@.child[0];
-	if (offs@.op == OFFSET || offs@.op == INDEX) &&
+	if (offs@.op >= OFFSET && offs@.op <= SLICE) &&
 	    offs@.child[0]@.type@.packed == BIT then
 	{   // We are dealing with a packed record or array (aka bitfield).
+	    t = offs@.type;		// final type
+	    size = t@.size;		// final bit size
 	    // Rewrite the AST to extract item.
-	    // First, go down the tree and accumulate over all bitfields
-	    wt = type.wordtype;
-	    ww = type.wordtype@.size;
-	    size = offs@.type@.size;	// final bit size
-//out.str(2, "BFLoad: size="); out.uint(2, size); out.nl(2);
-	    shft = 0;
-	    varb = 0;
-	    loop
-	    {   if offs@.op == INDEX then
-		{   indx = offs@.child[1];
-		    if indx@.size != ww then
-			indx = expr.Extend(indx, ww);
-		    indx = ast.New2(MUL, wt, indx,
-			    ast.Const(type.wordtype, offs@.type@.size));
-		    if varb != 0 then
-			varb = ast.New2(ADD, wt, varb, indx);
-		    else
-			varb = indx;
-		}
-		else
-		{
-		    shft += BitfieldOffset(offs@.child[0]@.type, offs@.valu);
-		}
-		offs = offs@.child[0];
-	      exit (offs@.op != OFFSET && offs@.op != INDEX) ||
-		    offs@.child[0]@.type@.packed != BIT;
-	    }
-	    if shft != 0 then
-	    {	tree = ast.Const(wt, shft);
-		if varb != 0 then
-		    varb = ast.New2(ADD, wt, varb, tree);
-		else
-		    varb = tree;
-	    }
-	    mask = (1<<size)-1;
-	    w = load@.size;	// width of final result
-	    // load the packed record/array
-	    tree = ast.New1(LOAD, offs@.type, offs);
-	    tree@.kind = UINT;
-	    // make sure the endian is correct
-	    if tree@.size > Target.membits &&
-	       tree@.type@.memorder != Target.order then
-		tree = ast.New1(REVB, tree@.type, tree);
-	    if tree@.size != ww then	// make sure it is word width
-		tree = expr.Extend(tree, ww);
-	    // shift item rightward
+	    tree, varb, offs = BitfieldRewrite(offs);
+	    // shift item rightward, if necessary
 	    if varb != 0 then
-		tree = ast.New2(LSR, wt, tree, varb);
+		tree = ast.New2(LSR, t, tree, varb);
 	    // mask off the parts we don't want
-	    tree = ast.New2(AND, wt, tree, ast.Const(wt, mask));
-	    if tree@.size != w then	// adjust width of final result
-		tree = expr.Extend(tree, w);
+	    mask = (1<<size)-1;
+	    tree = ast.New2(AND, t, tree, ast.Const(type.wordtype, mask));
+	    // possibly narrow the size
+	    tree = expr.Extend(tree, load@.size);
 //out.str(2, "BFLoad tree=\n"); ast.Dump(tree); out.nl(2);
 	    GenSub(tree);
 	    load@.child[0] = tree;      // load@.op == LOAD, we're done with it
@@ -1429,85 +1371,44 @@ out.str(2, "DCLCON in proc\n");
     }
 
     proc Store(store: Ast)
-    {   var offs, indx, rhs, lhs, varb, tree, temp: Ast;
-	var shft, size, w, ww: type.BitSize;
+    {   var rhs, lhs, varb, tree, temp: Ast;
+	var size: type.BitSize;
 	var mask: type.Valu;
-	var t, wt: Type;
+	var t: Type;
 	var i, n: ast.NSubNodes;
 
 	i = 0;
 	n = store@.num / 2;
 	while i < n do
-	{
-	    lhs = store@.child[i];
+	{   lhs = store@.child[i];
 	    rhs = store@.child[n+i];
 	    // LLVM doesn't handle bitfields (packed records or arrays)
 	    // so we expand bitfield insert
-	    if (lhs@.op == OFFSET || lhs@.op == INDEX) &&
+	    if (lhs@.op >= OFFSET && lhs@.op <= SLICE) &&
 		lhs@.child[0]@.type@.packed == BIT then
 	    {   // We are dealing with a packed record or array (aka bitfield).
-		// Rewrite the AST to insert field.
-		// First, go down the tree and accumulate over all bitfields
-		wt = type.wordtype;
-		ww = type.wordtype@.size;
-		offs = lhs;
-		size = offs@.type@.size;
-//out.str(2, "BFStore: size="); out.uint(2, size); out.nl(2);
-		shft = 0;
-		varb = 0;
-		loop
-		{   if offs@.op == INDEX then
-		    {   indx = offs@.child[1];
-			if indx@.size != ww then
-			    indx = expr.Extend(indx, ww);
-			indx = ast.New2(MUL, wt, indx,
-				ast.Const(type.wordtype, offs@.type@.size));
-			if varb != 0 then
-			    varb = ast.New2(ADD, wt, varb, indx);
-			else
-			    varb = indx;
-		    }
-		    else
-		    {
-			shft += BitfieldOffset(offs@.child[0]@.type, offs@.valu);
-		    }
-		    offs = offs@.child[0];
-		  exit (offs@.op != OFFSET && offs@.op != INDEX) ||
-			offs@.child[0]@.type@.packed != BIT;
-		}
-		if shft != 0 then
-		{	tree = ast.Const(wt, shft);
-		    if varb != 0 then
-			varb = ast.New2(ADD, wt, varb, tree);
-		    else
-			varb = tree;
-		}
-		t = offs@.type;
-		w = offs@.size;
-		lhs = offs;		// just the address part is left
-		// make sure value is word width
-		if rhs@.size != ww then
-		    rhs = expr.Extend(rhs, ww);
-		// shift the value left into place
-		if varb != 0 then
-		    rhs  = ast.New2(LSL, wt, rhs, varb);
-		// load the target for the read part of read-modify-write
-		tree = ast.New1(LOAD, wt, offs);
-		tree@.kind = UINT;
-		if tree@.size != ww then	// make sure target is word width
-		    tree = expr.Extend(tree, ww);
+		t = lhs@.type;			// final type
+		size = t@.size;			// final bit size
+		// Rewrite the AST to extract item.
+		tree, varb, lhs = BitfieldRewrite(lhs);
 		// generate the mask
 		mask = (1<<size)-1;
-		temp = ast.Const(wt, mask);
+		temp = ast.Const(type.wordtype, mask);
+		// shift the mask leftward, if necessary
 		if varb != 0 then
-		    temp = ast.New2(LSL, wt, temp, varb);
-		temp = ast.New1(NOT, wt, temp);
+		    temp = ast.New2(LSL, type.wordtype, temp, varb);
+		temp = ast.New1(NOT, type.wordtype, temp);
 		// mask out the field in the target
-		tree = ast.New2(AND, wt, tree, temp);
+		tree = ast.New2(AND, type.wordtype, tree, temp);
+		// make the value word size
+		rhs = expr.Extend(rhs, type.wordtype@.size);
+		// shift the value leftward, if necessary
+		if varb != 0 then
+		    rhs  = ast.New2(LSL, type.wordtype, rhs, varb);
 		// or in the new value
-		rhs  = ast.New2(OR, wt, tree, rhs);
-		if rhs@.size != w then	// adjust width of final result
-		    rhs = expr.Extend(rhs, w);
+		rhs  = ast.New2(OR, type.wordtype, tree, rhs);
+		// adjust width of final result
+		rhs = expr.Extend(rhs, lhs@.size);
 		store@.child[i] = lhs;
 		store@.child[n+i] = rhs;
 //out.str(2, "BFStore tree=\n"); ast.Dump(store); out.nl(2);
@@ -1608,7 +1509,7 @@ out.str(2, "DCLCON in proc\n");
 	is RET then term = Return(node);
 	is GETRV then GetRV(node);
 	is STORE then Store(node);
-	is LOAD then  Load(node);
+	is LOAD  then Load(node);
 	is BYREF then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
@@ -1764,3 +1665,5 @@ out.str(2, "DCLCON in proc\n");
 	if feature.gflag then llvmdb.ProgFinish();
     }
 }
+// vim: ts=8 sw=4 noet nowrap
+
