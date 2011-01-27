@@ -1,12 +1,13 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type1.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: type1.esl 500 2011-01-26 21:03:27Z bgl $
 
 package type
 {
     type Valu: _uint64;
     type SValu: _int64;
     type TypeT: (UTYPE, ENUM, UINT, SINT, REF, ARRAY, RECORD, REFPROC);
-    type OrderT: (NATIVE, MSB, LSB);
+    type BitOrderT: (NATIVE, MSB, LSB);
+    type MemOrderT: (NATIVE, BE, LE);
     type AlignT: (NATIVE, MEM, BIT);
     type AccessT: (RW, RO, WO);
     type BitSize: 0..0xFFFFFFFF;
@@ -25,8 +26,8 @@ package type
 	dbtag:	_uint16;	// tag for debug information
 	kind:	TypeT;		// ENUM, UINT, ...
 	packed:	AlignT;		// packed or not
-	bitorder: OrderT;	// lsb, msb
-	memorder: OrderT;	// le, be
+	bitorder: BitOrderT;	// lsb, msb
+	memorder: MemOrderT;	// le, be
 	access:	AccessT;	// access restrictions
 	flex:   boolean;	// flexible array
 	input:  boolean;	// external state changes (like C volatile)	
@@ -59,4 +60,5 @@ package type
 
     proc DumpT(t: Type, full: boolean);
 }
+// vim: ts=8 sw=4 noet nowrap
 

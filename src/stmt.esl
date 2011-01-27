@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 498 2011-01-24 01:46:29Z bgl $
+// $Id: stmt.esl 501 2011-01-27 01:50:56Z bgl $
 
 package stmt
 {
@@ -260,7 +260,8 @@ package stmt
 	    if tok == ASGN then
 	    {   tok = Next();
 		tree = expr.Const(t);
-		if t == 0 || t@.kind <= REF then
+		if t == 0 then t = tree@.type;
+		if t@.kind <= REF || t@.packed == BIT then
 		{   if tree@.op == CONST then
 		    {   s@.valu = tree@.valu;
 			if t == 0 then t = tree@.type;
@@ -270,7 +271,8 @@ package stmt
 			lex.Error(BADCONST);
 		}
 		else
-		{   t = tree@.type;
+		{   if t@.kind == ARRAY && t@.flex then
+			t = tree@.type;
 		    tree = ast.New1(DCLCON, t, tree);
 		    tree@.symb = s;
 		}
@@ -442,6 +444,17 @@ package stmt
 	return tree;
     }
 
+    const HostOrder: type.MemOrderT = LE;  // FIXME: determine this!
+
+    proc CheckSwap(lhs: Ast, rhs: Ast): Ast
+    {
+	if (rhs@.op == CONST && lhs@.type@.memorder != HostOrder) ||
+	  type.NeedSwap(lhs@.type, Target.order) then
+	    rhs = ast.New1(REVB, rhs@.type, rhs);
+	return rhs;
+    }
+
+
     proc AssignRecord(lhs:Ast): Ast
     {   var tree: Ast;
 	var t:Type;
@@ -450,8 +463,7 @@ package stmt
 	tree = expr.Term(t);
 	if t@.packed == BIT then
 	{   tree@.kind = UINT;		// FIXME: necessary?
-	    if type.NeedSwap(t, Target.order) then
-		tree = ast.New1(REVB, tree@.type, tree);
+	    tree = CheckSwap(lhs, tree);
 	}
 	// FIXME: copy or store depending on size?
 	tree = ast.New2(STORE, 0, lhs, tree);
@@ -481,8 +493,7 @@ package stmt
 	    {   lex.ErrorS(NOTIMPL, "packed array slices");
 //		return 0;
 	    }
-	    if type.NeedSwap(t, Target.order) then
-		tree = ast.New1(REVB, tree@.type, tree);
+	    tree = CheckSwap(lhs, tree);
 	    tree = ast.New2(STORE, 0, lhs, tree);
 	}
 	else
@@ -534,7 +545,7 @@ out.str(2, "TR kind="); out.str(2, type.KindName[tr@.kind]); out.nl(2);
 type.DumpT(tr, true); out.nl(2);
 */
 	if rhs@.op == LOAD && rhs@.kind == ARRAY then
-	{   rhs = rhs@.child[0];
+	{   rhs = rhs@.child[0];    // happens when coerce array to pointer
 	}
 	if rhs@.kind != REF then
 	{   if lhs@.size != rhs@.size then
@@ -551,9 +562,8 @@ type.DumpT(tr, true); out.nl(2);
 		}
 	    }
 	    else lex.Error(TYPEASSIGN);
-	}	
-	if type.NeedSwap(tr, tl@.memorder) then
-	    rhs = ast.New1(REVB, tr, rhs);
+	}
+	rhs = CheckSwap(lhs, rhs);	
 	return rhs;
     }
 
@@ -1262,4 +1272,5 @@ type.DumpT(tr, true); out.nl(2);
     }
 
 }
+// vim: ts=8 sw=4 noet nowrap
 

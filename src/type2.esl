@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 490 2011-01-16 00:25:09Z bgl $
+// $Id: type2.esl 500 2011-01-26 21:03:27Z bgl $
 
 package type
 {
@@ -71,8 +71,8 @@ package type
 	return false;
     }
 
-    proc NeedSwap(t: Type, to: OrderT): boolean
-    {   var fm: OrderT;
+    proc NeedSwap(t: Type, to: MemOrderT): boolean
+    {   var fm: MemOrderT;
 
 	if t@.size <= Target.membits then return false;
 	fm = t@.memorder;
@@ -98,7 +98,7 @@ package type
 	nt@.final = false;
     }
 	
-    proc ChangeOrder(told: Type, neworder: OrderT): Type
+    proc ChangeOrder(told: Type, neworder: MemOrderT): Type
     {   var t: Type;
 
 	t = Clone(told);
@@ -137,8 +137,8 @@ package type
 		    is KMPACK then  t@.packed = MEM;
 		    is KLSB then    t@.bitorder = LSB;
 		    is KMSB then    t@.bitorder = MSB;
-		    is KLE then     t@.memorder = LSB;
-		    is KBE then     t@.memorder = MSB;
+		    is KLE then     t@.memorder = LE;
+		    is KBE then     t@.memorder = BE;
 		    is KRO then     t@.access = RO;
 		    is KWO then     t@.access = WO;
 		    is KINPUT then  t@.input = true;
@@ -730,8 +730,8 @@ package type
     }
 
     const packedstr:[AlignT]@[]Char = {"", "memory", "packed"};
-    const bitorderstr:[OrderT]@[]Char = {"", "msb", "lsb"};
-    const memorderstr:[OrderT]@[]Char = {"", "be", "le"};
+    const bitorderstr:[BitOrderT]@[]Char = {"", "msb", "lsb"};
+    const memorderstr:[MemOrderT]@[]Char = {"", "be", "le"};
     const accessstr:[AccessT]@[]Char = {"RW", "RO", "WO"};
     const blanks:[]_byte =
 	"                                                                ";
@@ -849,4 +849,5 @@ package type
 	Dump2(t, 0, full);
     }
 }
+// vim: ts=8 sw=4 noet nowrap
 
