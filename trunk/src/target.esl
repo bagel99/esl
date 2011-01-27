@@ -1,5 +1,5 @@
 // Copyright (c) 2009, Brian G. Lucas.  See LICENSE file.
-// $Id: target.esl 478 2011-01-03 01:58:59Z bgl $
+// $Id: target.esl 500 2011-01-26 21:03:27Z bgl $
 
 package target
 {
@@ -13,7 +13,7 @@ package target
       {
 	name:		@[]Char;
 	triple:		@[]Char;
-	order:		type.OrderT;
+	order:		type.MemOrderT;
 	membits:	0..255;		// number of bits in smallest addressable
 	regsize:	0..255;		// width of integer registers
 	mustalign:	boolean;
@@ -26,7 +26,7 @@ package target
     const NumTargets = 7;
     const Targets: [NumTargets]TargetT =
     {   {   "x86", "i386-unknown-linux-gnu",
-	    LSB, 8, 32, false, 0,
+	    LE, 8, 32, false, 0,
 	    4,
 	    {32, 32},
 	    {   {8, 8}, {16,16}, {32,32}, {64,32},
@@ -34,7 +34,7 @@ package target
 	    }
 	},
 	{   "x86-64", "x86_64-unknown-linux-gnu",
-	    LSB, 8, 64, false, 0,
+	    LE, 8, 64, false, 0,
 	    4,
 	    {64, 64},
 	    {   {8, 8}, {16,16}, {32,32}, {64,64},
@@ -42,7 +42,7 @@ package target
 	    }
 	},
 	{   "msp430", "msp430-generic-generic",
-	    LSB, 8, 16, true, 0,
+	    LE, 8, 16, true, 0,
 	    3,
 	    {16, 16},
 	    {   {8, 8}, {16,16}, {32,16}, {0,0},
@@ -50,7 +50,7 @@ package target
 	    }
 	},
 	{   "cortex-m3", "thumb2-unknown-unknown",
-	    LSB, 8, 32, true, 0,	// need a version with no alignment
+	    LE, 8, 32, true, 0,	// need a version with no alignment
 	    4,
 	    {32, 32},
 	    {   {8, 8}, {16,16}, {32,32}, {64,32},
@@ -58,7 +58,7 @@ package target
 	    }
 	},
 	{   "ppc32", "ppc-unknown-unknown",
-	    MSB, 8, 32, true, 0,
+	    BE, 8, 32, true, 0,
 	    4,
 	    {32, 32},
 	    {   {8, 8}, {16,16}, {32,32}, {64,32},
@@ -66,7 +66,7 @@ package target
 	    }
 	},
 	{   "ppc64", "ppc64-unknown-unknown",
-	    MSB, 8, 64, true, 0,
+	    BE, 8, 64, true, 0,
 	    4,
 	    {32, 32},
 	    {   {8, 8}, {16,16}, {32,32}, {64,64},
@@ -74,7 +74,7 @@ package target
 	    }
 	},
 	{   "mips", "mips-unknown-unknown",
-	    MSB, 8, 32, true, 0,
+	    BE, 8, 32, true, 0,
 	    4,
 	    {32, 32},
 	    {   {8, 8}, {16,16}, {32,32}, {64,32},
@@ -84,7 +84,7 @@ package target
     };
     var Target: TargetT =
     {   "x86", "i386-unknown-linux-gnu",
-	LSB, 8, 32, false, 0,
+	LE, 8, 32, false, 0,
 	4,
 	{32, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,32},
@@ -127,4 +127,5 @@ package target
     }
    
 }
+// vim: ts=8 sw=4 noet nowrap
 

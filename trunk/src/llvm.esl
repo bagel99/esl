@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 497 2011-01-21 22:39:26Z bgl $
+// $Id: llvm.esl 501 2011-01-27 01:50:56Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -512,7 +512,10 @@ package llvm
 		    }
 		    is SCON then
 		    {   var n: 0..lex.StringMax;
-			n = node@.type@.hi;
+			if t@.flex then
+			    n = node@.type@.hi;
+			else
+			    n = t@.hi;
 			PString(pstring(node@.symb), n, true);
 		    }
 		}
@@ -897,9 +900,9 @@ out.str(2, " align="); out.uint(2, align);
 	    if length < size then
 	    {   var mask: _uint64;
 		// Assert size <= 64;
-		if Target.order == MSB then
+		if Target.order == BE then
 		    mask = ~((1 << ((size-length)*8)) -1);
-		else	// assume LSB
+		else	// assume LE
 		    mask = (1 << (length*8)) - 1;
 out.str(2, " mask=0x"); out.hex64(2, mask);
 		node@.child[0] = ast.New2(XOR, puinttype[i]@.base,
@@ -1281,13 +1284,13 @@ out.str(2, "DCLCON in proc\n");
 	return foffs;
     }
 
-    proc BitfieldIndex(node: Ast, tree: Ast): Ast
+    proc BitfieldIndex(node: Ast, size: type.BitSize, tree: Ast): Ast
     {   var indx: Ast;
 
 	// FIXME: what about bitorder?
 	indx = expr.Extend(node@.child[1], type.wordtype@.size);
 	indx = ast.New2(MUL, type.wordtype, indx,
-                        ast.Const(type.wordtype, node@.type@.size));
+                        ast.Const(type.wordtype, size));
 	if tree != 0 then
 	    tree = ast.New2(ADD, type.wordtype, tree, indx);
 	else
@@ -1303,9 +1306,12 @@ out.str(2, "DCLCON in proc\n");
 	varb = 0;
 	loop
 	{   if offs@.op
-	    is OFFSET then shft += BitfieldOffset(offs@.child[0]@.type, offs@.valu);
-	    is INDEX then varb = BitfieldIndex(offs, varb);
-	    is SLICE then {}// what to do???
+	    is OFFSET then
+		shft += BitfieldOffset(offs@.child[0]@.type, offs@.valu);
+	    is INDEX then
+		varb = BitfieldIndex(offs, offs@.type@.size, varb);
+	    is SLICE then
+		varb = BitfieldIndex(offs, offs@.type@.base@.size, varb);
 	    offs = offs@.child[0];
 	  exit (offs@.op < OFFSET || offs@.op > SLICE) ||
 	    offs@.child[0]@.type@.packed != BIT;
@@ -1320,20 +1326,43 @@ out.str(2, "DCLCON in proc\n");
 	// load the container of the bitfield
 	tree = ast.New1(LOAD, offs@.type, offs);
 	tree@.kind = UINT;
-	// make register sized, this simplifies things
-	tree = expr.Extend(tree, type.wordtype@.size);
+	tree@.size = offs@.type@.width;
 	// make sure the endian is correct
 	if tree@.size > Target.membits && 
 	   tree@.type@.memorder != Target.order then
 	    tree = ast.New1(REVB, tree@.type, tree);
-	// return the loaded container, the shift computation and remaining offs
-	return tree, varb, offs;
+	// make register sized, this simplifies things
+	tree = expr.Extend(tree, type.wordtype@.size);
+	return tree,    // return the loaded container,
+	       varb,    // the shift computation,
+	       offs;    // and the base address 
     }
 
-    proc Load(load: Ast)
-    {   var offs, tree, varb: Ast;
+    proc BitfieldMask(node: Ast): Ast
+    {   var mask: Ast;
+	var bits: type.Valu;
 	var size: type.BitSize;
-	var mask: type.Valu;
+
+	if node@.op == SLICE then
+	{   if node@.child[2]@.op != CONST then
+	    {
+out.str(2, "BitfieldMask of variable SLICE\n");
+	    }
+	    else
+	    {   size = node@.type@.base@.size;
+		size = size * type.BitSize(node@.child[2]@.valu);
+	    }
+	}
+	else
+	    size = node@.type.size;
+	bits = (1<<size)-1;
+	mask = ast.Const(type.wordtype, bits);
+	return mask;
+    }
+	
+    proc Load(load: Ast)
+    {   var offs, tree, varb, mask: Ast;
+	var size: type.BitSize;
 	var t: Type;
 
 	// LLVM doesn't handle bitfields (packed records or arrays)
@@ -1344,14 +1373,14 @@ out.str(2, "DCLCON in proc\n");
 	{   // We are dealing with a packed record or array (aka bitfield).
 	    t = offs@.type;		// final type
 	    size = t@.size;		// final bit size
+	    mask = BitfieldMask(offs);
 	    // Rewrite the AST to extract item.
 	    tree, varb, offs = BitfieldRewrite(offs);
 	    // shift item rightward, if necessary
 	    if varb != 0 then
 		tree = ast.New2(LSR, t, tree, varb);
 	    // mask off the parts we don't want
-	    mask = (1<<size)-1;
-	    tree = ast.New2(AND, t, tree, ast.Const(type.wordtype, mask));
+	    tree = ast.New2(AND, t, tree, mask);
 	    // possibly narrow the size
 	    tree = expr.Extend(tree, load@.size);
 //out.str(2, "BFLoad tree=\n"); ast.Dump(tree); out.nl(2);
@@ -1371,9 +1400,8 @@ out.str(2, "DCLCON in proc\n");
     }
 
     proc Store(store: Ast)
-    {   var rhs, lhs, varb, tree, temp: Ast;
+    {   var rhs, lhs, varb, tree, mask: Ast;
 	var size: type.BitSize;
-	var mask: type.Valu;
 	var t: Type;
 	var i, n: ast.NSubNodes;
 
@@ -1389,17 +1417,15 @@ out.str(2, "DCLCON in proc\n");
 	    {   // We are dealing with a packed record or array (aka bitfield).
 		t = lhs@.type;			// final type
 		size = t@.size;			// final bit size
+		mask = BitfieldMask(lhs);
 		// Rewrite the AST to extract item.
 		tree, varb, lhs = BitfieldRewrite(lhs);
-		// generate the mask
-		mask = (1<<size)-1;
-		temp = ast.Const(type.wordtype, mask);
 		// shift the mask leftward, if necessary
 		if varb != 0 then
-		    temp = ast.New2(LSL, type.wordtype, temp, varb);
-		temp = ast.New1(NOT, type.wordtype, temp);
+		    mask = ast.New2(LSL, type.wordtype, mask, varb);
+		mask = ast.New1(NOT, type.wordtype, mask);
 		// mask out the field in the target
-		tree = ast.New2(AND, type.wordtype, tree, temp);
+		tree = ast.New2(AND, type.wordtype, tree, mask);
 		// make the value word size
 		rhs = expr.Extend(rhs, type.wordtype@.size);
 		// shift the value leftward, if necessary
@@ -1409,6 +1435,10 @@ out.str(2, "DCLCON in proc\n");
 		rhs  = ast.New2(OR, type.wordtype, tree, rhs);
 		// adjust width of final result
 		rhs = expr.Extend(rhs, lhs@.size);
+		// make sure the endian is correct
+		if lhs@.size > Target.membits && 
+		   lhs@.type@.memorder != Target.order then
+		    rhs = ast.New1(REVB, rhs@.type, rhs);
 		store@.child[i] = lhs;
 		store@.child[n+i] = rhs;
 //out.str(2, "BFStore tree=\n"); ast.Dump(store); out.nl(2);
@@ -1644,7 +1674,7 @@ out.str(2, "DCLCON in proc\n");
 	puinttype[3].base = type.uinttypes[3];
 
 	out.str(f, "target datalayout = \"");
-	if Target.order == MSB then out.str(f, "E"); else out.str(f, "e");
+	if Target.order == BE then out.str(f, "E"); else out.str(f, "e");
 	out.str(f, "-p:");  out.uint(f, Target.ptr.size);
 	out.str(f, ":");    out.uint(f, Target.ptr.align);
 	out.str(f, ":");    out.uint(f, Target.ptr.align);

@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 496 2011-01-21 21:58:49Z bgl $
+// $Id: expr2.esl 501 2011-01-27 01:50:56Z bgl $
 
 package expr
 {
@@ -894,17 +894,16 @@ out.str(2, "Intrinsic unknown\n");
 		    tree@.size = t@.width;
 		}
 		is CONSTANT then
-		{   if t@.kind > REF then	// treat like a var
+		{   if t@.kind <= REF || t@.packed == BIT then
+			tree = ast.Const(t, s@.valu);
+		    else	// treat like a var
 		    {   tree = ast.New(VAR, t);
 			tree@.symb = s;
 			tree@.kind = REF;
 			tree@.size = t@.width;
 		    }
-		    else
-			tree = ast.Const(t, s@.valu);
 		    if t@.kind == REF then
-		    {	tree@.type = t@.base;
-		    }
+			tree@.type = t@.base;
 		}
 		is PROC then
 		{   if s@.valu != 0 then
@@ -1093,7 +1092,7 @@ out.str(2, "Intrinsic unknown\n");
 			    }
 			    else
 			    {   tree = Load(tree);
-				if tree != 0 && tree@.type != 0 &&
+				if tree != 0 && tree@.op != CONST &&
 				   type.NeedSwap(tree@.type, Target.order) then
 				{   tree = ast.New1(REVB, tree@.type, tree);
 				    tree@.type =
@@ -1517,4 +1516,5 @@ out.str(2, "Intrinsic unknown\n");
 	return rv;
     }
 }
+// vim: ts=8 sw=4 noet nowrap
 
