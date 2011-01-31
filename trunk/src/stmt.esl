@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 501 2011-01-27 01:50:56Z bgl $
+// $Id: stmt.esl 504 2011-01-31 21:51:14Z bgl $
 
 package stmt
 {
@@ -444,16 +444,12 @@ package stmt
 	return tree;
     }
 
-    const HostOrder: type.MemOrderT = LE;  // FIXME: determine this!
-
     proc CheckSwap(lhs: Ast, rhs: Ast): Ast
     {
-	if (rhs@.op == CONST && lhs@.type@.memorder != HostOrder) ||
-	  type.NeedSwap(lhs@.type, Target.order) then
+	if type.NeedSwap(lhs@.type, Target.order) then
 	    rhs = ast.New1(REVB, rhs@.type, rhs);
 	return rhs;
     }
-
 
     proc AssignRecord(lhs:Ast): Ast
     {   var tree: Ast;
