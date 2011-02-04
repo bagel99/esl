@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 501 2011-01-27 01:50:56Z bgl $
+// $Id: llvm.esl 507 2011-02-04 20:11:10Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -61,6 +61,12 @@ package llvm
 	dcltail = d;
     }
 
+    proc PEndLine(node: Ast)
+    {
+	if feature.gflag then llvmdb.PLine(node@.lineno);
+	out.nl(f);
+    }
+   
     proc PTypeName(t: Type)
     {   var s: Symb;
 	type word: 0..0xFFFFFFFF;
@@ -270,7 +276,7 @@ package llvm
     {
 	if node@.op
 	is CONST then lex.Error(ASSIGNCONST);
-	is VAR then NodeName(node);
+	is VAR, DCLVAR then NodeName(node);
 	else PTempName(node@.seqno);
     }
 
@@ -544,7 +550,21 @@ package llvm
 	if s != 0 then
 	{   DclType(s@.type);
 	    if s@.linkage
-	    is LOCAL then  Print("\t%I = alloca %B", node);
+	    is LOCAL then
+	    {   Print("\t%I = alloca %B", node);
+		if node@.child[0] != 0 then     // initialized local
+		{   if node@.type@.kind <= REF then // scalar
+		    {   out.nl(f);
+			out.chr(f, '\t');   // FIXME: refactor with Store
+			out.str(f, "store ");
+			NodeType(node@.child[0]); out.chr(f, ' ');
+			NodeSrc(node@.child[0]);  out.str(f, ", ");
+			NodeType(node); out.chr(f, ' ');
+			NodeDst(node);
+		    }
+		    else lex.ErrorS(NOTIMPL, "initialized local composites");
+		}
+	    }
 	    is NORMAL then
 	    {   Print("%I = internal global %B ", node);
 		Constant(node@.child[0], node@.type);
@@ -1110,12 +1130,6 @@ out.str(2, "DCLCON in proc\n");
 	}
     }
 
-    proc PEndLine(node: Ast)
-    {
-	if feature.gflag then llvmdb.PLine(node@.lineno);
-	out.nl(f);
-    }
-   
     proc Procedure(node: Ast)
     {   var s, ps: Symb;
 	var tl: type.TypeList;

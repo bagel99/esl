@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 502 2011-01-30 22:26:25Z bgl $
+// $Id: main.esl 508 2011-02-04 20:12:42Z bgl $
 
 var debug:
     {	symb:
@@ -46,10 +46,12 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 {
     var tree: Ast;
     var i: _uint;
-    var outfile: @[]_byte;
     var outfd: sys.fildes;
+    var outfile: @[]_byte;
+    var targetarch: @[]_byte;
 
     outfile = 0;
+    targetarch = 0;
     outfd = 1;
     i = 1;
     while i < argc && argv[i]@[0] == '-' do
@@ -69,17 +71,21 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	    is 'm' then  debug.meths = true;
 	}
 	is 'm' then 
-	{   i += 1;
-	    if !target.set(argv[i]@) then
-	    {   out.str(2, "Unsupported target: ");
-		out.str(2, argv[i]@);
-		out.nl(2);
+	{   if argv[i]@[2] != 0 then
+		targetarch = argv[i]@[2:];
+	    else
+	    {   i += 1;
+		targetarch = argv[i];
 	    }
 	}
 	is 'I' then lex.SearchPathAdd(argv[i]@[2:], false);
 	is 'o' then
-	{   i += 1;
-	    outfile = argv[i];
+	{   if argv[i]@[2] != 0 then
+		outfile = argv[i]@[2:];
+	    else
+	    {   i += 1;
+		outfile = argv[i];
+	    }
 	}
 	is 'O' then 
 	{   if argv[i]@[2]
@@ -105,6 +111,15 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	    out.str(1, ".o: ");
 	    argv[i]@[n-4] = '.';	// remove nul terminate
 	}
+    }
+    if !target.set(targetarch) then
+    {   out.str(2, "Unsupported target: ");
+	if targetarch != 0 then
+	    out.str(2, targetarch);
+	else
+	    out.str(2, target.DefaultTarget);
+	out.nl(2);
+	return 2;
     }
     if !lex.FileOpen(argv[i]@) then
     {   out.str(2, "Unable to open input file: ");

@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 504 2011-01-31 21:51:14Z bgl $
+// $Id: stmt.esl 507 2011-02-04 20:11:10Z bgl $
 
 package stmt
 {
@@ -174,7 +174,7 @@ package stmt
 	node = ast.New(DCLVAR, t);
 	if iv != 0 then
 	    node = ast.Child(node, iv);
-	node@.kind = t@.kind;
+	node@.kind = REF;
 	node@.size = t@.width;
 	node@.symb = s;
 	return node;
@@ -540,26 +540,22 @@ if tl@.base != 0 then
 out.str(2, "TR kind="); out.str(2, type.KindName[tr@.kind]); out.nl(2);
 type.DumpT(tr, true); out.nl(2);
 */
-	if rhs@.op == LOAD && rhs@.kind == ARRAY then
-	{   rhs = rhs@.child[0];    // happens when coerce array to pointer
+	// LHS is not a COMPOSITE (RECORD or ARRAY) -- handled elsewhere
+	if tl@.kind == REF then
+	{   // if RHS is COMPOSITE then this must be a coercion
+	    if (rhs@.kind == ARRAY || rhs@.kind == RECORD) && rhs@.op == LOAD then
+		rhs = rhs@.child[0];  // Undo LOAD
+	    if tl@.base != tr then
+	    {   if type.Compat(tl@.base, tr) then
+		    rhs = expr.Cast(rhs, tl);
+		else lex.Error(TYPEASSIGN);
+	    }
 	}
-	if rhs@.kind != REF then
+	else    // ordinary scalar
 	{   if lhs@.size != rhs@.size then
 		rhs = expr.ExtendT(rhs, tl);
 	}
-	else
-	{   if tl@.kind == REF then
-	    {   if tl@.base != tr then
-		{   if type.Compat(tl@.base, tr) then
-		    {
-			rhs = expr.Cast(rhs, tl);
-		    }
-		    else lex.Error(TYPEASSIGN);
-		}
-	    }
-	    else lex.Error(TYPEASSIGN);
-	}
-	rhs = CheckSwap(lhs, rhs);	
+	rhs = CheckSwap(lhs, rhs);
 	return rhs;
     }
 

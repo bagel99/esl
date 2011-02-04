@@ -1,5 +1,5 @@
 // Copyright (c) 2009, Brian G. Lucas.  See LICENSE file.
-// $Id: target.esl 503 2011-01-30 22:27:59Z bgl $
+// $Id: target.esl 508 2011-02-04 20:12:42Z bgl $
 
 package target
 {
@@ -23,6 +23,8 @@ package target
 	isizes:		[IntSizesMax]SizeAlign;
       };
 
+    const DefaultTarget: []_byte = "x86";   // FIXME
+    var   TargetName: @[]_byte;
     const NumTargets = 9;
     const Targets: [NumTargets]TargetT =
     {   {   "x86", "i386-unknown-linux-gnu",
@@ -111,12 +113,12 @@ package target
     proc set(name: @[]_byte): boolean
     {   var i: 0..TargetsMax;
 
+	if name == 0 then name = DefaultTarget;
 	i = 0;
 	while i < NumTargets do
-	{
-	    if zstr.eq(name, Targets[i].name, lex.IdentMax) then
-	    {
-		Target = Targets[i];
+	{   if zstr.eq(name, Targets[i].name, lex.IdentMax) then
+	    {   Target = Targets[i];
+		TargetName = Targets[i].name;
 		return true;
 	    }
 	    i += 1;
