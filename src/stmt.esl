@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 507 2011-02-04 20:11:10Z bgl $
+// $Id: stmt.esl 509 2011-02-05 21:53:03Z bgl $
 
 package stmt
 {
@@ -17,6 +17,7 @@ package stmt
 
     proc Program(file:@[]_byte): Ast;	// forward
     proc ProgStmt(): Ast;		// forward
+    proc Package(): Ast;		// forward
     proc PkgStmt(): Ast;		// forward
     proc Statement(): Ast;		// forward
 
@@ -961,8 +962,9 @@ type.DumpT(tr, true); out.nl(2);
 	return 0;
     }
 
-    const stmtlist:[12]TokenT =
-    { KTYPE, KVAR, KCONST, KIF, KFOR, KWHILE, KLOOP, KEXIT, KRET, KWHEN, KASM, NONE };
+    const stmtlist:[13]TokenT =
+    { KTYPE, KVAR, KCONST, KIF, KFOR, KWHILE, KLOOP, KEXIT, KRET, KWHEN,
+      KASM, KALIAS, NONE };
 
     proc Statement(): Ast
     {   var tree, stree: Ast;
@@ -1018,6 +1020,7 @@ type.DumpT(tr, true); out.nl(2);
 	    is KRET then    tree = Return();
 	    is KASM then    tree = Asm();
 	    is KWHEN then   tree = WhenStmt(PROCEDURE);
+	    is KALIAS then  tree = Alias();
 	    is SEMI then    {}		// ignore extra semicolons
 	    else lex.ErrorT(BADSTMTT, tok);
 	}
@@ -1119,8 +1122,30 @@ type.DumpT(tr, true); out.nl(2);
 	return tree;
     }
 
-    const packlist:[7]TokenT =
-    { KTYPE, KVAR, KCONST, KPROC, KALIAS, KWHEN, NONE };
+    proc Import(): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+
+	tok = Token;
+	tree = 0;
+	if tok == ID then
+	{
+	    if lex.FileCheck(lex.Ident) then
+	    {   if lex.FileOpen(lex.Ident) then
+		{   tree = Program(lex.Ident);
+		    lex.FileClose();
+		}
+		else
+		    lex.ErrorI(BADIMPORT, lex.Ident);
+	    }
+	    tok = Next();
+	    tok = lex.Expect(SEMI);
+	}
+	return tree;
+    }
+
+    const packlist:[9]TokenT =
+    { KTYPE, KVAR, KCONST, KPROC, KALIAS, KPACKAGE, KIMPORT, KWHEN, NONE };
 
     proc PkgStmt(): Ast
     {   var tree: Ast;
@@ -1134,6 +1159,8 @@ type.DumpT(tr, true); out.nl(2);
 	is KVAR then    { tok = Next();  tree = VarDecl(); }
 	is KCONST then  { tok = Next();  tree = ConstDecl(); }
 	is KPROC then   { tok = Next();  tree = Procedure(); }
+	is KPACKAGE then  { tok = Next();  tree = Package(); }
+	is KIMPORT then   { tok = Next(); tree = Import(); }
 	is KWHEN then   { tok = Next();  tree = WhenStmt(PACKAGE); }
 	else
 	{   if tok == ID then
@@ -1153,6 +1180,7 @@ type.DumpT(tr, true); out.nl(2);
     {   var tree, stree: Ast;
 	var tok: TokenT;
 	var s: Symb;
+	var pkgsave: Symb;
 	
 	tree = 0;
 	tok = Token;
@@ -1166,6 +1194,7 @@ type.DumpT(tr, true); out.nl(2);
 	    tok = Next();
 	    if tok == GBEG then
 	    {   tok = Next();
+		pkgsave = symb.curpack;
 		symb.curpack = s;
 		tree = ast.New(SEQ, 0);
 		symb.Push(s@.symblist);
@@ -1183,29 +1212,7 @@ type.DumpT(tr, true); out.nl(2);
 	    if debug.symb.pack then
 		symb.Dump(1);
 	    symb.Pop();
-	    symb.curpack = 0;
-	}
-	return tree;
-    }
-
-    proc Import(): Ast
-    {   var tree: Ast;
-	var tok: TokenT;
-
-	tok = Token;
-	tree = 0;
-	if tok == ID then
-	{
-	    if lex.FileCheck(lex.Ident) then
-	    {   if lex.FileOpen(lex.Ident) then
-		{   tree = Program(lex.Ident);
-		    lex.FileClose();
-		}
-		else
-		    lex.ErrorI(BADIMPORT, lex.Ident);
-	    }
-	    tok = Next();
-	    tok = lex.Expect(SEMI);
+	    symb.curpack = pkgsave;
 	}
 	return tree;
     }
@@ -1250,6 +1257,7 @@ type.DumpT(tr, true); out.nl(2);
 	s = symb.NewFile(lex.f@.filepath@.pathname, lex.f@.filename);
 	s@.package = CurFile;
 	CurFile = s;
+	symb.curpack = 0;
 	tree = ast.New(SEQ, 0);
 	tok = Next();
 	while tok != ENDF do
