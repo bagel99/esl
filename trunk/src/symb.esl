@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: symb.esl 488 2011-01-15 23:47:59Z bgl $
+// $Id: symb.esl 509 2011-02-05 21:53:03Z bgl $
 
 package symb
 {
@@ -161,15 +161,17 @@ package symb
 
 	s = 0;
 	tok = Token;
-	if tok == ID then // usually true
+	if tok == ID then   // usually true
 	    tok = Next();
-	if tok == DOT then
-	{   tok = Next();
-	    if tok == ID then
-		s = FindLocal(ps@.symblist, lex.Ident);
+	loop		    // loop thru package prefixes
+	{ exit tok != DOT with lex.Expect(DOT);
+	    tok = Next();
+	  exit tok != ID with lex.Expect(ID);
+	    s = FindLocal(ps@.symblist, lex.Ident);
+	  exit s == 0 || s@.kind != PACK;
+	    tok = Next();
+	    ps = s;
 	}
-	else
-	    lex.Expect(DOT);
 	return s;
     }
 
@@ -422,5 +424,5 @@ package symb
 	
     } 
 }
-
+// vim: ts=8 sw=4 noet nowrap
 

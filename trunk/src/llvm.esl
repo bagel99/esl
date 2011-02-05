@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 507 2011-02-04 20:11:10Z bgl $
+// $Id: llvm.esl 509 2011-02-05 21:53:03Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -227,6 +227,12 @@ package llvm
 	else                  { out.str(f, "i"); out.uint(f, node@.size); }
     }
 
+    proc PPkgPfx(s: Symb)
+    {   if s@.package != 0 then PPkgPfx(s@.package);    // recursive
+	out.str(f, s@.ident); 
+	out.chr(f, package_delimiter);
+    }
+
     proc PName(s: Symb)
     {
 	if s@.linkage
@@ -234,9 +240,7 @@ package llvm
 	is NORMAL, INLINE then
 	{   out.chr(f, '@');
 	    if s@.package != 0 then
-	    {   out.str(f, s@.package@.ident); 
-		out.chr(f, package_delimiter);
-	    }
+		PPkgPfx(s@.package);
 	    out.str(f, s@.ident);
 	}
 	is GLOBAL, EXTERN then { out.chr(f, '@'); out.str(f, s@.ident); }
