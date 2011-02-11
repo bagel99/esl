@@ -1,10 +1,12 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 509 2011-02-05 21:53:03Z bgl $
+// $Id: llvm.esl 514 2011-02-08 22:17:41Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
 {
     const package_delimiter:Char = '_';
+    const anon_prefix: []Char = "A.";
+    const scon_prefix: []Char = "S.";
     type file: sys.fildes;
     var  f: file;
     type typeoptions: (NONE, PACK);
@@ -27,6 +29,7 @@ package llvm
     var Tseqno: seqnoT;
     var Pseqno: seqnoT = 0;
     var Lseqno: seqnoT = 0;
+    var Aseqno: _uint16 = 0;
     var labthis: seqnoT;	// label sequence number of this basic block
     var loopexit: seqnoT;	// label sequence number for this loop exit
     type Intrinsics:
@@ -81,8 +84,12 @@ package llvm
 	    out.str(f, s@.ident);
 	}
 	else
-	{   out.str(f, "A.");
-	    out.uint(f, word(t));
+	{   out.str(f, anon_prefix);
+	    if t@.antag == 0 then
+	    {   Aseqno += 1;
+		t@.antag = Aseqno;
+	    }
+	    out.uint16(f, t@.antag);
 	}
     }
 
@@ -330,7 +337,8 @@ package llvm
 		is 'D' then NodeDst(node);
 		is 'W' then PType(type.wordtype, NONE);	// target word type
 		is 'S' then // string name
-		{   out.str(f, "@.str");
+		{   out.chr(f, '@');
+		    out.str(f, scon_prefix);
 		    out.uint32(f, _uint32(node@.valu));
 		}
 		is '%' then out.chr(f, c);
@@ -1069,6 +1077,7 @@ out.nl(2);
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
+	if feature.test then out.str(f, "tail ");
 	out.str(f, "call");
 	PRetvType(node@.symb@.retvlist, false);
 	if indirect then
