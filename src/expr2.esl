@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 501 2011-01-27 01:50:56Z bgl $
+// $Id: expr2.esl 515 2011-02-12 21:50:35Z bgl $
 
 package expr
 {
@@ -544,7 +544,7 @@ ast.Dump(tree);
 		}
 		else lex.ErrorI(BADID, s@.ident);
 	    }
-	    else lex.ErrorI(UNDEFID, s@.ident);
+	    else lex.ErrorI(UNDEFID, lex.Ident);
 	    tok = Next();
 	}
 	else lex.Error(EXPECTID);

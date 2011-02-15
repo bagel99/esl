@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 509 2011-02-05 21:53:03Z bgl $
+// $Id: stmt.esl 516 2011-02-15 21:45:23Z bgl $
 
 package stmt
 {
@@ -458,6 +458,7 @@ package stmt
 
 	t = lhs@.type;
 	tree = expr.Term(t);
+	if tree == 0 then return 0;
 	if t@.packed == BIT then
 	{   tree@.kind = UINT;		// FIXME: necessary?
 	    tree = CheckSwap(lhs, tree);
@@ -484,6 +485,7 @@ package stmt
 	var lalign, ralign: _uint;
 
 	tree = expr.Term(t);
+	if tree == 0 then return 0;
 	if t@.packed == BIT then
 	{   tree@.kind = UINT;		// FIXME: necessary?
 	    if lhs@.op == SLICE then
