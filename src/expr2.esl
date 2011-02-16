@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 515 2011-02-12 21:50:35Z bgl $
+// $Id: expr2.esl 517 2011-02-16 16:22:09Z bgl $
 
 package expr
 {
@@ -663,6 +663,14 @@ ast.Dump(tree); out.nl(2);
 		is OR then  { lhs@.valu = lhs@.valu | rhs@.valu; return lhs; }
 		is XOR then { lhs@.valu = lhs@.valu ^ rhs@.valu; return lhs; }
 		is AND then { lhs@.valu = lhs@.valu & rhs@.valu; return lhs; }
+		is DIV then { lhs@.valu = lhs@.valu / rhs@.valu; return lhs; }
+		is MOD then { lhs@.valu = lhs@.valu % rhs@.valu; return lhs; }
+		is LSL,ASL then { lhs@.valu = lhs@.valu << rhs@.valu; return lhs; }
+		is LSR then { lhs@.valu = lhs@.valu >> rhs@.valu; return lhs; }
+		is ASR then
+		{   lhs@.valu = Valu(type.SValu(lhs@.valu) << rhs@.valu);
+		    return lhs;
+		}
 		is UMIN then
 		{   if rhs@.valu < lhs.valu then lhs.valu = rhs.valu;
 		    return lhs;
@@ -1327,7 +1335,7 @@ out.str(2, "Intrinsic unknown\n");
 	is CLIST, SCON then	// constant aggregate
 	    alignment = tree@.type@.align;
 	else
-	    out.str(2, "GetAlignment: unexpected node\n");
+	    lex.ErrorS(NOTIMPL, "GetAlignment: unexpected node");
 //out.str(2, "GetAlignment: align="); out.uint(2, alignment); out.nl(2);
 	return alignment;
     }
