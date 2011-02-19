@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 489 2011-01-15 23:52:55Z bgl $
+// $Id: lex.esl 519 2011-02-19 01:25:44Z bgl $
 
 package lex
 {
@@ -253,7 +253,7 @@ package lex
 	[KMEMSZ] =	"size"
     }; 
     type TokenList: []TokenT;
-    const StringMax = 127;
+    const StringMax = 4095;
     const IdentMax = 63;
     const BufSize = 4096;
     const PathMax = 1024;	// Max chars in a pathname

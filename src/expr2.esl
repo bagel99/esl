@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 517 2011-02-16 16:22:09Z bgl $
+// $Id: expr2.esl 518 2011-02-17 02:41:04Z bgl $
 
 package expr
 {
@@ -551,6 +551,16 @@ ast.Dump(tree);
 	return tree;
     }
 
+    proc CoerceToRef(tree: Ast): Ast
+    {
+	if tree@.op == LOAD then
+	    tree = tree@.child[0];	// undo the load
+	if tree@.op != CLIST then
+	    tree = ast.New1(BYREF, tree@.type, tree);
+	tree@.kind = REF;
+	return tree;
+    }
+    
     proc Actual(tree: Ast, to: Type): Ast
     {   var fm: Type;
 	var ok: boolean;
@@ -583,18 +593,18 @@ ast.Dump(tree); out.nl(2);
 		return tree;
 	    }
 	    if tree@.kind != REF then
-	    {   if tree@.op == LOAD then
-		    tree = tree@.child[0];	// undo the load
-		if tree@.op != CLIST then
-		    tree = ast.New1(BYREF, tree@.type, tree);
-		tree@.kind = REF;
+	    {   tree = CoerceToRef(tree);
 		ok = type.Compat(fm, to@.base);
 	    }
 	    else
 	    {   if to@.base != fm then
 		{   if type.Compat(to@.base, fm) then
 			tree = Cast(tree, to);
-		    else lex.Error(TYPEASSIGN);
+		    else if to@.base@.kind == REF then  // formal is REF of REF
+		    {   tree = CoerceToRef(tree);
+			ok = type.Compat(fm, to@.base@.base);
+		    }
+		    else ok = false;
 		}
 	    }
 	    // Fix types when formal is a flex
