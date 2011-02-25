@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 516 2011-02-15 21:45:23Z bgl $
+// $Id: stmt.esl 520 2011-02-22 18:42:12Z bgl $
 
 package stmt
 {
@@ -767,15 +767,18 @@ type.DumpT(tr, true); out.nl(2);
 		loop
 		{   tok = Next();
 		    vlo = expr.Bool(t);
-		    if vlo@.op != CONST then
+		    if vlo != 0 && vlo@.op != CONST then
 			lex.Error(EXPCONST);
 		    tok = Token;
 		    if tok == RANGE then
 		    {   tok = Next();
 			vhi = expr.Bool(t);
-			if vlo@.op != CONST then
-			    lex.Error(EXPCONST);
-			vlo = ast.New2(CRANGE, vlo@.type, vlo, vhi);
+			if vhi != 0 then
+			{   if vhi@.op != CONST then
+				lex.Error(EXPCONST);
+			    if vlo != 0 then
+				vlo = ast.New2(CRANGE, vlo@.type, vlo, vhi);
+			}
 		    }
 		    ctree = ast.Child(ctree, vlo);
 		    tok = Token;
