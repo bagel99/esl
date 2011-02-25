@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 519 2011-02-19 01:25:44Z bgl $
+// $Id: lex.esl 521 2011-02-24 23:21:21Z bgl $
 
 package lex
 {
@@ -166,7 +166,7 @@ package lex
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
 	KINLINE,KINTR,
 	// type properties begin here
-	KMIN,	KMAX,	KBITSZ,	KMEMSZ
+	KMIN,	KMAX,	KBITSZ,	KMEMSZ,	KLEN
     );
     const keywords:[TokenT]@[]Char =
     {	[NONE] =	"",		// none
@@ -250,7 +250,8 @@ package lex
 	[KMIN] =	"min",		// properties
 	[KMAX] =	"max",
 	[KBITSZ] =	"bits",
-	[KMEMSZ] =	"size"
+	[KMEMSZ] =	"size",
+	[KLEN]=		"len"
     }; 
     type TokenList: []TokenT;
     const StringMax = 4095;
