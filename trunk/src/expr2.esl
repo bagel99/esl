@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 521 2011-02-24 23:21:21Z bgl $
+// $Id: expr2.esl 523 2011-02-28 21:18:23Z bgl $
 
 package expr
 {
@@ -748,7 +748,7 @@ ast.Dump(tree); out.nl(2);
 	}
 	// FIXME: all the kinds should be examined for legality
 	// for the various ops
-	if lhs@.kind == REF then
+	if lhs@.kind == REF || lhs@.kind == REFPROC then
 	{   if rhs@.op == CONST then
 	    {   if op == EQ || op == NE then
 		{   rhs@.kind = REF;
@@ -1441,7 +1441,7 @@ out.str(2, "Intrinsic unknown\n");
 		if rhs != 0 then
 		{   // FIXME: check lhs and rhs are compatible
 		    if NodeKind(tree)
-		    is ENUM, UINT, SINT, REF then
+		    is ENUM, UINT, SINT, REF, REFPROC then
 			tree = ScalarCompare(savetok, tree, rhs);
 		    is ARRAY then
 			tree = ArrayCompare(savetok, tree, rhs);
