@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: symb.esl 509 2011-02-05 21:53:03Z bgl $
+// $Id: symb.esl 522 2011-02-28 18:46:26Z bgl $
 
 package symb
 {
@@ -11,10 +11,10 @@ package symb
     {
 	next:	  @SymbNode;		// for lists
 	type:	  Type;
-	package:  @SymbNode;		// containing package/file or alias to
+	package:  @SymbNode;		// containing package/file
 	parmlist: @SymbNode;		// for procedures
 	retvlist: type.TypeList;	// for procedures, retval types
-	symblist: @SymbNode;		// for packages, procedures
+	symblist: @SymbNode;		// for packages, procedures, aliases
 	methnext: @SymbNode;		// for list of methods
 	valu:	  Valu;			// for constants and default values
 	xaddr:    Valu;			// externally fixed address
@@ -133,7 +133,7 @@ package symb
      {  var ns: Symb;
 
 	ns = New(ALIAS, name, false);
-	ns@.package = os;
+	ns@.symblist = os;
 	return ns;
     }
 
@@ -141,8 +141,14 @@ package symb
     {   var s: Symb;
 
 	s = as;
-	while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
+	while s != 0 do
+	{   if zstr.eq(s@.ident, name, lex.IdentMax) then
+	    {   if s@.kind == ALIAS then
+		    s = s@.symblist;
+		return s;
+	    }
 	    s = s@.next;
+	}
 	return s;
     }
 
@@ -181,15 +187,10 @@ package symb
 
 	i = level;
 	loop
-	{   s = symbs[i].frst;
-	    while s != 0 do
-	    {   if zstr.eq(s@.ident, name, lex.IdentMax) then
-		{   if s@.kind == ALIAS then
-			s = s@.package;
-		    s@.used = true;
-		    return s;
-		}
-		s = s@.next;
+	{   s = FindLocal(symbs[i].frst, name);
+	    if s != 0 then
+	    {   s@.used = true;
+		return s;
 	    }
 	  exit i == 0;
 	    i -= 1;
