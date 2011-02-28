@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 514 2011-02-08 22:17:41Z bgl $
+// $Id: llvm.esl 523 2011-02-28 21:18:23Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -298,7 +298,7 @@ package llvm
 	{   if node@.kind
 	    is ENUM, UINT then out.uint64(f, node@.valu);
 	    is SINT then       out.int64(f, _int64(node@.valu));
-	    is REF then	       ConstantRef(0, node);
+	    is REF, REFPROC then ConstantRef(0, node);
 	    is ARRAY, RECORD then out.uint64(f, node@.valu);	// packed?
 	}
 	is VAR then NodeName(node);
