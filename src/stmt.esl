@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 520 2011-02-22 18:42:12Z bgl $
+// $Id: stmt.esl 524 2011-03-06 01:49:26Z bgl $
 
 package stmt
 {
@@ -1036,7 +1036,7 @@ type.DumpT(tr, true); out.nl(2);
     {   var tree, stree: Ast;
 	var tok: TokenT;
 	var t, mt: Type;
-	var s, ms: Symb;
+	var s, ms, ss: Symb;
 
 	tree = 0;
 	mt = 0;
@@ -1082,12 +1082,16 @@ type.DumpT(tr, true); out.nl(2);
 	{
 	    s = symb.New(PROC, lex.Ident, true);
 	    if mt != 0 then
-	    {   if !symb.IsUniqueMethod(mt@.meths, lex.Ident) ||
-		   !symb.IsUniqueLocal(mt@.list, lex.Ident) then
+	    {   if !symb.IsUniqueLocal(mt@.list, lex.Ident) then
 		    lex.ErrorI(DEFID, lex.Ident);
-		// Order doesn't matter, just put on top of list
-		s@.methnext = mt@.meths;
-		mt@.meths = s;
+		else
+		{  ss = symb.FindMethod(mt@.meths, lex.Ident);
+		    if ss != 0 && !ss.forward then
+			lex.ErrorI(DEFID, lex.Ident);
+		    // Order doesn't matter, just put on top of list
+		    s@.methnext = mt@.meths;
+		    mt@.meths = s;
+		}
 	    }
 	    else
 		symb.MakeVisable(s);

@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: symb.esl 522 2011-02-28 18:46:26Z bgl $
+// $Id: symb.esl 524 2011-03-06 01:49:26Z bgl $
 
 package symb
 {
@@ -57,16 +57,6 @@ package symb
 	while s != 0 do
 	{   if zstr.eq(s@.ident, id, lex.IdentMax) then return false;
 	    s = s@.next;
-	}
-	return true;
-    }
-	
-    // Check for uniqueness, methods
-    proc IsUniqueMethod(s: Symb, id: @lex.Identifier): boolean
-    {
-	while s != 0 do
-	{   if zstr.eq(s@.ident, id, lex.IdentMax) then return false;
-	    s = s@.methnext;
 	}
 	return true;
     }
