@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 523 2011-02-28 21:18:23Z bgl $
+// $Id: llvm.esl 534 2011-03-22 17:08:28Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -72,7 +72,6 @@ package llvm
    
     proc PTypeName(t: Type)
     {   var s: Symb;
-	type word: 0..0xFFFFFFFF;
 
 	out.str(f, "%");
 	s = t@.name;
@@ -1102,6 +1101,8 @@ out.nl(2);
 	{   NeedDeclare(node);
 	    node@.symb@.declared = true;
 	}
+	if node@.symb@.forward then
+	    lex.ErrorI(FORWPROC, node@.symb@.ident);
     }
 
     // Search AST of a procedure for

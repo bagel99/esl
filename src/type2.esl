@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 500 2011-01-26 21:03:27Z bgl $
+// $Id: type2.esl 535 2011-03-22 17:58:45Z bgl $
 
 package type
 {
@@ -50,7 +50,27 @@ package type
 	return false;
     }
 
-    // FIXME: This should be in the type package
+    proc SameTypeList(al: TypeList, bl: TypeList): boolean
+    {
+	while al != 0 && bl != 0 do
+	{   if !Same(al.type, bl.type) then return false;
+	    al = al.next;
+	    bl = bl.next;
+	}
+	return al == 0 && bl == 0;  // must both be at the end of the list
+    }
+
+    // FIXME: could use SameTypeList() if SymbNode extends from TypeListEntry
+    proc SameSymbList(as: Symb, bs: Symb): boolean
+    {
+	while as != 0 && bs != 0 do
+	{   if !Same(as.type, bs.type) then return false;
+	    as = as.next;
+	    bs = bs.next;
+	}
+	return as == 0 && bs == 0;  // must both be at the end of the list
+    }
+
     const KindName: [TypeT]@[]Char =
     {   "UKNOWN", "ENUM", "UINT", "SINT", "REF", "ARRAY", "RECORD", "REFPROC" };
 
@@ -256,7 +276,7 @@ package type
 
 	last = prev@.next;
 	while pad > 0 do
-	{   s = symb.New(FIELD, "_", true);
+	{   s = symb.New(FIELD, "_", PRIVATE);
 	    s@.type = bytetype;
 	    s@.addr = index;
 	    prev@.next = s;
@@ -405,7 +425,7 @@ package type
 	    {	// for each field in base type, copy to new type
 		vb = bt@.list;
 		while vb != 0 do
-		{   vn = symb.New(CONSTANT, vb@.ident, true);
+		{   vn = symb.New(CONSTANT, vb@.ident, PRIVATE);
 		    if pvn != 0 then pvn@.next = vn;
 				else t@.list = vn;
 		    pvn = vn;
@@ -422,7 +442,7 @@ package type
 	{   if tok == ID then
 	    {   if !symb.IsUniqueLocal(t@.list, lex.Ident) then
 		    lex.ErrorI(DEFID, lex.Ident);
-		vn = symb.New(CONSTANT, lex.Ident, true);
+		vn = symb.New(CONSTANT, lex.Ident, PRIVATE);
 		if pvn != 0 then pvn@.next = vn;
 			    else t@.list = vn;
 		pvn = vn;
@@ -461,7 +481,7 @@ package type
 	    {	// copy the record type
 		bs = bt@.list;
 		while bs != 0 do
-		{   s = symb.New(FIELD, bs@.ident, true);
+		{   s = symb.New(FIELD, bs@.ident, PRIVATE);
 		    if ps != 0 then ps@.next = s; else t@.list = s;
 		    ps = s;
 		    s@.type = bs@.type;
@@ -480,7 +500,7 @@ package type
 	    is COLON then 
 	    {   if !symb.IsUniqueLocal(t@.list, lex.Ident) then
 		    lex.ErrorI(DEFID, lex.Ident);
-		s = symb.New(FIELD, lex.Ident, true);
+		s = symb.New(FIELD, lex.Ident, PRIVATE);
 		if ps != 0 then ps@.next = s; else t@.list = s;
 		ps = s;
 		tok = Next();
@@ -566,7 +586,7 @@ package type
 		{   if tok == ID then
 		    {   if !symb.IsUniqueLocal(procs@.parmlist, lex.Ident) then
 			    lex.ErrorI(DEFID, lex.Ident);
-			s = symb.New(VAR, lex.Ident, true);
+			s = symb.New(VAR, lex.Ident, PRIVATE);
 			tok = Next();
 			s@.isparam = true;
 			s@.linkage = LOCAL;
@@ -626,7 +646,7 @@ package type
 	    if symb.IsAnon(lex.Ident) then
 	    {
 		t = New(REFPROC);
-		bs = symb.New(PROC, lex.Ident, true);
+		bs = symb.New(PROC, lex.Ident, PRIVATE);
 		tok = Next();
 		DefProc(bs, 0);
 		t@.list = bs;
@@ -641,7 +661,7 @@ package type
 			FwdAdd(bs, t);
 		}
 		else	// undefined, make forward and make reference
-		{   bs = symb.New(TYPE, lex.Ident, false);
+		{   bs = symb.New(TYPE, lex.Ident, VISIBLE);
 		    FwdAdd(bs, t);
 		}
 		tok = Next();
@@ -722,7 +742,7 @@ package type
 	Final(t);
 	levelsave = symb.level;
 	symb.level = 0;
-	s = symb.New(TYPE, name, false);
+	s = symb.New(TYPE, name, VISIBLE);
 	symb.level = levelsave;
 	s@.type = t;
 	t@.name = s;

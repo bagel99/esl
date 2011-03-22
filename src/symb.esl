@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: symb.esl 524 2011-03-06 01:49:26Z bgl $
+// $Id: symb.esl 528 2011-03-20 18:26:35Z bgl $
 
 package symb
 {
@@ -62,7 +62,7 @@ package symb
     }
 	
     // Install symbol in symbol table
-    proc MakeVisable(s: Symb)
+    proc MakeVisible(s: Symb)
     {
 	if symbs[level].frst == 0 then
 	    symbs[level].frst = s;
@@ -71,19 +71,20 @@ package symb
 	symbs[level].last = s;
     }
 
-    proc New(kind: SymbT, name: @lex.Identifier, private: boolean): Symb
+    type Visibility: (VISIBLE, DELAYED, PRIVATE);
+
+    proc New(kind: SymbT, name: @lex.Identifier, vis: Visibility): Symb
     {   var s: Symb;
 
-	s = 0;
-	if !private then	// not private, see if already in use
-	{    s = symbs[level].frst;
-	     while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
+	if vis != PRIVATE then	// not private, see if already in use
+	{   s = symbs[level].frst;
+	    while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
 		s = s@.next;
-	}
-	if s != 0 then
-	{   if !s@.forward then
-		lex.ErrorI(DEFID, name);
-	    return s;
+	    if s != 0 then
+	    {   if !s@.forward then
+		    lex.ErrorI(DEFID, name);
+		return s;
+	    }
 	}
 	s = Symb(sys.malloc(SymbNode?size + zstr.len(name, lex.IdentMax)));
 	zstr.copy(s@.ident, name, lex.IdentMax);
@@ -92,20 +93,13 @@ package symb
 	s@.package = curpack;
 	if curproc != 0 then
 	    s@.linkage = LOCAL;
+	else if curpack != 0 then
+	    s@.linkage = NORMAL;
 	else
-	{   if curpack != 0 then
-		s@.linkage = NORMAL;
-	    else
-		s@.linkage = GLOBAL;
-	}
+	    s@.linkage = GLOBAL;
 	s@.lineno = lex.Lineno();
-	if !private then	// not private, install in symbol table
-	{   if symbs[level].frst == 0 then	// FIXME: use MakeVisable
-		symbs[level].frst = s;
-	    else
-		symbs[level].last@.next = s;
-	    symbs[level].last = s;
-	}
+	if vis == VISIBLE then	// install in symbol table now
+	    MakeVisible(s);
 	return s;
     }
 
@@ -116,13 +110,13 @@ package symb
 	zstr.copy(full, path, PathMax);
 	zstr.cat(full, "/", PathMax);
 	zstr.cat(full, file, PathMax);
-	return New(FILE, full, true);
+	return New(FILE, full, PRIVATE);
     }
 	
     proc Clone(os: Symb, name: @lex.Identifier): Symb
      {  var ns: Symb;
 
-	ns = New(ALIAS, name, false);
+	ns = New(ALIAS, name, VISIBLE);
 	ns@.symblist = os;
 	return ns;
     }
@@ -256,7 +250,7 @@ package symb
     proc NewIntrinsic(name: @lex.Identifier, valu: IntrinsicT)
     {   var s: Symb;
 
-	s = New(PROC, name, false);
+	s = New(PROC, name, VISIBLE);
 	s@.valu = _uint64(valu);
     }
 
@@ -267,23 +261,23 @@ package symb
 	// predefined _boolean
 	t = type.New(ENUM);
 	t@.size = 1;
-	s1 = New(CONSTANT, "true", true);
+	s1 = New(CONSTANT, "true", PRIVATE);
 	s1@.valu = 1;
-	s0 = New(CONSTANT, "false", true);
+	s0 = New(CONSTANT, "false", PRIVATE);
 	s0@.valu = 0;
 	s0@.next = s1;
 	t@.list = s0;
 	type.Final(t);
-	s = New(TYPE, "_boolean", false);
+	s = New(TYPE, "_boolean", VISIBLE);
 	s@.type = t;
 	t@.name = s;
 	type.booltype = t;	// internal use by compiler
 	s = Clone(s, "boolean");	// user convenience 
 	// now expose the constants false and true
-	s = New(CONSTANT, "false", false);
+	s = New(CONSTANT, "false", VISIBLE);
 	s@.type = t;
 	s@.valu = 0;
-	s = New(CONSTANT, "true", false);
+	s = New(CONSTANT, "true", VISIBLE);
 	s@.type = t;
 	s@.valu = 1;
 

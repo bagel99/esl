@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 524 2011-03-06 01:49:26Z bgl $
+// $Id: stmt.esl 535 2011-03-22 17:58:45Z bgl $
 
 package stmt
 {
@@ -129,7 +129,7 @@ package stmt
 	if tok == ID then
 	{
 	    // FIXME: maybe handle package.symbol as type-identifier
-	    s = symb.New(TYPE, lex.Ident, false);
+	    s = symb.New(TYPE, lex.Ident, DELAYED);
 	    bt = 0;	// assume not a derived type
 	    tok = Next();
 	    if tok == PBEG then
@@ -148,6 +148,7 @@ package stmt
 		}
 		tok = lex.Expect(PEND);
 	    }
+	    if !s@.forward then symb.MakeVisible(s);
 	    if tok == COLON then
 	    {   tok = Next();
 		t = type.Def(tok, bt);
@@ -190,14 +191,14 @@ package stmt
 	tree = 0;
 	tok = Token;
 	if tok == ID then
-	{   s = symb.New(VAR, lex.Ident, false);
+	{   s = symb.New(VAR, lex.Ident, VISIBLE);
 	    ss = s;
 	    tok = Next();
 	    // Warning: this works because the symbols list is singly linked
 	    while tok == COMMA do
 	    {   tok = Next();
 		if tok == ID then
-		{   s = symb.New(VAR, lex.Ident, false);
+		{   s = symb.New(VAR, lex.Ident, VISIBLE);
 		    tok = Next();
 		}
 		else
@@ -245,7 +246,7 @@ package stmt
 	tree = 0;
 	tok = Token;
 	if tok == ID then
-	{   s = symb.New(CONSTANT, lex.Ident, false);
+	{   s = symb.New(CONSTANT, lex.Ident, VISIBLE);
 	    tok = Next();
 	    t = 0;
 	    if tok == COLON then	// optional type
@@ -300,7 +301,9 @@ package stmt
 	{   s = symb.Find(lex.Ident);
 	    tok = Next();
 	    if s != 0 then
-		tree = expr.Primary(s);
+	    {   tree = expr.Primary(s);
+		if tree@.op == TYPE then lex.ErrorI(BADTYPE, tree@.symb@.ident);
+	    }
 	    else lex.ErrorI(UNDEFID, lex.Ident);
 	}
 	else lex.Error(EXPECTID);
@@ -675,9 +678,15 @@ type.DumpT(tr, true); out.nl(2);
 	}
 	if s != 0 then
 	{   tree = expr.Primary(s);
-	    if tree != 0 && tree@.op != CALL &&
-			    tree@.op != CALLI && tree@.op != ASM then
-		tree = Assign(tree);
+	    if tree != 0 then
+	    {   if tree@.op
+		is CALL, CALLI, ASM then {}     // no further action
+		is TYPE then
+		{   lex.ErrorI(BADTYPE, tree@.symb@.ident);
+		    tok = lex.Skip(skiplist);
+		}
+		else tree = Assign(tree);
+	    }
 	}
 	else
 	{   lex.ErrorI(UNDEFID, lex.Ident);
@@ -1033,10 +1042,11 @@ type.DumpT(tr, true); out.nl(2);
     }
 
     proc Procedure(): Ast
-    {   var tree, stree: Ast;
+    {   var tree: Ast;
 	var tok: TokenT;
 	var t, mt: Type;
-	var s, ms, ss: Symb;
+	var s, ms, ss, fs: Symb;
+	var ft: type.TypeList;
 
 	tree = 0;
 	mt = 0;
@@ -1047,7 +1057,7 @@ type.DumpT(tr, true); out.nl(2);
 	    tok = Next();
 	    if tok == ID then
 	    {   // method parameter
-		ms = symb.New(VAR, lex.Ident, true);
+		ms = symb.New(VAR, lex.Ident, PRIVATE);
 		ms@.isparam = true;
 		ms@.linkage = LOCAL;
 		t = 0;
@@ -1080,9 +1090,9 @@ type.DumpT(tr, true); out.nl(2);
 	}
 	if tok == ID then
 	{
-	    s = symb.New(PROC, lex.Ident, true);
 	    if mt != 0 then
-	    {   if !symb.IsUniqueLocal(mt@.list, lex.Ident) then
+	    {   s = symb.New(PROC, lex.Ident, PRIVATE);
+	        if !symb.IsUniqueLocal(mt@.list, lex.Ident) then
 		    lex.ErrorI(DEFID, lex.Ident);
 		else
 		{  ss = symb.FindMethod(mt@.meths, lex.Ident);
@@ -1094,37 +1104,51 @@ type.DumpT(tr, true); out.nl(2);
 		}
 	    }
 	    else
-		symb.MakeVisable(s);
+	        s = symb.New(PROC, lex.Ident, VISIBLE);
 	    tok = Next();
+	    // FIXME: should save parmlist of forward proc and check
+	    // against changes of types
+	    fs = s@.parmlist;
+	    ft = s@.retvlist;
+	    s@.parmlist = 0;    // FIXME
 	    type.DefProc(s, ms);
+	    if s@.forward then
+	    {   // Was forward proc, should check for parm/retv changes
+		if !type.SameSymbList(fs, s@.parmlist) then
+		    lex.ErrorI(FORWPARM, s@.ident);
+		if !type.SameTypeList(ft, s@.retvlist) then
+		    lex.ErrorI(FORWRETV, s@.ident);
+	    }
 	    tok = Token;
 	    if tok == COLON then
 	    {   type.ProcAttributes(s);
 		tok = Token;
 	    }
 	    if tok != SEMI then
-	    {   t = s@.type;
+	    {   s@.forward = false;
 		symb.curproc = s;
 		symb.Push(s@.parmlist);	// make parameters visable
 		symb.Push(0);		// another level for locals
 		LoopLevel = 0;
-		tree = ast.New(PROC, t);
-		tree@.symb = s;
-		if t != 0 && t@.kind == REF then
-		{   tree@.type = t@.base;
-		    tree@.size = Target.ptr.size;
-		}
-		stree = Statement();
+		tree = Statement();
 		if debug.symb.proc then
 		    symb.Dump(2);
 		symb.Pop();		// remove locals
 		symb.Pop();		// remove parameters
 		symb.curproc = 0;
-		tree = ast.Child(tree, stree);
+	        t = s@.type;
+		tree = ast.New1(PROC, t, tree);
+		tree@.symb = s;
+		if t != 0 && t@.kind == REF then
+		{   tree@.type = t@.base;
+		    tree@.size = Target.ptr.size;
+		}
 	    }
 	    else
 	    {   tok = Next();
-		s@.forward = true;
+		if s@.linkage
+		is EXTERN, FIXED then s@.forward = false;
+		else s@.forward = true;
 	    }
 	}
 	else lex.ErrorT(EXPECT, ID);
@@ -1196,10 +1220,10 @@ type.DumpT(tr, true); out.nl(2);
 	if tok == ID then
 	{   s = symb.FindTop(lex.Ident);
 	    if s == 0 then
-		s = symb.New(PACK, lex.Ident, false);
+		s = symb.New(PACK, lex.Ident, VISIBLE);
 	    else if s@.kind != PACK then
 		lex.ErrorI(DEFID, lex.Ident);
-	    s@.forward = true;
+//	    s@.forward = true;
 	    tok = Next();
 	    if tok == GBEG then
 	    {   tok = Next();
