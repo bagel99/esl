@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 521 2011-02-24 23:21:21Z bgl $
+// $Id: lex.esl 535 2011-03-22 17:58:45Z bgl $
 
 package lex
 {
@@ -44,6 +44,9 @@ package lex
 	RHSLESS,
 	RHSMORE,
 	BADRETURN,
+	FORWPROC,
+	FORWPARM,
+	FORWRETV,
 	WANTBOOL,
 	WANTUINT,
 	BADCAST,
@@ -115,6 +118,9 @@ package lex
 	[RHSLESS] =	"Not enough rhs values in assignment",
 	[RHSMORE] =	"Too many rhs values in assignment",
 	[BADRETURN] =	"Return with no value in procedure that expects one",
+	[FORWPROC] =	"Call of undefined forward procedure: ",
+	[FORWPARM] =	"Parameter types changed from forward declaration: ",
+	[FORWRETV] =	"Return value types changed from forward declaration: ",
 	[WANTBOOL] =	"Boolean expression required",
 	[WANTUINT] =	"Unsigned integer expression required",
 	[BADCAST] =	"Illegal cast",

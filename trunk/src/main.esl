@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 510 2011-02-07 22:16:48Z bgl $
+// $Id: main.esl 532 2011-03-22 17:05:17Z bgl $
 
 var debug:
     {	symb:
@@ -101,7 +101,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	i += 1;
     }
     if i >= argc then
-	return 1;
+	return 3;
     if feature.mflag then
     {   var n: _uint;
 	n = zstr.len(argv[i]@, lex.PathMax);
@@ -147,12 +147,14 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	symb.Dump(1);
     if debug.ast then
 	ast.Dump(tree);
+    if lex.ErrorCount == 0 then
+    {   if feature.mflag then
+	    out.nl(1);
+	else
+	    llvm.Gen(outfd, tree);
+    }
     if lex.ErrorCount != 0 then
-	return 3;
-    if feature.mflag then
-	out.nl(1);
-    else
-	llvm.Gen(outfd, tree);
+	return 1;
     return 0;
 }
 // vim: ts=8 sw=4 noet nowrap
