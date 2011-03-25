@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 535 2011-03-22 17:58:45Z bgl $
+// $Id: stmt.esl 536 2011-03-24 20:18:52Z bgl $
 
 package stmt
 {
@@ -483,11 +483,19 @@ package stmt
 	return tree;
     }
 
-    proc AssignArray(t:Type, lhs:Ast): Ast
+    proc AssignArray(lhs:Ast): Ast
     {   var tree, lsize, rsize, align: Ast;
 	var lalign, ralign: _uint;
+	var t:Type;
 
+	t = lhs@.type;
 	tree = expr.Term(t);
+/*
+	if t@.flex then
+	{   lex.Error(ASSIGNFLEX);
+	    return 0;
+	}
+*/
 	if tree == 0 then return 0;
 	if t@.packed == BIT then
 	{   tree@.kind = UINT;		// FIXME: necessary?
@@ -547,7 +555,8 @@ out.str(2, "TR kind="); out.str(2, type.KindName[tr@.kind]); out.nl(2);
 type.DumpT(tr, true); out.nl(2);
 */
 	// LHS is not a COMPOSITE (RECORD or ARRAY) -- handled elsewhere
-	if tl@.kind == REF then
+	if tl@.kind
+	is REF then
 	{   // if RHS is COMPOSITE then this must be a coercion
 	    if (rhs@.kind == ARRAY || rhs@.kind == RECORD) && rhs@.op == LOAD then
 		rhs = rhs@.child[0];  // Undo LOAD
@@ -556,6 +565,10 @@ type.DumpT(tr, true); out.nl(2);
 		    rhs = expr.Cast(rhs, tl);
 		else lex.Error(TYPEASSIGN);
 	    }
+	}
+	is REFPROC then
+	{   if tl@.base != tr && !type.Compat(tl@.base, tr) then
+		lex.Error(TYPEASSIGN);
 	}
 	else    // ordinary scalar
 	{   if lhs@.size != rhs@.size then
@@ -601,7 +614,7 @@ type.DumpT(tr, true); out.nl(2);
 		}
 		else if t != 0 && t@.kind == ARRAY then
 		{   if optok == ASGN && nl == 1 then
-			tree = AssignArray(t, lhs);
+			tree = AssignArray(lhs);
 		    else
 			lex.Error(ILLASSIGN);
 		    nr += 1;
