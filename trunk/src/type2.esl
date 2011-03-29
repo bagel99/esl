@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 536 2011-03-24 20:18:52Z bgl $
+// $Id: type2.esl 539 2011-03-28 15:13:28Z bgl $
 
 package type
 {
@@ -88,7 +88,9 @@ package type
 	}
 	is REF then    return Compat(t1@.base, t2@.base);
 	is ARRAY then  return Compat(t1@.base, t2@.base);	// FIXME: check index?
-	is REFPROC then return true;    // FIXME: check parmlist and retvlist
+	is REFPROC then
+	    return SameSymbList(t1@.list@.parmlist, t2@.list@.parmlist) &&
+	           SameTypeList(t1@.list@.retvlist, t2@.list@.retvlist);
 	return false;
     }
 
