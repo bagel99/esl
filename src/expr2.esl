@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 523 2011-02-28 21:18:23Z bgl $
+// $Id: expr2.esl 541 2011-03-29 20:06:50Z bgl $
 
 package expr
 {
@@ -597,7 +597,11 @@ ast.Dump(tree); out.nl(2);
 	    }
 	    if tree@.kind != REF then
 	    {   tree = CoerceToRef(tree);
-		ok = type.Compat(fm, to@.base);
+		if to@.base != fm then
+		{   if type.Compat(to@.base, fm) then
+			tree = expr.Cast(tree, to);
+		    else ok = false;
+		}
 	    }
 	    else
 	    {   if to@.base != fm then
@@ -605,7 +609,7 @@ ast.Dump(tree); out.nl(2);
 			tree = Cast(tree, to);
 		    else if to@.base@.kind == REF then  // formal is REF of REF
 		    {   tree = CoerceToRef(tree);
-			ok = type.Compat(fm, to@.base@.base);
+			ok = type.Compat(to@.base@.base, fm);
 		    }
 		    else ok = false;
 		}
@@ -1097,7 +1101,10 @@ out.str(2, "Intrinsic unknown\n");
 		if s != 0 then
 		{   tok = Next();
 		    if s@.kind == PROC && et != 0 && et@.kind == REFPROC then
-		    {   tree = ast.New(VAR, et);
+		    {   // must create a REFPROC type to point at proc symbol
+			t = type.New(REFPROC);
+			t@.list = s;
+			tree = ast.New(VAR, t);
 			tree@.symb = s;
 			tree@.kind = REFPROC;
 		    }

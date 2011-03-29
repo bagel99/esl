@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 534 2011-03-22 17:08:28Z bgl $
+// $Id: llvm.esl 540 2011-03-29 20:05:22Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -630,7 +630,6 @@ package llvm
 	d = dclhead;
 	while d != 0 do
 	{   if d@.node@.op
-	    is CALL then DclProc(d@.node, false);
 	    is SCON then DclString(d@.node);
 	    is CLIST then DclAggregate(d@.node);
 	    out.nl(f);
@@ -1063,6 +1062,23 @@ out.nl(2);
 	out.str(f, ")\n");
     }
 
+    // Declare parameter types and return value types
+    proc DclParmRetv(ps: Symb)
+    {   var tl: type.TypeList;
+        var s: Symb;
+
+	s = ps@.parmlist;
+	while s != 0 do
+	{   DclType(s@.type);
+	    s = s@.next;
+	}
+	tl = ps@.retvlist;
+	while tl != 0 do
+	{   DclType(tl@.type);
+	    tl = tl@.next;
+	}
+    }
+
     proc Call(node: Ast, indirect:boolean)
     {	var i: ast.NSubNodes;
 
@@ -1097,10 +1113,6 @@ out.nl(2);
 	    }
 	}
 	out.str(f, ")\n");
-	if node@.symb@.linkage == EXTERN && !node@.symb@.declared then
-	{   NeedDeclare(node);
-	    node@.symb@.declared = true;
-	}
 	if node@.symb@.forward then
 	    lex.ErrorI(FORWPROC, node@.symb@.ident);
     }
@@ -1108,27 +1120,13 @@ out.nl(2);
     // Search AST of a procedure for
     // 1. DCLVAR so types can be pre-declared
     // 2. DCLCON so they can be moved outside the procedure
+    // 3. CALL of external so parameter and retv types can be pre-declared
+    // FIXME: might as well catch SCON and CLIST since we search the whole tree
     proc DclProcSearch(node: Ast)
     {   var i: ast.NSubNodes;
 
 	if node != 0 then
 	{   if node@.op
-	    is LOOP, SEQ then
-	    {   i = 0;
-		while i < node@.num do
-		{   DclProcSearch(node@.child[i]);
-		    i += 1;
-		}
-	    }
-	    is IF, SEL then
-	    {   i = 1;	// skip selector
-		while i < node@.num do
-		{   DclProcSearch(node@.child[i]);
-		    i += 1;
-		}
-	    }
-	    is IS then     DclProcSearch(node@.child[node@.num-1]);
-	    is EXIT then   if node@.num > 1 then DclProcSearch(node@.child[1]);
 	    is DCLVAR then DclType(node@.type);
 	    is DCLCON then
 	    {   var s: Symb;
@@ -1139,7 +1137,22 @@ out.str(2, "DCLCON in proc\n");
 		    s@.linkage = NORMAL;	// promote linkage
 		    DclCon(node);
 		}
-		node@.op = NOP;		// ignore for code generation
+		node@.op = NULL;		// ignore for code generation
+	    }
+	    is CALL then
+	    {   var ps: Symb;
+		ps = node@.symb;
+		if ps@.linkage == EXTERN && !ps@.declared then
+		{   DclParmRetv(ps);
+		    DclProc(node, false);
+		    out.str(f, ";\n");
+		    ps@.declared = true;
+		}
+	    }
+	    i = 0;
+	    while i < node@.num do
+	    {   DclProcSearch(node@.child[i]);
+		i += 1;
 	    }
 	}
     }
@@ -1151,19 +1164,7 @@ out.str(2, "DCLCON in proc\n");
 
 	ps = node@.symb;
 	if ps != 0 then
-	{
-	    // Make sure all parameter types are declared
-	    s = ps@.parmlist;
-	    while s != 0 do
-	    {   DclType(s@.type);
-		s = s@.next;
-	    }
-	    // Make sure all returned value types are declared
-	    tl = ps@.retvlist;
-	    while tl != 0 do
-	    {   DclType(tl@.type);
-		tl = tl@.next;
-	    }
+	{   DclParmRetv(ps);    // declare parameter and retv types
 	    // Make sure any local variables have type declared
 	    // and DCLCONs are moved outside
 	    DclProcSearch(node@.child[0]);

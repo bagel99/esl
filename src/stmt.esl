@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 536 2011-03-24 20:18:52Z bgl $
+// $Id: stmt.esl 539 2011-03-28 15:13:28Z bgl $
 
 package stmt
 {
@@ -567,7 +567,7 @@ type.DumpT(tr, true); out.nl(2);
 	    }
 	}
 	is REFPROC then
-	{   if tl@.base != tr && !type.Compat(tl@.base, tr) then
+	{   if !type.Compat(tl, tr) then
 		lex.Error(TYPEASSIGN);
 	}
 	else    // ordinary scalar
