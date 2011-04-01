@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 539 2011-03-28 15:13:28Z bgl $
+// $Id: stmt.esl 542 2011-03-30 17:49:08Z bgl $
 
 package stmt
 {
@@ -522,13 +522,20 @@ package stmt
 		rsize = tree@.child[2];
 	    else
 		rsize = ast.Const(type.wordtype, tree@.type@.hi);
-/*
-	if lsize@.op == CONST && rsize@.op == CONST then
-	{   // FIXME: check lhs <= rhs
-out.str(2, "Array copy: nl="); out.uid(2, _uint(lsize@.valu));
-out.str(2, " nr="); out.uid(2, _uint(rsize@.valu)); out.nl(2);
-	}
-*/
+	    if lsize@.op == CONST && rsize@.op == CONST then
+	    {
+//out.str(2, "Array copy: nl="); out.uint(2, _uint(lsize@.valu));
+//out.str(2, " nr="); out.uint(2, _uint(rsize@.valu));
+		if rsize@.valu != 0 then
+		{   if lsize@.valu == 0 then
+			lsize@.valu = rsize@.valu;
+		    else
+			lsize@.valu = _min(lsize@.valu, rsize@.valu);
+		}
+		// FIXME: error if both are zero
+//out.str(2, " final="); out.uint(2, _uint(lsize@.valu));
+//out.nl(2);
+	    }
 	    lhs = ArrayFix(lhs);
 	    tree = ArrayFix(tree);
 	    tree = ast.New2(COPY, lhs@.type, lhs, tree);
