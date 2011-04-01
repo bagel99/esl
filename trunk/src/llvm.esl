@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 540 2011-03-29 20:05:22Z bgl $
+// $Id: llvm.esl 543 2011-04-01 00:33:13Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -39,30 +39,8 @@ package llvm
     );
     var UseIntrinsic: [Intrinsics]boolean;
 
-    type dclnode:
-    {   next: @dclnode;
-	symb: Symb;		// for symbols, e.g. proc
-	node: Ast;		// for string const FIXME: this should go away
-    };
-    type Dcl: @dclnode;
-    var dclhead, dcltail: Dcl;
-
     proc GenSub(node: Ast): boolean;	// forward
     proc ProcParmTypes(s: Symb);	// forward
-
-    proc NeedDeclare(node: Ast)
-    {   var d: Dcl;
-
-	d = Dcl(sys.zalloc(dclnode?size));
-	d@.symb = node@.symb;	// for proc
-	d@.node = node;		// FIXME: for string const
-	d@.next = 0;
-	if dclhead == 0 then
-	    dclhead = d;
-	else
-	    dcltail@.next = d;
-	dcltail = d;
-    }
 
     proc PEndLine(node: Ast)
     {
@@ -524,7 +502,6 @@ package llvm
 			    Print("getelementptr( %T %S ) ", node@.child[0]);
 			    if t@.flex then
 				Print(" to %T )", node);
-			    NeedDeclare(node@.child[0]);
 			}
 		    }
 		    is SCON then
@@ -593,12 +570,41 @@ package llvm
 	}
     }
 
+    proc DclString(node: Ast)
+    {   var n: 0..lex.StringMax;
+
+	Print("%S = internal constant %B ", node);
+	n = node@.type@.hi;
+	PString(pstring(node@.symb), n, true);
+    }
+
+    // Look at nodes under a constant to see if there are any
+    // string constants by reference.  If so, declare the string.
+    proc ConstScan(node: Ast)
+    {   var i: ast.NSubNodes;
+
+	if node@.op == BYREF && node@.child[0].op == SCON then
+	{
+//out.str(2, "ConstScan: BYREF SCON\n");
+	    DclString(node@.child[0]);
+	    out.str(f, ";\n");
+	}
+	else
+	{   i = 0;
+	    while i < node@.num do
+	    {   ConstScan(node@.child[i]);
+		i += 1;
+	    }
+	}
+    }
+
     proc DclCon(node: Ast)
     {   var s: Symb;
 
 	s = node@.symb;
 	if s != 0 then
 	{   DclType(s@.type);
+	    ConstScan(node);
 	    if s@.linkage
 	    is NORMAL then Print("%I = internal constant %B ", node);
 	    is GLOBAL then Print("%I = constant %B ", node);
@@ -608,33 +614,17 @@ package llvm
 	out.nl(f);
     }
 
-    proc DclString(node: Ast)
-    {   var n: 0..lex.StringMax;
-
-	Print("%S = internal constant %B ", node);
-	n = node@.type@.hi;
-	PString(pstring(node@.symb), n, true);
-    }
-
     proc DclAggregate(node: Ast)
     {
+	ConstScan(node);
 	Print("%S = internal constant %B ", node);
 	Constant(node, node@.type);
 	// FIXME: Alignment(node@.type)?
     }
 
     proc Declare()
-    {   var d: Dcl;
-	var i: Intrinsics;
+    {   var i: Intrinsics;
 
-	d = dclhead;
-	while d != 0 do
-	{   if d@.node@.op
-	    is SCON then DclString(d@.node);
-	    is CLIST then DclAggregate(d@.node);
-	    out.nl(f);
-	    d = d@.next;
-	}
 	i = MEMCPY;
 	while i < END do
 	{   if UseIntrinsic[i] then
@@ -1127,7 +1117,10 @@ out.nl(2);
 
 	if node != 0 then
 	{   if node@.op
-	    is DCLVAR then DclType(node@.type);
+	    is DCLVAR then
+	    {   DclType(node@.type);
+		return;
+	    }
 	    is DCLCON then
 	    {   var s: Symb;
 out.str(2, "DCLCON in proc\n");
@@ -1138,7 +1131,19 @@ out.str(2, "DCLCON in proc\n");
 		    DclCon(node);
 		}
 		node@.op = NULL;		// ignore for code generation
+		return;
 	    }
+	    is SCON then
+{
+//out.str(2, "SCON in proc\n");
+		DclString(node);
+		return;
+}
+	    is CLIST then
+{
+//out.str(2, "CLIST in proc\n");
+		DclAggregate(node);
+}
 	    is CALL then
 	    {   var ps: Symb;
 		ps = node@.symb;
@@ -1149,6 +1154,7 @@ out.str(2, "DCLCON in proc\n");
 		    ps@.declared = true;
 		}
 	    }
+	    is ASM then return;     // ignore SCONs under an ASM
 	    i = 0;
 	    while i < node@.num do
 	    {   DclProcSearch(node@.child[i]);
@@ -1560,7 +1566,6 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	{
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = getelementptr %T %S\n", node);
-	    NeedDeclare(node);
 	}
 	is ACOPY then Copy(node);
 	is AEQ, ANE then term = ArrayCompare(node);
