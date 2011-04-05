@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 541 2011-03-29 20:06:50Z bgl $
+// $Id: expr2.esl 545 2011-04-04 17:26:58Z bgl $
 
 package expr
 {
@@ -645,6 +645,10 @@ ast.Dump(tree); out.nl(2);
 	    is NEG  then tree@.valu = -tree@.valu;
 	    is NOT  then tree@.valu = ~tree@.valu;
 	    is BNOT then tree@.valu = tree@.valu ^ 1;
+	    is ABS  then 
+	    {   if tree@.kind == SINT && type.SValu(tree@.valu) < 0 then
+		    tree@.valu = type.Valu(-type.SValu(tree@.valu));
+	    }
 	}
 	else
 	    tree = ast.New1(op, rhs@.type, rhs);
@@ -785,36 +789,22 @@ ast.Dump(tree); out.nl(2);
 	    which = symb.IntrinsicT(ps@.valu);
 	    if which
 	    is ABS then
-	    {
-//out.str(2, "Intrinsic ABS\n");
-		rhs = Bool(0);
+	    {   rhs = Bool(0);
 		if rhs != 0 then
-		{   if rhs@.op == CONST then	// constant folding
-		    {   if rhs@.kind == SINT && type.SValu(rhs@.valu) < 0 then
-			    rhs@.valu = type.Valu(-type.SValu(rhs@.valu));
-			tree = rhs;
+		{   tree = UnOp(ABS, rhs);
+		    if tree@.kind == SINT then
+		    {   var i: _uint;
+			i = 0;
+			while i < type.NINTS &&
+			      tree@.size > type.inttypes[i]@.size do
+			    i += 1;
+			tree@.type = type.uinttypes[i];
+			tree@.kind = UINT;
 		    }
-		    else	// generate expression tree
-		    {   lhs = ast.New1(NEG, rhs@.type, rhs);
-			tree = ast.New2(SLT, type.booltype, rhs,
-					ast.Const(rhs@.type, 0));
-			tree = ast.New3(IFEXPR, rhs@.type, tree, lhs, rhs);
-		    }
-		}
-		if tree@.kind == SINT then
-		{   var i: _uint;
-		    i = 0;
-		    while i < type.NINTS &&
-			  tree@.size > type.inttypes[i]@.size do
-			i += 1;
-		    tree@.type = type.uinttypes[i];
-		    tree@.kind = UINT;
 		}
 	    }
 	    is MIN, MAX then
-	    {
-//out.str(2, "Intrinsic MIN/MAX\n");
-		lhs = Bool(0);
+	    {   lhs = Bool(0);
 		lex.Expect(COMMA);
 		rhs = Bool(0);
 		if lhs != 0 && rhs != 0 then
@@ -823,16 +813,6 @@ ast.Dump(tree); out.nl(2);
 		    else
 			if which == MIN then op = UMIN; else op = UMAX;
 		    tree = BinOp(op, lhs, rhs);
-		    if tree@.op != CONST then	// rewrite
-		    {   lhs = tree@.child[0];
-			rhs = tree@.child[1];
-			if op
-			is SMIN then tree@.op = SLT;
-			is SMAX then tree@.op = SGT;
-			is UMIN then tree@.op = ULT;
-			is UMAX then tree@.op = UGT;
-			tree = ast.New3(IFEXPR, lhs@.type, tree, lhs, rhs);
-		    }
 		}
 	    }
 	    else

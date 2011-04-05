@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 542 2011-03-30 17:49:08Z bgl $
+// $Id: stmt.esl 546 2011-04-04 17:27:37Z bgl $
 
 package stmt
 {
@@ -490,12 +490,6 @@ package stmt
 
 	t = lhs@.type;
 	tree = expr.Term(t);
-/*
-	if t@.flex then
-	{   lex.Error(ASSIGNFLEX);
-	    return 0;
-	}
-*/
 	if tree == 0 then return 0;
 	if t@.packed == BIT then
 	{   tree@.kind = UINT;		// FIXME: necessary?
@@ -522,19 +516,15 @@ package stmt
 		rsize = tree@.child[2];
 	    else
 		rsize = ast.Const(type.wordtype, tree@.type@.hi);
-	    if lsize@.op == CONST && rsize@.op == CONST then
-	    {
-//out.str(2, "Array copy: nl="); out.uint(2, _uint(lsize@.valu));
-//out.str(2, " nr="); out.uint(2, _uint(rsize@.valu));
-		if rsize@.valu != 0 then
-		{   if lsize@.valu == 0 then
-			lsize@.valu = rsize@.valu;
-		    else
-			lsize@.valu = _min(lsize@.valu, rsize@.valu);
-		}
-		// FIXME: error if both are zero
-//out.str(2, " final="); out.uint(2, _uint(lsize@.valu));
-//out.nl(2);
+	    if lsize@.op == CONST && lsize@.valu == 0 then
+	    {   if rsize@.op == CONST && rsize@.valu == 0 then
+		    lex.Error(ARRAYCOPY);
+		else
+		    lsize = rsize;
+	    }
+	    else
+	    {   if rsize@.op != CONST || rsize@.valu != 0 then
+		    lsize = expr.BinOp(UMIN, lsize, rsize);
 	    }
 	    lhs = ArrayFix(lhs);
 	    tree = ArrayFix(tree);
