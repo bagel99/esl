@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 488 2011-01-15 23:47:59Z bgl $
+// $Id: ast.esl 544 2011-04-03 19:44:02Z bgl $
 
 package ast
 {
@@ -28,7 +28,7 @@ package ast
 	LOAD,
 	STORE,		// assignment
 	ZEXT,   SEXT,   TRUNC,	REVB,
-	NEG,	NOT,
+	NEG,	NOT,	ABS,
 	ADD,    SUB,
 	MUL,    DIV,    MOD,
 	EQ,     NE,
@@ -63,12 +63,13 @@ package ast
 	[GETRV]=  1,	[LOAD]=   1,	[STORE]=  2,
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,	[REVB]=   1,
 	[NEG]=    1,	[NOT]=    1,
+	[ABS]=	  3,	// will convert into IFEXPR
 	[ADD]=	  2,	[SUB]=    2,
 	[MUL]=	  2,    [DIV]=	  2,    [MOD]=	  2,
 	[EQ]=	  2,    [NE]=     2,
 	[ULT]=	  2,    [UGT]=	  2,    [ULE]=	  2,    [UGE]=	  2,
 	[SLT]=	  2,	[SGT]=	  2,    [SLE]=	  2,    [SGE]=	  2,
-	[UMIN]=   2,	[UMAX]=   2,	[SMIN]=   2,	[SMAX]=   2,  
+	[UMIN]=   3,	[UMAX]=   3,	[SMIN]=   3,	[SMAX]=   3,  
 	[LSL]=	  2,    [LSR]=	  2,
 	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
@@ -274,6 +275,7 @@ package ast
 	[REVB]=  "REVB",
 	[NEG]=   "NEG",
 	[NOT]=   "NOT",
+	[ABS]=   "ABS",
 	[ADD]=   "ADD",		[SUB]=   "SUB",
 	[MUL]=   "MUL",		[DIV]=   "DIV",		[MOD]=   "MOD",
 	[EQ]=    "EQ",		[NE]=    "NE",

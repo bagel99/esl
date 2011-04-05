@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 543 2011-04-01 00:33:13Z bgl $
+// $Id: llvm.esl 545 2011-04-04 17:26:58Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -1111,9 +1111,12 @@ out.nl(2);
     // 1. DCLVAR so types can be pre-declared
     // 2. DCLCON so they can be moved outside the procedure
     // 3. CALL of external so parameter and retv types can be pre-declared
-    // FIXME: might as well catch SCON and CLIST since we search the whole tree
+    // 4. SCON,CLIST so they can be declared
+    // 5. Operators that must be expanded because of lack of LLVM support.
     proc DclProcSearch(node: Ast)
     {   var i: ast.NSubNodes;
+	var lhs, rhs: Ast;
+	var op: ast.Op;
 
 	if node != 0 then
 	{   if node@.op
@@ -1134,16 +1137,12 @@ out.str(2, "DCLCON in proc\n");
 		return;
 	    }
 	    is SCON then
-{
-//out.str(2, "SCON in proc\n");
-		DclString(node);
+	    {   DclString(node);
 		return;
-}
+	    }
 	    is CLIST then
-{
-//out.str(2, "CLIST in proc\n");
-		DclAggregate(node);
-}
+	    {   DclAggregate(node);
+	    }
 	    is CALL then
 	    {   var ps: Symb;
 		ps = node@.symb;
@@ -1154,6 +1153,30 @@ out.str(2, "DCLCON in proc\n");
 		    ps@.declared = true;
 		}
 	    }
+//
+	    is ABS then			    // must convert
+	    {   rhs = node@.child[0];
+		lhs = ast.New1(NEG, rhs@.type, rhs);
+		node@.child[0] = ast.New2(SLT, type.booltype, rhs,
+				ast.Const(rhs@.type, 0));
+		node = ast.Child(node, lhs);    // must return same node
+		node = ast.Child(node, rhs);    // must return same node
+		node@.op = IFEXPR;
+	    }
+	    is UMIN, UMAX, SMIN, SMAX then  // must convert
+	    {   lhs = node@.child[0];
+		rhs = node@.child[1];
+		if node@.op
+		is SMIN then op = SLT;
+		is SMAX then op = SGT;
+		is UMIN then op = ULT;
+		is UMAX then op = UGT;
+		node@.child[0] = ast.New2(op, type.booltype, lhs, rhs);
+		node@.child[1] = lhs;
+		node = ast.Child(node, rhs);    // must return same node
+		node@.op = IFEXPR;
+	    }
+//
 	    is ASM then return;     // ignore SCONs under an ASM
 	    i = 0;
 	    while i < node@.num do
