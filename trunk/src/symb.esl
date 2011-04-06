@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: symb.esl 528 2011-03-20 18:26:35Z bgl $
+// $Id: symb.esl 548 2011-04-05 20:30:16Z bgl $
 
 package symb
 {
@@ -11,7 +11,7 @@ package symb
     {
 	next:	  @SymbNode;		// for lists
 	type:	  Type;
-	package:  @SymbNode;		// containing package/file
+	package:  @SymbNode;		// containing proc/package/file
 	parmlist: @SymbNode;		// for procedures
 	retvlist: type.TypeList;	// for procedures, retval types
 	symblist: @SymbNode;		// for packages, procedures, aliases
@@ -90,13 +90,18 @@ package symb
 	zstr.copy(s@.ident, name, lex.IdentMax);
 	s@.kind = kind;
 	s@.next = 0;
-	s@.package = curpack;
 	if curproc != 0 then
-	    s@.linkage = LOCAL;
+	{   s@.linkage = LOCAL;
+	    s@.package = curproc;
+	}
 	else if curpack != 0 then
-	    s@.linkage = NORMAL;
+	{   s@.linkage = NORMAL;
+	    s@.package = curpack;
+	}
 	else
-	    s@.linkage = GLOBAL;
+	{   s@.linkage = GLOBAL;
+	    s@.package = 0;
+	}
 	s@.lineno = lex.Lineno();
 	if vis == VISIBLE then	// install in symbol table now
 	    MakeVisible(s);
