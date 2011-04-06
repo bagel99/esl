@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 545 2011-04-04 17:26:58Z bgl $
+// $Id: llvm.esl 547 2011-04-05 20:28:17Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -1126,11 +1126,9 @@ out.nl(2);
 	    }
 	    is DCLCON then
 	    {   var s: Symb;
-out.str(2, "DCLCON in proc\n");
 		s = node@.symb;
 		if s != 0 then
-		{
-		    s@.linkage = NORMAL;	// promote linkage
+		{   s@.linkage = NORMAL;	// promote linkage
 		    DclCon(node);
 		}
 		node@.op = NULL;		// ignore for code generation
