@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 539 2011-03-28 15:13:28Z bgl $
+// $Id: type2.esl 549 2011-04-06 20:24:21Z bgl $
 
 package type
 {
@@ -353,7 +353,7 @@ package type
 //out.chr(2, '('); out.uid(2, f@.addr);
 //out.str(2, ") offs=");  out.uid(2, offs);
 //out.str(2, " align="); out.uid(2, falign);
-			    if mod != 0 then
+			    if mod != 0 && t@.packed == NATIVE then
 			    {
 				index = FieldPad(prev,
 						 (falign-mod)/Target.membits,

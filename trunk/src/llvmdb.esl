@@ -1,5 +1,5 @@
 // Copyright (c) 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvmdb.esl 488 2011-01-15 23:47:59Z bgl $
+// $Id: llvmdb.esl 550 2011-04-06 20:37:29Z bgl $
 
 package llvmdb
 {
@@ -648,7 +648,7 @@ package llvmdb
 	if s@.linkage == LOCAL then
 	{
 	    out.str(f, "\tcall void @llvm.dbg.declare(metadata !{");
-	    llvm.PType(s@.type, NONE);
+	    llvm.PType(s@.type);
 	    out.str(f, "* ");
 	    llvm.PName(s);
 	    out.str(f, "}, ");
@@ -682,7 +682,7 @@ package llvmdb
 	    PMetaRef(tag, COMMA);			// type
 	    PBoolean(s@.linkage == LOCAL, COMMA);	// is local
 	    PBoolean(s@.linkage != EXTERN, COMMA);	// is a definition
-	    llvm.PType(s@.type, NONE);
+	    llvm.PType(s@.type);
 	    out.str(f, "* ");
 	    llvm.PName(s);
 	    PTerminator(BRACE);
@@ -747,7 +747,7 @@ package llvmdb
 	out.str(f, " (");
 	s = ps@.parmlist;
 	while s != 0 do
-	{   llvm.PType(s@.type, NONE);
+	{   llvm.PType(s@.type);
 	    s = s@.next;
 	    if s != 0 then out.str(f, ", ");
 	}
