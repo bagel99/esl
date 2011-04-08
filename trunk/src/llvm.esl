@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 550 2011-04-06 20:37:29Z bgl $
+// $Id: llvm.esl 552 2011-04-08 18:36:53Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -1097,25 +1097,30 @@ out.nl(2);
     }
 
     // Search AST of a procedure for
-    // 1. DCLVAR so types can be pre-declared
-    // 2. DCLCON so they can be moved outside the procedure
-    // 3. CALL of external so parameter and retv types can be pre-declared
-    // 4. SCON,CLIST so they can be declared
+    // 1. DCLVAR so types can be pre-declared and externs/globals declared
+    // 2. DCLCON so they can be declared
+    // 3. SCON,CLIST so they can be declared
+    // 4. CALL of external so parm and retv types can be pre-declared
     // 5. Operators that must be expanded because of lack of LLVM support.
     proc DclProcSearch(node: Ast)
     {   var i: ast.NSubNodes;
 	var lhs, rhs: Ast;
+	var s: Symb;
 	var op: ast.Op;
 
 	if node != 0 then
 	{   if node@.op
 	    is DCLVAR then
-	    {   DclType(node@.type);
+	    {   s = node@.symb;
+	        DclType(s@.type);
+		if s@.linkage != LOCAL then
+		{   DclVar(node);
+		    node@.op = NULL;
+		}
 		return;
 	    }
 	    is DCLCON then
-	    {   var s: Symb;
-		s = node@.symb;
+	    {   s = node@.symb;
 		if s != 0 then
 		{   s@.linkage = NORMAL;	// promote linkage
 		    DclCon(node);
