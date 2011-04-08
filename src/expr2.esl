@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 545 2011-04-04 17:26:58Z bgl $
+// $Id: expr2.esl 551 2011-04-08 18:35:36Z bgl $
 
 package expr
 {
@@ -684,6 +684,7 @@ ast.Dump(tree); out.nl(2);
 		is OR then  { lhs@.valu = lhs@.valu | rhs@.valu; return lhs; }
 		is XOR then { lhs@.valu = lhs@.valu ^ rhs@.valu; return lhs; }
 		is AND then { lhs@.valu = lhs@.valu & rhs@.valu; return lhs; }
+		is MUL then { lhs@.valu = lhs@.valu * rhs@.valu; return lhs; }
 		is DIV then { lhs@.valu = lhs@.valu / rhs@.valu; return lhs; }
 		is MOD then { lhs@.valu = lhs@.valu % rhs@.valu; return lhs; }
 		is LSL,ASL then { lhs@.valu = lhs@.valu << rhs@.valu; return lhs; }
