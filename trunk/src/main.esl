@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 532 2011-03-22 17:05:17Z bgl $
+// $Id: main.esl 554 2011-04-11 20:41:26Z bgl $
 
 var debug:
     {	symb:
@@ -18,7 +18,8 @@ var feature:
 	unused:boolean;
 	mflag: boolean;
 	gflag: boolean;
-	test:  boolean;
+	trunc: boolean;
+	tcall: boolean;
     };
 
 import sys;
@@ -94,7 +95,8 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	is 'F' then 
 	{   if argv[i]@[2]
 	    is 'u' then feature.unused = true;
-	    is 't' then feature.test = true;
+	    is 't' then feature.trunc = true;
+	    is 'c' then feature.tcall = true;
 	}
 	is 'M' then feature.mflag = true;
 	is 'g' then feature.gflag = true;
