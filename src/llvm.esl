@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 552 2011-04-08 18:36:53Z bgl $
+// $Id: llvm.esl 554 2011-04-11 20:41:26Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -1071,7 +1071,7 @@ out.nl(2);
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
-	if feature.test then out.str(f, "tail ");
+	if feature.tcall then out.str(f, "tail ");
 	out.str(f, "call");
 	PRetvType(node@.symb@.retvlist, false);
 	if indirect then

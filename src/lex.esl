@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 546 2011-04-04 17:27:37Z bgl $
+// $Id: lex.esl 555 2011-04-11 20:44:02Z bgl $
 
 package lex
 {
@@ -8,6 +8,7 @@ package lex
     (
 	NOTIMPL,
 	USETHEN,
+	TRUNC,
 	BADNL,		// first Error
 	CMTEOF,
 	BADEOF,
@@ -83,6 +84,7 @@ package lex
     {
 	[NOTIMPL] =	"Feature not yet implemented: ",
 	[USETHEN] =	"Use of ':' deprecated, use 'then' instead",
+	[TRUNC] =	"Truncation may cause loss of data",
 	[BADNL] =	"End of line in string or character constant",
 	[CMTEOF] =	"End of file in comment",
 	[BADEOF] =	"Unexpected end of file",

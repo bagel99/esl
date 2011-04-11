@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 551 2011-04-08 18:35:36Z bgl $
+// $Id: expr2.esl 555 2011-04-11 20:44:02Z bgl $
 
 package expr
 {
@@ -92,8 +92,19 @@ package expr
 	    tree@.size = size;
 	}
 	else if tree@.size > size then
-	{   if tree@.op != CONST then
-		tree = ast.New1(TRUNC, tree@.type, tree);
+	{
+	    if tree@.op != CONST then
+	    {   tree = ast.New1(TRUNC, tree@.type, tree);
+		if feature.trunc then lex.Error(TRUNC);
+	    }
+	    else    // truncate constant
+	    {   if tree@.kind == SINT then
+		    ; // FIXME
+		else
+		{   if type.bitsize(tree@.valu) > size then
+			lex.Error(TRUNC);
+		}
+	    }
 	    tree@.size = size;
 	}
 	return tree;
@@ -620,7 +631,7 @@ ast.Dump(tree); out.nl(2);
 	}
 	is ENUM, UINT, SINT then
 	{   ok = type.Compat(fm, to);
-	    if to@.width > tree@.size then
+	    if to@.width != tree@.size then
 		tree = ExtendT(tree, to);
 	    // NeedSwap?
 	}
@@ -1128,16 +1139,18 @@ out.str(2, "Intrinsic unknown\n");
 	{   tree = ast.New(CONST, et);
 	    tree@.valu = lex.Number;
 	    tree@.kind = UINT;
+	    tree@.size = type.bitsize(lex.Number);
 	    if et == 0 then
-	    {   tree@.type = type.wordtype;	// FIXME: ?
-		tree@.size = type.bitsize(lex.Number);
-	    }
+		tree@.type = type.wordtype;	// FIXME: ?
 	    else
-	    {   tree@.size = et@.size;
-		if et@.kind == REF then		// want pointer constant
+	    {   if et@.kind == REF then		    // want pointer constant
 		{   tree@.type = et@.base;
 		    tree@.kind = REF;
 		    tree@.size = Target.ptr.size;
+		}
+		else
+		{   if et@.size > tree@.size then   // widen
+			tree@.size = et@.size;
 		}
 	    }
 	    tok = Next();
