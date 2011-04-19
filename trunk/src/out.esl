@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: out.esl 488 2011-01-15 23:47:59Z bgl $
+// $Id: out.esl 559 2011-04-18 16:28:42Z bgl $
 
 // Formatted Output
 // This is a temporary hack.
@@ -72,7 +72,7 @@ package out
 
 	i = 15;
 	loop
-	{   buf[i] = hex[in&0xF];
+	{   buf[i] = hex[_uint(in)&0xF];
 	  exit i == 0;
 	    i -= 1;
 	    in = in >> 4;
@@ -154,7 +154,7 @@ package out
 	    }
 	    i += 1;
 	} 
-	buf[n] = in + '0';
+	buf[n] = _byte(in + '0');
 	sys.write(chan, buf, n+1);
     }
 
@@ -192,7 +192,7 @@ package out
 	else
 	{   while in != 0 do
 	    {   i -= 1;
-		buf[i] = (in % 10) + '0';
+		buf[i] = _byte((in % 10) + '0');
 		in = in / 10;
 	    }
 	}

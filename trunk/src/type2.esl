@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 549 2011-04-06 20:24:21Z bgl $
+// $Id: type2.esl 559 2011-04-18 16:28:42Z bgl $
 
 package type
 {
@@ -169,23 +169,23 @@ package type
 		    is KMEMSZ then 
 		    {   if tok == PBEG then
 			{   tok = Next();
-			    t@.width = expr.ConstScalar(type.wordtype) *
-					Target.membits;
+			    t@.width = BitSize(expr.ConstScalar(type.wordtype) *
+					Target.membits);
 			    lex.Expect(PEND);
 			}
 		    }		
 		    is KBITSZ then 
 		    {   if tok == PBEG then
 			{   tok = Next();
-			    t@.size = expr.ConstScalar(type.wordtype);
+			    t@.size = BitSize(expr.ConstScalar(type.wordtype));
 			    lex.Expect(PEND);
 			}
 		    }		
 		    is KALIGN then 
 		    {   if tok == PBEG then
 			{   tok = Next();
-			    t@.align = expr.ConstScalar(type.wordtype) *
-					Target.membits;
+			    t@.align = BitSize(expr.ConstScalar(type.wordtype) *
+					Target.membits);
 			    lex.Expect(PEND);
 			}
 		    }		
@@ -396,7 +396,7 @@ package type
 	    {   if t@.base != 0 then
 		{   Final(t@.base);
 		    if t@.size == 0 then
-			t@.size = t@.base@.size * t@.hi;
+			t@.size = BitSize(t@.base@.size * t@.hi);
 		    if t@.width == 0 then
 			t@.width = t@.size;
 		    if t@.align == 0 then
@@ -415,7 +415,7 @@ package type
     {   var tok: TokenT;
 	var t: Type;
 	var vn, pvn: Symb;
-	var v, vmax: 0..0xFFFFFFFF;
+	var v, vmax: _uint32;
 
 	tok = Next();
 	t = New(ENUM);
@@ -432,7 +432,7 @@ package type
 		    if pvn != 0 then pvn@.next = vn;
 				else t@.list = vn;
 		    pvn = vn;
-		    v = vb@.valu;
+		    v = _uint32(vb@.valu);
 		    vn@.valu = v;
 		    if v > vmax then vmax = v;
 		    vb = vb@.next;
@@ -452,7 +452,7 @@ package type
 		tok = Next();
 		if tok == ASGN then
 		{   tok = Next();
-		    v = expr.ConstScalar(type.wordtype);
+		    v = _uint32(expr.ConstScalar(type.wordtype));
 		    tok = Token;
 		}
 		vn@.valu = v;
@@ -803,9 +803,9 @@ package type
 			out.str(2, "): ");
 			Dump2(s@.type, indent+2, full);
 			if t@.packed == BIT then
-			    offs += s@.type@.size;
+			    offs += symb.OffsT(s@.type@.size);
 			else
-			    offs += s@.type@.width / Target.membits;
+			    offs += symb.OffsT(s@.type@.width / Target.membits);
 			out.nl(2);
 			s = s@.next;
 		    }

@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 555 2011-04-11 20:44:02Z bgl $
+// $Id: lex.esl 559 2011-04-18 16:28:42Z bgl $
 
 package lex
 {
@@ -265,11 +265,15 @@ package lex
     }; 
     type TokenList: []TokenT;
     const StringMax = 4095;
+    type StringRange: 0..StringMax;
     const IdentMax = 63;
     const BufSize = 4096;
+    type BufRange: 0..BufSize;
     const PathMax = 1024;	// Max chars in a pathname
+    type PathRange: 0..PathMax;
     const NameMax =  256;	// Max chars in filename
     const LinesMax = 0xFFFF;	// Max lines in a file, files in a program
+    type LinesRange: 0..LinesMax;
     const ErrorMax = 10;	// Max errors before terminate
     type SearchPathEntry:
     {   next:		@SearchPathEntry;
@@ -280,7 +284,7 @@ package lex
 
     type FileListEntry:
     {   next:		@FileListEntry;
-	fileno:		0..LinesMax;
+	fileno:		LinesRange;
 	filename:	[NameMax]Char;		// FIXME: make flexible
     };
     type FileList: @FileListEntry;
@@ -290,9 +294,9 @@ package lex
     {
 	prev:		@FileContext;
 	fd:		sys.fildes;
-	lineno:		0..LinesMax;
-	cchar:		0..BufSize;		// index into buf
-	nchar:		0..BufSize;		// num valid chars in buf
+	lineno:		LinesRange;
+	cchar:		BufRange;		// index into buf
+	nchar:		BufRange;		// num valid chars in buf
 	filepath:	Path;
 	filename:	[NameMax]Char;		// FIXME: point to FileList
 	buf:		[BufSize]Char;
@@ -458,7 +462,7 @@ package lex
 	var fd: sys.fildes;
 	var pp: Path;
 	var fp: FileList;
-	var i: 0..PathMax;
+	var i: _uint;
 	var pathbuf: [PathMax]Char;
 
 	nf = File(sys.malloc(FileContext?size));
@@ -561,7 +565,7 @@ package lex
 	if k < 0 then
 	    k = 0;
 	f@.cchar = 0;
-	f@.nchar = k;
+	f@.nchar = BufRange(k);
     }
 
     proc EscChar(c: Char): Char
@@ -842,7 +846,7 @@ package lex
 		else
 		{   h = EscHex(c, h);
 		    if str then
-		    {   j = EscUTF8(h, j);
+		    {   j = StringRange(EscUTF8(h, j));
 			state = STR;
 		    }
 		    else state = CHREND;

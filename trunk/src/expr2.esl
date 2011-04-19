@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 555 2011-04-11 20:44:02Z bgl $
+// $Id: expr2.esl 559 2011-04-18 16:28:42Z bgl $
 
 package expr
 {
@@ -79,9 +79,8 @@ package expr
     }
 
     // FIXME: move to ast.esl
-    proc Extend(tree: Ast, size: type.BitSize): Ast
+    proc Extend(tree: Ast, size: type.BitSize, iscast: boolean): Ast
     {
-
 	if tree@.size < size then
 	{   if tree@.op != CONST then
 	    {   if tree@.kind == SINT then
@@ -95,7 +94,7 @@ package expr
 	{
 	    if tree@.op != CONST then
 	    {   tree = ast.New1(TRUNC, tree@.type, tree);
-		if feature.trunc then lex.Error(TRUNC);
+		if feature.trunc && !iscast then lex.Error(TRUNC);
 	    }
 	    else    // truncate constant
 	    {   if tree@.kind == SINT then
@@ -112,9 +111,16 @@ package expr
 
     proc ExtendT(tree: Ast, t: Type): Ast
     {
-
-	tree = Extend(tree, t@.width);
+	tree = Extend(tree, t@.width, false);
 //	tree@.type = t;
+	return tree;
+    }
+
+    proc ExtendCast(tree: Ast, t: Type): Ast
+    {
+	tree = Extend(tree, t@.width, true);
+	tree@.type = t;
+	tree@.kind = t@.kind;
 	return tree;
     }
 
@@ -131,23 +137,15 @@ ast.Dump(tree);
 	if tree == 0 then return tree;
 	if t@.kind
 	is ENUM then
-	    if tree@.kind == UINT then		// UINT -> ENUM
-	    {
-		tree = ExtendT(tree, t);
-		tree@.type = t;
-		tree@.kind = t@.kind;
-//		tree@.size = t@.size;	// width?
-	    }
+	{   if tree@.kind == UINT then		// UINT -> ENUM
+		tree = ExtendCast(tree, t);
 	    else
 		lex.Error(BADCAST);
+	}
 	is UINT then
 	{   if tree@.kind
 	    is ENUM, UINT, SINT then		// ENUM|UINT|SINT -> UINT
-	    {   tree = ExtendT(tree, t);
-		tree@.type = t;
-		tree@.kind = t@.kind;
-//		tree@.size = t@.size;	// width?
-	    }
+		tree = ExtendCast(tree, t);
 	    is REF then				// REF -> UINT
 	    {   tree = ast.New1(CAST, t, tree);
 		tree@.kind = t@.kind;
@@ -168,11 +166,7 @@ ast.Dump(tree);
 	is SINT then
 	{   if tree@.kind
 	    is UINT, SINT then			// UINT|SINT -> SINT
-	    {   tree = ExtendT(tree, t);
-		tree@.type = t;
-		tree@.kind = t@.kind;
-//		tree@.size = t@.size;	// width?
-	    }
+		tree = ExtendCast(tree, t);
 	    else
 		lex.Error(BADCAST);
 	}
@@ -248,7 +242,7 @@ ast.Dump(tree);
 	    if node@.op == CONST then
 		cpart = cpart | (node@.valu << offs);
 	    else
-	    {   node = expr.Extend(node, tsize);
+	    {   node = expr.Extend(node, tsize, false);
 		node = ast.New2(LSL, bt, node,
 				ast.Const(type.wordtype, offs));
 		if vpart == 0 then
@@ -259,7 +253,7 @@ ast.Dump(tree);
 	    if t@.bitorder != MSB then offs += fsize;
 	    i += 1;
 	}
-	tree = expr.Extend(ast.Const(type.wordtype, cpart), tsize);
+	tree = expr.Extend(ast.Const(type.wordtype, cpart), tsize, false);
 	if vpart != 0 then
 	    tree = ast.New2(OR, type.wordtype, tree, vpart);
 	tree@.type = t;
@@ -280,7 +274,7 @@ ast.Dump(tree);
 	    strid += 1;
 	    tree@.valu = strid;
 	    once = false;
-	    n = t@.hi;
+	    n = ast.NSubNodes(t@.hi);
 	    if t@.flex then n = 0;
 	    i = 0;
 	    m = 0;
@@ -288,7 +282,7 @@ ast.Dump(tree);
 	    {   tok = Next();
 		if tok == ABEG then	// designated initializer
 		{   tok = Next();
-		    i = ConstScalar(t@.index);
+		    i = ast.NSubNodes(ConstScalar(t@.index));
 		    tok = lex.Expect(AEND);
 		    tok = lex.Expect(ASGN);
 		}
@@ -377,7 +371,7 @@ ast.Dump(tree);
 		if node@.op == CONST then
 		    cpart = cpart | (node@.valu << offs);
 		else
-		{   node = expr.Extend(node, tsize);
+		{   node = expr.Extend(node, tsize, false);
 		    node = ast.New2(LSL, ft, node,
 				    ast.Const(type.wordtype, offs));
 		    if vpart == 0 then
@@ -390,7 +384,7 @@ ast.Dump(tree);
 	    f = f@.next;
 	    i += 1;
 	}
-	tree = expr.Extend(ast.Const(type.wordtype, cpart), tsize);
+	tree = expr.Extend(ast.Const(type.wordtype, cpart), tsize, false);
 	if vpart != 0 then
 	    tree = ast.New2(OR, type.wordtype, tree, vpart);
 	tree@.type = t;
@@ -493,7 +487,9 @@ ast.Dump(tree);
 	st@.base = at@.base;
 	st@.packed = at@.packed;
 	if at@.flex then blen = 0; else blen = type.BitSize(at@.hi);
-	if len != 0 && len@.op == CONST then slen = len@.valu; else slen = 0;
+	if len != 0 && len@.op == CONST
+	    then slen = type.BitSize(len@.valu);
+	    else slen = 0;
 	if blen == 0 && slen == 0 then
 	    st@.flex = true;
 	else
@@ -675,7 +671,7 @@ ast.Dump(tree); out.nl(2);
 
     proc BinOp(op:ast.Op, lhs:Ast, rhs:Ast): Ast
     {   var tree: Ast;
-	var sl, sr: 0..255;
+	var sl, sr: type.BitSize;
 	var fold, swap: boolean;
 
 	if lhs@.op == TYPE then
@@ -779,10 +775,10 @@ ast.Dump(tree); out.nl(2);
 	sl = lhs@.size;
 	sr = rhs@.size;
 	if sl > sr then
-	    rhs = Extend(rhs, sl);
+	    rhs = Extend(rhs, sl, false);
 	else
 	{   if sr > sl then
-		lhs = Extend(lhs, sr);
+		lhs = Extend(lhs, sr, false);
 	}
 	tree = ast.New2(op, lhs@.type, lhs, rhs);
 	return tree;
