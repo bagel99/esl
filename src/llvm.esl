@@ -1,9 +1,10 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 554 2011-04-11 20:41:26Z bgl $
+// $Id: llvm.esl 559 2011-04-18 16:28:42Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
 {
+    alias lex.StringRange as StringRange;
     const package_delimiter:Char = '_';
     const anon_prefix: []Char = "A.";
     const scon_prefix: []Char = "S.";
@@ -494,11 +495,11 @@ package llvm
 			}
 		    }
 		    is SCON then
-		    {   var n: 0..lex.StringMax;
+		    {   var n: StringRange;
 			if t@.flex then
-			    n = node@.type@.hi;
+			    n = StringRange(node@.type@.hi);
 			else
-			    n = t@.hi;
+			    n = StringRange(t@.hi);
 			PString(pstring(node@.symb), n, true);
 		    }
 		}
@@ -560,10 +561,10 @@ package llvm
     }
 
     proc DclString(node: Ast)
-    {   var n: 0..lex.StringMax;
+    {   var n: StringRange;
 
 	Print("%S = internal constant %B ", node);
-	n = node@.type@.hi;
+	n = StringRange(node@.type@.hi);
 	PString(pstring(node@.symb), n, true);
     }
 
@@ -710,7 +711,7 @@ package llvm
 	var lo, hi: Valu;
 
 	// LLVM wants selector to be register width
-	node@.child[0] = expr.Extend(node@.child[0], type.wordtype@.size);
+	node@.child[0] = expr.ExtendT(node@.child[0], type.wordtype);
 	GenSub(node@.child[0]);		// the selector value
 	labelse = Lseqno;  Lseqno += 1;
 	labend = Lseqno;  Lseqno += 1;
@@ -841,7 +842,7 @@ package llvm
 	GenSub(node@.child[0]);
 	GenSub(node@.child[1]);
 	// LLVM wants count to be register width
-	node@.child[2] = expr.Extend(node@.child[2], type.wordtype@.size);
+	node@.child[2] = expr.ExtendT(node@.child[2], type.wordtype);
 	GenSub(node@.child[2]);
 	// FIXME: need to check for potential overlap and use memmove if necessary
 	// FIXME: find alignment, here or during parsing?
@@ -884,7 +885,7 @@ package llvm
 	length = 0;	// 0 means variable
 	if node@.child[2]@.op == CONST then
 	    length = _uint(node@.child[2]@.valu);
-	align = node@.child[3]@.valu;
+	align = _uint(node@.child[3]@.valu);
 out.str(2, "Array compare experimental: length=");
 	if length == 0 then
 out.str(2, "variable");
@@ -946,7 +947,7 @@ out.nl(2);
 				 node@.child[2],
 				 ast.Const(type.wordtype, size));
 	    // LLVM wants count to be register width
-	    node@.child[2] = expr.Extend(node@.child[2], type.wordtype@.size);
+	    node@.child[2] = expr.ExtendT(node@.child[2], type.wordtype);
 	    GenSub(node@.child[2]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    node@.kind = ENUM;
@@ -977,13 +978,13 @@ out.nl(2);
 
     proc PStringCon(node: Ast)
     {   var p: pstring;
-	var n: 0..lex.StringMax;
+	var n: StringRange;
     
 	if node == 0 then
 	    out.str(f, "\"\"");
 	else
 	{   p = pstring(node@.symb);
-	    n = zstr.len(p, lex.StringMax);
+	    n = StringRange(zstr.len(p, lex.StringMax));
 	    PString(p, n, false);
 	}
     }
@@ -1338,7 +1339,7 @@ out.nl(2);
     {   var indx: Ast;
 
 	// FIXME: what about bitorder?
-	indx = expr.Extend(node@.child[1], type.wordtype@.size);
+	indx = expr.ExtendT(node@.child[1], type.wordtype);
 	indx = ast.New2(MUL, type.wordtype, indx,
                         ast.Const(type.wordtype, size));
 	if tree != 0 then
@@ -1382,7 +1383,7 @@ out.nl(2);
 	   tree@.type@.memorder != Target.order then
 	    tree = ast.New1(REVB, tree@.type, tree);
 	// make register sized, this simplifies things
-	tree = expr.Extend(tree, type.wordtype@.size);
+	tree = expr.ExtendT(tree, type.wordtype);
 	return tree,    // return the loaded container,
 	       varb,    // the shift computation,
 	       offs;    // and the base address 
@@ -1432,7 +1433,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	    // mask off the parts we don't want
 	    tree = ast.New2(AND, t, tree, mask);
 	    // possibly narrow the size
-	    tree = expr.Extend(tree, load@.size);
+	    tree = expr.Extend(tree, load@.size, true);
 //out.str(2, "BFLoad tree=\n"); ast.Dump(tree); out.nl(2);
 	    GenSub(tree);
 	    load@.child[0] = tree;      // load@.op == LOAD, we're done with it
@@ -1477,14 +1478,14 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 		// mask out the field in the target
 		tree = ast.New2(AND, type.wordtype, tree, mask);
 		// make the value word size
-		rhs = expr.Extend(rhs, type.wordtype@.size);
+		rhs = expr.ExtendT(rhs, type.wordtype);
 		// shift the value leftward, if necessary
 		if varb != 0 then
 		    rhs  = ast.New2(LSL, type.wordtype, rhs, varb);
 		// or in the new value
 		rhs  = ast.New2(OR, type.wordtype, tree, rhs);
 		// adjust width of final result
-		rhs = expr.Extend(rhs, lhs@.size);
+		rhs = expr.Extend(rhs, lhs@.size, true);
 		// make sure the endian is correct
 		if lhs@.size > Target.membits && 
 		   lhs@.type@.memorder != Target.order then
@@ -1604,7 +1605,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	is INDEX then
 	{   GenSub(node@.child[0]);
 	    // LLVM wants index value to be register width
-	    node@.child[1] = expr.Extend(node@.child[1], type.wordtype@.size);
+	    node@.child[1] = expr.ExtendT(node@.child[1], type.wordtype);
 	    GenSub(node@.child[1]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = getelementptr %0T %0N, %W 0, %1T %1N\n", node);
@@ -1615,7 +1616,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	    // Ignore the count, for now
 	    GenSub(node@.child[0]);
 	    // LLVM wants index value to be register width
-	    node@.child[1] = expr.Extend(node@.child[1], type.wordtype@.size);
+	    node@.child[1] = expr.ExtendT(node@.child[1], type.wordtype);
 	    GenSub(node@.child[1]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    nextseqno = Tseqno; Tseqno += 1;

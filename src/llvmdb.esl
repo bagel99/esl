@@ -1,5 +1,5 @@
 // Copyright (c) 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvmdb.esl 550 2011-04-06 20:37:29Z bgl $
+// $Id: llvmdb.esl 559 2011-04-18 16:28:42Z bgl $
 
 package llvmdb
 {
@@ -206,7 +206,7 @@ package llvmdb
     }
 
     proc FileStart(fs: Symb)
-    {   var i: 0..lex.PathMax;
+    {   var i: _uint;
 	var name: @[]_byte;
 
 	name = fs@.ident;
@@ -269,26 +269,6 @@ package llvmdb
 	    fs = fs@.next;
 	}
 	return n;
-/*
-	fs = ps@.parmlist;
-	if fs == 0 then return 0;		// no formal parameters
-	while fs != 0 do
-	{   DefType(fs@.type);
-	    fs = fs@.next;
-	}
-	seqno += 1;
-	formals = seqno;
-	PMetaSeq(formals);
-	term = COMMA;
-	fs = ps@.parmlist;
-	while fs != 0 do
-	{   tag = fs@.type@.dbtag;
-	    fs = fs@.next;
-	    if fs == 0 then term = BRACE;
-	    PMetaRef(tag, term);
-	}
-	return formals;
-*/
     }
 	
     proc DefRetvs(ps: Symb): seqnoT
@@ -711,7 +691,8 @@ package llvmdb
 
     proc ProcFinish(ps: Symb)
     {   var s: Symb;
-	var formals, retvs, stag, ttag: seqnoT;
+	var retvs, stag, ttag: seqnoT;
+	var formals: _uint;
 
 	// output line number descriptors
 	DefLines();
