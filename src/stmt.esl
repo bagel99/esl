@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 546 2011-04-04 17:27:37Z bgl $
+// $Id: stmt.esl 561 2011-05-02 20:06:55Z bgl $
 
 package stmt
 {
@@ -550,17 +550,27 @@ if tl@.base != 0 then
 }
 out.str(2, "TR kind="); out.str(2, type.KindName[tr@.kind]); out.nl(2);
 type.DumpT(tr, true); out.nl(2);
+ast.Dump(rhs);
 */
 	// LHS is not a COMPOSITE (RECORD or ARRAY) -- handled elsewhere
 	if tl@.kind
 	is REF then
-	{   // if RHS is COMPOSITE then this must be a coercion
-	    if (rhs@.kind == ARRAY || rhs@.kind == RECORD) && rhs@.op == LOAD then
-		rhs = rhs@.child[0];  // Undo LOAD
-	    if tl@.base != tr then
-	    {   if type.Compat(tl@.base, tr) then
-		    rhs = expr.Cast(rhs, tl);
-		else lex.Error(TYPEASSIGN);
+	{   // FIXME: merge with code in expr.Actual()
+	    if rhs@.kind != REF then	    // this must be a coercion
+	    {   rhs = expr.CoerceToRef(rhs);
+		tr = rhs@.type;
+	        if tl@.base != tr then
+		{   if type.Compat(tl@.base, tr) then
+			rhs = expr.Cast(rhs, tl);
+		    else lex.Error(TYPEASSIGN);
+		}
+	    }
+	    else
+	    {   if tl@.base != tr then
+		{   if type.Compat(tl@.base, tr) then
+			rhs = expr.Cast(rhs, tl);
+		    else lex.Error(TYPEASSIGN);
+		}
 	    }
 	}
 	is REFPROC then
