@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 559 2011-04-18 16:28:42Z bgl $
+// $Id: expr2.esl 561 2011-05-02 20:06:55Z bgl $
 
 package expr
 {
@@ -179,7 +179,8 @@ ast.Dump(tree);
 		tree@.size = t@.size;	// width?
 	    }
 	    is UINT then			// UINT -> REF
-	    {   tree = ast.New1(CAST, t, tree);
+	    {   if tree@.size != Target.ptr.size then lex.Error(BADINTPTR);
+		tree = ast.New1(CAST, t, tree);
 		tree@.type = t@.base;
 		tree@.kind = t@.kind;
 		tree@.size = t@.size;	// FIXME: width?
@@ -564,7 +565,9 @@ ast.Dump(tree);
     proc CoerceToRef(tree: Ast): Ast
     {
 	if tree@.op == LOAD then
-	    tree = tree@.child[0];	// undo the load
+	    tree = tree@.child[0];		// undo the load
+	else if tree@.op == REVB && tree@.child[0]@.op == LOAD then
+	    tree = tree@.child[0]@.child[0];
 	if tree@.op != CLIST then
 	    tree = ast.New1(BYREF, tree@.type, tree);
 	tree@.kind = REF;
@@ -604,6 +607,7 @@ ast.Dump(tree); out.nl(2);
 	    }
 	    if tree@.kind != REF then
 	    {   tree = CoerceToRef(tree);
+		fm = tree@.type;
 		if to@.base != fm then
 		{   if type.Compat(to@.base, fm) then
 			tree = expr.Cast(tree, to);
