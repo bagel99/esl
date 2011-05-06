@@ -1,5 +1,5 @@
 // Copyright (c) 2009, Brian G. Lucas.  See LICENSE file.
-// $Id: target.esl 525 2011-03-19 16:31:58Z bgl $
+// $Id: target.esl 564 2011-05-04 18:50:58Z bgl $
 
 package target
 {
@@ -25,7 +25,7 @@ package target
 
     const DefaultTarget: []_byte = "x86";   // FIXME
     var   TargetName: @[]_byte;
-    const NumTargets = 12;
+    const NumTargets = 14;
     const Targets: [NumTargets]TargetT =
     {   {   "x86", "i386-unknown-linux-gnu",
 	    LE, 8, 32, false, 0,
@@ -83,7 +83,23 @@ package target
 		{0,0},  {0,0},   {0,0},   {0,0}
 	    }
 	},
-	{   "ppc32", "ppc-unknown-linux",
+	{   "xcore", "xcore-unknown-unknown",
+	    LE, 8, 32, true, 0,
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,32},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "bfin", "bfin-unknown-unknown",
+	    LE, 8, 32, true, 0,
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,32},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "ppc32", "ppc32-unknown-linux",
 	    BE, 8, 32, true, 0,
 	    4,
 	    {32, 32},

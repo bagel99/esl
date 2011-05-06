@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 559 2011-04-18 16:28:42Z bgl $
+// $Id: type2.esl 563 2011-05-04 18:50:36Z bgl $
 
 package type
 {
@@ -228,7 +228,7 @@ package type
 		    }
 		}
 	    }
-	    else
+	    else if tok != SEMI then
 	    {   lex.Error(EXPECTID);
 		tok = lex.Skip(askip2);
 	    }

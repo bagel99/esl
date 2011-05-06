@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 559 2011-04-18 16:28:42Z bgl $
+// $Id: llvm.esl 565 2011-05-06 23:54:49Z bgl $
 
 // Convert AST to LLVM assembly
 package llvm
@@ -383,6 +383,9 @@ package llvm
 
 	ps = node@.symb;
 	if isdefine then out.str(f, "define"); else out.str(f, "declare");
+	if ps@.linkage
+	is NORMAL then out.str(f, " internal");
+	is EXTERN then out.str(f, " external");
 	PRetvType(ps@.retvlist, true);
 	Print(" %I(", node);
 	s = ps@.parmlist;
