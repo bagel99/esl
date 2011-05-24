@@ -1,5 +1,5 @@
 // Copyright (c) 2009, Brian G. Lucas.  See LICENSE file.
-// $Id: target.esl 564 2011-05-04 18:50:58Z bgl $
+// $Id: target.esl 568 2011-05-23 21:28:40Z bgl $
 
 package target
 {
@@ -145,13 +145,13 @@ package target
     proc list()
     {   var i: 0..TargetsMax;
 
-        out.str(2, "Supported targets and generated triples:\n");
+        err.str("Supported targets and generated triples:\n");
 	i = 0;
 	while i < NumTargets do
-	{   out.str(2, Targets[i].name);
-	    out.str(2, ": ");
-	    out.str(2, Targets[i].triple);
-	    out.nl(2);
+	{   err.str(Targets[i].name);
+	    err.str(": ");
+	    err.str(Targets[i].triple);
+	    err.nl();
 	    i += 1;
 	}
     }

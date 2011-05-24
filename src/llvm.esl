@@ -1,7 +1,8 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 565 2011-05-06 23:54:49Z bgl $
+// $Id: llvm.esl 568 2011-05-23 21:28:40Z bgl $
 
 // Convert AST to LLVM assembly
+import bout;
 package llvm
 {
     alias lex.StringRange as StringRange;
@@ -9,7 +10,7 @@ package llvm
     const anon_prefix: []Char = "A.";
     const scon_prefix: []Char = "S.";
     type file: sys.fildes;
-    var  f: file;
+    var  f: bout.pBufIO;
     proc PType(t: Type);					// forward
     proc PName(s: Symb);					// forward
     proc PRetvType(tl: type.TypeList, extend: boolean);		// forward
@@ -45,28 +46,28 @@ package llvm
     proc PEndLine(node: Ast)
     {
 	if feature.gflag then llvmdb.PLine(node@.lineno);
-	out.nl(f);
+	f.nl();
     }
    
     proc PTypeName(t: Type)
     {   var s: Symb;
 
-	out.str(f, "%");
+	f.str("%");
 	s = t@.name;
 	if s != 0 then
 	{   if s@.package != 0 then
-	    {   out.str(f, s@.package@.ident);
-		out.str(f, ".");
+	    {   f.str(s@.package@.ident);
+		f.str(".");
 	    }
-	    out.str(f, s@.ident);
+	    f.str(s@.ident);
 	}
 	else
-	{   out.str(f, anon_prefix);
+	{   f.str(anon_prefix);
 	    if t@.antag == 0 then
 	    {   Aseqno += 1;
 		t@.antag = Aseqno;
 	    }
-	    out.uint16(f, t@.antag);
+	    f.uint16(t@.antag);
 	}
     }
 
@@ -76,19 +77,19 @@ package llvm
 	{   if t@.kind
 	    is ENUM, UINT, SINT then
 	    {   size = target.isize(t@.size);
-		out.str(f, "i"); out.uint(f, size);
+		f.str("i"); f.uint(size);
 	    }
 	    is REF then
 	    {   PType(t@.base);
-		out.str(f, "*");
+		f.str("*");
 	    }
 	    is RECORD then
 	    {
 		if t@.packed == BIT then
 		{   // LLVM doesn't do bit pack records, handle as integers
-//out.str(2, "PType packed record\n");
+//f.str("PType packed record\n");
 		    size = target.isize(t@.size);
-		    out.str(f, "i"); out.uint(f, size);
+		    f.str("i"); f.uint(size);
 		}
 		else
 		{   if t@.printed then
@@ -99,23 +100,23 @@ package llvm
 	    {
 		if t@.packed == BIT then
 		{   // LLVM doesn't do bit pack arrays, handle as integers
-//out.str(2, "PType packed array\n");
+//f.str("PType packed array\n");
 		    size = target.isize(t@.size);
-		    out.str(f, "i"); out.uint(f, size);
+		    f.str("i"); f.uint(size);
 		}
 		else
-		{   out.chr(f, '[');
-		    out.uint32(f, _uint32(t@.hi));
-		    out.str(f, " x ");
+		{   f.chr('[');
+		    f.uint32(_uint32(t@.hi));
+		    f.str(" x ");
 		    PType(t@.base);
-		    out.chr(f, ']');
+		    f.chr(']');
 		}
 	    }
 	    is REFPROC then
 	    {   PRetvType(t@.list@.retvlist, false);
-		out.chr(f, ' ');
+		f.chr(' ');
 		PParmTypes(t@.list@.parmlist);
-		out.chr(f, '*');
+		f.chr('*');
 	    }
 	}
     }
@@ -130,9 +131,9 @@ package llvm
 		if size < type.wordtype@.size then
 		{
 		    if t@.kind == SINT then
-			out.str(f, " signext");
+			f.str(" signext");
 		    else
-			out.str(f, " zeroext");
+			f.str(" zeroext");
 		}
 	    }
 	}
@@ -143,36 +144,36 @@ package llvm
 
 	if tl != 0 then
 	{   if  tl@.next != 0 then		// has multiple returned values
-	    {   out.str(f, " { ");
+	    {   f.str(" { ");
 		loop
 		{   PType(tl@.type);
 		    tl = tl@.next;
 		  exit tl == 0;
-		    out.str(f, ", ");
+		    f.str(", ");
 		}
-		out.str(f, " }");
+		f.str(" }");
 	    }
 	    else				// single returned value
 	    {   t = tl@.type;
 		if extend then PExtend(t);
-		out.chr(f, ' ');
+		f.chr(' ');
 		PType(t);
 	    }
 	}
 	else					// has no returned value
-	    out.str(f, " void");
+	    f.str(" void");
     }
     
     proc PParmTypes(s: Symb)
     {
-	out.chr(f, '(');
+	f.chr('(');
 	while s != 0 do
 	{   PType(s@.type);
 	    s = s@.next;
 	  exit s == 0;
-	    out.str(f, ", ");
+	    f.str(", ");
 	}
-	out.chr(f, ')');
+	f.chr(')');
     }
  
     proc ConstantRef(t: Type, node: Ast)
@@ -180,69 +181,69 @@ package llvm
 
 	v = node@.valu;
 	if v == 0 then
-	    out.str(f, "null");
+	    f.str("null");
 	else
-	{   out.str(f, "inttoptr(");
+	{   f.str("inttoptr(");
 	    PType(type.wordtype);
-	    out.chr(f, ' ');
-	    out.uint64(f, v);
-	    out.str(f, " to ");
+	    f.chr(' ');
+	    f.uint64(v);
+	    f.str(" to ");
 	    if t == 0 then	// FIXME: CONST REFs inconsistent
 	    {   PType(node@.type);
-		out.chr(f, '*');
+		f.chr('*');
 	    }
 	    else
 		PType(t);
-	    out.chr(f, ')');
+	    f.chr(')');
 	}
     }
 	
     proc NodeType(node: Ast)
     {
 	if node@.kind
-	is UTYPE then	      { out.str(f, "void"); }
-	is REF then           { PType(node@.type); out.str(f, "*"); }
+	is UTYPE then	      { f.str("void"); }
+	is REF then           { PType(node@.type); f.str("*"); }
 	is ARRAY, RECORD, REFPROC then { PType(node@.type); }
-	else                  { out.str(f, "i"); out.uint(f, node@.size); }
+	else                  { f.str("i"); f.uint(node@.size); }
     }
 
     proc PPkgPfx(s: Symb)
     {   if s@.package != 0 then PPkgPfx(s@.package);    // recursive
-	out.str(f, s@.ident); 
-	out.chr(f, package_delimiter);
+	f.str(s@.ident); 
+	f.chr(package_delimiter);
     }
 
     proc PName(s: Symb)
     {
 	if s@.linkage
-	is LOCAL then  { out.chr(f, '%'); out.str(f, s@.ident); }
+	is LOCAL then  { f.chr('%'); f.str(s@.ident); }
 	is NORMAL, INLINE then
-	{   out.chr(f, '@');
+	{   f.chr('@');
 	    if s@.package != 0 then
 		PPkgPfx(s@.package);
-	    out.str(f, s@.ident);
+	    f.str(s@.ident);
 	}
-	is GLOBAL, EXTERN then { out.chr(f, '@'); out.str(f, s@.ident); }
+	is GLOBAL, EXTERN then { f.chr('@'); f.str(s@.ident); }
 	is FIXED then
-	{   out.str(f, "inttoptr(");
+	{   f.str("inttoptr(");
 	    PType(type.wordtype);
-	    out.chr(f, ' ');
-	    out.uint64(f, s@.xaddr);
-	    out.str(f, " to ");
+	    f.chr(' ');
+	    f.uint64(s@.xaddr);
+	    f.str(" to ");
 	    if s@.kind == PROC then
 	    {   PRetvType(s@.retvlist, true);
 		PParmTypes(s@.parmlist);
 	    }
 	    else
 		PType(s@.type);
-	    out.str(f, "*)");
+	    f.str("*)");
 	}
     }
 
     proc PTempName(n: seqnoT)
     {
-	out.chr(f, '%');
-	out.uint(f, n-1);
+	f.chr('%');
+	f.uint(n-1);
     }
 
     proc NodeName(node: Ast)
@@ -252,7 +253,7 @@ package llvm
 	if s != 0 then
 	    PName(s);
 	else
-	    out.str(f, "__NoName__");
+	    f.str("__NoName__");
     }
 
     proc NodeDst(node: Ast)
@@ -268,10 +269,10 @@ package llvm
 	if node@.op
 	is CONST then
 	{   if node@.kind
-	    is ENUM, UINT then out.uint64(f, node@.valu);
-	    is SINT then       out.int64(f, _int64(node@.valu));
+	    is ENUM, UINT then f.uint64(node@.valu);
+	    is SINT then       f.int64(_int64(node@.valu));
 	    is REF, REFPROC then ConstantRef(0, node);
-	    is ARRAY, RECORD then out.uint64(f, node@.valu);	// packed?
+	    is ARRAY, RECORD then f.uint64(node@.valu);	    // packed?
 	}
 	is VAR then NodeName(node);
 	else        PTempName(node@.seqno);
@@ -309,22 +310,22 @@ package llvm
 		is 'D' then NodeDst(node);
 		is 'W' then PType(type.wordtype);	// target word type
 		is 'S' then // string name
-		{   out.chr(f, '@');
-		    out.str(f, scon_prefix);
-		    out.uint32(f, _uint32(node@.valu));
+		{   f.chr('@');
+		    f.str(scon_prefix);
+		    f.uint32(_uint32(node@.valu));
 		}
-		is '%' then out.chr(f, c);
+		is '%' then f.chr(c);
 	    }
 	    else
-		out.chr(f, c);
+		f.chr(c);
 	    i += 1;
 	}
     }
 
     proc PRetValName(n: ast.NSubNodes)
     {
-	out.str(f, "%rv.");
-	out.uint(f, n);
+	f.str("%rv.");
+	f.uint(n);
     }
 
     proc DclType(t: Type)
@@ -352,28 +353,28 @@ package llvm
 		}
 		// now deal with the record
 		PTypeName(t);
-		out.str(f, " = type ");
+		f.str(" = type ");
 		if t@.packed == BIT then
 		{   // LLVM doesn't do bit pack records, handle as integers
 		    size = target.isize(t@.size);
-		    out.str(f, "i"); out.uint(f, size);
+		    f.str("i"); f.uint(size);
 		}
 		else
 		{   if t@.packed == MEM then
-			out.str(f, "<");
-		    out.str(f, "{");
+			f.str("<");
+		    f.str("{");
 		    s = t@.list;
 		    while s != 0 do
 		    {   PType(s@.type);
 			s = s@.next;
 		      exit s == 0;
-			out.str(f, ", ");
+			f.str(", ");
 		    }
-		    out.str(f, "}");
+		    f.str("}");
 		    if t@.packed == MEM then
-			out.str(f, ">");
+			f.str(">");
 		}
-		out.nl(f);
+		f.nl();
 	    }
 	}		
     }
@@ -382,10 +383,10 @@ package llvm
     {   var s, ps: Symb;
 
 	ps = node@.symb;
-	if isdefine then out.str(f, "define"); else out.str(f, "declare");
+	if isdefine then f.str("define"); else f.str("declare");
 	if ps@.linkage
-	is NORMAL then out.str(f, " internal");
-	is EXTERN then out.str(f, " external");
+	is NORMAL then f.str(" internal");
+	is EXTERN then f.str(" external");
 	PRetvType(ps@.retvlist, true);
 	Print(" %I(", node);
 	s = ps@.parmlist;
@@ -393,35 +394,35 @@ package llvm
 	{   PType(s@.type);
 	    PExtend(s@.type);
 	    if isdefine then
-	    {   out.str(f, " %");
-		out.str(f, s@.ident);
-		out.str(f, ".arg");
+	    {   f.str(" %");
+		f.str(s@.ident);
+		f.str(".arg");
 	    }
 	    s = s@.next;
 	  exit s == 0;
-	    out.str(f, ", ");
+	    f.str(", ");
 	}
-	out.str(f, ")");
+	f.str(")");
     }
 
     proc PString(s:@[]_byte, n:0..lex.StringMax, prefix: boolean)
     {   var i: 0..lex.StringMax;
 	var c: Char;
 
-	if prefix then out.chr(f, 'c');
-	out.chr(f, '"');
+	if prefix then f.chr('c');
+	f.chr('"');
 	i = 0;
 	while i < n do
 	{   c = s[i];
 	    if c < ' ' || c >= 0x7F || c == '"' || c == '\\' then
-	    {   out.chr(f, '\\');
-		out.hex8(f, c);
+	    {   f.chr('\\');
+		f.hex8(c);
 	    }
 	    else
-		out.chr(f, c);
+		f.chr(c);
 	    i += 1;
 	}
-	out.chr(f, '"');
+	f.chr('"');
     }
 
     proc Constant(node: Ast, t: Type)
@@ -432,64 +433,64 @@ package llvm
 	    if t@.kind
 	    is ENUM, UINT then
 	    {   if node != 0 then
-		    out.uint64(f, node@.valu);
+		    f.uint64(node@.valu);
 		else
-		    out.uint(f, 0);
+		    f.uint(0);
 	    }
 	    is SINT then
 	    {   if node != 0 then
-		    out.int64(f, _int64(node@.valu));
+		    f.int64(_int64(node@.valu));
 		else
-		    out.uint(f, 0);
+		    f.uint(0);
 	    }
 	    is REF then
 	    {   if node == 0 || node@.valu == 0 then
-		    out.str(f, "zeroinitializer");
+		    f.str("zeroinitializer");
 		else
 		    ConstantRef(t, node);
 	    }
 	    is RECORD then
 	    {   if node != 0 then
 		{   if t@.packed == BIT then	// assert node@.op == CONST
-			out.uint64(f, _uint64(node@.valu));
+			f.uint64(_uint64(node@.valu));
 		    else			// assert node@.op == CLIST
-		    {   out.str(f, "{ ");
+		    {   f.str("{ ");
 			i = 0;
 			loop
 			{   PType(node@.child[i]@.type);
-			    out.str(f, " ");
+			    f.str(" ");
 			    Constant(node@.child[i], node@.child[i]@.type);
 			    i += 1;
 			  exit i >= node@.num;
-			    out.str(f, ", ");
+			    f.str(", ");
 			}
-			out.str(f, " }");
+			f.str(" }");
 		    }
 		}
 		else
-		    out.str(f, "zeroinitializer");
+		    f.str("zeroinitializer");
 	    }
 	    is ARRAY then
 	    {   if node != 0 then
 		{   if t@.packed == BIT then	// assert node@.op == CONST
-			out.uint64(f, _uint64(node@.valu));
+			f.uint64(_uint64(node@.valu));
 		    else if node@.op
 		    is CLIST then
-		    {   out.str(f, "[ ");
+		    {   f.str("[ ");
 			i = 0;
 			loop
 			{   PType(node@.child[i]@.type);
-			    out.str(f, " ");
+			    f.str(" ");
 			    Constant(node@.child[i], node@.child[i]@.type);
 			    i += 1;
 			  exit i >= node@.num;
-			    out.str(f, ", ");
+			    f.str(", ");
 			}
-			out.str(f, " ]");
+			f.str(" ]");
 		    }
 		    is BYREF then
 		    {   if node@.child[0]@.op == SCON then
-			{   out.str(f, "* ");
+			{   f.str("* ");
 			    if t@.flex then
 				Print("bitcast( %T ", node@.child[0]);
 			    Print("getelementptr( %T %S ) ", node@.child[0]);
@@ -507,10 +508,10 @@ package llvm
 		    }
 		}
 		else
-		    out.str(f, "zeroinitializer");
+		    f.str("zeroinitializer");
 	    }
 	    is REFPROC then
-		out.str(f, "null");
+		f.str("null");
 	}
     }
 
@@ -519,8 +520,8 @@ package llvm
 
 	n = t@.align;
 	if n >= Target.membits then
-	{   out.str(f, ", align ");
-	    out.uint(f, n / Target.membits);
+	{   f.str(", align ");
+	    f.uint(n / Target.membits);
 	}
     }
 
@@ -535,12 +536,12 @@ package llvm
 	    {   Print("\t%I = alloca %B", node);
 		if node@.child[0] != 0 then     // initialized local
 		{   if node@.type@.kind <= REF then // scalar
-		    {   out.nl(f);
-			out.chr(f, '\t');   // FIXME: refactor with Store
-			out.str(f, "store ");
-			NodeType(node@.child[0]); out.chr(f, ' ');
-			NodeSrc(node@.child[0]);  out.str(f, ", ");
-			NodeType(node); out.chr(f, ' ');
+		    {   f.nl();
+			f.chr('\t');   // FIXME: refactor with Store
+			f.str("store ");
+			NodeType(node@.child[0]); f.chr(' ');
+			NodeSrc(node@.child[0]);  f.str(", ");
+			NodeType(node); f.chr(' ');
 			NodeDst(node);
 		    }
 		    else lex.ErrorS(NOTIMPL, "initialized local composites");
@@ -558,7 +559,7 @@ package llvm
 	    }
 	    is EXTERN then
 		Print("%I = external global %B", node);
-	    out.nl(f);
+	    f.nl();
 	    if feature.gflag then llvmdb.DefVar(s);
 	}
     }
@@ -578,9 +579,9 @@ package llvm
 
 	if node@.op == BYREF && node@.child[0].op == SCON then
 	{
-//out.str(2, "ConstScan: BYREF SCON\n");
+//f.str("ConstScan: BYREF SCON\n");
 	    DclString(node@.child[0]);
-	    out.str(f, ";\n");
+	    f.str(";\n");
 	}
 	else
 	{   i = 0;
@@ -604,7 +605,7 @@ package llvm
 	    Constant(node@.child[0], node@.type);
 	    Alignment(s@.type);
 	}
-	out.nl(f);
+	f.nl();
     }
 
     proc DclAggregate(node: Ast)
@@ -647,39 +648,39 @@ package llvm
 
     proc PLabel(n: seqnoT)
     {
-	out.str(f, "L.");
-	out.uint(f, n);
+	f.str("L.");
+	f.uint(n);
     }
 
     proc Label(n: seqnoT)
     {
 	PLabel(n);
-	out.str(f, ":\n");
+	f.str(":\n");
 	labthis = n;
     }
 
     proc RefLabel(n: seqnoT)
     {
-	out.str(f, "label %");
+	f.str("label %");
 	PLabel(n);
     }
 	
     proc Branch(n: seqnoT)
     {
-	out.str(f, "\tbr ");
+	f.str("\tbr ");
 	RefLabel(n);
-	out.nl(f);
+	f.nl();
     }
 
     proc BranchConditional(node: Ast, ntrue: seqnoT, nfalse: seqnoT)
     {
-	out.str(f, "\tbr i1 ");
+	f.str("\tbr i1 ");
 	NodeSrc(node);
-	out.str(f, ", ");
+	f.str(", ");
 	RefLabel(ntrue);
-	out.str(f, ", ");
+	f.str(", ");
 	RefLabel(nfalse);
-	out.nl(f);
+	f.nl();
     }
 
     proc If(node: Ast): boolean
@@ -720,7 +721,7 @@ package llvm
 	labend = Lseqno;  Lseqno += 1;
 	Print("\tswitch %T %N, ", node@.child[0]);
 	RefLabel(labelse);
-	out.str(f, " [\n");
+	f.str(" [\n");
 	// first pass through all the "is" nodes to generate labels
 	i = 1;
 	while i < node@.num -1 do
@@ -742,10 +743,10 @@ package llvm
 		    }
 		    while lo <= hi do
 		    {   Print("\t\t%0T ", node);
-			out.uint32(f, _uint32(lo));
-			out.str(f, ", ");
+			f.uint32(_uint32(lo));
+			f.str(", ");
 			RefLabel(isnode@.seqno);
-			out.nl(f);
+			f.nl();
 			lo += 1;
 		    }
 		    j += 1;
@@ -753,7 +754,7 @@ package llvm
 	    }
 	    i += 1;
 	}
-	out.str(f, "\t]\n");
+	f.str("\t]\n");
 	// second pass through all the "is" nodes to generate the code
 	i = 1;
 	while i < node@.num -1 do
@@ -824,14 +825,14 @@ package llvm
 	Label(labend);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = phi i1 [ ", node);
-	if isand then out.str(f, "false"); else out.str(f, "true");
-	out.str(f, ", %");
+	if isand then f.str("false"); else f.str("true");
+	f.str(", %");
 	PLabel(lablhs);
-	out.str(f, " ], [ ");
+	f.str(" ], [ ");
 	PTempName(node@.child[1]@.seqno);
-	out.str(f, ", %");
+	f.str(", %");
 	PLabel(labrhs);
-	out.str(f, " ]\n");
+	f.str(" ]\n");
 	return false;
     }
 
@@ -889,17 +890,17 @@ package llvm
 	if node@.child[2]@.op == CONST then
 	    length = _uint(node@.child[2]@.valu);
 	align = _uint(node@.child[3]@.valu);
-out.str(2, "Array compare experimental: length=");
+err.str("Array compare experimental: length=");
 	if length == 0 then
-out.str(2, "variable");
+err.str("variable");
 	else
-out.uint(2, length);
+err.uint(length);
 	// find the largest target chunk we can use
 	i = GetChunkSize(length, align);
 	size = Target.isizes[i].size/Target.membits;
 	align = Target.isizes[i].align/Target.membits;
-out.str(2, " size="); out.uint(2, size);
-out.str(2, " align="); out.uint(2, align);
+err.str(" size="); err.uint(size);
+err.str(" align="); err.uint(align);
 	if length != 0 && length <= size then	// can do with one load
 	{
 	    node@.child[0] = expr.Cast(node@.child[0], puinttype[i]);
@@ -917,7 +918,7 @@ out.str(2, " align="); out.uint(2, align);
 		    mask = ~((1 << ((size-length)*8)) -1);
 		else	// assume LE
 		    mask = (1 << (length*8)) - 1;
-out.str(2, " mask=0x"); out.hex64(2, mask);
+err.str(" mask=0x"); err.hex64(mask);
 		node@.child[0] = ast.New2(XOR, puinttype[i]@.base,
 					  node@.child[0], node.child[1]);
 		node@.child[0] = ast.New2(AND, puinttype[i]@.base,
@@ -934,7 +935,7 @@ out.str(2, " mask=0x"); out.hex64(2, mask);
 		Print("\t%N = icmp eq %0T %0N, %1N\n", node);
 	    else
 		Print("\t%N = icmp ne %0T %0N, %1N\n", node);
-out.nl(2);
+err.nl();
 	    return true;
 	}
 	else
@@ -960,7 +961,7 @@ out.nl(2);
 	    Print("(%0T %0N, %1T %1N, %2T %2N)\n", node);
 	    UseIntrinsic[MEMCMP1+i] = true;
 	}
-out.nl(2);
+err.nl();
 	return false;
     }
 
@@ -984,7 +985,7 @@ out.nl(2);
 	var n: StringRange;
     
 	if node == 0 then
-	    out.str(f, "\"\"");
+	    f.str("\"\"");
 	else
 	{   p = pstring(node@.symb);
 	    n = StringRange(zstr.len(p, lex.StringMax));
@@ -1007,8 +1008,8 @@ out.nl(2);
 	    tl = type.TypeList(node@.child[0]@.type);	// hack
 	PRetvType(tl, false);
 	Print(" %0N, ", node);
-	out.uint32(f, _uint32(node@.valu));
-	out.nl(f);
+	f.uint32(_uint32(node@.valu));
+	f.nl();
     }
 
     // FIXME: re-factor to merge stuff with Call()
@@ -1020,18 +1021,18 @@ out.nl(2);
 	{   GenSub(node@.child[i]);
 	    i += 1;
 	}
-	out.chr(f, '\t');
+	f.chr('\t');
 	if node@.type != 0 then		// has return value
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
-	out.str(f, "call");
+	f.str("call");
 	PRetvType(type.TypeList(node@.type), false);
-	out.str(f, " asm sideeffect ");
+	f.str(" asm sideeffect ");
 	PStringCon(node@.child[0]);
-	out.str(f, ", ");
+	f.str(", ");
 	PStringCon(node@.child[1]);
-	out.str(f, " (");
+	f.str(" (");
 	i = 2;
 	if node@.num > i then
 	{   loop
@@ -1039,10 +1040,10 @@ out.nl(2);
 		Print("%T %N", node@.child[i]);
 		i += 1;
 	      exit i >= node@.num;
-		out.str(f, ", ");
+		f.str(", ");
 	    }
 	}
-	out.str(f, ")\n");
+	f.str(")\n");
     }
 
     // Declare parameter types and return value types
@@ -1070,13 +1071,13 @@ out.nl(2);
 	{   GenSub(node@.child[i]);
 	    i += 1;
 	}
-	out.chr(f, '\t');
+	f.chr('\t');
 	if node@.type != 0 then		// has return value
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
-	if feature.tcall then out.str(f, "tail ");
-	out.str(f, "call");
+	if feature.tcall then f.str("tail ");
+	f.str("call");
 	PRetvType(node@.symb@.retvlist, false);
 	if indirect then
 	{   Print(" %0N(", node);
@@ -1092,10 +1093,10 @@ out.nl(2);
 		Print("%T %N", node@.child[i]);
 		i += 1;
 	      exit i >= node@.num;
-		out.str(f, ", ");
+		f.str(", ");
 	    }
 	}
-	out.str(f, ")\n");
+	f.str(")\n");
 	if node@.symb@.forward then
 	    lex.ErrorI(FORWPROC, node@.symb@.ident);
     }
@@ -1145,7 +1146,7 @@ out.nl(2);
 		if ps@.linkage == EXTERN && !ps@.declared then
 		{   DclParmRetv(ps);
 		    DclProc(node, false);
-		    out.str(f, ";\n");
+		    f.str(";\n");
 		    ps@.declared = true;
 		}
 	    }
@@ -1196,10 +1197,10 @@ out.nl(2);
 	    // Now declare the procedure with its parameters
 	    DclProc(node, true);
 	    if ps@.linkage == INLINE then
-		out.str(f, " alwaysinline");
+		f.str(" alwaysinline");
 	    if feature.size then
-		out.str(f, " optsize");
-	    out.str(f, " nounwind {\n");
+		f.str(" optsize");
+	    f.str(" nounwind {\n");
 	    Pseqno += 1;
 	    Tseqno = 1;
 	    Lseqno = 0;
@@ -1208,75 +1209,75 @@ out.nl(2);
 	    tl = ps@.retvlist;
 	    i = 0;
 	    while tl != 0 do
-	    {   out.chr(f, '\t');
+	    {   f.chr('\t');
 		PRetValName(i);
-		out.str(f, " = alloca ");
+		f.str(" = alloca ");
 		PType(tl@.type);
-		out.nl(f);
+		f.nl();
 		i += 1;
 		tl = tl@.next;
 	    }
 	    // allocate parameters
 	    s = ps@.parmlist;
 	    while s != 0 do
-	    {   out.str(f, "\t%"); out.str(f, s@.ident);
-		out.str(f, " = alloca ");
+	    {   f.str("\t%"); f.str(s@.ident);
+		f.str(" = alloca ");
 		PType(s@.type);
-		out.nl(f);
+		f.nl();
 		s = s@.next;
 	    }
 	    s = ps@.parmlist;
 	    while s != 0 do
 	    {
-		out.str(f, "\tstore ");
+		f.str("\tstore ");
 		PType(s@.type);
-		out.str(f, " %");
-		out.str(f, s@.ident);
-		out.str(f, ".arg, ");
+		f.str(" %");
+		f.str(s@.ident);
+		f.str(".arg, ");
 		PType(s@.type);
-		out.str(f, "* %");
-		out.str(f, s@.ident);
-		out.nl(f);
+		f.str("* %");
+		f.str(s@.ident);
+		f.nl();
 		if feature.gflag then llvmdb.DefVar(s);
 		s = s@.next;
 	    }
 	    if !GenSub(node@.child[0]) then
-	    {   out.str(f, "\tbr label %return");
+	    {   f.str("\tbr label %return");
 		PEndLine(node);
 	    }
-	    out.str(f, "return:\n");
+	    f.str("return:\n");
 	    tl = ps@.retvlist;
 	    if tl != 0 then
 	    {   // load up returned values
 		i = 0;
 		while tl != 0 do
-		{   out.chr(f, '\t');
+		{   f.chr('\t');
 		    PTempName(Tseqno+i);
-		    out.str(f, " = load ");
+		    f.str(" = load ");
 		    PType(tl@.type);
-		    out.str(f, "* ");
+		    f.str("* ");
 		    PRetValName(i);
 //		    PEndLine(node);	//FIXME: wrong line number
-		    out.nl(f);
+		    f.nl();
 		    i += 1;
 		    tl = tl@.next;
 		}
 		tl = ps@.retvlist;
 		i = 0;
-		out.str(f, "\tret ");
+		f.str("\tret ");
 		loop
 		{   PType(tl@.type);
-		    out.chr(f, ' ');
+		    f.chr(' ');
 		    PTempName(Tseqno+i);
 		    i += 1;
 		    tl = tl@.next;
 		  exit tl == 0;
-		    out.str(f, ", ");
+		    f.str(", ");
 		}
 	    }
 	    else
-		out.str(f, "\tret void");
-	    out.str(f, "\n}\n");
+		f.str("\tret void");
+	    f.str("\n}\n");
 	}
     }
 
@@ -1287,7 +1288,7 @@ out.nl(2);
 	GenSub(node@.child[1]);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = ", node);
-	out.str(f, op);
+	f.str(op);
 	Print(" %T %0N, %1N", node);
 	PEndLine(node);
 	return false;
@@ -1300,7 +1301,7 @@ out.nl(2);
 	GenSub(node@.child[1]);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = ", node);
-	out.str(f, op);
+	f.str(op);
 	Print(" %0T %0N, %1N", node);
 	PEndLine(node);
 	return true;
@@ -1311,7 +1312,7 @@ out.nl(2);
 	GenSub(node@.child[0]);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = ", node);
-	out.str(f, op);
+	f.str(op);
 	Print(" %0T %0N to %T", node);
 	PEndLine(node);
     }
@@ -1334,7 +1335,7 @@ out.nl(2);
 	    s = s@.next;
 	    i += 1;
 	}
-//out.str(2, "BitfieldOffset="); out.uint(2, foffs); out.nl(2);
+//err.str("BitfieldOffset="); err.uint(WSfoffs); err.nl();
 	return foffs;
     }
 
@@ -1400,7 +1401,7 @@ out.nl(2);
 	if node@.op == SLICE then
 	{   if node@.child[2]@.op != CONST then
 	    {
-out.str(2, "BitfieldMask of variable SLICE\n");
+err.str("BitfieldMask of variable SLICE\n");
 	    }
 	    else
 	    {   size = node@.type@.base@.size;
@@ -1437,7 +1438,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	    tree = ast.New2(AND, t, tree, mask);
 	    // possibly narrow the size
 	    tree = expr.Extend(tree, load@.size, true);
-//out.str(2, "BFLoad tree=\n"); ast.Dump(tree); out.nl(2);
+//err.str("BFLoad tree=\n"); ast.Dump(tree); err.nl();
 	    GenSub(tree);
 	    load@.child[0] = tree;      // load@.op == LOAD, we're done with it
 	    load@.seqno = tree@.seqno;  // copy up seqno of node below
@@ -1447,7 +1448,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	    load@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = ", load);
 	    if offs@.type@.input then
-		out.str(f, "volatile ");
+		f.str("volatile ");
 	    Print("load %T* %0N", load);
 	    PEndLine(load);
 	}
@@ -1495,7 +1496,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 		    rhs = ast.New1(REVB, rhs@.type, rhs);
 		store@.child[i] = lhs;
 		store@.child[n+i] = rhs;
-//out.str(2, "BFStore tree=\n"); ast.Dump(store); out.nl(2);
+//err.str("BFStore tree=\n"); ast.Dump(store); err.nl();
 	    }
 	    GenSub(rhs);	// rhs first
 	    i += 1;
@@ -1506,13 +1507,13 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	    rhs = store@.child[n+i];
 	    if lhs != 0 then
 	    {   GenSub(lhs);	// then lhs
-		out.chr(f, '\t');
+		f.chr('\t');
 		if store@.child[i]@.type@.output then
-		   out.str(f, "volatile ");
-		out.str(f, "store ");
-		NodeType(rhs); out.chr(f, ' ');
-		NodeSrc(rhs);  out.str(f, ", ");
-		NodeType(lhs); out.chr(f, ' ');
+		   f.str("volatile ");
+		f.str("store ");
+		NodeType(rhs); f.chr(' ');
+		NodeSrc(rhs);  f.str(", ");
+		NodeType(lhs); f.chr(' ');
 		NodeDst(lhs);
 		PEndLine(store);
 	    }
@@ -1536,7 +1537,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	    }
 	    node@.seqno = node@.child[0]@.seqno;
 	}
-	out.str(f, "\tbr label %return");
+	f.str("\tbr label %return");
 	PEndLine(node);
 	return true;	// always terminates a block
     }
@@ -1557,8 +1558,8 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	term = false;
 	if node == 0 then return term;
 	if node@.seqno != 0 then return term;
-//{   out.str(2, "node "); out.uint(2, node@.seqno);
-//    out.str(2, " visited before, ignoring.\n");
+//{   err.str("node "); err.uint(Snode@.seqno);
+//    err.str(" visited before, ignoring.\n");
 //    return term;
 //}
 	if node@.op
@@ -1602,8 +1603,8 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = getelementptr %0T %0N, %W 0, i32 ", node);
-	    out.uint32(f, _uint32(node@.valu));
-	    out.nl(f);
+	    f.uint32(_uint32(node@.valu));
+	    f.nl();
 	}
 	is INDEX then
 	{   GenSub(node@.child[0]);
@@ -1624,7 +1625,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    nextseqno = Tseqno; Tseqno += 1;
 	    Print("\t%N = getelementptr %0T %0N, %W 0, %1T %1N\n", node);
-	    out.chr(f, '\t'); PTempName(nextseqno);
+	    f.chr('\t'); PTempName(nextseqno);
 	    Print(" = bitcast %A* %N to %T\n", node);
 	    node@.seqno = nextseqno;
 	}	
@@ -1713,7 +1714,7 @@ out.str(2, "BitfieldMask of variable SLICE\n");
     proc Gen(fd: file, tree: Ast)
     {   var i: 0..target.IntSizesMax;
 
-	f = fd;
+	f = bout.buffer(fd, 4096);;
 	// These pointer types might be useful to other packages.
 	pbytetype = type.New(REF);
 	pbytetype.base = type.bytetype;
@@ -1726,26 +1727,27 @@ out.str(2, "BitfieldMask of variable SLICE\n");
 	puinttype[3] = type.New(REF);
 	puinttype[3].base = type.uinttypes[3];
 
-	out.str(f, "target datalayout = \"");
-	if Target.order == BE then out.str(f, "E"); else out.str(f, "e");
-	out.str(f, "-p:");  out.uint(f, Target.ptr.size);
-	out.str(f, ":");    out.uint(f, Target.ptr.align);
-	out.str(f, ":");    out.uint(f, Target.ptr.align);
-	out.str(f, "-i1:"); out.uint(f, Target.isizes[0].align);
-	out.str(f, ":");   out.uint(f, Target.isizes[0].align);
+	f.str("target datalayout = \"");
+	if Target.order == BE then f.str("E"); else f.str("e");
+	f.str("-p:");  f.uint(Target.ptr.size);
+	f.str(":");    f.uint(Target.ptr.align);
+	f.str(":");    f.uint(Target.ptr.align);
+	f.str("-i1:"); f.uint(Target.isizes[0].align);
+	f.str(":");    f.uint(Target.isizes[0].align);
 	i = 0;
 	while i < Target.nisize do
-	{   out.str(f, "-i"); out.uint(f, Target.isizes[i].size);
-	    out.str(f, ":");  out.uint(f, Target.isizes[i].align);
-	    out.str(f, ":");  out.uint(f, Target.isizes[i].align);
+	{   f.str("-i"); f.uint(Target.isizes[i].size);
+	    f.str(":");  f.uint(Target.isizes[i].align);
+	    f.str(":");  f.uint(Target.isizes[i].align);
 	    i += 1;
 	}
-	out.str(f, "\"\ntarget triple = \"");
-	out.str(f, Target.triple);
-	out.str(f, "\"\n");
+	f.str("\"\ntarget triple = \"");
+	f.str(Target.triple);
+	f.str("\"\n");
 	GenSub(tree);
 	Declare();
 	if feature.gflag then llvmdb.ProgFinish();
+	f.flush();
     }
 }
 // vim: ts=8 sw=4 noet nowrap

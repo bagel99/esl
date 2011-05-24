@@ -1,5 +1,5 @@
 // Copyright (c) 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvmdb.esl 559 2011-04-18 16:28:42Z bgl $
+// $Id: llvmdb.esl 566 2011-05-23 20:25:24Z bgl $
 
 package llvmdb
 {
@@ -72,54 +72,54 @@ package llvmdb
 
     proc PSeq(n: seqnoT)
     {
-	out.chr(f, meta);
-	out.uint(f, n);
+	f.chr(meta);
+	f.uint(n);
     }
     proc PMetaSeq(n: seqnoT)
     {
 	PSeq(n);
-	out.str(f, " = metadata !{ ");
+	f.str(" = metadata !{ ");
     }
 
     proc PTerminator(term: TermT)
     {
 	if term
-	is BRACE then out.str(f, " }\n");
-	is COMMA then out.str(f, ", ");
-	is PAREN then out.str(f, " )");
+	is BRACE then f.str(" }\n");
+	is COMMA then f.str(", ");
+	is PAREN then f.str(" )");
     }
 
     proc PNull(term: TermT)
     {
-	out.str(f, "null");
+	f.str("null");
 	PTerminator(term);
     }
 
     proc PMetaRef(n: seqnoT, term: TermT)
     {
-	out.str(f, "metadata !");
-	out.uint(f, n);
+	f.str("metadata !");
+	f.uint(n);
 	PTerminator(term);
     }
 
     proc PBoolean(b: boolean, term: TermT)
     {
-	out.str(f, "i1 ");
-	if b then out.str(f, "true"); else out.str(f, "false");
+	f.str("i1 ");
+	if b then f.str("true"); else f.str("false");
 	PTerminator(term);
     }
 
     proc P32(v: _uint32, term: TermT)
     {
-	out.str(f, "i32 ");
-	out.uint32(f, v);
+	f.str("i32 ");
+	f.uint32(v);
 	PTerminator(term);
     }
 
     proc P64(v: _uint64, term: TermT)
     {
-	out.str(f, "i64 ");
-	out.uint64(f, v);
+	f.str("i64 ");
+	f.uint64(v);
 	PTerminator(term);
     }
 
@@ -131,21 +131,21 @@ package llvmdb
 
     proc PString(s: @[]_byte, term: TermT)
     {
-	out.str(f, "metadata !\"");
-	if s != 0 then out.str(f, s);
-	out.chr(f, '"');
+	f.str("metadata !\"");
+	if s != 0 then f.str(s);
+	f.chr('"');
 	PTerminator(term);
     }
 
     proc PString2(s1: @[]_byte, s2: @[]_byte, delim: _byte, term: TermT)
     {
-	out.str(f, "metadata !\"");
+	f.str("metadata !\"");
 	if s1 != 0 then
-	{   out.str(f, s1);
-	    out.chr(f, delim);
+	{   f.str(s1);
+	    f.chr(delim);
 	}
-	if s2 != 0 then out.str(f, s2);
-	out.chr(f, '"');
+	if s2 != 0 then f.str(s2);
+	f.chr('"');
 	PTerminator(term);
     }
 
@@ -616,7 +616,7 @@ package llvmdb
 		lntail@.next = ln;
 	    lntail = ln;
 	}
-	out.str(f, ", !dbg ");
+	f.str(", !dbg ");
 	PSeq(tag);	
     }
 
@@ -627,18 +627,18 @@ package llvmdb
 	s@.dbtag = seqno;
 	if s@.linkage == LOCAL then
 	{
-	    out.str(f, "\tcall void @llvm.dbg.declare(metadata !{");
+	    f.str("\tcall void @llvm.dbg.declare(metadata !{");
 	    llvm.PType(s@.type);
-	    out.str(f, "* ");
+	    f.str("* ");
 	    llvm.PName(s);
-	    out.str(f, "}, ");
-	    out.str(f, "metadata !");
-	    out.uint(f, seqno);
-	    out.chr(f, ')');
+	    f.str("}, ");
+	    f.str("metadata !");
+	    f.uint(seqno);
+	    f.chr(')');
 /*
 	    PLine(s@.lineno);
 */
-	    out.nl(f);
+	    f.nl();
 	    if !s@.isparam then
 	    {   s@.next = 0;
 		if lvtail == 0 then
@@ -663,7 +663,7 @@ package llvmdb
 	    PBoolean(s@.linkage == LOCAL, COMMA);	// is local
 	    PBoolean(s@.linkage != EXTERN, COMMA);	// is a definition
 	    llvm.PType(s@.type);
-	    out.str(f, "* ");
+	    f.str("* ");
 	    llvm.PName(s);
 	    PTerminator(BRACE);
 	    // We are re-using the next field in Symb,
@@ -725,14 +725,14 @@ package llvmdb
 	P32(256, COMMA);				// FIXME: what is this
 	PBoolean(false, COMMA);				// FIXME: what is this
 	llvm.PRetvType(ps@.retvlist, false);
-	out.str(f, " (");
+	f.str(" (");
 	s = ps@.parmlist;
 	while s != 0 do
 	{   llvm.PType(s@.type);
 	    s = s@.next;
-	    if s != 0 then out.str(f, ", ");
+	    if s != 0 then f.str(", ");
 	}
-	out.str(f, ")* ");
+	f.str(")* ");
 	llvm.PName(ps);
 	PTerminator(BRACE);	
 	ps@.dbtag = subr;
@@ -795,27 +795,27 @@ package llvmdb
 	s = gvhead;
 	if s != 0 then
 	{
-	    out.str(f, "!llvm.dbg.gv = !{ ");
+	    f.str("!llvm.dbg.gv = !{ ");
 	    while s != 0 do
 	    {   tag = s@.dbtag;
 		s = s@.next;
 		PSeq(tag);
-		if s == 0 then out.str(f, " }\n"); else out.str(f, ", ");
+		if s == 0 then f.str(" }\n"); else f.str(", ");
 	    }
 	}
 	// output list of subprograms
 	s = sphead;
 	if s != 0 then
 	{
-	    out.str(f, "!llvm.dbg.sp = !{ ");
+	    f.str("!llvm.dbg.sp = !{ ");
 	    while s != 0 do
 	    {   tag = s@.dbtag;
 		s = s@.next;
 		PSeq(tag);
-		if s == 0 then out.str(f, " }\n"); else out.str(f, ", ");
+		if s == 0 then f.str(" }\n"); else f.str(", ");
 	    }
 	}
-	out.str(f,
+	f.str(
 	 "declare void @llvm.dbg.declare(metadata, metadata) nounwind readnone\n");
     }
 }

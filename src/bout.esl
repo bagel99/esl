@@ -1,0 +1,275 @@
+// Copyright (c) 2011, Brian G. Lucas.  See LICENSE file.
+// $Id: bout.esl 568 2011-05-23 21:28:40Z bgl $
+
+// Buffered Output
+// Assumes target wordsize is 32-bits or more.
+
+import sys;
+import zstr;
+
+package bout
+{
+    const MinBufSize = 32;
+    type OutFD: sys.fildes;
+    type BufIO:
+    {   Buf:  @_memory;
+	Len:  _uint16;
+	Rem:  _uint16;
+	FD:   OutFD;
+    };
+    type pBufIO: @BufIO;
+
+    proc buffer(fd: sys.fildes, sz: _uint): @BufIO
+    {   var bo: pBufIO;
+
+	sz = _max(sz, MinBufSize);
+	bo = pBufIO(sys.malloc(BufIO?size));
+	if bo != 0 then
+	{   bo.Buf = sys.malloc(sz);
+	    if bo.Buf != 0 then
+	    {   bo.Len = sz;
+		bo.Rem = sz;
+		bo.FD = fd;
+		return bo;
+	    }
+	    // else free bo
+	}
+	return 0;
+    }
+
+    proc (bo: @BufIO) flush()
+    {
+	sys.write(bo.FD, bo.Buf, bo.Len - bo.Rem);
+	bo.Rem = bo.Len;
+    }
+
+    // Returns pointer to buffer offset with enough space
+    proc (bo: @BufIO) need(n: _uint): @_memory
+    {   var k: _uint;
+
+	if n > bo.Rem then
+	    bo.flush();
+	if n > bo.Len then
+	    return 0;
+	k = bo.Rem;
+	bo.Rem = k - n;
+	return bo.Buf[bo.Len-k:];
+    }
+
+    proc (bo: @BufIO) nl()
+    {	var bp: @_memory;
+
+	bp = bo.need(1);
+	if bp != 0 then
+	    bp[0] = '\n';
+    }
+
+    proc (bo: @BufIO) chr(c: _byte)
+    {	var bp: @_memory;
+
+	bp = bo.need(1);
+	if bp != 0 then
+	    bp[0] = c;
+    }
+
+    proc (bo: @BufIO) str(s:@[]_byte)
+    {   var n: _uint;
+	var bp: @_memory;
+
+	n = zstr.len(s, 0xFFFF);
+	bp = bo.need(n);
+	if bp == 0 then
+	    sys.write(bo.FD, s, n);
+	else
+	    bp[0:n] = s[0:n];
+    }
+
+    const hex: [16]_byte =
+	{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+    proc (bo: @BufIO) hex8(in: _uint8)
+    {	var bp: @_memory;
+
+	bp = bo.need(2);
+	if bp != 0 then
+	{   bp[0] = hex[(in>>4)&0xF];
+	    bp[1] = hex[in&0xF];
+	}
+    }
+
+    proc (bo: @BufIO) hex16(in:_uint16)
+    {	var bp: @_memory;
+
+	bp = bo.need(4);
+	if bp != 0 then
+	{   bp[0] = hex[(in>>12)&0xF];
+	    bp[1] = hex[(in>>8)&0xF];
+	    bp[2] = hex[(in>>4)&0xF];
+	    bp[3] = hex[in&0xF];
+	}
+    }
+
+    proc (bo: @BufIO) hex32(in:_uint32)
+    {	var bp: @_memory;
+	var i: _uint;
+
+	bp = bo.need(8);
+	if bp != 0 then
+	{   i = 7;
+	    loop
+	    {   bp[i] = hex[in&0xF];
+	      exit i == 0;
+		i -= 1;
+		in = in >> 4;
+	    }
+	}
+    }
+
+    proc (bo: @BufIO) hex64(in: _uint64)
+    {	var bp: @_memory;
+	var i: _uint;
+
+	bp = bo.need(16);
+	if bp != 0 then
+	{   i = 15;
+	    loop
+	    {   bp[i] = hex[_uint(in)&0xF];
+	      exit i == 0;
+		i -= 1;
+		in = in >> 4;
+	    }
+	}
+    }  
+
+    proc(bo: @BufIO)  uint64(in: _uint64)
+    {	var bp: @_memory;
+	var i, n: _uint;
+	var buf: [20]_byte;
+
+	i = 20;
+	if in == 0 then
+	{   i -= 1;
+	    buf[i] = '0';
+	}
+	else
+	{   while in != 0 do
+	    {   i -= 1;
+		buf[i] = _byte((in % 10) + '0');
+		in = in / 10;
+	    }
+	}
+	n = 20-i;
+	bp = bo.need(n);
+	if bp != 0 then
+	    bp[0:n] = buf[i:n];
+    }
+
+    proc(bo: @BufIO)  uint32(in: _uint32)
+    {	var bp: @_memory;
+	var i, n: _uint;
+
+	if _uint?size == _uint64?size then  // extend to native
+	    bo.uint64(_uint64(in));
+	else
+	{   var buf: [10]_byte;
+	    i = 10;
+	    if in == 0 then
+	    {   i -= 1;
+		buf[i] = '0';
+	    }
+	    else
+	    {   while in != 0 do
+		{   i -= 1;
+		    buf[i] = _byte((in % 10) + '0');
+		    in = in / 10;
+		}
+	    }
+	    n = 10-i;
+	    bp = bo.need(n);
+	    if bp != 0 then
+		bp[0:n] = buf[i:n];
+ 	}
+    }
+
+    proc (bo: @BufIO) uint16(in: _uint16)
+    {
+	if _uint?size == _uint64?size then  // extend to native
+	    bo.uint64(_uint64(in));
+	else
+	    bo.uint32(_uint32(in));
+    }
+
+    proc (bo: @BufIO) uint8(in: _uint8)
+    {
+	if _uint?size == _uint64?size then  // extend to native
+	    bo.uint64(_uint64(in));
+	else
+	    bo.uint32(_uint32(in));
+   }
+
+    proc (bo: @BufIO) uint(in: _uint):: inline
+    {
+	if _uint?size == _uint64?size then
+	    bo.uint64(in);
+	else
+	    bo.uint32(_uint32(in));
+    }
+
+    proc (bo: @BufIO) int64(in: _int64)
+    {	var bp: @_memory;
+	var ui: _uint64;
+
+	if in < 0 then
+	{   bp = bo.need(1);
+	    bp[0] = '-';
+	    ui = -in;
+	}
+	else
+	    ui = in;
+	bo.uint64(ui);
+    }	
+
+    proc (bo: @BufIO) int32(in: _int32)
+    {	var bp: @_memory;
+	var ui: _uint32;
+
+	if _int?size == _int64?size then  // extend to native
+	    bo.int64(_int64(in));
+	else
+	{   if in < 0 then
+	    {   bp = bo.need(1);
+		bp[0] = '-';
+		ui = -in;
+	    }
+	    else
+		ui = in;
+	    bo.uint32(ui);
+	}
+    }	
+
+    proc (bo: @BufIO) int16(in: _int16)
+    {
+	if _int?size == _int64?size then  // extend to native
+	    bo.int64(_int64(in));
+	else
+	    bo.int32(_int32(in));
+    }
+
+    proc (bo: @BufIO) int8(in: _int8)
+    {
+	if _int?size == _int64?size then  // extend to native
+	    bo.int64(_int64(in));
+	else
+	    bo.int32(_int32(in));
+    }
+
+    proc (bo: @BufIO) int(in: _int):: inline
+    {
+	if _int?size == _int64?size then
+	    bo.int64(in);
+	else
+	    bo.int32(_int32(in));
+    }
+}
+// vim: ts=8 sw=4 noet nowrap
+

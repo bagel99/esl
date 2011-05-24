@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 561 2011-05-02 20:06:55Z bgl $
+// $Id: stmt.esl 568 2011-05-23 21:28:40Z bgl $
 
 package stmt
 {
@@ -26,9 +26,9 @@ package stmt
 
     proc WhenSkip(tok: TokenT)
     {
-//out.str(2, "Beg skip line="); out.uid(2, lex.Lineno());
-//out.str(2, " tok="); out.str(2, lex.keywords[tok]);
-//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+//err.str("Beg skip line="); err.uid(lex.Lineno());
+//err.str(" tok="); err.str(lex.keywords[tok]);
+//err.chr(':'); err.str(lex.Ident); err.nl();
 	if tok == GBEG then
 	{   lex.Skip(skipgroup);
 	    lex.Expect(GEND);
@@ -37,18 +37,18 @@ package stmt
 	{   lex.Skip(skipstmt);
 	    lex.Expect(SEMI);
 	}
-//out.str(2, "End skip line="); out.uid(2, lex.Lineno());
-//out.str(2, " tok="); out.str(2, lex.keywords[Token]);
-//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+//err.str("End skip line="); err.uid(lex.Lineno());
+//err.str(" tok="); err.str(lex.keywords[Token]);
+//err.chr(':'); err.str(lex.Ident); err.nl();
     }
 
     proc WhenDo(nest: NestType): Ast
     {   var tree, stree: Ast;
 	var tok: TokenT;
 
-//out.str(2, "Beg do line="); out.uid(2, lex.Lineno());
-//out.str(2, " tok="); out.str(2, lex.keywords[Token]);
-//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+//err.str("Beg do line="); err.uid(lex.Lineno());
+//err.str(" tok="); err.str(lex.keywords[Token]);
+//err.chr(':'); err.str(lex.Ident); err.nl();
 	tree = 0;
 	if Token == GBEG then
 	{   tok = Next();
@@ -61,9 +61,9 @@ package stmt
 		if stree != 0 then
 		    tree = ast.Child(tree, stree);
 		tok = Token;
-//out.str(2, "\tline="); out.uid(2, lex.Lineno());
-//out.str(2, " tok="); out.str(2, lex.keywords[Token]);
-//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+//err.str("\tline="); err.uid(lex.Lineno());
+//err.str(" tok="); err.str(lex.keywords[Token]);
+//err.chr(':'); err.str(lex.Ident); err.nl();
 	    }
 	    lex.Expect(GEND);
 	}
@@ -73,9 +73,9 @@ package stmt
 	    is PACKAGE then    tree = PkgStmt();
 	    is PROCEDURE then  tree = Statement();
 	}
-//out.str(2, "End do line="); out.uid(2, lex.Lineno());
-//out.str(2, " tok="); out.str(2, lex.keywords[Token]);
-//out.chr(2, ':'); out.str(2, lex.Ident); out.nl(2);
+//err.str("End do line="); err.uid(lex.Lineno());
+//err.str(" tok="); err.str(lex.keywords[Token]);
+//err.chr(':'); err.str(lex.Ident); err.nl();
 	return tree;
     }
 
@@ -87,14 +87,14 @@ package stmt
 
 	tree = 0;
 	ctree = expr.Bool(0);
-//out.str(2, "When:\n"); ast.Dump(ctree);
+//err.str("When:\n"); ast.Dump(ctree);
 	if ctree@.op != CONST then
 	{
 	    lex.Error(EXPCONST);
 	    return tree;
 	}
 	val = ctree@.valu;
-//out.str(2, "WhenStmt1: val="); out.uid(2, _word(val)); out.nl(2);
+//err.str("WhenStmt1: val="); err.uid(_word(val)); err.nl();
 	tok = lex.Keyword(thenlist);
 	if tok == KTHEN then
 	{   tok = Next();
@@ -103,7 +103,7 @@ package stmt
 	    else
 		tree = WhenDo(nest);
 	    tok = lex.Keyword(elselist);
-//out.str(2, "WhenStmt2: tok="); out.str(2, lex.keywords[tok]); out.nl(2);
+//err.str("WhenStmt2: tok="); err.str(lex.keywords[tok]); err.nl();
 	    if tok == KELSE then
 	    {   tok = Next();
 		if val == 0 then
@@ -542,14 +542,14 @@ package stmt
 	tl = lhs@.type;		// target type
 	tr = rhs@.type;
 /*
-out.str(2, "TL kind="); out.str(2, type.KindName[tl@.kind]); out.nl(2);
-type.DumpT(tl, true); out.nl(2);
+err.str("TL kind="); err.str(type.KindName[tl@.kind]); err.nl();
+type.DumpT(tl, true); err.nl();
 if tl@.base != 0 then
-{ out.str(2, "TL.base kind="); out.str(2, type.KindName[tl@.base@.kind]); out.nl(2);
-  type.DumpT(tl@.base, true); out.nl(2);
+{ err.str("TL.base kind="); err.str(type.KindName[tl@.base@.kind]); err.nl();
+  type.DumpT(tl@.base, true); err.nl();
 }
-out.str(2, "TR kind="); out.str(2, type.KindName[tr@.kind]); out.nl(2);
-type.DumpT(tr, true); out.nl(2);
+err.str("TR kind="); err.str(type.KindName[tr@.kind]); err.nl();
+type.DumpT(tr, true); err.nl();
 ast.Dump(rhs);
 */
 	// LHS is not a COMPOSITE (RECORD or ARRAY) -- handled elsewhere
@@ -1014,7 +1014,7 @@ ast.Dump(rhs);
 	    {   stree = Statement();
 		if stree != 0 then
 		   tree = ast.Child(tree, stree);
-//out.str(2, "Stmt:\n");
+//err.str("Stmt:\n");
 //ast.Dump(tree);
 		tok = Token;
 	    }

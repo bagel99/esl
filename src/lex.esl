@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 560 2011-05-02 19:39:58Z bgl $
+// $Id: lex.esl 568 2011-05-23 21:28:40Z bgl $
 
 package lex
 {
@@ -355,25 +355,25 @@ package lex
     proc ErrorSub(error: Errors)
     {
 	if f@.filepath != 0 then
-	{   out.str(2, f@.filepath@.pathname);
-	    out.chr(2, '/');
+	{   err.str(f@.filepath@.pathname);
+	    err.chr('/');
 	}
-	out.str(2, f@.filename);
-	out.chr(2, ':');
-	out.uint(2, Lineno());
-	out.str(2, ": ");
+	err.str(f@.filename);
+	err.chr(':');
+	err.uint(Lineno());
+	err.str(": ");
 	if error >= FirstError then
 	{   if error >= InternalError then
-		out.str(2, "Internal ");
-	    out.str(2, "Error: ");
+		err.str("Internal ");
+	    err.str("Error: ");
 	    ErrorCount += 1;
 	}
 	else
-	    out.str(2, "Warning: ");
-	out.str(2, ErrMsg[error]);
+	    err.str("Warning: ");
+	err.str(ErrMsg[error]);
 	if ErrorCount >= ErrorMax then
 	{
-	    out.str(2, "Too many errors, quiting.\n");
+	    err.str("Too many errors, quiting.\n");
 	    sys.exit(1);
 	}
     }
@@ -382,33 +382,33 @@ package lex
     proc Error(error: Errors)
     {
 	ErrorSub(error);
-	out.nl(2);
+	err.nl();
     }
 
     // Print error message, parameter is arbitrary string
     proc ErrorS(error: Errors, msg: @[]_byte)
     {
 	ErrorSub(error);
-	out.str(2, msg);
-	out.nl(2);
+	err.str(msg);
+	err.nl();
     }
 
     // Print error message, parameter is identifer
     proc ErrorI(error: Errors, ident: @Identifier)
     {
 	ErrorSub(error);
-	out.str(2, ident);
-	out.nl(2);
+	err.str(ident);
+	err.nl();
     }
 
     // Print error message, parameter is token
     proc ErrorT(error: Errors, tok: TokenT)
     {
 	ErrorSub(error);
-	out.chr(2, '\'');
-	out.str(2, keywords[tok]);
-	out.chr(2, '\'');
-	out.nl(2);
+	err.chr('\'');
+	err.str(keywords[tok]);
+	err.chr('\'');
+	err.nl();
     }
 
     proc SearchPathAdd(newpath: @[]Char, prepend: boolean): Path
@@ -434,14 +434,14 @@ package lex
 	}
 	if debug.files then
 	{   var pp: Path;
-	    out.str(2, "New search path \"");
+	    err.str("New search path \"");
 	    pp = pathhead;
 	    while (pp != 0) do
-	    {   out.str(2, pp@.pathname);
-		out.chr(2, ':');
+	    {   err.str(pp@.pathname);
+		err.chr(':');
 		pp = pp@.next;
 	    }
-	    out.str(2, "\"\n");
+	    err.str("\"\n");
 	}
 	return np;
     }
@@ -507,22 +507,22 @@ package lex
 	    }
 	}
 	if debug.files then
-	{   out.str(2, "Open  file \"");
+	{   err.str("Open  file \"");
 	    if pp != 0 then
-	    {   out.str(2, pp@.pathname);
-		out.chr(2, '/');
+	    {   err.str(pp@.pathname);
+		err.chr('/');
 	    }
-	    out.str(2, pathbuf[i:]);
-	    out.str(2, "\"\n");
+	    err.str(pathbuf[i:]);
+	    err.str("\"\n");
 	}
 	if feature.mflag then
 	{
-	    out.str(1, " \\\n ");
+	    msg.str(" \\\n ");
 	    if pp != 0 && (pp@.pathname[0] != '.' || pp@.pathname[1] != 0) then
-	    {   out.str(1, pp@.pathname);
-		out.chr(1, '/');
+	    {   msg.str(pp@.pathname);
+		msg.chr('/');
 	    }
-	    out.str(1, pathbuf[i:]);
+	    msg.str(pathbuf[i:]);
 	}
 	if fd < 0 then
 	{
@@ -546,13 +546,13 @@ package lex
 	if f != 0 then
 	{   sys.close(f@.fd);
 	    if debug.files then
-	    {   out.str(2, "Close file \"");
+	    {   err.str("Close file \"");
 		if f@.filepath != 0 then
-		{   out.str(2, f@.filepath@.pathname);
-		    out.chr(2, '/');
+		{   err.str(f@.filepath@.pathname);
+		    err.chr('/');
 		}
-		out.str(2, f@.filename);
-		out.str(2, "\"\n");
+		err.str(f@.filename);
+		err.str("\"\n");
 	    }
 	    of = f;
 	    f = of@.prev;
@@ -894,15 +894,15 @@ package lex
     // FIXME: temporary debugging aid
     proc WhereAmI(msg: @[]_byte)
     {
-	out.str(2, msg);
-	out.str(2, " tok=");
-	out.str(2, keywords[Token]);
+	err.str(msg);
+	err.str(" tok=");
+	err.str(keywords[Token]);
 	if Token == ID then
-	{   out.str(2, " \"");
-	    out.str(2, Ident);
-	    out.chr(2, '"');
+	{   err.str(" \"");
+	    err.str(Ident);
+	    err.chr('"');
 	}
-	out.nl(2);
+	err.nl();
     }
 
     const plist: []TokenT = { PEND, NONE };
@@ -915,15 +915,15 @@ package lex
 
 	tok = Next();
 //WhereAmI("Skip start:");
-//out.str(2, "\tlineno="); out.uid(2, Lineno());
-//out.str(2, "\tlist=");
+//err.str("\tlineno="); err.uid(Lineno());
+//err.str("\tlist=");
 //i = 0; loop
 //{  ttok = toklist[i];
 //  exit ttok == NONE;
-//   out.chr(2, '"'); out.str(2, keywords[ttok]); out.str(2, "\" ");
+//   err.chr('"'); err.str(keywords[ttok]); err.str("\" ");
 //   i += 1;
 //}
-//out.nl(2);
+//err.nl();
 	while tok != ENDF do
 	{   i = 0;
 	    loop
@@ -939,7 +939,7 @@ package lex
 	    tok = Next();
 	}
 //WhereAmI("Skip end:");
-//out.str(2, "\tlineno="); out.uid(2, Lineno()); out.nl(2);
+//err.str("\tlineno="); err.uid(Lineno()); err.nl();
 	return tok;
     }
 
