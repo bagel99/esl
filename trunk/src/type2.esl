@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 563 2011-05-04 18:50:36Z bgl $
+// $Id: type2.esl 568 2011-05-23 21:28:40Z bgl $
 
 package type
 {
@@ -349,20 +349,20 @@ package type
 			{   var falign: BitSize;
 			    falign = f@.type@.align;
 			    mod = offs % falign;
-//out.str(2, "field: "); out.str(2, f@.ident);
-//out.chr(2, '('); out.uid(2, f@.addr);
-//out.str(2, ") offs=");  out.uid(2, offs);
-//out.str(2, " align="); out.uid(2, falign);
+//err.str("field: "); err.str(f@.ident);
+//err.chr('('); err.uid(f@.addr);
+//err.str(") offs=");  err.uid(offs);
+//err.str(" align="); err.uid(falign);
 			    if mod != 0 && t@.packed == NATIVE then
 			    {
 				index = FieldPad(prev,
 						 (falign-mod)/Target.membits,
 						 index);
-//out.str(2, " pad="); out.uid(2, falign - mod);
+//err.str(" pad="); err.uid(falign - mod);
 				offs += falign - mod;
 			    }
-//out.str(2, "==> ("); out.uid(2, index);
-//out.str(2, ") offs="); out.uid(2, offs); out.nl(2);
+//err.str("==> ("); err.uid(index);
+//err.str(") offs="); err.uid(offs); err.nl();
 			    offs += f@.type@.width;
 			    if falign > align then
 				align = falign;
@@ -378,8 +378,8 @@ package type
 		    t@.width = target.isize(offs);
 		else
 		    t@.width = offs;
-//out.str(2, "initial width="); out.uid(2, t@.width); out.nl(2);
-//out.str(2, "initial align="); out.uid(2, align); out.nl(2);
+//err.str("initial width="); err.uid(t@.width); err.nl();
+//err.str("initial align="); err.uid(align); err.nl();
 		if align > 0 then
 		{   mod = t@.width % align;
 		    if mod != 0 then	// pad to alignment
@@ -389,8 +389,8 @@ package type
 		    align = target.ialign(t@.size);
 		if t@.align == 0 then
 		    t@.align = align;
-//out.str(2, "final width="); out.uid(2, t@.width); out.nl(2);
-//out.str(2, "final align="); out.uid(2, t@.align); out.nl(2);
+//err.str("final width="); err.uid(t@.width); err.nl();
+//err.str("final align="); err.uid(t@.align); err.nl();
 	    }
 	    is ARRAY then 
 	    {   if t@.base != 0 then
@@ -766,101 +766,101 @@ package type
 	if t != 0 then
 	{
 	    if t@.name != 0 && (!full /* || t@.dumped */) then
-		out.str(2, t@.name@.ident);
+		err.str(t@.name@.ident);
 	    else
 	    {   if t@.kind
 		is UINT then 
 		{
-		    out.uint64(2, t@.lo); out.str(2, ".."); out.uint64(2, t@.hi);
+		    err.uint64(t@.lo); err.str(".."); err.uint64(t@.hi);
 		}
 		is SINT then 
 		{
-		    out.int64(2, _int64(t@.lo)); out.str(2, "..");
-		    out.int64(2, _int64(t@.hi));
+		    err.int64(_int64(t@.lo)); err.str("..");
+		    err.int64(_int64(t@.hi));
 		}
 		is ENUM then 
-		{   out.chr(2, '(');
+		{   err.chr('(');
 		    s = t@.list;
 		    while s != 0 do
-		    {   out.str(2, s@.ident);
-			out.chr(2, '=');
-			out.uint32(2, _uint32(s@.valu));
+		    {   err.str(s@.ident);
+			err.chr('=');
+			err.uint32(_uint32(s@.valu));
 			s = s@.next;
 		      exit s == 0;
-			out.str(2, ", ");
+			err.str(", ");
 		    }
-		    out.chr(2, ')');
+		    err.chr(')');
 		}
 		is RECORD then 
-		{   out.str(2, "{\n");
+		{   err.str("{\n");
 		    offs = 0;
 		    s = t@.list;
 		    while s != 0 do
-		    {   out.strn(2, blanks, indent+2);
-			out.str(2, s@.ident);
-			out.str(2, " (");
-			out.uint(2, offs);
-			out.str(2, "): ");
+		    {   err.strn(blanks, indent+2);
+			err.str(s@.ident);
+			err.str(" (");
+			err.uint(offs);
+			err.str("): ");
 			Dump2(s@.type, indent+2, full);
 			if t@.packed == BIT then
 			    offs += symb.OffsT(s@.type@.size);
 			else
 			    offs += symb.OffsT(s@.type@.width / Target.membits);
-			out.nl(2);
+			err.nl();
 			s = s@.next;
 		    }
-		    out.chr(2, '}');
+		    err.chr('}');
 		}
 		is ARRAY then 
-		{   out.chr(2, '[');
+		{   err.chr('[');
 		    if t@.flex then
-			out.chr(2, '*');
+			err.chr('*');
 		    else
-			out.uint32(2, _uint32(t@.hi));
-		    out.chr(2, ']');
+			err.uint32(_uint32(t@.hi));
+		    err.chr(']');
 		    Dump2(t@.base, indent, full);
 		}
 		is REF then 
-		{   out.chr(2, '@');
+		{   err.chr('@');
 		    if t@.base != 0 && t@.base@.name != 0 then
-			out.str(2, t@.base@.name@.ident);
+			err.str(t@.base@.name@.ident);
 		    else
 			Dump2(t@.base, indent, full);
 		}
 		is REFPROC then 
-		{   out.str(2, "@_");
+		{   err.str("@_");
 		    symb.DumpFormals(t@.list@.parmlist);
 		}
 		else
-		    out.str(2, "*UNKNOWN*");
-		out.str(2, " size=");
-		out.uint(2, t@.size);
-		out.chr(2, ':');
-		out.uint(2, t@.width);
-		out.chr(2, ':');
-		out.uint(2, t@.align);
-		out.str(2, " attr="); out.str(2, packedstr[t@.packed]);
-		out.chr(2, ':');
+		    err.str("*UNKNOWN*");
+		err.str(" size=");
+		err.uint(t@.size);
+		err.chr(':');
+		err.uint(t@.width);
+		err.chr(':');
+		err.uint(t@.align);
+		err.str(" attr="); err.str(packedstr[t@.packed]);
+		err.chr(':');
 		if t@.memorder != Target.order then
-		    out.str(2, memorderstr[t@.memorder]);
-		out.chr(2, ':');
+		    err.str(memorderstr[t@.memorder]);
+		err.chr(':');
 		if t@.bitorder != Target.order then
-		    out.str(2, bitorderstr[t@.bitorder]);
-		out.chr(2, ':');
+		    err.str(bitorderstr[t@.bitorder]);
+		err.chr(':');
 		if t@.access != RW then
-		    out.str(2, accessstr[t@.access]);
-		out.chr(2, ':');
-		if t@.input then out.chr(2, 'I');
-		if t@.output then out.chr(2, 'O');
+		    err.str(accessstr[t@.access]);
+		err.chr(':');
+		if t@.input then err.chr('I');
+		if t@.output then err.chr('O');
 		t@.dumped = true;
 		if t@.meths != 0 then
 		{   s = t@.meths;
-		    out.str(2, "\n\tmethods:\n\t");
+		    err.str("\n\tmethods:\n\t");
 		    loop
 		    {   symb.DumpS(s);
 			s = s@.methnext;
 		      exit s == 0;
-			out.chr(2, '\t');
+			err.chr('\t');
 		    }
 		}
 	    }

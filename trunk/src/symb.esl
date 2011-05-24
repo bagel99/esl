@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: symb.esl 548 2011-04-05 20:30:16Z bgl $
+// $Id: symb.esl 568 2011-05-23 21:28:40Z bgl $
 
 package symb
 {
@@ -232,15 +232,15 @@ package symb
 		s = symbs[level].frst;
 		while s != 0 do
 		{   if !s@.used && !s@.isparam then
-		    {   out.str(2, "In ");
+		    {   err.str("In ");
 			if curpack != 0 then
-			{   out.str(2, curpack@.ident);
-			    out.chr(2, '.');
+			{   err.str(curpack@.ident);
+			    err.chr('.');
 			}
-			out.str(2, curproc@.ident);
-			out.str(2, " unused: ");
-			out.str(2, s@.ident);
-			out.nl(2);
+			err.str(curproc@.ident);
+			err.str(" unused: ");
+			err.str(s@.ident);
+			err.nl();
 		    }
 		    s = s@.next;
 		}
@@ -329,23 +329,23 @@ package symb
 
     proc DumpST(s: Symb, full: boolean)
     {
-	out.str(2, s@.ident);
-	out.chr(2, ':');
+	err.str(s@.ident);
+	err.chr(':');
 	type.DumpT(s@.type, full);
     }
 
     proc DumpFormals(ss: Symb)
     {
-	out.chr(2, '(');
+	err.chr('(');
 	if ss != 0 then
 	{   loop
 	    {   DumpST(ss, false);
 		ss = ss@.next;
 	      exit ss == 0;
-		out.str(2, ", ");
+		err.str(", ");
 	    }
 	}
-	out.chr(2, ')');
+	err.chr(')');
     }
 
     proc DumpS(s: Symb)
@@ -353,42 +353,42 @@ package symb
 
 	if s@.kind
 	is CONSTANT then 
-	{   out.str(2, "constant "); DumpST(s, false);
-	    out.chr(2, '='); out.hex64(2, s@.valu);
+	{   err.str("constant "); DumpST(s, false);
+	    err.chr('='); err.hex64(s@.valu);
 	}
-	is TYPE then      { out.str(2, "type ");     DumpST(s, true); }
-	is VAR then       { out.str(2, "var ");      DumpST(s, false);
+	is TYPE then      { err.str("type ");     DumpST(s, true); }
+	is VAR then       { err.str("var ");      DumpST(s, false);
 //	    DumpLinkage(s);
 		     }
-	is FIELD then     { out.str(2, "field "); out.str(2, s@.ident);}
+	is FIELD then     { err.str("field "); err.str(s@.ident);}
 	is PROC then 
 	{   if s@.valu == 0 then
-	    {   out.str(2, "proc ");
-		out.str(2, s@.ident);
+	    {   err.str("proc ");
+		err.str(s@.ident);
 		DumpFormals(s@.parmlist);
 		tl = s@.retvlist;
 		if tl != 0 then
-		{   out.chr(2, ':');
+		{   err.chr(':');
 		    loop
 		    {   type.DumpT(tl@.type, false);
 			tl = tl@.next;
 		      exit tl == 0;
-			out.chr(2, ',');
+			err.chr(',');
 		    }
 		}
 	    }
 	    else
-	    {   out.str(2, "intrinsic ");
-		out.str(2, s@.ident);
-		out.str(2, "()");
+	    {   err.str("intrinsic ");
+		err.str(s@.ident);
+		err.str("()");
 	    }
 	}
-	is PACK then      { out.str(2, "package "); out.str(2, s@.ident);}
-	is ALIAS then     { out.str(2, "alias ");   out.str(2, s@.ident);}
+	is PACK then      { err.str("package "); err.str(s@.ident);}
+	is ALIAS then     { err.str("alias ");   err.str(s@.ident);}
 	else 
-	{   out.str(2, "undefined "); out.str(2, s@.ident); out.nl(2);
+	{   err.str("undefined "); err.str(s@.ident); err.nl();
 	}
-	out.nl(2);
+	err.nl();
     }
 
     proc Dump(n: levels)
@@ -402,7 +402,7 @@ package symb
 	i = level;
 	loop
 	{
-	    out.str(2, "*** level "); out.uint(2, i); out.str(2, " ***\n");
+	    err.str("*** level "); err.uint(i); err.str(" ***\n");
 	    s = symbs[i].frst;
 	    while s != 0 do
 	    {   DumpS(s);

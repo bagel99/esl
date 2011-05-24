@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 559 2011-04-18 16:28:42Z bgl $
+// $Id: ast.esl 568 2011-05-23 21:28:40Z bgl $
 
 package ast
 {
@@ -315,48 +315,48 @@ package ast
     {   var s: Symb;
 	var t: Type;
 
-	out.str(2, OpName[node@.op]);
-	out.chr(2, '(');
-	out.str(2, KindName[node@.kind]);
-	out.str(2, " sz=");
-	out.uint(2, node@.size);
-	out.str(2, " ln=");
-	out.uint(2, node@.lineno);
-	out.str(2, " nc=");
-	out.uint(2, node@.num);
+	err.str(OpName[node@.op]);
+	err.chr('(');
+	err.str(KindName[node@.kind]);
+	err.str(" sz=");
+	err.uint(node@.size);
+	err.str(" ln=");
+	err.uint(node@.lineno);
+	err.str(" nc=");
+	err.uint(node@.num);
 	t = node@.type;
 	if node@.op
 	is CONST, OFFSET, COPY, GETRV then
-	{   out.str(2, " value ");
+	{   err.str(" value ");
 	    if node@.op == CONST && node@.kind == SINT then
-		out.int64(2, _int64(node@.valu));
+		err.int64(_int64(node@.valu));
 	    else
-		out.uint64(2, node@.valu);
+		err.uint64(node@.valu);
 	}
 	is SCON then
 	{   type pstring: @[]_byte;
-	    out.str(2, " id ");
-	    out.uint32(2, _uint32(node@.valu));
-	    out.str(2, " value \"");
-	    out.strn(2, pstring(node@.symb), _uint32(node@.type@.hi-1));
-	    out.chr(2, '"');
+	    err.str(" id ");
+	    err.uint32(_uint32(node@.valu));
+	    err.str(" value \"");
+	    err.strn(pstring(node@.symb), _uint32(node@.type@.hi-1));
+	    err.chr('"');
 	}
 	is DCLVAR, VAR, PROC, CALL, FILE, PACKAGE then
 	{
-	    out.str(2, " name ");
+	    err.str(" name ");
 	    s = node@.symb;
 	    if s != 0 then
-		out.str(2, s@.ident);
+		err.str(s@.ident);
 	    else
-		out.str(2, "*NULL*");
+		err.str("*NULL*");
 	}
 	is ASM then t = 0;	// FIXME: temporarily don't dump type
-	out.chr(2, ')');
+	err.chr(')');
 	if t != 0 then
-	{   out.chr(2, ':');
+	{   err.chr(':');
 	    type.DumpT(t, false);
 	}
-	out.nl(2);
+	err.nl();
     }
 
     const blanks:[]_byte =
@@ -367,7 +367,7 @@ package ast
 
 	sys.write(2, blanks, level);
 	if tree == 0 then
-	    out.str(2, "*NULL*\n");
+	    err.str("*NULL*\n");
 	else
 	{   Print(tree);
 	    i = 0;

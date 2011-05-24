@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 561 2011-05-02 20:06:55Z bgl $
+// $Id: expr2.esl 568 2011-05-23 21:28:40Z bgl $
 
 package expr
 {
@@ -127,11 +127,11 @@ package expr
     proc Cast(tree: Ast, t: Type): Ast
     {
 /*
-out.str(2, "Cast to: kind=");
-out.str(2, type.KindName[t@.kind]);
-type.DumpT(t, true); out.nl(2);
-out.str(2, "from: kind=");
-out.str(2, type.KindName[tree@.kind]); out.nl(2);
+err.str("Cast to: kind=");
+err.str(type.KindName[t@.kind]);
+type.DumpT(t, true); err.nl();
+err.str("from: kind=");
+err.str(type.KindName[tree@.kind]); err.nl();
 ast.Dump(tree);
 */
 	if tree == 0 then return tree;
@@ -230,10 +230,10 @@ ast.Dump(tree);
 	tsize = t@.width;
 	bt = t@.base;
 	fsize = bt@.size;
-//out.str(2, "Small initialized array: tsz="); out.uint(2, tsize);
-//out.str(2, " fsz="); out.uint(2, fsize);
-//out.str(2, " n="); out.uint(2, intree@.num);
-//out.nl(2);
+//err.str("Small initialized array: tsz="); err.uint(tsize);
+//err.str(" fsz="); err.uint(fsize);
+//err.str(" n="); err.uint(intree@.num);
+//err.nl();
 	if t@.bitorder == MSB then offs = tsize; else offs = 0;
 	i = 0;
 	while i < intree@.num do
@@ -351,7 +351,7 @@ ast.Dump(tree);
 	    return tree;
 	}
 	tsize = t@.width;
-//out.str(2, "Small initialized record: sz="); out.uint(2, tsize); out.nl(2);
+//err.str("Small initialized record: sz="); err.uint(tsize); err.nl();
 	f = t@.list;
 	if t@.bitorder == MSB then offs = tsize; else offs = 0;
 	i = 0;
@@ -360,10 +360,10 @@ ast.Dump(tree);
 	    {   ft = f@.type;
 		fsize = ft@.size;
 		if t@.bitorder == MSB then offs -= fsize;
-//out.chr(2, '\t'); out.uid(2, i);
-//out.str(2, ": sz="); out.uid(2, fsize);
-//out.str(2, " os="); out.uid(2, offs);
-//out.nl(2);
+//err.chr('\t'); err.uid(i);
+//err.str(": sz="); err.uid(fsize);
+//err.str(" os="); err.uid(offs);
+//err.nl();
 		if i >= intree@.num then
 		{   lex.Error(BADLIST);
 		    return tree;
@@ -515,7 +515,7 @@ ast.Dump(tree);
     {   var t: Type;
 
 	if tree == 0 then return tree;
-//out.str(2, "Load: "); ast.Print(tree);
+//err.str("Load: "); ast.Print(tree);
 	if tree@.op
 	is TYPE then
 	{   lex.ErrorI(BADTYPE, tree@.type@.name@.ident);
@@ -589,14 +589,14 @@ ast.Dump(tree);
 	if fm == 0 then		// undefined type
 	    return tree;
 /*
-out.str(2, "Formal kind=");
-out.str(2, type.KindName[to@.kind]); out.nl(2);
-type.DumpT(to, true); out.nl(2);
-out.str(2, "Actual(initial) kind=");
-out.str(2, type.KindName[fm@.kind]); out.nl(2);
-type.DumpT(fm, true); out.nl(2);
-out.str(2, "Actual tree=");
-ast.Dump(tree); out.nl(2);
+err.str("Formal kind=");
+err.str(type.KindName[to@.kind]); err.nl();
+type.DumpT(to, true); err.nl();
+err.str("Actual(initial) kind=");
+err.str(type.KindName[fm@.kind]); err.nl();
+type.DumpT(fm, true); err.nl();
+err.str("Actual tree=");
+ast.Dump(tree); err.nl();
 */
 	ok = true;
 	if to@.kind
@@ -639,9 +639,9 @@ ast.Dump(tree); out.nl(2);
 	if !ok then
 {
 	    lex.Error(PARMTYPE);
-//out.str(2, "Actual(final) kind=");
-//out.str(2, type.KindName[fm@.kind]); out.nl(2);
-//type.DumpT(fm, true); out.nl(2);
+//err.str("Actual(final) kind=");
+//err.str(type.KindName[fm@.kind]); err.nl();
+//type.DumpT(fm, true); err.nl();
 //ast.Dump(tree);
 }
 	return tree;
@@ -829,7 +829,7 @@ ast.Dump(tree); out.nl(2);
 	    }
 	    else
 	    {
-out.str(2, "Intrinsic unknown\n");
+err.str("Intrinsic unknown\n");
 	    }
 	    tok = lex.Expect(PEND);
 	}
@@ -973,7 +973,7 @@ out.str(2, "Intrinsic unknown\n");
 			}
 			if s != 0 then		// method call
 			{   tok = Next();
-//out.str(2, "Method call: "); out.str(2, lex.Ident); out.nl(2);
+//err.str("Method call: "); err.str(lex.Ident); err.nl();
 			    tree = Call(s, 0, tree);
 			}
 			else
@@ -1276,7 +1276,7 @@ out.str(2, "Intrinsic unknown\n");
     {   var new, tz: _uint;
 
 
-//out.str(2, "OffsetAlign: base="); out.uint(2, base); out.str(2, " disp="); out.uint(2, disp);
+//err.str("OffsetAlign: base="); err.uint(base); err.str(" disp="); err.uint(disp);
 	new = base + disp;
 	tz = 0;
 	while new&1 == 0 do	// count trailing zeros
@@ -1285,7 +1285,7 @@ out.str(2, "Intrinsic unknown\n");
 	}
 	new = 1 << tz;
 	if new > base then new = base;	// can't improve alignment
-//out.str(2, " new="); out.uint(2, new); out.nl(2);
+//err.str(" new="); err.uint(new); err.nl();
 	return new;
     }
 
@@ -1294,7 +1294,7 @@ out.str(2, "Intrinsic unknown\n");
 	var s: Symb;
 
 	if record@.kind != RECORD then return 0;	// can't happen?
-//out.str(2, "FieldAlign: base="); out.uint(2, base); out.str(2, " fieldno="); out.uint(2, fieldno);
+//err.str("FieldAlign: base="); err.uint(base); err.str(" fieldno="); err.uint(fieldno);
 	offs = 0;
 	i = 0;
 	s = record@.list;
@@ -1306,7 +1306,7 @@ out.str(2, "Intrinsic unknown\n");
 	    i += 1;
 	    s = s@.next;
 	}
-//out.str(2, " offs="); out.uint(2, offs); out.nl(2);
+//err.str(" offs="); err.uint(offs); err.nl();
 	return OffsetAlign(base, offs);
     }
 
@@ -1356,7 +1356,7 @@ out.str(2, "Intrinsic unknown\n");
 	    alignment = tree@.type@.align;
 	else
 	    lex.ErrorS(NOTIMPL, "GetAlignment: unexpected node");
-//out.str(2, "GetAlignment: align="); out.uint(2, alignment); out.nl(2);
+//err.str("GetAlignment: align="); err.uint(alignment); err.nl();
 	return alignment;
     }
 
@@ -1376,7 +1376,7 @@ out.str(2, "Intrinsic unknown\n");
 	// FIXME: share code with stmt.AssignArray?
 	if lhs@.type@.packed == BIT then
 	{   if rhs@.type@.packed != BIT then
-		out.str(2, "Both must be packed\n");
+		err.str("Both must be packed\n");
 	    lhs@.kind = UINT;
 	    rhs@.kind = UINT;
 	    if op == AEQ then op = EQ; else op = NE;
@@ -1414,7 +1414,7 @@ out.str(2, "Intrinsic unknown\n");
     proc NodeKind(node: Ast): TypeT
     {   var kind: TypeT;
 
-//out.str(2, "NodeKind\n");
+//err.str("NodeKind\n");
 //ast.Dump(node);
 	if node@.op
 	is VAR, SLICE then
@@ -1505,7 +1505,7 @@ out.str(2, "Intrinsic unknown\n");
 
 	if t != 0 then
 	{
-//out.str(2, "Const: "); out.uid(2, t@.kind); out.nl(2); 
+//err.str("Const: "); err.uid(t@.kind); err.nl(); 
 	    if t@.kind
 	    is REF then
 	    {	if Token

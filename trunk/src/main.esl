@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 554 2011-04-11 20:41:26Z bgl $
+// $Id: main.esl 568 2011-05-23 21:28:40Z bgl $
 
 var debug:
     {	symb:
@@ -25,6 +25,8 @@ var feature:
 import sys;
 import zstr;
 import out;
+const err: sys.fildes = 2;      // error file descriptor for messages
+const msg: sys.fildes = 1;      // normal file descriptor for messages
 alias	_byte as Char;
 import lex;
 alias   lex.Next as Next, lex.TokenT as TokenT, lex.Token as Token;
@@ -109,33 +111,33 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	n = zstr.len(argv[i]@, lex.PathMax);
 	if zstr.eq(argv[i]@[n-4:4], ".esl", lex.PathMax) then
 	{   argv[i]@[n-4] = 0;		// nul terminate
-	    out.str(1, argv[i]@);
-	    out.str(1, ".o: ");
+	    msg.str(argv[i]@);
+	    msg.str(".o: ");
 	    argv[i]@[n-4] = '.';	// remove nul terminate
 	}
     }
     if !target.set(targetarch) then
-    {   out.str(2, "Unsupported target: ");
+    {   err.str("Unsupported target: ");
 	if targetarch != 0 then
-	    out.str(2, targetarch);
+	    err.str(targetarch);
 	else
-	    out.str(2, target.DefaultTarget);
-	out.nl(2);
+	    err.str(target.DefaultTarget);
+	err.nl();
 	target.list();
 	return 2;
     }
     if !lex.FileOpen(argv[i]@) then
-    {   out.str(2, "Unable to open input file: ");
-	out.str(2, argv[i]@);
-	out.nl(2);
+    {   err.str("Unable to open input file: ");
+	err.str(argv[i]@);
+	err.nl();
 	return 2;
     }
     if outfile != 0 then
     {   outfd = sys.open(outfile, sys.O_CREAT|sys.O_TRUNC|sys.O_WRONLY, 0o640);
 	if outfd < 0 then
-	{   out.str(2, "Unable to create output file: ");
-	    out.str(2, outfile@);
-	    out.nl(2);
+	{   err.str("Unable to create output file: ");
+	    err.str(outfile@);
+	    err.nl();
 	    return 2;
 	}
     }
@@ -151,7 +153,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	ast.Dump(tree);
     if lex.ErrorCount == 0 then
     {   if feature.mflag then
-	    out.nl(1);
+	    msg.nl();
 	else
 	    llvm.Gen(outfd, tree);
     }
