@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 568 2011-05-23 21:28:40Z bgl $
+// $Id: stmt.esl 584 2011-06-07 21:39:19Z bgl $
 
 package stmt
 {
@@ -536,53 +536,87 @@ package stmt
 	return tree;
     }
 
-    proc AdjustRHS(lhs: Ast, rhs: Ast): Ast
-    {   var tl, tr: Type;
+    proc AdjustRHS(lhs: Ast, tree: Ast): Ast
+    {   var to, fm, bt: Type;
+	var ok: boolean;
 
-	tl = lhs@.type;		// target type
-	tr = rhs@.type;
+	to = lhs@.type;		// target type
+	fm = tree@.type;
 /*
-err.str("TL kind="); err.str(type.KindName[tl@.kind]); err.nl();
-type.DumpT(tl, true); err.nl();
-if tl@.base != 0 then
-{ err.str("TL.base kind="); err.str(type.KindName[tl@.base@.kind]); err.nl();
-  type.DumpT(tl@.base, true); err.nl();
+err.str("TL kind="); err.str(type.KindName[to@.kind]); err.nl();
+type.DumpT(to, true); err.nl();
+if to@.base != 0 then
+{ err.str("TL.base kind="); err.str(type.KindName[to@.base@.kind]); err.nl();
+  type.DumpT(to@.base, true); err.nl();
 }
-err.str("TR kind="); err.str(type.KindName[tr@.kind]); err.nl();
-type.DumpT(tr, true); err.nl();
+err.str("TR kind="); err.str(type.KindName[fm@.kind]); err.nl();
+type.DumpT(fm, true); err.nl();
 ast.Dump(rhs);
 */
 	// LHS is not a COMPOSITE (RECORD or ARRAY) -- handled elsewhere
-	if tl@.kind
-	is REF then
-	{   // FIXME: merge with code in expr.Actual()
-	    if rhs@.kind != REF then	    // this must be a coercion
-	    {   rhs = expr.CoerceToRef(rhs);
-		tr = rhs@.type;
-	        if tl@.base != tr then
-		{   if type.Compat(tl@.base, tr) then
-			rhs = expr.Cast(rhs, tl);
-		    else lex.Error(TYPEASSIGN);
-		}
+	ok = true;
+	if to@.kind
+	is REF then     // FIXME: merge with code in expr.Actual()
+	{   bt = to@.base;
+	    if bt == 0 then
+	    {   lex.Error(BADREF);
+		return tree;
+	    }
+	    if tree@.kind == REF && type.Compat(bt, fm) then
+	    {   if bt != to then tree = expr.Cast(tree, to);
 	    }
 	    else
-	    {   if tl@.base != tr then
-		{   if type.Compat(tl@.base, tr) then
-			rhs = expr.Cast(rhs, tl);
-		    else lex.Error(TYPEASSIGN);
+	    {   tree = expr.CoerceToRef(tree);
+		fm = tree@.type;
+	        if type.Compat(bt, fm) then
+		{   if bt != to then tree = expr.Cast(tree, to);
 		}
+		else ok = false;
 	    }
+	    // Fix types when formal is a flex
+	    if bt@.flex && !tree@.type@.flex then
+		tree = ast.New1(CAST, bt, tree);
+	    // Check attributes
+	    if !expr.CheckRefAttributes(bt, fm) then
+		lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
 	}
 	is REFPROC then
-	{   if !type.Compat(tl, tr) then
-		lex.Error(TYPEASSIGN);
+	{   ok = type.Compat(to, fm);
 	}
-	else    // ordinary scalar
-	{   if lhs@.size != rhs@.size then
-		rhs = expr.ExtendT(rhs, tl);
+	is ENUM then
+	{   // FIXME: can't check for compat because 2 ENUMs which
+	    // differ only in endian currently don't pass.
+	    ok = type.Compat(fm, to);
+	    if !ok && fm.kind == UINT then ok = true;
+	    if lhs@.size != tree@.size then
+		tree = expr.ExtendT(tree, to);
 	}
-	rhs = CheckSwap(lhs, rhs);
-	return rhs;
+	is UINT then
+	{   ok = type.Compat(fm, to);
+	    if !ok then
+	    {   if fm.kind
+		is ENUM then ok = true;
+		is SINT then
+		{   if feature.trunc then lex.Error(TOUNSIGN);
+		    ok = true;
+		}
+	    }
+	    if lhs@.size != tree@.size then
+		tree = expr.ExtendT(tree, to);
+	}
+	is SINT then
+	{   ok = type.Compat(fm, to);
+	    if !ok && fm.kind == UINT then
+	    {   if feature.trunc then lex.Error(TOSIGNED);
+		ok = true;
+	    }
+	    if lhs@.size != tree@.size then
+		tree = expr.ExtendT(tree, to);
+	}
+	if !ok then
+	    lex.Error(TYPEASSIGN);
+	tree = CheckSwap(lhs, tree);
+	return tree;
     }
 
     proc Assign(lhs: Ast): Ast

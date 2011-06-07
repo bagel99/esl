@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 568 2011-05-23 21:28:40Z bgl $
+// $Id: type2.esl 585 2011-06-07 22:16:38Z bgl $
 
 package type
 {
@@ -42,6 +42,7 @@ package type
 
     proc Def(tok: TokenT, bt: Type): Type;		// forward
     proc ParmList(procs: Symb, meths: Symb);		// forward
+    proc Compat(t1: Type, t2: Type): boolean;		// forward
 
     proc Same(a:Type, b:Type): boolean
     {
@@ -53,7 +54,7 @@ package type
     proc SameTypeList(al: TypeList, bl: TypeList): boolean
     {
 	while al != 0 && bl != 0 do
-	{   if !Same(al.type, bl.type) then return false;
+	{   if !Compat(al.type, bl.type) then return false;
 	    al = al.next;
 	    bl = bl.next;
 	}
@@ -64,7 +65,7 @@ package type
     proc SameSymbList(as: Symb, bs: Symb): boolean
     {
 	while as != 0 && bs != 0 do
-	{   if !Same(as.type, bs.type) then return false;
+	{   if !Compat(as.type, bs.type) then return false;
 	    as = as.next;
 	    bs = bs.next;
 	}
@@ -79,6 +80,8 @@ package type
 	if t1 == 0 || t2 == 0 then return true;	// what should this be?
 	if t1 == t2 then return true;		// the trivial case
 	if t1@.kind != t2@.kind then return false;
+	if t1@.atbase != 0 then return Compat(t1@.atbase, t2);
+	if t2@.atbase != 0 then return Compat(t1, t2@.atbase);
 	if t2@.kind
 	is UINT, SINT then return true;
 	is ENUM, RECORD then 
@@ -144,6 +147,7 @@ package type
     };
     proc Attributes(s: Symb, t: Type,  sattrlist:@[]TokenT): Type
     {   var tok, atok: TokenT;
+	var at: Type;
 
 	// assert Token == COLON
 	loop
@@ -154,7 +158,10 @@ package type
 		{   // Handle type attribute
 		    tok = Next();
 		    if t@.final then
-			t = Clone(t);	// Will not be the same type
+		    {   at = t;
+			t = Clone(at);	// Will not be the same type
+			t@.atbase = at;
+		    }
 		    if atok
 		    is KPACK then   t@.packed = BIT;
 		    is KMPACK then  t@.packed = MEM;
@@ -301,7 +308,7 @@ package type
 	if t != 0 && !t@.final then
 	{
 	    if t@.bitorder == NATIVE then
-		t@.bitorder = Target.order;
+		t@.bitorder = LSB;
 	    if t@.memorder == NATIVE then
 		t@.memorder = Target.order;
 	    if t@.kind
@@ -327,7 +334,15 @@ package type
 		if t@.align == 0 then
 		    t@.align = target.ialign(t@.size);
 	    }
-	    is REF, REFPROC then 
+	    is REF then 
+	    {   // Make sure anonymous base types are final
+		if t@.base != 0 && t@.base@.name == 0 then
+		    Final(t@.base);
+		t@.size  = Target.ptr.size;
+		t@.width = Target.ptr.size;
+		t@.align = Target.ptr.align;
+	    }
+	    is REFPROC then 
 	    {   t@.size  = Target.ptr.size;
 		t@.width = Target.ptr.size;
 		t@.align = Target.ptr.align;

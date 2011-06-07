@@ -1,5 +1,5 @@
 // Copyright (c) 2011, Brian G. Lucas.  See LICENSE file.
-// $Id: bout.esl 568 2011-05-23 21:28:40Z bgl $
+// $Id: bout.esl 579 2011-06-07 20:42:38Z bgl $
 
 // Buffered Output
 // Assumes target wordsize is 32-bits or more.
@@ -222,10 +222,10 @@ package bout
 	if in < 0 then
 	{   bp = bo.need(1);
 	    bp[0] = '-';
-	    ui = -in;
+	    ui = _uint64(-in);
 	}
 	else
-	    ui = in;
+	    ui = _uint64(in);
 	bo.uint64(ui);
     }	
 
@@ -239,10 +239,10 @@ package bout
 	{   if in < 0 then
 	    {   bp = bo.need(1);
 		bp[0] = '-';
-		ui = -in;
+		ui = _uint64(-in);
 	    }
 	    else
-		ui = in;
+		ui = _uint64(in);
 	    bo.uint32(ui);
 	}
     }	

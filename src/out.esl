@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: out.esl 568 2011-05-23 21:28:40Z bgl $
+// $Id: out.esl 579 2011-06-07 20:42:38Z bgl $
 
 // Unbuffered formatted Output
 // Assumes target wordsize is 32-bits or more.
@@ -155,10 +155,10 @@ package out
 
 	if in < 0 then
 	{   sys.write(o, "-", 1);
-	    ui = -in;
+	    ui = _uint64(-in);
 	}
 	else
-	    ui = in;
+	    ui = _uint64(in);
 	o.uint64(ui);
     }	
 
@@ -170,10 +170,10 @@ package out
 	else
 	{   if in < 0 then
 	    {   sys.write(o, "-", 1);
-		ui = -in;
+		ui = _uint64(-in);
 	    }
 	    else
-		ui = in;
+		ui = _uint64(in);
 	    o.uint32(ui);
 	}
     }	
