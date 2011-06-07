@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type1.esl 514 2011-02-08 22:17:41Z bgl $
+// $Id: type1.esl 580 2011-06-07 20:44:54Z bgl $
 
 package type
 {
@@ -14,6 +14,7 @@ package type
     type TypeNode:
     {
 	base:	@TypeNode;	// for derived types
+	atbase: @TypeNode;      // for attribute modified types
 	index:  @TypeNode;	// for arrays
 	name:	@SymbNode;	// for named types
 	list:	@SymbNode;	// for enums, records

@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 568 2011-05-23 21:28:40Z bgl $
+// $Id: expr2.esl 586 2011-06-07 22:19:56Z bgl $
 
 package expr
 {
@@ -56,6 +56,8 @@ package expr
 	t@.index = type.wordtype;
 	t@.lo = 0;
 	t@.hi = lex.StringLen;
+	t@.align = t@.base@.align;
+	t@.memorder = Target.order;
 	tree = ast.New(SCON, t);
 	tree@.kind = REF;		// FIXME: should be REF?
 	tree@.symb = Symb(sys.memdup(lex.StringBuf, lex.StringLen));
@@ -230,10 +232,6 @@ ast.Dump(tree);
 	tsize = t@.width;
 	bt = t@.base;
 	fsize = bt@.size;
-//err.str("Small initialized array: tsz="); err.uint(tsize);
-//err.str(" fsz="); err.uint(fsize);
-//err.str(" n="); err.uint(intree@.num);
-//err.nl();
 	if t@.bitorder == MSB then offs = tsize; else offs = 0;
 	i = 0;
 	while i < intree@.num do
@@ -304,10 +302,12 @@ ast.Dump(tree);
 	    if n == 0 then	// flex array becomes a static array
 	    {   var nt: Type;
 		n = m;
-		nt = type.New(ARRAY);
+		nt = type.New(ARRAY);   // FIXME: use Clone()?
 		nt@.base = t@.base;
 		nt@.index = t@.index;
 		nt@.hi = n;
+		nt@.memorder = t@.memorder;
+		nt@.align = t@.align;
 		t = nt;
 	    }
 	    // make sure all elements are initialized in gaps
@@ -351,7 +351,6 @@ ast.Dump(tree);
 	    return tree;
 	}
 	tsize = t@.width;
-//err.str("Small initialized record: sz="); err.uint(tsize); err.nl();
 	f = t@.list;
 	if t@.bitorder == MSB then offs = tsize; else offs = 0;
 	i = 0;
@@ -360,10 +359,6 @@ ast.Dump(tree);
 	    {   ft = f@.type;
 		fsize = ft@.size;
 		if t@.bitorder == MSB then offs -= fsize;
-//err.chr('\t'); err.uid(i);
-//err.str(": sz="); err.uid(fsize);
-//err.str(" os="); err.uid(offs);
-//err.nl();
 		if i >= intree@.num then
 		{   lex.Error(BADLIST);
 		    return tree;
@@ -478,19 +473,111 @@ ast.Dump(tree);
 	return tree;
     }
 
+    proc CalcAlign(base: _uint, offset: _uint): _uint
+    {   var new, tz: _uint;
+
+
+//err.str("CalcAlign: base="); err.uint(base);
+//err.str(" offset="); err.uint(offset);
+	if offset == 0 then
+	    new = base;
+	else
+	{   tz = 0;
+	    while offset&1 == 0 do	// count trailing zeros
+	    {   offset = offset >> 1;
+		tz += 1;
+	    }
+	    new = 1 << tz;
+	    new = _min(base, new);      // can't be greater than base
+	}
+//err.str(" new="); err.uint(new); err.nl();
+	return new;
+    }
+
+    proc FieldAlign(base: _uint, record: Type, fieldno: _uint): _uint
+    {   var offs, i: _uint;
+	var s: Symb;
+
+	if record@.kind != RECORD then return 0;	// can't happen?
+//err.str("FieldAlign: base="); err.uint(base); err.str(" fieldno="); err.uint(fieldno);
+	offs = 0;
+	i = 0;
+	s = record@.list;
+	while i < fieldno && s != 0 do
+	{   if record@.packed == BIT then
+		offs += s@.type@.size;
+	    else
+		offs += s@.type@.width / Target.membits;
+	    i += 1;
+	    s = s@.next;
+	}
+//err.str(" offs="); err.uint(offs); err.nl();
+	return CalcAlign(base, offs);
+    }
+
+    proc GetAlignment(tree:Ast): _uint
+    {   var alignment: _uint;
+
+	if tree == 0 then return 0;
+	if tree@.op
+	is VAR then 		// direct variable, use its alignment
+	    if tree@.type != 0 then
+		alignment = tree@.type@.align/Target.membits;
+	    else
+		alignment = 0;
+	is LOAD then 		// via a pointer
+	{   if tree@.kind == REF && tree@.type != 0 then
+		alignment = tree@.type@.align/Target.membits;
+	    else
+		alignment = 0;
+	}
+	is REVB then
+	    alignment = GetAlignment(tree@.child[0]);
+	is OFFSET then 		// fixed offset
+	{   alignment = GetAlignment(tree@.child[0]);
+	    if alignment != 0 then
+		alignment = FieldAlign(alignment, 
+				       tree@.child[0]@.type, _uint(tree@.valu));
+	}
+	is INDEX, SLICE then 	// possible variable offset
+	{   alignment = GetAlignment(tree@.child[0]);
+	    if alignment != 0 then
+	    {   if tree@.child[1]@.op == CONST then
+	        {
+		    var size: _uint;
+		    size = tree@.child[0]@.type@.base@.width/Target.membits;
+//err.str("GetAlignment: size="); err.uint(size); err.nl();
+		    alignment = CalcAlign(alignment,
+			_uint(tree@.child[1]@.valu)*size);
+		}
+		else
+		    alignment = 0;
+	    }
+	}
+	is CLIST, SCON then	// constant aggregate
+	    alignment = tree@.type@.align;
+	else
+	{   lex.ErrorS(NOTIMPL, "GetAlignment: unexpected node");
+	    ast.Dump(tree);
+	}
+//err.str("GetAlignment: align="); err.uint(alignment); err.nl();
+	return alignment;
+    }
+
     proc Slice(array: Ast, inx: Ast, len: Ast): Ast
     {   var at, st: Type;
 	var tree: Ast;
 	var blen, slen: type.BitSize;
 
 	at = array@.type;
-	st = type.New(ARRAY);
+	st = type.New(ARRAY);       // FIXME: use Clone()?
 	st@.base = at@.base;
 	st@.packed = at@.packed;
-	if at@.flex then blen = 0; else blen = type.BitSize(at@.hi);
-	if len != 0 && len@.op == CONST
-	    then slen = type.BitSize(len@.valu);
-	    else slen = 0;
+	st@.memorder = at@.memorder;
+	blen = 0;
+	slen = 0;
+	if !at@.flex then blen = type.BitSize(at@.hi);
+	if len != 0 && len@.op == CONST then slen = type.BitSize(len@.valu);
 	if blen == 0 && slen == 0 then
 	    st@.flex = true;
 	else
@@ -503,9 +590,17 @@ ast.Dump(tree);
 	    {   // check slen < blen unless olen == 0
 	    }
 	    st@.hi = slen;
-	    st@.size = at@.base@.size * slen;
-	    st@.width = st@.size;
 	}
+	st@.size = at@.base@.size * slen;
+	st@.width = st@.size;
+	if inx != 0 && inx@.op == CONST then
+	{   var offs: _uint;
+	    offs = _uint(inx@.valu) * (at@.base@.width/Target.membits);
+	    st@.align = CalcAlign(at@.align/Target.membits, offs) *
+		Target.membits;
+	}
+	else    // Just take the alignment of the base type.
+	    st@.align = at@.base@.align;
 	tree = ast.New2(SLICE, st, array, inx);
 	tree = ast.Child(tree, len);
 	return tree;
@@ -539,29 +634,6 @@ ast.Dump(tree);
 	return tree;
     }
 
-    proc RProc(t: Type): Ast
-    {   var tree: Ast;
-	var tok: TokenT;
-	var s: Symb;
-
-	tok = Token;
-	if tok == ID then
-	{   s = symb.Find(lex.Ident);
-	    if s != 0 then
-	    {   if s@.kind == PROC then
-		{   tree = ast.New(VAR, t);
-		    tree@.symb = s;
-		    tree@.kind = REFPROC;
-		}
-		else lex.ErrorI(BADID, s@.ident);
-	    }
-	    else lex.ErrorI(UNDEFID, lex.Ident);
-	    tok = Next();
-	}
-	else lex.Error(EXPECTID);
-	return tree;
-    }
-
     proc CoerceToRef(tree: Ast): Ast
     {
 	if tree@.op == LOAD then
@@ -573,13 +645,24 @@ ast.Dump(tree);
 	tree@.kind = REF;
 	return tree;
     }
-    
+
+    proc CheckRefAttributes(to: Type, fm: Type): boolean
+    {
+	// Check endian
+	if to@.memorder != fm@.memorder then
+	    return false;
+	// Check alignment
+	if to@.align > fm.align then
+	    return false;
+	if to@.kind == REF && fm@.kind == REF then
+	    return CheckRefAttributes(to@.base, fm@.base);
+	return true;
+    }
+
     proc Actual(tree: Ast, to: Type): Ast
-    {   var fm: Type;
+    {   var fm, bt: Type;
 	var ok: boolean;
 
-	if to@.kind == REFPROC then
-	    return RProc(to);
 	if tree == 0 then
 	{   tree = Bool(to);
 	    if tree == 0 then	// invalid expression
@@ -588,46 +671,34 @@ ast.Dump(tree);
 	fm = tree@.type;
 	if fm == 0 then		// undefined type
 	    return tree;
-/*
-err.str("Formal kind=");
-err.str(type.KindName[to@.kind]); err.nl();
-type.DumpT(to, true); err.nl();
-err.str("Actual(initial) kind=");
-err.str(type.KindName[fm@.kind]); err.nl();
-type.DumpT(fm, true); err.nl();
-err.str("Actual tree=");
-ast.Dump(tree); err.nl();
-*/
 	ok = true;
 	if to@.kind
 	is REF then
-	{   if to@.base == 0 then
+	{   bt = to@.base;
+	    if bt == 0 then
 	    {   lex.Error(BADREF);
 		return tree;
 	    }
-	    if tree@.kind != REF then
-	    {   tree = CoerceToRef(tree);
-		fm = tree@.type;
-		if to@.base != fm then
-		{   if type.Compat(to@.base, fm) then
-			tree = expr.Cast(tree, to);
-		    else ok = false;
-		}
+	    if tree@.kind == REF && type.Compat(bt, fm) then
+	    {   if bt != to then tree = expr.Cast(tree, to);
 	    }
 	    else
-	    {   if to@.base != fm then
-		{   if type.Compat(to@.base, fm) then
-			tree = Cast(tree, to);
-		    else if to@.base@.kind == REF then  // formal is REF of REF
-		    {   tree = CoerceToRef(tree);
-			ok = type.Compat(to@.base@.base, fm);
-		    }
-		    else ok = false;
+	    {   tree = CoerceToRef(tree);
+		fm = tree@.type;
+	        if type.Compat(bt, fm) then
+		{   if bt != to then tree = expr.Cast(tree, to);
 		}
+		else ok = false;
 	    }
 	    // Fix types when formal is a flex
-	    if to@.base@.flex && !tree@.type@.flex then
-		tree = ast.New1(CAST, to@.base, tree);
+	    if bt@.flex && !tree@.type@.flex then
+		tree = ast.New1(CAST, bt, tree);
+	    // Check attributes
+	    if !CheckRefAttributes(bt, fm) then
+		lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
+	}
+	is REFPROC then
+	{   ok = type.Compat(to, fm);
 	}
 	is ENUM, UINT, SINT then
 	{   ok = type.Compat(fm, to);
@@ -637,13 +708,10 @@ ast.Dump(tree); err.nl();
 	}
 	is RECORD, ARRAY then ok = type.Compat(fm, to);
 	if !ok then
-{
-	    lex.Error(PARMTYPE);
-//err.str("Actual(final) kind=");
-//err.str(type.KindName[fm@.kind]); err.nl();
-//type.DumpT(fm, true); err.nl();
-//ast.Dump(tree);
-}
+	{   lex.Error(PARMTYPE);
+//err.str("to=\n"); type.DumpT(to, true); err.nl();
+//err.str("fm=\n"); type.DumpT(fm, true); err.nl();
+	}
 	return tree;
     }
 
@@ -653,7 +721,7 @@ ast.Dump(tree); err.nl();
 	if rhs@.op == CONST then	// constant folding
 	{   tree = rhs;			// assume nop
 	    if op
-	    is NEG  then tree@.valu = -tree@.valu;
+	    is NEG  then tree@.valu = type.Valu(-tree@.valu);
 	    is NOT  then tree@.valu = ~tree@.valu;
 	    is BNOT then tree@.valu = tree@.valu ^ 1;
 	    is ABS  then 
@@ -1272,94 +1340,6 @@ err.str("Intrinsic unknown\n");
 	return tree;
     }
 
-    proc OffsetAlign(base: _uint, disp: _uint): _uint
-    {   var new, tz: _uint;
-
-
-//err.str("OffsetAlign: base="); err.uint(base); err.str(" disp="); err.uint(disp);
-	new = base + disp;
-	tz = 0;
-	while new&1 == 0 do	// count trailing zeros
-	{   new = new >> 1;
-	    tz += 1;
-	}
-	new = 1 << tz;
-	if new > base then new = base;	// can't improve alignment
-//err.str(" new="); err.uint(new); err.nl();
-	return new;
-    }
-
-    proc FieldAlign(base: _uint, record: Type, fieldno: _uint): _uint
-    {   var offs, i: _uint;
-	var s: Symb;
-
-	if record@.kind != RECORD then return 0;	// can't happen?
-//err.str("FieldAlign: base="); err.uint(base); err.str(" fieldno="); err.uint(fieldno);
-	offs = 0;
-	i = 0;
-	s = record@.list;
-	while i < fieldno && s != 0 do
-	{   if record@.packed == BIT then
-		offs += s@.type@.size;
-	    else
-		offs += s@.type@.width / Target.membits;
-	    i += 1;
-	    s = s@.next;
-	}
-//err.str(" offs="); err.uint(offs); err.nl();
-	return OffsetAlign(base, offs);
-    }
-
-    proc GetAlignment(tree:Ast): _uint
-    {   var alignment: _uint;
-
-	if tree == 0 then return 0;
-	if tree@.op
-	is VAR then 		// direct variable, use its alignment
-	    if tree@.type != 0 then
-		alignment = tree@.type@.align/Target.membits;
-	    else
-		alignment = 0;
-	is LOAD then 		// via a pointer
-	{   if tree@.kind == REF && tree@.type != 0 then
-		alignment = tree@.type@.align/Target.membits;
-	    else
-		alignment = 0;
-	}
-	is OFFSET then 		// fixed offset
-	{   alignment = GetAlignment(tree@.child[0]);
-	    if alignment != 0 then
-		alignment = FieldAlign(alignment, 
-				       tree@.child[0]@.type, _uint(tree@.valu));
-	}
-	is INDEX then 		// possible variable offset
-	{   alignment = GetAlignment(tree@.child[0]);
-	    if alignment != 0 then
-	    {   if tree@.child[1]@.op == CONST then
-		    alignment = OffsetAlign(alignment,
-				    _uint(tree@.child[1]@.valu));
-		else
-		    alignment = 0;
-	    }
-	}
-	is SLICE then 
-	{   alignment = GetAlignment(tree@.child[0]);
-	    if alignment != 0 then
-	    {   if tree@.child[1]@.op == CONST then
-		    alignment = OffsetAlign(alignment,
-				    _uint(tree@.child[1]@.valu));
-		else
-		    alignment = 0;
-	    }
-	}
-	is CLIST, SCON then	// constant aggregate
-	    alignment = tree@.type@.align;
-	else
-	    lex.ErrorS(NOTIMPL, "GetAlignment: unexpected node");
-//err.str("GetAlignment: align="); err.uint(alignment); err.nl();
-	return alignment;
-    }
-
     proc ArrayCompare(tok: TokenT, lhs: Ast, rhs: Ast): Ast
     {   var tree: Ast;
 	var op: ast.Op;
@@ -1376,7 +1356,7 @@ err.str("Intrinsic unknown\n");
 	// FIXME: share code with stmt.AssignArray?
 	if lhs@.type@.packed == BIT then
 	{   if rhs@.type@.packed != BIT then
-		err.str("Both must be packed\n");
+		lex.ErrorS(NOTIMPL, "ArrayCompare: packed and not packed");
 	    lhs@.kind = UINT;
 	    rhs@.kind = UINT;
 	    if op == AEQ then op = EQ; else op = NE;

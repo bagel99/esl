@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 568 2011-05-23 21:28:40Z bgl $
+// $Id: llvm.esl 576 2011-06-07 17:47:31Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -888,19 +888,17 @@ package llvm
 
 	length = 0;	// 0 means variable
 	if node@.child[2]@.op == CONST then
-	    length = _uint(node@.child[2]@.valu);
+	    length = _uint(node@.child[2]@.valu) *
+		(node@.child[0]@.type@.base@.width/Target.membits);
 	align = _uint(node@.child[3]@.valu);
-err.str("Array compare experimental: length=");
-	if length == 0 then
-err.str("variable");
-	else
-err.uint(length);
 	// find the largest target chunk we can use
 	i = GetChunkSize(length, align);
 	size = Target.isizes[i].size/Target.membits;
 	align = Target.isizes[i].align/Target.membits;
+if debug.tests then { err.str("Array compare: length=");
+if length == 0 then err.str("variable"); else err.uint(length);
 err.str(" size="); err.uint(size);
-err.str(" align="); err.uint(align);
+err.str(" align="); err.uint(align);}
 	if length != 0 && length <= size then	// can do with one load
 	{
 	    node@.child[0] = expr.Cast(node@.child[0], puinttype[i]);
@@ -918,7 +916,7 @@ err.str(" align="); err.uint(align);
 		    mask = ~((1 << ((size-length)*8)) -1);
 		else	// assume LE
 		    mask = (1 << (length*8)) - 1;
-err.str(" mask=0x"); err.hex64(mask);
+if debug.tests then { err.str(" mask=0x"); err.hex64(mask);}
 		node@.child[0] = ast.New2(XOR, puinttype[i]@.base,
 					  node@.child[0], node.child[1]);
 		node@.child[0] = ast.New2(AND, puinttype[i]@.base,
@@ -935,7 +933,7 @@ err.str(" mask=0x"); err.hex64(mask);
 		Print("\t%N = icmp eq %0T %0N, %1N\n", node);
 	    else
 		Print("\t%N = icmp ne %0T %0N, %1N\n", node);
-err.nl();
+if debug.tests then { err.nl();}
 	    return true;
 	}
 	else
@@ -961,7 +959,7 @@ err.nl();
 	    Print("(%0T %0N, %1T %1N, %2T %2N)\n", node);
 	    UseIntrinsic[MEMCMP1+i] = true;
 	}
-err.nl();
+if debug.tests then { err.nl();}
 	return false;
     }
 
