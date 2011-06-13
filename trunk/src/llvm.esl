@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 576 2011-06-07 17:47:31Z bgl $
+// $Id: llvm.esl 587 2011-06-13 20:07:15Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -1487,7 +1487,7 @@ err.str("BitfieldMask of variable SLICE\n");
 		// or in the new value
 		rhs  = ast.New2(OR, type.wordtype, tree, rhs);
 		// adjust width of final result
-		rhs = expr.Extend(rhs, lhs@.size, true);
+		rhs = expr.Extend(rhs, lhs@.type@.width, true);
 		// make sure the endian is correct
 		if lhs@.size > Target.membits && 
 		   lhs@.type@.memorder != Target.order then
