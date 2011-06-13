@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 584 2011-06-07 21:39:19Z bgl $
+// $Id: stmt.esl 588 2011-06-13 20:08:27Z bgl $
 
 package stmt
 {
@@ -815,7 +815,7 @@ ast.Dump(rhs);
 	ctree = expr.Bool(0);
 	if ctree != 0 then
 	{   t = ctree@.type;
-	    if type.Same(t, type.booltype) then
+	    if type.Compat(t, type.booltype) then
 		ctree = expr.ForceBoolean(ctree);
 	    else
 		op = SEL;
@@ -913,7 +913,7 @@ ast.Dump(rhs);
 
 	tok = Token;
 	ctree = expr.Bool(type.booltype);
-	if type.Same(ctree@.type, type.booltype) then
+	if type.Compat(ctree@.type, type.booltype) then
 	    ctree = expr.ForceBoolean(ctree);
 	else
 	    lex.Error(WANTBOOL);
@@ -958,7 +958,7 @@ ast.Dump(rhs);
 	    lex.Error(NOLOOP);
 	tree = ast.New(EXIT, 0);
 	ctree = expr.Bool(type.booltype);
-	if type.Same(ctree@.type, type.booltype) then
+	if type.Compat(ctree@.type, type.booltype) then
 	    ctree = expr.ForceBoolean(ctree);
 	else
 	    lex.Error(WANTBOOL);

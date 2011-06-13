@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 585 2011-06-07 22:16:38Z bgl $
+// $Id: type2.esl 588 2011-06-13 20:08:27Z bgl $
 
 package type
 {
@@ -43,13 +43,6 @@ package type
     proc Def(tok: TokenT, bt: Type): Type;		// forward
     proc ParmList(procs: Symb, meths: Symb);		// forward
     proc Compat(t1: Type, t2: Type): boolean;		// forward
-
-    proc Same(a:Type, b:Type): boolean
-    {
-	if a == b || a@.name == b@.name then
-	    return true;
-	return false;
-    }
 
     proc SameTypeList(al: TypeList, bl: TypeList): boolean
     {
