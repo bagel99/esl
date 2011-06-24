@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: out.esl 579 2011-06-07 20:42:38Z bgl $
+// $Id: out.esl 590 2011-06-18 02:35:28Z bgl $
 
 // Unbuffered formatted Output
 // Assumes target wordsize is 32-bits or more.
@@ -85,7 +85,7 @@ package out
     }  
 
     proc(o: OutFD)  uint64(in: _uint64)
-    {	var i, n: _uint;
+    {	var i: _uint;
 	var buf: [20]_byte;
 
 	i = 20;
@@ -104,7 +104,7 @@ package out
     }
 
     proc(o: OutFD)  uint32(in: _uint32)
-    {	var i, n: _uint;
+    {	var i: _uint;
 	var buf: [10]_byte;
 
 	if _uint?size == _uint64?size then  // extend to native

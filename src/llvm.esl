@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 587 2011-06-13 20:07:15Z bgl $
+// $Id: llvm.esl 592 2011-06-24 21:47:58Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -21,7 +21,8 @@ import llvmdb;
 
 package llvm
 {
-    const llvm_memop_bug: boolean = true;	// memcpy intrinsic wants i8*
+    // change to memcpy instrinsic signature - between 2.8 and 2.9
+    const llvm_memcpy_new: boolean = true;
     type pstring: @[]_byte;
     // These pointer types might be useful to other packages.
     var pbytetype: Type;
@@ -624,10 +625,11 @@ package llvm
 	{   if UseIntrinsic[i] then
 		if i
 		is MEMCPY then
-		    if llvm_memop_bug then
-			Print("declare void @llvm.memcpy.%W(i8*, i8*, %W, i32) nounwind\n", 0);
+		{   if llvm_memcpy_new then
+			Print("declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\n", 0);
 		    else
-			Print("declare void @llvm.memcpy.%W([0 x i8]*, [0 x i8]*, %W, i32) nounwind\n", 0);
+			Print("declare void @llvm.memcpy.%W(i8*, i8*, %W, i32) nounwind\n", 0);
+		}
 		is BSWAP2 then
 		    Print("declare i16 @llvm.bswap.i16(i16)\n", 0);
 		is BSWAP4 then
@@ -838,11 +840,9 @@ package llvm
 
     proc Copy(node: Ast)
     {
-	if llvm_memop_bug then
-	{
-	    node@.child[0] = expr.Cast(node@.child[0], pbytetype);
-	    node@.child[1] = expr.Cast(node@.child[1], pbytetype);
-	}
+	// LLVM wants i8* types
+	node@.child[0] = expr.Cast(node@.child[0], pbytetype);
+	node@.child[1] = expr.Cast(node@.child[1], pbytetype);
 	GenSub(node@.child[0]);
 	GenSub(node@.child[1]);
 	// LLVM wants count to be register width
@@ -850,12 +850,12 @@ package llvm
 	GenSub(node@.child[2]);
 	// FIXME: need to check for potential overlap and use memmove if necessary
 	// FIXME: find alignment, here or during parsing?
-	if llvm_memop_bug then
+	if llvm_memcpy_new then
 	   Print(
-	   "\tcall void @llvm.memcpy.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N)\n", node);
+	   "\tcall void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\n", node);
 	else
 	   Print(
-	   "\tcall void @llvm.memcpy.%2T(%T %0N, %T %1N, %2T %2N, i32 %3N)\n", node);
+	   "\tcall void @llvm.memcpy.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N)\n", node);
 	UseIntrinsic[MEMCPY] = true;
     }
 
@@ -1262,15 +1262,39 @@ if debug.tests then { err.nl();}
 		}
 		tl = ps@.retvlist;
 		i = 0;
-		f.str("\tret ");
-		loop
-		{   PType(tl@.type);
+		if tl@.next != 0 then   // multiple returned values
+		{   // first, must insert each value into aggregate
+		    loop
+		    {   f.str("\t%mrv"); f.uint(i);
+			f.str(" = insertvalue");
+			PRetvType(ps@.retvlist, false);
+			if i == 0 then
+			    f.str(" undef");
+			else
+			{   f.str(" %mrv"); f.uint(i-1);
+			}
+			f.chr(',');
+			PType(tl@.type);
+			f.chr(' ');
+			PTempName(Tseqno+i);
+			f.chr(',');
+			f.uint(i);
+			f.nl();
+			i += 1;
+			tl = tl@.next;
+		      exit tl == 0;
+		    }
+		    // finally return the aggregate
+		    f.str("\tret ");
+		    PRetvType(ps@.retvlist, false);
+		    f.str(" %mrv"); f.uint(i-1);
+		    f.nl();
+		}
+		else		    // only one returned value
+		{   f.str("\tret ");
+		    PType(tl@.type);
 		    f.chr(' ');
 		    PTempName(Tseqno+i);
-		    i += 1;
-		    tl = tl@.next;
-		  exit tl == 0;
-		    f.str(", ");
 		}
 	    }
 	    else
