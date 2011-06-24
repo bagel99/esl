@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 588 2011-06-13 20:08:27Z bgl $
+// $Id: stmt.esl 589 2011-06-18 01:43:06Z bgl $
 
 package stmt
 {
@@ -1099,7 +1099,7 @@ ast.Dump(rhs);
     {   var tree: Ast;
 	var tok: TokenT;
 	var t, mt: Type;
-	var s, ms, ss, fs: Symb;
+	var s, ms, fs: Symb;
 	var ft: type.TypeList;
 
 	tree = 0;
@@ -1145,13 +1145,13 @@ ast.Dump(rhs);
 	if tok == ID then
 	{
 	    if mt != 0 then
-	    {   s = symb.New(PROC, lex.Ident, PRIVATE);
-	        if !symb.IsUniqueLocal(mt@.list, lex.Ident) then
-		    lex.ErrorI(DEFID, lex.Ident);
-		else
-		{  ss = symb.FindMethod(mt@.meths, lex.Ident);
-		    if ss != 0 && !ss.forward then
+	    {   s = symb.FindMethod(mt@.meths, lex.Ident);
+		if s != 0 then
+		{   if !s.forward then
 			lex.ErrorI(DEFID, lex.Ident);
+		}
+		else
+		{   s = symb.New(PROC, lex.Ident, PRIVATE);
 		    // Order doesn't matter, just put on top of list
 		    s@.methnext = mt@.meths;
 		    mt@.meths = s;
