@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 586 2011-06-07 22:19:56Z bgl $
+// $Id: expr2.esl 595 2011-07-18 22:17:05Z bgl $
 
 package expr
 {
@@ -1485,7 +1485,7 @@ err.str("Intrinsic unknown\n");
 
 	if t != 0 then
 	{
-//err.str("Const: "); err.uid(t@.kind); err.nl(); 
+//err.str("Const: "); err.str(type.KindName[t@.kind]); err.nl(); 
 	    if t@.kind
 	    is REF then
 	    {	if Token
@@ -1495,7 +1495,14 @@ err.str("Intrinsic unknown\n");
 		}
 		else
 		{   tree = Bool(t);	// FIXME: Bool(0)?
-		    tree@.type = t;
+		    if tree@.type != t then
+		    {   if type.Compat(tree@.type, t@.base) then
+			{   tree = CoerceToRef(tree);
+			    tree@.type = t@.base;
+			}
+			else
+			    lex.Error(BADCOMPV);
+		    }
 		}
 	    }
 	    is RECORD then tree = RecordConst(t);

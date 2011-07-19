@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 589 2011-06-18 01:43:06Z bgl $
+// $Id: stmt.esl 593 2011-07-14 22:05:04Z bgl $
 
 package stmt
 {
@@ -310,6 +310,15 @@ package stmt
 	return tree;
     }
 
+    proc EndConstraint(what: @[]_byte, i: 0..lex.StringMax): 0..lex.StringMax
+    {
+	loop
+	{   i += 1;
+	  exit what@[i] == '}';
+	}
+	return i;
+    }
+
     proc Asm(): Ast
     {   var tree, node, temp: Ast;
 	var narg, nout: ast.NSubNodes;
@@ -348,6 +357,8 @@ package stmt
 		    {   if what@[i]
 			is '=' then
 			{   i += 1;
+			    if what@[i] == '{' then
+				i = EndConstraint(what, i);
 			    nout += 1;
 			    constraints[narg] = OUT;
 			    narg += 1;
@@ -358,9 +369,15 @@ package stmt
 			}
 			is '~' then	// FIXME: handle this
 			{
+			    lex.ErrorS(NOTIMPL, "'~' in constraint");
+			    if what@[i] == '{' then
+				i = EndConstraint(what, i);
 			}
 			else
-			{   constraints[narg] = IN;
+			{
+			    if what@[i] == '{' then
+				i = EndConstraint(what, i);
+			    constraints[narg] = IN;
 			    narg += 1;
 			}
 			i += 1;
