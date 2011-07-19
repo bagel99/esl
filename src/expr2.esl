@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 595 2011-07-18 22:17:05Z bgl $
+// $Id: expr2.esl 596 2011-07-19 16:49:58Z bgl $
 
 package expr
 {
@@ -1495,7 +1495,13 @@ err.str("Intrinsic unknown\n");
 		}
 		else
 		{   tree = Bool(t);	// FIXME: Bool(0)?
-		    if tree@.type != t then
+//err.str("\tGot: "); err.str(type.KindName[tree@.kind]); err.nl();
+//type.DumpT(tree@.type, true); err.nl();
+//ast.Dump(tree);
+//err.str("\tWant:\n"); type.DumpT(t, true); err.nl();
+		    if tree@.op == CONST then   // pointer constant
+			tree@.type = t;
+		    else if tree@.type != t then
 		    {   if type.Compat(tree@.type, t@.base) then
 			{   tree = CoerceToRef(tree);
 			    tree@.type = t@.base;
