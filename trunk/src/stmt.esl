@@ -1,16 +1,17 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 593 2011-07-14 22:05:04Z bgl $
+// $Id: stmt.esl 600 2011-08-12 21:26:05Z bgl $
 
 package stmt
 {
     const isthenlist:[3]TokenT = { KIS, KTHEN, NONE };
+    const iselselist:[3]TokenT = { KIS, KELSE, NONE };
     const thenlist:[2]TokenT = { KTHEN, NONE };
     const elselist:[2]TokenT = { KELSE, NONE };
     const aslist:[2]TokenT = { KAS, NONE };
     const dolist:[2]TokenT = { KDO, NONE };
     const withlist:[2]TokenT = { KWITH, NONE };
     const skiplist:[3]TokenT = { GEND, SEMI, NONE };
-    type NestType: (PROGRAM, PACKAGE, PROCEDURE);
+    type NestType: (PROGRAM, PACKAGE);
     const LoopMax = 32;
     var   LoopLevel: 0..LoopMax-1;
     var   CurFile: Symb;
@@ -23,32 +24,56 @@ package stmt
 
     const skipgroup: [2]TokenT = { GEND, NONE };
     const skipstmt: [2]TokenT = { SEMI, NONE };
+    const iflist: [2]TokenT = {KIF, NONE };
 
-    proc WhenSkip(tok: TokenT)
+    proc CCSkip(tok: TokenT)
     {
-//err.str("Beg skip line="); err.uid(lex.Lineno());
-//err.str(" tok="); err.str(lex.keywords[tok]);
-//err.chr(':'); err.str(lex.Ident); err.nl();
+//lex.WhereAmI("Beg skip");
 	if tok == GBEG then
 	{   lex.Skip(skipgroup);
 	    lex.Expect(GEND);
 	}
 	else
-	{   lex.Skip(skipstmt);
-	    lex.Expect(SEMI);
+	{   // Have to treat if statement differently
+	    tok = lex.Keyword(iflist);
+	    if tok == KIF then
+	    {   tok = lex.Skip(isthenlist);
+		if tok
+		is KTHEN then
+		{   tok = Next();
+		    CCSkip(tok);
+		    tok = lex.Keyword(elselist);
+		}
+		is KIS then
+		{   loop
+		    {   tok = Next();
+			tok = lex.Skip(thenlist);
+			if tok == KTHEN then
+			{   tok = Next();
+			    CCSkip(tok);
+			}
+			tok = lex.Keyword(iselselist);
+		      exit tok != KIS;
+		   }
+		}
+		if tok == KELSE then
+		{   tok = Next();
+		    CCSkip(tok);
+		}        
+	    }
+	    else
+	    {   lex.Skip(skipstmt);
+	        lex.Expect(SEMI);
+	    }
 	}
-//err.str("End skip line="); err.uid(lex.Lineno());
-//err.str(" tok="); err.str(lex.keywords[Token]);
-//err.chr(':'); err.str(lex.Ident); err.nl();
+//lex.WhereAmI("End skip");
     }
 
-    proc WhenDo(nest: NestType): Ast
+    proc CCDo(nest: NestType): Ast
     {   var tree, stree: Ast;
 	var tok: TokenT;
 
-//err.str("Beg do line="); err.uid(lex.Lineno());
-//err.str(" tok="); err.str(lex.keywords[Token]);
-//err.chr(':'); err.str(lex.Ident); err.nl();
+//lex.WhereAmI("Beg do");
 	tree = 0;
 	if Token == GBEG then
 	{   tok = Next();
@@ -57,13 +82,9 @@ package stmt
 	    {   if nest
 		is PROGRAM then    stree = ProgStmt();
 		is PACKAGE then    stree = PkgStmt();
-		is PROCEDURE then  stree = Statement();
 		if stree != 0 then
 		    tree = ast.Child(tree, stree);
 		tok = Token;
-//err.str("\tline="); err.uid(lex.Lineno());
-//err.str(" tok="); err.str(lex.keywords[Token]);
-//err.chr(':'); err.str(lex.Ident); err.nl();
 	    }
 	    lex.Expect(GEND);
 	}
@@ -71,50 +92,89 @@ package stmt
 	{   if nest
 	    is PROGRAM then    tree = ProgStmt();
 	    is PACKAGE then    tree = PkgStmt();
-	    is PROCEDURE then  tree = Statement();
 	}
-//err.str("End do line="); err.uid(lex.Lineno());
-//err.str(" tok="); err.str(lex.keywords[Token]);
-//err.chr(':'); err.str(lex.Ident); err.nl();
+//lex.WhereAmI("End do");
 	return tree;
     }
 
-    proc WhenStmt(nest: NestType): Ast
-    {   var tree: Ast;
-	var val: Valu;
+    proc CCIfStmt(nest: NestType): Ast
+    {   var tree, ctree: Ast;
 	var tok: TokenT;
-	var ctree: Ast;
+	var t: Type;
+	var val, vlo, vhi: Valu;
+	var doneit, doit: boolean;
 
 	tree = 0;
 	ctree = expr.Bool(0);
-//err.str("When:\n"); ast.Dump(ctree);
-	if ctree@.op != CONST then
-	{
-	    lex.Error(EXPCONST);
-	    return tree;
+//err.str("CCIf:\n"); ast.Dump(ctree);
+	if ctree == 0 || ctree@.op != CONST then
+	{   lex.Error(EXPCONST);
+	    return 0;
 	}
+	t = ctree@.type;
 	val = ctree@.valu;
-//err.str("WhenStmt1: val="); err.uid(_word(val)); err.nl();
-	tok = lex.Keyword(thenlist);
-	if tok == KTHEN then
+	tok = lex.Keyword(isthenlist);
+	if tok
+	is KTHEN then
 	{   tok = Next();
-	    if val == 0 then
-		WhenSkip(tok);
+	    if !type.Compat(t, type.booltype) then
+	    {   lex.Error(WANTBOOL);
+		ctree@.valu = 0;    // just pick something and continue
+	    }
+	    doneit = boolean(val);
+	    if doneit then
+		tree = CCDo(nest);
 	    else
-		tree = WhenDo(nest);
-	    tok = lex.Keyword(elselist);
-//err.str("WhenStmt2: tok="); err.str(lex.keywords[tok]); err.nl();
-	    if tok == KELSE then
-	    {   tok = Next();
-		if val == 0 then
-		    tree = WhenDo(nest);
+		CCSkip(tok);
+	}
+	is KIS then
+	{   doneit = false;
+	    loop
+	    {   doit = false;
+		loop
+		{   tok = Next();
+		    vlo = expr.ConstScalar(t);
+		    vhi = vlo;  // assume no range
+		    tok = Token;
+		    if tok == RANGE then
+		    {   tok = Next();
+			vhi = expr.ConstScalar(t);
+		    }
+		    if vlo > vhi then
+		    {   // FIXME: range error
+		    }
+		    doit = doit || (vlo <= val && val <= vhi);
+		    tok = Token;
+		  exit tok != COMMA;
+		}
+		tok = lex.Keyword(thenlist);
+		if tok == KTHEN then
+		    tok = Next();
+		else lex.ErrorT(EXPECT, KTHEN);
+		if doit && doneit then
+		{   // FIXME: error message duplicate case
+		    doit = false;
+		}
+		if doit then
+		{   tree = CCDo(nest);
+		    doneit = true;
+		}
 		else
-		    WhenSkip(tok);
-	    }	    
+		    CCSkip(tok);  
+		tok = lex.Keyword(isthenlist);
+	      exit tok != KIS;
+	    }
 	}
 	else
-	{   lex.ErrorT(EXPECT, KTHEN);
-	}
+	    lex.Error(BADIF);
+	tok = lex.Keyword(elselist);
+	if tok == KELSE then
+	{   tok = Next();
+	    if !doneit then
+		tree = CCDo(nest);
+	    else
+		CCSkip(tok);
+	}	    
 	return tree;
     }
 
@@ -864,19 +924,13 @@ ast.Dump(rhs);
 		    tok = Token;
 		  exit tok != COMMA;
 		}
-		if tok == COLON then
-		{   tok = Next();
-		    lex.Error(USETHEN); // FIXME make illegal some day
-		}
-		else if lex.Keyword(thenlist) == KTHEN then
-		{   tok = Next();
-		}
+		if lex.Keyword(thenlist) == KTHEN then
+		    tok = Next();
 		else lex.ErrorT(EXPECT, KTHEN);
 		stree = Statement();
 		ctree = ast.Child(ctree, stree);
 		tree = ast.Child(tree, ctree);
-		tok = Token;
-		if tok == ID then tok = lex.Keyword(isthenlist);
+		tok = lex.Keyword(isthenlist);
 	      exit tok != KIS;
 	    }
 	}
@@ -1048,7 +1102,7 @@ ast.Dump(rhs);
     }
 
     const stmtlist:[13]TokenT =
-    { KTYPE, KVAR, KCONST, KIF, KFOR, KWHILE, KLOOP, KEXIT, KRET, KWHEN,
+    { KTYPE, KVAR, KCONST, KIF, KFOR, KWHILE, KLOOP, KEXIT, KRET,
       KASM, KALIAS, NONE };
 
     proc Statement(): Ast
@@ -1104,7 +1158,6 @@ ast.Dump(rhs);
 	    is KEXIT then   tree = Exit();
 	    is KRET then    tree = Return();
 	    is KASM then    tree = Asm();
-	    is KWHEN then   tree = WhenStmt(PROCEDURE);
 	    is KALIAS then  tree = Alias();
 	    is SEMI then    {}		// ignore extra semicolons
 	    else lex.ErrorT(BADSTMTT, tok);
@@ -1249,7 +1302,7 @@ ast.Dump(rhs);
     }
 
     const packlist:[9]TokenT =
-    { KTYPE, KVAR, KCONST, KPROC, KALIAS, KPACKAGE, KIMPORT, KWHEN, NONE };
+    { KTYPE, KVAR, KCONST, KPROC, KALIAS, KPACKAGE, KIMPORT, KIF, NONE };
 
     proc PkgStmt(): Ast
     {   var tree: Ast;
@@ -1265,7 +1318,7 @@ ast.Dump(rhs);
 	is KPROC then   { tok = Next();  tree = Procedure(); }
 	is KPACKAGE then  { tok = Next();  tree = Package(); }
 	is KIMPORT then   { tok = Next(); tree = Import(); }
-	is KWHEN then   { tok = Next();  tree = WhenStmt(PACKAGE); }
+	is KIF then     { tok = Next();  tree = CCIfStmt(PACKAGE); }
 	else
 	{   if tok == ID then
 	    {   lex.Error(NOPACK);
@@ -1322,7 +1375,7 @@ ast.Dump(rhs);
     }
 
     const proglist:[9]TokenT = 
-    { KIMPORT, KALIAS, KPACKAGE, KTYPE, KVAR, KCONST, KPROC, KWHEN, NONE };
+    { KIMPORT, KALIAS, KPACKAGE, KTYPE, KVAR, KCONST, KPROC, KIF, NONE };
 
     proc ProgStmt(): Ast
     {   var tree: ast.Ast;
@@ -1338,7 +1391,7 @@ ast.Dump(rhs);
 	is KVAR then      { tok = Next(); tree = VarDecl(); }
 	is KCONST then    { tok = Next(); tree = ConstDecl(); }
 	is KPROC then     { tok = Next(); tree = Procedure(); }
-	is KWHEN then     { tok = Next(); tree = WhenStmt(PROGRAM); }
+	is KIF then       { tok = Next(); tree = CCIfStmt(PROGRAM); }
 	else
 	{   if tok == SEMI then
 		tok = Next();
