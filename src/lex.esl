@@ -1,92 +1,32 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 582 2011-06-07 20:56:26Z bgl $
+// $Id: lex.esl 599 2011-08-12 20:25:17Z bgl $
 
 package lex
 {
     // Order is warnings, errors, internal errors
     type Errors:
-    (
-	NOTIMPL,
-	USETHEN,
-	TRUNC,
-	TOSIGNED,
-	TOUNSIGN,
-	BADINTPTR,
-	BADNL,		// first Error
-	CMTEOF,
-	BADEOF,
-	BADCHR,
-	BADHEXESC,
-	BADUTF8,
-	IDLONG,
-	STRLONG,
-	EXPECT,
-	EXPECTID,
-	UNDEFID,
-	DEFID,
-	UNDEFFIELD,
-	BADID,
-	BADREF,
-	BADINDEX,
-	NOIDTYPE,
-	NOTTYPE,
-	NOTYPE,
-	NOTENUM,
-	BADTYPE,
-	OPTYPE,
-	BADTYPDEF,
-	BADATTR,
-	UNDEFSTMT,
-	BADSTMTI,
-	BADSTMTT,
-	BADCOMPARE,
-	BADASSIGN,
-	ILLASSIGN,
-	LHSASSIGN,
-	RHSASSIGN,
-	TYPEASSIGN,
-	RHSLESS,
-	RHSMORE,
-	BADRETURN,
-	FORWPROC,
-	FORWPARM,
-	FORWRETV,
-	WANTBOOL,
-	WANTUINT,
-	BADCAST,
-	UNDFCOMPV,
-	BADCOMPV,
-	PROPID,
-	BADIF,
-	BADIS,
-	NOPROC,
-	NOLOOP,
-	NOPACK,
-	NOTREF,
-	NOTARRAY,
-	ARRAYCOPY,
-	NOTRECORD,
-	BADRECORD,
-	BASERECORD,
-	BASEENUM,
-	ARGSLO,
-	ARGSHI,
-	PARMTYPE,
-	INITHI,
-	BADCONST,
-	EXPCONST,
-	BADIMPORT,
-	BADLIST,	// first Internal Error
-	BADPACKREC,
-	ASSIGNCONST,
-	BADPTRCONST
+    (   // Warnings
+	NOTIMPL,    TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,
+	// Errors
+	BADNL,      ILLCHR,     ILLUTF8,    CMTEOF,     BADEOF,     BADCHR,
+	BADHEXESC,  BADUTF8,    IDLONG,     STRLONG,    EXPECT,     EXPECTID,
+	UNDEFID,    DEFID,      UNDEFFIELD, BADID,      BADREF,     BADINDEX,
+	NOIDTYPE,   NOTTYPE,    NOTYPE,     NOTENUM,    BADTYPE,    OPTYPE,
+	BADTYPDEF,  BADATTR,    UNDEFSTMT,  BADSTMTI,   BADSTMTT,   BADCOMPARE,
+	BADASSIGN,  ILLASSIGN,  LHSASSIGN,  RHSASSIGN,  TYPEASSIGN, RHSLESS,
+	RHSMORE,    BADRETURN,  FORWPROC,   FORWPARM,   FORWRETV,   WANTBOOL,
+	WANTUINT,   BADCAST,    UNDFCOMPV,  BADCOMPV,   PROPID,     BADIF,
+	BADIS,      NOPROC,     NOLOOP,     NOPACK,     NOTREF,     NOTARRAY,
+	ARRAYCOPY,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,   ARGSLO,
+	ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,   BADIMPORT,
+	// Internal Errors
+	BADLIST,    BADPACKREC, ASSIGNCONST,BADPTRCONST
     );
     const FirstError:Errors = BADNL;
     const InternalError:Errors = BADLIST;
     const ErrMsg:[Errors]@[]Char =
     {
 	[NOTIMPL] =	"Feature not yet implemented: ",
-	[USETHEN] =	"Use of ':' deprecated, use 'then' instead",
 	[TRUNC] =	"Truncation may cause loss of data",
 	[TOSIGNED] =	"Converting unsigned to signed integer",
 	[TOUNSIGN] =	"Converting signed to unsigned integer",
@@ -175,7 +115,7 @@ package lex
 	KRET,
 	KIF,	KTHEN,	KELSE,	KIS,
 	KFOR,	KWHILE,	KDO,	KLOOP,	KEXIT,	KWITH,
-	KIMPORT,KALIAS,	KAS,    KWHEN,	KASM,
+	KIMPORT,KALIAS,	KAS,    KASM,
 	// attributes begin here
 	KPACK,	KMPACK,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,
@@ -245,7 +185,6 @@ package lex
 	[KIMPORT] =	"import",
 	[KALIAS] =	"alias",
 	[KAS] =		"as",
-	[KWHEN] =	"when",
 	[KASM] =	"asm",
 	[KPACK] =	"packed",       // attributes for types
 	[KMPACK] =	"mempacked",
@@ -899,6 +838,7 @@ package lex
     proc WhereAmI(msg: @[]_byte)
     {
 	err.str(msg);
+	err.str(" line="); err.uint(Lineno());
 	err.str(" tok=");
 	err.str(keywords[Token]);
 	if Token == ID then
@@ -919,7 +859,6 @@ package lex
 
 	tok = Next();
 //WhereAmI("Skip start:");
-//err.str("\tlineno="); err.uid(Lineno());
 //err.str("\tlist=");
 //i = 0; loop
 //{  ttok = toklist[i];
@@ -928,11 +867,13 @@ package lex
 //   i += 1;
 //}
 //err.nl();
+	ttok = ENDF;
 	while tok != ENDF do
 	{   i = 0;
 	    loop
 	    {   ttok = toklist[i];
 	      exit ttok == NONE || tok == ttok;
+	      exit ttok > ID && zstr.eq(Ident, keywords[ttok]@, IdentMax);
 		i += 1;
 	    }
 	  exit ttok != NONE;
@@ -943,8 +884,10 @@ package lex
 	    tok = Next();
 	}
 //WhereAmI("Skip end:");
-//err.str("\tlineno="); err.uid(Lineno()); err.nl();
-	return tok;
+//err.str("\ttok="); err.str(keywords[tok]);
+//err.str(" ttok="); err.str(keywords[ttok]);
+//err.nl();
+	return ttok;
     }
 
     proc Want(toklist: @TokenList): TokenT
@@ -959,4 +902,5 @@ package lex
     }
 
 }
+// vim: ts=8 sw=4 noet nowrap
 

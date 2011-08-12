@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 595 2011-07-18 22:17:05Z bgl $
+// $Id: llvm.esl 597 2011-08-07 18:51:41Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -581,6 +581,7 @@ package llvm
 	Print("%S = internal constant %B ", node);
 	n = StringRange(node@.type@.hi);
 	PString(pstring(node@.symb), n, true);
+	f.nl();
     }
 
     // Look at nodes under a constant to see if there are any
