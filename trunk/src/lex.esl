@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 599 2011-08-12 20:25:17Z bgl $
+// $Id: lex.esl 603 2011-08-29 00:42:57Z bgl $
 
 package lex
 {
@@ -19,6 +19,7 @@ package lex
 	BADIS,      NOPROC,     NOLOOP,     NOPACK,     NOTREF,     NOTARRAY,
 	ARRAYCOPY,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,   ARGSLO,
 	ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,   BADIMPORT,
+	PROGERROR,
 	// Internal Errors
 	BADLIST,    BADPACKREC, ASSIGNCONST,BADPTRCONST
     );
@@ -32,6 +33,8 @@ package lex
 	[TOUNSIGN] =	"Converting signed to unsigned integer",
 	[BADINTPTR] =	"Pointer converted from wrong size integer",
 	[BADNL] =	"End of line in string or character constant",
+	[ILLCHR] =      "Illegal character in source",
+	[ILLUTF8] =     "Illegal byte in UTF8 sequence",
 	[CMTEOF] =	"End of file in comment",
 	[BADEOF] =	"Unexpected end of file",
 	[BADCHR] =	"Malformed character constant",
@@ -95,6 +98,8 @@ package lex
 	[BADCONST] =	"Const requires a constant value",
 	[EXPCONST] =	"Expression must be a compile-time constant",
 	[BADIMPORT] =	"Unable to import: ",
+	[PROGERROR] =   "Program defined error: ",
+	[BADLIST] =     "Malformed LIST for packed record",
 	[BADPACKREC] =	"Expecting LIST for packed record",
 	[ASSIGNCONST] = "Assignment to constant",
 	[BADPTRCONST] = "Illegal pointer constant"
@@ -115,7 +120,7 @@ package lex
 	KRET,
 	KIF,	KTHEN,	KELSE,	KIS,
 	KFOR,	KWHILE,	KDO,	KLOOP,	KEXIT,	KWITH,
-	KIMPORT,KALIAS,	KAS,    KASM,
+	KIMPORT,KALIAS,	KAS,    KASM,   KERROR,
 	// attributes begin here
 	KPACK,	KMPACK,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,
@@ -186,6 +191,7 @@ package lex
 	[KALIAS] =	"alias",
 	[KAS] =		"as",
 	[KASM] =	"asm",
+	[KERROR] =      "error",
 	[KPACK] =	"packed",       // attributes for types
 	[KMPACK] =	"mempacked",
 	[KLSB] =	"lsb",
@@ -276,8 +282,8 @@ package lex
 	OCT,
 	HEX,
 	DEC,
-	ID,
-	CHR, CHREND,
+	ID,   ID1,  ID2,  ID3,				// must be consecutive
+	CHR,  CHREND,
 	STR,
 	ESC,
 	HEX1, HEX2,					// must be consecutive
@@ -636,9 +642,37 @@ package lex
 		is '1'..'9' then { n = c-'0'; state = DEC; }
 		is '\'' then state = CHR;
 		is '"' then { j = 0; state = STR; }
+		is ' ','\t','\n','\r','\f' then // whitespace
+		{ }
+
 		is 'A'..'Z', 'a'..'z', '_' then
 		{   Ident[0] = c;  j = 1; state = ID; }
+		is 0xC2 .. 0xDF then		// 2 byte UTF8
+		{   Ident[0] = c;  j = 1; state = ID1; }
+		is 0xE0 .. 0xEF then		// 3 byte UTF8
+		{   Ident[0] = c;  j = 1; state = ID2; }
+		is 0xF0 .. 0xF4 then		// 4 byte UTF8
+		{   Ident[0] = c;  j = 1; state = ID3; }
+		else
+		    Error(ILLCHR);
 	    }
+	    is ID then
+		if c
+		is 'A'..'Z', 'a'..'z', '0'..'9', '_' then
+		{   Ident[j] = c; j += 1; }
+		is 0xC2 .. 0xDF then		// 2 byte UTF8
+		{   Ident[j] = c;  j += 1; state = ID1; }
+		is 0xE0 .. 0xEF then		// 3 byte UTF8
+		{   Ident[j] = c;  j += 1; state = ID2; }
+		is 0xF0 .. 0xF4 then		// 4 byte UTF8
+		{   Ident[j] = c;  j += 1; state = ID3; }
+		else
+		{   Ident[j] = 0; tok = ID; }   // end of identifier
+	    is ID1, ID2, ID3 then     // in a UTF8 sequence in identifier
+		if (c & 0b1100_0000) == 0b1000_0000 then
+		{   Ident[j] = c; j += 1; state -= 1; }
+		else
+		    Error(ILLUTF8);
 	    is DIV then
 		if c
 		is '/' then state = CMTLN;
@@ -719,12 +753,6 @@ package lex
 		is 'a'..'f' then n = (n<<4) + (c-'a'+10);
 		is '_' then {}
 		else    { Number = n; tok = NUM; }
-	    is ID then
-		if c
-		is 'A'..'Z', 'a'..'z', '0'..'9', '_' then
-		{   Ident[j] = c; j += 1; }
-		else
-		{   Ident[j] = 0; tok = ID; }
 	    is CHR then
 	    {	str = false;
 		if c
