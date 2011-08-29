@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 600 2011-08-12 21:26:05Z bgl $
+// $Id: stmt.esl 603 2011-08-29 00:42:57Z bgl $
 
 package stmt
 {
@@ -1101,9 +1101,21 @@ ast.Dump(rhs);
 	return 0;
     }
 
-    const stmtlist:[13]TokenT =
+    proc ErrorStmt(): Ast
+    {   var tok: TokenT;
+
+	tok = Token;
+	if tok == STR then
+	{   lex.ErrorS(PROGERROR, lex.StringBuf);
+	    tok = Next();
+	}
+	else lex.ErrorT(EXPECT, STR);
+	return 0;
+    }
+
+    const stmtlist:[]TokenT =
     { KTYPE, KVAR, KCONST, KIF, KFOR, KWHILE, KLOOP, KEXIT, KRET,
-      KASM, KALIAS, NONE };
+      KASM, KALIAS, KERROR, NONE };
 
     proc Statement(): Ast
     {   var tree, stree: Ast;
@@ -1159,6 +1171,7 @@ ast.Dump(rhs);
 	    is KRET then    tree = Return();
 	    is KASM then    tree = Asm();
 	    is KALIAS then  tree = Alias();
+	    is KERROR then  tree = ErrorStmt();
 	    is SEMI then    {}		// ignore extra semicolons
 	    else lex.ErrorT(BADSTMTT, tok);
 	}
@@ -1301,8 +1314,8 @@ ast.Dump(rhs);
 	return tree;
     }
 
-    const packlist:[9]TokenT =
-    { KTYPE, KVAR, KCONST, KPROC, KALIAS, KPACKAGE, KIMPORT, KIF, NONE };
+    const packlist:[]TokenT =
+    { KTYPE, KVAR, KCONST, KPROC, KALIAS, KPACKAGE, KIMPORT, KIF, KERROR, NONE };
 
     proc PkgStmt(): Ast
     {   var tree: Ast;
@@ -1319,6 +1332,7 @@ ast.Dump(rhs);
 	is KPACKAGE then  { tok = Next();  tree = Package(); }
 	is KIMPORT then   { tok = Next(); tree = Import(); }
 	is KIF then     { tok = Next();  tree = CCIfStmt(PACKAGE); }
+	is KERROR then  { tok = Next();  tree = ErrorStmt(); }
 	else
 	{   if tok == ID then
 	    {   lex.Error(NOPACK);
@@ -1374,8 +1388,8 @@ ast.Dump(rhs);
 	return tree;
     }
 
-    const proglist:[9]TokenT = 
-    { KIMPORT, KALIAS, KPACKAGE, KTYPE, KVAR, KCONST, KPROC, KIF, NONE };
+    const proglist:[]TokenT = 
+    { KIMPORT, KALIAS, KPACKAGE, KTYPE, KVAR, KCONST, KPROC, KIF, KERROR, NONE };
 
     proc ProgStmt(): Ast
     {   var tree: ast.Ast;
@@ -1392,6 +1406,7 @@ ast.Dump(rhs);
 	is KCONST then    { tok = Next(); tree = ConstDecl(); }
 	is KPROC then     { tok = Next(); tree = Procedure(); }
 	is KIF then       { tok = Next(); tree = CCIfStmt(PROGRAM); }
+	is KERROR then    { tok = Next(); tree = ErrorStmt(); }
 	else
 	{   if tok == SEMI then
 		tok = Next();
