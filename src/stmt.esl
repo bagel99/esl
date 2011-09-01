@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 603 2011-08-29 00:42:57Z bgl $
+// $Id: stmt.esl 605 2011-09-01 18:01:22Z bgl $
 
 package stmt
 {
@@ -1182,7 +1182,7 @@ ast.Dump(rhs);
     {   var tree: Ast;
 	var tok: TokenT;
 	var t, mt: Type;
-	var s, ms, fs: Symb;
+	var s, ms, fs, es: Symb;
 	var ft: type.TypeList;
 
 	tree = 0;
@@ -1264,14 +1264,13 @@ ast.Dump(rhs);
 	    if tok != SEMI then
 	    {   s@.forward = false;
 		symb.curproc = s;
-		symb.Push(s@.parmlist);	// make parameters visable
-		symb.Push(0);		// another level for locals
+		es = symb.Push(s@.parmlist);	// make parameters visable
 		LoopLevel = 0;
 		tree = Statement();
 		if debug.symb.proc then
 		    symb.Dump(2);
-		symb.Pop();		// remove locals
-		symb.Pop();		// remove parameters
+		symb.Pop();			// remove locals+parameters
+		if es != 0 then es@.next = 0;   // restore parameter list end
 		symb.curproc = 0;
 	        t = s@.type;
 		tree = ast.New1(PROC, t, tree);
