@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 601 2011-08-28 19:45:35Z bgl $
+// $Id: expr2.esl 606 2011-09-01 20:46:37Z bgl $
 
 package expr
 {
@@ -959,7 +959,7 @@ err.str("Intrinsic unknown\n");
 	}
 	else
 	    lex.ErrorT(EXPECT, PBEG);
-	if s != 0 then
+	if s != 0 && s@.isparam then
 	    lex.Error(ARGSLO);
 	return tree;
     }
@@ -1327,7 +1327,18 @@ err.str("Intrinsic unknown\n");
     proc ScalarCompare(tok: TokenT, lhs: Ast, rhs: Ast): Ast
     {   var tree: Ast;
 	var op: ast.Op;
- 
+
+        if rhs.kind
+        is ARRAY, RECORD then
+	{   lex.Error(BADCOMPARE);
+	    return lhs;			// what to return on error?
+	}
+	is REF, REFPROC then
+	{   if tok != EQ && tok != NE then
+	    {   lex.Error(BADCOMPARE);
+		return lhs;			// what to return on error?
+	    }
+	}
 	if IsSignedBinOp(lhs, rhs) then
 	    op = scmpop[tok - EQ];
 	else
@@ -1351,6 +1362,10 @@ err.str("Intrinsic unknown\n");
 	is EQ then op = AEQ;
 	is NE then op = ANE;
 	else
+	{   lex.Error(BADCOMPARE);
+	    return lhs;			// what to return on error?
+	}
+	if rhs@.kind != ARRAY then
 	{   lex.Error(BADCOMPARE);
 	    return lhs;			// what to return on error?
 	}

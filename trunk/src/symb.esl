@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: symb.esl 568 2011-05-23 21:28:40Z bgl $
+// $Id: symb.esl 605 2011-09-01 18:01:22Z bgl $
 
 package symb
 {
@@ -76,15 +76,17 @@ package symb
     proc New(kind: SymbT, name: @lex.Identifier, vis: Visibility): Symb
     {   var s: Symb;
 
+	s = 0;
 	if vis != PRIVATE then	// not private, see if already in use
 	{   s = symbs[level].frst;
 	    while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
 		s = s@.next;
-	    if s != 0 then
-	    {   if !s@.forward then
-		    lex.ErrorI(DEFID, name);
+	}
+	if s != 0 then
+	{   if s@.forward then
 		return s;
-	    }
+	    else    // already defined, error message and make a new one
+		lex.ErrorI(DEFID, name);
 	}
 	s = Symb(sys.malloc(SymbNode?size + zstr.len(name, lex.IdentMax)));
 	zstr.copy(s@.ident, name, lex.IdentMax);
@@ -201,7 +203,7 @@ package symb
 	return symbs[level].frst;
     }
 
-    proc Push(init: Symb)
+    proc Push(init: Symb): Symb
     {
 	if level < NestMax then
 	{   level += 1;
@@ -221,6 +223,7 @@ package symb
 	else
 	{	// FIXME: error
 	}
+	return init;
     }
 
     proc Pop()

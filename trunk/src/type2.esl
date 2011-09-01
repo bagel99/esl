@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 588 2011-06-13 20:08:27Z bgl $
+// $Id: type2.esl 606 2011-09-01 20:46:37Z bgl $
 
 package type
 {
@@ -651,6 +651,7 @@ package type
 	var t: Type;
 	var bs: Symb;
 
+	t = unkntype;		// in case all goes wrong
 	tok = Next();
 	if tok == ID then
 	{
@@ -718,7 +719,12 @@ package type
 	{
 	    s = Name();
 	    if s != 0 then
-		t = s@.type;
+	    {   t = s@.type;
+		if t == 0 then
+		{   lex.Error(NOIDTYPE);
+		    t = unkntype;
+		}
+	    }
 	    else
 		lex.ErrorI(UNDEFID, lex.Ident);
 	    tok = Next();
