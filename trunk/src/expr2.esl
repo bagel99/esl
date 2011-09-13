@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 606 2011-09-01 20:46:37Z bgl $
+// $Id: expr2.esl 611 2011-09-13 17:09:08Z bgl $
 
 package expr
 {
@@ -19,7 +19,7 @@ package expr
 	return tree;
     }
 
-    const proplist:[]TokenT = { KMIN, KMAX, KBITSZ, KMEMSZ, KLEN, NONE };
+    const proplist:[]TokenT = { KMIN, KMAX, KBITSZ, KMEMSZ, KALIGN, KLEN, NONE };
     proc Property(t:Type): Ast
     {   var tree: Ast;
 	var tok: TokenT;
@@ -33,6 +33,7 @@ package expr
 	    is KMAX then tree = ast.Const(t, t@.hi);
 	    is KBITSZ then tree = ast.Const(type.wordtype, t@.size);
 	    is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/Target.membits);
+	    is KALIGN then tree = ast.Const(type.wordtype, t@.align/Target.membits);
 	    is KLEN then
 	    {   if t@.kind == ARRAY then
 		    tree = ast.Const(type.wordtype, t@.hi);
