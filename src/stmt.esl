@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 605 2011-09-01 18:01:22Z bgl $
+// $Id: stmt.esl 607 2011-09-08 19:40:22Z bgl $
 
 package stmt
 {
@@ -1197,7 +1197,7 @@ ast.Dump(rhs);
 		ms = symb.New(VAR, lex.Ident, PRIVATE);
 		ms@.isparam = true;
 		ms@.linkage = LOCAL;
-		t = 0;
+		t = type.unkntype;		// in case all goes wrong
 		tok = Next();
 		if tok == COLON then
 		{   tok = Next();

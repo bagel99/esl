@@ -1,5 +1,5 @@
 // Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 606 2011-09-01 20:46:37Z bgl $
+// $Id: type2.esl 612 2011-09-13 18:14:37Z bgl $
 
 package type
 {
@@ -304,6 +304,10 @@ package type
 		t@.bitorder = LSB;
 	    if t@.memorder == NATIVE then
 		t@.memorder = Target.order;
+	    if t@.size != 0 && t@.width == 0 then
+		t@.width = target.isize(t@.size);
+	    if t@.width != 0 && t@.size == 0 then
+		t@.size = t@.width;
 	    if t@.kind
 	    is ENUM, UINT then 
 	    {   if t@.size == 0 then
@@ -381,13 +385,18 @@ package type
 		    prev = f;
 		    f = f@.next;
 		}
-		t@.size = offs;
-		if offs <= Target.regsize then
-		    t@.width = target.isize(offs);
-		else
-		    t@.width = offs;
-//err.str("initial width="); err.uid(t@.width); err.nl();
-//err.str("initial align="); err.uid(align); err.nl();
+//err.str("explicit size= "); err.uint(t@.size); err.nl();
+//err.str("explicit width="); err.uint(t@.width); err.nl();
+		if t@.size == 0 then    // no explicit attribute
+		    t@.size = offs;
+		if t@.width == 0 then
+		{   if offs <= Target.regsize then
+			t@.width = target.isize(offs);
+		    else
+			t@.width = offs;
+		}
+//err.str("initial width="); err.uint(t@.width); err.nl();
+//err.str("initial align="); err.uint(align); err.nl();
 		if align > 0 then
 		{   mod = t@.width % align;
 		    if mod != 0 then	// pad to alignment
@@ -397,8 +406,8 @@ package type
 		    align = target.ialign(t@.size);
 		if t@.align == 0 then
 		    t@.align = align;
-//err.str("final width="); err.uid(t@.width); err.nl();
-//err.str("final align="); err.uid(t@.align); err.nl();
+//err.str("final width="); err.uint(t@.width); err.nl();
+//err.str("final align="); err.uint(t@.align); err.nl();
 	    }
 	    is ARRAY then 
 	    {   if t@.base != 0 then
@@ -601,14 +610,15 @@ package type
 			tok = Next();
 			s@.isparam = true;
 			s@.linkage = LOCAL;
+			t = unkntype;
 			if tok == COLON then
 			{   tok = Next();
 			    t = type.Def(tok, 0);
 			    type.Final(t);
-			    s@.type = t;
 			    tok = Token;
 			}
 			else lex.ErrorT(EXPECT, COLON);
+			s@.type = t;
 			if procs@.parmlist == 0 then
 			    procs@.parmlist = s;
 			if prevs != 0 then
