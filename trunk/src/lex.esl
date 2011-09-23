@@ -1,5 +1,5 @@
-// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 603 2011-08-29 00:42:57Z bgl $
+// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// $Id: lex.esl 623 2011-09-19 01:12:30Z bgl $
 
 package lex
 {
@@ -322,7 +322,7 @@ package lex
 	err.str(ErrMsg[error]);
 	if ErrorCount >= ErrorMax then
 	{
-	    err.str("Too many errors, quiting.\n");
+	    err.str("\nToo many errors, quiting.\n");
 	    sys.exit(1);
 	}
     }

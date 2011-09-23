@@ -1,5 +1,5 @@
-// Copyright (c) 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvmdb.esl 566 2011-05-23 20:25:24Z bgl $
+// Copyright (c) 2010-2011, Brian G. Lucas.  See LICENSE file.
+// $Id: llvmdb.esl 623 2011-09-19 01:12:30Z bgl $
 
 package llvmdb
 {
@@ -424,7 +424,7 @@ package llvmdb
 	seqno += 1;
 	PHeader(seqno, DW_TAG.Enumerator);	// tag
 	PSymbName(s, COMMA);			// name
-	P64(s@.valu, BRACE);			// value
+	P64(s@.const@.valu, BRACE);		// value
 	return seqno;
     }
 

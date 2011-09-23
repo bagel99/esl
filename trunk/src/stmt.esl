@@ -1,5 +1,5 @@
-// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 607 2011-09-08 19:40:22Z bgl $
+// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// $Id: stmt.esl 624 2011-09-19 01:13:49Z bgl $
 
 package stmt
 {
@@ -323,11 +323,10 @@ package stmt
 	    {   tok = Next();
 		tree = expr.Const(t);
 		if t == 0 then t = tree@.type;
+		s@.const = tree;
 		if t@.kind <= REF || t@.packed == BIT then
 		{   if tree@.op == CONST then
-		    {   s@.valu = tree@.valu;
-			if t == 0 then t = tree@.type;
-			tree = 0;	// delete AST
+		    {   if t == 0 then t = tree@.type;
 		    }
 		    else
 			lex.Error(BADCONST);
@@ -361,7 +360,7 @@ package stmt
 	{   s = symb.Find(lex.Ident);
 	    tok = Next();
 	    if s != 0 then
-	    {   tree = expr.Primary(s);
+	    {   tree = expr.Primary(s, 0);
 		if tree@.op == TYPE then lex.ErrorI(BADTYPE, tree@.symb@.ident);
 	    }
 	    else lex.ErrorI(UNDEFID, lex.Ident);
@@ -808,7 +807,7 @@ ast.Dump(rhs);
 	    tok = Next();
 	}
 	if s != 0 then
-	{   tree = expr.Primary(s);
+	{   tree = expr.Primary(s, 0);
 	    if tree != 0 then
 	    {   if tree@.op
 		is CALL, CALLI, ASM then {}     // no further action
@@ -1235,6 +1234,7 @@ ast.Dump(rhs);
 		}
 		else
 		{   s = symb.New(PROC, lex.Ident, PRIVATE);
+		    s@.bound = true;
 		    // Order doesn't matter, just put on top of list
 		    s@.methnext = mt@.meths;
 		    mt@.meths = s;
