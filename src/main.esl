@@ -1,5 +1,5 @@
-// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 574 2011-06-07 17:43:16Z bgl $
+// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// $Id: main.esl 623 2011-09-19 01:12:30Z bgl $
 
 var debug:
     {	symb:
@@ -33,10 +33,13 @@ import type1;
 alias	type.Type as Type, type.TypeT as TypeT, type.Valu as Valu;
 import target;
 alias	target.Target as Target;
-import symb;
+import symb1;
+alias   symb.SymbNode as type.SymbNode; // fixup forward reference
 alias	symb.Symb as Symb, symb.SymbT as SymbT;
 import ast;
+alias   ast.AstNode as symb.AstNode;    // fixup forward reference
 alias	ast.Ast as Ast, ast.Op as Op;
+import symb2;
 import expr1;
 import type2;
 import expr2;

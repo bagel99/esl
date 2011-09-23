@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 568 2011-05-23 21:28:40Z bgl $
+// $Id: ast.esl 617 2011-09-16 19:01:40Z bgl $
 
 package ast
 {
@@ -109,6 +109,15 @@ package ast
 	return pa;
     }
 
+    proc Dup(from: Ast): Ast
+    {   var pa: Ast;
+
+	pa = Ast(sys.zalloc(AstNode?size + from@.max * Ast?size));
+	pa@ = from@;	// record copy
+	pa@.lineno = lex.Lineno();
+	return pa;
+    }	
+    
     proc Expand(po: Ast, newsize:NSubNodes): Ast
     {   var pn: Ast;
 	var size, i: NSubNodes;

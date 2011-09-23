@@ -1,0 +1,172 @@
+// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// $Id: symb2.esl 623 2011-09-19 01:12:30Z bgl $
+
+package symb
+{
+    proc NewIntrinsic(name: @lex.Identifier, valu: IntrinsicT)
+    {   var s: Symb;
+
+	s = New(PROC, name, VISIBLE);
+	s@.addr = OffsT(valu);  // store intrinsic index in addr field
+    }
+
+    proc InitDecl()
+    {   var t: Type;
+	var s, s0, s1: Symb;
+
+	// predefined _boolean
+	t = type.New(ENUM);
+	t@.size = 1;
+	s1 = New(CONSTANT, "true", PRIVATE);
+	s1@.const = ast.Const(t, 1);
+	s0 = New(CONSTANT, "false", PRIVATE);
+	s0@.const = ast.Const(t, 0);
+	s0@.next = s1;
+	t@.list = s0;
+	type.Final(t);
+	s = New(TYPE, "_boolean", VISIBLE);
+	s@.type = t;
+	t@.name = s;
+	type.booltype = t;	// internal use by compiler
+	s = Clone(s, "boolean");	// user convenience 
+	// now expose the constants false and true
+	s = New(CONSTANT, "false", VISIBLE);
+	s@.type = t;
+	s@.const = ast.Const(t, 0);
+	s = New(CONSTANT, "true", VISIBLE);
+	s@.type = t;
+	s@.const = ast.Const(t, 1);
+
+	// predefined _byte, _memory, _address
+	type.bytetype = type.NewBuiltin(UINT, "_byte", Target.membits);
+	type.memtype = type.NewBuiltin(ARRAY, "_memory", 0);
+	type.memtype@.base = type.bytetype;
+	type.memtype@.align = Target.membits;	// Fixup alignment
+	type.memtype@.flex = true;
+	t = type.NewBuiltin(REF, "_address", Target.ptr.size);
+	t@.base = type.memtype;
+	t@.align = Target.ptr.align;
+	
+	// predefined _uint*, _int*
+	type.wordtype = type.NewBuiltin(UINT, "_uint", Target.regsize);
+	type.swordtype = type.NewBuiltin(SINT, "_int", Target.regsize);
+	type.uinttypes[0] = type.NewBuiltin(UINT, "_uint8",   8);
+	type.inttypes[0]  = type.NewBuiltin(SINT, "_int8",    8);
+	type.uinttypes[1] = type.NewBuiltin(UINT, "_uint16", 16);
+	type.inttypes[1]  = type.NewBuiltin(SINT, "_int16",  16);
+	type.uinttypes[2] = type.NewBuiltin(UINT, "_uint32", 32);
+	type.inttypes[2]  = type.NewBuiltin(SINT, "_int32",  32);
+	type.uinttypes[3] = type.NewBuiltin(UINT, "_uint64", 64);
+	type.inttypes[3]  = type.NewBuiltin(SINT, "_int64",  64);
+
+	// the "unknown" type
+	type.unkntype = type.New(UTYPE);
+	type.unkntype@.size = Target.membits;	// give it non-zero size
+	type.unkntype@.align = Target.membits;	// and alignment	
+
+	// intrinsics
+	NewIntrinsic("_abs", ABS);
+	NewIntrinsic("_min", MIN);
+	NewIntrinsic("_max", MAX);
+    }
+
+    proc Init()
+    {
+	level = 0;
+	symbs[0].frst = 0;
+	symbs[0].last = 0;
+	InitDecl();
+    }
+
+    proc DumpST(s: Symb, full: boolean)
+    {
+	err.str(s@.ident);
+	err.chr(':');
+	type.DumpT(s@.type, full);
+    }
+
+    proc DumpFormals(ss: Symb)
+    {
+	err.chr('(');
+	if ss != 0 then
+	{   loop
+	    {   DumpST(ss, false);
+		ss = ss@.next;
+	      exit ss == 0;
+		err.str(", ");
+	    }
+	}
+	err.chr(')');
+    }
+
+    proc DumpS(s: Symb)
+    {   var tl: type.TypeList;
+
+	if s@.kind
+	is CONSTANT then 
+	{   err.str("constant "); DumpST(s, false);
+	    if s@.type@.kind <= REF && s@.const != 0 then
+	    {   err.chr('='); 
+		err.hex64(s@.const@.valu);
+	    }
+	}
+	is TYPE then      { err.str("type ");     DumpST(s, true); }
+	is VAR then       { err.str("var ");      DumpST(s, false);
+//	    DumpLinkage(s);
+		     }
+	is FIELD then     { err.str("field "); err.str(s@.ident);}
+	is PROC then 
+	{   if s@.addr == 0 then
+	    {   err.str("proc ");
+		err.str(s@.ident);
+		DumpFormals(s@.parmlist);
+		tl = s@.retvlist;
+		if tl != 0 then
+		{   err.chr(':');
+		    loop
+		    {   type.DumpT(tl@.type, false);
+			tl = tl@.next;
+		      exit tl == 0;
+			err.chr(',');
+		    }
+		}
+	    }
+	    else
+	    {   err.str("intrinsic ");
+		err.str(s@.ident);
+		err.str("()");
+	    }
+	}
+	is PACK then      { err.str("package "); err.str(s@.ident);}
+	is ALIAS then     { err.str("alias ");   err.str(s@.ident);}
+	else 
+	{   err.str("undefined "); err.str(s@.ident); err.nl();
+	}
+	err.nl();
+    }
+
+    proc Dump(n: levels)
+    {   var stop, i: _uint; // FIXME levels;
+	var s: Symb;
+
+	if level < n then
+	   stop = 0;
+	else
+	   stop = level + 1 - n;
+	i = level;
+	loop
+	{
+	    err.str("*** level "); err.uint(i); err.str(" ***\n");
+	    s = symbs[i].frst;
+	    while s != 0 do
+	    {   DumpS(s);
+		s = s@.next;
+	    }
+	  exit i <= stop;
+	    i -= 1;
+	}
+	
+    } 
+}
+// vim: ts=8 sw=4 noet nowrap
+

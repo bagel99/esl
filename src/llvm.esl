@@ -1,5 +1,5 @@
-// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 597 2011-08-07 18:51:41Z bgl $
+// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// $Id: llvm.esl 623 2011-09-19 01:12:30Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -220,8 +220,21 @@ package llvm
 	is LOCAL then  { f.chr('%'); f.str(s@.ident); }
 	is NORMAL, INLINE then
 	{   f.chr('@');
-	    if s@.package != 0 then
-		PPkgPfx(s@.package);
+	    if s@.kind == PROC && s@.bound then
+	    {   var bs: Symb;
+		var bt: Type;
+		bt = s@.parmlist@.type;
+		if bt@.kind == REF then bt = bt@.base;
+		bs = bt@.name;
+		if bs@.package != 0 then
+		    PPkgPfx(bs@.package);
+		f.str(bs@.ident);
+		f.chr(package_delimiter);
+	    }
+	    else
+	    {   if s@.package != 0 then
+		    PPkgPfx(s@.package);
+	    }
 	    f.str(s@.ident);
 	}
 	is GLOBAL, EXTERN then { f.chr('@'); f.str(s@.ident); }

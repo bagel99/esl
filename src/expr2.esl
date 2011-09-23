@@ -1,5 +1,5 @@
-// Copyright (c) 2009, 2010, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 611 2011-09-13 17:09:08Z bgl $
+// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// $Id: expr2.esl 624 2011-09-19 01:13:49Z bgl $
 
 package expr
 {
@@ -69,12 +69,16 @@ package expr
 
     proc EnumConst(t: Type): Ast
     {   var s: Symb;
+	var tree: Ast;
 
 	// assert t@.kind == ENUM
 	s = t@.list;
 	while s != 0 do
 	{   if zstr.eq(s@.ident, lex.Ident, lex.IdentMax) then
-		return ast.Const(t, s@.valu);
+	    {   tree = ast.Dup(s@.const);
+		tree@.size = s@.const@.type@.width;
+		return tree;
+	    }
 	    s = s@.next;
 	}
 	lex.ErrorI(UNDEFID, lex.Ident);
@@ -217,6 +221,30 @@ ast.Dump(tree);
 	return tree;
     }
 
+    proc CompositeNamedConstant(t: Type): Ast
+    {   var cs: Symb;
+	var ct: Type;
+	var tree: Ast;
+	var tok: TokenT;
+
+        tree = 0;
+	cs = symb.Find(lex.Ident);
+	if cs != 0 then
+	{   if cs@.kind == CONSTANT then
+	    {   ct = cs@.type;
+		if type.Compat(ct, t) then
+		{   tree = cs@.const;
+		    tree@.type = ct;
+		}
+		else lex.Error(BADCOMPV);
+	    }
+	    else lex.Error(EXPCONST);
+	    tok = Next();
+	}
+	else lex.ErrorI(UNDEFID, lex.Ident);
+	return tree;
+    }
+
     proc ArrayPack(t:Type, intree:Ast): Ast
     {   var offs, tsize, fsize: type.BitSize;
 	var i: ast.NSubNodes;
@@ -332,8 +360,9 @@ ast.Dump(tree);
 	    tree@.kind = REF;
 	    tok = Next();
 	}
-	else
-	    lex.ErrorT(EXPECT, GBEG);
+	else if tok == ID then
+	    tree = CompositeNamedConstant(t);
+	else lex.ErrorT(EXPECT, GBEG);
 	return tree;
     }
 
@@ -451,8 +480,9 @@ ast.Dump(tree);
 	    if t@.packed == BIT then
 		tree = RecordPack(t, tree);
 	}
-	else
-	    lex.ErrorT(EXPECT, GBEG);
+	else if tok == ID then
+	    tree = CompositeNamedConstant(t);
+	else lex.ErrorT(EXPECT, GBEG);
 	return tree;
     }
 
@@ -868,7 +898,7 @@ ast.Dump(tree);
 	tok = Token;
 	if tok == PBEG then
 	{   tok = Next();
-	    which = symb.IntrinsicT(ps@.valu);
+	    which = symb.IntrinsicT(ps@.addr);
 	    if which
 	    is ABS then
 	    {   rhs = Bool(0);
@@ -965,7 +995,20 @@ err.str("Intrinsic unknown\n");
 	return tree;
     }
 
-    proc Atom(s:Symb): Ast
+    proc RefProc(s: Symb): Ast
+    {   var t: Type;
+	var tree: Ast;
+
+	// must create a REFPROC type to point at proc symbol
+	t = type.New(REFPROC);
+	t@.list = s;
+	tree = ast.New(VAR, t);
+	tree@.kind = REFPROC;
+	tree@.symb = s;
+	return tree;
+    }
+
+    proc Atom(s:Symb, et:Type): Ast
     {   var tree: Ast;
 	var t: Type;
 
@@ -982,7 +1025,7 @@ err.str("Intrinsic unknown\n");
 		}
 		is CONSTANT then
 		{   if t@.kind <= REF || t@.packed == BIT then
-			tree = ast.Const(t, s@.valu);
+			tree = ast.Dup(s@.const);
 		    else	// treat like a var
 		    {   tree = ast.New(VAR, t);
 			tree@.symb = s;
@@ -993,10 +1036,14 @@ err.str("Intrinsic unknown\n");
 			tree@.type = t@.base;
 		}
 		is PROC then
-		{   if s@.valu != 0 then
+		{   if s@.addr != 0 then
 			tree = Intrinsic(s);
 		    else
-			tree = Call(s, 0, 0);
+		    {   if et != 0 && et@.kind == REFPROC then
+			    tree = RefProc(s);
+			else
+			    tree = Call(s, 0, 0);
+		    }
 		}
 		is TYPE then
 		{   tree = ast.New(TYPE, t);
@@ -1007,13 +1054,13 @@ err.str("Intrinsic unknown\n");
 	return tree;
     }
 
-    proc Primary(s: Symb): Ast
+    proc Primary(s: Symb, et: Type): Ast
     {   var tree: Ast;
 	var t, bt: Type;
 	var tok: TokenT;
 	var done: boolean;
 
-	tree = Atom(s);
+	tree = Atom(s, et);
 	tok = Token;
 	done = false;
 	while !done && tree != 0 && tree@.type != 0 do
@@ -1044,7 +1091,10 @@ err.str("Intrinsic unknown\n");
 			if s != 0 then		// method call
 			{   tok = Next();
 //err.str("Method call: "); err.str(lex.Ident); err.nl();
-			    tree = Call(s, 0, tree);
+			    if et != 0 && et@.kind == REFPROC then
+				tree = RefProc(s);
+			    else
+				tree = Call(s, 0, tree);
 			}
 			else
 			{   if t@.kind == REF then
@@ -1162,38 +1212,27 @@ err.str("Intrinsic unknown\n");
 	    {   s = symb.Find(lex.Ident);
 		if s != 0 then
 		{   tok = Next();
-		    if s@.kind == PROC && et != 0 && et@.kind == REFPROC then
-		    {   // must create a REFPROC type to point at proc symbol
-			t = type.New(REFPROC);
-			t@.list = s;
-			tree = ast.New(VAR, t);
-			tree@.symb = s;
-			tree@.kind = REFPROC;
-		    }
-		    else
-		    {
-			tree = Primary(s);
-			if tree != 0 then
-			{   if tree@.op == TYPE then
-			    {   if tok 
-				is PBEG then		// cast
-				{   tok = Next();
-				    t = tree@.type;
-				    tree = Bool(0);	// FIXME: is this right?
-				    tree = Cast(tree, t);
-				    tok = lex.Expect(PEND);
-				}
-				is GBEG then		// composite
-				    tree = CompositeValue(tree@.type);
+		    tree = Primary(s, et);
+		    if tree != 0 then
+		    {   if tree@.op == TYPE then
+			{   if tok 
+			    is PBEG then		// cast
+			    {   tok = Next();
+				t = tree@.type;
+				tree = Bool(0);	// FIXME: is this right?
+				tree = Cast(tree, t);
+				tok = lex.Expect(PEND);
 			    }
-			    else
-			    {   tree = Load(tree);
-				if tree != 0 && tree@.op != CONST &&
-				   type.NeedSwap(tree@.type, Target.order) then
-				{   tree = ast.New1(REVB, tree@.type, tree);
-				    tree@.type =
-				      type.ChangeOrder(tree@.type, Target.order);
-				}
+			    is GBEG then		// composite
+				tree = CompositeValue(tree@.type);
+			}
+			else if tree@.kind != REFPROC then
+			{   tree = Load(tree);
+			    if tree != 0 && tree@.op != CONST &&
+			       type.NeedSwap(tree@.type, Target.order) then
+			    {   tree = ast.New1(REVB, tree@.type, tree);
+				tree@.type =
+				  type.ChangeOrder(tree@.type, Target.order);
 			    }
 			}
 		    }
