@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 617 2011-09-16 19:01:40Z bgl $
+// $Id: ast.esl 628 2011-09-30 19:33:59Z bgl $
 
 package ast
 {
@@ -174,8 +174,10 @@ package ast
 	pa@.child[0] = pc0;
 	pa@.num = 1;
 	pa@.type = t;
-	pa@.kind = pc0@.kind;
-	pa@.size = pc0@.size;
+	if pc0 != 0 then
+	{   pa@.kind = pc0@.kind;
+	    pa@.size = pc0@.size;
+	}
 	return pa;
     }
 
@@ -191,8 +193,10 @@ package ast
 	pa@.child[1] = pc1;
 	pa@.num = 2;
 	pa@.type = t;
-	pa@.kind = pc0@.kind;
-	pa@.size = pc0@.size;
+	if pc0 != 0 then
+	{   pa@.kind = pc0@.kind;
+	    pa@.size = pc0@.size;
+	}
 	return pa;
     }
 
@@ -209,8 +213,10 @@ package ast
 	pa@.child[2] = pc2;
 	pa@.num = 3;
 	pa@.type = t;
-	pa@.kind = pc0@.kind;
-	pa@.size = pc0@.size;
+	if pc0 != 0 then
+	{   pa@.kind = pc0@.kind;
+	    pa@.size = pc0@.size;
+	}
 	return pa;
     }
 

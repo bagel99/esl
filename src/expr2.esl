@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 624 2011-09-19 01:13:49Z bgl $
+// $Id: expr2.esl 629 2011-10-03 02:07:38Z bgl $
 
 package expr
 {
@@ -255,7 +255,7 @@ ast.Dump(tree);
 	vpart = 0;
 	cpart = 0;
 	if intree@.op != CLIST then
-	{   lex.Error(BADPACKREC);
+	{   lex.ErrorS(COMPILER, "No CLIST for packed array");
 	    return tree;
 	}
 	tsize = t@.width;
@@ -377,7 +377,7 @@ ast.Dump(tree);
 	vpart = 0;
 	cpart = 0;
 	if intree@.op != CLIST then
-	{   lex.Error(BADPACKREC);
+	{   lex.ErrorS(COMPILER, "No CLIST for packed record");
 	    return tree;
 	}
 	tsize = t@.width;
@@ -390,7 +390,7 @@ ast.Dump(tree);
 		fsize = ft@.size;
 		if t@.bitorder == MSB then offs -= fsize;
 		if i >= intree@.num then
-		{   lex.Error(BADLIST);
+		{   lex.ErrorS(COMPILER, "Malformed LIST for packed record");
 		    return tree;
 		}
 		node = intree@.child[i];
@@ -888,6 +888,102 @@ ast.Dump(tree);
 	return tree;
     }
 
+    proc FindFlexSize(t: Type): type.BitSize
+    {   var size: type.BitSize;
+	var bt: Type;
+
+	size = 1;   // some default
+	if t != 0 then
+	{   if t@.flex then
+	    {   if t@.kind
+		is ARRAY then
+		    bt = t@.base;
+		is RECORD then
+		{   var f, ff: Symb;
+		    bt = 0;
+		    f = t@.list;
+		    while f != 0 do
+		    {   bt = f@.type;
+			f = f@.next;
+		    }
+		}
+		if bt != 0 then size = FindFlexSize(bt);
+	    }
+	    else
+		size = t@.width/Target.membits;
+	}
+	return size;
+    }
+
+    proc NewOrDelete(which: symb.IntrinsicT): Ast
+    {   var tree, size, temp, space: Ast;
+	var s: Symb;
+	var tok: TokenT;
+	var t: Type;
+
+	tree = 0;
+	tok = Token;
+	if tok == ID then
+	{   if which == NEW then
+	    {   s = symb.FindKind(lex.Ident, TYPE);
+		if s != 0 then t = s@.type;
+	    }
+	    else
+	    {   s = symb.FindKind(lex.Ident, VAR);
+		if s != 0 then
+		{   if s@.type@.kind == REF then
+			t = s@.type@.base;
+		    else lex.Error(NOTREF);
+		}
+	    }   
+	    tok = Next();
+	    if t != 0 then
+	    {   size = ast.Const(type.wordtype, t@.width/Target.membits);
+		if tok == PBEG then
+		{   tok = Next();
+		    if !t@.flex then
+			lex.ErrorS(NOTIMPL, "not a variable sized type");
+		    temp = Const(type.wordtype);
+		    temp = ast.New2(MUL, type.wordtype, temp,
+			ast.Const(type.wordtype, FindFlexSize(t)));
+		    size = ast.New2(ADD, type.wordtype, size, temp);
+		    tok = lex.Expect(PEND);
+		}
+		if tok == COMMA then
+		{   tok = Next();
+		    space = Const(type.wordtype);
+		}
+		else
+		    space = ast.Const(type.wordtype, 0);
+		tree = ast.New(CALL, 0);
+		if which == NEW then
+		{   tree@.symb = symb.libnew;
+		    tree@.type = type.memtype;
+		    tree@.kind = REF;
+		    tree@.size = Target.ptr.size;
+		    tree = ast.Child(tree, size);
+		    tree = ast.Child(tree,
+			   ast.Const(type.wordtype, t@.align/Target.membits));
+		    tree = ast.Child(tree, space);
+		    tree = ast.New1(CAST, s@.type, tree);
+		}
+		else
+		{   tree@.symb = symb.libdel;
+		    temp = ast.New(VAR, s@.type);
+		    temp@.kind = REF;
+		    temp@.symb = s;
+		    temp = ast.New1(BYREF, temp@.type, temp);
+		    temp = ast.New1(CAST, type.memtype, temp);
+		    tree = ast.Child(tree, temp);
+		    tree = ast.Child(tree, size);
+		    tree = ast.Child(tree, space);
+		}
+	    }
+	}
+	else lex.Error(EXPECTID);
+	return tree;
+    }
+
     proc Intrinsic(ps: Symb): Ast
     {   var tree, lhs, rhs: Ast;
 	var tok: TokenT;
@@ -927,10 +1023,10 @@ ast.Dump(tree);
 		    tree = BinOp(op, lhs, rhs);
 		}
 	    }
+	    is NEW then tree = NewOrDelete(NEW);
+	    is DEL then tree = NewOrDelete(DEL);
 	    else
-	    {
-err.str("Intrinsic unknown\n");
-	    }
+		lex.ErrorS(COMPILER, "Intrinsic unknown");
 	    tok = lex.Expect(PEND);
 	}
 	else lex.ErrorT(EXPECT, PBEG);

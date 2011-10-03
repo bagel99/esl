@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 623 2011-09-19 01:12:30Z bgl $
+// $Id: llvm.esl 630 2011-10-03 17:35:21Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -21,8 +21,6 @@ import llvmdb;
 
 package llvm
 {
-    // change to memcpy instrinsic signature - between 2.8 and 2.9
-    const llvm_memcpy_new: boolean = true;
     type pstring: @[]_byte;
     // These pointer types might be useful to other packages.
     var pbytetype: Type;
@@ -273,7 +271,7 @@ package llvm
     proc NodeDst(node: Ast)
     {
 	if node@.op
-	is CONST then lex.Error(ASSIGNCONST);
+	is CONST then lex.ErrorS(COMPILER, "Assignment to constant");
 	is VAR, DCLVAR then NodeName(node);
 	else PTempName(node@.seqno);
     }
@@ -649,11 +647,7 @@ package llvm
 	{   if UseIntrinsic[i] then
 		if i
 		is MEMCPY then
-		{   if llvm_memcpy_new then
-			Print("declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\n", 0);
-		    else
-			Print("declare void @llvm.memcpy.%W(i8*, i8*, %W, i32) nounwind\n", 0);
-		}
+		    Print("declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\n", 0);
 		is BSWAP2 then
 		    Print("declare i16 @llvm.bswap.i16(i16)\n", 0);
 		is BSWAP4 then
@@ -661,13 +655,13 @@ package llvm
 		is BSWAP8 then
 		    Print("declare i64 @llvm.bswap.i64(i64)\n", 0);
 		is MEMCMP1 then
-		    Print("declare i1 @memcmp_i8(i8*, i8*, %W)\n", 0);
+		    Print("declare i1 @memcmp1(i8*, i8*, %W)\n", 0);
 		is MEMCMP2 then
-		    Print("declare i1 @memcmp_i16(i16*, i16*, %W)\n", 0);
+		    Print("declare i1 @memcmp2(i16*, i16*, %W)\n", 0);
 		is MEMCMP4 then
-		    Print("declare i1 @memcmp_i32(i32*, i32*, %W)\n", 0);
+		    Print("declare i1 @memcmp4(i32*, i32*, %W)\n", 0);
 		is MEMCMP8 then
-		    Print("declare i1 @memcmp_i64(i64*, i64*, %W)\n", 0);
+		    Print("declare i1 @memcmp8(i64*, i64*, %W)\n", 0);
 	    i += 1;
 	}
     }
@@ -874,12 +868,8 @@ package llvm
 	GenSub(node@.child[2]);
 	// FIXME: need to check for potential overlap and use memmove if necessary
 	// FIXME: find alignment, here or during parsing?
-	if llvm_memcpy_new then
-	   Print(
+	Print(
 	   "\tcall void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\n", node);
-	else
-	   Print(
-	   "\tcall void @llvm.memcpy.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N)\n", node);
 	UseIntrinsic[MEMCPY] = true;
     }
 
@@ -978,8 +968,8 @@ if debug.tests then { err.nl();}
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    node@.kind = ENUM;
 	    node@.size = 1;
-	    Print("\t%N = call i1 @memcmp_", node);
-	    PType(puinttype[i]@.base);
+	    Print("\t%N = call i1 @memcmp", node);
+	    f.uint(puinttype[i]@.base@.width/Target.membits);
 	    Print("(%0T %0N, %1T %1N, %2T %2N)\n", node);
 	    UseIntrinsic[MEMCMP1+i] = true;
 	    if node@.op == ANE then     // ugly invert in place

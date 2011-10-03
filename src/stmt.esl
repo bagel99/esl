@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 624 2011-09-19 01:13:49Z bgl $
+// $Id: stmt.esl 625 2011-09-28 00:19:55Z bgl $
 
 package stmt
 {
@@ -718,18 +718,20 @@ ast.Dump(rhs);
 	if tok >= ASGN && tok <= DECR then
 	{   optok = tok;
 	    tok = Next();
+	    if nl > 1 && optok != ASGN then
+		lex.Error(ILLASSIGN);
 	    nr = 0;
 	    loop
 	    {   lhs = tree@.child[nr];
 		if lhs != 0 then t = lhs@.type; else t = 0;
-		if t != 0 && t@.kind == RECORD then
+		if t != 0 && t@.kind == RECORD && t@.packed != BIT then
 		{   if optok == ASGN && nl == 1 then
 			tree = AssignRecord(lhs);
 		    else
 			lex.Error(ILLASSIGN);
 		    nr += 1;
 		}
-		else if t != 0 && t@.kind == ARRAY then
+		else if t != 0 && t@.kind == ARRAY && t@.packed != BIT then
 		{   if optok == ASGN && nl == 1 then
 			tree = AssignArray(lhs);
 		    else
@@ -739,35 +741,28 @@ ast.Dump(rhs);
 		else
 		{   rhs = expr.Bool(t);	// right-hand side
 		    if rhs != 0 then
-		    {   if rhs@.op == CALL || rhs@.op == CALLI then
-			{   tl = rhs@.symb@.retvlist;
-			    if tl != 0 then
-			    {   if tl@.next != 0 then	// multiple ret. values
-				{   i = 0;
-				    loop
-				    {   lrhs = ast.New1(GETRV, tl@.type, rhs);
-					lrhs@.kind = tl@.type@.kind;
-					if lrhs@.kind == REF then
-					{   lrhs@.type = tl@.type@.base;
-					    lrhs@.size = Target.ptr.size;
-					}
-					else
-					    lrhs@.size = tl@.type@.width;
-					lrhs@.valu = i;
-					tree = ast.Child(tree, lrhs);
-					i += 1;
-					tl = tl@.next;
-				      exit tl == 0;
-				    }
-				    nr += i;
+		    {   if (rhs@.op == CALL || rhs@.op == CALLI) &&
+			    rhs@.symb@.retvlist != 0 &&
+			    rhs@.symb@.retvlist@.next != 0 then
+			{   // call that returns multiple values
+			    tl = rhs@.symb@.retvlist;
+			    i = 0;
+			    loop
+			    {   lrhs = ast.New1(GETRV, tl@.type, rhs);
+				lrhs@.kind = tl@.type@.kind;
+				if lrhs@.kind == REF then
+				{   lrhs@.type = tl@.type@.base;
+				    lrhs@.size = Target.ptr.size;
 				}
-				else			// single ret. value
-				{   rhs = AdjustRHS(lhs, rhs);
-				    tree = ast.Child(tree, rhs);
-				    nr += 1;
-				}
+				else
+				    lrhs@.size = tl@.type@.width;
+				lrhs@.valu = i;
+				tree = ast.Child(tree, lrhs);
+				i += 1;
+				tl = tl@.next;
+			      exit tl == 0;
 			    }
-			    else lex.Error(RHSASSIGN);
+			    nr += i;
 			}
 			else 
 			{   if rhs@.type != 0 then

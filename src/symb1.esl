@@ -1,12 +1,12 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb1.esl 623 2011-09-19 01:12:30Z bgl $
+// $Id: symb1.esl 629 2011-10-03 02:07:38Z bgl $
 
 package symb
 {
     type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS);
     type LinkT: (LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE);
     type OffsT: 0..0xFFFF;
-    type IntrinsicT: (NONE, ABS, MIN, MAX);
+    type IntrinsicT: (NONE, ABS, MIN, MAX, NEW, DEL);
     type SymbNode:
     {
 	next:	  @SymbNode;		// for lists
@@ -38,6 +38,8 @@ package symb
     var  level: levels;
     var  curpack: Symb;		// current package, 0 if not in a package
     var  curproc: Symb;		// current procedure, 0 if not in a procedure
+    var  libnew: Symb;
+    var  libdel: Symb;
     type symblist:
       { frst:	Symb;
 	last:	Symb;
@@ -195,6 +197,20 @@ package symb
 	s = FindTop(name);
 	if s != 0 && s@.kind == PACK then
 	    s = FindPackage(s);
+	return s;
+    }
+
+    proc FindKind(name: @lex.Identifier, kind:SymbT): Symb
+    {   var s: Symb;
+
+	s = Find(name);
+	if s != 0 then
+	{   if s@.kind != kind then
+		if kind
+		is TYPE then lex.Error(NOTTYPE);
+		is VAR  then lex.Error(NOTVAR);
+	}
+	else lex.ErrorI(UNDEFID, name);
 	return s;
     }
 

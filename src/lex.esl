@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 623 2011-09-19 01:12:30Z bgl $
+// $Id: lex.esl 627 2011-09-30 16:56:29Z bgl $
 
 package lex
 {
@@ -19,12 +19,11 @@ package lex
 	BADIS,      NOPROC,     NOLOOP,     NOPACK,     NOTREF,     NOTARRAY,
 	ARRAYCOPY,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,   ARGSLO,
 	ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,   BADIMPORT,
-	PROGERROR,
-	// Internal Errors
-	BADLIST,    BADPACKREC, ASSIGNCONST,BADPTRCONST
+	NOTVAR,     BADFLEX,
+	PROGERROR,  // error statement
+	COMPILER    // internal compiler error
     );
     const FirstError:Errors = BADNL;
-    const InternalError:Errors = BADLIST;
     const ErrMsg:[Errors]@[]Char =
     {
 	[NOTIMPL] =	"Feature not yet implemented: ",
@@ -98,11 +97,10 @@ package lex
 	[BADCONST] =	"Const requires a constant value",
 	[EXPCONST] =	"Expression must be a compile-time constant",
 	[BADIMPORT] =	"Unable to import: ",
+	[NOTVAR] =      "Expected variable identifier",
+	[BADFLEX] =     "Flexible array must be final field",
 	[PROGERROR] =   "Program defined error: ",
-	[BADLIST] =     "Malformed LIST for packed record",
-	[BADPACKREC] =	"Expecting LIST for packed record",
-	[ASSIGNCONST] = "Assignment to constant",
-	[BADPTRCONST] = "Illegal pointer constant"
+	[COMPILER] =    "Internal compiler error: "
     };
     // Lines commented ** must have the tokens consecutive
     type TokenT:
@@ -312,9 +310,7 @@ package lex
 	err.uint(Lineno());
 	err.str(": ");
 	if error >= FirstError then
-	{   if error >= InternalError then
-		err.str("Internal ");
-	    err.str("Error: ");
+	{   err.str("Error: ");
 	    ErrorCount += 1;
 	}
 	else
