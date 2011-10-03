@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb2.esl 623 2011-09-19 01:12:30Z bgl $
+// $Id: symb2.esl 629 2011-10-03 02:07:38Z bgl $
 
 package symb
 {
@@ -10,8 +10,42 @@ package symb
 	s@.addr = OffsT(valu);  // store intrinsic index in addr field
     }
 
+    proc NewLibrary(name: @lex.Identifier, rett: Type): Symb
+    {   var s: Symb;
+	var tl: type.TypeList;
+
+	s = New(PROC, name, VISIBLE);
+	s@.linkage = EXTERN;
+	if rett != 0 then
+	{   tl = type.TypeList(sys.zalloc(type.TypeListEntry?size));
+	    tl@.type = rett;
+	    s@.retvlist = tl;
+	    s@.type = rett;
+	}
+	return s;
+    }
+
+    proc AddLibFormal(s: Symb, t: Type)
+    {   var fs, pfs, tfs: Symb;
+
+	fs = symb.New(VAR, "_", PRIVATE);
+	fs@.isparam = true;
+	fs@.linkage = LOCAL;
+	fs@.type = t;
+	pfs = 0;
+	tfs = s@.parmlist;
+	while tfs != 0 do
+	{   pfs = tfs;
+	    tfs = tfs@.next;
+	}
+	if pfs == 0 then
+	    s@.parmlist = fs;
+	else
+	    pfs@.next = fs;
+    }
+
     proc InitDecl()
-    {   var t: Type;
+    {   var t, taddr: Type;
 	var s, s0, s1: Symb;
 
 	// predefined _boolean
@@ -43,9 +77,9 @@ package symb
 	type.memtype@.base = type.bytetype;
 	type.memtype@.align = Target.membits;	// Fixup alignment
 	type.memtype@.flex = true;
-	t = type.NewBuiltin(REF, "_address", Target.ptr.size);
-	t@.base = type.memtype;
-	t@.align = Target.ptr.align;
+	taddr = type.NewBuiltin(REF, "_address", Target.ptr.size);
+	taddr@.base = type.memtype;
+	taddr@.align = Target.ptr.align;
 	
 	// predefined _uint*, _int*
 	type.wordtype = type.NewBuiltin(UINT, "_uint", Target.regsize);
@@ -68,6 +102,18 @@ package symb
 	NewIntrinsic("_abs", ABS);
 	NewIntrinsic("_min", MIN);
 	NewIntrinsic("_max", MAX);
+	NewIntrinsic("_new", NEW);
+	NewIntrinsic("_delete", DEL);
+
+	// library routines
+	libnew = NewLibrary("memalloc", taddr);
+	AddLibFormal(libnew, type.wordtype);
+	AddLibFormal(libnew, type.wordtype);
+	AddLibFormal(libnew, type.wordtype);
+	libdel = NewLibrary("memfree", 0);
+	AddLibFormal(libdel, taddr);
+	AddLibFormal(libdel, type.wordtype);
+	AddLibFormal(libdel, type.wordtype);
     }
 
     proc Init()

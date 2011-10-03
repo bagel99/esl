@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 623 2011-09-19 01:12:30Z bgl $
+// $Id: type2.esl 627 2011-09-30 16:56:29Z bgl $
 
 package type
 {
@@ -353,6 +353,12 @@ package type
 		while f != 0 do
 		{   if f@.type != 0 then
 		    {	Final(f@.type);
+			if f@.type@.flex then
+			{   if f@.next != 0 then    // flex must be final field
+				lex.Error(BADFLEX);
+			    else
+				t@.flex = true;     // mark record as flex
+			}
 			if t@.packed == BIT then
 			{
 			    offs += f@.type@.size;
