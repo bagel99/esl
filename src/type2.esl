@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 627 2011-09-30 16:56:29Z bgl $
+// $Id: type2.esl 633 2011-10-10 21:11:54Z bgl $
 
 package type
 {
@@ -129,6 +129,24 @@ package type
     const askip1:[4]TokenT = { PEND, SEMI, NONE };
     const askip2:[5]TokenT = { COMMA, PEND, SEMI, NONE };
 
+    proc XLinkage(s: Symb)
+    {   var tok: TokenT;
+
+	tok = Token;
+	if tok == PBEG then
+	{   tok = Next();
+	    if tok == STR then
+	    {   s@.altsymb = symb.New(ALIAS, lex.StringBuf, PRIVATE);
+		tok = Next();
+	    }
+	    else
+	    {   s@.xaddr = expr.ConstScalar(type.wordtype);
+		s@.linkage = FIXED;
+	    }
+	    lex.Expect(PEND);
+	}
+    }
+    
     const tattrlist:[]TokenT =
     {	KPACK, KMPACK,
 	KLSB, KMSB,
@@ -200,16 +218,13 @@ package type
 			    tok = Next();
 			    if atok
 			    is KINLINE then  s@.linkage = INLINE;
-			    is KGLOBAL then  s@.linkage = GLOBAL;
+			    is KGLOBAL then 
+			    {   s@.linkage = GLOBAL;
+				XLinkage(s);
+			    }
 			    is KEXTERN then 
-			    {   if tok == PBEG then
-				{   tok = Next();
-				    s@.xaddr = expr.ConstScalar(type.wordtype);
-				    lex.Expect(PEND);
-				    s@.linkage = FIXED;
-				}
-				else
-				    s@.linkage = EXTERN;
+			    {   s@.linkage = EXTERN;
+				XLinkage(s);
 			    }
 			    is KSECTION then 
 			    {   lex.ErrorI(BADATTR, lex.Ident);
@@ -251,7 +266,7 @@ package type
 	return Attributes(s, t, vattrlist);
     }
 
-    const pattrlist:[3]TokenT = { KEXTERN, KINLINE, NONE };
+    const pattrlist:[4]TokenT = { KEXTERN, KGLOBAL, KINLINE, NONE };
     proc ProcAttributes(s: Symb)
     {   var t: Type;
 
@@ -891,7 +906,7 @@ package type
 		    err.str("\n\tmethods:\n\t");
 		    loop
 		    {   symb.DumpS(s);
-			s = s@.methnext;
+			s = s@.next;
 		      exit s == 0;
 			err.chr('\t');
 		    }

@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb1.esl 629 2011-10-03 02:07:38Z bgl $
+// $Id: symb1.esl 633 2011-10-10 21:11:54Z bgl $
 
 package symb
 {
@@ -9,26 +9,26 @@ package symb
     type IntrinsicT: (NONE, ABS, MIN, MAX, NEW, DEL);
     type SymbNode:
     {
-	next:	  @SymbNode;		// for lists
+	next:	  @SymbNode;	// for lists
 	type:	  Type;
-	package:  @SymbNode;		// containing proc/package/file
-	parmlist: @SymbNode;		// for procedures
-	retvlist: type.TypeList;	// for procedures, retval types
-	symblist: @SymbNode;		// for packages, procedures, aliases
-	methnext: @SymbNode;		// for list of methods
-	const:    @AstNode;		// for constants
-	xaddr:    Valu;			// externally fixed address
-	addr:	  OffsT;		// e.g. field offset or intrinsic #
-	lineno:   _uint16;		// line number where declared
-	dbtag:    _uint16;		// tag for debug information
-	kind:	  SymbT;		// TYPE, VAR, ...
-	linkage:  LinkT;		// internal, external, forward
-	forward:  boolean;		// forward declared
-	bound:    boolean;		// is a bound procedure
-	hasdef:   boolean;		// has default value
-	isparam:  boolean;		// is a formal parameter
-	used:	  boolean;		// was ever used (looked up)
-	declared: boolean;		// used in llvm generation
+	package:  @SymbNode;	// containing proc/package/file
+	parmlist: @SymbNode;	// for procedures
+	retvlist: type.TypeList;// for procedures, retval types
+	symblist: @SymbNode;	// for packages, procedures, aliases
+	altsymb:  @SymbNode;	// alternate name, e.g. external name
+	const:    @AstNode;	// for constants, initializer, default value
+	xaddr:    Valu;		// externally fixed address
+	addr:	  OffsT;	// e.g. field offset or intrinsic #
+	lineno:   _uint16;	// line number where declared
+	dbtag:    _uint16;	// tag for debug information
+	kind:	  SymbT;	// TYPE, VAR, ...
+	linkage:  LinkT;	// LOCAL, NORMAL, ...
+	forward:  boolean;	// forward declared
+	bound:    boolean;	// is a bound procedure
+	hasdef:   boolean;	// has default value
+	isparam:  boolean;	// is a formal parameter
+	used:	  boolean;	// was ever used (looked up)
+	declared: boolean;	// used in llvm generation
 	ident:	  []Char;
     };
     type Symb: @SymbNode;
@@ -150,7 +150,7 @@ package symb
 
 	s = as;
 	while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
-	    s = s@.methnext;
+	    s = s@.next;
 	return s;
     }
 

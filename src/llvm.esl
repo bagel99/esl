@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 630 2011-10-03 17:35:21Z bgl $
+// $Id: llvm.esl 633 2011-10-10 21:11:54Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -235,7 +235,13 @@ package llvm
 	    }
 	    f.str(s@.ident);
 	}
-	is GLOBAL, EXTERN then { f.chr('@'); f.str(s@.ident); }
+	is GLOBAL, EXTERN then
+	{   f.chr('@');
+	    if s@.altsymb != 0 then
+		f.str(s@.altsymb@.ident);
+	    else
+		f.str(s@.ident);
+	}
 	is FIXED then
 	{   f.str("inttoptr(");
 	    PType(type.wordtype);

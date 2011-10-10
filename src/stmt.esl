@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 625 2011-09-28 00:19:55Z bgl $
+// $Id: stmt.esl 632 2011-10-07 21:15:59Z bgl $
 
 package stmt
 {
@@ -1231,7 +1231,7 @@ ast.Dump(rhs);
 		{   s = symb.New(PROC, lex.Ident, PRIVATE);
 		    s@.bound = true;
 		    // Order doesn't matter, just put on top of list
-		    s@.methnext = mt@.meths;
+		    s@.next = mt@.meths;
 		    mt@.meths = s;
 		}
 	    }
