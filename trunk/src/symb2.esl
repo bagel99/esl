@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb2.esl 629 2011-10-03 02:07:38Z bgl $
+// $Id: symb2.esl 633 2011-10-10 21:11:54Z bgl $
 
 package symb
 {
@@ -145,6 +145,28 @@ package symb
 	err.chr(')');
     }
 
+    proc DumpLinkage(s: Symb)
+    {
+	if s@.linkage
+	is GLOBAL then
+	{   err.str(": global");
+	}
+	is EXTERN then
+	{   err.str(": external");
+	}
+	is FIXED then
+	{   err.str(": fixed(");
+	    err.hex64(s@.xaddr);
+	    err.chr(')');
+	    return;
+	}
+	if s@.altsymb != 0 then
+	{   err.str("(\"");
+	    err.str(s@.altsymb@.ident);
+	    err.str("\")");
+	}
+    }
+
     proc DumpS(s: Symb)
     {   var tl: type.TypeList;
 
@@ -156,10 +178,8 @@ package symb
 		err.hex64(s@.const@.valu);
 	    }
 	}
-	is TYPE then      { err.str("type ");     DumpST(s, true); }
-	is VAR then       { err.str("var ");      DumpST(s, false);
-//	    DumpLinkage(s);
-		     }
+	is TYPE then { err.str("type "); DumpST(s, true); }
+	is VAR then  { err.str("var ");  DumpST(s, false); DumpLinkage(s); }
 	is FIELD then     { err.str("field "); err.str(s@.ident);}
 	is PROC then 
 	{   if s@.addr == 0 then
@@ -182,6 +202,7 @@ package symb
 		err.str(s@.ident);
 		err.str("()");
 	    }
+	    DumpLinkage(s);
 	}
 	is PACK then      { err.str("package "); err.str(s@.ident);}
 	is ALIAS then     { err.str("alias ");   err.str(s@.ident);}
