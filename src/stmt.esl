@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 632 2011-10-07 21:15:59Z bgl $
+// $Id: stmt.esl 634 2011-10-19 19:21:15Z bgl $
 
 package stmt
 {
@@ -349,26 +349,6 @@ package stmt
 	return tree;
     }
 
-    proc GetLHS(): Ast
-    {   var s: Symb;
-	var tok: TokenT;
-	var tree: Ast;
-
-	tree = 0;
-	tok = Token;
-	if tok == ID then
-	{   s = symb.Find(lex.Ident);
-	    tok = Next();
-	    if s != 0 then
-	    {   tree = expr.Primary(s, 0);
-		if tree@.op == TYPE then lex.ErrorI(BADTYPE, tree@.symb@.ident);
-	    }
-	    else lex.ErrorI(UNDEFID, lex.Ident);
-	}
-	else lex.Error(EXPECTID);
-	return tree;
-    }
-
     proc EndConstraint(what: @[]_byte, i: 0..lex.StringMax): 0..lex.StringMax
     {
 	loop
@@ -459,7 +439,7 @@ package stmt
 		    {   if tok == COMMA then
 			{   tok = Next();
 			    if constraints[na] == OUT then
-			    {   outputs[no] = GetLHS();
+			    {   outputs[no] = expr.GetLHS();
 				no += 1;
 			    }
 			    else				// IN
@@ -710,7 +690,7 @@ ast.Dump(rhs);
 	{
 	  exit tok != COMMA;
 	    tok = Next();
-	    lhs = GetLHS();
+	    lhs = expr.GetLHS();
 	    tree = ast.Child(tree, lhs);
 	    nl += 1;
 	    tok = Token;

@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 633 2011-10-10 21:11:54Z bgl $
+// $Id: llvm.esl 643 2011-10-31 22:03:17Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -443,100 +443,97 @@ package llvm
 	f.chr('"');
     }
 
-    proc Constant(node: Ast, t: Type)
-    {   var i: ast.NSubNodes;
+    proc DefaultInitializer(t: Type)
+    {
+	if t@.kind
+	is ENUM, UINT, SINT then
+	    f.uint(0);
+	is REF then
+	    f.str("zeroinitializer");   // FIXME: "null" ?
+	is ARRAY, RECORD then
+	    f.str("zeroinitializer");
+	is REFPROC then
+	    f.str("null");
+    }
 
+    proc Constant(node: Ast)
+    {   var i: ast.NSubNodes;
+	var t: Type;
+
+	t = node@.type;
 	if t != 0 then
 	{
 	    if t@.kind
-	    is ENUM, UINT then
-	    {   if node != 0 then
-		    f.uint64(node@.valu);
-		else
-		    f.uint(0);
-	    }
-	    is SINT then
-	    {   if node != 0 then
-		    f.int64(_int64(node@.valu));
-		else
-		    f.uint(0);
-	    }
+	    is ENUM, UINT then f.uint64(node@.valu);
+	    is SINT then f.int64(_int64(node@.valu));
 	    is REF then
-	    {   if node == 0 || node@.valu == 0 then
+	    {   if node@.valu == 0 then
 		    f.str("zeroinitializer");
 		else
 		    ConstantRef(t, node);
 	    }
 	    is RECORD then
-	    {   if node != 0 then
-		{   if t@.packed == BIT then	// assert node@.op == CONST
-			f.uint64(_uint64(node@.valu));
-		    else			// assert node@.op == CLIST
-		    {   f.str("{ ");
-			i = 0;
-			loop
-			{   PType(node@.child[i]@.type);
-			    f.str(" ");
-			    Constant(node@.child[i], node@.child[i]@.type);
-			    i += 1;
-			  exit i >= node@.num;
-			    f.str(", ");
-			}
-			f.str(" }");
+	    {   if t@.packed == BIT then	// assert node@.op == CONST
+		    f.uint64(_uint64(node@.valu));
+		else			// assert node@.op == CLIST
+		{   f.str("{ ");
+		    i = 0;
+		    loop
+		    {   PType(node@.child[i]@.type);
+			f.str(" ");
+			Constant(node@.child[i]);
+			i += 1;
+		      exit i >= node@.num;
+			f.str(", ");
 		    }
+		    f.str(" }");
 		}
-		else
-		    f.str("zeroinitializer");
 	    }
 	    is ARRAY then
-	    {   if node != 0 then
-		{   if t@.packed == BIT then	// assert node@.op == CONST
-			f.uint64(_uint64(node@.valu));
-		    else if node@.op
-		    is CLIST then
-		    {   f.str("[ ");
-			i = 0;
-			loop
-			{   PType(node@.child[i]@.type);
-			    f.str(" ");
-			    Constant(node@.child[i], node@.child[i]@.type);
-			    i += 1;
-			  exit i >= node@.num;
-			    f.str(", ");
-			}
-			f.str(" ]");
+	    {   if t@.packed == BIT then	// assert node@.op == CONST
+		    f.uint64(_uint64(node@.valu));
+		else if node@.op
+		is CLIST then
+		{   f.str("[ ");
+		    i = 0;
+		    loop
+		    {   PType(node@.child[i]@.type);
+			f.str(" ");
+			Constant(node@.child[i]);
+			i += 1;
+		      exit i >= node@.num;
+			f.str(", ");
 		    }
-		    is BYREF then
-		    {   f.str("* ");
-			if node@.child[0]@.op
-			is SCON then
-			{   if t@.flex then
-				Print("bitcast( %T ", node@.child[0]);
-			    Print("getelementptr( %T %S ) ", node@.child[0]);
-			    if t@.flex then
-				Print(" to %T )", node);
-			}
-			is VAR then
-			{   if t@.flex then
-				Print("bitcast( %T ", node@.child[0]);
-			    Print("getelementptr( %T %N ) ", node@.child[0]);
-			    if t@.flex then
-				Print(" to %T )", node);
-			}
-			is CONST then
-			    ConstantRef(t, node@.child[0]);
-		    }
-		    is SCON then
-		    {   var n: StringRange;
-			if t@.flex then
-			    n = StringRange(node@.type@.hi);
-			else
-			    n = StringRange(t@.hi);
-			PString(pstring(node@.symb), n, true);
-		    }
+		    f.str(" ]");
 		}
-		else
-		    f.str("zeroinitializer");
+		is BYREF then
+		{   f.str("* ");
+		    if node@.child[0]@.op
+		    is SCON then
+		    {   if t@.flex then
+			    Print("bitcast( %T ", node@.child[0]);
+			Print("getelementptr( %T %S ) ", node@.child[0]);
+			if t@.flex then
+			    Print(" to %T )", node);
+		    }
+		    is VAR then
+		    {   if t@.flex then
+			    Print("bitcast( %T ", node@.child[0]);
+			Print("getelementptr( %T %N ) ", node@.child[0]);
+			if t@.flex then
+			    Print(" to %T )", node);
+		    }
+		    is CONST then
+			ConstantRef(t, node@.child[0]);
+		}
+		is SCON then
+		{   var n: StringRange;
+		    if t@.flex then
+			n = StringRange(node@.type@.hi);
+		    else
+			n = StringRange(t@.hi);
+		    PString(pstring(node@.symb), n, true);
+		}
 	    }
 	    is REFPROC then
 		f.str("null");
@@ -577,12 +574,18 @@ package llvm
 	    }
 	    is NORMAL then
 	    {   Print("%I = internal global %B ", node);
-		Constant(node@.child[0], node@.type);
+		if node@.child[0] != 0 then
+		    Constant(node@.child[0]);
+		else
+		    DefaultInitializer(node@.type);
 		Alignment(s@.type);
 	    }
 	    is GLOBAL then
 	    {   Print("%I = global %B ", node);
-		Constant(node@.child[0], node@.type);
+		if node@.child[0] != 0 then
+		    Constant(node@.child[0]);
+		else
+		    DefaultInitializer(node@.type);
 		Alignment(s@.type);
 	    }
 	    is EXTERN then
@@ -610,7 +613,6 @@ package llvm
 	{
 //f.str("ConstScan: BYREF SCON\n");
 	    DclString(node@.child[0]);
-	    f.str(";\n");
 	}
 	else
 	{   i = 0;
@@ -631,7 +633,7 @@ package llvm
 	    if s@.linkage
 	    is NORMAL then Print("%I = internal constant %B ", node);
 	    is GLOBAL then Print("%I = constant %B ", node);
-	    Constant(node@.child[0], node@.type);
+	    Constant(node@.child[0]);
 	    Alignment(s@.type);
 	}
 	f.nl();
@@ -641,7 +643,7 @@ package llvm
     {
 	ConstScan(node);
 	Print("%S = internal constant %B ", node);
-	Constant(node, node@.type);
+	Constant(node);
 	// FIXME: Alignment(node@.type)?
     }
 
@@ -915,10 +917,6 @@ package llvm
 	i = GetChunkSize(length, align);
 	size = Target.isizes[i].size/Target.membits;
 	align = Target.isizes[i].align/Target.membits;
-if debug.tests then { err.str("Array compare: length=");
-if length == 0 then err.str("variable"); else err.uint(length);
-err.str(" size="); err.uint(size);
-err.str(" align="); err.uint(align);}
 	if length != 0 && length <= size then	// can do with one load
 	{
 	    node@.child[0] = expr.Cast(node@.child[0], puinttype[i]);
@@ -936,7 +934,6 @@ err.str(" align="); err.uint(align);}
 		    mask = ~((1 << ((size-length)*8)) -1);
 		else	// assume LE
 		    mask = (1 << (length*8)) - 1;
-if debug.tests then { err.str(" mask=0x"); err.hex64(mask);}
 		node@.child[0] = ast.New2(XOR, puinttype[i]@.base,
 					  node@.child[0], node.child[1]);
 		node@.child[0] = ast.New2(AND, puinttype[i]@.base,
@@ -953,7 +950,6 @@ if debug.tests then { err.str(" mask=0x"); err.hex64(mask);}
 		Print("\t%N = icmp eq %0T %0N, %1N\n", node);
 	    else
 		Print("\t%N = icmp ne %0T %0N, %1N\n", node);
-if debug.tests then { err.nl();}
 	    return true;
 	}
 	else
@@ -984,7 +980,6 @@ if debug.tests then { err.nl();}
 		Print("\t%N = xor i1 %0N, true\n", node);
 	    }
 	}
-if debug.tests then { err.nl();}
 	return false;
     }
 
@@ -1169,7 +1164,7 @@ if debug.tests then { err.nl();}
 		if ps@.linkage == EXTERN && !ps@.declared then
 		{   DclParmRetv(ps);
 		    DclProc(node, false);
-		    f.str(";\n");
+		    f.nl();
 		    ps@.declared = true;
 		}
 	    }
@@ -1382,7 +1377,7 @@ if debug.tests then { err.nl();}
 	    s = s@.next;
 	    i += 1;
 	}
-//err.str("BitfieldOffset="); err.uint(WSfoffs); err.nl();
+//err.str("BitfieldOffset="); err.uint(foffs); err.nl();
 	return foffs;
     }
 
@@ -1435,6 +1430,9 @@ if debug.tests then { err.nl();}
 	    tree = ast.New1(REVB, tree@.type, tree);
 	// make register sized, this simplifies things
 	tree = expr.ExtendT(tree, type.wordtype);
+//err.str("BitfieldRewrite tree=\n"); ast.Dump(tree);
+//err.str("varb=\n"); ast.Dump(varb);
+//err.str("offs=\n"); ast.Dump(offs);
 	return tree,    // return the loaded container,
 	       varb,    // the shift computation,
 	       offs;    // and the base address 
@@ -1485,7 +1483,8 @@ err.str("BitfieldMask of variable SLICE\n");
 	    tree = ast.New2(AND, t, tree, mask);
 	    // possibly narrow the size
 	    tree = expr.Extend(tree, load@.size, true);
-//err.str("BFLoad tree=\n"); ast.Dump(tree); err.nl();
+//err.str("BFLoad size="); err.uint(load@.size);
+//err.str(" tree=\n"); ast.Dump(tree);
 	    GenSub(tree);
 	    load@.child[0] = tree;      // load@.op == LOAD, we're done with it
 	    load@.seqno = tree@.seqno;  // copy up seqno of node below
@@ -1543,7 +1542,8 @@ err.str("BitfieldMask of variable SLICE\n");
 		    rhs = ast.New1(REVB, rhs@.type, rhs);
 		store@.child[i] = lhs;
 		store@.child[n+i] = rhs;
-//err.str("BFStore tree=\n"); ast.Dump(store); err.nl();
+//err.str("BFStore size="); err.uint(lhs@.type@.width);
+//err.str(" tree=\n"); ast.Dump(store);
 	    }
 	    GenSub(rhs);	// rhs first
 	    i += 1;

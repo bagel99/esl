@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 628 2011-09-30 19:33:59Z bgl $
+// $Id: ast.esl 644 2011-11-05 00:36:51Z bgl $
 
 package ast
 {
@@ -239,7 +239,8 @@ package ast
 	if n > pp@.max then
 	    pp = Expand(pp, n);
 	pp@.child[n-1] = pc;
-	pp@.num = n;
+	if n > pp@.num then
+	    pp@.num = n;
 	return pp;
     }
 
@@ -330,16 +331,20 @@ package ast
     {   var s: Symb;
 	var t: Type;
 
+	t = node@.type;
+	if node@.op == ASM then t = 0;	// ASM overloads to point to typelist
 	err.str(OpName[node@.op]);
 	err.chr('(');
-	err.str(KindName[node@.kind]);
+	if t != 0 then
+	    err.str(KindName[t@.kind]);
+	else
+	    err.str("UNKN");
 	err.str(" sz=");
 	err.uint(node@.size);
 	err.str(" ln=");
 	err.uint(node@.lineno);
 	err.str(" nc=");
 	err.uint(node@.num);
-	t = node@.type;
 	if node@.op
 	is CONST, OFFSET, COPY, GETRV then
 	{   err.str(" value ");
@@ -365,7 +370,6 @@ package ast
 	    else
 		err.str("*NULL*");
 	}
-	is ASM then t = 0;	// FIXME: temporarily don't dump type
 	err.chr(')');
 	if t != 0 then
 	{   err.chr(':');

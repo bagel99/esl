@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 623 2011-09-19 01:12:30Z bgl $
+// $Id: main.esl 638 2011-10-23 20:47:16Z bgl $
 
 var debug:
     {	symb:
@@ -10,7 +10,7 @@ var debug:
 	    };
 	ast:   boolean;
 	files: boolean;
-	tests: boolean;
+	tests: [10]boolean;
     };
 var feature:
     {   size:  boolean;
@@ -72,7 +72,10 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 		debug.symb.proc = true;
 	    }
 	    is 'f' then  debug.files = true;
-	    is 't' then  debug.tests = true;
+	    is 't' then
+	    {   if argv[i]@[3] >= '0' && argv[i]@[3] <= '9' then
+		    debug.tests[argv[i]@[3] - '0'] = true;
+	    }
 	}
 	is 'm' then 
 	{   if argv[i]@[2] != 0 then

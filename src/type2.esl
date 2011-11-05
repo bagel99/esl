@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 633 2011-10-10 21:11:54Z bgl $
+// $Id: type2.esl 643 2011-10-31 22:03:17Z bgl $
 
 package type
 {
@@ -297,6 +297,7 @@ package type
 	{   s = symb.New(FIELD, "_", PRIVATE);
 	    s@.type = bytetype;
 	    s@.addr = index;
+	    s@.ispad = true;
 	    prev@.next = s;
 	    prev = s;
 	    index += 1;    
@@ -767,6 +768,12 @@ package type
 	is PBEG then  t = Enum(bt);
 	is GBEG then  t = Record(bt);
 	is ABEG then  t = Array();
+	is QUEST then
+	{   var tree: Ast;
+	    tok = Next();
+	    tree = expr.GetLHS();
+	    if tree != 0 then t = tree@.type;
+	}
 	else
 	{
 	    lex.Error(NOTYPE);
