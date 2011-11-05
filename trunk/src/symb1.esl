@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb1.esl 633 2011-10-10 21:11:54Z bgl $
+// $Id: symb1.esl 643 2011-10-31 22:03:17Z bgl $
 
 package symb
 {
@@ -27,6 +27,7 @@ package symb
 	bound:    boolean;	// is a bound procedure
 	hasdef:   boolean;	// has default value
 	isparam:  boolean;	// is a formal parameter
+	ispad:    boolean;      // is a field used for padding
 	used:	  boolean;	// was ever used (looked up)
 	declared: boolean;	// used in llvm generation
 	ident:	  []Char;

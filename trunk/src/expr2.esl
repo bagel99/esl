@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 629 2011-10-03 02:07:38Z bgl $
+// $Id: expr2.esl 644 2011-11-05 00:36:51Z bgl $
 
 package expr
 {
@@ -391,7 +391,7 @@ ast.Dump(tree);
 		if t@.bitorder == MSB then offs -= fsize;
 		if i >= intree@.num then
 		{   lex.ErrorS(COMPILER, "Malformed LIST for packed record");
-		    return tree;
+		    return 0;
 		}
 		node = intree@.child[i];
 		if node@.op == CONST then
@@ -455,7 +455,10 @@ ast.Dump(tree);
 		if fs != 0 then
 		{   tree = ast.ChildIndexed(tree, fs@.addr, stree);
 		    if fs@.addr > max then max = fs@.addr;
-		    fs = fs@.next;
+		    loop
+		    {   fs = fs@.next;
+		      exit fs == 0 || !fs@.ispad;
+		    }
 		}
 		else if !once then
 		{   once = true;
@@ -972,7 +975,7 @@ ast.Dump(tree);
 		    temp = ast.New(VAR, s@.type);
 		    temp@.kind = REF;
 		    temp@.symb = s;
-		    temp = ast.New1(BYREF, temp@.type, temp);
+		    temp = Load(temp);
 		    temp = ast.New1(CAST, type.memtype, temp);
 		    tree = ast.Child(tree, temp);
 		    tree = ast.Child(tree, size);
@@ -1292,6 +1295,26 @@ ast.Dump(tree);
 	    }
 	    else done = true;
 	}
+	return tree;
+    }
+
+    proc GetLHS(): Ast
+    {   var s: Symb;
+	var tok: TokenT;
+	var tree: Ast;
+
+	tree = 0;
+	tok = Token;
+	if tok == ID then
+	{   s = symb.Find(lex.Ident);
+	    tok = Next();
+	    if s != 0 then
+	    {   tree = expr.Primary(s, 0);
+		if tree@.op == TYPE then lex.ErrorI(BADTYPE, tree@.symb@.ident);
+	    }
+	    else lex.ErrorI(UNDEFID, lex.Ident);
+	}
+	else lex.Error(EXPECTID);
 	return tree;
     }
 
