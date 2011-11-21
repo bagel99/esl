@@ -120,7 +120,7 @@ package lex
 	KFOR,	KWHILE,	KDO,	KLOOP,	KEXIT,	KWITH,
 	KIMPORT,KALIAS,	KAS,    KASM,   KERROR,
 	// attributes begin here
-	KPACK,	KMPACK,	KLSB,	KMSB,	KLE,	KBE,
+	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
 	KINLINE,KINTR,
@@ -191,7 +191,7 @@ package lex
 	[KASM] =	"asm",
 	[KERROR] =      "error",
 	[KPACK] =	"packed",       // attributes for types
-	[KMPACK] =	"mempacked",
+	[KNOPAD] =	"nopad",
 	[KLSB] =	"lsb",
 	[KMSB] =	"msb",
 	[KLE] =		"le",

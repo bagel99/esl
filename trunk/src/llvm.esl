@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 643 2011-10-31 22:03:17Z bgl $
+// $Id: llvm.esl 647 2011-11-21 17:30:48Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -24,7 +24,7 @@ package llvm
     type pstring: @[]_byte;
     // These pointer types might be useful to other packages.
     var pbytetype: Type;
-    var puinttype: [4]Type;
+    var puinttype: [target.IntSizesMax]Type;
     type seqnoT: 0..0xFFFF;
     var Tseqno: seqnoT;
     var Pseqno: seqnoT = 0;
@@ -84,7 +84,7 @@ package llvm
 	    }
 	    is RECORD then
 	    {
-		if t@.packed == BIT then
+		if t@.packed then
 		{   // LLVM doesn't do bit pack records, handle as integers
 //f.str("PType packed record\n");
 		    size = target.isize(t@.size);
@@ -97,7 +97,7 @@ package llvm
 	    }
 	    is ARRAY then
 	    {
-		if t@.packed == BIT then
+		if t@.packed then
 		{   // LLVM doesn't do bit pack arrays, handle as integers
 //f.str("PType packed array\n");
 		    size = target.isize(t@.size);
@@ -175,7 +175,7 @@ package llvm
 	f.chr(')');
     }
  
-    proc ConstantRef(t: Type, node: Ast)
+    proc ConstantRef(node: Ast)
     {   var v: type.Valu;
 
 	v = node@.valu;
@@ -187,23 +187,18 @@ package llvm
 	    f.chr(' ');
 	    f.uint64(v);
 	    f.str(" to ");
-	    if t == 0 then	// FIXME: CONST REFs inconsistent
-	    {   PType(node@.type);
-		f.chr('*');
-	    }
-	    else
-		PType(t);
+	    PType(node@.type);
 	    f.chr(')');
 	}
     }
 	
     proc NodeType(node: Ast)
     {
-	if node@.kind
+	if node@.type@.kind
 	is UTYPE then	      { f.str("void"); }
-	is REF then           { PType(node@.type); f.str("*"); }
+	is REF then           { PType(node@.type); /* f.str("*"); */ }
 	is ARRAY, RECORD, REFPROC then { PType(node@.type); }
-	else                  { f.str("i"); f.uint(node@.size); }
+	else                  { f.str("i"); f.uint(node@.width); }
     }
 
     proc PPkgPfx(s: Symb)
@@ -286,11 +281,16 @@ package llvm
     {
 	if node@.op
 	is CONST then
-	{   if node@.kind
+	{   if node@.type@.kind
 	    is ENUM, UINT then f.uint64(node@.valu);
 	    is SINT then       f.int64(_int64(node@.valu));
-	    is REF, REFPROC then ConstantRef(0, node);
+	    is REF, REFPROC then ConstantRef(node);
 	    is ARRAY, RECORD then f.uint64(node@.valu);	    // packed?
+	}
+	is SCON, CLIST then
+	{   f.chr('@');
+	    f.str(scon_prefix);
+	    f.uint32(_uint32(node@.valu));
 	}
 	is VAR then NodeName(node);
 	else        PTempName(node@.seqno);
@@ -322,6 +322,7 @@ package llvm
 		if c
 		is 'B' then PType(node@.type);
 		is 'A' then PType(node@.type@.base);
+		is 'C' then PType(node@.type@.base@.base);
 		is 'T' then NodeType(node);
 		is 'I' then NodeName(node);
 		is 'N' then NodeSrc(node);
@@ -372,13 +373,13 @@ package llvm
 		// now deal with the record
 		PTypeName(t);
 		f.str(" = type ");
-		if t@.packed == BIT then
+		if t@.packed then
 		{   // LLVM doesn't do bit pack records, handle as integers
 		    size = target.isize(t@.size);
 		    f.str("i"); f.uint(size);
 		}
 		else
-		{   if t@.packed == MEM then
+		{   if t@.unalgn then
 			f.str("<");
 		    f.str("{");
 		    s = t@.list;
@@ -389,7 +390,7 @@ package llvm
 			f.str(", ");
 		    }
 		    f.str("}");
-		    if t@.packed == MEM then
+		    if t@.unalgn then
 			f.str(">");
 		}
 		f.nl();
@@ -459,27 +460,32 @@ package llvm
     proc Constant(node: Ast)
     {   var i: ast.NSubNodes;
 	var t: Type;
+	var n: StringRange;
 
 	t = node@.type;
 	if t != 0 then
-	{
-	    if t@.kind
-	    is ENUM, UINT then f.uint64(node@.valu);
-	    is SINT then f.int64(_int64(node@.valu));
-	    is REF then
-	    {   if node@.valu == 0 then
-		    f.str("zeroinitializer");
-		else
-		    ConstantRef(t, node);
+	{   if node.op
+	    is CONST then
+	    {   if t@.kind
+		is REF, REFPROC then ConstantRef(node);
+		is SINT then f.int64(_int64(node@.valu));
+		else         f.uint64(node@.valu);
 	    }
-	    is RECORD then
-	    {   if t@.packed == BIT then	// assert node@.op == CONST
-		    f.uint64(_uint64(node@.valu));
-		else			// assert node@.op == CLIST
+	    is SCON then
+	    {   if t@.flex then
+		    n = StringRange(node@.type@.hi);
+		else
+		    n = StringRange(t@.hi);
+		PString(pstring(node@.symb), n, true);
+	    }
+	    is CLIST then
+	    {   if t@.kind
+		is RECORD then
 		{   f.str("{ ");
 		    i = 0;
 		    loop
-		    {   PType(node@.child[i]@.type);
+		    {
+		        PType(node@.child[i]@.type);
 			f.str(" ");
 			Constant(node@.child[i]);
 			i += 1;
@@ -488,16 +494,12 @@ package llvm
 		    }
 		    f.str(" }");
 		}
-	    }
-	    is ARRAY then
-	    {   if t@.packed == BIT then	// assert node@.op == CONST
-		    f.uint64(_uint64(node@.valu));
-		else if node@.op
-		is CLIST then
+		is ARRAY then
 		{   f.str("[ ");
 		    i = 0;
 		    loop
-		    {   PType(node@.child[i]@.type);
+		    {
+		        PType(node@.child[i]@.type);
 			f.str(" ");
 			Constant(node@.child[i]);
 			i += 1;
@@ -506,37 +508,28 @@ package llvm
 		    }
 		    f.str(" ]");
 		}
-		is BYREF then
-		{   f.str("* ");
-		    if node@.child[0]@.op
-		    is SCON then
-		    {   if t@.flex then
-			    Print("bitcast( %T ", node@.child[0]);
-			Print("getelementptr( %T %S ) ", node@.child[0]);
-			if t@.flex then
-			    Print(" to %T )", node);
-		    }
-		    is VAR then
-		    {   if t@.flex then
-			    Print("bitcast( %T ", node@.child[0]);
-			Print("getelementptr( %T %N ) ", node@.child[0]);
-			if t@.flex then
-			    Print(" to %T )", node);
-		    }
-		    is CONST then
-			ConstantRef(t, node@.child[0]);
-		}
-		is SCON then
-		{   var n: StringRange;
-		    if t@.flex then
-			n = StringRange(node@.type@.hi);
-		    else
-			n = StringRange(t@.hi);
-		    PString(pstring(node@.symb), n, true);
-		}
 	    }
-	    is REFPROC then
-		f.str("null");
+	    is BYREF then
+	    {   if t@.base@.flex then
+		    Print("bitcast( %T* ", node@.child[0]);
+		Print("getelementptr( %T* %N ) ", node@.child[0]);
+		if t@.base@.flex then
+		    Print(" to %T )", node);
+	    }
+	    is CAST then
+	    {   if t@.base@.flex then
+		    Print("bitcast( %T ", node@.child[0]);
+		Print("getelementptr( %T %N ) ", node@.child[0]);
+		if t@.base@.flex then
+		    Print(" to %T )", node);
+	    }
+	    is VAR then    // reference another const by name
+	    {   if t@.base@.flex then
+		    Print("bitcast( %T ", node);
+		Print("getelementptr( %T %N ) ", node);
+		if t@.base@.flex then
+		    Print(" to %T )", node);
+	    }
 	}
     }
 
@@ -552,38 +545,40 @@ package llvm
 
     proc DclVar(node: Ast)
     {   var s: Symb;
+        var rhs: Ast;
 
 	s = node@.symb;
+	rhs = node@.child[0];
 	if s != 0 then
 	{   DclType(s@.type);
 	    if s@.linkage
 	    is LOCAL then
 	    {   Print("\t%I = alloca %B", node);
-		if node@.child[0] != 0 then     // initialized local
+		if rhs != 0 then     // initialized local
 		{   if node@.type@.kind <= REF then // scalar
 		    {   f.nl();
-			f.chr('\t');   // FIXME: refactor with Store
+			f.chr('\t');
+			// FIXME: Print("store %T %N", rhs);
 			f.str("store ");
-			NodeType(node@.child[0]); f.chr(' ');
-			NodeSrc(node@.child[0]);  f.str(", ");
-			NodeType(node); f.chr(' ');
-			NodeDst(node);
+			NodeType(rhs); f.chr(' ');
+			NodeSrc(rhs);
+			Print(", %B* %D", node);
 		    }
 		    else lex.ErrorS(NOTIMPL, "initialized local composites");
 		}
 	    }
 	    is NORMAL then
 	    {   Print("%I = internal global %B ", node);
-		if node@.child[0] != 0 then
-		    Constant(node@.child[0]);
+		if rhs != 0 then
+		    Constant(rhs);
 		else
 		    DefaultInitializer(node@.type);
 		Alignment(s@.type);
 	    }
 	    is GLOBAL then
 	    {   Print("%I = global %B ", node);
-		if node@.child[0] != 0 then
-		    Constant(node@.child[0]);
+		if rhs != 0 then
+		    Constant(rhs);
 		else
 		    DefaultInitializer(node@.type);
 		Alignment(s@.type);
@@ -598,6 +593,7 @@ package llvm
     proc DclString(node: Ast)
     {   var n: StringRange;
 
+//err.str("DclString\n");
 	Print("%S = internal constant %B ", node);
 	n = StringRange(node@.type@.hi);
 	PString(pstring(node@.symb), n, true);
@@ -609,6 +605,7 @@ package llvm
     proc ConstScan(node: Ast)
     {   var i: ast.NSubNodes;
 
+//err.str("ConstScan\n");
 	if node@.op == BYREF && node@.child[0].op == SCON then
 	{
 //f.str("ConstScan: BYREF SCON\n");
@@ -626,6 +623,7 @@ package llvm
     proc DclCon(node: Ast)
     {   var s: Symb;
 
+//err.str("DclCon\n");
 	s = node@.symb;
 	if s != 0 then
 	{   DclType(s@.type);
@@ -641,10 +639,12 @@ package llvm
 
     proc DclAggregate(node: Ast)
     {
+//err.str("DclAggregate\n");
 	ConstScan(node);
 	Print("%S = internal constant %B ", node);
 	Constant(node);
 	// FIXME: Alignment(node@.type)?
+	f.nl();
     }
 
     proc Declare()
@@ -869,6 +869,10 @@ package llvm
 	// LLVM wants i8* types
 	node@.child[0] = expr.Cast(node@.child[0], pbytetype);
 	node@.child[1] = expr.Cast(node@.child[1], pbytetype);
+/* {
+err.str("Copy: from=\n"); ast.Dump(node@.child[1]);
+err.str("to=\n"); ast.Dump(node@.child[0]);
+} */
 	GenSub(node@.child[0]);
 	GenSub(node@.child[1]);
 	// LLVM wants count to be register width
@@ -911,22 +915,24 @@ package llvm
 	length = 0;	// 0 means variable
 	if node@.child[2]@.op == CONST then
 	    length = _uint(node@.child[2]@.valu) *
-		(node@.child[0]@.type@.base@.width/Target.membits);
+		(node@.child[0]@.type@.base@.base@.width/Target.membits);
 	align = _uint(node@.child[3]@.valu);
 	// find the largest target chunk we can use
 	i = GetChunkSize(length, align);
 	size = Target.isizes[i].size/Target.membits;
 	align = Target.isizes[i].align/Target.membits;
+/* { err.str("Array compare: length=");
+if length == 0 then err.str("variable"); else err.uint(length);
+err.str(" size="); err.uint(size);
+err.str(" align="); err.uint(align);} */
 	if length != 0 && length <= size then	// can do with one load
 	{
 	    node@.child[0] = expr.Cast(node@.child[0], puinttype[i]);
-	    node@.child[0]@.size = puinttype[i]@.base@.width;
+	    node@.child[0]@.width = puinttype[i]@.base@.width;
 	    node@.child[0] = ast.New1(LOAD, puinttype[i]@.base, node@.child[0]);
-	    node@.child[0]@.kind = puinttype[i]@.base@.kind;
 	    node@.child[1] = expr.Cast(node@.child[1], puinttype[i]);
-	    node@.child[1]@.size = puinttype[i]@.base@.width;
+	    node@.child[1]@.width = puinttype[i]@.base@.width;
 	    node@.child[1] = ast.New1(LOAD, puinttype[i]@.base, node@.child[1]);
-	    node@.child[1]@.kind = puinttype[i]@.base@.kind;
 	    if length < size then
 	    {   var mask: _uint64;
 		// Assert size <= 64;
@@ -934,6 +940,7 @@ package llvm
 		    mask = ~((1 << ((size-length)*8)) -1);
 		else	// assume LE
 		    mask = (1 << (length*8)) - 1;
+/* { err.str(" mask=0x"); err.hex64(mask);} */
 		node@.child[0] = ast.New2(XOR, puinttype[i]@.base,
 					  node@.child[0], node.child[1]);
 		node@.child[0] = ast.New2(AND, puinttype[i]@.base,
@@ -944,20 +951,20 @@ package llvm
 	    GenSub(node@.child[0]);
 	    GenSub(node@.child[1]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    node@.kind = ENUM;
-	    node@.size = 1;
+	    node@.width = 1;
 	    if node@.op == AEQ then
 		Print("\t%N = icmp eq %0T %0N, %1N\n", node);
 	    else
 		Print("\t%N = icmp ne %0T %0N, %1N\n", node);
+/* { err.nl();} */
 	    return true;
 	}
 	else
 	{
 	    node@.child[0] = expr.Cast(node@.child[0], puinttype[i]);
-	    node@.child[0]@.size = puinttype[i]@.base@.width;
+	    node@.child[0]@.width = puinttype[i]@.base@.width;
 	    node@.child[1] = expr.Cast(node@.child[1], puinttype[i]);
-	    node@.child[1]@.size = puinttype[i]@.base@.width;
+	    node@.child[1]@.width = puinttype[i]@.base@.width;
 	    GenSub(node@.child[0]);
 	    GenSub(node@.child[1]);
 	    if size > 1 then
@@ -968,8 +975,7 @@ package llvm
 	    node@.child[2] = expr.ExtendT(node@.child[2], type.wordtype);
 	    GenSub(node@.child[2]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    node@.kind = ENUM;
-	    node@.size = 1;
+	    node@.width = 1;
 	    Print("\t%N = call i1 @memcmp", node);
 	    f.uint(puinttype[i]@.base@.width/Target.membits);
 	    Print("(%0T %0N, %1T %1N, %2T %2N)\n", node);
@@ -980,13 +986,14 @@ package llvm
 		Print("\t%N = xor i1 %0N, true\n", node);
 	    }
 	}
+/* { err.nl();} */
 	return false;
     }
 
     proc Swap(node: Ast)
     {
 	GenSub(node@.child[0]);
-	if node@.size
+	if node@.width
 	is 16 then  UseIntrinsic[BSWAP2] = true;
 	is 32 then  UseIntrinsic[BSWAP4] = true;
 	is 64 then  UseIntrinsic[BSWAP8] = true;
@@ -1157,6 +1164,7 @@ package llvm
 	    }
 	    is CLIST then
 	    {   DclAggregate(node);
+		return;
 	    }
 	    is CALL then
 	    {   var ps: Symb;
@@ -1164,7 +1172,7 @@ package llvm
 		if ps@.linkage == EXTERN && !ps@.declared then
 		{   DclParmRetv(ps);
 		    DclProc(node, false);
-		    f.nl();
+		    f.chr('\n');
 		    ps@.declared = true;
 		}
 	    }
@@ -1359,6 +1367,16 @@ package llvm
 	PEndLine(node);
     }
 
+    // FIXME: perhaps this is general enought to be in the type package
+    proc TargetUintType(size: type.BitSize): Type
+    {   var i: 0..target.IntSizesMax;
+
+	i = 0;    
+	while i < Target.nisize && size > Target.isizes[i].size do
+	    i += 1;
+	return type.uinttypes[i];
+   }
+
     proc BitfieldOffset(trec: Type, fno: type.Valu): type.BitSize
     {   var foffs, rsize, fsize: type.BitSize;
 	var s: Symb;
@@ -1404,14 +1422,14 @@ package llvm
 	loop
 	{   if offs@.op
 	    is OFFSET then
-		shft += BitfieldOffset(offs@.child[0]@.type, offs@.valu);
+		shft += BitfieldOffset(offs@.child[0]@.type@.base, offs@.valu);
 	    is INDEX then
-		varb = BitfieldIndex(offs, offs@.type@.size, varb);
+		varb = BitfieldIndex(offs, offs@.type@.base@.size, varb);
 	    is SLICE then
 		varb = BitfieldIndex(offs, offs@.type@.base@.size, varb);
 	    offs = offs@.child[0];
 	  exit (offs@.op < OFFSET || offs@.op > SLICE) ||
-	    offs@.child[0]@.type@.packed != BIT;
+	    !offs@.child[0]@.type@.base@.packed;
 	}
 	if shft != 0 then
 	{   tree = ast.Const(type.wordtype, shft);
@@ -1420,19 +1438,19 @@ package llvm
 	    else
 		varb = tree;
 	}
-	// load the container of the bitfield
-	tree = ast.New1(LOAD, offs@.type, offs);
-	tree@.kind = UINT;
-	tree@.size = offs@.type@.width;
+	// load the container of the bitfield as a UINT
+	tree = ast.New1(LOAD, TargetUintType(offs@.type@.base@.width), offs);
+	tree@.width = tree@.type@.width;
 	// make sure the endian is correct
-	if tree@.size > Target.membits && 
-	   tree@.type@.memorder != Target.order then
+	if tree@.width > Target.membits && 
+	   offs@.type@.base@.memorder != Target.order then
 	    tree = ast.New1(REVB, tree@.type, tree);
 	// make register sized, this simplifies things
 	tree = expr.ExtendT(tree, type.wordtype);
-//err.str("BitfieldRewrite tree=\n"); ast.Dump(tree);
-//err.str("varb=\n"); ast.Dump(varb);
-//err.str("offs=\n"); ast.Dump(offs);
+/* {
+err.str("BitfieldRewrite tree=\n"); ast.Dump(tree);
+err.str("varb=\n"); ast.Dump(varb);
+err.str("offs=\n"); ast.Dump(offs); } */
 	return tree,    // return the loaded container,
 	       varb,    // the shift computation,
 	       offs;    // and the base address 
@@ -1446,7 +1464,7 @@ package llvm
 	if node@.op == SLICE then
 	{   if node@.child[2]@.op != CONST then
 	    {
-err.str("BitfieldMask of variable SLICE\n");
+		lex.ErrorS(COMPILER, "BitfieldMask of variable SLICE");
 	    }
 	    else
 	    {   size = node@.type@.base@.size;
@@ -1454,7 +1472,7 @@ err.str("BitfieldMask of variable SLICE\n");
 	    }
 	}
 	else
-	    size = node@.type.size;
+	    size = node@.type@.base.size;
 	bits = (1<<size)-1;
 	mask = ast.Const(type.wordtype, bits);
 	return mask;
@@ -1462,38 +1480,42 @@ err.str("BitfieldMask of variable SLICE\n");
 	
     proc Load(load: Ast)
     {   var offs, tree, varb, mask: Ast;
-	var size: type.BitSize;
-	var t: Type;
 
 	// LLVM doesn't handle bitfields (packed records or arrays)
 	// so we expand bitfield extract
 	offs = load@.child[0];
 	if (offs@.op >= OFFSET && offs@.op <= SLICE) &&
-	    offs@.child[0]@.type@.packed == BIT then
+	    offs@.child[0]@.type@.base@.packed then
 	{   // We are dealing with a packed record or array (aka bitfield).
-	    t = offs@.type;		// final type
-	    size = t@.size;		// final bit size
 	    mask = BitfieldMask(offs);
 	    // Rewrite the AST to extract item.
 	    tree, varb, offs = BitfieldRewrite(offs);
 	    // shift item rightward, if necessary
 	    if varb != 0 then
-		tree = ast.New2(LSR, t, tree, varb);
+		tree = ast.New2(LSR, type.wordtype, tree, varb);
 	    // mask off the parts we don't want
-	    tree = ast.New2(AND, t, tree, mask);
+	    tree = ast.New2(AND, type.wordtype, tree, mask);
 	    // possibly narrow the size
-	    tree = expr.Extend(tree, load@.size, true);
-//err.str("BFLoad size="); err.uint(load@.size);
-//err.str(" tree=\n"); ast.Dump(tree);
+	    tree = expr.Extend(tree, load@.width, true);
+/* {
+err.str("BFLoad size="); err.uint(load@.width);
+err.str(" tree=\n"); ast.Dump(tree); } */
 	    GenSub(tree);
 	    load@.child[0] = tree;      // load@.op == LOAD, we're done with it
 	    load@.seqno = tree@.seqno;  // copy up seqno of node below
 	}
 	else	// normal load
-	{   GenSub(offs);
+	{
+if debug.tests[1] then {
+	    if offs@.type@.base@.unalgn then
+	    {
+		lex.ErrorS(NOTIMPL, "Load of unaligned");
+	    }
+}
+	    GenSub(offs);
 	    load@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = ", load);
-	    if offs@.type@.input then
+	    if offs@.type@.base@.input then
 		f.str("volatile ");
 	    Print("load %T* %0N", load);
 	    PEndLine(load);
@@ -1502,8 +1524,6 @@ err.str("BitfieldMask of variable SLICE\n");
 
     proc Store(store: Ast)
     {   var rhs, lhs, varb, tree, mask: Ast;
-	var size: type.BitSize;
-	var t: Type;
 	var i, n: ast.NSubNodes;
 
 	i = 0;
@@ -1514,10 +1534,8 @@ err.str("BitfieldMask of variable SLICE\n");
 	    // LLVM doesn't handle bitfields (packed records or arrays)
 	    // so we expand bitfield insert
 	    if (lhs@.op >= OFFSET && lhs@.op <= SLICE) &&
-		lhs@.child[0]@.type@.packed == BIT then
+		lhs@.child[0]@.type@.base@.packed then
 	    {   // We are dealing with a packed record or array (aka bitfield).
-		t = lhs@.type;			// final type
-		size = t@.size;			// final bit size
 		mask = BitfieldMask(lhs);
 		// Rewrite the AST to extract item.
 		tree, varb, lhs = BitfieldRewrite(lhs);
@@ -1535,15 +1553,16 @@ err.str("BitfieldMask of variable SLICE\n");
 		// or in the new value
 		rhs  = ast.New2(OR, type.wordtype, tree, rhs);
 		// adjust width of final result
-		rhs = expr.Extend(rhs, lhs@.type@.width, true);
+		rhs = expr.Extend(rhs, lhs@.type@.base@.width, true);
 		// make sure the endian is correct
-		if lhs@.size > Target.membits && 
+		if lhs@.width > Target.membits && 
 		   lhs@.type@.memorder != Target.order then
 		    rhs = ast.New1(REVB, rhs@.type, rhs);
 		store@.child[i] = lhs;
 		store@.child[n+i] = rhs;
-//err.str("BFStore size="); err.uint(lhs@.type@.width);
-//err.str(" tree=\n"); ast.Dump(store);
+/* {
+err.str("BFStore size="); err.uint(lhs@.type@.base@.width);
+err.str(" tree=\n"); ast.Dump(store); } */
 	    }
 	    GenSub(rhs);	// rhs first
 	    i += 1;
@@ -1553,15 +1572,22 @@ err.str("BitfieldMask of variable SLICE\n");
 	{   lhs = store@.child[i];
 	    rhs = store@.child[n+i];
 	    if lhs != 0 then
-	    {   GenSub(lhs);	// then lhs
+	    {
+if debug.tests[1] then {
+		if lhs@.type@.base@.unalgn then
+		{
+		    lex.ErrorS(NOTIMPL, "Store of unaligned");
+		}
+}
+	        GenSub(lhs);	// then lhs
 		f.chr('\t');
-		if store@.child[i]@.type@.output then
-		   f.str("volatile ");
+		if lhs@.type@.base@.output then
+		    f.str("volatile ");
+		// FIXME: Print("store %T %N", rhs);
 		f.str("store ");
 		NodeType(rhs); f.chr(' ');
-		NodeSrc(rhs);  f.str(", ");
-		NodeType(lhs); f.chr(' ');
-		NodeDst(lhs);
+		NodeSrc(rhs);
+		Print(", %B %D", lhs);
 		PEndLine(store);
 	    }
 	    i += 1;
@@ -1628,12 +1654,7 @@ err.str("BitfieldMask of variable SLICE\n");
 	}
 	is DCLVAR then DclVar(node);
 	is DCLCON then DclCon(node);
-	is VAR, CONST then {}
-	is SCON, CLIST then
-	{
-	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = getelementptr %T %S\n", node);
-	}
+	is VAR, CONST, SCON, CLIST then {}
 	is ACOPY then Copy(node);
 	is AEQ, ANE then term = ArrayCompare(node);
 	is COPY then Copy(node);
@@ -1644,12 +1665,12 @@ err.str("BitfieldMask of variable SLICE\n");
 	is BYREF then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = getelementptr %T %0N\n", node);
+	    Print("\t%N = getelementptr %B %0N\n", node);
 	}
 	is OFFSET then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = getelementptr %0T %0N, %W 0, i32 ", node);
+	    Print("\t%N = getelementptr %0B %0N, %W 0, i32 ", node);
 	    f.uint32(_uint32(node@.valu));
 	    f.nl();
 	}
@@ -1659,7 +1680,7 @@ err.str("BitfieldMask of variable SLICE\n");
 	    node@.child[1] = expr.ExtendT(node@.child[1], type.wordtype);
 	    GenSub(node@.child[1]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = getelementptr %0T %0N, %W 0, %1T %1N\n", node);
+	    Print("\t%N = getelementptr %0B %0N, %W 0, %1T %1N\n", node);
 	}
 	is SLICE then
 	{   var nextseqno: seqnoT;
@@ -1673,23 +1694,23 @@ err.str("BitfieldMask of variable SLICE\n");
 	    nextseqno = Tseqno; Tseqno += 1;
 	    Print("\t%N = getelementptr %0T %0N, %W 0, %1T %1N\n", node);
 	    f.chr('\t'); PTempName(nextseqno);
-	    Print(" = bitcast %A* %N to %T\n", node);
+	    Print(" = bitcast %C* %N to %T\n", node);
 	    node@.seqno = nextseqno;
 	}	
 	is CAST then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    if node@.kind == REF then
-	    {   if node@.child[0]@.kind == REF then
-		    Print("\t%N = bitcast %0T %0N to %T\n", node);
+	    if node@.type@.kind == REF then
+	    {   if node@.child[0]@.type@.kind == REF then
+		    Print("\t%N = bitcast %0B %0N to %B\n", node);
 		else
 		    Print("\t%N = inttoptr %0T %0N to %T\n", node);
 	    }
 	    else
-	    {   if node@.child[0]@.kind == REF then
+	    {   if node@.child[0]@.type@.kind == REF then
 		    Print("\t%N = ptrtoint %0T %0N to %T\n", node);
 		else
-		    Print("\t%N = bitcast %0T %0N to %T\n", node);
+		    Print("\t%N = bitcast %0B %0N to %B\n", node);
 	    }
 	}	
 	is ZEXT then  ChangeSize(node, "zext");
@@ -1763,17 +1784,12 @@ err.str("BitfieldMask of variable SLICE\n");
 
 	f = bout.buffer(fd, 4096);;
 	// These pointer types might be useful to other packages.
-	pbytetype = type.New(REF);
-	pbytetype.base = type.bytetype;
-	puinttype[0] = type.New(REF);
-	puinttype[0].base = type.uinttypes[0];
-	puinttype[1] = type.New(REF);
-	puinttype[1].base = type.uinttypes[1];
-	puinttype[2] = type.New(REF);
-	puinttype[2].base = type.uinttypes[2];
-	puinttype[3] = type.New(REF);
-	puinttype[3].base = type.uinttypes[3];
-
+	pbytetype = type.MakeRef(type.bytetype);
+	i = 0;
+	while i < Target.nisize do
+	{   puinttype[i] = type.MakeRef(type.uinttypes[i]);
+	    i += 1;
+	}
 	f.str("target datalayout = \"");
 	if Target.order == BE then f.str("E"); else f.str("e");
 	f.str("-p:");  f.uint(Target.ptr.size);

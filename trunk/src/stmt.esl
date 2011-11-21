@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 634 2011-10-19 19:21:15Z bgl $
+// $Id: stmt.esl 647 2011-11-21 17:30:48Z bgl $
 
 package stmt
 {
@@ -133,12 +133,12 @@ package stmt
 	    {   doit = false;
 		loop
 		{   tok = Next();
-		    vlo = expr.ConstScalar(t);
+		    vlo = expr.ConstValue(t);
 		    vhi = vlo;  // assume no range
 		    tok = Token;
 		    if tok == RANGE then
 		    {   tok = Next();
-			vhi = expr.ConstScalar(t);
+			vhi = expr.ConstValue(t);
 		    }
 		    if vlo > vhi then
 		    {   // FIXME: range error
@@ -236,8 +236,7 @@ package stmt
 	node = ast.New(DCLVAR, t);
 	if iv != 0 then
 	    node = ast.Child(node, iv);
-	node@.kind = REF;
-	node@.size = t@.width;
+	node@.width = t@.width;
 	node@.symb = s;
 	return node;
     }
@@ -322,20 +321,19 @@ package stmt
 	    if tok == ASGN then
 	    {   tok = Next();
 		tree = expr.Const(t);
-		if t == 0 then t = tree@.type;
 		s@.const = tree;
-		if t@.kind <= REF || t@.packed == BIT then
-		{   if tree@.op == CONST then
-		    {   if t == 0 then t = tree@.type;
+		if tree != 0 then
+		{   if t == 0 then t = tree@.type;
+		    if t@.kind <= REF || t@.packed then
+		    {   if tree@.op != CONST then
+			    lex.Error(BADCONST);
 		    }
 		    else
-			lex.Error(BADCONST);
-		}
-		else
-		{   if t@.kind == ARRAY && t@.flex then
-			t = tree@.type;
-		    tree = ast.New1(DCLCON, t, tree);
-		    tree@.symb = s;
+		    {   if t@.kind == ARRAY && t@.flex then
+			    t = tree@.type;
+			tree = ast.New1(DCLCON, t, tree);
+			tree@.symb = s;
+		    }
 		}
 		s@.hasdef = true;
 	    }
@@ -458,7 +456,7 @@ package stmt
 		no = 0;
 		while no < nout do
 		{   tl = type.TypeList(sys.zalloc(type.TypeListEntry?size));
-		    tl@.type = outputs[no]@.type;
+		    tl@.type = outputs[no]@.type@.base;
 		    if tltail == 0 then
 			tlhead = tl;
 		    else
@@ -480,9 +478,8 @@ package stmt
 		    if nout > 1 then
 		    {   no = 0;
 			while no < nout do
-			{   temp = ast.New1(GETRV, outputs[no]@.type, node);
-			    temp@.kind = temp@.type@.kind;
-			    temp@.size = temp@.type@.width;
+			{   temp = ast.New1(GETRV, outputs[no]@.type@.base, node);
+			    temp@.width = temp@.type@.width;
 			    temp@.valu = no;
 			    tree = ast.Child(tree, temp);
 			    no += 1;
@@ -492,9 +489,8 @@ package stmt
 		    {   // This is a hack because the ASM node overloads type
 			// to point to a TypeList instead of Type, so we need
 			// a node with a real Type.
-			temp = ast.New1(NOP, outputs[0]@.type, node);
-			temp@.kind = temp@.type@.kind;
-			temp@.size = temp@.type@.width;
+			temp = ast.New1(NOP, outputs[0]@.type@.base, node);
+			temp@.width = temp@.type@.width;
 			tree = ast.Child(tree, temp);
 		    }
 		}
@@ -506,7 +502,7 @@ package stmt
 
     proc CheckSwap(lhs: Ast, rhs: Ast): Ast
     {
-	if type.NeedSwap(lhs@.type, Target.order) then
+	if type.NeedSwap(lhs@.type@.base, Target.order) then
 	    rhs = ast.New1(REVB, rhs@.type, rhs);
 	return rhs;
     }
@@ -515,12 +511,14 @@ package stmt
     {   var tree: Ast;
 	var t:Type;
 
-	t = lhs@.type;
+	t = lhs@.type@.base;
 	tree = expr.Term(t);
 	if tree == 0 then return 0;
-	if t@.packed == BIT then
-	{   tree@.kind = UINT;		// FIXME: necessary?
+	if t@.packed then    // FIXME: not possible?
 	    tree = CheckSwap(lhs, tree);
+	else if tree@.op == CLIST then
+	{   tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
+	    tree = ast.New1(LOAD, tree@.type@.base, tree);
 	}
 	// FIXME: copy or store depending on size?
 	tree = ast.New2(STORE, 0, lhs, tree);
@@ -528,14 +526,16 @@ package stmt
     }
 
     proc ArrayFix(tree:Ast): Ast
-    {
+    {   var at: Type;
+
 	if tree@.op
 	is VAR then
 	    tree = ast.New1(BYREF, tree@.type, tree);
 	is CLIST then
-	    tree@.kind = REF;
-	if tree@.type@.base != type.bytetype || !tree@.type@.flex then
-	    tree = ast.New1(CAST, type.memtype, tree);
+	    {}
+	at = tree@.type@.base;  // type of array
+	if at@.base != type.bytetype || !at@.flex then
+	    tree = ast.New1(CAST, type.MakeRef(type.memtype), tree);
 	return tree;
     }
 
@@ -544,12 +544,11 @@ package stmt
 	var lalign, ralign: _uint;
 	var t:Type;
 
-	t = lhs@.type;
+	t = lhs@.type@.base;
 	tree = expr.Term(t);
 	if tree == 0 then return 0;
-	if t@.packed == BIT then
-	{   tree@.kind = UINT;		// FIXME: necessary?
-	    if lhs@.op == SLICE then
+	if t@.packed then	// FIXME: not possible?
+	{   if lhs@.op == SLICE then
 	    {   lex.ErrorS(NOTIMPL, "packed array slices");
 //		return 0;
 	    }
@@ -562,16 +561,22 @@ package stmt
 	    if lhs@.op == SLICE then
 		lsize = lhs@.child[2];
 	    else
-		lsize = ast.Const(type.wordtype, lhs@.type@.hi);
-	    if tree@.op == LOAD && tree@.kind == ARRAY then // undo the load
+		lsize = ast.Const(type.wordtype, lhs@.type@.base@.hi);
+	    if tree@.op == LOAD && tree@.type@.kind == ARRAY then // undo the load
 		tree = tree@.child[0];
+	    else if tree@.op == SCON || tree@.op == CLIST then
+		tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
 	    ralign = expr.GetAlignment(tree);
+//err.str("ArrayCopy lalign="); err.uint(lalign);
+//err.str(" ralign="); err.uint(ralign); err.nl();
 	    if ralign < lalign then
 		lalign = ralign;
 	    if tree@.op == SLICE then
 		rsize = tree@.child[2];
 	    else
-		rsize = ast.Const(type.wordtype, tree@.type@.hi);
+		rsize = ast.Const(type.wordtype, tree@.type@.base@.hi);
+//err.str("ArrayCopy lsize=\n"); ast.Dump(lsize);
+//err.str("rsize=\n"); ast.Dump(rsize);
 	    if lsize@.op == CONST && lsize@.valu == 0 then
 	    {   if rsize@.op == CONST && rsize@.valu == 0 then
 		    lex.Error(ARRAYCOPY);
@@ -597,54 +602,50 @@ package stmt
 	var ok: boolean;
 
 	to = lhs@.type;		// target type
+	if to@.kind != REF then
+	{   lex.ErrorS(COMPILER, "LHS should be REF");
+	    return 0;
+	}
+	to = to@.base;
 	fm = tree@.type;
-/*
-err.str("TL kind="); err.str(type.KindName[to@.kind]); err.nl();
-type.DumpT(to, true); err.nl();
-if to@.base != 0 then
-{ err.str("TL.base kind="); err.str(type.KindName[to@.base@.kind]); err.nl();
-  type.DumpT(to@.base, true); err.nl();
-}
-err.str("TR kind="); err.str(type.KindName[fm@.kind]); err.nl();
-type.DumpT(fm, true); err.nl();
-ast.Dump(rhs);
-*/
 	// LHS is not a COMPOSITE (RECORD or ARRAY) -- handled elsewhere
 	ok = true;
 	if to@.kind
 	is REF then     // FIXME: merge with code in expr.Actual()
-	{   bt = to@.base;
-	    if bt == 0 then
-	    {   lex.Error(BADREF);
-		return tree;
-	    }
-	    if tree@.kind == REF && type.Compat(bt, fm) then
-	    {   if bt != to then tree = expr.Cast(tree, to);
+	{   if fm@.kind == REF && type.Compat(to, fm) then
+	    {   if fm != to then
+		{
+		    tree = expr.Cast(tree, to);
+		    fm = tree@.type;
+		}
 	    }
 	    else
 	    {   tree = expr.CoerceToRef(tree);
 		fm = tree@.type;
-	        if type.Compat(bt, fm) then
-		{   if bt != to then tree = expr.Cast(tree, to);
+	        if type.Compat(to, fm) then
+		{   if fm != to then
+		    {   tree = expr.Cast(tree, to);
+			fm = tree@.type;
+		    }
 		}
 		else ok = false;
 	    }
 	    // Fix types when formal is a flex
-	    if bt@.flex && !tree@.type@.flex then
-		tree = ast.New1(CAST, bt, tree);
+	    if to@.flex && !fm@.flex then
+	    {   tree = ast.New1(CAST, to, tree);
+		fm = tree@.type;
+	    }
 	    // Check attributes
-	    if !expr.CheckRefAttributes(bt, fm) then
+	    if !expr.CheckRefAttributes(to, fm) then
 		lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
 	}
 	is REFPROC then
 	{   ok = type.Compat(to, fm);
 	}
 	is ENUM then
-	{   // FIXME: can't check for compat because 2 ENUMs which
-	    // differ only in endian currently don't pass.
-	    ok = type.Compat(fm, to);
+	{   ok = type.Compat(fm, to);
 	    if !ok && fm.kind == UINT then ok = true;
-	    if lhs@.size != tree@.size then
+	    if to@.width != tree@.width then
 		tree = expr.ExtendT(tree, to);
 	}
 	is UINT then
@@ -657,7 +658,7 @@ ast.Dump(rhs);
 		    ok = true;
 		}
 	    }
-	    if lhs@.size != tree@.size then
+	    if to@.width != tree@.width then
 		tree = expr.ExtendT(tree, to);
 	}
 	is SINT then
@@ -666,7 +667,7 @@ ast.Dump(rhs);
 	    {   if feature.trunc then lex.Error(TOSIGNED);
 		ok = true;
 	    }
-	    if lhs@.size != tree@.size then
+	    if to@.width != tree@.width then
 		tree = expr.ExtendT(tree, to);
 	}
 	if !ok then
@@ -703,15 +704,21 @@ ast.Dump(rhs);
 	    nr = 0;
 	    loop
 	    {   lhs = tree@.child[nr];
-		if lhs != 0 then t = lhs@.type; else t = 0;
-		if t != 0 && t@.kind == RECORD && t@.packed != BIT then
+		t = 0;
+		if lhs != 0 then
+		{   if lhs@.type@.kind != REF then
+			lex.ErrorS(COMPILER, "Assign LHS not REF");
+		    else
+			t = lhs@.type@.base;
+		}
+		if t != 0 && t@.kind == RECORD && !t@.packed then
 		{   if optok == ASGN && nl == 1 then
 			tree = AssignRecord(lhs);
 		    else
 			lex.Error(ILLASSIGN);
 		    nr += 1;
 		}
-		else if t != 0 && t@.kind == ARRAY && t@.packed != BIT then
+		else if t != 0 && t@.kind == ARRAY && !t@.packed then
 		{   if optok == ASGN && nl == 1 then
 			tree = AssignArray(lhs);
 		    else
@@ -729,13 +736,7 @@ ast.Dump(rhs);
 			    i = 0;
 			    loop
 			    {   lrhs = ast.New1(GETRV, tl@.type, rhs);
-				lrhs@.kind = tl@.type@.kind;
-				if lrhs@.kind == REF then
-				{   lrhs@.type = tl@.type@.base;
-				    lrhs@.size = Target.ptr.size;
-				}
-				else
-				    lrhs@.size = tl@.type@.width;
+				lrhs@.width = tl@.type@.width;
 				lrhs@.valu = i;
 				tree = ast.Child(tree, lrhs);
 				i += 1;
@@ -831,10 +832,10 @@ ast.Dump(rhs);
 		    tree = ast.Child(tree, rval);
 		    if t@.kind == REF then
 		    {   tree@.type = t@.base;
-			tree@.size = Target.ptr.size;
+			tree@.width = Target.ptr.size;
 		    }
 		    else
-			tree@.size = t@.width;
+			tree@.width = t@.width;
 		}
 		else
 		    lex.Error(BADRETURN);
@@ -846,8 +847,7 @@ ast.Dump(rhs);
 	}
 	if tree@.num != 0 then	// FIXME: fix in llvm?
 	{   tree@.type = tree@.child[0]@.type;	// first returned value
-	    tree@.kind = tree@.child[0]@.kind;
-	    tree@.size = tree@.child[0]@.size;
+	    tree@.width = tree@.child[0]@.width;
 	}
 	lex.Expect(SEMI);
 	return tree;
@@ -958,12 +958,14 @@ ast.Dump(rhs);
 
 	tok = Token;
 	ctree = expr.Bool(type.booltype);
-	if type.Compat(ctree@.type, type.booltype) then
-	    ctree = expr.ForceBoolean(ctree);
-	else
-	    lex.Error(WANTBOOL);
-	ctree = ast.New1(BNOT, 0, ctree);
-	ctree = ast.New1(EXIT, 0, ctree);
+	if ctree != 0 then
+	{   if type.Compat(ctree@.type, type.booltype) then
+		ctree = expr.ForceBoolean(ctree);
+	    else
+		lex.Error(WANTBOOL);
+	    ctree = ast.New1(BNOT, 0, ctree);
+	    ctree = ast.New1(EXIT, 0, ctree);
+	}
 	LoopLevel += 1;
 	tok = lex.Keyword(dolist);
 	if tok == KDO then
@@ -1252,7 +1254,7 @@ ast.Dump(rhs);
 		tree@.symb = s;
 		if t != 0 && t@.kind == REF then
 		{   tree@.type = t@.base;
-		    tree@.size = Target.ptr.size;
+		    tree@.width = Target.ptr.size;
 		}
 	    }
 	    else

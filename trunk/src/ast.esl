@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 644 2011-11-05 00:36:51Z bgl $
+// $Id: ast.esl 647 2011-11-21 17:30:48Z bgl $
 
 package ast
 {
@@ -84,10 +84,9 @@ package ast
     type AstNode:
     {
 	op:	Op;		// what kind of node is this
-	kind:   type.TypeT;
 	num:	NSubNodes;	// number of subnodes
 	max:	NSubNodes;	// maximum allocated slots for subnode
-	size:	type.BitSize;
+	width:	type.BitSize;	// current width in bits
 	scale:	type.BitSize;
 	lineno:	_uint16;	// source code line number
 	seqno:	_uint16;	// used by LLVM
@@ -132,8 +131,7 @@ package ast
 	pn = Alloc(po@.op, size);
 	// Record copy?
 	pn@.op =    po@.op;
-	pn@.kind =  po@.kind;
-	pn@.size =  po@.size;
+	pn@.width = po@.width;
 	pn@.scale = po@.scale;
 	pn@.lineno= po@.lineno;
 	pn@.num =   po@.num;
@@ -156,10 +154,7 @@ package ast
 	pa = Alloc(op, NumChildDefault[op]);
 	pa@.type = t;
 	if t != 0 then
-	{
-	    pa@.kind = t@.kind;
-	    pa@.size = t@.width;
-	}
+	    pa@.width = t@.width;
 	return pa;
     }
 
@@ -175,9 +170,7 @@ package ast
 	pa@.num = 1;
 	pa@.type = t;
 	if pc0 != 0 then
-	{   pa@.kind = pc0@.kind;
-	    pa@.size = pc0@.size;
-	}
+	    pa@.width = pc0@.width;
 	return pa;
     }
 
@@ -194,9 +187,7 @@ package ast
 	pa@.num = 2;
 	pa@.type = t;
 	if pc0 != 0 then
-	{   pa@.kind = pc0@.kind;
-	    pa@.size = pc0@.size;
-	}
+	    pa@.width = pc0@.width;
 	return pa;
     }
 
@@ -214,9 +205,7 @@ package ast
 	pa@.num = 3;
 	pa@.type = t;
 	if pc0 != 0 then
-	{   pa@.kind = pc0@.kind;
-	    pa@.size = pc0@.size;
-	}
+	    pa@.width = pc0@.width;
 	return pa;
     }
 
@@ -250,9 +239,7 @@ package ast
 	pa = New(CONST, t);
 	pa@.valu = value;
 	if t != 0 then
-	{   pa@.kind = t@.kind;
-	    pa@.size = t@.width;
-	}
+	    pa@.width = t@.width;
 	return pa;
     }
 
@@ -340,7 +327,7 @@ package ast
 	else
 	    err.str("UNKN");
 	err.str(" sz=");
-	err.uint(node@.size);
+	err.uint(node@.width);
 	err.str(" ln=");
 	err.uint(node@.lineno);
 	err.str(" nc=");
@@ -348,7 +335,7 @@ package ast
 	if node@.op
 	is CONST, OFFSET, COPY, GETRV then
 	{   err.str(" value ");
-	    if node@.op == CONST && node@.kind == SINT then
+	    if node@.op == CONST && node@.type@.kind == SINT then
 		err.int64(_int64(node@.valu));
 	    else
 		err.uint64(node@.valu);

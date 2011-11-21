@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type1.esl 623 2011-09-19 01:12:30Z bgl $
+// $Id: type1.esl 647 2011-11-21 17:30:48Z bgl $
 
 package type
 {
@@ -8,7 +8,6 @@ package type
     type TypeT: (UTYPE, ENUM, UINT, SINT, REF, ARRAY, RECORD, REFPROC);
     type BitOrderT: (NATIVE, MSB, LSB);
     type MemOrderT: (NATIVE, BE, LE);
-    type AlignT: (NATIVE, MEM, BIT);
     type AccessT: (RW, RO, WO);
     type BitSize: 0..0xFFFFFFFF;
     type TypeNode:
@@ -19,6 +18,7 @@ package type
 	name:	@SymbNode;	// for named types
 	list:	@SymbNode;	// for enums, records
 	meths:	@SymbNode;	// list of methods for this type
+	reftype:@TypeNode;      // type that refs this type
 	lo:	Valu;
 	hi:	Valu;
 	size:	BitSize;	// size in bits
@@ -27,10 +27,11 @@ package type
 	dbtag:	_uint16;	// tag for debug information
 	antag:  _uint16;	// tag for anonymous types (used by llvm)
 	kind:	TypeT;		// ENUM, UINT, ...
-	packed:	AlignT;		// packed or not
 	bitorder: BitOrderT;	// lsb, msb
 	memorder: MemOrderT;	// le, be
 	access:	AccessT;	// access restrictions
+	packed: boolean;	// packed to bit level
+	unalgn: boolean;	// not aligned natively
 	flex:   boolean;	// flexible array
 	input:  boolean;	// external state changes (like C volatile)	
 	output: boolean;	// changes external state (like C volatile)	
@@ -52,6 +53,7 @@ package type
     var wordtype: Type;
     var swordtype: Type;
     var memtype: Type;
+    var addrtype: Type;
     const NINTS = 4;		// number of integer types supported
     var uinttypes: [NINTS]Type;
     var inttypes:  [NINTS]Type;
