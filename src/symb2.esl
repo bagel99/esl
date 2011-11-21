@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb2.esl 633 2011-10-10 21:11:54Z bgl $
+// $Id: symb2.esl 647 2011-11-21 17:30:48Z bgl $
 
 package symb
 {
@@ -80,6 +80,7 @@ package symb
 	taddr = type.NewBuiltin(REF, "_address", Target.ptr.size);
 	taddr@.base = type.memtype;
 	taddr@.align = Target.ptr.align;
+	type.addrtype = taddr;
 	
 	// predefined _uint*, _int*
 	type.wordtype = type.NewBuiltin(UINT, "_uint", Target.regsize);

@@ -1,11 +1,11 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr1.esl 636 2011-10-23 00:45:10Z bgl $
+// $Id: expr1.esl 647 2011-11-21 17:30:48Z bgl $
 
 package expr
 {
     proc Bool(t:Type): Ast;		// forward
     proc Const(t:Type): Ast;		// forward
-    proc ConstScalar(t:Type): Valu;	// forward
+    proc ConstValue(t:Type): Valu;	// forward
     proc GetLHS(): Ast;			// forward
 }
 

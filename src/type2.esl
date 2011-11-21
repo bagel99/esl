@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 643 2011-10-31 22:03:17Z bgl $
+// $Id: type2.esl 647 2011-11-21 17:30:48Z bgl $
 
 package type
 {
@@ -108,6 +108,22 @@ package type
 	return t;
     }
 
+    proc MakeRef(bt: Type): Type
+    {   var t: Type;
+
+	t = bt@.reftype;
+	if t == 0 then
+	{   t = New(REF);
+	    t@.base = bt;
+	    t@.memorder = Target.order;
+	    t@.size  = Target.ptr.size;
+	    t@.width = Target.ptr.size;
+	    t@.align = Target.ptr.align;
+	    t@.reftype = t;
+	}
+	return t;
+    }
+
     proc Clone(ot: Type): Type
     {   var nt: Type;
 
@@ -140,7 +156,7 @@ package type
 		tok = Next();
 	    }
 	    else
-	    {   s@.xaddr = expr.ConstScalar(type.wordtype);
+	    {   s@.xaddr = expr.ConstValue(type.wordtype);
 		s@.linkage = FIXED;
 	    }
 	    lex.Expect(PEND);
@@ -148,7 +164,7 @@ package type
     }
     
     const tattrlist:[]TokenT =
-    {	KPACK, KMPACK,
+    {	KPACK, KNOPAD,
 	KLSB, KMSB,
 	KLE, KBE,
 	KRO, KWO,
@@ -174,8 +190,8 @@ package type
 			t@.atbase = at;
 		    }
 		    if atok
-		    is KPACK then   t@.packed = BIT;
-		    is KMPACK then  t@.packed = MEM;
+		    is KPACK then   t@.packed = true;
+		    is KNOPAD then  t@.unalgn = true;
 		    is KLSB then    t@.bitorder = LSB;
 		    is KMSB then    t@.bitorder = MSB;
 		    is KLE then     t@.memorder = LE;
@@ -187,7 +203,7 @@ package type
 		    is KMEMSZ then 
 		    {   if tok == PBEG then
 			{   tok = Next();
-			    t@.width = BitSize(expr.ConstScalar(type.wordtype) *
+			    t@.width = BitSize(expr.ConstValue(type.wordtype) *
 					Target.membits);
 			    lex.Expect(PEND);
 			}
@@ -195,14 +211,14 @@ package type
 		    is KBITSZ then 
 		    {   if tok == PBEG then
 			{   tok = Next();
-			    t@.size = BitSize(expr.ConstScalar(type.wordtype));
+			    t@.size = BitSize(expr.ConstValue(type.wordtype));
 			    lex.Expect(PEND);
 			}
 		    }		
 		    is KALIGN then 
 		    {   if tok == PBEG then
 			{   tok = Next();
-			    t@.align = BitSize(expr.ConstScalar(type.wordtype) *
+			    t@.align = BitSize(expr.ConstValue(type.wordtype) *
 					Target.membits);
 			    lex.Expect(PEND);
 			}
@@ -307,6 +323,16 @@ package type
 	return index;	
     }
 
+    proc ForcePacked(t: Type): Type
+    {
+	if (t@.kind == RECORD || t@.kind == ARRAY) && !t@.packed then
+	{   t = Clone(t);
+	    t@.packed = true;
+	    Final(t);
+	}
+	return t;
+    }
+
     proc Final(t: Type)
     {   var align: BitSize;
 	var tlo, thi: BitSize;
@@ -324,6 +350,15 @@ package type
 		t@.width = target.isize(t@.size);
 	    if t@.width != 0 && t@.size == 0 then
 		t@.size = t@.width;
+if debug.tests[1] then {
+	    if Target.mustalign && t@.align != 0 &&
+	       t@.align < target.ialign(t@.size) then
+	    {
+//err.str("align: set to "); err.uint(t@.align);
+//err.str(" target wants "); err.uint(target.ialign(t@.size)); err.nl();   
+		    t@.unalgn = true;
+	    }
+}
 	    if t@.kind
 	    is ENUM, UINT then 
 	    {   if t@.size == 0 then
@@ -375,8 +410,8 @@ package type
 			    else
 				t@.flex = true;     // mark record as flex
 			}
-			if t@.packed == BIT then
-			{
+			if t@.packed then
+			{   f@.type = ForcePacked(f@.type);
 			    offs += f@.type@.size;
 			}
 			else
@@ -387,7 +422,7 @@ package type
 //err.chr('('); err.uid(f@.addr);
 //err.str(") offs=");  err.uid(offs);
 //err.str(" align="); err.uid(falign);
-			    if mod != 0 && t@.packed == NATIVE then
+			    if mod != 0 && !t@.unalgn then
 			    {
 				index = FieldPad(prev,
 						 (falign-mod)/Target.membits,
@@ -434,12 +469,14 @@ package type
 	    is ARRAY then 
 	    {   if t@.base != 0 then
 		{   Final(t@.base);
+		    if t@.packed then
+			t@.base = ForcePacked(t@.base);
 		    if t@.size == 0 then
 			t@.size = BitSize(t@.base@.size * t@.hi);
 		    if t@.width == 0 then
 			t@.width = t@.size;
 		    if t@.align == 0 then
-		    {   if t@.packed != BIT then
+		    {   if !t@.packed then
 			    t@.align = t@.base@.align;
 			else
 			    t@.align = 1;
@@ -643,6 +680,13 @@ package type
 			    tok = Token;
 			}
 			else lex.ErrorT(EXPECT, COLON);
+if debug.tests[2] then {
+			if t@.kind
+			is ARRAY, RECORD then
+			{   if !t@.packed then
+				lex.ErrorS(NOTIMPL, "Aggregate parameter by value not allowed");
+			}
+}
 			s@.type = t;
 			if procs@.parmlist == 0 then
 			    procs@.parmlist = s;
@@ -735,9 +779,9 @@ package type
 	    {   tok = Next();
 		vhi = expr.Bool(0);
 		if vlo@.op == CONST && vhi@.op == CONST then
-		{   if vlo@.kind
+		{   if vlo@.type@.kind
 		    is UINT, SINT then 
-		    {	t = type.New(vlo@.kind);
+		    {	t = type.New(vlo@.type@.kind);
 			t@.lo = vlo@.valu;
 			t@.hi = vhi@.valu;
 		    }
@@ -772,7 +816,10 @@ package type
 	{   var tree: Ast;
 	    tok = Next();
 	    tree = expr.GetLHS();
-	    if tree != 0 then t = tree@.type;
+	    if tree != 0 then
+	    {   // assert tree@.kind == REF
+		t = tree@.type@.base;
+	    }
 	}
 	else
 	{
@@ -807,7 +854,6 @@ package type
 	return t;
     }
 
-    const packedstr:[AlignT]@[]Char = {"", "memory", "packed"};
     const bitorderstr:[BitOrderT]@[]Char = {"", "msb", "lsb"};
     const memorderstr:[MemOrderT]@[]Char = {"", "be", "le"};
     const accessstr:[AccessT]@[]Char = {"RW", "RO", "WO"};
@@ -857,7 +903,7 @@ package type
 			err.uint(offs);
 			err.str("): ");
 			Dump2(s@.type, indent+2, full);
-			if t@.packed == BIT then
+			if t@.packed then
 			    offs += symb.OffsT(s@.type@.size);
 			else
 			    offs += symb.OffsT(s@.type@.width / Target.membits);
@@ -894,7 +940,9 @@ package type
 		err.uint(t@.width);
 		err.chr(':');
 		err.uint(t@.align);
-		err.str(" attr="); err.str(packedstr[t@.packed]);
+		err.str(" attr=");
+		if t@.packed then err.str("packed");
+		else if t@.unalgn then err.str("unaligned");
 		err.chr(':');
 		if t@.memorder != Target.order then
 		    err.str(memorderstr[t@.memorder]);
