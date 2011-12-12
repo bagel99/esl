@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 647 2011-11-21 17:30:48Z bgl $
+// $Id: llvm.esl 662 2011-12-09 21:37:34Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -1514,10 +1514,17 @@ if debug.tests[1] then {
 }
 	    GenSub(offs);
 	    load@.seqno = Tseqno;  Tseqno += 1;
+if debug.tests[9] then {
+	    Print("\t%N = load ", load);
+	    if offs@.type@.base@.input then
+		f.str("volatile ");
+	    Print("%T* %0N", load);
+} else {
 	    Print("\t%N = ", load);
 	    if offs@.type@.base@.input then
 		f.str("volatile ");
 	    Print("load %T* %0N", load);
+}
 	    PEndLine(load);
 	}
     }
@@ -1581,10 +1588,16 @@ if debug.tests[1] then {
 }
 	        GenSub(lhs);	// then lhs
 		f.chr('\t');
+if debug.tests[9] then {
+		f.str("store ");
+		if lhs@.type@.base@.output then
+		    f.str("volatile ");
+} else {
 		if lhs@.type@.base@.output then
 		    f.str("volatile ");
 		// FIXME: Print("store %T %N", rhs);
 		f.str("store ");
+}
 		NodeType(rhs); f.chr(' ');
 		NodeSrc(rhs);
 		Print(", %B %D", lhs);

@@ -1,8 +1,10 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: out.esl 590 2011-06-18 02:35:28Z bgl $
-
-// Unbuffered formatted Output
-// Assumes target wordsize is 32-bits or more.
+/*
+ * Unbuffered Formatted Output
+ * Assumes target wordsize is 32-bits or more.
+ *
+ * Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+ * $Id: out.esl 650 2011-11-29 03:12:22Z bgl $
+ */
 
 import sys;
 import zstr;
@@ -35,24 +37,24 @@ package out
 	sys.write(o, s, len);
     }
 
-    const hex: [16]_byte =
+    const hexchr: [16]_byte =
 	{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
     proc (o: OutFD) hex8(in: _uint8)
     {   var buf: [2]_byte;
 
-	buf[0] = hex[(in>>4)&0xF];
-	buf[1] = hex[in&0xF];
-	sys.write(0, buf, 2);
+	buf[0] = hexchr[(in>>4)&0xF];
+	buf[1] = hexchr[in&0xF];
+	sys.write(o, buf, 2);
     }
 
     proc (o: OutFD) hex16(in:_uint16)
     {   var buf: [4]_byte;
 
-	buf[0] = hex[(in>>12)&0xF];
-	buf[1] = hex[(in>>8)&0xF];
-	buf[2] = hex[(in>>4)&0xF];
-	buf[3] = hex[in&0xF];
+	buf[0] = hexchr[(in>>12)&0xF];
+	buf[1] = hexchr[(in>>8)&0xF];
+	buf[2] = hexchr[(in>>4)&0xF];
+	buf[3] = hexchr[in&0xF];
 	sys.write(o, buf, 4);
     }
 
@@ -62,7 +64,7 @@ package out
 
 	i = 7;
 	loop
-	{   buf[i] = hex[in&0xF];
+	{   buf[i] = hexchr[in&0xF];
 	  exit i == 0;
 	    i -= 1;
 	    in = in >> 4;
@@ -76,13 +78,21 @@ package out
 
 	i = 15;
 	loop
-	{   buf[i] = hex[_uint(in)&0xF];
+	{   buf[i] = hexchr[_uint(in)&0xF];
 	  exit i == 0;
 	    i -= 1;
 	    in = in >> 4;
 	}
 	sys.write(o, buf, 16);
     }  
+
+    proc (o: OutFD) hex(in: _uint):: inline
+    {
+	if _uint?size == _uint64?size then
+	    o.hex64(in);
+	else
+	    o.hex32(_uint32(in));
+    }
 
     proc(o: OutFD)  uint64(in: _uint64)
     {	var i: _uint;

@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 627 2011-09-30 16:56:29Z bgl $
+// $Id: lex.esl 652 2011-11-29 20:33:19Z bgl $
 
 package lex
 {
@@ -19,7 +19,7 @@ package lex
 	BADIS,      NOPROC,     NOLOOP,     NOPACK,     NOTREF,     NOTARRAY,
 	ARRAYCOPY,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,   ARGSLO,
 	ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,   BADIMPORT,
-	NOTVAR,     BADFLEX,
+	NOTVAR,     BADFLEX,    FORWNOFIX,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -99,6 +99,7 @@ package lex
 	[BADIMPORT] =	"Unable to import: ",
 	[NOTVAR] =      "Expected variable identifier",
 	[BADFLEX] =     "Flexible array must be final field",
+	[FORWNOFIX]=    "Unresolved forward symbol: ",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
@@ -310,17 +311,16 @@ package lex
 	err.uint(Lineno());
 	err.str(": ");
 	if error >= FirstError then
-	{   err.str("Error: ");
-	    ErrorCount += 1;
+	{   ErrorCount += 1;
+	    if ErrorCount >= ErrorMax then
+	    {   err.str("\nToo many errors, quiting.\n");
+		sys.exit(1);
+	    }
+	    err.str("Error: ");
 	}
 	else
 	    err.str("Warning: ");
 	err.str(ErrMsg[error]);
-	if ErrorCount >= ErrorMax then
-	{
-	    err.str("\nToo many errors, quiting.\n");
-	    sys.exit(1);
-	}
     }
 
     // Print error message, no parameters

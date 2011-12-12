@@ -1,12 +1,12 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb1.esl 643 2011-10-31 22:03:17Z bgl $
+// $Id: symb1.esl 661 2011-12-09 21:35:58Z bgl $
 
 package symb
 {
     type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS);
     type LinkT: (LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE);
     type OffsT: 0..0xFFFF;
-    type IntrinsicT: (NONE, ABS, MIN, MAX, NEW, DEL);
+    type IntrinsicT: (NONE, DEF, ABS, MIN, MAX, NEW, DEL);
     type SymbNode:
     {
 	next:	  @SymbNode;	// for lists
@@ -213,6 +213,21 @@ package symb
 	}
 	else lex.ErrorI(UNDEFID, name);
 	return s;
+    }
+
+    proc IsDefined(name: @lex.Identifier): boolean
+    {   var s: Symb;
+	var tok: TokenT;
+
+	s = FindTop(name);
+	loop
+	{   tok = Next();
+	  exit s == 0 || s@.kind != PACK || tok != DOT;
+	    tok = Next();
+	  exit tok != ID;
+	    s = FindLocal(s@.symblist, lex.Ident);
+	}
+	return s != 0;
     }
 
     proc Save(): Symb

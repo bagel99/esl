@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 638 2011-10-23 20:47:16Z bgl $
+// $Id: main.esl 654 2011-11-29 20:34:34Z bgl $
 
 var debug:
     {	symb:
@@ -146,6 +146,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	}
     }
     symb.Init();
+    ast.Init();
     symb.Push(0);	// preserve universal level
     tree = stmt.Program(argv[i]@);
     if debug.symb.prog then
@@ -155,6 +156,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	symb.Dump(1);
     if debug.ast then
 	ast.Dump(tree);
+    type.FwdCheck();
     if lex.ErrorCount == 0 then
     {   if feature.mflag then
 	    msg.nl();

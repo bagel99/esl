@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 647 2011-11-21 17:30:48Z bgl $
+// $Id: stmt.esl 659 2011-12-06 18:16:11Z bgl $
 
 package stmt
 {
@@ -11,7 +11,7 @@ package stmt
     const dolist:[2]TokenT = { KDO, NONE };
     const withlist:[2]TokenT = { KWITH, NONE };
     const skiplist:[3]TokenT = { GEND, SEMI, NONE };
-    type NestType: (PROGRAM, PACKAGE);
+    type NestType: (PROGRAM, PACKAGE, PROCEDURE);
     const LoopMax = 32;
     var   LoopLevel: 0..LoopMax-1;
     var   CurFile: Symb;
@@ -82,6 +82,7 @@ package stmt
 	    {   if nest
 		is PROGRAM then    stree = ProgStmt();
 		is PACKAGE then    stree = PkgStmt();
+		is PROCEDURE then  stree = Statement();
 		if stree != 0 then
 		    tree = ast.Child(tree, stree);
 		tok = Token;
@@ -92,25 +93,20 @@ package stmt
 	{   if nest
 	    is PROGRAM then    tree = ProgStmt();
 	    is PACKAGE then    tree = PkgStmt();
+	    is PROCEDURE then  tree = Statement();
 	}
 //lex.WhereAmI("End do");
 	return tree;
     }
 
-    proc CCIfStmt(nest: NestType): Ast
-    {   var tree, ctree: Ast;
+    proc CCIfTail(ctree: Ast, nest: NestType): Ast
+    {   var tree: Ast;
 	var tok: TokenT;
 	var t: Type;
 	var val, vlo, vhi: Valu;
 	var doneit, doit: boolean;
 
 	tree = 0;
-	ctree = expr.Bool(0);
-//err.str("CCIf:\n"); ast.Dump(ctree);
-	if ctree == 0 || ctree@.op != CONST then
-	{   lex.Error(EXPCONST);
-	    return 0;
-	}
 	t = ctree@.type;
 	val = ctree@.valu;
 	tok = lex.Keyword(isthenlist);
@@ -176,6 +172,18 @@ package stmt
 		CCSkip(tok);
 	}	    
 	return tree;
+    }
+
+    proc CCIfStmt(nest: NestType): Ast
+    {   var ctree: Ast;
+
+	ctree = expr.Bool(0);
+//err.str("CCIf:\n"); ast.Dump(ctree);
+	if ctree == 0 || ctree@.op != CONST then
+	{   lex.Error(EXPCONST);
+	    return 0;
+	}
+	return CCIfTail(ctree, nest);
     }
 
     proc TypeDecl(): Ast
@@ -861,11 +869,12 @@ package stmt
 	var op: ast.Op;
 
 	tree = 0;
-	tok = Token;
 	op = IF;	// arbitrary default
 	ctree = expr.Bool(0);
 	if ctree != 0 then
-	{   t = ctree@.type;
+	{   if ctree@.op == CONST then
+		return CCIfTail(ctree, PROCEDURE);
+	    t = ctree@.type;
 	    if type.Compat(t, type.booltype) then
 		ctree = expr.ForceBoolean(ctree);
 	    else
@@ -1268,25 +1277,45 @@ package stmt
 	return tree;
     }
 
-    proc Import(): Ast
+    proc ImportSub(filename: @[]Char): Ast
     {   var tree: Ast;
 	var tok: TokenT;
 
+	tree = 0;
+	if lex.FileCheck(filename) then
+	{   if lex.FileOpen(filename) then
+	    {   tok = Token;
+		tree = Program(filename);
+		lex.FileClose();
+		Token = tok;
+	    }
+	    else
+		lex.ErrorI(BADIMPORT, filename);
+	}
+	return tree;
+    }
+
+    proc Import(): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+	var name: @[]Char;
+
 	tok = Token;
 	tree = 0;
-	if tok == ID then
+	if tok
+	is ID then
 	{
-	    if lex.FileCheck(lex.Ident) then
-	    {   if lex.FileOpen(lex.Ident) then
-		{   tree = Program(lex.Ident);
-		    lex.FileClose();
-		}
-		else
-		    lex.ErrorI(BADIMPORT, lex.Ident);
-	    }
-	    tok = Next();
-	    tok = lex.Expect(SEMI);
+	    tree = ImportSub(lex.Ident);
+	    tok = Next();       // flush ID
 	}
+	is PBEG then
+	{   tok = Next();
+	    name = expr.ConstString();
+	    if name != 0 then
+		tree = ImportSub(name);
+	    tok = lex.Expect(PEND);
+	}
+	tok = lex.Expect(SEMI);
 	return tree;
     }
 
