@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 647 2011-11-21 17:30:48Z bgl $
+// $Id: type2.esl 655 2011-11-29 22:11:10Z bgl $
 
 package type
 {
@@ -34,12 +34,37 @@ package type
 		if fp != 0 then fp@.next = fn; else fwdlist = fn;
 		// free(f)
 	    }
-	    fp = f;
+	    else
+		fp = f;
 	    f = fn;
 	}
 	s@.forward = false;
     }
 
+    // FIXME - move to symb
+    proc PPkgPfx(f:sys.fildes, s: Symb)
+    {   if s@.package != 0 then PPkgPfx(f, s@.package);    // recursive
+	f.str(s@.ident); 
+	f.chr('.');
+    }
+    // FIXME - move to symb
+    proc PName(f:sys.fildes, s: Symb)
+    {   if s@.package != 0 then PPkgPfx(f, s@.package);
+	f.str(s@.ident);
+    }
+
+    proc FwdCheck(): boolean
+    {   var f: pfwd;
+
+	f = fwdlist;
+	while f != 0 do
+	{   lex.ErrorSub(FORWNOFIX);
+	    PName(err, f@.symb);
+	    err.nl();
+	    f = f@.next;
+	}
+    }
+	
     proc Def(tok: TokenT, bt: Type): Type;		// forward
     proc ParmList(procs: Symb, meths: Symb);		// forward
     proc Compat(t1: Type, t2: Type): boolean;		// forward
@@ -498,6 +523,7 @@ if debug.tests[1] then {
 	v = 0;
 	vmax = 0;
 	pvn = 0;
+	t@.base = bt;
 	if bt != 0 then
 	{   var vb: Symb;
 	    if bt@.kind == ENUM then

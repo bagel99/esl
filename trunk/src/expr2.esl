@@ -1,18 +1,17 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 647 2011-11-21 17:30:48Z bgl $
+// $Id: expr2.esl 661 2011-12-09 21:35:58Z bgl $
 
 package expr
 {
     const skiplist:[4]TokenT = { PEND, GEND, SEMI, NONE };
 
     proc ForceBoolean(tree: Ast): Ast
-    {   var zero: Ast;
-
+    {
 	if tree@.type != 0 && !type.Compat(tree@.type,type.booltype) then
 	    lex.Error(WANTBOOL);
 	if tree@.width > 1 then		// llvm wants a 1-bit boolean
-	{   zero = ast.Const(tree@.type, 0);
-	    tree = ast.New2(NE, type.booltype, tree, zero);
+	{   if tree@.op != CONST then
+		tree = ast.New2(NE, type.booltype, tree, ast.Const(tree@.type, 0));
 	    tree@.width = 1;
 	}
 	return tree;
@@ -723,33 +722,36 @@ ast.Dump(tree);
 	ok = true;
 	if to@.kind
 	is REF then
-	{   if fm@.kind == REF && type.Compat(to, fm) then
-	    {
-		if fm != to then
-		{
-		    tree = expr.Cast(tree, to);
-		    fm = tree@.type;
-		}
-	    }
-	    else
-	    {   tree = CoerceToRef(tree);
-		fm = tree@.type;
-		// Coerce to REF memtype is always OK
-	        if to@.base == type.memtype || type.Compat(to, fm) then
-		{
-		    if fm != to then
+	{   if to@.base != 0 then
+	    {   if fm@.kind == REF && type.Compat(to, fm) then
+		{   if fm != to then
 		    {   tree = expr.Cast(tree, to);
 			fm = tree@.type;
 		    }
 		}
-		else ok = false;
+		else
+		{   tree = CoerceToRef(tree);
+		    fm = tree@.type;
+		    // Coerce to REF memtype is always OK
+		    if to@.base == type.memtype || type.Compat(to, fm) then
+		    {   if fm != to then
+			{   tree = expr.Cast(tree, to);
+			    fm = tree@.type;
+			}
+		    }
+		    else ok = false;
+		}
+		// Fix types when formal is a flex
+		if to@.flex && !fm@.flex then
+		    tree = ast.New1(CAST, to, tree);
+		// Check attributes
+		if !CheckRefAttributes(to, fm) then
+		    lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
 	    }
-	    // Fix types when formal is a flex
-	    if to@.flex && !fm@.flex then
-		tree = ast.New1(CAST, to, tree);
-	    // Check attributes
-	    if !CheckRefAttributes(to, fm) then
-		lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
+	    else
+	    {   lex.Error(BADREF);
+		ok = false;
+	    }
 	}
 	is REFPROC then
 	{   ok = type.Compat(to, fm);
@@ -1014,6 +1016,12 @@ ast.Dump(tree);
 	{   tok = Next();
 	    which = symb.IntrinsicT(ps@.addr);
 	    if which
+	    is DEF then
+	    {   if tok == ID then
+		    tree = ast.Const(type.booltype,
+				     _uint(symb.IsDefined(lex.Ident)));
+		else lex.Error(EXPECTID);
+	    }
 	    is ABS then
 	    {   rhs = Bool(0);
 		if rhs != 0 then
@@ -1233,20 +1241,22 @@ ast.Dump(tree);
 		    return 0;
 		}
 		bt = t@.base;   // t should be REF
-		if bt@.kind == REF then
-		{   if bt != 0 then			// FIXME: cleanup
-		    {	t = bt;
-			tree = ast.New1(LOAD, t, tree);
-			tree@.width = Target.ptr.size;
+		if bt != 0 then // and therefore bt should not be null
+		{   if bt@.kind == REF then
+		    {   if bt@.base != 0 then
+			{   tree = ast.New1(LOAD, bt, tree);
+			    tree@.width = Target.ptr.size;
+			}
+			else
+			{   lex.Error(BADREF);
+			    return 0;	// give up
+			}
 		    }
-		    else
-		    {   lex.Error(BADREF);
-			tree = 0;	// give up
+		    else if bt@.kind == REFPROC then
+		    {   tree = ast.New1(LOAD, bt, tree);
+			tree = Call(bt@.list, tree, 0);
 		    }
-		}
-		else if bt@.kind == REFPROC then
-		{   tree = ast.New1(LOAD, bt, tree);
-		    tree = Call(bt@.list, tree, 0);
+		    else lex.Error(NOTREF);
 		}
 		else lex.Error(NOTREF);
 	    }
@@ -1260,7 +1270,7 @@ ast.Dump(tree);
 		if bt != 0 then // and therefore bt should not be null
 		{   if bt@.kind == REF then
 		    {   if bt@.base != 0 then
-			{	tree = ast.New1(LOAD, bt, tree);
+			{   tree = ast.New1(LOAD, bt, tree);
 			    tree@.width = Target.ptr.size;
 			    bt = bt@.base;
 			}
@@ -1734,6 +1744,25 @@ if !debug.tests[0] then {
 	else
 	    lex.Error(EXPCONST);
 	return rv;
+    }
+
+    proc ConstString(): @[]Char
+    {   var tree: Ast;
+	type pstring: @[]_byte;
+
+	tree = expr.Bool(0);
+	if tree != 0 then
+	{   if tree@.op == SCON then
+		return pstring(tree@.symb);
+	    else if tree@.op == LOAD &&
+		    tree@.child[0]@.op == VAR &&
+		    tree@.child[0]@.symb@.const != 0 &&
+		    tree@.child[0]@.symb@.const@.op == SCON then
+	    {
+		return pstring(tree@.child[0]@.symb@.const@.symb);
+	    }
+	}
+	return 0;
     }
 }
 // vim: ts=8 sw=4 noet nowrap
