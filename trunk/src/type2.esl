@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 655 2011-11-29 22:11:10Z bgl $
+// $Id: type2.esl 668 2012-01-25 20:35:36Z bgl $
 
 package type
 {
@@ -481,8 +481,8 @@ if debug.tests[1] then {
 //err.str("initial align="); err.uint(align); err.nl();
 		if align > 0 then
 		{   mod = t@.width % align;
-		    if mod != 0 then	// pad to alignment
-			t@.width += align - mod;
+		    if mod != 0  && !t@.unalgn then
+			t@.width += align - mod;	// pad to alignment
 		}
 		else  
 		    align = target.ialign(t@.size);

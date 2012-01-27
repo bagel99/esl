@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb2.esl 658 2011-12-05 22:00:58Z bgl $
+// $Id: symb2.esl 667 2012-01-23 02:07:19Z bgl $
 
 package symb
 {
@@ -207,7 +207,12 @@ package symb
 	    DumpLinkage(s);
 	}
 	is PACK then      { err.str("package "); err.str(s@.ident);}
-	is ALIAS then     { err.str("alias ");   err.str(s@.ident);}
+	is ALIAS then
+	{   err.str("alias ");
+	    err.str(s@.ident);
+	    err.str(" to ");
+	    err.str(s@.symblist@.ident);
+	}
 	else 
 	{   err.str("undefined "); err.str(s@.ident); err.nl();
 	}

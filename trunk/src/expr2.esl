@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 661 2011-12-09 21:35:58Z bgl $
+// $Id: expr2.esl 671 2012-01-27 01:04:02Z bgl $
 
 package expr
 {
@@ -292,7 +292,7 @@ package expr
 
     proc ArrayConst(t: Type): Ast
     {   var tree, stree: Ast;
-	var i, m, n: ast.NSubNodes;	// what type should this be
+	var i, j, m, n: ast.NSubNodes;	// what type should this be
 	var tok: TokenT;
 	var once: boolean;
 
@@ -308,17 +308,25 @@ package expr
 	    i = 0;
 	    m = 0;
 	    loop
-	    {   tok = Next();
+	    {   j = i;  // for non-designated initializer
+		tok = Next();
 		if tok == ABEG then	// designated initializer
 		{   tok = Next();
 		    i = ast.NSubNodes(ConstValue(t@.index));
+		    j = i;
+		    if Token == RANGE then
+		    {   tok = Next();
+			j = ast.NSubNodes(ConstValue(t@.index));
+		    }
 		    tok = lex.Expect(AEND);
 		    tok = lex.Expect(ASGN);
 		}
 		stree = Const(t@.base);
-		if n == 0 || i < n then	// still room
-		{   tree = ast.ChildIndexed(tree, i, stree);
-		    i += 1;
+		if (n == 0 || j < n) && i <= j then	// still room
+		{   while i <= j do
+		    {   tree = ast.ChildIndexed(tree, i, stree);
+		        i += 1;
+		    }
 		    if i > m then m = i;
 		}
 		else if !once then
@@ -335,10 +343,10 @@ package expr
 		nt = type.New(ARRAY);   // FIXME: use Clone()?
 		nt@.base = t@.base;
 		nt@.index = t@.index;
-		nt@.hi = n;
 		nt@.memorder = t@.memorder;
 		nt@.align = t@.align;
 		t = nt;
+		t@.hi = n;      // new size
 	    }
 	    // make sure all elements are initialized in gaps
 	    i = 0;
@@ -421,6 +429,28 @@ package expr
 	return tree;
     }
 
+    // Convert flex record to non-flex record
+    proc RecordFixFlex(bt: Type, node: Ast): Type
+    {   var t: Type;
+	var s, ps, bs: Symb;
+
+//err.str("Init flex record\n");
+	t = type.New(RECORD);
+	// copy all fields
+	ps = 0;
+	bs = bt@.list;
+	while bs != 0 do
+	{   s = symb.New(FIELD, bs@.ident, PRIVATE);
+	    if ps != 0 then ps@.next = s; else t@.list = s;
+	    ps = s;
+	    s@.type = bs@.type;
+	    bs = bs@.next;
+	}
+	// final field must be the flex, change its type
+	ps@.type = node@.child[node@.num-1]@.type;
+	return t;
+    }
+
     proc RecordConst(t: Type): Ast
     {   var tree, stree: Ast;
 	var fs, ds: Symb;
@@ -487,6 +517,8 @@ package expr
 	    {   tree = ast.ChildIndexed(tree, fs@.addr, ast.Const(fs@.type, 0));
 		fs = fs@.next;
 	    }
+	    if t@.flex then
+		tree@.type = RecordFixFlex(t, tree);
 	    if t@.packed then
 		tree = RecordPack(t, tree);
 	    else
@@ -541,7 +573,8 @@ package expr
 	var s: Symb;
 
 	if record@.kind != RECORD then return 0;	// can't happen?
-//err.str("FieldAlign: base="); err.uint(base); err.str(" fieldno="); err.uint(fieldno);
+//err.str("FieldAlign: base="); err.uint(base);
+//err.str(" fieldno="); err.uint(fieldno);
 	offs = 0;
 	i = 0;
 	s = record@.list;
@@ -1071,6 +1104,8 @@ ast.Dump(tree);
 	tree@.symb = ps;
 	if t != 0 then		// has returned value
 	    tree@.width = t@.width;
+	else
+	    tree@.type = type.unkntype;
 	s = ps@.parmlist;
 	if arg != 0 then	// method call
 	{   // assert s != 0
@@ -1724,7 +1759,14 @@ if !debug.tests[0] then {
 	    }
 	    is RECORD then tree = RecordConst(t);
 	    is ARRAY then  tree = ArrayConst(t);
-	    else tree = Bool(t);	// scalar
+	    is REFPROC then tree = Bool(t);     // FIXME?
+	    else
+	    {   tree = Bool(t);	    // scalar
+		if tree != 0 then
+		{   tree = Extend(tree, t@.width, false);   // usually truncates
+		    tree@.type = t;
+		}
+	    }
 	}
 	else tree = Bool(t);		// unknown type
 	return tree;
