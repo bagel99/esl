@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 654 2011-11-29 20:34:34Z bgl $
+// $Id: main.esl 665 2012-01-13 19:05:26Z bgl $
 
 var debug:
     {	symb:
@@ -19,6 +19,7 @@ var feature:
 	gflag: boolean;
 	trunc: boolean;
 	tcall: boolean;
+	ambig: boolean;
     };
 
 import sys;
@@ -103,6 +104,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	    is 'u' then feature.unused = true;
 	    is 't' then feature.trunc = true;
 	    is 'c' then feature.tcall = true;
+	    is 'a' then feature.ambig = true;
 	}
 	is 'M' then feature.mflag = true;
 	is 'g' then feature.gflag = true;

@@ -1,12 +1,12 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 652 2011-11-29 20:33:19Z bgl $
+// $Id: lex.esl 665 2012-01-13 19:05:26Z bgl $
 
 package lex
 {
     // Order is warnings, errors, internal errors
     type Errors:
     (   // Warnings
-	NOTIMPL,    TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,
+	NOTIMPL,    TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,  AMBIGUOUS,
 	// Errors
 	BADNL,      ILLCHR,     ILLUTF8,    CMTEOF,     BADEOF,     BADCHR,
 	BADHEXESC,  BADUTF8,    IDLONG,     STRLONG,    EXPECT,     EXPECTID,
@@ -31,6 +31,7 @@ package lex
 	[TOSIGNED] =	"Converting unsigned to signed integer",
 	[TOUNSIGN] =	"Converting signed to unsigned integer",
 	[BADINTPTR] =	"Pointer converted from wrong size integer",
+	[AMBIGUOUS] =   "Use of identifier is ambiguous: ",
 	[BADNL] =	"End of line in string or character constant",
 	[ILLCHR] =      "Illegal character in source",
 	[ILLUTF8] =     "Illegal byte in UTF8 sequence",
@@ -115,11 +116,12 @@ package lex
 	PBEG,	PEND,	ABEG,	AEND,	GBEG,	GEND,
 	NUM,	STR,
 	ID,		// all keywords follow this
-	KTYPE,	KVAR,	KCONST,	KPROC,	KPACKAGE,
-	KRET,
-	KIF,	KTHEN,	KELSE,	KIS,
-	KFOR,	KWHILE,	KDO,	KLOOP,	KEXIT,	KWITH,
-	KIMPORT,KALIAS,	KAS,    KASM,   KERROR,
+	KTYPE,	KVAR,	KCONST,	KIMPORT,KALIAS,	KERROR,
+	KPROC,	KPACKAGE,
+	KASM,   KCALL,
+	KRET,   KIF,	KWHILE,				// must be contiguous
+	KFOR,	KLOOP,	KEXIT,
+	KTHEN,	KELSE,	KIS,    KDO,	KWITH,  KAS,
 	// attributes begin here
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,
@@ -173,24 +175,25 @@ package lex
 	[KTYPE] =	"type",
 	[KVAR] =	"var",
 	[KCONST] =	"const",
+	[KIMPORT] =	"import",
+	[KALIAS] =	"alias",
+	[KERROR] =      "error",
 	[KPROC] =	"proc",
 	[KPACKAGE] =	"package",
+	[KASM] =	"asm",
+	[KCALL] =       "call",
 	[KRET] =	"return",
 	[KIF] =		"if",
+	[KWHILE] =	"while",
+	[KFOR] =	"for",
+	[KLOOP] =	"loop",
+	[KEXIT] =	"exit",
 	[KTHEN] =	"then",
 	[KELSE] =	"else",
 	[KIS] =		"is",
-	[KFOR] =	"for",
-	[KWHILE] =	"while",
 	[KDO] =		"do",
-	[KLOOP] =	"loop",
-	[KEXIT] =	"exit",
 	[KWITH] =	"with",
-	[KIMPORT] =	"import",
-	[KALIAS] =	"alias",
 	[KAS] =		"as",
-	[KASM] =	"asm",
-	[KERROR] =      "error",
 	[KPACK] =	"packed",       // attributes for types
 	[KNOPAD] =	"nopad",
 	[KLSB] =	"lsb",
@@ -882,15 +885,17 @@ package lex
 	var i: _uint;
 
 	tok = Next();
-//WhereAmI("Skip start:");
-//err.str("\tlist=");
-//i = 0; loop
-//{  ttok = toklist[i];
-//  exit ttok == NONE;
-//   err.chr('"'); err.str(keywords[ttok]); err.str("\" ");
-//   i += 1;
-//}
-//err.nl();
+/*
+WhereAmI("Skip start:");
+err.str("\tlist=");
+i = 0; loop
+{  ttok = toklist[i];
+  exit ttok == NONE;
+   err.chr('"'); err.str(keywords[ttok]); err.str("\" ");
+   i += 1;
+}
+err.nl();
+*/
 	ttok = ENDF;
 	while tok != ENDF do
 	{   i = 0;
@@ -907,10 +912,12 @@ package lex
 	    is GBEG then tok = Skip(glist);
 	    tok = Next();
 	}
-//WhereAmI("Skip end:");
-//err.str("\ttok="); err.str(keywords[tok]);
-//err.str(" ttok="); err.str(keywords[ttok]);
-//err.nl();
+/*
+WhereAmI("Skip end:");
+err.str("\ttok="); err.str(keywords[tok]);
+err.str(" ttok="); err.str(keywords[ttok]);
+err.nl();
+*/
 	return ttok;
     }
 

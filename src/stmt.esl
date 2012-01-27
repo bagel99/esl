@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 659 2011-12-06 18:16:11Z bgl $
+// $Id: stmt.esl 671 2012-01-27 01:04:02Z bgl $
 
 package stmt
 {
@@ -287,7 +287,9 @@ package stmt
 		}
 	    }
 	    else
+	    {   t = type.unkntype;
 		lex.ErrorT(EXPECT, COLON);
+	    }
 	    if ss@.next == 0 then	// just one
 		tree = VarNew(ss, t, iv);
 	    else
@@ -337,7 +339,7 @@ package stmt
 			    lex.Error(BADCONST);
 		    }
 		    else
-		    {   if t@.kind == ARRAY && t@.flex then
+		    {   if t@.flex then
 			    t = tree@.type;
 			tree = ast.New1(DCLCON, t, tree);
 			tree@.symb = s;
@@ -1037,10 +1039,24 @@ package stmt
 	tok = Token;
 	loop
 	{   if tok == ID then
-	    {   s = symb.Find(lex.Ident);
-		if s == 0 then
-		    lex.ErrorI(UNDEFID, lex.Ident);
-		tok = Next();
+	    {   s = symb.FindTop(lex.Ident);
+		if s != 0 then
+		{   tok = Next();
+		    if tok == DOT && s@.kind == PACK then
+		    {   tok = Next();
+			if tok == ID then
+			{   s = symb.FindLocal(s@.symblist, lex.Ident);
+			    if s == 0 then
+				lex.ErrorI(UNDEFID, lex.Ident);
+			    tok = Next();
+			}
+			else lex.Error(EXPECTID);
+		    }
+		}
+		else
+		{   lex.ErrorI(UNDEFID, lex.Ident);
+		    tok = Next();
+		}
 		tok = lex.Keyword(aslist);
 		if tok == KAS then
 		{   tok = Next();
@@ -1100,7 +1116,7 @@ package stmt
 
     const stmtlist:[]TokenT =
     { KTYPE, KVAR, KCONST, KIF, KFOR, KWHILE, KLOOP, KEXIT, KRET,
-      KASM, KALIAS, KERROR, NONE };
+      KASM, KALIAS, KERROR, KCALL, NONE };
 
     proc Statement(): Ast
     {   var tree, stree: Ast;
@@ -1133,8 +1149,16 @@ package stmt
 	    if tok > ID && s != 0 then	// both keyword and valid identifer
 	    {   // Need to disambiguate
 		if tok2
-		is ASGN, INCR, DECR, ABEG, DOT, AT, PBEG, COMMA then 
-		    tok = ID;	// assignment or procedure call
+		is ASGN, INCR, DECR, ABEG, DOT, AT, COMMA then 
+		    tok = ID;	// assignment
+		is PBEG then
+		{   if s@.kind == PROC && (tok >= KRET && tok <= KWHILE) then
+		    {   if feature.ambig then
+			    lex.ErrorT(AMBIGUOUS, tok);
+		    }
+		    else
+			tok = ID;   // call
+		}
 	    }
 	    if tok
 	    is ID then 
@@ -1157,6 +1181,11 @@ package stmt
 	    is KASM then    tree = Asm();
 	    is KALIAS then  tree = Alias();
 	    is KERROR then  tree = ErrorStmt();
+	    is KCALL then
+	    {   s = symb.FindTop(lex.Ident);
+		tok2 = Next();
+		tree = AssignOrCall(s);
+	    }
 	    is SEMI then    {}		// ignore extra semicolons
 	    else lex.ErrorT(BADSTMTT, tok);
 	}

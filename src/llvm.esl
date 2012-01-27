@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 662 2011-12-09 21:37:34Z bgl $
+// $Id: llvm.esl 668 2012-01-25 20:35:36Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -380,7 +380,7 @@ package llvm
 		}
 		else
 		{   if t@.unalgn then
-			f.str("<");
+			f.chr('<');
 		    f.str("{");
 		    s = t@.list;
 		    while s != 0 do
@@ -391,7 +391,7 @@ package llvm
 		    }
 		    f.str("}");
 		    if t@.unalgn then
-			f.str(">");
+			f.chr('>');
 		}
 		f.nl();
 	    }
@@ -481,7 +481,9 @@ package llvm
 	    is CLIST then
 	    {   if t@.kind
 		is RECORD then
-		{   f.str("{ ");
+		{   if t@.unalgn then
+			f.chr('<');
+		    f.str("{ ");
 		    i = 0;
 		    loop
 		    {
@@ -493,6 +495,8 @@ package llvm
 			f.str(", ");
 		    }
 		    f.str(" }");
+		    if t@.unalgn then
+			f.chr('>');
 		}
 		is ARRAY then
 		{   f.str("[ ");
@@ -623,7 +627,6 @@ package llvm
     proc DclCon(node: Ast)
     {   var s: Symb;
 
-//err.str("DclCon\n");
 	s = node@.symb;
 	if s != 0 then
 	{   DclType(s@.type);
@@ -1097,7 +1100,7 @@ err.str(" align="); err.uint(align);} */
 	    i += 1;
 	}
 	f.chr('\t');
-	if node@.type != 0 then		// has return value
+	if node@.type != 0 && node@.type@.kind != UTYPE then // has return value
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
