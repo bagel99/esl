@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 671 2012-01-27 01:04:02Z bgl $
+// $Id: expr2.esl 674 2012-02-09 21:19:01Z bgl $
 
 package expr
 {
@@ -86,6 +86,26 @@ package expr
 	return 0;
     }
 
+    proc CheckConstTruncate(node: Ast, size: type.BitSize)
+    {
+	// assert node@.op == CONST
+	if size >= type.Valu?bits then return;
+	if node@.type@.kind == SINT then
+	{   if type.SValu(node@.valu) < 0 then
+	    {   if type.SValu(node@.valu) >> (size+1) != -1 then
+		    lex.Error(TRUNC);
+	    }
+	    else
+	    {   if node@.valu >> (size+1) != 0 then
+		    lex.Error(TRUNC);
+	    }
+	}
+	else
+	{   if node@.valu >> size != 0 then
+		lex.Error(TRUNC);
+	}
+    }
+	
     // FIXME: move to ast.esl
     proc Extend(tree: Ast, size: type.BitSize, iscast: boolean): Ast
     {
@@ -104,14 +124,8 @@ package expr
 	    {   tree = ast.New1(TRUNC, tree@.type, tree);
 		if feature.trunc && !iscast then lex.Error(TRUNC);
 	    }
-	    else    // truncate constant
-	    {   if tree@.type@.kind == SINT then
-		    ; // FIXME
-		else
-		{   if type.bitsize(tree@.valu) > size then
-			lex.Error(TRUNC);
-		}
-	    }
+	    else
+		CheckConstTruncate(tree, size);
 	    tree@.width = size;
 	}
 	return tree;
@@ -251,7 +265,7 @@ package expr
     {   var offs, tsize, fsize: type.BitSize;
 	var i: ast.NSubNodes;
 	var tree, vpart, node: Ast;
-	var cpart: type.Valu;
+	var cpart, mask: type.Valu;
 	var bt: Type;		// base type
 
 	vpart = 0;
@@ -263,6 +277,7 @@ package expr
 	tsize = t@.width;
 	bt = t@.base;
 	fsize = bt@.size;
+	mask = ((1 << fsize)-1);
 	if t@.bitorder == MSB then offs = tsize; else offs = 0;
 	i = 0;
 	while i < intree@.num do
@@ -270,7 +285,9 @@ package expr
 	    if t@.bitorder == MSB then offs -= fsize;
 	    node = intree@.child[i];
 	    if node@.op == CONST then
-		cpart = cpart | (node@.valu << offs);
+	    {   CheckConstTruncate(node, fsize);
+		cpart = cpart | ((node@.valu&mask) << offs);
+	    }
 	    else
 	    {   node = expr.Extend(node, tsize, false);
 		node = ast.New2(LSL, bt, node,
@@ -288,6 +305,18 @@ package expr
 	    tree = ast.New2(OR, type.wordtype, tree, vpart);
 	tree@.type = t;
 	return tree;
+    }
+
+    proc ArrayFixFlex(bt: Type, len: _uint): Type
+    {   var t: Type;
+
+	t = type.Clone(bt);
+	t@.hi = len;
+	t@.size = 0;
+	t@.width = 0;
+	t@.final = false;
+	type.Final(t);
+	return t;
     }
 
     proc ArrayConst(t: Type): Ast
@@ -337,17 +366,8 @@ package expr
 	      exit tok != COMMA;
 	    }
 	    tok = lex.Expect(GEND);
-	    if n == 0 then	// flex array becomes a static array
-	    {   var nt: Type;
-		n = m;
-		nt = type.New(ARRAY);   // FIXME: use Clone()?
-		nt@.base = t@.base;
-		nt@.index = t@.index;
-		nt@.memorder = t@.memorder;
-		nt@.align = t@.align;
-		t = nt;
-		t@.hi = n;      // new size
-	    }
+	    if t@.flex then	// flex array becomes a static array
+		t = ArrayFixFlex(t, m);
 	    // make sure all elements are initialized in gaps
 	    i = 0;
 	    while i < m do
@@ -383,7 +403,7 @@ package expr
 	var f: Symb;
 	var i: ast.NSubNodes;
 	var tree, vpart, node: Ast;
-	var cpart: type.Valu;
+	var cpart, mask: type.Valu;
 	var ft: Type;		// field type
 
 	vpart = 0;
@@ -400,6 +420,7 @@ package expr
 	{   if f@.type != 0 then
 	    {   ft = f@.type;
 		fsize = ft@.size;
+		mask = ((1 << fsize)-1);
 		if t@.bitorder == MSB then offs -= fsize;
 		if i >= intree@.num then
 		{   lex.ErrorS(COMPILER, "Malformed LIST for packed record");
@@ -407,7 +428,9 @@ package expr
 		}
 		node = intree@.child[i];
 		if node@.op == CONST then
-		    cpart = cpart | (node@.valu << offs);
+		{   CheckConstTruncate(node, fsize);
+		    cpart = cpart | ((node@.valu&mask) << offs);
+		}
 		else
 		{   node = expr.Extend(node, tsize, false);
 		    node = ast.New2(LSL, ft, node,
@@ -435,8 +458,8 @@ package expr
 	var s, ps, bs: Symb;
 
 //err.str("Init flex record\n");
-	t = type.New(RECORD);
-	// copy all fields
+	t = type.Clone(bt);
+	// copy all fields because we need the change the final one
 	ps = 0;
 	bs = bt@.list;
 	while bs != 0 do
@@ -448,6 +471,11 @@ package expr
 	}
 	// final field must be the flex, change its type
 	ps@.type = node@.child[node@.num-1]@.type;
+	// Recalculate size and width
+	t@.size = 0;
+	t@.width = 0;
+	t@.final = false;
+	type.Final(t);
 	return t;
     }
 
@@ -1231,7 +1259,6 @@ ast.Dump(tree);
 			}
 			if s != 0 then		// method call
 			{   tok = Next();
-//err.str("Method call: "); err.str(lex.Ident); err.nl();
 			    if et != 0 && et@.kind == REFPROC then
 				tree = RefProc(s);
 			    else
@@ -1240,30 +1267,34 @@ ast.Dump(tree);
 			else
 			{
 			    bt = t@.base;   // t should be REF
-			    if bt@.kind == REF then
-			    {   if bt@.base != 0 then
-				{   tree = ast.New1(LOAD, bt, tree);
-				    tree@.width = Target.ptr.size;
-				    bt = bt@.base;
+			    if bt != 0 then // and therefore bt should not be null
+			    {   if bt@.kind == REF then
+				{   if bt@.base != 0 then
+				    {   tree = ast.New1(LOAD, bt, tree);
+					tree@.width = Target.ptr.size;
+					bt = bt@.base;
+				    }
+				    else
+				    {   lex.Error(BADREF);
+					tree = 0;	// give up
+				    }
 				}
-				else
-				{   lex.Error(BADREF);
-				    tree = 0;	// give up
+				if bt@.kind == RECORD then
+				{   s = symb.FindLocal(bt@.list, lex.Ident);
+				    if s != 0 then
+				    {   tok = Next();
+					tree = ast.New1(OFFSET,
+						type.MakeRef(s@.type), tree);
+					tree@.valu = s@.addr;
+					tree@.width = Target.ptr.size;
+				    }
+				    else
+				    {   lex.ErrorI(UNDEFFIELD, lex.Ident);
+					tok = Next();
+				    }
 				}
 			    }
-			    if bt@.kind == RECORD then
-			    {   s = symb.FindLocal(bt@.list, lex.Ident);
-				if s != 0 then
-				{   tok = Next();
-				    tree = ast.New1(OFFSET, type.MakeRef(s@.type), tree);
-				    tree@.valu = s@.addr;
-				    tree@.width = Target.ptr.size;
-				}
-				else
-				{   lex.ErrorI(UNDEFFIELD, lex.Ident);
-				    tok = Next();
-				}
-			    }
+			    else lex.Error(NOTREF);
 			}
 		    }
 		    else lex.Error(EXPECTID);

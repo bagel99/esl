@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 671 2012-01-27 01:04:02Z bgl $
+// $Id: stmt.esl 676 2012-02-13 18:34:44Z bgl $
 
 package stmt
 {
@@ -1390,7 +1390,7 @@ package stmt
 	tree = 0;
 	tok = Token;
 	if tok == ID then
-	{   s = symb.FindTop(lex.Ident);
+	{   s = symb.FindThisLevel(lex.Ident);
 	    if s == 0 then
 		s = symb.New(PACK, lex.Ident, VISIBLE);
 	    else if s@.kind != PACK then

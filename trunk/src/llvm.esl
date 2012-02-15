@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 668 2012-01-25 20:35:36Z bgl $
+// $Id: llvm.esl 675 2012-02-10 18:08:15Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -47,7 +47,7 @@ package llvm
 	if feature.gflag then llvmdb.PLine(node@.lineno);
 	f.nl();
     }
-   
+
     proc PTypeName(t: Type)
     {   var s: Symb;
 
@@ -70,8 +70,28 @@ package llvm
 	}
     }
 
+    proc PRecordType(t: Type)
+    {   var s: Symb;
+
+	if t@.unalgn then
+	    f.chr('<');
+	f.str("{");
+	s = t@.list;
+	while s != 0 do
+	{   PType(s@.type);
+	    s = s@.next;
+	  exit s == 0;
+	    f.str(", ");
+	}
+	f.str("}");
+	if t@.unalgn then
+	    f.chr('>');
+	 
+    }
+
     proc PType(t: Type)
     {   var size: type.BitSize;
+
 	if t != 0 then
 	{   if t@.kind
 	    is ENUM, UINT, SINT then
@@ -83,16 +103,16 @@ package llvm
 		f.str("*");
 	    }
 	    is RECORD then
-	    {
-		if t@.packed then
+	    {   if t@.packed then
 		{   // LLVM doesn't do bit pack records, handle as integers
-//f.str("PType packed record\n");
 		    size = target.isize(t@.size);
 		    f.str("i"); f.uint(size);
 		}
 		else
 		{   if t@.printed then
 			PTypeName(t);
+		    else
+			PRecordType(t);
 		}
 	    }
 	    is ARRAY then
@@ -272,7 +292,11 @@ package llvm
     proc NodeDst(node: Ast)
     {
 	if node@.op
-	is CONST then lex.ErrorS(COMPILER, "Assignment to constant");
+	is CONST then
+	{   if node@.type@.kind != REF then
+	        lex.ErrorS(COMPILER, "Assignment to constant");
+	    ConstantRef(node);
+	}
 	is VAR, DCLVAR then NodeName(node);
 	else PTempName(node@.seqno);
     }
@@ -379,20 +403,7 @@ package llvm
 		    f.str("i"); f.uint(size);
 		}
 		else
-		{   if t@.unalgn then
-			f.chr('<');
-		    f.str("{");
-		    s = t@.list;
-		    while s != 0 do
-		    {   PType(s@.type);
-			s = s@.next;
-		      exit s == 0;
-			f.str(", ");
-		    }
-		    f.str("}");
-		    if t@.unalgn then
-			f.chr('>');
-		}
+		    PRecordType(t);
 		f.nl();
 	    }
 	}		
