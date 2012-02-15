@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb1.esl 661 2011-12-09 21:35:58Z bgl $
+// $Id: symb1.esl 676 2012-02-13 18:34:44Z bgl $
 
 package symb
 {
@@ -64,6 +64,15 @@ package symb
 	return true;
     }
 	
+    proc FindThisLevel(name: @lex.Identifier): Symb
+    {   var s: Symb;
+
+	s = symbs[level].frst;
+	while s != 0 && !zstr.eq(s@.ident, name, lex.IdentMax) do
+	    s = s@.next;
+        return s;
+    }
+
     // Install symbol in symbol table
     proc MakeVisible(s: Symb)
     {
