@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 674 2012-02-09 21:19:01Z bgl $
+// $Id: expr2.esl 687 2012-03-07 02:14:38Z bgl $
 
 package expr
 {
@@ -735,6 +735,14 @@ ast.Dump(tree);
 	    tree = ast.New1(LOAD, t, tree);
 	    tree@.width = t@.width;
 	}
+	is CONST then   // FIXME: merge with above?
+	{   t = tree@.type;
+	    if t@.kind == REF then
+	    {   t = t@.base;
+		tree = ast.New1(LOAD, t, tree);
+		tree@.width = t@.width;
+	    }
+	}
 	return tree;
     }
 
@@ -1266,11 +1274,15 @@ ast.Dump(tree);
 			}
 			else
 			{
-			    bt = t@.base;   // t should be REF
+			    if tree@.op == CONST then
+				bt = t;
+			    else
+				bt = t@.base;   // t should be REF
 			    if bt != 0 then // and therefore bt should not be null
 			    {   if bt@.kind == REF then
 				{   if bt@.base != 0 then
-				    {   tree = ast.New1(LOAD, bt, tree);
+				    {   if tree@.op != CONST then
+					    tree = ast.New1(LOAD, bt, tree);
 					tree@.width = Target.ptr.size;
 					bt = bt@.base;
 				    }
@@ -1306,11 +1318,15 @@ ast.Dump(tree);
 		{   lex.ErrorI(BADTYPE, tree@.symb@.ident);
 		    return 0;
 		}
-		bt = t@.base;   // t should be REF
+		if tree@.op == CONST then
+		    bt = t;
+		else
+		    bt = t@.base;   // t should be REF
 		if bt != 0 then // and therefore bt should not be null
 		{   if bt@.kind == REF then
 		    {   if bt@.base != 0 then
-			{   tree = ast.New1(LOAD, bt, tree);
+			{   if tree@.op != CONST then
+				tree = ast.New1(LOAD, bt, tree);
 			    tree@.width = Target.ptr.size;
 			}
 			else
@@ -1332,11 +1348,15 @@ ast.Dump(tree);
 		{   lex.ErrorI(BADTYPE, tree@.symb@.ident);
 		    return 0;
 		}
-		bt = t@.base;   // t should be REF
+		if tree@.op == CONST then
+		    bt = t;
+		else
+		    bt = t@.base;   // t should be REF
 		if bt != 0 then // and therefore bt should not be null
 		{   if bt@.kind == REF then
 		    {   if bt@.base != 0 then
-			{   tree = ast.New1(LOAD, bt, tree);
+			{   if tree@.op != CONST then
+				tree = ast.New1(LOAD, bt, tree);
 			    tree@.width = Target.ptr.size;
 			    bt = bt@.base;
 			}
@@ -1596,10 +1616,15 @@ if !debug.tests[0] then {
 	    tree@.width = 1;
 	    return tree;
 	}
+	// FIXME the compares on lhs@.op and rhs@.op can be optimized
 	if lhs@.op == LOAD && lhs@.type@.kind == ARRAY then	// undo LOAD
 	    lhs = lhs@.child[0];
 	if rhs@.op == LOAD && rhs@.type@.kind == ARRAY then	// undo LOAD
 	    rhs = rhs@.child[0];
+	if lhs@.op == CLIST || lhs@.op == SCON then
+	    lhs = ast.New1(BYREF, type.MakeRef(lhs@.type), lhs);
+	if rhs@.op == CLIST || rhs@.op == SCON then
+	    rhs = ast.New1(BYREF, type.MakeRef(rhs@.type), rhs);
 	lalign = GetAlignment(lhs);
 	ralign = GetAlignment(rhs);
 //err.str("ArrayCompare lalign="); err.uint(lalign);

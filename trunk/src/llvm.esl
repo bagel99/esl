@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 675 2012-02-10 18:08:15Z bgl $
+// $Id: llvm.esl 683 2012-03-05 23:20:03Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -935,10 +935,12 @@ err.str("to=\n"); ast.Dump(node@.child[0]);
 	i = GetChunkSize(length, align);
 	size = Target.isizes[i].size/Target.membits;
 	align = Target.isizes[i].align/Target.membits;
-/* { err.str("Array compare: length=");
+/*
+{ err.str("Array compare: length=");
 if length == 0 then err.str("variable"); else err.uint(length);
 err.str(" size="); err.uint(size);
-err.str(" align="); err.uint(align);} */
+err.str(" align="); err.uint(align);}
+*/
 	if length != 0 && length <= size then	// can do with one load
 	{
 	    node@.child[0] = expr.Cast(node@.child[0], puinttype[i]);

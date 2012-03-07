@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 665 2012-01-13 19:05:26Z bgl $
+// $Id: lex.esl 680 2012-02-28 21:09:22Z bgl $
 
 package lex
 {
@@ -834,16 +834,6 @@ package lex
     }
 
 
-    proc Expect(expect: TokenT): TokenT
-    {   var tok: TokenT;
-
-	if Token == expect then
-	    tok = Next();
-	else
-	    ErrorT(EXPECT, expect);
-	return tok;
-    }
-
     proc Keyword(toklist: @TokenList): TokenT
     {   var tok: TokenT;
 	var i: _uint;
@@ -859,6 +849,23 @@ package lex
 	    }
 	}
 	return Token;
+    }
+
+    proc Expect(expect: TokenT): TokenT
+    {   var tok: TokenT;
+	var toklist: [2]TokenT;
+
+	tok = Token;
+	if expect > ID then
+	{   toklist[0] = expect;
+	    toklist[1] = NONE;
+	    tok = Keyword(toklist);
+	}
+	if tok == expect then
+	    tok = Next();
+	else
+	    ErrorT(EXPECT, expect);
+	return tok;
     }
 
     // FIXME: temporary debugging aid

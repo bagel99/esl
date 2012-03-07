@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 668 2012-01-25 20:35:36Z bgl $
+// $Id: type2.esl 677 2012-02-25 21:12:35Z bgl $
 
 package type
 {
@@ -668,15 +668,6 @@ if debug.tests[1] then {
 	return t;
     }
 
-    proc Name(): Symb
-    {   var s: Symb;
-
-	s = symb.Find(lex.Ident);
-	if s != 0 && s@.kind != TYPE then
-	    lex.Error(NOTTYPE);
-	return s;
-    }
-
     proc DefProc(procs: Symb, meths: Symb)
     {   var s, prevs: Symb;
 	var t: Type;
@@ -751,6 +742,15 @@ if debug.tests[2] then {
 	}
     }
 
+    proc Name(): Symb
+    {   var s: Symb;
+
+	s = symb.Find(lex.Ident);
+	if s != 0 && s@.kind != TYPE then
+	    lex.Error(NOTTYPE);
+	return s;
+    }
+
     proc Ref(): Type
     {   var tok: TokenT;
 	var t: Type;
@@ -791,6 +791,32 @@ if debug.tests[2] then {
 	return t;
     }
 
+    proc Range(vlo: Ast): Type
+    {   var t: Type;
+	var tok: TokenT;
+	var vhi: Ast;
+
+	t = unkntype;		// in case all goes wrong
+	if Token == RANGE then
+	{   tok = Next();
+	    vhi = expr.Bool(0);
+	    if vlo@.op == CONST && vhi@.op == CONST then
+	    {   if vlo@.type@.kind
+		is ENUM, UINT, SINT then 
+		{	t = type.New(vlo@.type@.kind);
+		    t@.lo = vlo@.valu;
+		    t@.hi = vhi@.valu;
+		}
+		else
+		    lex.Error(BADTYPDEF);
+	    }
+	    else
+		lex.Error(EXPCONST);
+	}
+	else
+	    lex.ErrorT(EXPECT, RANGE);
+	return t;
+    }
 
     proc Def(tok: TokenT, bt: Type): Type
     {   var t: Type;
@@ -801,38 +827,39 @@ if debug.tests[2] then {
 	if tok
 	is NUM, PLUS, MINUS then 
 	{   vlo = expr.Bool(0);
-	    if Token == RANGE then
-	    {   tok = Next();
-		vhi = expr.Bool(0);
-		if vlo@.op == CONST && vhi@.op == CONST then
-		{   if vlo@.type@.kind
-		    is UINT, SINT then 
-		    {	t = type.New(vlo@.type@.kind);
-			t@.lo = vlo@.valu;
-			t@.hi = vhi@.valu;
-		    }
-		    else
-			lex.Error(BADTYPDEF);
-		}
-		else
-		    lex.Error(EXPCONST);
-	    }
-	    else
-		lex.ErrorT(EXPECT, RANGE);
+	    t = Range(vlo);
 	}
 	is ID then 
-	{
-	    s = Name();
+	{   s = symb.Find(lex.Ident);
 	    if s != 0 then
-	    {   t = s@.type;
-		if t == 0 then
-		{   lex.Error(NOIDTYPE);
-		    t = unkntype;
+	    {   if s@.kind 
+		is TYPE then
+		{   tok = Next();
+		    if tok == DOT then  // enum const, start of range
+		    {   tok = Next();
+			vlo = expr.EnumConst(s@.type);
+			tok = Next();
+			t = Range(expr.EnumConst(s@.type));
+		    }
+		    else    // just type name
+		    {   t = s@.type;
+		        if t == 0 then
+			{   lex.Error(NOIDTYPE);
+			    t = unkntype;
+			}
+		    }
+		}
+		is CONSTANT then	// named const, start of range
+		{   vlo = expr.Bool(0);
+		    t = Range(vlo);
+		}
+		else 
+		{   tok = Next();
+		    lex.Error(NOTTYPE);
 		}
 	    }
 	    else
 		lex.ErrorI(UNDEFID, lex.Ident);
-	    tok = Next();
 	}
 	is AT then    t = Ref();
 	is PBEG then  t = Enum(bt);
