@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr1.esl 647 2011-11-21 17:30:48Z bgl $
+// $Id: expr1.esl 678 2012-02-25 21:13:48Z bgl $
 
 package expr
 {
@@ -7,5 +7,6 @@ package expr
     proc Const(t:Type): Ast;		// forward
     proc ConstValue(t:Type): Valu;	// forward
     proc GetLHS(): Ast;			// forward
+    proc EnumConst(t:Type): Ast;	// forward
 }
 

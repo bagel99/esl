@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 676 2012-02-13 18:34:44Z bgl $
+// $Id: stmt.esl 681 2012-02-28 21:17:53Z bgl $
 
 package stmt
 {
@@ -8,7 +8,6 @@ package stmt
     const thenlist:[2]TokenT = { KTHEN, NONE };
     const elselist:[2]TokenT = { KELSE, NONE };
     const aslist:[2]TokenT = { KAS, NONE };
-    const dolist:[2]TokenT = { KDO, NONE };
     const withlist:[2]TokenT = { KWITH, NONE };
     const skiplist:[3]TokenT = { GEND, SEMI, NONE };
     type NestType: (PROGRAM, PACKAGE, PROCEDURE);
@@ -909,9 +908,7 @@ package stmt
 		    tok = Token;
 		  exit tok != COMMA;
 		}
-		if lex.Keyword(thenlist) == KTHEN then
-		    tok = Next();
-		else lex.ErrorT(EXPECT, KTHEN);
+		lex.Expect(KTHEN);
 		stree = Statement();
 		ctree = ast.Child(ctree, stree);
 		tree = ast.Child(tree, ctree);
@@ -967,7 +964,6 @@ package stmt
     {   var tree, ctree: Ast;
 	var tok: TokenT;
 
-	tok = Token;
 	ctree = expr.Bool(type.booltype);
 	if ctree != 0 then
 	{   if type.Compat(ctree@.type, type.booltype) then
@@ -978,13 +974,32 @@ package stmt
 	    ctree = ast.New1(EXIT, 0, ctree);
 	}
 	LoopLevel += 1;
-	tok = lex.Keyword(dolist);
-	if tok == KDO then
-	    tok = Next();
-	else
-	    lex.ErrorT(EXPECT, KDO);
+	lex.Expect(KDO);
 	tree = Statement();
 	tree = ast.New2(SEQ, 0, ctree, tree);
+	tree = ast.New1(LOOP, 0, tree);
+	if LoopLevel > 0 then
+	    LoopLevel -= 1;	
+	return tree;
+    }
+
+    proc Do(): Ast
+    {   var tree, ctree: Ast;
+	var tok: TokenT;
+
+	LoopLevel += 1;
+	tree = Statement();
+	lex.Expect(KWHILE);
+	ctree = expr.Bool(type.booltype);
+	if ctree != 0 then
+	{   if type.Compat(ctree@.type, type.booltype) then
+		ctree = expr.ForceBoolean(ctree);
+	    else
+		lex.Error(WANTBOOL);
+	    ctree = ast.New1(BNOT, 0, ctree);
+	    ctree = ast.New1(EXIT, 0, ctree);
+	}
+	tree = ast.New2(SEQ, 0, tree, ctree);
 	tree = ast.New1(LOOP, 0, tree);
 	if LoopLevel > 0 then
 	    LoopLevel -= 1;	
@@ -1115,7 +1130,7 @@ package stmt
     }
 
     const stmtlist:[]TokenT =
-    { KTYPE, KVAR, KCONST, KIF, KFOR, KWHILE, KLOOP, KEXIT, KRET,
+    { KTYPE, KVAR, KCONST, KIF, KWHILE, KLOOP, KDO, KFOR, KEXIT, KRET,
       KASM, KALIAS, KERROR, KCALL, NONE };
 
     proc Statement(): Ast
@@ -1175,6 +1190,7 @@ package stmt
 	    is KIF then     tree = If();
 	    is KFOR then    tree = For();
 	    is KWHILE then  tree = While();
+	    is KDO then     tree = Do();
 	    is KLOOP then   tree = Loop();
 	    is KEXIT then   tree = Exit();
 	    is KRET then    tree = Return();
