@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: target.esl 623 2011-09-19 01:12:30Z bgl $
+// $Id: target.esl 688 2012-05-11 19:35:01Z bgl $
 
 package target
 {
@@ -25,7 +25,7 @@ package target
 
     const DefaultTarget: []_byte = "x86";   // FIXME
     var   TargetName: @[]_byte;
-    const NumTargets = 14;
+    const NumTargets = 16;
     const Targets: [NumTargets]TargetT =
     {   {   "x86", "i386-unknown-linux-gnu",
 	    LE, 8, 32, false, 0,
@@ -67,7 +67,23 @@ package target
 		{0,0},  {0,0},   {0,0},   {0,0}
 	    }
 	},
-	{   "cortex-m3", "thumb2-unknown-unknown",
+	{   "cortex-m0", "thumbv6m-unknown-unknown",
+	    LE, 8, 32, true, 0,	// need a version with no alignment
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,32},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "cortex-m3", "thumbv7m-unknown-unknown",
+	    LE, 8, 32, true, 0,	// need a version with no alignment
+	    4,
+	    {32, 32},
+	    {   {8, 8}, {16,16}, {32,32}, {64,32},
+		{0,0},  {0,0},   {0,0},   {0,0}
+	    }
+	},
+	{   "cortex-m4", "thumbv7m-unknown-unknown",
 	    LE, 8, 32, true, 0,	// need a version with no alignment
 	    4,
 	    {32, 32},
