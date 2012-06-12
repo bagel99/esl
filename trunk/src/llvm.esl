@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 691 2012-05-24 20:29:04Z bgl $
+// $Id: llvm.esl 693 2012-06-02 22:17:13Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -722,7 +722,7 @@ package llvm
 	RefLabel(ntrue);
 	f.str(", ");
 	RefLabel(nfalse);
-	f.nl();
+	PEndLine(node);
     }
 
     proc If(node: Ast): boolean
@@ -1822,6 +1822,7 @@ if debug.tests[1] then {
 	f.str("\"\ntarget triple = \"");
 	f.str(Target.triple);
 	f.str("\"\n");
+	if feature.gflag then llvmdb.ProgStart(tree@.symb@, false);
 	GenSub(tree);
 	Declare();
 	if feature.gflag then llvmdb.ProgFinish();
