@@ -1,5 +1,12 @@
-// Copyright (c) 2010-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvmdb.esl 623 2011-09-19 01:12:30Z bgl $
+/*
+ * Output the debug information as LLVM metadata.
+ * The LLVM documentation is incomplete, out-of-date, or just wrong.
+ * Use clang's calls to DIBuilder routines (llvm/lib/Analysis/DIBuilder.cpp)
+ * in clang/lib/CodeGen/CGDebuginfo.cpp as a reference.
+ *
+ * Copyright (c) 2010-2012, Brian G. Lucas.  See LICENSE file.
+ * $Id: llvmdb.esl 696 2012-06-12 21:52:52Z bgl $
+ */
 
 package llvmdb
 {
@@ -19,7 +26,7 @@ package llvmdb
 	CompileUnit=17,
 	String=18,
 	Structure=19,
-	Subroutine=21,
+	SubroutineType=21,
 	Typedef=22,
 	Union=23,
 	Inheritance=28,
@@ -43,8 +50,20 @@ package llvmdb
     (	Address=1, Boolean=2, ComplexFloat=3, Float=4, 
 	Signed=5, SignedChar=6, Unsigned=7, UnsignedChar=8
     );
-    const DWLanguage:_uint32 = 4;	// FIXME: using C++ for now
-    const LLVMDebugVersion:_uint32 = 0x9_0000;
+    const DWLanguage:_uint32 = 12;	// FIXME: using C99 for now
+    const LLVMDebugVersion:_uint32 = 0xC_0000;
+    type DIFlags:	// from llvm/include/llvm/Analysis/DebugInfo.h
+    ( Private		= 1 << 0,
+      Protected		= 1 << 1,
+      FwdDecl		= 1 << 2,
+      AppleBlock	= 1 << 3,
+      BlockByrefStruct	= 1 << 4,
+      Virtual		= 1 << 5,
+      Artificial	= 1 << 6,
+      Explicit		= 1 << 7,
+      Prototyped	= 1 << 8,
+      ObjcClassComplete	= 1 << 9
+    );
     const meta:_byte = '!';		// metadata introducer
     type TermT: (COMMA, BRACE, PAREN, NONE);
     type seqnoT: _uint16;
@@ -56,17 +75,17 @@ package llvmdb
     };
     type Line: @LineT;
     var seqno: seqnoT;
-    var unit, file, pakg, subr, blok: seqnoT;
+    var unit, file, subr, blok: seqnoT;
+    var globals, subprogs, retained, enums: seqnoT;
     var gvhead, gvtail: Symb;	// linked list of global variables
     var lvhead, lvtail: Symb;	// linked list of local variables
     var sphead, sptail: Symb;	// linked list of subprograms
     var lnhead, lntail: Line;	// linked list of line number descriptors
+    var lexblkno: _uint;	// unique id for lexical block
 
-    proc GetContext(): seqnoT
+    proc GetLineContext(): seqnoT
     {
 	if blok != 0 then return blok;
-	if subr != 0 then return subr;
-	if pakg != 0 then return pakg;
 	return file;
     }
 
@@ -78,13 +97,13 @@ package llvmdb
     proc PMetaSeq(n: seqnoT)
     {
 	PSeq(n);
-	f.str(" = metadata !{ ");
+	f.str(" = metadata !{");
     }
 
     proc PTerminator(term: TermT)
     {
 	if term
-	is BRACE then f.str(" }\n");
+	is BRACE then f.str("}\n");
 	is COMMA then f.str(", ");
 	is PAREN then f.str(" )");
     }
@@ -149,7 +168,7 @@ package llvmdb
 	PTerminator(term);
     }
 
-    proc PSymbName(s: Symb, term: TermT)
+    proc PName(s: Symb, term: TermT)
     {
 	if s != 0 && !symb.IsAnon(s@.ident) then
 	    PString(s@.ident, term);
@@ -157,7 +176,7 @@ package llvmdb
 	    PString(0, term);
     }
 
-    proc PDispName(s: Symb, term: TermT)
+    proc PFullName(s: Symb, term: TermT)
     {
 	if s != 0 && !symb.IsAnon(s@.ident) then
 	{   if s@.package != 0 then
@@ -185,75 +204,25 @@ package llvmdb
     {   var tag: seqnoT;
 
 	tag = file;
-	if pakg != 0 then tag = pakg;
 	PMetaRef(tag, term);
     }
 
-    proc CompileUnit(name: @[]_byte, opt: boolean)
-    {
-	seqno = 1;	// This should be the first thing called
-	unit = seqno;
-	PHeader(unit, DW_TAG.CompileUnit);	// tag
-	P32(0, COMMA);				// unused
-	P32(DWLanguage, COMMA);			// language id
-	PString(name, COMMA);			// filename
-	PString(0, COMMA);			// directory
-	PString("ESL", COMMA);			// producer
-	PBoolean(true, COMMA);			// is main
-	PBoolean(opt, COMMA);			// is optimized
-	PString(0, COMMA);			// flags
-	P32(0, BRACE);				// runtime version
+    proc PListStart(): seqnoT
+    {   var tag: seqnoT;
+
+	seqno += 1;  tag = seqno;
+	PMetaSeq(tag);
+	return tag;
     }
+    
+    proc PEmptyList(): seqnoT
+    {   var tag: seqnoT;
 
-    proc FileStart(fs: Symb)
-    {   var i: _uint;
-	var name: @[]_byte;
-
-	name = fs@.ident;
-	if unit == 0 then CompileUnit(name, false);
-	seqno += 1;
-	file = seqno;
-	fs@.dbtag = file;
-	PHeader(file, DW_TAG.File);		// tag
-	// need to split the name into file and directory
-	i = zstr.rfind(name, '/', lex.PathMax);
-	if i == lex.PathMax then		// '/' not found
-	{   PString(name, COMMA);		// file
-	    PString("", COMMA);			// directory
-	}
-	else
-	{   name[i] = 0;
-	    PString(name[i+1:], COMMA);		// file
-	    PString(name, COMMA);		// directory
-	}
-	PMetaRef(unit, BRACE);			// context, i.e., compile unit
+	tag = PListStart();
+	P32(0, BRACE);
+	return tag;
     }
-
-    proc FileFinish(fs: Symb)
-    {   var ps: Symb;
-
-	ps = fs@.package;
-	if ps != 0 then
-	    file = ps@.dbtag;		// tag of containing file
-	else
-	    file = 0;			// must be final end of file
-    }
-
-    proc PackageStart(name: @[]_byte)
-    {
-	seqno += 1;
-	pakg = seqno;
-	PHeader(pakg, DW_TAG.Namespace);	// tag
-	PMetaRef(file, COMMA);			// context
-	PString(name, COMMA);			// name
-	PMetaRef(file, BRACE);			// file
-    }
-
-    proc PackageEnd()
-    {
-	pakg = 0;
-    }
-
+	    
     proc DefType(t: Type): seqnoT;		// forward
 
     proc DefFormals(ps: Symb): _uint
@@ -300,92 +269,28 @@ package llvmdb
 	return retvs;
     }
 	
-    proc DefSubroutine(ps: Symb, formals: boolean): seqnoT
-    {   var tag, list: seqnoT;
-	var s: Symb;
-	var tl: type.TypeList;
-	var term: TermT;
-
-	// FIXME: what about multiple returned values?
-	// define all the returned values and formals
-	tl = ps@.retvlist;
-	while tl != 0 do
-	{   DefType(tl@.type);
-	    tl = tl@.next;
-	}
-	if formals then
-	{   s = ps@.parmlist;
-	    while s != 0 do
-	    {   DefType(s@.type);
-		s = s@.next;
-	    }
-	}
-	// now create the list of returned values and formals
-	seqno += 1;
-	list = seqno;
-	PMetaSeq(list);
-	tl = ps@.retvlist;
-	if formals then
-	    s = ps@.parmlist;
-	else
-	    s = 0;
-	if s == 0 then term = BRACE; else term = COMMA;
-	if tl == 0 then				// not return value
-	    PNull(term);
-	else
-	{   while tl != 0 do
-	    {   tag = tl@.type@.dbtag;
-		tl = tl@.next;
-		if tl == 0 && s == 0 then term = BRACE;
-		PMetaRef(tag, term);
-	    }
-	}
-	term = COMMA;
-	while s != 0 do
-	{   tag = s@.type@.dbtag;
-	    s = s@.next;
-	    if s == 0 then term = BRACE;
-	    PMetaRef(tag, term);
-	}
-	seqno += 1;
-	PHeader(seqno, DW_TAG.Subroutine);	// tag
-	PMetaRef(file, COMMA);			// context
-//	PSymbName(ps, COMMA);			// name
-	PString(0, COMMA);	// clang prints ""
-	PMetaRef(file, COMMA);			// file
-	P32(0, COMMA);				// line
-	P64(0, COMMA);				// size
-	P64(0, COMMA);				// align
-	P64(0, COMMA);				// offset
-	P32(0, COMMA);				// flags?
-	PNull(COMMA);				// what is this?
-	PMetaRef(list, COMMA);			// retv and formals?
-	P32(0, COMMA);				// runtime language
-	PNull(BRACE);				// containing type
-	return seqno;
-    }
-
     proc DefBasicType(dwtype: DW_ATE, t: type.Type): seqnoT
-    {
-	seqno += 1;
-	PHeader(seqno, DW_TAG.BasicType);		// tag
-	PMetaRef(unit, COMMA);			// context
-	PSymbName(t@.name, COMMA);		// name
-	PMetaRef(file, COMMA);			// file
+    {   var tagt: seqnoT;
+
+	seqno += 1;  tagt = seqno;
+	PHeader(tagt, DW_TAG.BasicType);	// tag
+	PNull(COMMA);				// context
+	PName(t@.name, COMMA);			// name
+	PNull(COMMA);				// file
 	P32(0, COMMA);				// line
 	P64(_uint64(t@.width), COMMA);		// size
 	P64(_uint64(t@.align), COMMA);		// align
 	P64(0, COMMA);				// offset
 	P32(0, COMMA);				// flags
 	P32(_uint32(dwtype), BRACE);		// encoding
-	return seqno;
+	return tagt;
     }
 
     proc PTypeHeader(tag: seqnoT, dwat: DW_TAG, t:Type)
     {
 	PHeader(tag, dwat);			// tag
 	PMetaRef(file, COMMA);			// context
-	PSymbName(t@.name, COMMA);		// name
+	PName(t@.name, COMMA);			// name
 	PMetaRef(file, COMMA);			// file
 	if t@.name != 0 then
 	    P32(t@.name@.lineno, COMMA);	// line
@@ -397,39 +302,46 @@ package llvmdb
 	P32(0, COMMA);				// flags
     }
     
+    proc DefSubroutine(stag: seqnoT, ps: Symb);	// forward
+
     proc DefRefType(t: Type): seqnoT
-    {   var tag: seqnoT;
+    {   var tagb, tagr: seqnoT;
 
 	if t@.kind == REFPROC then
-	    tag = DefSubroutine(t@.list, true);
+	{   seqno += 1;  tagb = seqno;
+	    DefSubroutine(tagb, t@.list);
+	}
 	else
-	    tag = DefType(t@.base);
-	seqno += 1;
-	PTypeHeader(seqno, DW_TAG.Pointer, t);
-	PMetaRef(tag, BRACE);			// derived from
-	return seqno;
+	    tagb = DefType(t@.base);
+	seqno += 1;  tagr = seqno;
+	PTypeHeader(tagr, DW_TAG.Pointer, t);
+	PMetaRef(tagb, BRACE);			// derived from
+	return tagr;
     }
 
     proc DefRange(lo: _uint64, hi: _uint64): seqnoT
-    {
-	seqno += 1;
-	PHeader(seqno, DW_TAG.Subrange);	// tag
+    {   var tagr: seqnoT;
+
+	seqno += 1;  tagr = seqno;
+	// emit Subrange
+	PHeader(tagr, DW_TAG.Subrange);	// tag
 	P64(lo, COMMA);				// lo value
 	P64(hi, BRACE);				// hi value
-	return seqno;
+	return tagr;
     }
 
     proc DefEnumConst(s: Symb): seqnoT
-    {
-	seqno += 1;
-	PHeader(seqno, DW_TAG.Enumerator);	// tag
-	PSymbName(s, COMMA);			// name
+    {   var tagc: seqnoT;
+
+	seqno += 1;  tagc = seqno;
+	PHeader(tagc, DW_TAG.Enumerator);	// tag
+	PName(s, COMMA);			// name
 	P64(s@.const@.valu, BRACE);		// value
-	return seqno;
+	return tagc;
     }
 
     proc DefEnumerationType(t: Type): seqnoT
-    {   var tag, list: seqnoT;
+    {   var tag, list, tage: seqnoT;
 	var s: Symb;
 	var term: TermT;
 
@@ -441,9 +353,7 @@ package llvmdb
 	    s = s@.next;
 	}
 	// then the list
-	seqno += 1;
-	list = seqno;
-	PMetaSeq(list);
+	list = PListStart();
 	term = COMMA;  
 	s = t@.list;
 	while s != 0 do
@@ -452,53 +362,60 @@ package llvmdb
 	    if s == 0 then term = BRACE;
 	    PMetaRef(tag, term);
 	}
-	// finally the enumeration type itself
-	seqno += 1;
-	PTypeHeader(seqno, DW_TAG.Enumeration, t);
+	seqno += 1;  tage = seqno;
+	// emit Enumeration
+	PTypeHeader(tage, DW_TAG.Enumeration, t);
 	PNull(COMMA);				// derived from
 	PMetaRef(list, COMMA);			// enum list
 	P32(0, COMMA);				// runtime languages
 	PNull(BRACE);				// what is this?
-	return seqno;
+	return tage;
     }
 
     proc DefArrayType(t: Type): seqnoT
-    {   var tagb, tagi: seqnoT;
+    {   var tagb, tagi, taga, tagl: seqnoT;
 
 	tagb = DefType(t@.base);
-	if t@.flex then
-	    tagi = DefRange(0, 0);
-	else if t@.index != 0 && t@.index@.kind == ENUM then
-	    tagi = DefEnumerationType(t@.index);
-	else
+	tagi = 0;
+	if !t@.flex then
 	    tagi = DefRange(t@.lo, t@.hi-1);
-	seqno += 1;
-	PTypeHeader(seqno, DW_TAG.Array, t);
+	// LLVM wants a list of indices
+	if tagi != 0 then
+	{   tagl = PListStart();
+	    PMetaRef(tagi, BRACE);
+	} 
+	seqno += 1;  taga = seqno;
+	// emit Array
+	PTypeHeader(taga, DW_TAG.Array, t);
 	PMetaRef(tagb, COMMA);			// derived from
-	PMetaRef(tagi, COMMA);			// index type
+	if tagi == 0 then
+	    PNull(COMMA);			// flex
+	else
+	    PMetaRef(tagl, COMMA);		// index type list
 	P32(0, COMMA);				// runtime languages
 	PNull(BRACE);				// what is this?
-	return seqno;
+	return taga;
     }
 
     proc DefField(s: Symb): seqnoT
-    {   var tag: seqnoT;
+    {   var tagt, tagf: seqnoT;
 	var t: Type;
 
 	t = s@.type;
-	tag = DefType(s@.type);
-	seqno += 1;
-	PHeader(seqno, DW_TAG.Member);		// tag
+	tagt = DefType(t);
+	seqno += 1;  tagf = seqno;
+	// emit Member
+	PHeader(tagf, DW_TAG.Member);		// tag
 	PMetaRef(file, COMMA);			// context
-	PSymbName(s, COMMA);			// name
+	PName(s, COMMA);			// name
 	PMetaRef(file, COMMA);			// file
 	P32(0, COMMA);				// line
 	P64(_uint64(t@.width), COMMA);		// size
 	P64(_uint64(t@.align), COMMA);		// align
 	P64(s@.addr, COMMA);			// offset
 	P32(0, COMMA);				// flags
-	PMetaRef(tag, BRACE);			// derived from
-	return seqno;
+	PMetaRef(tagt, BRACE);			// derived from
+	return tagf;
     }
 
     proc DefRecordType(t: Type): seqnoT
@@ -508,11 +425,10 @@ package llvmdb
 
 	// must put the record out first in case of recursion
 	// (e.g. field in record points to record)
-	seqno += 1;
-	rec = seqno;
+	seqno += 1;  rec = seqno;
 	t@.dbtag = rec;
-	seqno += 1;
-	list = seqno;
+	seqno += 1;  list = seqno;
+	// emit Structure
 	PTypeHeader(rec, DW_TAG.Structure, t);
 	PNull(COMMA);				// derived from
 	PMetaRef(list, COMMA);			// field list
@@ -588,7 +504,7 @@ package llvmdb
 	while ln != 0 do
 	{   PMetaSeq(ln@.tag);
 	    P32(ln@.lineno, COMMA);			// line
-	    P32(0, COMMA);				// column?
+	    P32(1, COMMA);				// column?
 	    PMetaRef(ln@.context, COMMA);
 	    PNull(BRACE);
 	    ln = ln@.next;
@@ -609,7 +525,7 @@ package llvmdb
 	    ln = Line(sys.zalloc(LineT?size));
 	    ln@.tag = tag;
 	    ln@.lineno = lineno;
-	    ln@.context = GetContext();
+	    ln@.context = GetLineContext();
 	    if lntail == 0 then
 		lnhead = ln;
 	    else
@@ -617,7 +533,7 @@ package llvmdb
 	    lntail = ln;
 	}
 	f.str(", !dbg ");
-	PSeq(tag);	
+	PSeq(tag);
     }
 
     proc DefVar(s: Symb): seqnoT
@@ -635,10 +551,8 @@ package llvmdb
 	    f.str("metadata !");
 	    f.uint(seqno);
 	    f.chr(')');
-/*
 	    PLine(s@.lineno);
-*/
-	    f.nl();
+	    f.nl();	
 	    if !s@.isparam then
 	    {   s@.next = 0;
 		if lvtail == 0 then
@@ -653,15 +567,15 @@ package llvmdb
 	    tag = DefType(s@.type);
 	    PHeader(s@.dbtag, DW_TAG.GlobalVariable);	// tag
 	    P32(0, COMMA);				// unused
-	    PContext(COMMA);				// context
-	    PSymbName(s, COMMA);			// name
-	    PDispName(s, COMMA);			// display name
-	    PLinkName(s, COMMA);			// linkage name
+	    PNull(COMMA);				// context
+	    PFullName(s, COMMA);			// name
+	    PFullName(s, COMMA);			// display name
+	    PString(0, COMMA);				// linkage name
 	    PMetaRef(file, COMMA);			// file
 	    P32(s@.lineno, COMMA);			// line
 	    PMetaRef(tag, COMMA);			// type
-	    PBoolean(s@.linkage == LOCAL, COMMA);	// is local
-	    PBoolean(s@.linkage != EXTERN, COMMA);	// is a definition
+	    P32(_uint32(s@.linkage == NORMAL), COMMA);	// is "static"
+	    P32(_uint32(s@.linkage != EXTERN), COMMA);	// is a definition
 	    llvm.PType(s@.type);
 	    f.str("* ");
 	    llvm.PName(s);
@@ -681,49 +595,91 @@ package llvmdb
 	return seqno;
     }
 
+    proc DefSubroutine(stag: seqnoT, ps: Symb)
+    {   var tag, list: seqnoT;
+	var s: Symb;
+	var tl: type.TypeList;
+	var term: TermT;
+
+	// FIXME: what about multiple returned values?
+	// define all the returned values and formals
+	tl = ps@.retvlist;
+	while tl != 0 do
+	{   DefType(tl@.type);
+	    tl = tl@.next;
+	}
+	s = ps@.parmlist;
+	while s != 0 do
+	{   DefType(s@.type);
+	    s = s@.next;
+	}
+	// now create the list of returned values and formals
+	list = PListStart();
+	tl = ps@.retvlist;
+	s = ps@.parmlist;
+	if s == 0 then term = BRACE; else term = COMMA;
+	if tl == 0 then				// not return value
+	    PNull(term);
+	else
+	{   while tl != 0 do
+	    {   tag = tl@.type@.dbtag;
+		tl = tl@.next;
+		if tl == 0 && s == 0 then term = BRACE;
+		PMetaRef(tag, term);
+	    }
+	}
+	term = COMMA;
+	while s != 0 do
+	{   tag = s@.type@.dbtag;
+	    s = s@.next;
+	    if s == 0 then term = BRACE;
+	    PMetaRef(tag, term);
+	}
+	// emit SubroutineType
+	PHeader(stag, DW_TAG.SubroutineType);	// tag
+	P32(0, COMMA);				// was context?
+	PString(0, COMMA);			// clang prints ""
+	P32(0, COMMA);				// was file?
+	P32(0, COMMA);				// line
+	P64(0, COMMA);				// size
+	P64(0, COMMA);				// align
+	P64(0, COMMA);				// offset
+	P32(0, COMMA);				// flags?
+	PNull(COMMA);				// what is this?
+	PMetaRef(list, COMMA);			// retv and formals?
+	P32(0, COMMA);				// runtime language
+	P32(0, BRACE);				// containing type
+    }
+
     proc ProcStart(ps: Symb)
     {
-	seqno += 1;
-	subr = seqno;
-	seqno += 1;
-	blok = seqno;
+	seqno += 1;  subr = seqno;
+	seqno += 1;  blok = seqno;
     }
 
     proc ProcFinish(ps: Symb)
     {   var s: Symb;
-	var retvs, stag, ttag: seqnoT;
-	var formals: _uint;
+	var stype, stag, ttag, fvars, empty: seqnoT;
+	var argno: _uint;
 
-	// output line number descriptors
-	DefLines();
-/*
-	// output the subroutine descriptor
-	stag = DefSubroutine(ps, false);
-*/
-	// define all the formals and returned values
-	formals = DefFormals(ps);
-	retvs = DefRetvs(ps);
-	// output the subprogram descriptor
+	seqno += 1;  stype = seqno;
+	// emit SubProgram
 	PHeader(subr, DW_TAG.Subprogram);		// tag
 	P32(0, COMMA);					// unused
-	// FIXME: use package name
 	PContext(COMMA);				// context
-	PSymbName(ps, COMMA);				// name
-	PDispName(ps, COMMA);				// display name
-	PLinkName(ps, COMMA);				// linkage name
+	PFullName(ps, COMMA);				// name
+	PFullName(ps, COMMA);				// display name
+	PString(0, COMMA);				// linkage name
 	PMetaRef(file, COMMA);				// file
 	P32(ps@.lineno, COMMA);				// line
-	if retvs == 0 then
-	    PNull(COMMA);
-	else
-	    PMetaRef(retvs, COMMA);				// type
+	PMetaRef(stype, COMMA);				// subroutine type
 	PBoolean(false, COMMA);				// FIXME: local
 	PBoolean(ps@.linkage != EXTERN, COMMA);		// is a definition
 	P32(0, COMMA);					// virtuality
 	P32(0, COMMA);					// virtual index
 	PNull(COMMA);					// base type
-	P32(256, COMMA);				// FIXME: what is this
-	PBoolean(false, COMMA);				// FIXME: what is this
+	P32(256, COMMA);				// FIXME: DIFlags
+	PBoolean(false, COMMA);				// FIXME: is optimized
 	llvm.PRetvType(ps@.retvlist, false);
 	f.str(" (");
 	s = ps@.parmlist;
@@ -734,18 +690,35 @@ package llvmdb
 	}
 	f.str(")* ");
 	llvm.PName(ps);
-	PTerminator(BRACE);	
-	ps@.dbtag = subr;
-	ps@.next = 0;
+	PTerminator(COMMA);				// pointer to function
+	PNull(COMMA);					// template parameters
+	PNull(COMMA);					// function declaration
+	seqno += 1;  fvars = seqno;
+	PMetaRef(fvars, COMMA);				// function variables
+	P32(ps@.lineno+1, BRACE);			// FIXME: scope line
+	// FIXME function variables null list?
+	empty = PEmptyList();
+	PMetaSeq(fvars);
+	PMetaRef(empty, BRACE);
+	ps@.dbtag = subr;	// save tag
+	ps@.next = 0;		// and add to subprogram list
 	if sptail == 0 then
 	    sphead = ps;
 	else
 	    sptail@.next = ps;
 	sptail = ps;
+
+	// define all the formals and returned values
+	DefFormals(ps);
+	DefRetvs(ps);
+	// output the subroutine type descriptor
+	DefSubroutine(stype, ps);
 	// output formal argument descriptors
-	{   s = ps@.parmlist;
+	{   argno = 0;
+	    s = ps@.parmlist;
 	    while s != 0 do
-	    {   ttag = DefType(s@.type);
+	    {   argno += 1;
+	    	ttag = DefType(s@.type);
 		stag = s@.dbtag;
 		if stag == 0 then	// FIXME: shouldn't happen
 		{   seqno += 1;
@@ -753,21 +726,24 @@ package llvmdb
 		}
 		PHeader(stag, DW_TAG.ArgVariable);	// tag
 		PMetaRef(subr, COMMA);			// context
-		PSymbName(s, COMMA);			// name
+		PName(s, COMMA);			// name
 		PMetaRef(file, COMMA);			// file
-		P32(s@.lineno, COMMA);			// line
+		P32(s@.lineno|(argno<<24), COMMA);	// line+argno
 		PMetaRef(ttag, COMMA);			// type
+		P32(0, COMMA);				// flags?
 		P32(0, BRACE);				// what is this?
 		s = s@.next;
 	    }
 	}
+
 	// output lexical block (only one per procedure)
 	PHeader(blok, DW_TAG.Block);			// tag
 	PMetaRef(subr, COMMA);				// context
 	P32(ps@.lineno, COMMA);				// line
-	P32(0, COMMA);					// column
+	P32(1, COMMA);					// column
 	PMetaRef(file, COMMA);				// file
-	P32(0, BRACE);					// what is this?
+	P32(lexblkno, BRACE);				// unique id?
+	lexblkno += 1;
 	// output local variable descriptors
 	s = lvhead;
 	while s != 0 do
@@ -775,48 +751,138 @@ package llvmdb
 	    stag = s@.dbtag;
 	    PHeader(stag, DW_TAG.AutoVariable);		// tag
 	    PMetaRef(blok, COMMA);			// context
-	    PSymbName(s, COMMA);			// name
+	    PName(s, COMMA);				// name
 	    PMetaRef(file, COMMA);			// file
 	    P32(s@.lineno, COMMA);			// line
-	    PMetaRef(ttag, BRACE);			// type
+	    PMetaRef(ttag, COMMA);			// type
+	    P32(0, COMMA);				// flags?
+	    P32(0, BRACE);				// what is this?
 	    s = s@.next;
 	}
+	// output line number descriptors
+	DefLines();
 	lvhead = 0;
 	lvtail = 0;
 	subr = 0;
 	blok = 0;
     }
 
-    proc ProgFinish()
-    {   var s: Symb;
-	var tag: seqnoT;
+    proc PackageStart(name: @[]_byte)
+    {
+    }
 
-	// output list of global variables
-	s = gvhead;
-	if s != 0 then
-	{
-	    f.str("!llvm.dbg.gv = !{ ");
-	    while s != 0 do
-	    {   tag = s@.dbtag;
-		s = s@.next;
-		PSeq(tag);
-		if s == 0 then f.str(" }\n"); else f.str(", ");
-	    }
+    proc PackageEnd()
+    {
+    }
+
+    proc FileStart(fs: Symb)
+    {   var i: _uint;
+	var name: @[]_byte;
+
+	name = fs@.ident;
+	seqno += 1;  file = seqno;
+	fs@.dbtag = file;
+	PHeader(file, DW_TAG.File);		// tag
+	// need to split the name into file and directory
+	i = zstr.rfind(name, '/', lex.PathMax);
+	if i == lex.PathMax then		// '/' not found
+	{   PString(name, COMMA);		// file
+	    PString("", COMMA);			// directory
 	}
-	// output list of subprograms
-	s = sphead;
-	if s != 0 then
-	{
-	    f.str("!llvm.dbg.sp = !{ ");
-	    while s != 0 do
-	    {   tag = s@.dbtag;
-		s = s@.next;
-		PSeq(tag);
-		if s == 0 then f.str(" }\n"); else f.str(", ");
-	    }
+	else
+	{   name[i] = 0;
+	    PString(name[i+1:], COMMA);		// file
+	    PString(name, COMMA);		// directory
 	}
+	PNull(BRACE);				// unused
+    }
+
+    proc FileFinish(fs: Symb)
+    {   var ps: Symb;
+
+	ps = fs@.package;
+	if ps != 0 then
+	    file = ps@.dbtag;		// tag of containing file
+	else
+	    file = 0;			// must be final end of file
+    }
+
+    proc ProgStart(fs: Symb, opt: boolean)
+    {
 	f.str(
 	 "declare void @llvm.dbg.declare(metadata, metadata) nounwind readnone\n");
+	seqno = 0;	// This should be the first thing called
+	unit = seqno;
+	seqno += 1;  enums = seqno;
+	seqno += 1;  retained = seqno;
+	seqno += 1;  subprogs = seqno;
+	seqno += 1;  globals = seqno;
+	// emit anchor
+    	f.str("!llvm.dbg.cu = !{!"); f.uint(unit); f.str("}\n");
+	// emit Compile Unit
+	PHeader(unit, DW_TAG.CompileUnit);	// tag
+	P32(0, COMMA);				// unused
+	P32(DWLanguage, COMMA);			// language id
+	PString(fs@.ident, COMMA);		// filename
+	PString(0, COMMA);			// directory FIXME
+	PString("ESL", COMMA);			// producer
+	PBoolean(true, COMMA);			// is main
+	PBoolean(opt, COMMA);			// is optimized
+	PString(0, COMMA);			// flags
+	P32(0, COMMA);				// runtime version
+	PMetaRef(enums, COMMA);			// list of enum types
+	PMetaRef(retained, COMMA);		// list of retained types
+	PMetaRef(subprogs, COMMA);		// list of subprograms
+	PMetaRef(globals, BRACE);		// list of global variables
+    }
+
+    proc ProgFinish()
+    {   var s: Symb;
+	var tag, empty, list: seqnoT;
+	var term: TermT;
+
+	// output an empty list
+	seqno += 1;  empty = seqno;
+	PMetaSeq(empty);
+	f.str("i32 0 }\n");
+	// output list of enums (NOT USED YET)
+	PMetaSeq(enums);
+	PMetaRef(empty, BRACE);
+	// output list of retained types (NOT USED, WHAT IS THIS?)
+	PMetaSeq(retained);
+	PMetaRef(empty, BRACE);
+	// output list of subprograms
+	list = PListStart();
+	s = sphead;
+	if s != 0 then
+	{   term = COMMA;
+	    while s != 0 do
+	    {   tag = s@.dbtag;
+		s = s@.next;
+		if s == 0 then term = BRACE;
+		PMetaRef(tag, term);
+	    }
+	}
+	else
+	    PMetaRef(empty, BRACE);
+	PMetaSeq(subprogs);
+	PMetaRef(list, BRACE);
+	// output list of global variables
+	list = PListStart();
+	s = gvhead;
+	if s != 0 then
+	{   term = COMMA;
+	    while s != 0 do
+	    {   tag = s@.dbtag;
+		s = s@.next;
+		if s == 0 then term = BRACE;
+		PMetaRef(tag, term);
+	    }
+	}
+	else
+	    PMetaRef(empty, BRACE);
+	PMetaSeq(globals);
+	PMetaRef(list, BRACE);
     }
 }
 
