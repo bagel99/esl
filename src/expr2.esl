@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 687 2012-03-07 02:14:38Z bgl $
+// $Id: expr2.esl 703 2012-07-14 21:47:43Z bgl $
 
 package expr
 {
@@ -311,6 +311,7 @@ package expr
     {   var t: Type;
 
 	t = type.Clone(bt);
+	t@.flex = false;
 	t@.hi = len;
 	t@.size = 0;
 	t@.width = 0;

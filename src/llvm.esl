@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 693 2012-06-02 22:17:13Z bgl $
+// $Id: llvm.esl 702 2012-07-14 20:26:07Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -480,6 +480,7 @@ package llvm
 	    {   if t@.kind
 		is REF, REFPROC then ConstantRef(node);
 		is SINT then f.int64(_int64(node@.valu));
+		is ARRAY then f.str("zeroinitializer");
 		else         f.uint64(node@.valu);
 	    }
 	    is SCON then
@@ -1393,21 +1394,32 @@ err.str(" align="); err.uint(align);}
 	return type.uinttypes[i];
    }
 
-    proc BitfieldOffset(trec: Type, fno: type.Valu): type.BitSize
+    proc IsPacked(node: Ast): boolean
+    {
+	if node@.op == CONST then
+	    return node@.type@.packed;
+	else
+	    return node@.type@.base@.packed;
+    }
+
+    proc BitfieldOffset(node: Ast, fno: type.Valu): type.BitSize
     {   var foffs, rsize, fsize: type.BitSize;
 	var s: Symb;
 	var i: ast.NSubNodes;
+	var t: Type;
 
+        t = node@.type;
+        if node@.op != CONST then t = t@.base;
 	// assert trec@.kind == RECORD
-	rsize = trec@.width;
-	if trec@.bitorder == MSB then foffs = rsize; else foffs = 0;
-	s = trec@.list;
+	rsize = t@.width;
+	if t@.bitorder == MSB then foffs = rsize; else foffs = 0;
+	s = t@.list;
 	i = 0;
 	while s != 0 do
 	{   fsize = s@.type@.size;
-	    if trec@.bitorder == MSB then foffs -= fsize;
+	    if t@.bitorder == MSB then foffs -= fsize;
 	  exit i == fno;
-	    if trec@.bitorder != MSB then foffs += fsize;
+	    if t@.bitorder != MSB then foffs += fsize;
 	    s = s@.next;
 	    i += 1;
 	}
@@ -1432,20 +1444,21 @@ err.str(" align="); err.uint(align);}
     proc BitfieldRewrite(offs: Ast): Ast, Ast, Ast
     {   var varb, tree: Ast;
 	var shft: type.BitSize;
+	var t: Type;
 
 	shft = 0;
 	varb = 0;
 	loop
 	{   if offs@.op
 	    is OFFSET then
-		shft += BitfieldOffset(offs@.child[0]@.type@.base, offs@.valu);
+		shft += BitfieldOffset(offs@.child[0], offs@.valu);
 	    is INDEX then
 		varb = BitfieldIndex(offs, offs@.type@.base@.size, varb);
 	    is SLICE then
 		varb = BitfieldIndex(offs, offs@.type@.base@.size, varb);
 	    offs = offs@.child[0];
 	  exit (offs@.op < OFFSET || offs@.op > SLICE) ||
-	    !offs@.child[0]@.type@.base@.packed;
+	    !IsPacked(offs@.child[0]);
 	}
 	if shft != 0 then
 	{   tree = ast.Const(type.wordtype, shft);
@@ -1454,13 +1467,23 @@ err.str(" align="); err.uint(align);}
 	    else
 		varb = tree;
 	}
-	// load the container of the bitfield as a UINT
-	tree = ast.New1(LOAD, TargetUintType(offs@.type@.base@.width), offs);
-	tree@.width = tree@.type@.width;
-	// make sure the endian is correct
-	if tree@.width > Target.membits && 
-	   offs@.type@.base@.memorder != Target.order then
-	    tree = ast.New1(REVB, tree@.type, tree);
+	t = offs@.type;
+	if offs@.op == CONST then
+	{
+	    tree = offs;
+	    tree@.type = type.wordtype;
+	    tree@.width = type.wordtype@.width;
+	}
+	else
+	{   t = t@.base;
+	    // load the container of the bitfield as a UINT
+	    tree = ast.New1(LOAD, TargetUintType(t@.width), offs);
+	    tree@.width = tree@.type@.width;
+	    // make sure the endian is correct
+	    if tree@.width > Target.membits && 
+	       t@.memorder != Target.order then
+		tree = ast.New1(REVB, tree@.type, tree);
+	}
 	// make register sized, this simplifies things
 	tree = expr.ExtendT(tree, type.wordtype);
 /* {
@@ -1493,15 +1516,10 @@ err.str("offs=\n"); ast.Dump(offs); } */
 	mask = ast.Const(type.wordtype, bits);
 	return mask;
     }
-	
-    proc Load(load: Ast)
-    {   var offs, tree, varb, mask: Ast;
 
-	// LLVM doesn't handle bitfields (packed records or arrays)
-	// so we expand bitfield extract
-	offs = load@.child[0];
-	if (offs@.op >= OFFSET && offs@.op <= SLICE) &&
-	    offs@.child[0]@.type@.base@.packed then
+    proc LoadPacked(load: Ast, offs: Ast)
+    {   var tree, varb, mask: Ast;
+
 	{   // We are dealing with a packed record or array (aka bitfield).
 	    mask = BitfieldMask(offs);
 	    // Rewrite the AST to extract item.
@@ -1520,7 +1538,18 @@ err.str(" tree=\n"); ast.Dump(tree); } */
 	    load@.child[0] = tree;      // load@.op == LOAD, we're done with it
 	    load@.seqno = tree@.seqno;  // copy up seqno of node below
 	}
-	else	// normal load
+    }
+	
+    proc Load(load: Ast)
+    {   var offs: Ast;
+
+	// LLVM doesn't handle bitfields (packed records or arrays)
+	// so we expand bitfield extract
+	offs = load@.child[0];
+	if (offs@.op >= OFFSET && offs@.op <= SLICE) &&
+	    IsPacked(offs@.child[0]) then
+		LoadPacked(load, offs);
+	else    // normal load
 	{
 if debug.tests[1] then {
 	    if offs@.type@.base@.unalgn then

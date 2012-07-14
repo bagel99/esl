@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 681 2012-02-28 21:17:53Z bgl $
+// $Id: stmt.esl 699 2012-07-10 17:20:46Z bgl $
 
 package stmt
 {
@@ -9,6 +9,8 @@ package stmt
     const elselist:[2]TokenT = { KELSE, NONE };
     const aslist:[2]TokenT = { KAS, NONE };
     const withlist:[2]TokenT = { KWITH, NONE };
+    const fromlist:[3]TokenT = { KFROM, KIN, NONE };
+    const bylist:[2]TokenT = { KBY, NONE };
     const skiplist:[3]TokenT = { GEND, SEMI, NONE };
     type NestType: (PROGRAM, PACKAGE, PROCEDURE);
     const LoopMax = 32;
@@ -952,11 +954,85 @@ package stmt
     }
 
     proc For(): Ast
-    {   var tree: Ast;
+    {   var tree, exit, init, body, incr, ix, fm, to, by: Ast;
+	var t: Type;
 	var tok: TokenT;
+	var s: Symb;
+	var isup: boolean;
 
+        lex.ErrorS(EXPERIMENT, "for loop");
 	tree = 0;
 	tok = Token;
+	if tok == ID then
+	{   s = symb.Find(lex.Ident);
+	    if s != 0 && s@.kind == VAR then
+	    {   t = s@.type;
+		ix = ast.New(VAR, type.MakeRef(s@.type));
+		ix.symb = s;
+	    }
+	    else
+	    {   lex.ErrorI(UNDEFID, lex.Ident);
+		t = type.unkntype;
+		ix = 0;
+	    }
+	    tok = Next();
+	    tok = lex.Keyword(fromlist);
+	    if tok
+	    is KIN then
+	    {   tok = Next();
+		fm = 0;
+		if Token == ID then
+		{   s = symb.Find(lex.Ident);
+		    if s != 0 && s@.kind == TYPE then
+		    {   fm = ast.Const(s@.type, s@.type@.lo);
+			to = ast.Const(s@.type, s@.type@.hi);
+		    }
+		    tok = Next();
+		}
+		if fm == 0 then     // not a named type, parse a range
+		{   fm = expr.Bool(t);
+		    lex.Expect(RANGE);
+		    to = expr.Bool(t);
+		}
+		by = ast.Const(t, 1);
+		lex.Expect(KDO);
+	    }
+	    is KFROM then
+	    {   tok = Next();
+		fm = expr.Bool(t);
+		lex.Expect(KTO);
+		to = expr.Bool(t);
+		tok = lex.Keyword(bylist);
+		if tok == KBY then
+		{   tok = Next();
+		    by = expr.Bool(t);
+		}
+		else
+		    by = ast.Const(t, 1);
+		lex.Expect(KDO);
+	    }
+	    else
+	    {   lex.Error(BADFOR);
+		tok = Next();       // FIXME skip?
+	    }
+	    init = 0;
+	    exit = 0;
+	    incr = 0;
+	    if ix != 0 then
+	    {   if fm != 0 then
+		    init = ast.New2(STORE, t, ix, fm);
+		if to != 0 then
+		    exit = ast.New1(EXIT, 0,
+			     ast.New2(UGT, t, expr.Load(ix), to));
+		incr = ast.New2(STORE, t, ix,
+			 ast.New2(ADD, t, expr.Load(ix), by));
+	    }
+	    body = Statement();
+	    body = ast.New3(SEQ, 0, exit, body, incr);
+	    body = ast.New1(LOOP, 0, body);
+	    tree = ast.New2(SEQ, 0, init, body);
+	}
+	else lex.ErrorT(EXPECT, ID);
 	return tree;
     }
 

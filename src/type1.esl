@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type1.esl 647 2011-11-21 17:30:48Z bgl $
+// $Id: type1.esl 700 2012-07-10 21:57:00Z bgl $
 
 package type
 {
@@ -30,6 +30,9 @@ package type
 	bitorder: BitOrderT;	// lsb, msb
 	memorder: MemOrderT;	// le, be
 	access:	AccessT;	// access restrictions
+	sizeattr:  boolean;	// size attribute specified
+	widthattr: boolean;	// width attribute specified
+	alignattr: boolean;	// align attribute specified
 	packed: boolean;	// packed to bit level
 	unalgn: boolean;	// not aligned natively
 	flex:   boolean;	// flexible array
