@@ -1,12 +1,13 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 680 2012-02-28 21:09:22Z bgl $
+// $Id: lex.esl 699 2012-07-10 17:20:46Z bgl $
 
 package lex
 {
     // Order is warnings, errors, internal errors
     type Errors:
     (   // Warnings
-	NOTIMPL,    TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,  AMBIGUOUS,
+	NOTIMPL,    EXPERIMENT,
+	TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,  AMBIGUOUS,
 	// Errors
 	BADNL,      ILLCHR,     ILLUTF8,    CMTEOF,     BADEOF,     BADCHR,
 	BADHEXESC,  BADUTF8,    IDLONG,     STRLONG,    EXPECT,     EXPECTID,
@@ -19,7 +20,7 @@ package lex
 	BADIS,      NOPROC,     NOLOOP,     NOPACK,     NOTREF,     NOTARRAY,
 	ARRAYCOPY,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,   ARGSLO,
 	ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,   BADIMPORT,
-	NOTVAR,     BADFLEX,    FORWNOFIX,
+	NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -27,6 +28,7 @@ package lex
     const ErrMsg:[Errors]@[]Char =
     {
 	[NOTIMPL] =	"Feature not yet implemented: ",
+	[EXPERIMENT] =  "Feature is experimental: ",
 	[TRUNC] =	"Truncation may cause loss of data",
 	[TOSIGNED] =	"Converting unsigned to signed integer",
 	[TOUNSIGN] =	"Converting signed to unsigned integer",
@@ -101,6 +103,7 @@ package lex
 	[NOTVAR] =      "Expected variable identifier",
 	[BADFLEX] =     "Flexible array must be final field",
 	[FORWNOFIX]=    "Unresolved forward symbol: ",
+	[BADFOR] =      "Syntax error in for statement",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
@@ -122,6 +125,7 @@ package lex
 	KRET,   KIF,	KWHILE,				// must be contiguous
 	KFOR,	KLOOP,	KEXIT,
 	KTHEN,	KELSE,	KIS,    KDO,	KWITH,  KAS,
+	KIN,	KFROM,	KTO,    KBY,			// for loop support
 	// attributes begin here
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,
@@ -194,6 +198,10 @@ package lex
 	[KDO] =		"do",
 	[KWITH] =	"with",
 	[KAS] =		"as",
+	[KIN] =		"in",
+	[KFROM] =	"from",
+	[KTO] =		"to",
+	[KBY] =		"by",
 	[KPACK] =	"packed",       // attributes for types
 	[KNOPAD] =	"nopad",
 	[KLSB] =	"lsb",
@@ -380,18 +388,20 @@ package lex
 		pathtail = np;
 	    }
 	}
-	if debug.files then
-	{   var pp: Path;
-	    err.str("New search path \"");
-	    pp = pathhead;
-	    while (pp != 0) do
-	    {   err.str(pp@.pathname);
-		err.chr(':');
-		pp = pp@.next;
-	    }
-	    err.str("\"\n");
-	}
 	return np;
+    }
+
+    proc SearchPathPrint()
+    {   var pp: Path;
+
+	err.str("Search path \"");
+	pp = pathhead;
+	while (pp != 0) do
+	{   err.str(pp@.pathname);
+	    err.chr(':');
+	    pp = pp@.next;
+	}
+	err.str("\"\n");
     }
 
     // Search to see if we have not imported this yet

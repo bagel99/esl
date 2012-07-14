@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 677 2012-02-25 21:12:35Z bgl $
+// $Id: type2.esl 700 2012-07-10 21:57:00Z bgl $
 
 package type
 {
@@ -230,6 +230,7 @@ package type
 			{   tok = Next();
 			    t@.width = BitSize(expr.ConstValue(type.wordtype) *
 					Target.membits);
+			    t@.widthattr = true;
 			    lex.Expect(PEND);
 			}
 		    }		
@@ -237,6 +238,7 @@ package type
 		    {   if tok == PBEG then
 			{   tok = Next();
 			    t@.size = BitSize(expr.ConstValue(type.wordtype));
+			    t@.sizeattr = true;
 			    lex.Expect(PEND);
 			}
 		    }		
@@ -245,6 +247,7 @@ package type
 			{   tok = Next();
 			    t@.align = BitSize(expr.ConstValue(type.wordtype) *
 					Target.membits);
+			    t@.alignattr = true;
 			    lex.Expect(PEND);
 			}
 		    }		
@@ -371,10 +374,30 @@ package type
 		t@.bitorder = LSB;
 	    if t@.memorder == NATIVE then
 		t@.memorder = Target.order;
-	    if t@.size != 0 && t@.width == 0 then
-		t@.width = target.isize(t@.size);
-	    if t@.width != 0 && t@.size == 0 then
-		t@.size = t@.width;
+	    /*
+	     * This code checks to see if size/width/align has been
+	     * set by explicit attributes and adjusts things accordingly.
+	     */
+/*
+if t@.name != 0 then {
+err.str("type name: ");
+err.str(t@.name@.ident);
+err.nl();
+}
+err.str("initial size="); err.uint(t@.size);
+err.str(" width="); err.uint(t@.width);
+err.str(" align="); err.uint(t@.align); err.nl();
+*/
+	    if t@.sizeattr then
+	    {   if !t@.widthattr then
+		    t@.width = target.isize(t@.size);
+		if !t@.alignattr then
+		    t@.align = target.ialign(t@.size);
+	    }
+	    if t@.widthattr then
+	    {   if !t@.sizeattr then
+		    t@.size = t@.width;
+	    }
 if debug.tests[1] then {
 	    if Target.mustalign && t@.align != 0 &&
 	       t@.align < target.ialign(t@.size) then
@@ -428,7 +451,9 @@ if debug.tests[1] then {
 		f = t@.list;
 		while f != 0 do
 		{   if f@.type != 0 then
-		    {	Final(f@.type);
+		    {
+//err.str("field: "); err.str(f@.ident); err.nl();
+		    	Final(f@.type);
 			if f@.type@.flex then
 			{   if f@.next != 0 then    // flex must be final field
 				lex.Error(BADFLEX);
@@ -443,20 +468,13 @@ if debug.tests[1] then {
 			{   var falign: BitSize;
 			    falign = f@.type@.align;
 			    mod = offs % falign;
-//err.str("field: "); err.str(f@.ident);
-//err.chr('('); err.uid(f@.addr);
-//err.str(") offs=");  err.uid(offs);
-//err.str(" align="); err.uid(falign);
 			    if mod != 0 && !t@.unalgn then
 			    {
 				index = FieldPad(prev,
 						 (falign-mod)/Target.membits,
 						 index);
-//err.str(" pad="); err.uid(falign - mod);
 				offs += falign - mod;
 			    }
-//err.str("==> ("); err.uid(index);
-//err.str(") offs="); err.uid(offs); err.nl();
 			    offs += f@.type@.width;
 			    if falign > align then
 				align = falign;
@@ -467,8 +485,6 @@ if debug.tests[1] then {
 		    prev = f;
 		    f = f@.next;
 		}
-//err.str("explicit size= "); err.uint(t@.size); err.nl();
-//err.str("explicit width="); err.uint(t@.width); err.nl();
 		if t@.size == 0 then    // no explicit attribute
 		    t@.size = offs;
 		if t@.width == 0 then
@@ -477,8 +493,6 @@ if debug.tests[1] then {
 		    else
 			t@.width = offs;
 		}
-//err.str("initial width="); err.uint(t@.width); err.nl();
-//err.str("initial align="); err.uint(align); err.nl();
 		if align > 0 then
 		{   mod = t@.width % align;
 		    if mod != 0  && !t@.unalgn then
@@ -488,8 +502,6 @@ if debug.tests[1] then {
 		    align = target.ialign(t@.size);
 		if t@.align == 0 then
 		    t@.align = align;
-//err.str("final width="); err.uint(t@.width); err.nl();
-//err.str("final align="); err.uint(t@.align); err.nl();
 	    }
 	    is ARRAY then 
 	    {   if t@.base != 0 then
@@ -508,6 +520,11 @@ if debug.tests[1] then {
 		    }
 		}
 	    }
+/*
+err.str("final size="); err.uint(t@.size);
+err.str(" width="); err.uint(t@.width);
+err.str(" align="); err.uint(t@.align); err.nl();
+*/
 	    t@.final = true;
 	}
     }

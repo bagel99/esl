@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 665 2012-01-13 19:05:26Z bgl $
+// $Id: main.esl 697 2012-06-26 19:58:29Z bgl $
 
 var debug:
     {	symb:
@@ -132,6 +132,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	target.list();
 	return 2;
     }
+    if debug.files then lex.SearchPathPrint();
     if !lex.FileOpen(argv[i]@) then
     {   err.str("Unable to open input file: ");
 	err.str(argv[i]@);
