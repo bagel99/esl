@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 700 2012-07-10 21:57:00Z bgl $
+// $Id: type2.esl 709 2012-07-28 21:14:21Z bgl $
 
 package type
 {
@@ -1038,6 +1038,8 @@ if debug.tests[2] then {
 		}
 	    }
 	}
+	else
+	    err.str("???");
     }
 
     proc DumpT(t: Type, full: boolean)

@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 702 2012-07-14 20:26:07Z bgl $
+// $Id: llvm.esl 706 2012-07-28 21:12:13Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -415,7 +415,7 @@ package llvm
 	ps = node@.symb;
 	if isdefine then f.str("define"); else f.str("declare");
 	if ps@.linkage
-	is NORMAL then f.str(" internal");
+	is NORMAL, INLINE then f.str(" internal");
 	is EXTERN then f.str(" external");
 	PRetvType(ps@.retvlist, true);
 	Print(" %I(", node);
@@ -573,8 +573,9 @@ package llvm
 		if rhs != 0 then     // initialized local
 		{   if node@.type@.kind <= REF then // scalar
 		    {   f.nl();
-			f.chr('\t');
 			// FIXME: Print("store %T %N", rhs);
+			GenSub(rhs);
+			f.chr('\t');
 			f.str("store ");
 			NodeType(rhs); f.chr(' ');
 			NodeSrc(rhs);

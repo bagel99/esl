@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 703 2012-07-14 21:47:43Z bgl $
+// $Id: expr2.esl 711 2012-07-30 17:17:43Z bgl $
 
 package expr
 {
@@ -733,15 +733,21 @@ ast.Dump(tree);
 		return 0;
 	    }
 	    t = t@.base;
-	    tree = ast.New1(LOAD, t, tree);
-	    tree@.width = t@.width;
+	    if t != 0 then
+	    {   tree = ast.New1(LOAD, t, tree);
+		tree@.width = t@.width;
+	    }
+	    else lex.Error(BADREF);
 	}
 	is CONST then   // FIXME: merge with above?
 	{   t = tree@.type;
 	    if t@.kind == REF then
 	    {   t = t@.base;
-		tree = ast.New1(LOAD, t, tree);
-		tree@.width = t@.width;
+		if t != 0 then
+		{   tree = ast.New1(LOAD, t, tree);
+		    tree@.width = t@.width;
+		}
+		else lex.Error(BADREF);
 	    }
 	}
 	return tree;
@@ -766,6 +772,7 @@ ast.Dump(tree);
 
     proc CheckRefAttributes(to: Type, fm: Type): boolean
     {
+	if to == 0 || fm == 0 then return false;
 	// Check endian
 	if to@.memorder != fm@.memorder then
 	    return false;
@@ -1018,7 +1025,10 @@ ast.Dump(tree);
 	if tok == ID then
 	{   if which == NEW then
 	    {   s = symb.FindKind(lex.Ident, TYPE);
-		if s != 0 then t = s@.type;
+		if s == 0 then
+		    t = 0;
+		else
+		    t = s@.type;
 	    }
 	    else
 	    {   s = symb.FindKind(lex.Ident, VAR);

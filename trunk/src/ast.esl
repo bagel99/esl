@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 648 2011-11-22 21:17:55Z bgl $
+// $Id: ast.esl 707 2012-07-28 21:12:43Z bgl $
 
 package ast
 {
@@ -302,17 +302,6 @@ package ast
 	[PROC]=  "PROC"
     };
 
-    const KindName:[TypeT]@[]Char =
-    {	[UTYPE]=  "UNKN",
-	[ENUM]=   "ENUM",
-	[UINT]=   "UINT",
-	[SINT]=   "SINT",
-	[REF]=    "REF",
-	[ARRAY]=  "ARRAY",
-	[RECORD]= "RECORD",
-	[REFPROC]="REFPROC"
-    };
-
     proc Print(node: Ast)
     {   var s: Symb;
 	var t: Type;
@@ -320,12 +309,7 @@ package ast
 	t = node@.type;
 	if node@.op == ASM then t = 0;	// ASM overloads to point to typelist
 	err.str(OpName[node@.op]);
-	err.chr('(');
-	if t != 0 then
-	    err.str(KindName[t@.kind]);
-	else
-	    err.str("UNKN");
-	err.str(" sz=");
+	err.str("(sz=");
 	err.uint(node@.width);
 	err.str(" ln=");
 	err.uint(node@.lineno);
