@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 699 2012-07-10 17:20:46Z bgl $
+// $Id: stmt.esl 710 2012-07-28 21:15:02Z bgl $
 
 package stmt
 {
@@ -647,8 +647,11 @@ package stmt
 		fm = tree@.type;
 	    }
 	    // Check attributes
-	    if !expr.CheckRefAttributes(to, fm) then
-		lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
+	    if to@.base != 0 then
+	    {   if !expr.CheckRefAttributes(to, fm) then
+		    lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
+	    }
+	    else lex.Error(BADREF);
 	}
 	is REFPROC then
 	{   ok = type.Compat(to, fm);
@@ -1020,7 +1023,9 @@ package stmt
 	    incr = 0;
 	    if ix != 0 then
 	    {   if fm != 0 then
+		{   fm = AdjustRHS(ix, fm);
 		    init = ast.New2(STORE, t, ix, fm);
+		}
 		if to != 0 then
 		    exit = ast.New1(EXIT, 0,
 			     ast.New2(UGT, t, expr.Load(ix), to));
