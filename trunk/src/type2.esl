@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 709 2012-07-28 21:14:21Z bgl $
+// $Id: type2.esl 718 2012-08-12 20:46:01Z bgl $
 
 package type
 {
@@ -120,8 +120,8 @@ package type
 
 	if t@.size <= Target.membits then return false;
 	fm = t@.memorder;
-	if fm == NATIVE then fm = Target.order;
-	if to == NATIVE then to = Target.order;
+	if fm == NATIVE then fm = Target.memorder;
+	if to == NATIVE then to = Target.memorder;
 	return fm != to;
     }
 
@@ -140,7 +140,7 @@ package type
 	if t == 0 then
 	{   t = New(REF);
 	    t@.base = bt;
-	    t@.memorder = Target.order;
+	    t@.memorder = Target.memorder;
 	    t@.size  = Target.ptr.size;
 	    t@.width = Target.ptr.size;
 	    t@.align = Target.ptr.align;
@@ -371,9 +371,9 @@ package type
 	if t != 0 && !t@.final then
 	{
 	    if t@.bitorder == NATIVE then
-		t@.bitorder = LSB;
+		t@.bitorder = Target.bitorder;
 	    if t@.memorder == NATIVE then
-		t@.memorder = Target.order;
+		t@.memorder = Target.memorder;
 	    /*
 	     * This code checks to see if size/width/align has been
 	     * set by explicit attributes and adjusts things accordingly.
@@ -1014,10 +1014,10 @@ if debug.tests[2] then {
 		if t@.packed then err.str("packed");
 		else if t@.unalgn then err.str("unaligned");
 		err.chr(':');
-		if t@.memorder != Target.order then
+		if t@.memorder != Target.memorder then
 		    err.str(memorderstr[t@.memorder]);
 		err.chr(':');
-		if t@.bitorder != Target.order then
+		if t@.bitorder != Target.bitorder then
 		    err.str(bitorderstr[t@.bitorder]);
 		err.chr(':');
 		if t@.access != RW then

@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 707 2012-07-28 21:12:43Z bgl $
+// $Id: ast.esl 712 2012-08-07 19:38:51Z bgl $
 
 package ast
 {
@@ -32,6 +32,7 @@ package ast
 	LSL,    LSR,	ASL,    ASR,
 	AND,    OR,     XOR,
 	BAND,   BOR,	BNOT,
+	UNARY,		// unary intrinsic
 	IFEXPR,		// select expression
 	SEQ,		// sequence
 	LOOP,
@@ -67,6 +68,7 @@ package ast
 	[LSL]=	  2,    [LSR]=	  2,	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
 	[BAND]=	  2,	[BOR]=	  2,	[BNOT]=	  2,
+	[UNARY]=  1,
 	[IFEXPR]= 3,
 	[SEQ]=    8,	[LOOP]=   1,	[EXIT]=   2,
 	[IF]=     3,	[SEL]=    8,	[IS]=     4,
@@ -291,6 +293,7 @@ package ast
 	[ASL]=   "ASL",		[ASR]=   "ASR",
 	[AND]=   "AND",		[OR]=    "OR",		[XOR]=   "XOR",
 	[BAND]=  "BAND",	[BOR]=   "BOR",		[BNOT]=  "BNOT",
+	[UNARY]= "UNARY",
 	[IFEXPR]="IFEXPR",
 	[SEQ]=   "SEQ",
 	[LOOP]=  "LOOP",
@@ -316,7 +319,7 @@ package ast
 	err.str(" nc=");
 	err.uint(node@.num);
 	if node@.op
-	is CONST, OFFSET, COPY, GETRV then
+	is CONST, OFFSET, COPY, GETRV, UNARY then
 	{   err.str(" value ");
 	    if node@.op == CONST && node@.type@.kind == SINT then
 		err.int64(_int64(node@.valu));

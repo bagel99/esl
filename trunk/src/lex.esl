@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 699 2012-07-10 17:20:46Z bgl $
+// $Id: lex.esl 720 2012-08-13 22:20:22Z bgl $
 
 package lex
 {
@@ -238,15 +238,14 @@ package lex
     const ErrorMax = 10;	// Max errors before terminate
     type SearchPathEntry:
     {   next:		@SearchPathEntry;
-	pathname:	[PathMax]Char;		// FIXME: make flexible
+	path:		[]Char;
     };
     type Path: @SearchPathEntry;
     var  pathhead, pathtail:Path;
 
     type FileListEntry:
     {   next:		@FileListEntry;
-	fileno:		LinesRange;
-	filename:	[NameMax]Char;		// FIXME: make flexible
+	name:		[]Char;
     };
     type FileList: @FileListEntry;
     var  filehead, filetail: FileList;
@@ -254,12 +253,12 @@ package lex
     type FileContext:
     {
 	prev:		@FileContext;
+	filepath:	Path;
+	filename:	FileList;
 	fd:		sys.fildes;
 	lineno:		LinesRange;
 	cchar:		BufRange;		// index into buf
 	nchar:		BufRange;		// num valid chars in buf
-	filepath:	Path;
-	filename:	[NameMax]Char;		// FIXME: point to FileList
 	buf:		[BufSize]Char;
     };
     type File: @FileContext;
@@ -314,10 +313,10 @@ package lex
     proc ErrorSub(error: Errors)
     {
 	if f@.filepath != 0 then
-	{   err.str(f@.filepath@.pathname);
+	{   err.str(f@.filepath@.path);
 	    err.chr('/');
 	}
-	err.str(f@.filename);
+	err.str(f@.filename@.name);
 	err.chr(':');
 	err.uint(Lineno());
 	err.str(": ");
@@ -369,9 +368,11 @@ package lex
 
     proc SearchPathAdd(newpath: @[]Char, prepend: boolean): Path
     {   var np: Path;
+	var len: _uint;
 
-	np = Path(sys.malloc(SearchPathEntry?size));
-	zstr.copy(np@.pathname, newpath, PathMax);
+	len = zstr.len(newpath, PathMax);
+	np = Path(sys.malloc(SearchPathEntry?size + len+1));
+	zstr.copy(np@.path, newpath, len+1);
 	if pathhead == 0 then
 	{   np@.next = 0;
 	    pathhead = np;
@@ -397,7 +398,7 @@ package lex
 	err.str("Search path \"");
 	pp = pathhead;
 	while (pp != 0) do
-	{   err.str(pp@.pathname);
+	{   err.str(pp@.path);
 	    err.chr(':');
 	    pp = pp@.next;
 	}
@@ -410,11 +411,32 @@ package lex
 
 	fp = filehead;
 	while fp != 0 do
-	{   if zstr.eq(fp@.filename, filename, NameMax) then
+	{   if zstr.eq(fp@.name, filename, NameMax) then
 		return false;	// already imported
 	    fp = fp@.next;
 	}
 	return true;
+    }
+
+    proc FileListAdd(filename: @[]Char): FileList
+    {   var fp: FileList;
+	var len, i: _uint;
+	
+	len = zstr.len(filename, NameMax);
+	// hack to strip off ".esl" if present
+	i = zstr.rfind(filename, '.', NameMax);
+	if i != NameMax then
+	{   filename[i] = 0;
+	    len = i;
+	}
+	fp = FileList(sys.malloc(FileListEntry?size + len+1));
+	zstr.copy(fp@.name, filename, len+1);
+	if filehead == 0 then
+	    filehead = fp;
+	else
+	    filetail@.next = fp;
+	filetail = fp;
+	return fp;
     }
 
     proc FileOpen(filename: @[]Char): boolean
@@ -425,13 +447,12 @@ package lex
 	var i: _uint;
 	var pathbuf: [PathMax]Char;
 
-	nf = File(sys.malloc(FileContext?size));
 	if f != 0 then		// this is a nested file
 	{   // search SearchPath trying to open file
 	    pp = pathhead;
 	    while pp != 0 do
 	    {
-		zstr.copy(pathbuf, pp@.pathname, PathMax);
+		zstr.copy(pathbuf, pp@.path, PathMax);
 		zstr.cat(pathbuf, "/", PathMax);
 		i = zstr.len(pathbuf, PathMax);
 		zstr.cat(pathbuf, filename, PathMax);
@@ -439,15 +460,6 @@ package lex
 		fd = sys.open(pathbuf, sys.O_RDONLY, 0);
 	      exit fd >= 0;
 		pp = pp@.next;
-	    }
-	    if fd >= 0 then
-	    {   fp = FileList(sys.malloc(FileListEntry?size));
-		zstr.copy(fp@.filename, filename, NameMax);
-		if filehead == 0 then
-		    filehead = fp;
-		else
-		    filetail@.next = fp;
-		filetail = fp;
 	    }
 	}
 	else			// this is the outer file
@@ -464,10 +476,12 @@ package lex
 		i += 1;
 	    }
 	}
+	if fd >= 0 then
+	    fp = FileListAdd(filename);
 	if debug.files then
 	{   err.str("Open  file \"");
 	    if pp != 0 then
-	    {   err.str(pp@.pathname);
+	    {   err.str(pp@.path);
 		err.chr('/');
 	    }
 	    err.str(pathbuf[i:]);
@@ -476,18 +490,16 @@ package lex
 	if feature.mflag then
 	{
 	    msg.str(" \\\n ");
-	    if pp != 0 && (pp@.pathname[0] != '.' || pp@.pathname[1] != 0) then
-	    {   msg.str(pp@.pathname);
+	    if pp != 0 && (pp@.path[0] != '.' || pp@.path[1] != 0) then
+	    {   msg.str(pp@.path);
 		msg.chr('/');
 	    }
 	    msg.str(pathbuf[i:]);
 	}
 	if fd < 0 then
-	{
-	    // free(nf)
 	    return false;
-	}
-	zstr.copy(nf@.filename, pathbuf[i:], NameMax);
+	nf = File(sys.malloc(FileContext?size));
+	nf@.filename = fp;
 	nf@.filepath = pp;
 	nf@.fd = fd;
 	nf@.lineno = 1;
@@ -506,10 +518,10 @@ package lex
 	    if debug.files then
 	    {   err.str("Close file \"");
 		if f@.filepath != 0 then
-		{   err.str(f@.filepath@.pathname);
+		{   err.str(f@.filepath@.path);
 		    err.chr('/');
 		}
-		err.str(f@.filename);
+		err.str(f@.filename@.name);
 		err.str("\"\n");
 	    }
 	    of = f;
