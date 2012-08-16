@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 710 2012-07-28 21:15:02Z bgl $
+// $Id: stmt.esl 721 2012-08-16 20:58:24Z bgl $
 
 package stmt
 {
@@ -513,7 +513,7 @@ package stmt
 
     proc CheckSwap(lhs: Ast, rhs: Ast): Ast
     {
-	if type.NeedSwap(lhs@.type@.base, Target.order) then
+	if type.NeedSwap(lhs@.type@.base, Target.memorder) then
 	    rhs = ast.New1(REVB, rhs@.type, rhs);
 	return rhs;
     }
@@ -963,7 +963,6 @@ package stmt
 	var s: Symb;
 	var isup: boolean;
 
-        lex.ErrorS(EXPERIMENT, "for loop");
 	tree = 0;
 	tok = Token;
 	if tok == ID then
@@ -1461,7 +1460,7 @@ package stmt
 	is KCONST then  { tok = Next();  tree = ConstDecl(); }
 	is KPROC then   { tok = Next();  tree = Procedure(); }
 	is KPACKAGE then  { tok = Next();  tree = Package(); }
-	is KIMPORT then   { tok = Next(); tree = Import(); }
+//	is KIMPORT then   { tok = Next(); tree = Import(); }
 	is KIF then     { tok = Next();  tree = CCIfStmt(PACKAGE); }
 	is KERROR then  { tok = Next();  tree = ErrorStmt(); }
 	else
@@ -1557,7 +1556,7 @@ package stmt
 	var tok: TokenT;
 	var s: Symb;
 
-	s = symb.NewFile(lex.f@.filepath@.pathname, lex.f@.filename);
+	s = symb.NewFile(lex.f@.filepath@.path, lex.f@.filename@.name);
 	s@.package = CurFile;
 	CurFile = s;
 	symb.curpack = 0;

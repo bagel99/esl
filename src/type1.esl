@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type1.esl 700 2012-07-10 21:57:00Z bgl $
+// $Id: type1.esl 714 2012-08-09 17:57:06Z bgl $
 
 package type
 {
@@ -55,6 +55,7 @@ package type
     var bytetype: Type;
     var wordtype: Type;
     var swordtype: Type;
+    var uintptrtype: Type;
     var memtype: Type;
     var addrtype: Type;
     const NINTS = 4;		// number of integer types supported

@@ -1,12 +1,14 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb1.esl 676 2012-02-13 18:34:44Z bgl $
+// $Id: symb1.esl 714 2012-08-09 17:57:06Z bgl $
 
 package symb
 {
     type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS);
     type LinkT: (LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE);
     type OffsT: 0..0xFFFF;
-    type IntrinsicT: (NONE, DEF, ABS, MIN, MAX, NEW, DEL);
+    type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
+	CLZ, CLZNZ, CTZ, CTZNZ, POP, 
+	NEW, NEWNZ, DEL );
     type SymbNode:
     {
 	next:	  @SymbNode;	// for lists
