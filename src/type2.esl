@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 718 2012-08-12 20:46:01Z bgl $
+// $Id: type2.esl 730 2012-10-01 20:49:09Z bgl $
 
 package type
 {
@@ -125,6 +125,28 @@ package type
 	return fm != to;
     }
 
+
+    proc TargetUintType(size: type.BitSize): Type
+    {   var i: 0..target.IntSizesMax;
+
+	i = 0;    
+	while i < Target.nisize && size > Target.isizes[i].size do
+	    i += 1;
+	return type.uinttypes[i];
+    }
+
+    proc ExactTargetUintType(bits: type.BitSize): Type
+    {   var i: 0..target.IntSizesMax;
+
+	i = 0;
+	while i < type.NINTS do
+	{   if bits == type.uinttypes[i]@.size then
+		return type.uinttypes[i];
+	    i += 1;
+	}
+	return 0;
+    }
+
     proc New(kind: TypeT): Type
     {   var t: Type;
 
@@ -163,6 +185,17 @@ package type
 
 	t = Clone(told);
 	t@.memorder = neworder;
+	t@.final = true;
+	return t;
+    }
+
+    proc ForceUnAligned(told: Type, align: BitSize): Type
+    {   var t: Type;
+
+	t = Clone(told);
+	t@.atbase = told;
+	t@.align = align;
+	t@.unalgn = true;
 	t@.final = true;
 	return t;
     }
@@ -216,7 +249,7 @@ package type
 		    }
 		    if atok
 		    is KPACK then   t@.packed = true;
-		    is KNOPAD then  t@.unalgn = true;
+		    is KNOPAD then  t@.noepad = true;
 		    is KLSB then    t@.bitorder = LSB;
 		    is KMSB then    t@.bitorder = MSB;
 		    is KLE then     t@.memorder = LE;
@@ -247,6 +280,8 @@ package type
 			{   tok = Next();
 			    t@.align = BitSize(expr.ConstValue(type.wordtype) *
 					Target.membits);
+			    if t@.align == 0 then
+				t@.align = Target.membits; // minimum align
 			    t@.alignattr = true;
 			    lex.Expect(PEND);
 			}
@@ -379,11 +414,11 @@ package type
 	     * set by explicit attributes and adjusts things accordingly.
 	     */
 /*
-if t@.name != 0 then {
-err.str("type name: ");
-err.str(t@.name@.ident);
+err.str("Final: ");
+if t@.name != 0 then { err.str(t@.name@.ident); }
 err.nl();
-}
+type.DumpT(t, false);
+err.nl();
 err.str("initial size="); err.uint(t@.size);
 err.str(" width="); err.uint(t@.width);
 err.str(" align="); err.uint(t@.align); err.nl();
@@ -391,30 +426,18 @@ err.str(" align="); err.uint(t@.align); err.nl();
 	    if t@.sizeattr then
 	    {   if !t@.widthattr then
 		    t@.width = target.isize(t@.size);
-		if !t@.alignattr then
-		    t@.align = target.ialign(t@.size);
 	    }
 	    if t@.widthattr then
 	    {   if !t@.sizeattr then
 		    t@.size = t@.width;
 	    }
-if debug.tests[1] then {
-	    if Target.mustalign && t@.align != 0 &&
-	       t@.align < target.ialign(t@.size) then
-	    {
-//err.str("align: set to "); err.uint(t@.align);
-//err.str(" target wants "); err.uint(target.ialign(t@.size)); err.nl();   
-		    t@.unalgn = true;
-	    }
-}
 	    if t@.kind
 	    is ENUM, UINT then 
 	    {   if t@.size == 0 then
 		    t@.size = bitsize(t@.hi);
 		if t@.width == 0 then
 		    t@.width = target.isize(t@.size);
-		if t@.align == 0 then
-		    t@.align = target.ialign(t@.size);
+		align = target.ialign(t@.size);
 	    }
 	    is SINT then 
 	    {   if t@.size == 0 then
@@ -427,8 +450,7 @@ if debug.tests[1] then {
 		}
 		if t@.width == 0 then
 		    t@.width = target.isize(t@.size);
-		if t@.align == 0 then
-		    t@.align = target.ialign(t@.size);
+		align = target.ialign(t@.size);
 	    }
 	    is REF then 
 	    {   // Make sure anonymous base types are final
@@ -436,12 +458,12 @@ if debug.tests[1] then {
 		    Final(t@.base);
 		t@.size  = Target.ptr.size;
 		t@.width = Target.ptr.size;
-		t@.align = Target.ptr.align;
+		align = Target.ptr.align;
 	    }
 	    is REFPROC then 
 	    {   t@.size  = Target.ptr.size;
 		t@.width = Target.ptr.size;
-		t@.align = Target.ptr.align;
+		align = Target.ptr.align;
 	    }
 	    is RECORD then 
 	    {   index = 0;
@@ -467,13 +489,20 @@ if debug.tests[1] then {
 			else
 			{   var falign: BitSize;
 			    falign = f@.type@.align;
-			    mod = offs % falign;
-			    if mod != 0 && !t@.unalgn then
+			    if t@.alignattr && t@.align < falign then
+				f@.type = ForceUnAligned(f@.type, t@.align);
+			    if f@.type@.unalgn then
+				t@.nofpad = true;
+			    else
 			    {
-				index = FieldPad(prev,
-						 (falign-mod)/Target.membits,
-						 index);
-				offs += falign - mod;
+				mod = offs % falign;
+				if mod != 0 then
+				{   // field needs padding
+				    index = FieldPad(prev,
+						(falign-mod)/Target.membits,
+						index);
+				    offs += falign - mod;
+				}
 			    }
 			    offs += f@.type@.width;
 			    if falign > align then
@@ -488,20 +517,18 @@ if debug.tests[1] then {
 		if t@.size == 0 then    // no explicit attribute
 		    t@.size = offs;
 		if t@.width == 0 then
-		{   if offs <= Target.regsize then
+		{   if offs <= Target.regsize  && !t@.noepad then
 			t@.width = target.isize(offs);
 		    else
 			t@.width = offs;
 		}
 		if align > 0 then
 		{   mod = t@.width % align;
-		    if mod != 0  && !t@.unalgn then
+		    if mod != 0  && !t@.noepad then
 			t@.width += align - mod;	// pad to alignment
 		}
 		else  
 		    align = target.ialign(t@.size);
-		if t@.align == 0 then
-		    t@.align = align;
 	    }
 	    is ARRAY then 
 	    {   if t@.base != 0 then
@@ -512,19 +539,23 @@ if debug.tests[1] then {
 			t@.size = BitSize(t@.base@.size * t@.hi);
 		    if t@.width == 0 then
 			t@.width = t@.size;
-		    if t@.align == 0 then
-		    {   if !t@.packed then
-			    t@.align = t@.base@.align;
-			else
-			    t@.align = 1;
-		    }
+		    if !t@.packed then
+			align = t@.base@.align;
+		    else
+			align = target.ialign(t@.size);
 		}
 	    }
-/*
-err.str("final size="); err.uint(t@.size);
-err.str(" width="); err.uint(t@.width);
-err.str(" align="); err.uint(t@.align); err.nl();
-*/
+
+//err.str("final size="); err.uint(t@.size);
+//err.str(" width="); err.uint(t@.width);
+//err.str(" normal align="); err.uint(align);
+	    if t@.alignattr then
+	    {   if t@.align < align then
+		    t@.unalgn = true;
+	    }
+	    else
+		t@.align = align;
+//err.str(" final align="); err.uint(t@.align); err.nl();
 	    t@.final = true;
 	}
     }
@@ -1011,8 +1042,10 @@ if debug.tests[2] then {
 		err.chr(':');
 		err.uint(t@.align);
 		err.str(" attr=");
-		if t@.packed then err.str("packed");
-		else if t@.unalgn then err.str("unaligned");
+		if t@.unalgn then err.str("unalgn ");
+		if t@.packed then err.str("packed ");
+		if t@.noepad then err.str("noepad ");
+		if t@.nofpad then err.str("nofpad ");
 		err.chr(':');
 		if t@.memorder != Target.memorder then
 		    err.str(memorderstr[t@.memorder]);

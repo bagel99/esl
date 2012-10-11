@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type1.esl 714 2012-08-09 17:57:06Z bgl $
+// $Id: type1.esl 729 2012-09-28 22:03:06Z bgl $
 
 package type
 {
@@ -13,7 +13,7 @@ package type
     type TypeNode:
     {
 	base:	@TypeNode;	// for derived types
-	atbase: @TypeNode;      // for attribute modified types
+	atbase: @TypeNode;      // for attribute (or just name) modified types
 	index:  @TypeNode;	// for arrays
 	name:	@SymbNode;	// for named types
 	list:	@SymbNode;	// for enums, records
@@ -35,6 +35,8 @@ package type
 	alignattr: boolean;	// align attribute specified
 	packed: boolean;	// packed to bit level
 	unalgn: boolean;	// not aligned natively
+	noepad: boolean;	// record not padded at end
+	nofpad: boolean;	// record contains unaligned fields
 	flex:   boolean;	// flexible array
 	input:  boolean;	// external state changes (like C volatile)	
 	output: boolean;	// changes external state (like C volatile)	

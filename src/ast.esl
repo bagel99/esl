@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 712 2012-08-07 19:38:51Z bgl $
+// $Id: ast.esl 732 2012-10-08 17:26:54Z bgl $
 
 package ast
 {
@@ -17,6 +17,7 @@ package ast
 	OFFSET,	INDEX,	SLICE,	BYREF,
 	CAST,
 	CALL,	CALLI,	ASM,
+	SET,
 	COPY,	ACOPY,	AEQ,	ANE,	// record and array operators
 	GETRV,
 	LOAD,
@@ -54,6 +55,7 @@ package ast
 	[OFFSET]= 1,	[INDEX]=  2,	[SLICE]=  3,	[BYREF]=  1,
 	[CAST]=   1,
 	[CALL]=   4,	[CALLI]=  5,	[ASM]=    5,
+	[SET]=    4,
 	[COPY]=   4,	[ACOPY]=  4,	[AEQ]=    4,	[ANE]=    4,
 	[GETRV]=  1,	[LOAD]=   1,	[STORE]=  2,
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,	[REVB]=   1,
@@ -266,6 +268,7 @@ package ast
 	[INDEX]= "INDEX",
 	[SLICE]= "SLICE",
 	[BYREF]= "BYREF",
+	[SET]=   "SET",
 	[COPY]=  "COPY",
 	[ACOPY]= "ACOPY",
 	[AEQ]=   "AEQ",

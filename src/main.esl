@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 697 2012-06-26 19:58:29Z bgl $
+// $Id: main.esl 728 2012-09-26 21:57:27Z bgl $
 
 var debug:
     {	symb:
@@ -25,8 +25,8 @@ var feature:
 import sys;
 import zstr;
 import out;
-const err: sys.fildes = 2;      // error file descriptor for messages
-const msg: sys.fildes = 1;      // normal file descriptor for messages
+const err: out.fildes = 2;      // error file descriptor for messages
+const msg: out.fildes = 1;      // normal file descriptor for messages
 alias	_byte as Char;
 import lex;
 alias   lex.Next as Next, lex.TokenT as TokenT, lex.Token as Token;

@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 721 2012-08-16 20:58:24Z bgl $
+// $Id: stmt.esl 733 2012-10-11 19:38:15Z bgl $
 
 package stmt
 {
@@ -221,8 +221,15 @@ package stmt
 	    if tok == COLON then
 	    {   tok = Next();
 		t = type.Def(tok, bt);
-		if t != 0 && t@.name == 0 then
+		if t != 0 then
+		{   if t@.name != 0 then    // must clone named type (methods)
+		    {   var at: Type;
+			at = t;
+			t = type.Clone(at);
+			t@.atbase = at;
+		    }
 		    t@.name = s;
+		}
 		tok = Token;
 		if tok == COLON then
 		    t = type.TypeAttributes(t);
@@ -558,6 +565,10 @@ package stmt
 	t = lhs@.type@.base;
 	tree = expr.Term(t);
 	if tree == 0 then return 0;
+	if tree@.type == 0 || tree@.type@.kind != ARRAY then
+	{   lex.Error(NOTARRAY);
+	    return 0;
+	}
 	if t@.packed then	// FIXME: not possible?
 	{   if lhs@.op == SLICE then
 	    {   lex.ErrorS(NOTIMPL, "packed array slices");
@@ -800,7 +811,7 @@ package stmt
 	{   tree = expr.Primary(s, 0);
 	    if tree != 0 then
 	    {   if tree@.op
-		is CALL, CALLI, ASM then {}     // no further action
+		is CALL, CALLI, ASM, SET then {}     // no further action
 		is TYPE then
 		{   lex.ErrorI(BADTYPE, tree@.symb@.ident);
 		    tok = lex.Skip(skiplist);
