@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb2.esl 714 2012-08-09 17:57:06Z bgl $
+// $Id: symb2.esl 732 2012-10-08 17:26:54Z bgl $
 
 package symb
 {
@@ -112,8 +112,8 @@ package symb
 	NewIntrinsic("_ctznz", CTZNZ);
 	NewIntrinsic("_pop", POP);
 	NewIntrinsic("_new", NEW);
-	NewIntrinsic("_newnz", NEWNZ);
 	NewIntrinsic("_delete", DEL);
+	NewIntrinsic("_zero", ZERO);
 
 	// library routines
 	libnew = NewLibrary("memalloc", taddr);

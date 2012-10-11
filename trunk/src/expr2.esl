@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 721 2012-08-16 20:58:24Z bgl $
+// $Id: expr2.esl 732 2012-10-08 17:26:54Z bgl $
 
 package expr
 {
@@ -1066,19 +1066,24 @@ ast.Dump(tree);
 	tree = 0;
 	tok = Token;
 	if tok == ID then
-	{   if which == NEW then
+	{   t = 0;
+	    if which == NEW then
 	    {   s = symb.FindKind(lex.Ident, TYPE);
-		if s == 0 then
-		    t = 0;
-		else
+		if s != 0 then
 		    t = s@.type;
 	    }
-	    else
+	    else    // DEL or ZERO
 	    {   s = symb.FindKind(lex.Ident, VAR);
 		if s != 0 then
 		{   if s@.type@.kind == REF then
 			t = s@.type@.base;
-		    else lex.Error(NOTREF);
+		    else
+		    {   if which == ZERO then
+			{   t = s@.type;
+			}
+			else
+			    lex.Error(NOTREF);
+		    }
 		}
 	    }   
 	    tok = Next();
@@ -1100,9 +1105,10 @@ ast.Dump(tree);
 		}
 		else
 		    space = ast.Const(type.wordtype, 0);
-		tree = ast.New(CALL, 0);
-		if which == NEW then
-		{   tree@.symb = symb.libnew;
+		if which
+		is NEW then
+		{   tree = ast.New(CALL, 0);
+		    tree@.symb = symb.libnew;
 		    tree@.type = type.addrtype;
 		    tree@.width = Target.ptr.size;
 		    tree = ast.Child(tree, size);
@@ -1111,8 +1117,9 @@ ast.Dump(tree);
 		    tree = ast.Child(tree, space);
 		    tree = ast.New1(CAST, type.MakeRef(s@.type), tree);
 		}
-		else
-		{   tree@.symb = symb.libdel;
+		is DEL then
+		{   tree = ast.New(CALL, 0);
+		    tree@.symb = symb.libdel;
 		    temp = ast.New(VAR, type.MakeRef(s@.type));
 		    temp@.symb = s;
 		    temp = Load(temp);
@@ -1120,6 +1127,22 @@ ast.Dump(tree);
 		    tree = ast.Child(tree, temp);
 		    tree = ast.Child(tree, size);
 		    tree = ast.Child(tree, space);
+		}
+		else    // ZERO
+		{   if s@.type@.kind == REF then
+		    {   temp = ast.New(VAR, type.MakeRef(s@.type));
+		        temp@.symb = s;
+		        temp = Load(temp);
+		    }
+		    else
+		    {   temp = ast.New(VAR, s@.type);
+		        temp@.symb = s;
+		        temp = ast.New1(BYREF, type.MakeRef(s@.type), temp);
+		    }
+		    tree = ast.New3(SET, type.unkntype, temp,
+			    ast.Const(type.bytetype, 0), size);
+		    tree = ast.Child(tree,
+			    ast.Const(type.wordtype, t@.align/Target.membits));
 		}
 	    }
 	}
@@ -1178,7 +1201,7 @@ ast.Dump(tree);
 		    tree.valu = _uint(which);
 		}
 	    }
-	    is NEW, NEWNZ, DEL then
+	    is NEW, DEL, ZERO then
 		tree = NewOrDelete(which);
 	    else
 		lex.ErrorS(COMPILER, "Intrinsic unknown");
@@ -1884,21 +1907,23 @@ if !debug.tests[0] then {
 		}
 		else
 		{   tree = Bool(t);
-		    if tree@.op
-		    is CONST then   // pointer constant
-			tree@.type = t;
-		    is LOAD then    // reference to stored const
-		    {
-			tree = tree@.child[0];
-			// assert tree@.op == VAR
-			if t@.base@.flex && !tree@.type@.base@.flex then
-			    tree = ast.New1(CAST, t, tree);
-		    }
-		    else if tree@.type != t then
-		    {   if type.Compat(tree@.type, t@.base) then
-			    tree = CoerceToRef(tree);
-			else
-			    lex.Error(BADCOMPV);
+		    if tree != 0 then
+		    {   if tree@.op
+			is CONST then   // pointer constant
+			    tree@.type = t;
+			is LOAD then    // reference to stored const
+			{
+			    tree = tree@.child[0];
+			    // assert tree@.op == VAR
+			    if t@.base@.flex && !tree@.type@.base@.flex then
+				tree = ast.New1(CAST, t, tree);
+			}
+			else if tree@.type != t then
+			{   if type.Compat(tree@.type, t@.base) then
+				tree = CoerceToRef(tree);
+			    else
+				lex.Error(BADCOMPV);
+			}
 		    }
 		}
 	    }

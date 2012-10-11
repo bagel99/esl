@@ -3,7 +3,7 @@
  * Assumes target wordsize is 32-bits or more.
  *
  * Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
- * $Id: out.esl 650 2011-11-29 03:12:22Z bgl $
+ * $Id: out.esl 728 2012-09-26 21:57:27Z bgl $
  */
 
 import sys;
@@ -11,28 +11,28 @@ import zstr;
 
 package out
 {
-    type OutFD: sys.fildes;
+    alias sys.fildes as fildes;
 
-    proc (o: OutFD) nl()
+    proc (o: fildes) nl()
     {
 	sys.write(o, "\n", 1);
     }
 
-    proc (o: OutFD) chr(c: _byte)
+    proc (o: fildes) chr(c: _byte)
     {   var buf: [1]_byte;
 
 	buf[0] = c;
 	sys.write(o, buf, 1);
     }
 
-    proc (o: OutFD) str(s:@[]_byte)
+    proc (o: fildes) str(s:@[]_byte)
     {   var n: _uint;
 
 	n = zstr.len(s, 0xFFFF);
 	sys.write(o, s, n);
     }
 
-    proc (o: OutFD) strn(s:@[]_byte, len:_uint)
+    proc (o: fildes) strn(s:@[]_byte, len:_uint)
     {
 	sys.write(o, s, len);
     }
@@ -40,7 +40,7 @@ package out
     const hexchr: [16]_byte =
 	{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
-    proc (o: OutFD) hex8(in: _uint8)
+    proc (o: fildes) hex8(in: _uint8)
     {   var buf: [2]_byte;
 
 	buf[0] = hexchr[(in>>4)&0xF];
@@ -48,7 +48,7 @@ package out
 	sys.write(o, buf, 2);
     }
 
-    proc (o: OutFD) hex16(in:_uint16)
+    proc (o: fildes) hex16(in:_uint16)
     {   var buf: [4]_byte;
 
 	buf[0] = hexchr[(in>>12)&0xF];
@@ -58,7 +58,7 @@ package out
 	sys.write(o, buf, 4);
     }
 
-    proc (o: OutFD) hex32(in:_uint32)
+    proc (o: fildes) hex32(in:_uint32)
     {	var buf: [8]_byte;
 	var i: _uint;
 
@@ -72,7 +72,7 @@ package out
 	sys.write(o, buf, 8);
     }
 
-    proc (o: OutFD) hex64(in: _uint64)
+    proc (o: fildes) hex64(in: _uint64)
     {   var buf: [16]_byte;
 	var i: 0..15;
 
@@ -86,7 +86,7 @@ package out
 	sys.write(o, buf, 16);
     }  
 
-    proc (o: OutFD) hex(in: _uint):: inline
+    proc (o: fildes) hex(in: _uint):: inline
     {
 	if _uint?size == _uint64?size then
 	    o.hex64(in);
@@ -94,7 +94,7 @@ package out
 	    o.hex32(_uint32(in));
     }
 
-    proc(o: OutFD)  uint64(in: _uint64)
+    proc (o: fildes)  uint64(in: _uint64)
     {	var i: _uint;
 	var buf: [20]_byte;
 
@@ -113,7 +113,7 @@ package out
 	sys.write(o, buf[i:], 20-i);
     }
 
-    proc(o: OutFD)  uint32(in: _uint32)
+    proc (o: fildes)  uint32(in: _uint32)
     {	var i: _uint;
 	var buf: [10]_byte;
 
@@ -136,7 +136,7 @@ package out
  	}
     }
 
-    proc (o: OutFD) uint16(in: _uint16)
+    proc (o: fildes) uint16(in: _uint16)
     {
 	if _uint?size == _uint64?size then  // extend to native
 	    o.uint64(_uint64(in));
@@ -144,7 +144,7 @@ package out
 	    o.uint32(_uint32(in));
     }
 
-    proc (o: OutFD) uint8(in: _uint8)
+    proc (o: fildes) uint8(in: _uint8)
     {
 	if _uint?size == _uint64?size then  // extend to native
 	    o.uint64(_uint64(in));
@@ -152,7 +152,7 @@ package out
 	    o.uint32(_uint32(in));
    }
 
-    proc (o: OutFD) uint(in: _uint):: inline
+    proc (o: fildes) uint(in: _uint):: inline
     {
 	if _uint?size == _uint64?size then
 	    o.uint64(in);
@@ -160,7 +160,7 @@ package out
 	    o.uint32(_uint32(in));
     }
 
-    proc (o: OutFD) int64(in: _int64)
+    proc (o: fildes) int64(in: _int64)
     {	var ui: _uint64;
 
 	if in < 0 then
@@ -172,7 +172,7 @@ package out
 	o.uint64(ui);
     }	
 
-    proc (o: OutFD) int32(in: _int32)
+    proc (o: fildes) int32(in: _int32)
     {	var ui: _uint32;
 
 	if _int?size == _int64?size then  // extend to native
@@ -188,7 +188,7 @@ package out
 	}
     }	
 
-    proc (o: OutFD) int16(in: _int16)
+    proc (o: fildes) int16(in: _int16)
     {
 	if _int?size == _int64?size then  // extend to native
 	    o.int64(_int64(in));
@@ -196,7 +196,7 @@ package out
 	    o.int32(_int32(in));
     }
 
-    proc (o: OutFD) int8(in: _int8)
+    proc (o: fildes) int8(in: _int8)
     {
 	if _int?size == _int64?size then  // extend to native
 	    o.int64(_int64(in));
@@ -204,7 +204,7 @@ package out
 	    o.int32(_int32(in));
     }
 
-    proc (o: OutFD) int(in: _int):: inline
+    proc (o: fildes) int(in: _int):: inline
     {
 	if _int?size == _int64?size then
 	    o.int64(in);
