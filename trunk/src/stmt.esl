@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 733 2012-10-11 19:38:15Z bgl $
+// $Id: stmt.esl 734 2012-10-22 17:33:13Z bgl $
 
 package stmt
 {
@@ -1419,14 +1419,10 @@ package stmt
 
 	tree = 0;
 	if lex.FileCheck(filename) then
-	{   if lex.FileOpen(filename) then
-	    {   tok = Token;
-		tree = Program(filename);
-		lex.FileClose();
-		Token = tok;
-	    }
-	    else
-		lex.ErrorI(BADIMPORT, filename);
+	{   tok = Token;
+	    tree = Program(filename);
+	    lex.FileClose();
+	    Token = tok;
 	}
 	return tree;
     }

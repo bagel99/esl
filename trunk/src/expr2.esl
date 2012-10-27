@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 732 2012-10-08 17:26:54Z bgl $
+// $Id: expr2.esl 736 2012-10-25 20:22:41Z bgl $
 
 package expr
 {
@@ -25,8 +25,10 @@ package expr
 
 	tree = 0;
 	t = node@.type;
-	if node@.op != TYPE then
-	    t = t@.base;
+	if node@.op
+	is TYPE, CONST then ;  // ok
+	is VAR  then { t = t@.base; if t == 0 then return 0; }
+	else return 0;  // must be TYPE, CONST or VAR?
 	tok = Token;
 	if tok == ID then
 	{   tok = lex.Keyword(proplist);
@@ -66,6 +68,32 @@ package expr
 	strid += 1;
 	tree@.valu = strid;
 	return tree;
+    }
+
+    proc StringCat(tree: Ast): Ast
+    {   var sr: _address;
+	var t: Type;
+	var nl, nr, i, j: _uint;
+
+	// modify the ARRAY type
+	t = tree@.type;     // assert t@.kind == ARRAY
+	nl = t@.hi - 1;	    // LHS string length without nul termination
+	nr = lex.StringLen; // RHS string length with nul termination
+	t@.hi = nl+nr;
+	// move RHS down in StringBuf, include nul termination
+	// potential overlap, must do a reverse copy
+	i = nr;
+	loop
+	{   lex.StringBuf[i+nl] = lex.StringBuf[i];
+	  exit i == 0;
+	    i -= 1;
+	}
+	// copy in LHS, symbol pointer actually points to LHS string
+	sr = _address(tree@.symb);
+	lex.StringBuf[0:nl] = sr[0:nl];
+	// create a new string long enough
+	tree@.symb = Symb(sys.memdup(lex.StringBuf, nl+nr));
+	return tree;   
     }
 
     proc EnumConst(t: Type): Ast
@@ -1595,7 +1623,11 @@ ast.Dump(tree);
 	}
 	is STR then
 	{   tree = String();
-	    tok = Next();
+	    loop
+	    {   tok = Next();
+	      exit tok != STR;
+		tree = StringCat(tree);
+	    }
 	}
 	is PBEG then
 	{   tok = Next();

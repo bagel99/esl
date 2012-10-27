@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 720 2012-08-13 22:20:22Z bgl $
+// $Id: lex.esl 734 2012-10-22 17:33:13Z bgl $
 
 package lex
 {
@@ -99,7 +99,7 @@ package lex
 	[INITHI] =	"Too many initializers",
 	[BADCONST] =	"Const requires a constant value",
 	[EXPCONST] =	"Expression must be a compile-time constant",
-	[BADIMPORT] =	"Unable to import: ",
+	[BADIMPORT] =	"Unable to open file: ",
 	[NOTVAR] =      "Expected variable identifier",
 	[BADFLEX] =     "Flexible array must be final field",
 	[FORWNOFIX]=    "Unresolved forward symbol: ",
@@ -227,7 +227,7 @@ package lex
     type TokenList: []TokenT;
     const StringMax = 4095;
     type StringRange: 0..StringMax;
-    const IdentMax = 63;
+    const IdentMax = 255;
     const BufSize = 4096;
     type BufRange: 0..BufSize;
     const PathMax = 1024;	// Max chars in a pathname
@@ -405,30 +405,11 @@ package lex
 	err.str("\"\n");
     }
 
-    // Search to see if we have not imported this yet
-    proc FileCheck(filename: @[]Char): boolean
-    {   var fp: FileList;
-
-	fp = filehead;
-	while fp != 0 do
-	{   if zstr.eq(fp@.name, filename, NameMax) then
-		return false;	// already imported
-	    fp = fp@.next;
-	}
-	return true;
-    }
-
     proc FileListAdd(filename: @[]Char): FileList
     {   var fp: FileList;
-	var len, i: _uint;
+	var len: _uint;
 	
 	len = zstr.len(filename, NameMax);
-	// hack to strip off ".esl" if present
-	i = zstr.rfind(filename, '.', NameMax);
-	if i != NameMax then
-	{   filename[i] = 0;
-	    len = i;
-	}
 	fp = FileList(sys.malloc(FileListEntry?size + len+1));
 	zstr.copy(fp@.name, filename, len+1);
 	if filehead == 0 then
@@ -456,7 +437,6 @@ package lex
 		zstr.cat(pathbuf, "/", PathMax);
 		i = zstr.len(pathbuf, PathMax);
 		zstr.cat(pathbuf, filename, PathMax);
-		zstr.cat(pathbuf, ".esl", PathMax);
 		fd = sys.open(pathbuf, sys.O_RDONLY, 0);
 	      exit fd >= 0;
 		pp = pp@.next;
@@ -476,8 +456,9 @@ package lex
 		i += 1;
 	    }
 	}
-	if fd >= 0 then
-	    fp = FileListAdd(filename);
+	if fd < 0 then
+	    return false;
+	fp = FileListAdd(filename);
 	if debug.files then
 	{   err.str("Open  file \"");
 	    if pp != 0 then
@@ -496,8 +477,6 @@ package lex
 	    }
 	    msg.str(pathbuf[i:]);
 	}
-	if fd < 0 then
-	    return false;
 	nf = File(sys.malloc(FileContext?size));
 	nf@.filename = fp;
 	nf@.filepath = pp;
@@ -508,6 +487,24 @@ package lex
 	nf@.prev = f;
 	f = nf;
 	return true;        
+    }
+
+    // Search to see if we have not imported this yet, if not, open it
+    proc FileCheck(filename: @[]Char): boolean
+    {   var fp: FileList;
+	var len, sfx: _uint;
+
+	zstr.cat(filename, ".esl", IdentMax);   // filename is in an ident buf
+	fp = filehead;
+	while fp != 0 do
+	{   
+	    if zstr.eq(fp@.name, filename, sfx) then
+		return false;	// already imported
+	    fp = fp@.next;
+	}
+	if FileOpen(filename) then return true;
+	ErrorI(BADIMPORT, filename);
+	return false;
     }
 
     proc FileClose()
