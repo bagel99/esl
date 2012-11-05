@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 732 2012-10-08 17:26:54Z bgl $
+// $Id: ast.esl 737 2012-11-02 21:15:51Z bgl $
 
 package ast
 {
@@ -24,6 +24,7 @@ package ast
 	STORE,		// assignment
 	ZEXT,   SEXT,   TRUNC,	REVB,
 	NEG,	NOT,	ABS,
+	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,
 	ADD,    SUB,
 	MUL,    DIV,    MOD,
 	EQ,     NE,
@@ -33,7 +34,6 @@ package ast
 	LSL,    LSR,	ASL,    ASR,
 	AND,    OR,     XOR,
 	BAND,   BOR,	BNOT,
-	UNARY,		// unary intrinsic
 	IFEXPR,		// select expression
 	SEQ,		// sequence
 	LOOP,
@@ -61,6 +61,8 @@ package ast
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,	[REVB]=   1,
 	[NEG]=    1,	[NOT]=    1,
 	[ABS]=	  3,	// will convert into IFEXPR
+	[CLZ]=    1,	[CLZNZ]=  1,	[CTZ]=    1,	[CTZNZ]=  1,
+	[POP]=    1,
 	[ADD]=	  2,	[SUB]=    2,
 	[MUL]=	  2,    [DIV]=	  2,    [MOD]=	  2,
 	[EQ]=	  2,    [NE]=     2,
@@ -70,7 +72,6 @@ package ast
 	[LSL]=	  2,    [LSR]=	  2,	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
 	[BAND]=	  2,	[BOR]=	  2,	[BNOT]=	  2,
-	[UNARY]=  1,
 	[IFEXPR]= 3,
 	[SEQ]=    8,	[LOOP]=   1,	[EXIT]=   2,
 	[IF]=     3,	[SEL]=    8,	[IS]=     4,
@@ -280,9 +281,10 @@ package ast
 	[SEXT]=  "SEXT",
 	[TRUNC]= "TRUNC",
 	[REVB]=  "REVB",
-	[NEG]=   "NEG",
-	[NOT]=   "NOT",
-	[ABS]=   "ABS",
+	[NEG]=   "NEG",		[NOT]=   "NOT",		[ABS]=   "ABS",
+	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",		
+	[CTZ]=   "CTZ",		[CTZNZ]= "CTZNZ",
+	[POP]=   "POP",
 	[ADD]=   "ADD",		[SUB]=   "SUB",
 	[MUL]=   "MUL",		[DIV]=   "DIV",		[MOD]=   "MOD",
 	[EQ]=    "EQ",		[NE]=    "NE",
@@ -296,7 +298,6 @@ package ast
 	[ASL]=   "ASL",		[ASR]=   "ASR",
 	[AND]=   "AND",		[OR]=    "OR",		[XOR]=   "XOR",
 	[BAND]=  "BAND",	[BOR]=   "BOR",		[BNOT]=  "BNOT",
-	[UNARY]= "UNARY",
 	[IFEXPR]="IFEXPR",
 	[SEQ]=   "SEQ",
 	[LOOP]=  "LOOP",
@@ -322,7 +323,7 @@ package ast
 	err.str(" nc=");
 	err.uint(node@.num);
 	if node@.op
-	is CONST, OFFSET, COPY, GETRV, UNARY then
+	is CONST, OFFSET, COPY, GETRV, CLZ, CTZ then
 	{   err.str(" value ");
 	    if node@.op == CONST && node@.type@.kind == SINT then
 		err.int64(_int64(node@.valu));
