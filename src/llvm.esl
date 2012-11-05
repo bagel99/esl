@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 732 2012-10-08 17:26:54Z bgl $
+// $Id: llvm.esl 738 2012-11-02 21:20:32Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -430,13 +430,13 @@ package llvm
 	    }        
 	    is POP then
 	    {   if UsedIntrinsic[i]&0x01 != 0 then
-		    Print("declare i8 @llvm.pop.i8(i8)\n", 0);
+		    Print("declare i8 @llvm.ctpop.i8(i8)\n", 0);
 		if UsedIntrinsic[i]&0x02 != 0 then
-		    Print("declare i16 @llvm.pop.i16(i16)\n", 0);
+		    Print("declare i16 @llvm.ctpop.i16(i16)\n", 0);
 		if UsedIntrinsic[i]&0x08 != 0 then
-		    Print("declare i32 @llvm.pop.i32(i32)\n", 0);
+		    Print("declare i32 @llvm.ctpop.i32(i32)\n", 0);
 		if UsedIntrinsic[i]&0x80 != 0 then
-		    Print("declare i64 @llvm.pop.i64(i64)\n", 0);
+		    Print("declare i64 @llvm.ctpop.i64(i64)\n", 0);
 	    }        
 	    i += 1;
 	}
@@ -1071,19 +1071,19 @@ err.str(" align="); err.uint(align);}
 	return false;
     }
 
-    proc Swap(node: Ast)
+    proc UnaryOp(node: Ast): boolean
     {
 	GenSub(node@.child[0]);
 	node@.seqno = Tseqno;  Tseqno += 1;
-	Print("\t%N = call %T @llvm.bswap.%T(%T %0N)\n", node);
-	UseIntrinsic(BSWAP, node@.width);
-    }
-
-    proc UnaryIntrinsic(node: Ast): boolean
-    {
-	GenSub(node@.child[0]);
-	node@.seqno = Tseqno;  Tseqno += 1;
-	if symb.IntrinsicT(node@.valu)
+	if node@.op
+	is NOT then
+	    Print("\t%N = xor %0T %0N, -1\n", node);
+	is NEG then
+	    Print("\t%N = sub %0T 0, %0N\n", node);
+	is REVB then
+	{   Print("\t%N = call %T @llvm.bswap.%T(%T %0N)\n", node);
+	    UseIntrinsic(BSWAP, node@.width);
+	}
 	is CLZ then
 	{   Print("\t%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)", node);
 	    UseIntrinsic(CLZ, node@.width);
@@ -1101,7 +1101,7 @@ err.str(" align="); err.uint(align);}
 	    UseIntrinsic(CTZ, node@.width);
 	}
 	is POP then
-	{   Print("\t%N = call %T @llvm.pop.%T(%0T %0N)", node);
+	{   Print("\t%N = call %T @llvm.ctpop.%T(%0T %0N)", node);
 	    UseIntrinsic(POP, node@.width);
 	}
 	PEndLine(node);
@@ -1832,17 +1832,8 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	is ZEXT then  ChangeSize(node, "zext");
 	is SEXT then  ChangeSize(node, "sext");
 	is TRUNC then ChangeSize(node, "trunc");
-	is REVB then  Swap(node);
-	is NOT then
-	{   GenSub(node@.child[0]);
-	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = xor %0T %0N, -1\n", node);
-	}
-	is NEG then
-	{   GenSub(node@.child[0]);
-	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = sub %0T 0, %0N\n", node);
-	}
+	is REVB, NOT, NEG then UnaryOp(node);
+	is CLZ, CLZNZ, CTZ, CTZNZ, POP then UnaryOp(node);
 	is ADD then BinaryOp(node, "add");
 	is SUB then BinaryOp(node, "sub");
 	is MUL then BinaryOp(node, "mul");
@@ -1871,7 +1862,6 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	}
 	is BOR then  term = Conditional(node, false);
 	is BAND then term = Conditional(node, true);
-	is UNARY then UnaryIntrinsic(node);
 	is IFEXPR then IfExpr(node);
 	is CALL then  Call(node, false);
 	is CALLI then Call(node, true);

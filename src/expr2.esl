@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 736 2012-10-25 20:22:41Z bgl $
+// $Id: expr2.esl 737 2012-11-02 21:15:51Z bgl $
 
 package expr
 {
@@ -919,6 +919,18 @@ ast.Dump(tree);
 	return tree;
     }
 
+    // Until all hosts have the popcnt instruction
+    proc popcnt(x: type.Valu): _uint
+    {   var n: _uint;
+
+	n = 0;
+	while x != 0 do
+	{   n += 1;
+	    x = x & (x-1);
+	}
+	return n;
+    }
+
     proc UnOp(op:ast.Op, rhs:Ast): Ast
     {   var tree: Ast;
 
@@ -932,6 +944,21 @@ ast.Dump(tree);
 	    {   if tree@.type@.kind == SINT && type.SValu(tree@.valu) < 0 then
 		    tree@.valu = type.Valu(-type.SValu(tree@.valu));
 	    }
+	    is CLZ, CLZNZ  then
+	    {   if tree@.valu == 0 then
+		    tree@.valu = tree@.width;
+		else
+		    tree@.valu = _clznz(tree@.valu) -
+			    (Valu?size*Target.membits - tree@.width);
+	    }
+	    is CTZ, CTZNZ  then
+	    {   if tree@.valu == 0 then
+		    tree@.valu = 0;
+		else
+		    tree@.valu = _ctznz(tree@.valu);
+	    }
+	    is POP  then tree@.valu = popcnt(tree@.valu);
+	    else lex.ErrorS(COMPILER, "Unhandled unary operation");
 	}
 	else
 	    tree = ast.New1(op, rhs@.type, rhs);
@@ -1178,6 +1205,15 @@ ast.Dump(tree);
 	return tree;
     }
 
+    proc IntrinsicUnary(op: ast.Op): Ast
+    {   var tree, lhs, rhs: Ast;
+
+	tree = Bool(0);
+	if tree != 0 then
+	    tree = UnOp(op, tree);
+	return tree;
+    }
+
     proc Intrinsic(ps: Symb): Ast
     {   var tree, lhs, rhs: Ast;
 	var tok: TokenT;
@@ -1197,17 +1233,14 @@ ast.Dump(tree);
 		else lex.Error(EXPECTID);
 	    }
 	    is ABS then
-	    {   rhs = Bool(0);
-		if rhs != 0 then
-		{   tree = UnOp(ABS, rhs);
-		    if tree@.type@.kind == SINT then
-		    {   var i: _uint;
-			i = 0;
-			while i < type.NINTS &&
-			      tree@.width > type.inttypes[i]@.size do
-			    i += 1;
-			tree@.type = type.uinttypes[i];
-		    }
+	    {   tree = IntrinsicUnary(ABS);
+		if tree != 0 && tree@.type@.kind == SINT then
+		{   var i: _uint;
+		    i = 0;
+		    while i < type.NINTS &&
+			  tree@.width > type.inttypes[i]@.size do
+			i += 1;
+		    tree@.type = type.uinttypes[i];
 		}
 	    }
 	    is MIN, MAX then
@@ -1222,13 +1255,11 @@ ast.Dump(tree);
 		    tree = BinOp(op, lhs, rhs);
 		}
 	    }
-	    is CLZ, CLZNZ, CTZ, CTZNZ, POP then
-	    {   rhs = Bool(0);
-		if rhs != 0 then
-		{   tree = UnOp(UNARY, rhs);
-		    tree.valu = _uint(which);
-		}
-	    }
+	    is CLZ   then tree = IntrinsicUnary(CLZ);
+	    is CLZNZ then tree = IntrinsicUnary(CLZNZ);
+	    is CTZ   then tree = IntrinsicUnary(CTZ);
+	    is CTZNZ then tree = IntrinsicUnary(CTZNZ);
+	    is POP   then tree = IntrinsicUnary(POP);
 	    is NEW, DEL, ZERO then
 		tree = NewOrDelete(which);
 	    else
