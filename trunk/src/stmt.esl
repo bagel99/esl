@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 734 2012-10-22 17:33:13Z bgl $
+// $Id: stmt.esl 741 2012-11-29 18:28:34Z bgl $
 
 package stmt
 {
@@ -342,16 +342,10 @@ package stmt
 		s@.const = tree;
 		if tree != 0 then
 		{   if t == 0 then t = tree@.type;
-		    if t@.kind <= REF || t@.packed then
-		    {   if tree@.op != CONST then
-			    lex.Error(BADCONST);
-		    }
-		    else
-		    {   if t@.flex then
-			    t = tree@.type;
-			tree = ast.New1(DCLCON, t, tree);
-			tree@.symb = s;
-		    }
+		    if t@.flex then
+			t = tree@.type;
+		    tree = ast.New1(DCLCON, t, tree);
+		    tree@.symb = s;
 		}
 		s@.hasdef = true;
 	    }
@@ -1390,7 +1384,7 @@ package stmt
 		LoopLevel = 0;
 		tree = Statement();
 		if debug.symb.proc then
-		    symb.Dump(2);
+		    symb.Dump(1);
 		symb.Pop();			// remove locals+parameters
 		if es != 0 then es@.next = 0;   // restore parameter list end
 		symb.curproc = 0;

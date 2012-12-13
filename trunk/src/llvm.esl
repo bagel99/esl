@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 738 2012-11-02 21:20:32Z bgl $
+// $Id: llvm.esl 743 2012-12-04 17:30:30Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -104,17 +104,17 @@ package llvm
 	{   if t@.kind
 	    is ENUM, UINT, SINT then
 	    {   size = target.isize(t@.size);
-		f.str("i"); f.uint(size);
+		f.chr('i'); f.uint(size);
 	    }
 	    is REF then
 	    {   PType(t@.base);
-		f.str("*");
+		f.chr('*');
 	    }
 	    is RECORD then
 	    {   if t@.packed then
 		{   // LLVM doesn't do bit pack records, handle as integers
 		    size = target.isize(t@.size);
-		    f.str("i"); f.uint(size);
+		    f.chr('i'); f.uint(size);
 		}
 		else
 		{   if t@.printed then
@@ -129,7 +129,7 @@ package llvm
 		{   // LLVM doesn't do bit pack arrays, handle as integers
 //f.str("PType packed array\n");
 		    size = target.isize(t@.size);
-		    f.str("i"); f.uint(size);
+		    f.chr('i'); f.uint(size);
 		}
 		else
 		{   f.chr('[');
@@ -616,11 +616,17 @@ package llvm
 		    Print(" to %T )", node);
 	    }
 	    is VAR then    // reference another const by name
-	    {   if t@.base@.flex then
-		    Print("bitcast( %T ", node);
-		Print("getelementptr( %T %N ) ", node);
-		if t@.base@.flex then
-		    Print(" to %T )", node);
+	    {   if t@.kind == REFPROC then
+		{
+		    PName(node@.symb);
+		}
+		else
+		{   if t@.base@.flex then
+			Print("bitcast( %T ", node);
+		    Print("getelementptr( %T %N ) ", node);
+		    if t@.base@.flex then
+			Print(" to %T )", node);
+		}
 	    }
 	}
     }
@@ -1077,11 +1083,11 @@ err.str(" align="); err.uint(align);}
 	node@.seqno = Tseqno;  Tseqno += 1;
 	if node@.op
 	is NOT then
-	    Print("\t%N = xor %0T %0N, -1\n", node);
+	    Print("\t%N = xor %0T %0N, -1", node);
 	is NEG then
-	    Print("\t%N = sub %0T 0, %0N\n", node);
+	    Print("\t%N = sub %0T 0, %0N", node);
 	is REVB then
-	{   Print("\t%N = call %T @llvm.bswap.%T(%T %0N)\n", node);
+	{   Print("\t%N = call %T @llvm.bswap.%T(%T %0N)", node);
 	    UseIntrinsic(BSWAP, node@.width);
 	}
 	is CLZ then
