@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 737 2012-11-02 21:15:51Z bgl $
+// $Id: ast.esl 742 2012-12-03 20:03:53Z bgl $
 
 package ast
 {
@@ -84,8 +84,8 @@ package ast
 	op:	Op;		// what kind of node is this
 	num:	NSubNodes;	// number of subnodes
 	max:	NSubNodes;	// maximum allocated slots for subnode
+	scale:	_int16;
 	width:	type.BitSize;	// current width in bits
-	scale:	type.BitSize;
 	lineno:	_uint16;	// source code line number
 	seqno:	_uint16;	// used by LLVM
 	valu:	type.Valu;

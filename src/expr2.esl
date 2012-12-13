@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 737 2012-11-02 21:15:51Z bgl $
+// $Id: expr2.esl 741 2012-11-29 18:28:34Z bgl $
 
 package expr
 {
@@ -27,8 +27,11 @@ package expr
 	t = node@.type;
 	if node@.op
 	is TYPE, CONST then ;  // ok
-	is VAR  then { t = t@.base; if t == 0 then return 0; }
-	else return 0;  // must be TYPE, CONST or VAR?
+	is VAR, OFFSET, INDEX  then
+	{   t = t@.base;
+	    if t == 0 then return 0;
+	}
+	else return 0;
 	tok = Token;
 	if tok == ID then
 	{   tok = lex.Keyword(proplist);
@@ -252,7 +255,12 @@ package expr
 //err.str("IsAggregateConst op="); err.str(ast.OpName[node@.op]); err.nl();
 	if node@.op
 	is SCON, CONST then return true;
-	is VAR then return node@.symb@.kind == CONSTANT;
+	is VAR then
+	{   if node@.type@.kind == REFPROC then
+		return node@.symb@.kind == PROC;
+	    else
+		return node@.symb@.kind == CONSTANT;
+	}
 	is BYREF, CAST then return IsAggregateConst(node@.child[0]);
 	is CLIST then
 	{   i = 0;
@@ -1538,10 +1546,6 @@ ast.Dump(tree);
 		    lex.Error(NOTARRAY);
 		tok = lex.Expect(AEND);
 	    }
-	    is QUEST then
-	    {   tok = Next();
-		tree = Property(tree);
-	    }
 	    else done = true;
 	}
 	return tree;
@@ -1598,7 +1602,12 @@ ast.Dump(tree);
 		{   tok = Next();
 		    tree = Primary(s, et);
 		    if tree != 0 then
-		    {   if tree@.op == TYPE then
+		    {   tok = Token;
+			if tok == QUEST then
+			{   tok = Next();
+			    tree = Property(tree);
+			}
+		        if tree@.op == TYPE then
 			{   if tok 
 			    is PBEG then		// cast
 			    {   tok = Next();
