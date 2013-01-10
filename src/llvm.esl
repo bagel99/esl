@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 743 2012-12-04 17:30:30Z bgl $
+// $Id: llvm.esl 746 2013-01-09 22:39:25Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -1454,6 +1454,14 @@ err.str(" align="); err.uint(align);}
 	return false;
     }
 
+    proc SignedBinaryOp(node: Ast, uop: @[]Char, sop: @[]Char): boolean
+    {
+        if node@.type@.kind == SINT then
+	    return BinaryOp(node, sop);
+	else
+	    return BinaryOp(node, uop);
+    }
+
     proc CompareOp(node: Ast, op: @[]Char): boolean
     {
 
@@ -1843,8 +1851,8 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	is ADD then BinaryOp(node, "add");
 	is SUB then BinaryOp(node, "sub");
 	is MUL then BinaryOp(node, "mul");
-	is DIV then BinaryOp(node, "udiv");	// FIXME: signed version
-	is MOD then BinaryOp(node, "urem");	// FIXME: signed version
+	is DIV then SignedBinaryOp(node, "udiv", "sdiv");
+	is MOD then SignedBinaryOp(node, "urem", "srem");
 	is LSL, ASL then BinaryOp(node, "shl");
 	is LSR then BinaryOp(node, "lshr");
 	is ASR then BinaryOp(node, "ashr");
