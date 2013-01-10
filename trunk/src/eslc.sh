@@ -16,12 +16,14 @@ eslcomp="$HOME/src/compiler/src/eslc2"
 llvmdir2_9="$HOME/work/llvm-2.9/Release/bin"
 llvmdir3_0="$HOME/work/llvm-3.0/Release/bin"
 llvmdir3_1="$HOME/work/llvm-3.1/Release+Asserts/bin"
+llvmdir3_2="$HOME/work/llvm-3.2/build/Release+Asserts/bin"
 llvmdirT="$HOME/work/llvm/Release+Asserts/bin"
 
 #
 # Initialize variables
 #
 cflag=0
+gflag=
 mflag=0
 no_assem=0
 print_cmds=0
@@ -30,7 +32,7 @@ optimize=
 feature=
 loopthresh=10
 outfile="a.out"
-llvmdir=$llvmdir3_1
+llvmdir=$llvmdir3_2
 
 #
 # Clean up temporary files
@@ -53,6 +55,7 @@ usage()
     echo "  [-i]            LLVM optimizer option to disable inlining"
     echo "  [-u] <number>   LLVM optimizer loop-unroll threshold"
     echo "  [-O{0123s}]     optimization level"
+    echo "  [-g]            include debug information"
     echo "  [-D<letter>]    debug subsystem"
     echo "  [-F<letter>]    enable feature"
     echo "  [-P]            use previous released version of LLVM"
@@ -71,10 +74,11 @@ version()
 tarch=`uname -m`
 
 # Parse the options
-while getopts "chim:o:O:u:vI:VD:F:MPTX" flags
+while getopts "cghim:o:O:u:vI:VD:F:MPT" flags
 do
     case $flags in
     c) cflag=1 ;;
+    g) gflag="-g" ;;
     h) usage; exit 0 ;;
     i) opt_opt="-disable-inlining" ;;
     m) tarch=$OPTARG ;;
@@ -87,9 +91,8 @@ do
     D) debug="$debug -D$OPTARG" ;;
     F) feature="$feature -F$OPTARG" ;;
     M) feature="$feature -M"; mflag=1 ;;
-    P) llvmdir=$llvmdir3_0 ;;
+    P) llvmdir=$llvmdir3_1 ;;
     T) llvmdir=$llvmdirT ;;
-    X) eslcomp=$eslcompX ;;
     *) echo "Unknown option: $flag" ; exit 1 ;;
     esac
 done
@@ -106,11 +109,14 @@ src_filename=$@
 # Convert ESLC target name to what front and backends need
 march=
 mcpu=
+mattr=
 case "$tarch" in
     x86| i386 | i486 | i586 | i686) tarch=x86; march=x86 ;;
     x86_64 | x86-64)    tarch=x86-64; march=x86-64 ;;
     s390x | systemz)    march=systemz ;;
     cortex-m3)		march=thumb; mcpu="-mcpu=cortex-m3" ;;
+    cortex-m4)          march=thumb; mcpu="-mcpu=cortex-m4"
+		        mattr="-mattr=+vfp3" ;;
     cortex-a8)		march=thumb; mcpu="-mcpu=cortex-a8" ;;
     arm920t)		march=thumb; mcpu="-mcpu=arm920t" ;;
     *)			march=$tarch ;;
@@ -131,14 +137,14 @@ trap cleanup 0
 # Run the ESL compiler
 #
 case "$optimize" in
-   s) feature="$feature -Fs" ;;
+   s) feature="$feature -Os" ;;
    0 | 1 | 2 | 3) ;;
 esac
 if test $print_cmds -ne 0
 then
-    echo "eslcomp -m $tarch $feature $debug $pkgs $src_filename >  $lla_tmpfile"
+    echo "eslcomp -m $tarch $gflag $feature $debug $pkgs $src_filename >  $lla_tmpfile"
 fi
-$eslcomp -m $tarch $feature $debug $pkgs $src_filename > $lla_tmpfile
+$eslcomp -m $tarch $gflag $feature $debug $pkgs $src_filename > $lla_tmpfile
 if test $? -ne 0
 then
     exit $?     # compile error
@@ -164,7 +170,7 @@ then
 fi
 $llvmdir/llvm-as -o - $lla_tmpfile | \
 $llvmdir/opt -std-compile-opts $opt_opt -unroll-threshold=$loopthresh -o - | \
-$llvmdir/llc -march=$march $mcpu -asm-verbose=0 -o $asm_filename
+$llvmdir/llc -march=$march $mcpu $mattr -asm-verbose=0 -o $asm_filename
 
 ## vim: ts=8 sw=4 noet nowrap
 

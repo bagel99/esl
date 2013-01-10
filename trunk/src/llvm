@@ -1,6 +1,6 @@
 #!/bin/sh
 # Run a .ll file through the LLVM backend
-LLVM=$HOME/work/llvm-3.1/Release+Asserts/bin		# !!!FIX THIS!!!
+LLVM=$HOME/work/llvm-3.2/build/Release+Asserts/bin		# !!!FIX THIS!!!
 DEBUG=
 ARCH=
 INLINE=
