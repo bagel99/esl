@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 742 2012-12-03 20:03:53Z bgl $
+// $Id: ast.esl 737 2012-11-02 21:15:51Z bgl $
 
 package ast
 {
@@ -12,7 +12,7 @@ package ast
 	PACKAGE,	// package boundary
 	DCLVAR,		// variable declaration
 	DCLCON,		// constant declaration (for aggregates)
-	CONST,	SCON,	CLIST,	CRANGE,
+	CONST,	FCON,	SCON,	CLIST,	CRANGE,
 	VAR,
 	OFFSET,	INDEX,	SLICE,	BYREF,
 	CAST,
@@ -24,6 +24,7 @@ package ast
 	STORE,		// assignment
 	ZEXT,   SEXT,   TRUNC,	REVB,
 	NEG,	NOT,	ABS,
+	FNEG,   CVTUF,	CVTIF,  CVTFU,	CVTFI,
 	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,
 	ADD,    SUB,
 	MUL,    DIV,    MOD,
@@ -34,6 +35,7 @@ package ast
 	LSL,    LSR,	ASL,    ASR,
 	AND,    OR,     XOR,
 	BAND,   BOR,	BNOT,
+	FADD,	FSUB,	FMUL,	FDIV,	FREM,
 	IFEXPR,		// select expression
 	SEQ,		// sequence
 	LOOP,
@@ -50,7 +52,8 @@ package ast
 	[TYPE]=   1,	[FILE]=   1,	[PACKAGE]=1,
 	[DCLVAR]= 1,
 	[DCLCON]= 1,
-	[CONST]=  0,	[SCON]=   0,	[CLIST]=  8,	[CRANGE]= 2,
+	[CONST]=  0,	[FCON]=   0,	[SCON]=   0,
+	[CLIST]=  8,	[CRANGE]= 2,
 	[VAR]=    0,
 	[OFFSET]= 1,	[INDEX]=  2,	[SLICE]=  3,	[BYREF]=  1,
 	[CAST]=   1,
@@ -61,6 +64,8 @@ package ast
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,	[REVB]=   1,
 	[NEG]=    1,	[NOT]=    1,
 	[ABS]=	  3,	// will convert into IFEXPR
+	[FNEG]=   1,
+	[CVTUF]=  1,	[CVTIF]=  1,	[CVTFU]=  1,	[CVTFI]=  1,
 	[CLZ]=    1,	[CLZNZ]=  1,	[CTZ]=    1,	[CTZNZ]=  1,
 	[POP]=    1,
 	[ADD]=	  2,	[SUB]=    2,
@@ -72,6 +77,8 @@ package ast
 	[LSL]=	  2,    [LSR]=	  2,	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
 	[BAND]=	  2,	[BOR]=	  2,	[BNOT]=	  2,
+	[FADD]=   2,	[FSUB]=   2,
+	[FMUL]=   2,	[FDIV]=   2,	[FREM]=   2,
 	[IFEXPR]= 3,
 	[SEQ]=    8,	[LOOP]=   1,	[EXIT]=   2,
 	[IF]=     3,	[SEL]=    8,	[IS]=     4,
@@ -85,12 +92,12 @@ package ast
 	num:	NSubNodes;	// number of subnodes
 	max:	NSubNodes;	// maximum allocated slots for subnode
 	scale:	_int16;
-	width:	type.BitSize;	// current width in bits
 	lineno:	_uint16;	// source code line number
 	seqno:	_uint16;	// used by LLVM
-	valu:	type.Valu;
+	width:	type.BitSize;	// current width in bits
 	type:	Type;
 	symb:	Symb;
+	valu:	type.Valu;
 	child:	[]@AstNode;
     };
     type Ast: @AstNode;
@@ -257,6 +264,7 @@ package ast
 	[DCLVAR]="DCLVAR",
 	[DCLCON]="DCLCON",
 	[CONST]= "CONST",
+	[FCON]=  "FCONST",
 	[SCON]=  "STRCON",
 	[VAR]=   "VAR",
 	[CALL]=  "CALL",
@@ -282,6 +290,9 @@ package ast
 	[TRUNC]= "TRUNC",
 	[REVB]=  "REVB",
 	[NEG]=   "NEG",		[NOT]=   "NOT",		[ABS]=   "ABS",
+	[FNEG]=  "FNEG",
+	[CVTUF]= "CVTUF",	[CVTIF]= "CVTIF",
+	[CVTFU]= "CVTFU",	[CVTFI]= "CVTFI",
 	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",		
 	[CTZ]=   "CTZ",		[CTZNZ]= "CTZNZ",
 	[POP]=   "POP",
@@ -298,6 +309,8 @@ package ast
 	[ASL]=   "ASL",		[ASR]=   "ASR",
 	[AND]=   "AND",		[OR]=    "OR",		[XOR]=   "XOR",
 	[BAND]=  "BAND",	[BOR]=   "BOR",		[BNOT]=  "BNOT",
+	[FADD]=  "FADD",	[FSUB]=  "FSUB",
+	[FMUL]=  "FMUL",	[FDIV]=  "FDIV",	[FREM]=  "FREM",
 	[IFEXPR]="IFEXPR",
 	[SEQ]=   "SEQ",
 	[LOOP]=  "LOOP",

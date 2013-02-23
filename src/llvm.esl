@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 746 2013-01-09 22:39:25Z bgl $
+// $Id: llvm.esl 741 2012-11-29 18:28:34Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -105,6 +105,12 @@ package llvm
 	    is ENUM, UINT, SINT then
 	    {   size = target.isize(t@.size);
 		f.chr('i'); f.uint(size);
+	    }
+	    is FLOAT then
+	    {
+		if t@.size
+		is 32 then f.str("float");
+		is 64 then f.str("double");
 	    }
 	    is REF then
 	    {   PType(t@.base);
@@ -224,6 +230,7 @@ package llvm
     {
 	if node@.type@.kind
 	is UTYPE then	      { f.str("void"); }
+	is FLOAT then         { PType(node@.type); }
 	is REF then           { PType(node@.type); /* f.str("*"); */ }
 	is ARRAY, RECORD, REFPROC then { PType(node@.type); }
 	else                  { f.str("i"); f.uint(node@.width); }
@@ -297,6 +304,13 @@ package llvm
 	    f.str("__NoName__");
     }
 
+    proc PFloat(node: Ast)
+    {
+	f.uint64(node@.valu);
+	f.str(".0e");
+	f.int16(-node@.scale);
+    }
+
     proc NodeDst(node: Ast)
     {
 	if node@.op
@@ -319,6 +333,7 @@ package llvm
 	    is REF, REFPROC then ConstantRef(node);
 	    is ARRAY, RECORD then f.uint64(node@.valu);	    // packed?
 	}
+	is FCON then PFloat(node);
 	is SCON, CLIST then
 	{   f.chr('@');
 	    f.str(scon_prefix);
@@ -531,6 +546,8 @@ package llvm
 	if t@.kind
 	is ENUM, UINT, SINT then
 	    f.uint(0);
+	is FLOAT then
+	    f.str("0.0");
 	is REF then
 	    f.str("zeroinitializer");   // FIXME: "null" ?
 	is ARRAY, RECORD then
@@ -559,6 +576,7 @@ package llvm
 		}
 		else         f.uint64(node@.valu);
 	    }
+	    is FCON then PFloat(node);
 	    is SCON then
 	    {   if t@.flex then
 		    n = StringRange(node@.type@.hi);
@@ -1086,6 +1104,16 @@ err.str(" align="); err.uint(align);}
 	    Print("\t%N = xor %0T %0N, -1", node);
 	is NEG then
 	    Print("\t%N = sub %0T 0, %0N", node);
+	is FNEG then
+	    Print("\t%N = fsub %0T 0.0, %0N", node);
+	is CVTUF then
+	    Print("\t%N = uitofp %0T %0N to %T", node);
+	is CVTIF then
+	    Print("\t%N = sitofp %0T %0N to %T", node);
+	is CVTFU then
+	    Print("\t%N = fptoui %0T %0N to %T", node);
+	is CVTFI then
+	    Print("\t%N = fptosi %0T %0N to %T", node);
 	is REVB then
 	{   Print("\t%N = call %T @llvm.bswap.%T(%T %0N)", node);
 	    UseIntrinsic(BSWAP, node@.width);
@@ -1783,7 +1811,7 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	}
 	is DCLVAR then DclVar(node);
 	is DCLCON then DclCon(node);
-	is VAR, CONST, SCON, CLIST then {}
+	is VAR, CONST, FCON, SCON, CLIST then {}
 	is ACOPY then Copy(node);
 	is AEQ, ANE then term = ArrayCompare(node);
 	is SET then Set(node);
@@ -1846,7 +1874,7 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	is ZEXT then  ChangeSize(node, "zext");
 	is SEXT then  ChangeSize(node, "sext");
 	is TRUNC then ChangeSize(node, "trunc");
-	is REVB, NOT, NEG then UnaryOp(node);
+	is REVB, NOT, NEG, FNEG, CVTUF, CVTIF, CVTFU, CVTFI then UnaryOp(node);
 	is CLZ, CLZNZ, CTZ, CTZNZ, POP then UnaryOp(node);
 	is ADD then BinaryOp(node, "add");
 	is SUB then BinaryOp(node, "sub");
@@ -1856,6 +1884,11 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	is LSL, ASL then BinaryOp(node, "shl");
 	is LSR then BinaryOp(node, "lshr");
 	is ASR then BinaryOp(node, "ashr");
+	is FADD then BinaryOp(node, "fadd");
+	is FSUB then BinaryOp(node, "fsub");
+	is FMUL then BinaryOp(node, "fmul");
+	is FDIV then BinaryOp(node, "fdiv");
+	is FREM then BinaryOp(node, "frem");
 	is EQ then  term = CompareOp(node, "icmp eq");
 	is NE then  term = CompareOp(node, "icmp ne");
 	is UGT then term = CompareOp(node, "icmp ugt");

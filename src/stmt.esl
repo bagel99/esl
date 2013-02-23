@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 741 2012-11-29 18:28:34Z bgl $
+// $Id: stmt.esl 747 2013-02-07 18:25:12Z bgl $
 
 package stmt
 {
@@ -613,88 +613,6 @@ package stmt
 	return tree;
     }
 
-    proc AdjustRHS(lhs: Ast, tree: Ast): Ast
-    {   var to, fm, bt: Type;
-	var ok: boolean;
-
-	to = lhs@.type;		// target type
-	if to@.kind != REF then
-	{   lex.ErrorS(COMPILER, "LHS should be REF");
-	    return 0;
-	}
-	to = to@.base;
-	fm = tree@.type;
-	// LHS is not a COMPOSITE (RECORD or ARRAY) -- handled elsewhere
-	ok = true;
-	if to@.kind
-	is REF then     // FIXME: merge with code in expr.Actual()
-	{   if fm@.kind == REF && type.Compat(to, fm) then
-	    {   if fm != to then
-		{
-		    tree = expr.Cast(tree, to);
-		    fm = tree@.type;
-		}
-	    }
-	    else
-	    {   tree = expr.CoerceToRef(tree);
-		fm = tree@.type;
-	        if type.Compat(to, fm) then
-		{   if fm != to then
-		    {   tree = expr.Cast(tree, to);
-			fm = tree@.type;
-		    }
-		}
-		else ok = false;
-	    }
-	    // Fix types when formal is a flex
-	    if to@.flex && !fm@.flex then
-	    {   tree = ast.New1(CAST, to, tree);
-		fm = tree@.type;
-	    }
-	    // Check attributes
-	    if to@.base != 0 then
-	    {   if !expr.CheckRefAttributes(to, fm) then
-		    lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
-	    }
-	    else lex.Error(BADREF);
-	}
-	is REFPROC then
-	{   ok = type.Compat(to, fm);
-	}
-	is ENUM then
-	{   ok = type.Compat(fm, to);
-	    if !ok && fm.kind == UINT then ok = true;
-	    if to@.width != tree@.width then
-		tree = expr.ExtendT(tree, to);
-	}
-	is UINT then
-	{   ok = type.Compat(fm, to);
-	    if !ok then
-	    {   if fm.kind
-		is ENUM then ok = true;
-		is SINT then
-		{   if feature.trunc then lex.Error(TOUNSIGN);
-		    ok = true;
-		}
-	    }
-	    if to@.width != tree@.width then
-		tree = expr.ExtendT(tree, to);
-	}
-	is SINT then
-	{   ok = type.Compat(fm, to);
-	    if !ok && fm.kind == UINT then
-	    {   if feature.trunc then lex.Error(TOSIGNED);
-		ok = true;
-	    }
-	    if to@.width != tree@.width then
-		tree = expr.ExtendT(tree, to);
-	}
-	if !ok then
-	    lex.Error(TYPEASSIGN);
-	tree = CheckSwap(lhs, tree);
-	return tree;
-    }
-
     proc Assign(lhs: Ast): Ast
     {   var tree, rhs, lrhs: Ast;
 	var t: Type;
@@ -771,7 +689,10 @@ package stmt
 				    if optok == INCR then op = ADD; else op = SUB;
 				    rhs = expr.BinOp(op, lrhs, rhs);
 				}
-				rhs = AdjustRHS(lhs, rhs);
+				if lhs@.type@.kind != REF then
+				    lex.ErrorS(COMPILER, "LHS should be REF");
+				rhs = expr.Adjust(rhs, lhs@.type@.base);
+				rhs = CheckSwap(lhs, rhs);
 			    }
 			    else lex.Error(RHSASSIGN);
 			    tree = ast.Child(tree, rhs);
@@ -847,7 +768,7 @@ package stmt
 	    rval = expr.Bool(t);
 	    if rval != 0 then
 	    {   if t != 0 then
-		{   rval = expr.Actual(rval, t);
+		{   rval = expr.Adjust(rval, t);
 		    tree = ast.Child(tree, rval);
 		    if t@.kind == REF then
 		    {   tree@.type = t@.base;
@@ -1027,7 +948,7 @@ package stmt
 	    incr = 0;
 	    if ix != 0 then
 	    {   if fm != 0 then
-		{   fm = AdjustRHS(ix, fm);
+		{   fm = expr.Adjust(fm, ix@.type@.base);
 		    init = ast.New2(STORE, t, ix, fm);
 		}
 		if to != 0 then

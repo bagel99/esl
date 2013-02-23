@@ -7,8 +7,8 @@ package symb
     type LinkT: (LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE);
     type OffsT: 0..0xFFFF;
     type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
-	CLZ, CLZNZ, CTZ, CTZNZ, POP, 
-	NEW, DEL, ZERO );
+	CLZ, CLZNZ, CTZ, CTZNZ, POP,
+	CVT, NEW, DEL, ZERO );
     type SymbNode:
     {
 	next:	  @SymbNode;	// for lists

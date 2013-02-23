@@ -117,7 +117,7 @@ package lex
 	EQ,	NE,	LT,	GT,	LE,	GE,	// must be contiguous
 	BAND,	BOR,					// **
 	PBEG,	PEND,	ABEG,	AEND,	GBEG,	GEND,
-	NUM,	STR,
+	NUM,	FNUM,   STR,
 	ID,		// all keywords follow this
 	KTYPE,	KVAR,	KCONST,	KIMPORT,KALIAS,	KERROR,
 	KPROC,	KPACKAGE,
@@ -174,6 +174,7 @@ package lex
 	[GBEG] =	"{",
 	[GEND] =	"}",
 	[NUM] =		"NUMBER",
+	[FNUM] =	"FNUM",
 	[STR] =		"STRING",
 	[ID] =		"IDENT",
 	[KTYPE] =	"type",
@@ -263,34 +264,32 @@ package lex
     };
     type File: @FileContext;
     var f: File;
-
     type Identifier: []Char;
     var ErrorCount: 0..ErrorMax;
     var Token: TokenT;			// current token
     var Ident: [IdentMax+1]Char;	// if token is an IDENT
-    var Number: _uint64;		// if token is a NUM
+    var Number: _uint64;		// if token is a NUM or FNUM
+    var Scale:  _int16;			// power of 10 for FNUM
     var StringLen: 0..StringMax;	// if token is a STR
     var StringBuf: [StringMax+1]Char;	// if token is a STR
     type State:
-      ( FIRST,	// first character
+    (   FIRST,	// first character
 	DIV,	// seen "/"
 	CMTLN,	// seen "//", skipping to EOL
 	CMTBK,	// seen "/*", skipping to "*"
 	CMTBE,	// seen "*" in a block comment
 	DOT,	// seen "."
-	PLUS,
-	MINUS,
-	LT,
-	GT,
-	ASGN,
-	NOT,
-	AND,
-	OR,
+	PLUS,	// seen "+"
+	MINUS,	// seen "-"
+	LT,	// seen "<"
+	GT,	// seen ">"
+	ASGN,	// seen "="
+	NOT,	// seen "!"
+	AND,	// seen "&"
+	OR,	// seen "|"
 	ZERO,	// seen "0"
-	BIN,
-	OCT,
-	HEX,
-	DEC,
+	BIN,  OCT,  HEX,
+	DEC,  DECD, DECF, EXP1, EXP2,
 	ID,   ID1,  ID2,  ID3,				// must be consecutive
 	CHR,  CHREND,
 	STR,
@@ -298,7 +297,8 @@ package lex
 	HEX1, HEX2,					// must be consecutive
 	U161, U162, U163, U164,				// must be consecutive
 	U321, U322, U323, U324, U325, U326, U327, U328	// must be consecutive
-      );
+    );
+    var saves: State = FIRST;		// look behind state
 
     // These are for error message use
     proc Filename(): []Char;
@@ -537,6 +537,22 @@ package lex
 	f@.nchar = BufRange(k);
     }
 
+    proc MakeFnum(n: _uint64, scale1: _uint)
+    {   var scale: _int;
+
+	scale = _int(scale1);
+	Number = n;
+	Scale = scale;
+    }
+
+    proc MakeFnumE(n: _uint64, scale1: _uint, scale2: _int)
+    {   var scale: _int;
+
+	scale = scale2 - _int(scale1);
+	Number = n;
+	Scale = scale;
+    }
+
     proc EscChar(c: Char): Char
     {
 	if c
@@ -603,12 +619,16 @@ package lex
 	var tok: TokenT;
 	var i: 0..BufSize;
 	var e: 0..BufSize;
-	var j: 0..StringMax;
-	var str: boolean;
+	var j, k: 0..StringMax;
+	var str, neg: boolean;
 	var h: _uint32;		// for hex and unicode escapes
 	var n: _uint64;		// for numbers
 
 	state = FIRST;
+	if saves != FIRST then
+	{   state = saves;
+	    saves = FIRST;
+	}
 	tok = NONE;
 	i = f@.cchar;
 	e = f@.nchar;
@@ -625,7 +645,7 @@ package lex
 		    else
 			Error(BADEOF);
 		    tok = ENDF;
-		}		 
+		}
 	    }
 	    c = f@.buf[i];
 	    if state
@@ -657,7 +677,7 @@ package lex
 		is '&' then state = AND;
 		is '|' then state = OR;
 		is '0' then      { n = 0;     state = ZERO; }
-		is '1'..'9' then { n = c-'0'; state = DEC; }
+		is '1'..'9' then { n = c-'0'; j = 1; state = DEC; }
 		is '\'' then state = CHR;
 		is '"' then { j = 0; state = STR; }
 		is ' ','\t','\n','\r','\f' then // whitespace
@@ -705,6 +725,7 @@ package lex
 	    is DOT then
 		if c
 		is '.' then { tok = RANGE; i += 1; }
+		is '0'..'9' then { n = 0; k = 0; j = 0; state = DECD; }
 		else    tok = DOT;
 	    is PLUS then
 		if c
@@ -745,15 +766,11 @@ package lex
 		is 'b' then state = BIN;
 		is 'o' then state = OCT;
 		is 'x' then state = HEX;
-		is '0'..'9' then { n = c-'0'; state = DEC; }
-		is '_' then state = DEC;
+		is '0'..'9' then { n = c-'0'; j = 1; state = DEC; }
+		is '_'      then {            j = 0; state = DEC; }
+		is '.'      then { k = 0;     j = 0; state = DECD; }
 		else    { Number = n; tok = NUM; }
 	    }
-	    is DEC then
-		if c
-		is '0'..'9' then n = n*10 + (c-'0');
-		is '_' then {}
-		else    { Number = n; tok = NUM; }
 	    is BIN then
 		if c
 		is '0'..'1' then n = (n<<1) + (c-'0');
@@ -771,6 +788,44 @@ package lex
 		is 'a'..'f' then n = (n<<4) + (c-'a'+10);
 		is '_' then {}
 		else    { Number = n; tok = NUM; }
+	    is DEC then
+		if c
+		is '0'..'9' then { n = n*10 + (c-'0'); j += 1; }
+		is '_' then {}
+		is '.' then { k = 0; state = DECD; }
+		else    { Number = n; tok = NUM; }
+	    is DECD then
+		if c
+		is '.' then     // simple decimal integer followed by ..
+		    { saves = DOT; Number = n; tok = NUM; }
+		is '0'..'9' then
+		{   n = n*10 + (c-'0'); j += 1;
+		    k += 1; state = DECF;
+		}
+		is '_' then {}
+		is 'e','E' then state = EXP1;
+		else { MakeFnum(n, k); tok = FNUM; }
+	    is DECF then
+		if c
+		is '0'..'9' then { n = n*10 + (c-'0'); j += 1; k += 1; }
+		is '_' then {}
+		is 'e','E' then state = EXP1;
+		else { MakeFnum(n, k); tok = FNUM; }
+	    is EXP1 then
+		if c
+		is '-' then { h = 0; neg = true; state = EXP2; }
+		is '+' then { h = 0; neg = false; state = EXP2; }
+		is '0'..'9' then { h = c-'0'; neg = false; state = EXP2; }
+		else { /* FIXME - error */ state = FIRST; }
+	    is EXP2 then
+		if c
+		is '0'..'9' then { h = h*10 + (c-'0'); }
+		else 
+		{   var exp: _int;
+		    exp = _int(h);
+		    if neg then exp = -exp;
+		    MakeFnumE(n, k, exp); tok = FNUM;
+		}
 	    is CHR then
 	    {	str = false;
 		if c
