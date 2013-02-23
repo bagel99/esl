@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 730 2012-10-01 20:49:09Z bgl $
+// $Id: type2.esl 748 2013-02-07 18:28:14Z bgl $
 
 package type
 {
@@ -539,6 +539,8 @@ err.str(" align="); err.uint(t@.align); err.nl();
 			t@.size = BitSize(t@.base@.size * t@.hi);
 		    if t@.width == 0 then
 			t@.width = t@.size;
+		    if t@.base.width < t@.base.align then
+			lex.ErrorS(NOTIMPL, "Array of aligned items");
 		    if !t@.packed then
 			align = t@.base@.align;
 		    else

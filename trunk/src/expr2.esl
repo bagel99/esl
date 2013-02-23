@@ -202,6 +202,10 @@ package expr
 		else
 		    lex.Error(BADCAST);
 	    }
+	    is FLOAT then
+	    {   tree = ast.New1(CAST, to, tree);
+		tree@.width = to@.width;
+	    }
 	    else
 		lex.Error(BADCAST);
 	}
@@ -209,6 +213,14 @@ package expr
 	{   if tree@.type@.kind
 	    is UINT, SINT then			// UINT|SINT -> SINT
 		tree = ExtendCast(tree, to);
+	    else
+		lex.Error(BADCAST);
+	}
+	is FLOAT then
+	{   if tree@.type@.kind == UINT then
+	    {   tree = ast.New1(CAST, to, tree);
+		tree@.width = to@.width;
+	    }
 	    else
 		lex.Error(BADCAST);
 	}
@@ -254,7 +266,7 @@ package expr
 
 //err.str("IsAggregateConst op="); err.str(ast.OpName[node@.op]); err.nl();
 	if node@.op
-	is SCON, CONST then return true;
+	is SCON, FCON, CONST then return true;
 	is VAR then
 	{   if node@.type@.kind == REFPROC then
 		return node@.symb@.kind == PROC;
@@ -863,15 +875,10 @@ ast.Dump(tree);
 	return true;
     }
 
-    proc Actual(tree: Ast, to: Type): Ast
+    proc Adjust(tree: Ast, to: Type): Ast
     {   var fm, bt: Type;
 	var ok: boolean;
 
-	if tree == 0 then
-	{   tree = Bool(to);
-	    if tree == 0 then	// invalid expression
-		return tree;
-	}
 	fm = tree@.type;
 	if fm == 0 then		// undefined type
 	    return tree;
@@ -881,7 +888,7 @@ ast.Dump(tree);
 	{   if to@.base != 0 then
 	    {   if fm@.kind == REF && type.Compat(to, fm) then
 		{   if fm != to then
-		    {   tree = expr.Cast(tree, to);
+		    {   tree = Cast(tree, to);
 			fm = tree@.type;
 		    }
 		}
@@ -891,7 +898,7 @@ ast.Dump(tree);
 		    // Coerce to REF memtype is always OK
 		    if to@.base == type.memtype || type.Compat(to, fm) then
 		    {   if fm != to then
-			{   tree = expr.Cast(tree, to);
+			{   tree = Cast(tree, to);
 			    fm = tree@.type;
 			}
 		    }
@@ -912,18 +919,37 @@ ast.Dump(tree);
 	is REFPROC then
 	{   ok = type.Compat(to, fm);
 	}
-	is ENUM, UINT, SINT then
+	is ENUM then
 	{   ok = type.Compat(fm, to);
+	    if !ok && fm.kind == UINT then ok = true;
 	    if to@.width != tree@.width then
-		tree = ExtendT(tree, to);
-	    // NeedSwap?
+		tree = expr.ExtendT(tree, to);
 	}
-	is RECORD, ARRAY then ok = type.Compat(fm, to);
+	is UINT then
+	{   ok = type.Compat(fm, to);
+	    if !ok then
+	    {   if fm.kind
+		is ENUM then ok = true;
+		is SINT then
+		{   if feature.trunc then lex.Error(TOUNSIGN);
+		    ok = true;
+		}
+	    }
+	    if to@.width != tree@.width then
+		tree = expr.ExtendT(tree, to);
+	}
+	is SINT then
+	{   ok = type.Compat(fm, to);
+	    if !ok && fm.kind == UINT then
+	    {   if feature.trunc then lex.Error(TOSIGNED);
+		ok = true;
+	    }
+	    if to@.width != tree@.width then
+		tree = expr.ExtendT(tree, to);
+	}
 	if !ok then
-	{   lex.Error(PARMTYPE);
-//err.str("to=\n"); type.DumpT(to, true); err.nl();
-//err.str("fm=\n"); type.DumpT(fm, true); err.nl();
-	}
+	    lex.Error(TYPEASSIGN);
+//	tree = CheckSwap(lhs, tree);    // FIXME - do for parms and retv?
 	return tree;
     }
 
@@ -1222,6 +1248,57 @@ ast.Dump(tree);
 	return tree;
     }
 
+    proc Convert(): Ast
+    {   var tok: TokenT;
+        var tree: Ast;
+        var t: Type;
+        var s: Symb;
+        var to, fm: TypeT;
+        var op: ast.Op;
+
+	tree = 0;
+	t = 0;
+        tok = Token;
+        if tok == ID then
+        {   s = symb.Find(lex.Ident);
+	    if s != 0 then
+	    {   if s@.kind == TYPE then
+		    t = s@.type;
+		else lex.Error(NOTTYPE);
+	    }
+	    else lex.ErrorS(UNDEFID, lex.Ident);
+	    tok = Next();        
+	    if tok == COMMA then
+	    {   tok = Next();
+		tree = Bool(0);
+		if tree != 0 && t != 0 then
+		{   to = t@.kind;
+		    fm = tree@.type@.kind;
+		    // FIXME - much more needed here
+		    op = NULL;
+		    if to
+		    is  FLOAT then
+		    {   if fm
+			is UINT then op = CVTUF;
+			is SINT then op = CVTIF;
+		    }
+		    is UINT then
+		    {   if fm == FLOAT then op = CVTFU;
+		    }
+		    is SINT then
+		    {   if fm == FLOAT then op = CVTFI;
+		    }
+		    if op != NULL then
+		    {   tree = ast.New1(op, t, tree);
+			tree@.width = t@.width;
+		    }
+		}
+	    }
+        }
+        else lex.Error(NOTTYPE);
+        return tree;
+    }
+
     proc Intrinsic(ps: Symb): Ast
     {   var tree, lhs, rhs: Ast;
 	var tok: TokenT;
@@ -1268,6 +1345,7 @@ ast.Dump(tree);
 	    is CTZ   then tree = IntrinsicUnary(CTZ);
 	    is CTZNZ then tree = IntrinsicUnary(CTZNZ);
 	    is POP   then tree = IntrinsicUnary(POP);
+	    is CVT   then tree = Convert();
 	    is NEW, DEL, ZERO then
 		tree = NewOrDelete(which);
 	    else
@@ -1297,7 +1375,7 @@ ast.Dump(tree);
 	if arg != 0 then	// method call
 	{   // assert s != 0
 	    arg = Load(arg);
-	    arg = Actual(arg, s@.type);
+	    arg = Adjust(arg, s@.type);
 	    tree = ast.Child(tree, arg);
 	    s = s@.next;
 	}
@@ -1311,7 +1389,9 @@ ast.Dump(tree);
 		    {   lex.Error(ARGSHI);
 			tok = lex.Skip(skiplist);
 		    }
-		    arg = Actual(0, s@.type);
+		    arg = Bool(s@.type);
+		    if arg != 0 then
+			arg = Adjust(arg, s@.type);
 		    tree = ast.Child(tree, arg);
 		    s = s@.next;
 		    tok = Token;
@@ -1661,6 +1741,14 @@ ast.Dump(tree);
 	    }
 	    tok = Next();
 	}
+	is FNUM then
+	{   tree = ast.New(FCON, et);
+	    tree@.valu = lex.Number;
+	    tree@.scale = lex.Scale;
+	    if et == 0 then
+		tree@.type = type.floattype;
+	    tok = Next();
+	}
 	is STR then
 	{   tree = String();
 	    loop
@@ -1694,14 +1782,19 @@ ast.Dump(tree);
 	{   tl = tree@.type;
 	    if savetok
 	    is MINUS then
-	    {   tree = UnOp(NEG, tree);
-		if tree@.type@.kind == UINT then
-		{   var i: _uint;
-		    i = 0;
-		    while i < type.NINTS &&
-			  tree@.width > type.uinttypes[i]@.size do
-			i += 1;
-		    tree@.type = type.inttypes[i];
+	    {   if tree@.type@.kind == FLOAT then
+		    tree = UnOp(FNEG, tree);
+		else
+		{
+		    tree = UnOp(NEG, tree);
+		    if tree@.type@.kind == UINT then
+		    {   var i: _uint;
+			i = 0;
+			while i < type.NINTS &&
+			      tree@.width > type.uinttypes[i]@.size do
+			    i += 1;
+			tree@.type = type.inttypes[i];
+		    }
 		}
 	    }
 	    is INV then
@@ -1714,18 +1807,19 @@ ast.Dump(tree);
 	return tree;
     }
 
-    const mulop: []ast.Op = { MUL, DIV, MOD, LSL, LSR, AND };
+    const mulop: []ast.Op = { MUL, DIV, MOD, LSL, LSR, AND  };
+    const fmulop:[]ast.Op = { FMUL,FDIV,FREM,NULL,NULL,NULL };
     proc Mul(t:Type): Ast
     {   var tree, rhs: Ast;
 	var op: ast.Op;
-	var tok: TokenT;
+	var tok, stok: TokenT;
 
 	tree = Unary(t);
 	if tree != 0 then
 	{   loop
 	    {   tok = Token;
 	      exit tok < STAR || tok > AND;
-		op = mulop[tok - STAR];
+	        stok = tok;
 		tok = Next();
 		rhs = Unary(tree@.type);
 	      exit rhs == 0;
@@ -1739,24 +1833,29 @@ if !debug.tests[0] then {
 		if op != AND && t != 0 && t@.width > tree@.type@.width then
 		    tree = ExtendT(tree, t);
 }
+		if tree@.type@.kind == FLOAT then
+		    op = fmulop[stok - STAR];
+		else
+		    op = mulop[stok - STAR];
 		tree = BinOp(op, tree, rhs);
 	    }
 	}
 	return tree;
     }
 
-    const addop: []ast.Op = { ADD, SUB, OR, XOR };
+    const addop: []ast.Op = { ADD, SUB, OR,  XOR  };
+    const faddop:[]ast.Op = { FADD,FSUB,NULL,NULL };
     proc Add(t:Type): Ast
     {   var tree, rhs: Ast;
 	var op: ast.Op;
-	var tok: TokenT;
+	var tok, stok: TokenT;
 
 	tree = Mul(t);
 	if tree != 0 then
 	{   loop
 	    {   tok = Token;
 	      exit tok < PLUS || tok > XOR;
-		op = addop[tok - PLUS];
+	        stok = tok;
 		tok = Next();
 		rhs = Mul(tree@.type);
 	      exit rhs == 0;
@@ -1765,6 +1864,10 @@ if !debug.tests[0] then {
 		if op != OR && op != XOR && t != 0 && t@.width > tree@.type@.width then
 		    tree = ExtendT(tree, t);
 }
+		if tree@.type@.kind == FLOAT then
+		    op = faddop[stok - PLUS];
+		else
+		    op = addop[stok - PLUS];
 		tree = BinOp(op, tree, rhs);
 	    }
 	}

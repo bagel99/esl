@@ -5,7 +5,7 @@ package type
 {
     type Valu: _uint64;
     type SValu: _int64;
-    type TypeT: (UTYPE, ENUM, UINT, SINT, REF, ARRAY, RECORD, REFPROC);
+    type TypeT: (UTYPE, ENUM, UINT, SINT, FLOAT, REF, ARRAY, RECORD, REFPROC);
     type BitOrderT: (NATIVE, MSB, LSB);
     type MemOrderT: (NATIVE, BE, LE);
     type AccessT: (RW, RO, WO);
@@ -57,12 +57,15 @@ package type
     var bytetype: Type;
     var wordtype: Type;
     var swordtype: Type;
+    var floattype: Type;
     var uintptrtype: Type;
     var memtype: Type;
     var addrtype: Type;
     const NINTS = 4;		// number of integer types supported
     var uinttypes: [NINTS]Type;
     var inttypes:  [NINTS]Type;
+    const NFLOATS = 2;
+    var floattypes:[NFLOATS]Type;
 
     proc New(kind: TypeT): Type;
     proc NewBuiltin(kind: TypeT, name: @lex.Identifier, size: BitSize): Type;
