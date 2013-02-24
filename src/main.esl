@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: main.esl 728 2012-09-26 21:57:27Z bgl $
+// $Id: main.esl 750 2013-02-24 23:22:40Z bgl $
 
 var debug:
     {	symb:
@@ -13,7 +13,7 @@ var debug:
 	tests: [10]boolean;
     };
 var feature:
-    {   size:  boolean;
+    {   size:  (NO, YES, MIN);
 	unused:boolean;
 	mflag: boolean;
 	gflag: boolean;
@@ -97,7 +97,8 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	}
 	is 'O' then 
 	{   if argv[i]@[2]
-	    is 's' then feature.size = true;
+	    is 's' then feature.size = YES;
+	    is 'z' then feature.size = MIN;
 	}
 	is 'F' then 
 	{   if argv[i]@[2]
