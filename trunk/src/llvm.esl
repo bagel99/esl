@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 741 2012-11-29 18:28:34Z bgl $
+// $Id: llvm.esl 750 2013-02-24 23:22:40Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -1362,8 +1362,11 @@ err.str(" align="); err.uint(align);}
 	    DclProc(node, true);
 	    if ps@.linkage == INLINE then
 		f.str(" alwaysinline");
-	    if feature.size then
+	    if feature.size != NO then
+	    {   if feature.size == MIN then
+		    f.str(" minsize");
 		f.str(" optsize");
+	    }
 	    f.str(" nounwind {\n");
 	    Pseqno += 1;
 	    Tseqno = 1;

@@ -54,7 +54,7 @@ usage()
     echo "  [-I <pkgdir>]   append directory to search imports"
     echo "  [-i]            LLVM optimizer option to disable inlining"
     echo "  [-u] <number>   LLVM optimizer loop-unroll threshold"
-    echo "  [-O{0123s}]     optimization level"
+    echo "  [-O{0123sz}]    optimization level"
     echo "  [-g]            include debug information"
     echo "  [-D<letter>]    debug subsystem"
     echo "  [-F<letter>]    enable feature"
@@ -138,6 +138,7 @@ trap cleanup 0
 #
 case "$optimize" in
    s) feature="$feature -Os" ;;
+   z) feature="$feature -Oz" ;;
    0 | 1 | 2 | 3) ;;
 esac
 if test $print_cmds -ne 0
