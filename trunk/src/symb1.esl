@@ -1,10 +1,10 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb1.esl 749 2013-02-24 23:17:49Z bgl $
+// $Id: symb1.esl 755 2013-03-04 22:52:24Z bgl $
 
 package symb
 {
     type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS);
-    type LinkT: (LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE);
+    type LinkT: (FORMAL, LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE, NOINLINE);
     type OffsT: 0..0xFFFF;
     type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
 	CLZ, CLZNZ, CTZ, CTZNZ, POP,
@@ -28,9 +28,9 @@ package symb
 	forward:  boolean;	// forward declared
 	bound:    boolean;	// is a bound procedure
 	hasdef:   boolean;	// has default value
-	isparam:  boolean;	// is a formal parameter
 	ispad:    boolean;      // is a field used for padding
 	used:	  boolean;	// was ever used (looked up)
+	xname:    boolean;      // has characters LLVM needs escaped
 	declared: boolean;	// used in llvm generation
 	ident:	  []Char;
     };
@@ -43,15 +43,29 @@ package symb
     var  curproc: Symb;		// current procedure, 0 if not in a procedure
     var  libnew, libnewnz, libdel: Symb;
     type symblist:
-      { frst:	Symb;
+    {   frst:	Symb;
 	last:	Symb;
-      };
+	pkg:    Symb;		// package symbol or 0
+    };
     var  symbs: [NestMax+1]symblist;
+    type Visibility: (VISIBLE, DELAYED, PRIVATE);
+
 
     // Check for anonymous identifier
     proc IsAnon(id: @lex.Identifier): boolean
     {
 	return zstr.eq(id, "_", lex.IdentMax);
+    }
+
+    proc IsUTF8(id: @lex.Identifier): boolean
+    {   var i: _uint;
+
+	i = 0;
+	while id[i] != 0 do
+	{   if id[i] > 0x7F then return true;
+	    i += 1;
+        }
+        return false;
     }
 
     // Check for uniqueness, fields, enum constants
@@ -84,8 +98,6 @@ package symb
 	symbs[level].last = s;
     }
 
-    type Visibility: (VISIBLE, DELAYED, PRIVATE);
-
     proc New(kind: SymbT, name: @lex.Identifier, vis: Visibility): Symb
     {   var s: Symb;
 
@@ -101,8 +113,9 @@ package symb
 	    else    // already defined, error message and make a new one
 		lex.ErrorI(DEFID, name);
 	}
-	s = Symb(sys.malloc(SymbNode?size + zstr.len(name, lex.IdentMax)));
+	s = Symb(sys.malloc(SymbNode?size + zstr.len(name, lex.IdentMax) + 1));
 	zstr.copy(s@.ident, name, lex.IdentMax);
+	s@.xname = IsUTF8(name);
 	s@.kind = kind;
 	s@.next = 0;
 	if curproc != 0 then
@@ -166,8 +179,9 @@ package symb
     }
 
     proc FindPackage(ps: Symb): Symb
-    {   var s: Symb;
+    {   var s, fs: Symb;
 	var tok: TokenT;
+	var i: _uint;
 
 	s = 0;
 	tok = Token;
@@ -177,7 +191,13 @@ package symb
 	{ exit tok != DOT with lex.Expect(DOT);
 	    tok = Next();
 	  exit tok != ID with lex.Expect(ID);
-	    s = FindLocal(ps@.symblist, lex.Ident);
+	    fs = ps@.symblist;       // assume not a nested package
+	    i = level;
+	    while i > 0 && symbs[i].pkg != ps do
+		i -= 1;
+	    if i != 0 then	    // we are in the package we seek
+		fs = symbs[i].frst;
+	    s = FindLocal(fs, lex.Ident);
 	  exit s == 0 || s@.kind != PACK;
 	    tok = Next();
 	    ps = s;
@@ -245,7 +265,7 @@ package symb
 	return symbs[level].frst;
     }
 
-    proc Push(init: Symb): Symb
+    proc Push(init: Symb, ps: Symb): Symb
     {
 	if level < NestMax then
 	{   level += 1;
@@ -261,6 +281,7 @@ package symb
 		    init = init@.next;
 		symbs[level].last = init;
 	    }
+	    symbs[level].pkg = ps;
 	}
 	else
 	{	// FIXME: error
@@ -276,7 +297,7 @@ package symb
 	    {   var s: Symb;
 		s = symbs[level].frst;
 		while s != 0 do
-		{   if !s@.used && !s@.isparam then
+		{   if !s@.used && s@.linkage != FORMAL then
 		    {   err.str("In ");
 			if curpack != 0 then
 			{   err.str(curpack@.ident);

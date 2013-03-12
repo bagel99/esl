@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 748 2013-02-07 18:28:14Z bgl $
+// $Id: type2.esl 756 2013-03-05 19:18:28Z bgl $
 
 package type
 {
@@ -297,6 +297,7 @@ package type
 			    tok = Next();
 			    if atok
 			    is KINLINE then  s@.linkage = INLINE;
+			    is KNOINLINE then s@.linkage = NOINLINE;
 			    is KGLOBAL then 
 			    {   s@.linkage = GLOBAL;
 				XLinkage(s);
@@ -345,7 +346,7 @@ package type
 	return Attributes(s, t, vattrlist);
     }
 
-    const pattrlist:[4]TokenT = { KEXTERN, KGLOBAL, KINLINE, NONE };
+    const pattrlist:[5]TokenT = { KEXTERN, KGLOBAL, KINLINE, KNOINLINE, NONE };
     proc ProcAttributes(s: Symb)
     {   var t: Type;
 
@@ -737,8 +738,7 @@ err.str(" align="); err.uint(t@.align); err.nl();
 			    lex.ErrorI(DEFID, lex.Ident);
 			s = symb.New(VAR, lex.Ident, PRIVATE);
 			tok = Next();
-			s@.isparam = true;
-			s@.linkage = LOCAL;
+			s@.linkage = FORMAL;
 			t = unkntype;
 			if tok == COLON then
 			{   tok = Next();
@@ -871,7 +871,7 @@ if debug.tests[2] then {
     proc Def(tok: TokenT, bt: Type): Type
     {   var t: Type;
 	var s: Symb;
-	var vlo, vhi: Ast;
+	var vlo: Ast;
 
 	t = unkntype;		// in case all goes wrong
 	if tok
