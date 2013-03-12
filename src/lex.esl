@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 749 2013-02-24 23:17:49Z bgl $
+// $Id: lex.esl 756 2013-03-05 19:18:28Z bgl $
 
 package lex
 {
@@ -130,7 +130,7 @@ package lex
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
-	KINLINE,KINTR,
+	KINLINE,KNOINLINE,KINTR,
 	// type properties begin here
 	KMIN,	KMAX,	KBITSZ,	KMEMSZ,	KLEN
     );
@@ -218,6 +218,7 @@ package lex
 	[KSECTION] =	"section",
 	[KALIGN] =	"align",
 	[KINLINE] =	"inline",	// attributes for procs
+	[KNOINLINE] =   "noinline",
 	[KINTR] =	"interrupt",
 	[KMIN] =	"min",		// properties
 	[KMAX] =	"max",
@@ -492,7 +493,7 @@ package lex
     // Search to see if we have not imported this yet, if not, open it
     proc FileCheck(filename: @[]Char): boolean
     {   var fp: FileList;
-	var len, sfx: _uint;
+	var sfx: _uint;
 
 	zstr.cat(filename, ".esl", IdentMax);   // filename is in an ident buf
 	fp = filehead;

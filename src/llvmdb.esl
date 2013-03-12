@@ -5,7 +5,7 @@
  * in clang/lib/CodeGen/CGDebuginfo.cpp as a reference.
  *
  * Copyright (c) 2010-2012, Brian G. Lucas.  See LICENSE file.
- * $Id: llvmdb.esl 696 2012-06-12 21:52:52Z bgl $
+ * $Id: llvmdb.esl 762 2013-03-11 21:37:51Z bgl $
  */
 
 package llvmdb
@@ -227,7 +227,6 @@ package llvmdb
 
     proc DefFormals(ps: Symb): _uint
     {   var fs: Symb;
-	var term: TermT;
 	var n: _uint;
 
 	n = 0;
@@ -541,7 +540,8 @@ package llvmdb
 
 	seqno += 1;
 	s@.dbtag = seqno;
-	if s@.linkage == LOCAL then
+	if s@.linkage
+	is LOCAL, FORMAL then
 	{
 	    f.str("\tcall void @llvm.dbg.declare(metadata !{");
 	    llvm.PType(s@.type);
@@ -553,7 +553,7 @@ package llvmdb
 	    f.chr(')');
 	    PLine(s@.lineno);
 	    f.nl();	
-	    if !s@.isparam then
+	    if s@.linkage != FORMAL then
 	    {   s@.next = 0;
 		if lvtail == 0 then
 		    lvhead = s;
@@ -617,9 +617,11 @@ package llvmdb
 	list = PListStart();
 	tl = ps@.retvlist;
 	s = ps@.parmlist;
-	if s == 0 then term = BRACE; else term = COMMA;
-	if tl == 0 then				// not return value
+	term = COMMA;
+	if tl == 0 then				// no return value
+	{   if s == 0 then term = BRACE;
 	    PNull(term);
+	}
 	else
 	{   while tl != 0 do
 	    {   tag = tl@.type@.dbtag;

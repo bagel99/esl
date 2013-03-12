@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 750 2013-02-24 23:22:40Z bgl $
+// $Id: llvm.esl 760 2013-03-08 20:16:28Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -245,7 +245,7 @@ package llvm
     proc PName(s: Symb)
     {
 	if s@.linkage
-	is LOCAL then  { f.chr('%'); f.str(s@.ident); }
+	is FORMAL, LOCAL then  { f.chr('%'); f.str(s@.ident); }
 	is NORMAL, INLINE then
 	{   f.chr('@');
 	    if s@.kind == PROC && s@.bound then
@@ -512,7 +512,7 @@ package llvm
 	    if isdefine then
 	    {   f.str(" %");
 		f.str(s@.ident);
-		f.str(".arg");
+		f.chr('$');
 	    }
 	    s = s@.next;
 	  exit s == 0;
@@ -832,7 +832,7 @@ package llvm
 	var lo, hi: Valu;
 
 	// LLVM wants selector to be register width
-	node@.child[0] = expr.ExtendT(node@.child[0], type.wordtype);
+	node@.child[0] = ast.ExtendT(node@.child[0], type.wordtype);
 	GenSub(node@.child[0]);		// the selector value
 	labelse = Lseqno;  Lseqno += 1;
 	labend = Lseqno;  Lseqno += 1;
@@ -956,8 +956,8 @@ package llvm
     proc Copy(node: Ast)
     {
 	// LLVM wants i8* types
-	node@.child[0] = expr.Cast(node@.child[0], pbytetype);
-	node@.child[1] = expr.Cast(node@.child[1], pbytetype);
+	node@.child[0] = ast.Cast(node@.child[0], pbytetype);
+	node@.child[1] = ast.Cast(node@.child[1], pbytetype);
 /* {
 err.str("Copy: from=\n"); ast.Dump(node@.child[1]);
 err.str("to=\n"); ast.Dump(node@.child[0]);
@@ -965,7 +965,7 @@ err.str("to=\n"); ast.Dump(node@.child[0]);
 	GenSub(node@.child[0]);
 	GenSub(node@.child[1]);
 	// LLVM wants count to be register width
-	node@.child[2] = expr.ExtendT(node@.child[2], type.wordtype);
+	node@.child[2] = ast.ExtendT(node@.child[2], type.wordtype);
 	GenSub(node@.child[2]);
 	// FIXME: need to check for potential overlap and use memmove if necessary
 	// FIXME: find alignment, here or during parsing?
@@ -977,11 +977,11 @@ err.str("to=\n"); ast.Dump(node@.child[0]);
     proc Set(node: Ast)
     {
 	// LLVM wants i8* type
-	node@.child[0] = expr.Cast(node@.child[0], pbytetype);
+	node@.child[0] = ast.Cast(node@.child[0], pbytetype);
 	GenSub(node@.child[0]);
 	GenSub(node@.child[1]);
 	// LLVM wants count to be register width
-	node@.child[2] = expr.ExtendT(node@.child[2], type.wordtype);
+	node@.child[2] = ast.ExtendT(node@.child[2], type.wordtype);
 	GenSub(node@.child[2]);
 	Print(
 	   "\tcall void @llvm.memset.p0i8.%W(i8* %0N, %1T %1N, %2T %2N, i32 %3N, i1 0)\n", node);
@@ -1032,10 +1032,10 @@ err.str(" align="); err.uint(align);}
 */
 	if length != 0 && length <= size then	// can do with one load
 	{
-	    node@.child[0] = expr.Cast(node@.child[0], puinttype[i]);
+	    node@.child[0] = ast.Cast(node@.child[0], puinttype[i]);
 	    node@.child[0]@.width = puinttype[i]@.base@.width;
 	    node@.child[0] = ast.New1(LOAD, puinttype[i]@.base, node@.child[0]);
-	    node@.child[1] = expr.Cast(node@.child[1], puinttype[i]);
+	    node@.child[1] = ast.Cast(node@.child[1], puinttype[i]);
 	    node@.child[1]@.width = puinttype[i]@.base@.width;
 	    node@.child[1] = ast.New1(LOAD, puinttype[i]@.base, node@.child[1]);
 	    if length < size then
@@ -1066,9 +1066,9 @@ err.str(" align="); err.uint(align);}
 	}
 	else
 	{
-	    node@.child[0] = expr.Cast(node@.child[0], puinttype[i]);
+	    node@.child[0] = ast.Cast(node@.child[0], puinttype[i]);
 	    node@.child[0]@.width = puinttype[i]@.base@.width;
-	    node@.child[1] = expr.Cast(node@.child[1], puinttype[i]);
+	    node@.child[1] = ast.Cast(node@.child[1], puinttype[i]);
 	    node@.child[1]@.width = puinttype[i]@.base@.width;
 	    GenSub(node@.child[0]);
 	    GenSub(node@.child[1]);
@@ -1077,7 +1077,7 @@ err.str(" align="); err.uint(align);}
 				 node@.child[2],
 				 ast.Const(type.wordtype, size));
 	    // LLVM wants count to be register width
-	    node@.child[2] = expr.ExtendT(node@.child[2], type.wordtype);
+	    node@.child[2] = ast.ExtendT(node@.child[2], type.wordtype);
 	    GenSub(node@.child[2]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    node@.width = 1;
@@ -1360,8 +1360,9 @@ err.str(" align="); err.uint(align);}
 	    DclProcSearch(node@.child[0]);
 	    // Now declare the procedure with its parameters
 	    DclProc(node, true);
-	    if ps@.linkage == INLINE then
-		f.str(" alwaysinline");
+	    if ps@.linkage
+	    is INLINE then f.str(" alwaysinline");
+	    is NOINLINE then f.str(" noinline");
 	    if feature.size != NO then
 	    {   if feature.size == MIN then
 		    f.str(" minsize");
@@ -1400,7 +1401,7 @@ err.str(" align="); err.uint(align);}
 		PType(s@.type);
 		f.str(" %");
 		f.str(s@.ident);
-		f.str(".arg, ");
+		f.str("$, ");
 		PType(s@.type);
 		f.str("* %");
 		f.str(s@.ident);
@@ -1553,7 +1554,7 @@ err.str(" align="); err.uint(align);}
     {   var indx: Ast;
 
 	// FIXME: what about bitorder?
-	indx = expr.ExtendT(node@.child[1], type.wordtype);
+	indx = ast.ExtendT(node@.child[1], type.wordtype);
 	indx = ast.New2(MUL, type.wordtype, indx,
                         ast.Const(type.wordtype, size));
 	if tree != 0 then
@@ -1607,7 +1608,7 @@ err.str(" align="); err.uint(align);}
 		tree = ast.New1(REVB, tree@.type, tree);
 	}
 	// make register sized, this simplifies things
-	tree = expr.ExtendT(tree, type.wordtype);
+	tree = ast.ExtendT(tree, type.wordtype);
 /* {
 err.str("BitfieldRewrite tree=\n"); ast.Dump(tree);
 err.str("varb=\n"); ast.Dump(varb);
@@ -1652,7 +1653,7 @@ err.str("offs=\n"); ast.Dump(offs); } */
 	    // mask off the parts we don't want
 	    tree = ast.New2(AND, type.wordtype, tree, mask);
 	    // possibly narrow the size
-	    tree = expr.Extend(tree, load@.width, true);
+	    tree = ast.Extend(tree, load@.width, true);
 /* {
 err.str("BFLoad size="); err.uint(load@.width);
 err.str(" tree=\n"); ast.Dump(tree); } */
@@ -1710,14 +1711,14 @@ err.str(" tree=\n"); ast.Dump(tree); } */
 		// mask out the field in the target
 		tree = ast.New2(AND, type.wordtype, tree, mask);
 		// make the value word size
-		rhs = expr.ExtendT(rhs, type.wordtype);
+		rhs = ast.ExtendT(rhs, type.wordtype);
 		// shift the value leftward, if necessary
 		if varb != 0 then
 		    rhs  = ast.New2(LSL, type.wordtype, rhs, varb);
 		// or in the new value
 		rhs  = ast.New2(OR, type.wordtype, tree, rhs);
 		// adjust width of final result
-		rhs = expr.Extend(rhs, lhs@.type@.base@.width, true);
+		rhs = ast.Extend(rhs, lhs@.type@.base@.width, true);
 		// make sure the endian is correct
 		if lhs@.width > Target.membits && 
 		   lhs@.type@.memorder != Target.memorder then
@@ -1838,7 +1839,7 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	is INDEX then
 	{   GenSub(node@.child[0]);
 	    // LLVM wants index value to be register width
-	    node@.child[1] = expr.ExtendT(node@.child[1], type.wordtype);
+	    node@.child[1] = ast.ExtendT(node@.child[1], type.wordtype);
 	    GenSub(node@.child[1]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = getelementptr %0B %0N, %W 0, %1T %1N\n", node);
@@ -1849,7 +1850,7 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	    // Ignore the count, for now
 	    GenSub(node@.child[0]);
 	    // LLVM wants index value to be register width
-	    node@.child[1] = expr.ExtendT(node@.child[1], type.wordtype);
+	    node@.child[1] = ast.ExtendT(node@.child[1], type.wordtype);
 	    GenSub(node@.child[1]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    nextseqno = Tseqno; Tseqno += 1;

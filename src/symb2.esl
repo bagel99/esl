@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: symb2.esl 749 2013-02-24 23:17:49Z bgl $
+// $Id: symb2.esl 755 2013-03-04 22:52:24Z bgl $
 
 package symb
 {
@@ -29,8 +29,7 @@ package symb
     {   var fs, pfs, tfs: Symb;
 
 	fs = symb.New(VAR, "_", PRIVATE);
-	fs@.isparam = true;
-	fs@.linkage = LOCAL;
+	fs@.linkage = FORMAL;
 	fs@.type = t;
 	pfs = 0;
 	tfs = s@.parmlist;
@@ -189,7 +188,7 @@ package symb
 	if s@.kind
 	is CONSTANT then 
 	{   err.str("constant "); DumpST(s, false);
-	    if s@.type@.kind <= REF && s@.const != 0 then
+	    if s@.type != 0 && s@.type@.kind <= REF && s@.const != 0 then
 	    {   err.chr('='); 
 		err.hex64(s@.const@.valu);
 	    }
@@ -244,7 +243,11 @@ package symb
 	i = level;
 	loop
 	{
-	    err.str("*** level "); err.uint(i); err.str(" ***\n");
+	    err.str("*** level "); err.uint(i);
+	    if symbs[i].pkg != 0 then
+	    {   err.str(" package ");  err.str(symbs[i].pkg@.ident);
+	    }
+	    err.str(" ***\n");
 	    s = symbs[i].frst;
 	    while s != 0 do
 	    {   DumpS(s);

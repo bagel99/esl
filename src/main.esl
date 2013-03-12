@@ -151,7 +151,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
     }
     symb.Init();
     ast.Init();
-    symb.Push(0);	// preserve universal level
+    symb.Push(0, 0);	// preserve universal level
     tree = stmt.Program(argv[i]@);
     if debug.symb.prog then
 	symb.Dump(1);

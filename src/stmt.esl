@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 747 2013-02-07 18:25:12Z bgl $
+// $Id: stmt.esl 756 2013-03-05 19:18:28Z bgl $
 
 package stmt
 {
@@ -553,7 +553,7 @@ package stmt
 
     proc AssignArray(lhs:Ast): Ast
     {   var tree, lsize, rsize, align: Ast;
-	var lalign, ralign: _uint;
+	var lalign, ralign, width: _uint;
 	var t:Type;
 
 	t = lhs@.type@.base;
@@ -575,9 +575,13 @@ package stmt
 	{
 	    lalign = expr.GetAlignment(lhs);
 	    if lhs@.op == SLICE then
-		lsize = lhs@.child[2];
+	    {   lsize = lhs@.child[2];
+		width = lhs@.child[0]@.type@.base@.base@.width;
+	    }
 	    else
-		lsize = ast.Const(type.wordtype, lhs@.type@.base@.hi);
+	    {   lsize = ast.Const(type.wordtype, lhs@.type@.base@.hi);
+		width = lhs@.type@.base@.base@.width;
+	    }
 	    if tree@.op == LOAD && tree@.type@.kind == ARRAY then // undo the load
 		tree = tree@.child[0];
 	    else if tree@.op == SCON || tree@.op == CLIST then
@@ -603,6 +607,8 @@ package stmt
 	    {   if rsize@.op != CONST || rsize@.valu != 0 then
 		    lsize = expr.BinOp(UMIN, lsize, rsize);
 	    }
+	    lsize = ast.New2(MUL, lsize@.type, lsize,
+			     ast.Const(type.wordtype, width/Target.membits));
 	    lhs = ArrayFix(lhs);
 	    tree = ArrayFix(tree);
 	    tree = ast.New2(COPY, lhs@.type, lhs, tree);
@@ -887,7 +893,6 @@ package stmt
 	var t: Type;
 	var tok: TokenT;
 	var s: Symb;
-	var isup: boolean;
 
 	tree = 0;
 	tok = Token;
@@ -968,7 +973,6 @@ package stmt
 
     proc While(): Ast
     {   var tree, ctree: Ast;
-	var tok: TokenT;
 
 	ctree = expr.Bool(type.booltype);
 	if ctree != 0 then
@@ -991,7 +995,6 @@ package stmt
 
     proc Do(): Ast
     {   var tree, ctree: Ast;
-	var tok: TokenT;
 
 	LoopLevel += 1;
 	tree = Statement();
@@ -1231,8 +1234,7 @@ package stmt
 	    if tok == ID then
 	    {   // method parameter
 		ms = symb.New(VAR, lex.Ident, PRIVATE);
-		ms@.isparam = true;
-		ms@.linkage = LOCAL;
+		ms@.linkage = FORMAL;
 		t = type.unkntype;		// in case all goes wrong
 		tok = Next();
 		if tok == COLON then
@@ -1301,7 +1303,7 @@ package stmt
 	    if tok != SEMI then
 	    {   s@.forward = false;
 		symb.curproc = s;
-		es = symb.Push(s@.parmlist);	// make parameters visable
+		es = symb.Push(s@.parmlist, 0);	// make parameters visable
 		LoopLevel = 0;
 		tree = Statement();
 		if debug.symb.proc then
@@ -1420,7 +1422,7 @@ package stmt
 		pkgsave = symb.curpack;
 		symb.curpack = s;
 		tree = ast.New(SEQ, 0);
-		symb.Push(s@.symblist);
+		symb.Push(s@.symblist, s);
 		while tok != GEND && tok != ENDF do
 		{   stree = PkgStmt();
 		    if stree != 0 then
