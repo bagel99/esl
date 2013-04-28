@@ -1,5 +1,5 @@
 
-SRC =	main.esl lex.esl type1.esl type2.esl symb.esl \
+SRC =	main.esl lex.esl type1.esl type2.esl symb1.esl symb2.esl \
 	expr1.esl expr2.esl stmt.esl target.esl ast.esl llvm.esl \
 	zstr.esl out.esl sys.esl
 
@@ -8,8 +8,8 @@ SRC =	main.esl lex.esl type1.esl type2.esl symb.esl \
 LLVM=./llvm
 LLVMFLAG= -I		# no inlining to ease debugging
 
-# GCC is used only to run the assembler and linker
-GCC=	gcc
+# C compiler is used only to run the assembler and linker
+GCC=	cc
 
 # For 32-bit x86 use these
 #CFLAGS=-m32
@@ -78,4 +78,10 @@ eslc3:	main3.s
 tarball:
 	tar -czhf eslc.tgz \
 	$(SRC) main-start-x86.ll main-start-x86-64.ll llvm Makefile
+
+clean:
+	rm -f main-start.s eslc0
+	rm -f main1.ll main1.s eslc1
+	rm -f main2.ll main2.s eslc2
+	rm -f main3.ll main3.s eslc3
 
