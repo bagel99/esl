@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 756 2013-03-05 19:18:28Z bgl $
+// $Id: stmt.esl 767 2013-04-17 21:46:28Z bgl $
 
 package stmt
 {
@@ -579,7 +579,7 @@ package stmt
 		width = lhs@.child[0]@.type@.base@.base@.width;
 	    }
 	    else
-	    {   lsize = ast.Const(type.wordtype, lhs@.type@.base@.hi);
+	    {   lsize = ast.Const(type.wordtype, lhs@.type@.base@.Span());
 		width = lhs@.type@.base@.base@.width;
 	    }
 	    if tree@.op == LOAD && tree@.type@.kind == ARRAY then // undo the load
@@ -594,7 +594,7 @@ package stmt
 	    if tree@.op == SLICE then
 		rsize = tree@.child[2];
 	    else
-		rsize = ast.Const(type.wordtype, tree@.type@.base@.hi);
+		rsize = ast.Const(type.wordtype, tree@.type@.base@.Span());
 //err.str("ArrayCopy lsize=\n"); ast.Dump(lsize);
 //err.str("rsize=\n"); ast.Dump(rsize);
 	    if lsize@.op == CONST && lsize@.valu == 0 then
@@ -1242,6 +1242,7 @@ package stmt
 		    if tok
 		    is AT then 
 		    {   t = type.Ref();
+			type.Final(t);
 			mt = t@.base;
 		    }
 		    is ID then 

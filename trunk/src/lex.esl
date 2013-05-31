@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 756 2013-03-05 19:18:28Z bgl $
+// $Id: lex.esl 775 2013-05-28 20:41:36Z bgl $
 
 package lex
 {
@@ -549,7 +549,7 @@ package lex
     proc MakeFnumE(n: _uint64, scale1: _uint, scale2: _int)
     {   var scale: _int;
 
-	scale = scale2 - _int(scale1);
+	scale = _int(scale1) - scale2;
 	Number = n;
 	Scale = scale;
     }
