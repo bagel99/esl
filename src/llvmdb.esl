@@ -5,7 +5,7 @@
  * in clang/lib/CodeGen/CGDebuginfo.cpp as a reference.
  *
  * Copyright (c) 2010-2012, Brian G. Lucas.  See LICENSE file.
- * $Id: llvmdb.esl 762 2013-03-11 21:37:51Z bgl $
+ * $Id: llvmdb.esl 766 2013-04-16 21:00:41Z bgl $
  */
 
 package llvmdb
@@ -377,7 +377,7 @@ package llvmdb
 	tagb = DefType(t@.base);
 	tagi = 0;
 	if !t@.flex then
-	    tagi = DefRange(t@.lo, t@.hi-1);
+	    tagi = DefRange(t@.lo, t@.hi);
 	// LLVM wants a list of indices
 	if tagi != 0 then
 	{   tagl = PListStart();

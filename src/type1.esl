@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type1.esl 749 2013-02-24 23:17:49Z bgl $
+// $Id: type1.esl 766 2013-04-16 21:00:41Z bgl $
 
 package type
 {
@@ -72,6 +72,15 @@ package type
     proc Final(t: Type);
 
     proc DumpT(t: Type, full: boolean);
+
+    proc (t: Type) Span(): _uint
+    {
+	// assert t@.kind == ARRAY;
+        if t@.flex then
+	    return 0;
+        else
+	    return t@.hi - t@.lo + 1;
+    }
 }
 // vim: ts=8 sw=4 noet nowrap
 

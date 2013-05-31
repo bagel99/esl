@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: llvm.esl 760 2013-03-08 20:16:28Z bgl $
+// $Id: llvm.esl 766 2013-04-16 21:00:41Z bgl $
 
 // Convert AST to LLVM assembly
 import bout;
@@ -139,7 +139,7 @@ package llvm
 		}
 		else
 		{   f.chr('[');
-		    f.uint32(_uint32(t@.hi));
+		    f.uint32(t.Span());
 		    f.str(" x ");
 		    PType(t@.base);
 		    f.chr(']');
@@ -579,9 +579,9 @@ package llvm
 	    is FCON then PFloat(node);
 	    is SCON then
 	    {   if t@.flex then
-		    n = StringRange(node@.type@.hi);
+		    n = StringRange(node@.type.Span());
 		else
-		    n = StringRange(t@.hi);
+		    n = StringRange(t.Span());
 		PString(pstring(node@.symb), n, true);
 	    }
 	    is CLIST then
@@ -712,7 +712,7 @@ package llvm
 
 //err.str("DclString\n");
 	Print("%S = internal constant %B ", node);
-	n = StringRange(node@.type@.hi);
+	n = StringRange(node@.type.Span());
 	PString(pstring(node@.symb), n, true);
 	f.nl();
     }

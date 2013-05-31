@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 756 2013-03-05 19:18:28Z bgl $
+// $Id: type2.esl 766 2013-04-16 21:00:41Z bgl $
 
 package type
 {
@@ -102,8 +102,21 @@ package type
 	if t2@.atbase != 0 then return Compat(t1, t2@.atbase);
 	if t2@.kind
 	is UINT, SINT then return true;
-	is ENUM, RECORD then 
-	{   // if t2 is a superset of t1 then they are compatable
+	is ENUM then 
+	{   var bt1, bt2: Type;
+	    // must have same base type
+	    bt1 = t1;
+	    while bt1@.base != 0 do
+		bt1 = bt1@.base;
+	    bt2 = t2;
+	    while bt2@.base != 0 do
+		bt2 = bt2@.base;
+	    if bt1 != bt2 then return false;
+	    // if t2 is a superset of t1 then they are compatable
+	    return t2@.lo <= t1@.lo && t1@.hi <= t2@.hi;
+	}
+	is RECORD then 
+	{   // if t2 is same as, or derived from, t1 then they are compatable
 	    if t2@.base != 0 then return Compat(t1, t2@.base);
 	    return false;
 	}
@@ -537,11 +550,15 @@ err.str(" align="); err.uint(t@.align); err.nl();
 		    if t@.packed then
 			t@.base = ForcePacked(t@.base);
 		    if t@.size == 0 then
-			t@.size = BitSize(t@.base@.size * t@.hi);
+			t@.size = BitSize(t@.base@.size * t.Span());
 		    if t@.width == 0 then
 			t@.width = t@.size;
 		    if t@.base.width < t@.base.align then
+{
 			lex.ErrorS(NOTIMPL, "Array of aligned items");
+type.DumpT(t@.base, true);
+err.nl();
+}
 		    if !t@.packed then
 			align = t@.base@.align;
 		    else
@@ -626,6 +643,29 @@ err.str(" align="); err.uint(t@.align); err.nl();
 	return t;
     }
 
+    proc RangeEnum(t: Type, bt: Type)
+    {   var vb, vn, pvn: Symb;
+	var v, vlo, vhi: _uint32;
+
+	t@.base = bt;
+	vb = bt@.list;
+	pvn = 0;
+	vlo = t@.lo;
+	// skip over any too low
+	while vb != 0 && vlo > _uint32(vb@.const@.valu) do
+	    vb = vb@.next;
+	vhi = t@.hi;
+	// copy over those in range
+	while vb != 0 && vhi >= _uint32(vb@.const@.valu) do
+	{   vn = symb.New(CONSTANT, vb@.ident, PRIVATE);
+	    vn@.const = ast.Const(t, vb@.const@.valu);
+	    if pvn != 0 then pvn@.next = vn;
+			else t@.list = vn;
+	    pvn = vn;
+	    vb = vb@.next;
+	}
+    }
+
     proc Record(bt: Type): Type
     {   var tok: TokenT;
 	var t, ft: Type;
@@ -697,13 +737,15 @@ err.str(" align="); err.uint(t@.align); err.nl();
 	    if tree != 0 then
 	    {   if tree@.op
 		is CONST then
-		{   t@.hi = tree@.valu;
+		{   t@.lo = 0;
+		    t@.hi = tree@.valu - 1;
 		    t@.index = type.wordtype;
 		}
 		is TYPE then
 		{   if tree@.type@.kind
 		    is ENUM, UINT then
-		    {   t@.hi = tree@.type@.hi + 1;
+		    {   t@.lo = tree@.type@.lo;
+		        t@.hi = tree@.type@.hi;
 			t@.index = tree@.type;
 		    }
 		    else lex.Error(BADINDEX);
@@ -853,9 +895,11 @@ if debug.tests[2] then {
 	    if vlo@.op == CONST && vhi@.op == CONST then
 	    {   if vlo@.type@.kind
 		is ENUM, UINT, SINT then 
-		{	t = type.New(vlo@.type@.kind);
+		{   t = type.New(vlo@.type@.kind);
 		    t@.lo = vlo@.valu;
 		    t@.hi = vhi@.valu;
+		    if vlo@.type@.kind == ENUM then
+			RangeEnum(t, vlo@.type);
 		}
 		else
 		    lex.Error(BADTYPDEF);
@@ -1020,7 +1064,10 @@ if debug.tests[2] then {
 		    if t@.flex then
 			err.chr('*');
 		    else
+		    {	err.uint32(_uint32(t@.lo));
+		        err.str("..");
 			err.uint32(_uint32(t@.hi));
+		    }
 		    err.chr(']');
 		    Dump2(t@.base, indent, full);
 		}
