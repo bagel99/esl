@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: lex.esl 775 2013-05-28 20:41:36Z bgl $
+// $Id$
 
 package lex
 {

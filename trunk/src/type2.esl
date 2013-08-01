@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type2.esl 766 2013-04-16 21:00:41Z bgl $
+// $Id$
 
 package type
 {
@@ -466,6 +466,8 @@ err.str(" align="); err.uint(t@.align); err.nl();
 		    t@.width = target.isize(t@.size);
 		align = target.ialign(t@.size);
 	    }
+	    is FLOAT then
+	        t@.width = t@.size;
 	    is REF then 
 	    {   // Make sure anonymous base types are final
 		if t@.base != 0 && t@.base@.name == 0 then
@@ -633,13 +635,14 @@ err.nl();
 	    else
 		lex.Error(EXPECTID);
 	    if v > vmax then vmax = v;
-	  exit tok != COMMA;
-	    tok = Next();
+	  exit tok == PEND;
+	    tok = lex.Expect(COMMA);
+	  exit tok == PEND;
 	    v += 1;
 	}
+	lex.Expect(PEND);
 	t@.lo = 0;
 	t@.hi = vmax;
-	lex.Expect(PEND);
 	return t;
     }
 

@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: stmt.esl 767 2013-04-17 21:46:28Z bgl $
+// $Id$
 
 package stmt
 {
@@ -291,6 +291,8 @@ package stmt
 		if tok == ASGN then
 		{   tok = Next();
 		    iv = expr.Const(t);
+		    if t@.flex then
+			t = iv@.type;       // iv may have fixed a flex
 		    s@.hasdef = true;
 		}
 	    }
@@ -605,7 +607,7 @@ package stmt
 	    }
 	    else
 	    {   if rsize@.op != CONST || rsize@.valu != 0 then
-		    lsize = expr.BinOp(UMIN, lsize, rsize);
+		    lsize = ast.OpMinMax(UMIN, lsize, rsize);
 	    }
 	    lsize = ast.New2(MUL, lsize@.type, lsize,
 			     ast.Const(type.wordtype, width/Target.membits));
@@ -629,15 +631,18 @@ package stmt
 
 	tree = ast.New1(STORE, 0, lhs);
 	nl = 1;
-	tok = Token;
 	loop
-	{
+	{   tok = Token;
 	  exit tok != COMMA;
 	    tok = Next();
-	    lhs = expr.GetLHS();
+	    if tok == ID && symb.IsAnon(lex.Ident) then
+	    {   tok = Next();
+		lhs = 0;
+	    }
+	    else
+		lhs = expr.GetLHS();
 	    tree = ast.Child(tree, lhs);
 	    nl += 1;
-	    tok = Token;
 	}
 	if tok >= ASGN && tok <= DECR then
 	{   optok = tok;
@@ -693,12 +698,12 @@ package stmt
 			    {   if optok != ASGN then
 				{   lrhs = expr.Load(lhs);
 				    if optok == INCR then op = ADD; else op = SUB;
-				    rhs = expr.BinOp(op, lrhs, rhs);
+				    rhs = ast.OpBinary(op, lrhs, rhs, 0);
 				}
-				if lhs@.type@.kind != REF then
-				    lex.ErrorS(COMPILER, "LHS should be REF");
-				rhs = expr.Adjust(rhs, lhs@.type@.base);
-				rhs = CheckSwap(lhs, rhs);
+				if lhs != 0 then
+				{   rhs = expr.Adjust(rhs, lhs@.type@.base);
+				    rhs = CheckSwap(lhs, rhs);
+				}
 			    }
 			    else lex.Error(RHSASSIGN);
 			    tree = ast.Child(tree, rhs);
@@ -814,7 +819,7 @@ package stmt
 		return CCIfTail(ctree, PROCEDURE);
 	    t = ctree@.type;
 	    if type.Compat(t, type.booltype) then
-		ctree = expr.ForceBoolean(ctree);
+		ctree = ast.ForceBoolean(ctree);
 	    else
 		op = SEL;
 	    tree = ast.New(op, 0);
@@ -977,7 +982,7 @@ package stmt
 	ctree = expr.Bool(type.booltype);
 	if ctree != 0 then
 	{   if type.Compat(ctree@.type, type.booltype) then
-		ctree = expr.ForceBoolean(ctree);
+		ctree = ast.ForceBoolean(ctree);
 	    else
 		lex.Error(WANTBOOL);
 	    ctree = ast.New1(BNOT, 0, ctree);
@@ -1002,7 +1007,7 @@ package stmt
 	ctree = expr.Bool(type.booltype);
 	if ctree != 0 then
 	{   if type.Compat(ctree@.type, type.booltype) then
-		ctree = expr.ForceBoolean(ctree);
+		ctree = ast.ForceBoolean(ctree);
 	    else
 		lex.Error(WANTBOOL);
 	    ctree = ast.New1(BNOT, 0, ctree);
@@ -1040,10 +1045,12 @@ package stmt
 	    lex.Error(NOLOOP);
 	tree = ast.New(EXIT, 0);
 	ctree = expr.Bool(type.booltype);
-	if type.Compat(ctree@.type, type.booltype) then
-	    ctree = expr.ForceBoolean(ctree);
-	else
-	    lex.Error(WANTBOOL);
+	if ctree != 0 then
+	{   if type.Compat(ctree@.type, type.booltype) then
+		ctree = ast.ForceBoolean(ctree);
+	    else
+		lex.Error(WANTBOOL);
+	}
 	tree = ast.Child(tree, ctree);
 	tok = lex.Keyword(withlist);
 	if tok == KWITH then
@@ -1188,6 +1195,8 @@ package stmt
 	    is ID then 
 	    {   if s != 0 then
 		    tree = AssignOrCall(s);
+		else if symb.IsAnon(lex.Ident) then
+		    tree = Assign(0);
 		else
 		{   lex.ErrorI(BADSTMTI, lex.Ident);
 		    tok = lex.Skip(stmtlist);

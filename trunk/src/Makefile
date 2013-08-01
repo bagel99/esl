@@ -11,13 +11,17 @@ LLVMFLAG= -I		# no inlining to ease debugging
 # C compiler is used only to run the assembler and linker
 GCC=	cc
 
-# For 32-bit x86 use these
-#CFLAGS=-m32
-#ARCH=x86
+ARCH:= $(shell uname -m)
+ifeq ($(ARCH), x86_64)
+  CFLAGS=
+  ARCH=x86-64
+else
+  ifeq ($(ARCH), i686)
+    CFLAGS=-m32
+    ARCH=x86
+  endif
+endif
 
-# For 64-bit x86-64 use these
-CFLAGS=
-ARCH=x86-64
 
 BOOT=main-start-$(ARCH).ll
 

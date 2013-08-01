@@ -13,10 +13,8 @@
 #
 pkgs="-I."
 eslcomp="$HOME/src/compiler/src/eslc2"
-llvmdir2_9="$HOME/work/llvm-2.9/Release/bin"
-llvmdir3_0="$HOME/work/llvm-3.0/Release/bin"
-llvmdir3_1="$HOME/work/llvm-3.1/Release+Asserts/bin"
 llvmdir3_2="$HOME/work/llvm-3.2/build/Release+Asserts/bin"
+llvmdir3_3="$HOME/work/llvm-3.3/build/Release+Asserts/bin"
 llvmdirT="$HOME/work/llvm/Release+Asserts/bin"
 
 #
@@ -32,7 +30,7 @@ optimize=
 feature=
 loopthresh=10
 outfile="a.out"
-llvmdir=$llvmdir3_2
+llvmdir=$llvmdir3_3
 
 #
 # Clean up temporary files
@@ -91,7 +89,7 @@ do
     D) debug="$debug -D$OPTARG" ;;
     F) feature="$feature -F$OPTARG" ;;
     M) feature="$feature -M"; mflag=1 ;;
-    P) llvmdir=$llvmdir3_1 ;;
+    P) llvmdir=$llvmdir3_2 ;;
     T) llvmdir=$llvmdirT ;;
     *) echo "Unknown option: $flag" ; exit 1 ;;
     esac

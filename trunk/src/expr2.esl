@@ -1,23 +1,12 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: expr2.esl 780 2013-05-30 18:08:56Z bgl $
+// $Id$
 
 package expr
 {
     const skiplist:[4]TokenT = { PEND, GEND, SEMI, NONE };
 
-    proc ForceBoolean(tree: Ast): Ast
-    {
-	if tree@.type != 0 && !type.Compat(tree@.type,type.booltype) then
-	    lex.Error(WANTBOOL);
-	if tree@.width > 1 then		// llvm wants a 1-bit boolean
-	{   if tree@.op != CONST then
-		tree = ast.New2(NE, type.booltype, tree, ast.Const(tree@.type, 0));
-	    tree@.width = 1;
-	}
-	return tree;
-    }
-
     const proplist:[]TokenT = { KMIN, KMAX, KBITSZ, KMEMSZ, KALIGN, KLEN, NONE };
+
     proc Property(node: Ast): Ast
     {   var tree: Ast;
 	var t: Type;
@@ -383,6 +372,7 @@ package expr
 	}
 	// final field must be the flex, change its type
 	ps@.type = node@.child[node@.num-1]@.type;
+	t@.base = bt;       // set base type for compatibility test
 	// Recalculate size and width
 	t@.size = 0;
 	t@.width = 0;
@@ -829,56 +819,15 @@ ast.Dump(tree);
 	    if to@.width != tree@.width then
 		tree = ast.ExtendT(tree, to);
 	}
+	is FLOAT then
+	{
+	    if to@.width != tree@.width then
+		tree = ast.ExtendT(tree, to);
+	}
 	if !ok then
 	    lex.Error(TYPEASSIGN);
 //	tree = CheckSwap(lhs, tree);    // FIXME - do for parms and retv?
 	return tree;
-    }
-
-    // Until all hosts have the popcnt instruction
-    proc popcnt(x: type.Valu): _uint
-    {   var n: _uint;
-
-	n = 0;
-	while x != 0 do
-	{   n += 1;
-	    x = x & (x-1);
-	}
-	return n;
-    }
-
-    proc UnOp(op:ast.Op, rhs:Ast): Ast
-    {   var tree: Ast;
-
-	if rhs@.op == CONST then	// constant folding
-	{   tree = rhs;			// assume nop
-	    if op
-	    is NEG  then tree@.valu = type.Valu(-tree@.valu);
-	    is NOT  then tree@.valu = ~tree@.valu;
-	    is BNOT then tree@.valu = tree@.valu ^ 1;
-	    is ABS  then 
-	    {   if tree@.type@.kind == SINT && type.SValu(tree@.valu) < 0 then
-		    tree@.valu = type.Valu(-type.SValu(tree@.valu));
-	    }
-	    is CLZ, CLZNZ  then
-	    {   if tree@.valu == 0 then
-		    tree@.valu = tree@.width;
-		else
-		    tree@.valu = _clznz(tree@.valu) -
-			    (Valu?size*Target.membits - tree@.width);
-	    }
-	    is CTZ, CTZNZ  then
-	    {   if tree@.valu == 0 then
-		    tree@.valu = 0;
-		else
-		    tree@.valu = _ctznz(tree@.valu);
-	    }
-	    is POP  then tree@.valu = popcnt(tree@.valu);
-	    else lex.ErrorS(COMPILER, "Unhandled unary operation");
-	}
-	else
-	    tree = ast.New1(op, rhs@.type, rhs);
-	return tree; 
     }
 
     proc IsSignedBinOp(lhs: Ast, rhs: Ast): boolean
@@ -886,115 +835,6 @@ ast.Dump(tree);
 	if lhs@.type@.kind == SINT || rhs@.type@.kind == SINT then
 	    return true;
 	return false;
-    }
-
-    proc BinOp(op:ast.Op, lhs:Ast, rhs:Ast): Ast
-    {   var tree: Ast;
-	var sl, sr: type.BitSize;
-
-	if lhs@.op == TYPE then
-	{   lex.ErrorI(BADTYPE, lhs@.type@.name@.ident);
-	    return 0;
-	}
-	if rhs@.op == TYPE then
-	{   lex.ErrorI(BADTYPE,rhs@.type@.name@.ident);
-	    return 0;
-	}
-	if lhs@.op == CONST then
-	{   if rhs@.op == CONST then	// constant folding
-	    {   if op
-		is ADD then { lhs@.valu += rhs@.valu; return lhs; }
-		is SUB then { lhs@.valu -= rhs@.valu; return lhs; }
-		is OR then  { lhs@.valu = lhs@.valu | rhs@.valu; return lhs; }
-		is XOR then { lhs@.valu = lhs@.valu ^ rhs@.valu; return lhs; }
-		is AND then { lhs@.valu = lhs@.valu & rhs@.valu; return lhs; }
-		is MUL then { lhs@.valu = lhs@.valu * rhs@.valu; return lhs; }
-		is DIV then { lhs@.valu = lhs@.valu / rhs@.valu; return lhs; }
-		is MOD then { lhs@.valu = lhs@.valu % rhs@.valu; return lhs; }
-		is LSL,ASL then { lhs@.valu = lhs@.valu << rhs@.valu; return lhs; }
-		is LSR then { lhs@.valu = lhs@.valu >> rhs@.valu; return lhs; }
-		is ASR then
-		{   lhs@.valu = Valu(type.SValu(lhs@.valu) << rhs@.valu);
-		    return lhs;
-		}
-		is UMIN then
-		{   if rhs@.valu < lhs.valu then lhs.valu = rhs.valu;
-		    return lhs;
-		}
-		is UMAX then
-		{   if rhs@.valu > lhs.valu then lhs.valu = rhs.valu;
-		    return lhs;
-		}
-		is SMIN then
-		{   if type.SValu(rhs@.valu) < type.SValu(lhs.valu) then
-			lhs.valu = rhs.valu;
-		    return lhs;
-		}
-		is SMAX then
-		{   if type.SValu(rhs@.valu) > type.SValu(lhs.valu) then
-			lhs.valu = rhs.valu;
-		    return lhs;
-		}
-		is EQ then
-		{   lhs@.valu = _uint(lhs@.valu == rhs@.valu);
-		    return lhs;
-		}
-		is NE then
-		{   lhs@.valu = _uint(lhs@.valu != rhs@.valu);
-		    return lhs;
-		}
-		is ULT then
-		{   lhs@.valu = _uint(lhs@.valu < rhs@.valu);
-		    return lhs;
-		}
-		is UGT then
-		{   lhs@.valu = _uint(lhs@.valu > rhs@.valu);
-		    return lhs;
-		}
-		is ULE then
-		{   lhs@.valu = _uint(lhs@.valu <= rhs@.valu);
-		    return lhs;
-		}
-		is UGE then
-		{   lhs@.valu = _uint(lhs@.valu >= rhs@.valu);
-		    return lhs;
-		}
-		is SLT then
-		{   lhs@.valu = _uint(type.SValu(lhs@.valu) < type.SValu(rhs@.valu));
-		    return lhs;
-		}
-		is SGT then
-		{   lhs@.valu = _uint(type.SValu(lhs@.valu) > type.SValu(rhs@.valu));
-		    return lhs;
-		}
-		is SLE then
-		{   lhs@.valu = _uint(type.SValu(lhs@.valu) <= type.SValu(rhs@.valu));
-		    return lhs;
-		}
-		is SGE then
-		{   lhs@.valu = _uint(type.SValu(lhs@.valu) >= type.SValu(rhs@.valu));
-		    return lhs;
-		}
-	    }
-	}
-	// FIXME: all the kinds should be examined for legality
-	// for the various ops
-	if lhs@.type@.kind == REF || lhs@.type@.kind == REFPROC then
-	{   if rhs@.op == CONST then
-	    {   if op == EQ || op == NE then
-		    rhs@.width = Target.ptr.size;
-	    }
-	}
-	sl = lhs@.width;
-	sr = rhs@.width;
-	if sl > sr then
-	    rhs = ast.Extend(rhs, sl, false);
-	else
-	{   if sr > sl then
-		lhs = ast.Extend(lhs, sr, false);
-	}
-	tree = ast.New2(op, lhs@.type, lhs, rhs);
-	return tree;
     }
 
     proc FindFlexSize(t: Type): type.BitSize
@@ -1194,8 +1034,7 @@ ast.Dump(tree);
     {   var tree: Ast;
 
 	tree = Bool(0);
-	if tree != 0 then
-	    tree = UnOp(op, tree);
+	tree = ast.OpUnary(op, tree);
 	return tree;
     }
 
@@ -1288,7 +1127,7 @@ ast.Dump(tree);
 			if which == MIN then op = SMIN; else op = SMAX;
 		    else
 			if which == MIN then op = UMIN; else op = UMAX;
-		    tree = BinOp(op, lhs, rhs);
+		    tree = ast.OpMinMax(op, lhs, rhs);
 		}
 	    }
 	    is CLZ   then tree = IntrinsicUnary(CLZ);
@@ -1737,10 +1576,10 @@ ast.Dump(tree);
 	    if savetok
 	    is MINUS then
 	    {   if tree@.type@.kind == FLOAT then
-		    tree = UnOp(FNEG, tree);
+		    tree = ast.OpUnary(FNEG, tree);
 		else
 		{
-		    tree = UnOp(NEG, tree);
+		    tree = ast.OpUnary(NEG, tree);
 		    if tree@.type@.kind == UINT then
 		    {   var i: _uint;
 			i = 0;
@@ -1752,10 +1591,10 @@ ast.Dump(tree);
 		}
 	    }
 	    is INV then
-		tree = UnOp(NOT, tree);
+		tree =ast.OpUnary(NOT, tree);
 	    is NOT then
-	    {   tree = ForceBoolean(tree);
-		tree = UnOp(BNOT, tree);
+	    {   tree = ast.ForceBoolean(tree);
+		tree = ast.OpUnary(BNOT, tree);
 	    }
 	}
 	return tree;
@@ -1778,19 +1617,22 @@ ast.Dump(tree);
 		rhs = Unary(tree@.type);
 	      exit rhs == 0;
 		if tree@.type@.kind == FLOAT then
-		    op = fmulop[stok - STAR];
+		    tree = ast.OpFloat(fmulop[stok - STAR], tree, rhs, t);
 		else
 		{   op = mulop[stok - STAR];
-		    if tree@.type@.kind == SINT then
-		    {   if op
-			is LSL then op = ASL;
-			is LSR then op = ASR;
+		    if op
+		    is AND then tree = ast.OpLogic(op, tree, rhs);
+		    is MUL then tree = ast.OpMul(op, tree, rhs, t);
+		    is DIV, MOD then tree = ast.OpDiv(op, tree, rhs, t);
+		    is LSL then
+		    {   if tree@.type@.kind == SINT then op = ASL;
+			tree = ast.OpMul(op, tree, rhs, t);
 		    }
-		    // make LHS as wide as result wants it
-		    if op != AND && t != 0 && t@.width > tree@.type@.width then
-			tree = ast.ExtendT(tree, t);
+		    is LSR then
+		    {   if tree@.type@.kind == SINT then op = ASR;
+			tree = ast.OpDiv(op, tree, rhs, t);
+		    }
 		}
-		tree = BinOp(op, tree, rhs);
 	    }
 	}
 	return tree;
@@ -1813,15 +1655,14 @@ ast.Dump(tree);
 		rhs = Mul(tree@.type);
 	      exit rhs == 0;
 		if tree@.type@.kind == FLOAT then
-		    op = faddop[stok - PLUS];
+		    tree = ast.OpFloat(faddop[stok - PLUS], tree, rhs, t);
 		else
 		{   op = addop[stok - PLUS];
-		    // make LHS as wide as result wants it
-		    if op != OR && op != XOR &&
-			    t != 0 && t@.width > tree@.type@.width then
-			tree = ast.ExtendT(tree, t);
+		    if op < OR then
+			tree = ast.OpAdd(op, tree, rhs, t);
+		    else
+			tree = ast.OpLogic(op, tree, rhs);
 		}
-		tree = BinOp(op, tree, rhs);
 	    }
 	}
 	return tree;
@@ -1830,17 +1671,6 @@ ast.Dump(tree);
 
     const ucmpop: []ast.Op = { EQ, NE, ULT, UGT, ULE, UGE };
     const scmpop: []ast.Op = { EQ, NE, SLT, SGT, SLE, SGE };
-    proc ScalarCompare(op: ast.Op, lhs: Ast, rhs: Ast): Ast
-    {   var tree: Ast;
-
-	tree = BinOp(op, lhs, rhs);
-	if tree != 0 then
-	{   tree@.type = type.booltype;
-	    tree@.width = 1;
-	}
-	return tree;
-    }
-
     proc ArrayCompare(op: ast.Op, lhs: Ast, rhs: Ast): Ast
     {   var tree: Ast;
 	var lsize, rsize, align: Ast;
@@ -1923,7 +1753,7 @@ ast.Dump(tree);
 			    op = scmpop[savetok - EQ];
 			else
 			    op = ucmpop[savetok - EQ];
-			tree = ScalarCompare(op, tree, rhs);
+			tree = ast.OpCompare(op, tree, rhs);
 		    }
 		    is REF, REFPROC then
 		    {   if savetok
@@ -1931,7 +1761,7 @@ ast.Dump(tree);
 			is NE then op = NE;
 			else ok = false;
 			if ok then
-			    tree = ScalarCompare(op, tree, rhs);
+			    tree = ast.OpCompare(op, tree, rhs);
 		    }
 		    is RECORD then
 		    {   if NodeKind(rhs) == RECORD &&
@@ -1941,7 +1771,7 @@ ast.Dump(tree);
 			    is NE then op = NE;
 			    else ok = false;
 			    if ok then
-				tree = ScalarCompare(op, tree, rhs);
+				tree = ast.OpCompare(op, tree, rhs);
 			}
 			else ok = false;
 		    }
@@ -1953,7 +1783,7 @@ ast.Dump(tree);
 				is NE then op = NE;
 				else ok = false;
 				if ok then
-				    tree = ScalarCompare(op, tree, rhs);
+				    tree = ast.OpCompare(op, tree, rhs);
 			    }
 			    else
 			    {   if savetok
@@ -1985,15 +1815,7 @@ ast.Dump(tree);
 	  exit tok != BAND;
 	    tok = Next();
 	    rhs = Compare(tree@.type);
-	    if tree != 0 && rhs != 0 then
-	    {   tree = ForceBoolean(tree);
-		rhs = ForceBoolean(rhs);
-		// constant folding
-		if tree@.op == CONST && rhs@.op == CONST then
-		    tree@.valu = tree@.valu & rhs@.valu;
-		else
-		    tree = ast.New2(BAND, type.booltype, tree, rhs);
-	    }
+	    tree = ast.OpBool(BAND, tree, rhs);
 	}
 	return tree;
     }
@@ -2008,15 +1830,7 @@ ast.Dump(tree);
 	  exit tok != BOR;
 	    tok = Next();
 	    rhs = BoolAnd(tree@.type);
-	    if tree != 0 && rhs != 0 then
-	    {   tree = ForceBoolean(tree);
-		rhs = ForceBoolean(rhs);
-		// constant folding
-		if tree@.op == CONST && rhs@.op == CONST then
-		    tree@.valu = tree@.valu | rhs@.valu;
-		else
-		    tree = ast.New2(BOR, type.booltype, tree, rhs);
-	    }
+	    tree = ast.OpBool(BOR, tree, rhs);
 	}
 	return tree;
     }

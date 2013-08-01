@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: ast.esl 766 2013-04-16 21:00:41Z bgl $
+// $Id$
 
 package ast
 {
@@ -24,7 +24,8 @@ package ast
 	STORE,		// assignment
 	ZEXT,   SEXT,   TRUNC,	REVB,
 	NEG,	NOT,	ABS,
-	FNEG,   CVTUF,	CVTIF,  CVTFU,	CVTFI,
+	FNEG,   FCVTL,  FCVTS,
+	CVTUF,	CVTIF,  CVTFU,	CVTFI,
 	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,
 	ADD,    SUB,
 	MUL,    DIV,    MOD,
@@ -64,7 +65,7 @@ package ast
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,	[REVB]=   1,
 	[NEG]=    1,	[NOT]=    1,
 	[ABS]=	  3,	// will convert into IFEXPR
-	[FNEG]=   1,
+	[FNEG]=   1,    [FCVTL]=  1,    [FCVTS]=  1,
 	[CVTUF]=  1,	[CVTIF]=  1,	[CVTFU]=  1,	[CVTFI]=  1,
 	[CLZ]=    1,	[CLZNZ]=  1,	[CTZ]=    1,	[CTZNZ]=  1,
 	[POP]=    1,
@@ -274,7 +275,10 @@ package ast
     {
 	if tree@.width < size then
 	{   if tree@.op != CONST then
-	    {   if tree@.type@.kind == SINT then
+	    {   if tree@.type@.kind
+		is FLOAT then
+		    tree = New1(FCVTL, tree@.type, tree);
+		is SINT then
 		    tree = New1(SEXT, tree@.type, tree);
 		else
 		    tree = New1(ZEXT, tree@.type, tree);
@@ -284,7 +288,10 @@ package ast
 	else if tree@.width > size then
 	{
 	    if tree@.op != CONST then
-	    {   tree = New1(TRUNC, tree@.type, tree);
+	    {   if tree@.type@.kind == FLOAT then
+		    tree = New1(FCVTS, tree@.type, tree);
+		else
+		    tree = New1(TRUNC, tree@.type, tree);
 		if feature.trunc && !iscast then lex.Error(TRUNC);
 	    }
 	    else
@@ -393,6 +400,274 @@ package ast
 	return tree;
     }
 
+    proc ForceBoolean(tree: Ast): Ast
+    {
+	if tree@.type != 0 && !type.Compat(tree@.type, type.booltype) then
+	    lex.Error(WANTBOOL);
+	if tree@.width > 1 then		// llvm wants a 1-bit boolean
+	{   if tree@.op != CONST then
+		tree = New2(NE, type.booltype, tree, Const(tree@.type, 0));
+	    tree@.width = 1;
+	}
+	return tree;
+    }
+
+    // Until all hosts have the popcnt instruction
+    proc popcnt(x: type.Valu): _uint
+    {   var n: _uint;
+
+	n = 0;
+	while x != 0 do
+	{   n += 1;
+	    x = x & (x-1);
+	}
+	return n;
+    }
+
+    proc OpUnary(op:ast.Op, rhs:Ast): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if rhs != 0 then
+	{   if rhs@.op == CONST then	// constant folding
+	    {   if op
+		is NEG  then rhs@.valu = type.Valu(-rhs@.valu);
+		is NOT  then rhs@.valu = ~rhs@.valu;
+		is BNOT then rhs@.valu = rhs@.valu ^ 1;
+		is ABS  then 
+		{   if rhs@.type@.kind == SINT && type.SValu(rhs@.valu) < 0 then
+			rhs@.valu = type.Valu(-type.SValu(rhs@.valu));
+		}
+		is CLZ, CLZNZ  then
+		{   if rhs@.valu == 0 then
+			rhs@.valu = rhs@.width;
+		    else
+			rhs@.valu = _clznz(rhs@.valu) -
+			    (Valu?size*Target.membits - rhs@.width);
+		}
+		is CTZ, CTZNZ  then
+		{   if rhs@.valu == 0 then
+			rhs@.valu = 0;
+		    else
+			rhs@.valu = _ctznz(rhs@.valu);
+		}
+		is POP  then rhs@.valu = popcnt(rhs@.valu);
+		else lex.ErrorS(COMPILER, "Unhandled unary operation");
+		tree = rhs;
+	    }
+	    else
+		tree = New1(op, rhs@.type, rhs);
+	}
+	return tree; 
+    }
+
+    // BAND, BOR
+    proc OpBool(op: Op, lhs: Ast, rhs: Ast): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   lhs = ForceBoolean(lhs);
+	    rhs = ForceBoolean(rhs);
+	    if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   if op
+		is BOR  then lhs@.valu = lhs@.valu | rhs@.valu;
+		is BAND then lhs@.valu = lhs@.valu & rhs@.valu;
+		tree = lhs;
+	    }
+	    else
+		tree = New2(op, type.booltype, lhs, rhs);
+	}
+	return tree;
+    }
+
+    proc OpBinary(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
+    {
+	var sl, sr: type.BitSize;
+
+	sl = lhs@.width;
+	sr = rhs@.width;
+	// make LHS as wide as result wants it
+	if t != 0 && t@.width > sl then
+	{  lhs = ExtendT(lhs, t);
+	   sl = t@.width;
+	}
+	if sl > sr then
+	    rhs = Extend(rhs, sl, false);
+	else if sr > sl then
+	    lhs = Extend(lhs, sr, false);
+	return New2(op, lhs@.type, lhs, rhs);
+    }
+
+    // ADD, SUB
+    proc OpAdd(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   if op
+		is ADD then lhs@.valu += rhs@.valu;
+		is SUB then lhs@.valu -= rhs@.valu;
+		tree = lhs;
+	    }
+	    else
+		tree = OpBinary(op, lhs, rhs, t);
+	}
+	return tree;
+    }
+
+    proc OpMul(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   if op
+		is MUL then lhs@.valu = lhs@.valu * rhs@.valu;
+		is LSL,ASL then lhs@.valu = lhs@.valu << rhs@.valu;
+		tree = lhs;
+	    }
+	    else
+		tree = OpBinary(op, lhs, rhs, t);
+	}
+	return tree;
+    }
+
+    proc OpDiv(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   if op
+		is DIV then lhs@.valu = lhs@.valu / rhs@.valu;
+		is MOD then lhs@.valu = lhs@.valu % rhs@.valu;
+		is LSR then lhs@.valu = lhs@.valu >> rhs@.valu;
+		is ASR then lhs@.valu = Valu(type.SValu(lhs@.valu) << rhs@.valu);
+		tree = lhs;
+	    }
+	    else
+		tree = OpBinary(op, lhs, rhs, t);   // FIXME - widen not needed
+//		tree = OpBinary(op, lhs, rhs, 0);
+	}
+	return tree;
+    }
+
+    // MIN, MAX
+    proc OpMinMax(op: Op, lhs: Ast, rhs: Ast): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   if op
+		is UMIN then
+		{   if rhs@.valu < lhs.valu then lhs.valu = rhs.valu;
+		}
+		is UMAX then
+		{   if rhs@.valu > lhs.valu then lhs.valu = rhs.valu;
+		}
+		is SMIN then
+		{   if type.SValu(rhs@.valu) < type.SValu(lhs.valu) then
+			lhs.valu = rhs.valu;
+		}
+		is SMAX then
+		{   if type.SValu(rhs@.valu) > type.SValu(lhs.valu) then
+			lhs.valu = rhs.valu;
+		}
+		tree = lhs;
+	    }
+	    else
+		tree = OpBinary(op, lhs, rhs, 0);
+	}
+	return tree;
+    }
+
+
+    // AND, OR, XOR
+    proc OpLogic(op: Op, lhs: Ast, rhs: Ast): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   if op
+		is OR then  lhs@.valu = lhs@.valu | rhs@.valu;
+		is XOR then lhs@.valu = lhs@.valu ^ rhs@.valu;
+		is AND then lhs@.valu = lhs@.valu & rhs@.valu;
+		tree = lhs;
+	    }
+	    else
+		tree = OpBinary(op, lhs, rhs, 0);
+	}
+	return tree;
+    }
+
+    // EQ, NE, ULT, UGT, ULE, UGE, SLT, SGT, SLE, SGE
+    proc OpCompare(op: Op, lhs: Ast, rhs: Ast): Ast
+    {   var tree: Ast;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   if op
+		is EQ then lhs@.valu = _uint(lhs@.valu == rhs@.valu);
+		is NE then lhs@.valu = _uint(lhs@.valu != rhs@.valu);
+		is ULT then lhs@.valu = _uint(lhs@.valu < rhs@.valu);
+		is UGT then lhs@.valu = _uint(lhs@.valu > rhs@.valu);
+		is ULE then lhs@.valu = _uint(lhs@.valu <= rhs@.valu);
+		is UGE then lhs@.valu = _uint(lhs@.valu >= rhs@.valu);
+		is SLT then
+		    lhs@.valu = _uint(type.SValu(lhs@.valu) < type.SValu(rhs@.valu));
+		is SGT then
+		    lhs@.valu = _uint(type.SValu(lhs@.valu) > type.SValu(rhs@.valu));
+		is SLE then
+		    lhs@.valu = _uint(type.SValu(lhs@.valu) <= type.SValu(rhs@.valu));
+		is SGE then
+		    lhs@.valu = _uint(type.SValu(lhs@.valu) >= type.SValu(rhs@.valu));
+		tree = lhs;
+	    }
+	    else
+	    {   // FIXME: all the kinds should be examined for legality
+		// for the various ops
+		if lhs@.type@.kind == REF || lhs@.type@.kind == REFPROC then
+		{   if rhs@.op == CONST then
+		    {   if op == EQ || op == NE then
+			    rhs@.width = Target.ptr.size;
+		    }
+		}
+		tree = OpBinary(op, lhs, rhs, 0);
+	    }
+	    tree@.type = type.booltype;
+	    tree@.width = 1;
+	}
+	return tree;
+    }
+
+    // FADD, FSUB, FMUL, FDIV, FREM
+    proc OpFloat(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
+    {   var tree: Ast;
+	var sl, sr: type.BitSize;
+
+	tree = 0;
+	// FIXME - constant folding
+	sl = lhs@.width;
+	sr = rhs@.width;
+	// make LHS as wide as result wants it
+	if t != 0 && t@.width > sl then
+	{  lhs = ExtendT(lhs, t);
+	   sl = t@.width;
+	}
+	if sl > sr then
+	    rhs = ExtendT(rhs, lhs@.type);
+	else if sr > sl then
+	    lhs = ExtendT(lhs, rhs@.type);
+	return New2(op, lhs@.type, lhs, rhs);
+    }
+
+
+
     proc Init()
     {
 	Null = New(NULL, type.unkntype);
@@ -433,7 +708,7 @@ package ast
 	[TRUNC]= "TRUNC",
 	[REVB]=  "REVB",
 	[NEG]=   "NEG",		[NOT]=   "NOT",		[ABS]=   "ABS",
-	[FNEG]=  "FNEG",
+	[FNEG]=  "FNEG",	[FCVTL]= "FCVTL",       [FCVTS]= "FCVTS",
 	[CVTUF]= "CVTUF",	[CVTIF]= "CVTIF",
 	[CVTFU]= "CVTFU",	[CVTFI]= "CVTFI",
 	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",		
@@ -537,4 +812,5 @@ package ast
     }
 
 }
+// vim: ts=8 sw=4 noet nowrap
 

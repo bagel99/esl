@@ -5,7 +5,7 @@
  * in clang/lib/CodeGen/CGDebuginfo.cpp as a reference.
  *
  * Copyright (c) 2010-2012, Brian G. Lucas.  See LICENSE file.
- * $Id: llvmdb.esl 766 2013-04-16 21:00:41Z bgl $
+ * $Id$
  */
 
 package llvmdb
