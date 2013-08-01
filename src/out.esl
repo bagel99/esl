@@ -3,7 +3,7 @@
  * Assumes target wordsize is 32-bits or more.
  *
  * Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
- * $Id: out.esl 728 2012-09-26 21:57:27Z bgl $
+ * $Id$
  */
 
 import sys;

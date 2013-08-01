@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id: type1.esl 766 2013-04-16 21:00:41Z bgl $
+// $Id$
 
 package type
 {
@@ -70,6 +70,7 @@ package type
     proc New(kind: TypeT): Type;
     proc NewBuiltin(kind: TypeT, name: @lex.Identifier, size: BitSize): Type;
     proc Final(t: Type);
+    proc Compat(t1: Type, t2: Type): boolean;
 
     proc DumpT(t: Type, full: boolean);
 
