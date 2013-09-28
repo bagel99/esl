@@ -410,6 +410,19 @@ package type
 	return t;
     }
 
+    proc DumpType(msg: @[]_byte, t: Type)
+    {
+        const tname: [TypeT]@[]_byte =
+	{   "UTYPE", "ENUM", "UINT", "SINT", "FLOAT", "REF", "ARRAY", "RECORD",
+	    "REFPROC"
+	};
+	err.str(msg);
+	err.str(tname[t@.kind]);
+	err.nl();
+	type.DumpT(t, true);
+	err.nl();
+    }
+
     proc Final(t: Type)
     {   var align: BitSize;
 	var tlo, thi: BitSize;
@@ -427,16 +440,7 @@ package type
 	     * This code checks to see if size/width/align has been
 	     * set by explicit attributes and adjusts things accordingly.
 	     */
-/*
-err.str("Final: ");
-if t@.name != 0 then { err.str(t@.name@.ident); }
-err.nl();
-type.DumpT(t, false);
-err.nl();
-err.str("initial size="); err.uint(t@.size);
-err.str(" width="); err.uint(t@.width);
-err.str(" align="); err.uint(t@.align); err.nl();
-*/
+//DumpType("Final beg: ", t);
 	    if t@.sizeattr then
 	    {   if !t@.widthattr then
 		    t@.width = target.isize(t@.size);
@@ -446,6 +450,8 @@ err.str(" align="); err.uint(t@.align); err.nl();
 		    t@.size = t@.width;
 	    }
 	    if t@.kind
+	    is UTYPE then
+		align = t@.align;   // code below depends on this
 	    is ENUM, UINT then 
 	    {   if t@.size == 0 then
 		    t@.size = bitsize(t@.hi);
@@ -489,9 +495,7 @@ err.str(" align="); err.uint(t@.align); err.nl();
 		f = t@.list;
 		while f != 0 do
 		{   if f@.type != 0 then
-		    {
-//err.str("field: "); err.str(f@.ident); err.nl();
-		    	Final(f@.type);
+		    {   Final(f@.type);
 			if f@.type@.flex then
 			{   if f@.next != 0 then    // flex must be final field
 				lex.Error(BADFLEX);
@@ -511,6 +515,7 @@ err.str(" align="); err.uint(t@.align); err.nl();
 				t@.nofpad = true;
 			    else
 			    {
+//err.str("offs="); err.uint(offs); err.str(" falign="); err.uint(falign); err.nl();
 				mod = offs % falign;
 				if mod != 0 then
 				{   // field needs padding
@@ -543,8 +548,16 @@ err.str(" align="); err.uint(t@.align); err.nl();
 		    if mod != 0  && !t@.noepad then
 			t@.width += align - mod;	// pad to alignment
 		}
-		else  
-		    align = target.ialign(t@.size);
+		else
+		{   if t@.noepad then
+		    {   if t@.packed then
+			    align = 1;
+			else
+			    align = Target.membits;
+		    }
+		    else
+			align = target.ialign(t@.size);
+		}
 	    }
 	    is ARRAY then 
 	    {   if t@.base != 0 then
@@ -567,18 +580,14 @@ err.nl();
 			align = target.ialign(t@.size);
 		}
 	    }
-
-//err.str("final size="); err.uint(t@.size);
-//err.str(" width="); err.uint(t@.width);
-//err.str(" normal align="); err.uint(align);
 	    if t@.alignattr then
 	    {   if t@.align < align then
 		    t@.unalgn = true;
 	    }
 	    else
 		t@.align = align;
-//err.str(" final align="); err.uint(t@.align); err.nl();
 	    t@.final = true;
+//DumpType("Final end: ", t);
 	}
     }
 
@@ -669,6 +678,37 @@ err.nl();
 	}
     }
 
+    proc Range(vlo: Ast): Type
+    {   var t: Type;
+	var tok: TokenT;
+	var vhi: Ast;
+
+	t = unkntype;		// in case all goes wrong
+	if Token == RANGE then
+	{   tok = Next();
+	    vhi = expr.Bool(0);
+	    if vlo != 0 && vhi != 0 then
+	    {   if vlo@.op == CONST && vhi@.op == CONST then
+		{   if vlo@.type@.kind
+		    is ENUM, UINT, SINT then 
+		    {   t = type.New(vlo@.type@.kind);
+			t@.lo = vlo@.valu;
+			t@.hi = vhi@.valu;
+			if vlo@.type@.kind == ENUM then
+			    RangeEnum(t, vlo@.type);
+		    }
+		    else
+			lex.Error(BADTYPDEF);
+		}
+		else
+		    lex.Error(EXPCONST);
+	    }
+	}
+	else
+	    lex.ErrorT(EXPECT, RANGE);
+	return t;
+    }
+
     proc Record(bt: Type): Type
     {   var tok: TokenT;
 	var t, ft: Type;
@@ -730,19 +770,25 @@ err.nl();
     proc Array(): Type
     {   var tok: TokenT;
 	var t, bt: Type;
+	var tree: Ast;
 
 	tok = Next();
 	t = type.New(ARRAY);
 	if tok != AEND then
-	{
-	    var tree: Ast;
-	    tree = expr.Bool(0);
+	{   tree = expr.Bool(0);
 	    if tree != 0 then
 	    {   if tree@.op
 		is CONST then
-		{   t@.lo = 0;
-		    t@.hi = tree@.valu - 1;
-		    t@.index = type.wordtype;
+		{   if Token == RANGE then
+		    {   t@.index = Range(tree);
+			t@.lo = t@.index@.lo;
+			t@.hi = t@.index@.hi;
+		    }
+		    else
+		    {   t@.lo = 0;
+			t@.hi = tree@.valu - 1;
+			t@.index = type.wordtype;
+		    }
 		}
 		is TYPE then
 		{   if tree@.type@.kind
@@ -886,35 +932,6 @@ if debug.tests[2] then {
 	return t;
     }
 
-    proc Range(vlo: Ast): Type
-    {   var t: Type;
-	var tok: TokenT;
-	var vhi: Ast;
-
-	t = unkntype;		// in case all goes wrong
-	if Token == RANGE then
-	{   tok = Next();
-	    vhi = expr.Bool(0);
-	    if vlo@.op == CONST && vhi@.op == CONST then
-	    {   if vlo@.type@.kind
-		is ENUM, UINT, SINT then 
-		{   t = type.New(vlo@.type@.kind);
-		    t@.lo = vlo@.valu;
-		    t@.hi = vhi@.valu;
-		    if vlo@.type@.kind == ENUM then
-			RangeEnum(t, vlo@.type);
-		}
-		else
-		    lex.Error(BADTYPDEF);
-	    }
-	    else
-		lex.Error(EXPCONST);
-	}
-	else
-	    lex.ErrorT(EXPECT, RANGE);
-	return t;
-    }
-
     proc Def(tok: TokenT, bt: Type): Type
     {   var t: Type;
 	var s: Symb;
@@ -1042,6 +1059,8 @@ if debug.tests[2] then {
 		    }
 		    err.chr(')');
 		}
+		is FLOAT then
+		    err.str("<float>");
 		is RECORD then 
 		{   err.str("{\n");
 		    offs = 0;
