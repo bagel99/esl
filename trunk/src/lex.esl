@@ -18,9 +18,9 @@ package lex
 	RHSMORE,    BADRETURN,  FORWPROC,   FORWPARM,   FORWRETV,   WANTBOOL,
 	WANTUINT,   BADCAST,    UNDFCOMPV,  BADCOMPV,   PROPID,     BADIF,
 	BADIS,      NOPROC,     NOLOOP,     NOPACK,     NOTREF,     NOTARRAY,
-	ARRAYCOPY,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,   ARGSLO,
-	ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,   BADIMPORT,
-	NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,
+	ARRAYCOPY,  BADINXEXP,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,
+	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
+	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -89,6 +89,7 @@ package lex
 	[NOTREF] =	"Not a pointer",
 	[NOTARRAY] =	"Not an array",
 	[ARRAYCOPY] =	"Array copy with undefined length",
+	[BADINXEXP] =   "Illegal array index",
 	[NOTRECORD] =	"Not a record",
 	[BADRECORD] =	"Syntax error in record declaration",
 	[BASERECORD] =	"Base type must be a record",

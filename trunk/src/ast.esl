@@ -274,7 +274,7 @@ package ast
     proc Extend(tree: Ast, size: type.BitSize, iscast: boolean): Ast
     {
 	if tree@.width < size then
-	{   if tree@.op != CONST then
+	{   if tree@.op != CONST && tree@.op != FCON then
 	    {   if tree@.type@.kind
 		is FLOAT then
 		    tree = New1(FCVTL, tree@.type, tree);
@@ -287,7 +287,7 @@ package ast
 	}
 	else if tree@.width > size then
 	{
-	    if tree@.op != CONST then
+	    if tree@.op != CONST && tree@.op != FCON then
 	    {   if tree@.type@.kind == FLOAT then
 		    tree = New1(FCVTS, tree@.type, tree);
 		else

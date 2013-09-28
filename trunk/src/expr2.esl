@@ -17,25 +17,27 @@ package expr
 	if node@.op
 	is TYPE, CONST then ;  // ok
 	is VAR, OFFSET, INDEX  then
-	{   t = t@.base;
-	    if t == 0 then return 0;
-	}
+	    t = t@.base;
 	else return 0;
 	tok = Token;
 	if tok == ID then
 	{   tok = lex.Keyword(proplist);
-	    if tok
-	    is KMIN then tree = ast.Const(t, t@.lo);
-	    is KMAX then tree = ast.Const(t, t@.hi);
-	    is KBITSZ then tree = ast.Const(type.wordtype, t@.size);
-	    is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/Target.membits);
-	    is KALIGN then tree = ast.Const(type.wordtype, t@.align/Target.membits);
-	    is KLEN then
-	    {   if t@.kind == ARRAY then
-		    tree = ast.Const(type.wordtype, t.Span());
-		else lex.Error(OPTYPE);
+	    if t != 0 then
+	    {   if tok
+		is KMIN then tree = ast.Const(t, t@.lo);
+		is KMAX then tree = ast.Const(t, t@.hi);
+		is KBITSZ then tree = ast.Const(type.wordtype, t@.size);
+		is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/Target.membits);
+		is KALIGN then tree = ast.Const(type.wordtype, t@.align/Target.membits);
+		is KLEN then
+		{   if t@.kind == ARRAY then
+			tree = ast.Const(type.wordtype, t.Span());
+		    else lex.Error(OPTYPE);
+		}
+		else lex.Error(PROPID);
 	    }
-	    else lex.Error(PROPID);
+	    else
+		tree = ast.Const(type.wordtype, 0); // t == 0, return something
 	}
 	else lex.Error(PROPID);
 	tok = Next();
@@ -44,7 +46,7 @@ package expr
 
     var strid: Valu = 0;
 
-    proc String(): Ast
+    proc NewString(): Ast
     {   var tree: Ast;
 	var t: Type;
 
@@ -86,6 +88,20 @@ package expr
 	// create a new string long enough
 	tree@.symb = Symb(sys.memdup(lex.StringBuf, nl+nr));
 	return tree;   
+    }
+
+    // Parse string constants, perhaps concatenated
+    proc String(): Ast
+    {   var tree: Ast;
+	var tok: TokenT;
+
+        tree = NewString();
+	loop
+	{   tok = Next();
+	  exit tok != STR;
+	    tree = StringCat(tree);
+	}
+        return tree;
     }
 
     proc EnumConst(t: Type): Ast
@@ -290,9 +306,7 @@ package expr
 	    }
 	}
 	else if tok == STR then
-	{   tree = String();
-	    tok = Next();
-	}
+	    tree = String();
 	else if tok == ID then
 	    tree = CompositeNamedConstant(t);
 	else lex.ErrorT(EXPECT, GBEG);
@@ -1397,6 +1411,13 @@ ast.Dump(tree);
 		    if bt@.kind == ARRAY then
 		    {   var index: Ast;
 			index = Bool(bt@.index);
+			if index == 0 then
+			{   lex.Error(BADINXEXP);
+			    index = ast.Null;
+			}
+			if bt@.lo != 0 then
+			    index = ast.New2(SUB, bt@.index, index,
+					     ast.Const(bt@.index, bt@.lo));
 			tok = Token;
 			if tok == COLON then	// array slice
 			{   var len: Ast;
@@ -1406,10 +1427,7 @@ ast.Dump(tree);
 			    done = true;
 			}
 			else
-			{   if bt@.lo != 0 then
-			        index = ast.New2(SUB, bt@.index, index,
-						ast.Const(bt@.index, bt@.lo));
-			    tree = ast.New2(INDEX, type.MakeRef(bt@.base), tree, index);
+			{   tree = ast.New2(INDEX, type.MakeRef(bt@.base), tree, index);
 			    tree@.width = Target.ptr.size;
 			}			
 		    }
@@ -1537,19 +1555,14 @@ ast.Dump(tree);
 	is FNUM then
 	{   tree = ast.New(FCON, et);
 	    tree@.valu = lex.Number;
+	    tree@.width = 64;			// FIXME: ?
 	    tree@.scale = lex.Scale;
 	    if et == 0 then
 		tree@.type = type.floattype;
 	    tok = Next();
 	}
 	is STR then
-	{   tree = String();
-	    loop
-	    {   tok = Next();
-	      exit tok != STR;
-		tree = StringCat(tree);
-	    }
-	}
+	    tree = String();
 	is PBEG then
 	{   tok = Next();
 	    tree = Bool(et);

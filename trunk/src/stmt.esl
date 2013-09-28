@@ -390,7 +390,7 @@ package stmt
 	// First is string of assembly language pattern
 	if tok == STR then
 	{   tree = ast.Child(tree, expr.String());
-	    tok = Next();
+	    tok = Token;
 	    if tok == COMMA then
 	    {   tok = Next();
 		narg = 0;
@@ -401,7 +401,7 @@ package stmt
 		{   node = expr.String();
 		    what = pstring(node@.symb);
 		    tree = ast.Child(tree, node);
-		    tok = Next();
+		    tok = Token;
 		    // Parse the constraint string
 		    i = 0;
 		    while what@[i] != 0 && narg < MaxArg-1 do
@@ -1072,14 +1072,14 @@ package stmt
 	{   if tok == ID then
 	    {   s = symb.FindTop(lex.Ident);
 		if s != 0 then
-		{   tok = Next();
-		    if tok == DOT && s@.kind == PACK then
+		{   loop
 		    {   tok = Next();
+		      exit s == 0 || tok != DOT || s@.kind != PACK;
+			tok = Next();
 			if tok == ID then
 			{   s = symb.FindLocal(s@.symblist, lex.Ident);
 			    if s == 0 then
 				lex.ErrorI(UNDEFID, lex.Ident);
-			    tok = Next();
 			}
 			else lex.Error(EXPECTID);
 		    }
