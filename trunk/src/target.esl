@@ -101,6 +101,7 @@ package target
 	{   "ppc64",    "ppc64-unknown-linux",		Model64BEA },
 	{   "s390x",    "systemz-unknown-linux",	Model64BEA },
 	{   "systemz",  "systemz-unknown-linux",	Model64BEA },
+	{   "aarch64",  "aarch64-unknown-linux",	Model64LEU },
  	{   "msp430", "msp430-generic-generic",		Model16LEA }
     };
 

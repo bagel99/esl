@@ -457,6 +457,30 @@ package llvm
 	}
     }
 
+    proc Alignment(t: Type)
+    {   var n: type.BitSize;
+
+	n = t@.align;
+	if n >= Target.membits then
+	{   f.str(", align ");
+	    f.uint(n / Target.membits);
+	}
+    }
+
+    proc Section(s: Symb, comma: boolean)
+    {
+	if s != 0 then
+	{
+	    if comma then
+	    {
+		f.str(",");
+	    }
+	    f.str(" section \"");
+	    f.str(s@.ident);
+	    f.str("\"");
+	}
+    }
+
     proc DclType(t: Type)
     {   var s: Symb;
 	var size: type.BitSize;
@@ -649,16 +673,6 @@ package llvm
 	}
     }
 
-    proc Alignment(t: Type)
-    {   var n: type.BitSize;
-
-	n = t@.align;
-	if n >= Target.membits then
-	{   f.str(", align ");
-	    f.uint(n / Target.membits);
-	}
-    }
-
     proc DclVar(node: Ast)
     {   var s: Symb;
         var rhs: Ast;
@@ -691,6 +705,7 @@ package llvm
 		else
 		    DefaultInitializer(node@.type);
 		Alignment(s@.type);
+		Section(s@.section, true);
 	    }
 	    is GLOBAL then
 	    {   Print("%I = global %B ", node);
@@ -699,6 +714,7 @@ package llvm
 		else
 		    DefaultInitializer(node@.type);
 		Alignment(s@.type);
+		Section(s@.section, true);
 	    }
 	    is EXTERN then
 		Print("%I = external global %B", node);
@@ -749,6 +765,7 @@ package llvm
 	    is GLOBAL then Print("%I = constant %B ", node);
 	    Constant(node@.child[0]);
 	    Alignment(s@.type);
+	    Section(s@.section, true);
 	}
 	f.nl();
     }
@@ -1372,7 +1389,9 @@ err.str(" align="); err.uint(align);}
 		    f.str(" minsize");
 		f.str(" optsize");
 	    }
-	    f.str(" nounwind {\n");
+	    f.str(" nounwind");
+	    Section(ps@.section, false);
+	    f.str(" {\n");
 	    Pseqno += 1;
 	    Tseqno = 1;
 	    Lseqno = 0;
