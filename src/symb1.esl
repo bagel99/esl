@@ -18,6 +18,7 @@ package symb
 	retvlist: type.TypeList;// for procedures, retval types
 	symblist: @SymbNode;	// for packages, procedures, aliases
 	altsymb:  @SymbNode;	// alternate name, e.g. external name
+	section:  @SymbNode;    // linker section
 	const:    @AstNode;	// for constants, initializer, default value
 	xaddr:    Valu;		// externally fixed address
 	addr:	  OffsT;	// e.g. field offset or intrinsic #

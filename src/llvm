@@ -16,11 +16,11 @@ do
   esac
 done
 if [ "$ARCH" == "" ]
-then
-  case `uname -m` in
-      i686)   ARCH=x86;;
-      x86_64) ARCH=x86-64;;
-      *) echo "unknown target architecture"; exit 1;;
+then	# target same as host
+  ARCH=`uname -m`
+  case $ARCH in
+    i686)   ARCH=x86;;
+    x86_64) ARCH=x86-64;;
   esac
 fi
 case `uname -s` in
