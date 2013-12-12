@@ -58,7 +58,9 @@ package expr
 	t@.align = t@.base@.align;
 	t@.memorder = Target.memorder;
 	tree = ast.New(SCON, t);
-	tree@.symb = Symb(sys.memdup(lex.StringBuf, lex.StringLen));
+//err.str("NewString \"");  err.str(lex.StringBuf); err.str("\"\n");
+	tree@.symb = symb.New(STRING, lex.StringBuf, PRIVATE);
+//symb.DumpS(tree@.symb);
 	strid += 1;
 	tree@.valu = strid;
 	return tree;
@@ -82,11 +84,13 @@ package expr
 	  exit i == 0;
 	    i -= 1;
 	}
-	// copy in LHS, symbol pointer actually points to LHS string
-	sr = _address(tree@.symb);
+	// copy in LHS, symbol is string
+	sr = tree@.symb@.ident;
 	lex.StringBuf[0:nl] = sr[0:nl];
 	// create a new string long enough
-	tree@.symb = Symb(sys.memdup(lex.StringBuf, nl+nr));
+//err.str("NewString \"");  err.str(lex.StringBuf); err.str("\"\n");
+	tree@.symb = symb.New(STRING, lex.StringBuf, PRIVATE);
+//symb.DumpS(tree@.symb);
 	return tree;   
     }
 
@@ -1913,20 +1917,19 @@ ast.Dump(tree);
 	return rv;
     }
 
-    proc ConstString(): @[]Char
+    proc ConstString(): Symb
     {   var tree: Ast;
-	type pstring: @[]_byte;
 
 	tree = expr.Bool(0);
 	if tree != 0 then
 	{   if tree@.op == SCON then
-		return pstring(tree@.symb);
+		return tree@.symb;
 	    else if tree@.op == LOAD &&
 		    tree@.child[0]@.op == VAR &&
 		    tree@.child[0]@.symb@.const != 0 &&
 		    tree@.child[0]@.symb@.const@.op == SCON then
 	    {
-		return pstring(tree@.child[0]@.symb@.const@.symb);
+		return tree@.child[0]@.symb@.const@.symb;
 	    }
 	}
 	return 0;

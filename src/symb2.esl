@@ -226,6 +226,10 @@ package symb
 	    err.str(" to ");
 	    err.str(s@.symblist@.ident);
 	}
+	is STRING then
+	{   err.str("string ");
+	    err.str(s@.ident);
+	}
 	else 
 	{   err.str("undefined "); err.str(s@.ident);
 	}

@@ -343,7 +343,18 @@ package stmt
 		tree = expr.Const(t);
 		s@.const = tree;
 		if tree != 0 then
-		{   if t == 0 then t = tree@.type;
+		{   if t == 0 then
+			t = tree@.type;
+		    else
+		    {   if t@.flex then
+			    t = tree@.type;
+			else if tree@.op == SCON &&
+			        t@.hi == tree@.type@.hi-1 then
+			{   // we are allowed to trim the NUL from the string
+			    tree = ast.Dup(tree);   // dup in case re-using
+			    tree@.type = t;
+			}
+		    }
 		    if t@.flex then
 			t = tree@.type;
 		    tree = ast.New1(DCLCON, t, tree);
@@ -374,8 +385,7 @@ package stmt
     {   var tree, node, temp: Ast;
 	var narg, nout: ast.NSubNodes;
 	var tok: TokenT;
-	type pstring: @[]_byte;
-	var what: pstring;		// constraint list
+	var what: @[]_byte;		// constraint list
 	var i: 0..lex.StringMax;	// index into constraint string
 	const MaxArg = 9;
 	type ArgRange: 0..MaxArg;
@@ -399,7 +409,7 @@ package stmt
 		// Must be here if any operands, could be here even if none.
 		if tok == STR then
 		{   node = expr.String();
-		    what = pstring(node@.symb);
+		    what = node@.symb@.ident;
 		    tree = ast.Child(tree, node);
 		    tok = Token;
 		    // Parse the constraint string
@@ -1357,7 +1367,7 @@ package stmt
     proc Import(): Ast
     {   var tree: Ast;
 	var tok: TokenT;
-	var name: @[]Char;
+	var s: Symb;
 
 	tok = Token;
 	tree = 0;
@@ -1369,9 +1379,9 @@ package stmt
 	}
 	is PBEG then
 	{   tok = Next();
-	    name = expr.ConstString();
-	    if name != 0 then
-		tree = ImportSub(name);
+	    s = expr.ConstString();
+	    if s != 0 then
+		tree = ImportSub(s@.ident);
 	    tok = lex.Expect(PEND);
 	}
 	tok = lex.Expect(SEMI);

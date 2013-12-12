@@ -3,7 +3,7 @@
 
 package symb
 {
-    type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS);
+    type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS, STRING);
     type LinkT: (FORMAL, LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE, NOINLINE);
     type OffsT: 0..0xFFFF;
     type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
