@@ -762,11 +762,10 @@ package ast
 		err.uint64(node@.valu);
 	}
 	is SCON then
-	{   type pstring: @[]_byte;
-	    err.str(" id ");
+	{   err.str(" id ");
 	    err.uint32(_uint32(node@.valu));
 	    err.str(" value \"");
-	    err.strn(pstring(node@.symb), node@.type.Span()-1);
+	    err.strn(node@.symb@.ident, node@.type.Span()-1);
 	    err.chr('"');
 	}
 	is DCLVAR, VAR, PROC, CALL, FILE, PACKAGE then

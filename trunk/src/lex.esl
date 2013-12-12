@@ -431,7 +431,7 @@ package lex
 	var i: _uint;
 	var pathbuf: [PathMax]Char;
 
-	if f != 0 then		// this is a nested file
+	if f != 0 then		// this is an included file, name missing ".esl"
 	{   // search SearchPath trying to open file
 	    pp = pathhead;
 	    while pp != 0 do
@@ -440,12 +440,13 @@ package lex
 		zstr.cat(pathbuf, "/", PathMax);
 		i = zstr.len(pathbuf, PathMax);
 		zstr.cat(pathbuf, filename, PathMax);
+		zstr.cat(pathbuf, ".esl", PathMax);
 		fd = sys.open(pathbuf, sys.O_RDONLY, 0);
 	      exit fd >= 0;
 		pp = pp@.next;
 	    }
 	}
-	else			// this is the outer file
+	else			// this is the outer file, name has ".esl"
 	{   zstr.copy(pathbuf, filename, PathMax);
 	    fd = sys.open(pathbuf, sys.O_RDONLY, 0);
 	    i = zstr.rfind(pathbuf, '/', PathMax);
@@ -497,7 +498,6 @@ package lex
     {   var fp: FileList;
 	var sfx: _uint;
 
-	zstr.cat(filename, ".esl", IdentMax);   // filename is in an ident buf
 	fp = filehead;
 	while fp != 0 do
 	{   

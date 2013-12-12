@@ -21,7 +21,6 @@ import llvmdb;
 
 package llvm
 {
-    type pstring: @[]_byte;
     // These pointer types might be useful to other packages.
     var pbytetype: Type;
     var puinttype: [target.IntSizesMax]Type;
@@ -606,7 +605,7 @@ package llvm
 		    n = StringRange(node@.type.Span());
 		else
 		    n = StringRange(t.Span());
-		PString(pstring(node@.symb), n, true);
+		PString(node@.symb@.ident, n, true);
 	    }
 	    is CLIST then
 	    {   if t@.kind
@@ -729,7 +728,7 @@ package llvm
 //err.str("DclString\n");
 	Print("%S = internal constant %B ", node);
 	n = StringRange(node@.type.Span());
-	PString(pstring(node@.symb), n, true);
+	PString(node@.symb@.ident, n, true);
 	f.nl();
     }
 
@@ -1165,15 +1164,13 @@ err.str(" align="); err.uint(align);}
     }
 
     proc PStringCon(node: Ast)
-    {   var p: pstring;
-	var n: StringRange;
+    {   var n: StringRange;
     
 	if node == 0 then
 	    f.str("\"\"");
 	else
-	{   p = pstring(node@.symb);
-	    n = StringRange(zstr.len(p, lex.StringMax));
-	    PString(p, n, false);
+	{   n = StringRange(zstr.len(node@.symb@.ident, lex.StringMax));
+	    PString(node@.symb@.ident, n, false);
 	}
     }
 	    
@@ -1542,7 +1539,7 @@ err.str(" align="); err.uint(align);}
 
     proc IsPacked(node: Ast): boolean
     {
-	if node@.op == CONST then
+	if node@.type@.kind != REF then
 	    return node@.type@.packed;
 	else
 	    return node@.type@.base@.packed;
@@ -1555,8 +1552,8 @@ err.str(" align="); err.uint(align);}
 	var t: Type;
 
         t = node@.type;
-        if node@.op != CONST then t = t@.base;
-	// assert trec@.kind == RECORD
+        if t@.kind == REF then t = t@.base;
+	// assert t@.kind == RECORD
 	rsize = t@.width;
 	if t@.bitorder == MSB then foffs = rsize; else foffs = 0;
 	s = t@.list;
@@ -1614,8 +1611,8 @@ err.str(" align="); err.uint(align);}
 		varb = tree;
 	}
 	t = offs@.type;
-	if offs@.op == CONST then
-	{
+	if t@.kind != REF then
+	{   // assert offs@.op == CONST
 	    tree = offs;
 	    tree@.type = type.wordtype;
 	    tree@.width = type.wordtype@.width;
@@ -1722,7 +1719,7 @@ err.str(" tree=\n"); ast.Dump(tree); } */
 	    // LLVM doesn't handle bitfields (packed records or arrays)
 	    // so we expand bitfield insert
 	    if (lhs != 0 && lhs@.op >= OFFSET && lhs@.op <= SLICE) &&
-		lhs@.child[0]@.type@.base@.packed then
+		IsPacked(lhs@.child[0]) then
 	    {   // We are dealing with a packed record or array (aka bitfield).
 		mask = BitfieldMask(lhs);
 		// Rewrite the AST to extract item.
@@ -1835,6 +1832,7 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	{   if feature.gflag then llvmdb.ProcStart(node@.symb@);
 	    Procedure(node);
 	    if feature.gflag then llvmdb.ProcFinish(node@.symb@);
+f.flush();
 	}
 	is DCLVAR then DclVar(node);
 	is DCLCON then DclCon(node);
