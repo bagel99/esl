@@ -223,7 +223,7 @@ package type
 	if tok == PBEG then
 	{   tok = Next();
 	    if tok == STR then
-	    {   s@.altsymb = symb.New(STRING, lex.StringBuf, PRIVATE);
+	    {   s@.altsymb = symb.NewString(lex.StringBuf);
 		tok = Next();
 	    }
 	    else
@@ -241,7 +241,7 @@ package type
 	if tok == PBEG then
 	{   tok = Next();
 	    if tok == STR then
-	    {   s@.section = symb.New(STRING, lex.StringBuf, PRIVATE);
+	    {   s@.section = symb.NewString(lex.StringBuf);
 	    	tok = Next();
 	    	lex.Expect(PEND);
 	    	return;
@@ -328,9 +328,11 @@ package type
 			    is KINLINE then  s@.linkage = INLINE;
 			    is KNOINLINE then s@.linkage = NOINLINE;
 			    is KGLOBAL then 
-			    {   s@.linkage = GLOBAL;
+			    {   if s@.linkage != WEAK then
+				    s@.linkage = GLOBAL;
 				XLinkage(s);
 			    }
+			    is KWEAK then s@.linkage = WEAK;
 			    is KEXTERN then 
 			    {   s@.linkage = EXTERN;
 				XLinkage(s);
@@ -365,13 +367,13 @@ package type
 	return Attributes(0, t, nattrlist);
     }
 
-    const vattrlist:[4]TokenT = { KEXTERN, KGLOBAL, KSECTION, NONE };
+    const vattrlist:[5]TokenT = { KEXTERN, KGLOBAL, KWEAK, KSECTION, NONE };
     proc VarAttributes(s: Symb, t: Type): Type
     {
 	return Attributes(s, t, vattrlist);
     }
 
-    const pattrlist:[6]TokenT = { KEXTERN, KGLOBAL, KSECTION, KINLINE, KNOINLINE, NONE };
+    const pattrlist:[7]TokenT = { KEXTERN, KGLOBAL, KWEAK, KSECTION, KINLINE, KNOINLINE, NONE };
     proc ProcAttributes(s: Symb)
     {   var t: Type;
 

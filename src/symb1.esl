@@ -4,7 +4,7 @@
 package symb
 {
     type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS, STRING);
-    type LinkT: (FORMAL, LOCAL, NORMAL, GLOBAL, EXTERN, FIXED, INLINE, NOINLINE);
+    type LinkT: (FORMAL, LOCAL, NORMAL, GLOBAL, WEAK, EXTERN, FIXED, INLINE, NOINLINE);
     type OffsT: 0..0xFFFF;
     type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
 	CLZ, CLZNZ, CTZ, CTZNZ, POP,
@@ -145,6 +145,19 @@ package symb
 	zstr.cat(full, "/", PathMax);
 	zstr.cat(full, file, PathMax);
 	return New(FILE, full, PRIVATE);
+    }
+
+    proc NewString(string: @[]_byte): Symb
+    {   var s: Symb;
+	var len: _uint;
+
+	len = zstr.len(string, lex.StringMax);
+	s = Symb(sys.malloc(SymbNode?size + len + 1));
+	_zero(s);
+	zstr.copy(s@.ident, string, lex.StringMax);
+	s@.kind = STRING;
+	s@.lineno = lex.Lineno();
+	return s;
     }
 	
     proc Clone(os: Symb, name: @lex.Identifier): Symb
