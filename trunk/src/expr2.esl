@@ -59,7 +59,7 @@ package expr
 	t@.memorder = Target.memorder;
 	tree = ast.New(SCON, t);
 //err.str("NewString \"");  err.str(lex.StringBuf); err.str("\"\n");
-	tree@.symb = symb.New(STRING, lex.StringBuf, PRIVATE);
+	tree@.symb = symb.NewString(lex.StringBuf);
 //symb.DumpS(tree@.symb);
 	strid += 1;
 	tree@.valu = strid;
@@ -89,7 +89,7 @@ package expr
 	lex.StringBuf[0:nl] = sr[0:nl];
 	// create a new string long enough
 //err.str("NewString \"");  err.str(lex.StringBuf); err.str("\"\n");
-	tree@.symb = symb.New(STRING, lex.StringBuf, PRIVATE);
+	tree@.symb = symb.NewString(lex.StringBuf);
 //symb.DumpS(tree@.symb);
 	return tree;   
     }

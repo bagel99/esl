@@ -132,7 +132,7 @@ package lex
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
-	KINLINE,KNOINLINE,KINTR,
+	KINLINE,KNOINLINE,KINTR,KWEAK,
 	// type properties begin here
 	KMIN,	KMAX,	KBITSZ,	KMEMSZ,	KLEN
     );
@@ -222,6 +222,7 @@ package lex
 	[KINLINE] =	"inline",	// attributes for procs
 	[KNOINLINE] =   "noinline",
 	[KINTR] =	"interrupt",
+	[KWEAK] =       "weak",
 	[KMIN] =	"min",		// properties
 	[KMAX] =	"max",
 	[KBITSZ] =	"bits",
@@ -496,12 +497,11 @@ package lex
     // Search to see if we have not imported this yet, if not, open it
     proc FileCheck(filename: @[]Char): boolean
     {   var fp: FileList;
-	var sfx: _uint;
 
 	fp = filehead;
 	while fp != 0 do
-	{   
-	    if zstr.eq(fp@.name, filename, sfx) then
+	{
+	    if zstr.eq(fp@.name, filename, NameMax) then
 		return false;	// already imported
 	    fp = fp@.next;
 	}

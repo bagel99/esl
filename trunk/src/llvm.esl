@@ -264,7 +264,7 @@ package llvm
 	    }
 	    f.str(s@.ident);
 	}
-	is GLOBAL, EXTERN then
+	is GLOBAL, WEAK, EXTERN then
 	{   f.chr('@');
 	    if s@.altsymb != 0 then
 		f.str(s@.altsymb@.ident);
@@ -525,6 +525,7 @@ package llvm
 	if isdefine then f.str("define"); else f.str("declare");
 	if ps@.linkage
 	is NORMAL, INLINE then f.str(" internal");
+	is WEAK then f.str(" weak");
 	is EXTERN then f.str(" external");
 	PRetvType(ps@.retvlist, true);
 	Print(" %I(", node);
@@ -708,6 +709,15 @@ package llvm
 	    }
 	    is GLOBAL then
 	    {   Print("%I = global %B ", node);
+		if rhs != 0 then
+		    Constant(rhs);
+		else
+		    DefaultInitializer(node@.type);
+		Alignment(s@.type);
+		Section(s@.section, true);
+	    }
+	    is WEAK then
+	    {   Print("%I = weak global %B ", node);
 		if rhs != 0 then
 		    Constant(rhs);
 		else
