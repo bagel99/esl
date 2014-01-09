@@ -1128,13 +1128,7 @@ ast.Dump(tree);
 	    is ABS then
 	    {   tree = IntrinsicUnary(ABS);
 		if tree != 0 && tree@.type@.kind == SINT then
-		{   var i: _uint;
-		    i = 0;
-		    while i < type.NINTS &&
-			  tree@.width > type.inttypes[i]@.size do
-			i += 1;
-		    tree@.type = type.uinttypes[i];
-		}
+		    tree@.type = target.utype(tree@.width);
 	    }
 	    is MIN, MAX then
 	    {   lhs = Bool(0);
@@ -1598,13 +1592,7 @@ ast.Dump(tree);
 		{
 		    tree = ast.OpUnary(NEG, tree);
 		    if tree@.type@.kind == UINT then
-		    {   var i: _uint;
-			i = 0;
-			while i < type.NINTS &&
-			      tree@.width > type.uinttypes[i]@.size do
-			    i += 1;
-			tree@.type = type.inttypes[i];
-		    }
+			tree@.type = target.stype(tree@.width);
 		}
 	    }
 	    is INV then

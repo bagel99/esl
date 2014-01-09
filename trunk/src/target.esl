@@ -3,7 +3,7 @@
 
 package target
 {
-    const IntSizesMax = 8;
+    alias type.NINTS as IntSizesMax;
     const TargetsMax = 31;
     type SizeAlign:
     {   size:	0..255;
@@ -34,49 +34,37 @@ package target
     {   LE, LSB, 8, 32, false,
 	4,
 	{32, 32},
-	{   {8, 8}, {16,16}, {32,32}, {64,32},
-	    {0,0},  {0,0},   {0,0},   {0,0}
-	}
+	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
     const Model32LEA: ModelT =  // 32-bit little-endian strict alignment
     {   LE, LSB, 8, 32, true,
 	4,
 	{32, 32},
-	{   {8, 8}, {16,16}, {32,32}, {64,32},
-	    {0,0},  {0,0},   {0,0},   {0,0}
-	}
+	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
     const Model64LEU: ModelT =  // 64-bit little-endian no-alignment
     {   LE, LSB, 8, 64, false,
-	4,
+	5,
 	{64, 64},
-	{   {8, 8}, {16,16}, {32,32}, {64,64},
-	    {0,0},  {0,0},   {0,0},   {0,0}
-	}
+	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,64}, {0,0}  }
     };
     const Model32BEA: ModelT =  // 32-bit big-endian strict alignment
     {   BE, MSB, 8, 32, true,
-	4,
+	5,
 	{32, 32},
-	{   {8, 8}, {16,16}, {32,32}, {64,32},
-	    {0,0},  {0,0},   {0,0},   {0,0}
-	}
+	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
     const Model64BEA: ModelT =  // 64-bit big-endian strict alignment
     {   BE, MSB, 8, 64, true,
 	4,
 	{64, 64},
-	{   {8, 8}, {16,16}, {32,32}, {64,64},
-	    {0,0},  {0,0},   {0,0},   {0,0}
-	}
+	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,128}, {0,0}  }
     };
     const Model16LEA: ModelT =  // 16-bit little-endian strict alignment
     {   LE, LSB, 8, 16, true,
 	3,
 	{16, 16},
-	{   {8, 8}, {16,16}, {32,16}, {0,0},
-	    {0,0},  {0,0},   {0,0},   {0,0}
-	}
+	{   {8, 8}, {16,16}, {32,16}, {0,0}, {0,0}, {0,0}  }
     };
 
     const Targets: []TargetT =
@@ -155,7 +143,24 @@ package target
 	    i += 1;
 	return Target.isizes[i].align;
     }
-   
+
+    proc utype(bits: type.BitSize): Type
+    {   var i: 0..IntSizesMax;
+
+	i = 0;
+	while i < Target.nisize && Target.isizes[i].size < bits do
+	    i += 1;
+	return type.uinttypes[i];
+    }   
+
+    proc stype(bits: type.BitSize): Type
+    {   var i: 0..IntSizesMax;
+
+	i = 0;
+	while i < Target.nisize && Target.isizes[i].size < bits do
+	    i += 1;
+	return type.inttypes[i];
+    }   
 }
 // vim: ts=8 sw=4 noet nowrap
 
