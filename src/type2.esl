@@ -138,28 +138,6 @@ package type
 	return fm != to;
     }
 
-
-    proc TargetUintType(size: type.BitSize): Type
-    {   var i: 0..target.IntSizesMax;
-
-	i = 0;    
-	while i < Target.nisize && size > Target.isizes[i].size do
-	    i += 1;
-	return type.uinttypes[i];
-    }
-
-    proc ExactTargetUintType(bits: type.BitSize): Type
-    {   var i: 0..target.IntSizesMax;
-
-	i = 0;
-	while i < type.NINTS do
-	{   if bits == type.uinttypes[i]@.size then
-		return type.uinttypes[i];
-	    i += 1;
-	}
-	return 0;
-    }
-
     proc New(kind: TypeT): Type
     {   var t: Type;
 
@@ -216,7 +194,7 @@ package type
     const askip1:[4]TokenT = { PEND, SEMI, NONE };
     const askip2:[5]TokenT = { COMMA, PEND, SEMI, NONE };
 
-    proc XLinkage(s: Symb)
+    proc XLinkage(s: Symb, constok: boolean)
     {   var tok: TokenT;
 
 	tok = Token;
@@ -226,7 +204,7 @@ package type
 	    {   s@.altsymb = symb.NewString(lex.StringBuf);
 		tok = Next();
 	    }
-	    else
+	    else if constok then
 	    {   s@.xaddr = expr.ConstValue(type.wordtype);
 		s@.linkage = FIXED;
 	    }
@@ -330,12 +308,15 @@ package type
 			    is KGLOBAL then 
 			    {   if s@.linkage != WEAK then
 				    s@.linkage = GLOBAL;
-				XLinkage(s);
+				XLinkage(s, false);
 			    }
-			    is KWEAK then s@.linkage = WEAK;
+			    is KWEAK then
+			    {   s@.linkage = WEAK;
+				XLinkage(s, false);
+			    }
 			    is KEXTERN then 
 			    {   s@.linkage = EXTERN;
-				XLinkage(s);
+				XLinkage(s, true);
 			    }
 			    is KSECTION then
 			    {   XSection(s);

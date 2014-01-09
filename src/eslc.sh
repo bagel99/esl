@@ -15,6 +15,7 @@ pkgs="-I."
 eslcomp="$HOME/src/compiler/src/eslc2"
 llvmdir3_2="$HOME/work/llvm-3.2/build/Release+Asserts/bin"
 llvmdir3_3="$HOME/work/llvm-3.3/build/Release+Asserts/bin"
+llvmdir3_4="$HOME/work/llvm-3.4/build/Release+Asserts/bin"
 llvmdirT="$HOME/work/llvm/Release+Asserts/bin"
 
 #
@@ -30,7 +31,7 @@ optimize=
 feature=
 loopthresh=10
 outfile="a.out"
-llvmdir=$llvmdir3_3
+llvmdir=$llvmdir3_4
 
 #
 # Clean up temporary files

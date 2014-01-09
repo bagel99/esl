@@ -36,14 +36,87 @@ package llvm
 	CLZ, CTZ, POP,
 	END
     );
-    type IntrinsicSize: _uint16; // bit map for each size
-    var UsedIntrinsic: [Intrinsics]IntrinsicSize;
+    type IntrinsicUse:
+    {   next:   @IntrinsicUse;
+	type:   Type;
+	size:   _uint;
+    };
+    type pIntrinsicUse: @IntrinsicUse;
+    var UsedIntrinsic: [Intrinsics]pIntrinsicUse;
 
-    proc UseIntrinsic(which: Intrinsics, width: _uint)
-    {   var nbytes: _uint;
+    proc UseIntrinsic(which: Intrinsics, size: _uint, t: Type)
+    {   var piu: pIntrinsicUse;
 
-	nbytes = width / Target.membits;
-	UsedIntrinsic[which] = UsedIntrinsic[which] | (1 << (nbytes-1));
+	if size == 0 then size = 1;
+//err.str("Use "); err.uint(_uint8(which));
+//err.str(" size="); err.uint(size); err.nl();
+	piu = UsedIntrinsic[which];
+	while piu != 0 && piu@.size != size do
+	    piu = piu@.next;
+	if piu == 0 then    // new usage
+	{   piu = pIntrinsicUse(sys.malloc(IntrinsicUse?size));
+	    piu.size = size;
+	    piu.type = t;
+	    piu.next = UsedIntrinsic[which];
+	    UsedIntrinsic[which] = piu;
+	}
+    }
+
+    proc Print(fmt: @[]Char, anode: Ast);   // forward
+
+    proc DeclareIntrinsics()
+    {   var i: Intrinsics;
+	var piu: pIntrinsicUse;
+	var dummy: ast.AstNode;     // just to Print width/align of type
+
+	dummy.type = 0;
+	i = MEMCPY;
+	while i < END do
+	{   if UsedIntrinsic[i] != 0 then
+	    {   piu = UsedIntrinsic[i];
+		if i
+		is MEMCPY then
+		    Print("declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\n", dummy);
+		is MEMSET then
+		    Print("declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\n", dummy);
+		is BSWAP then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @llvm.bswap.%K(%K)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is CLZ then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @llvm.ctlz.%K(%K, i1)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is CTZ then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @llvm.cttz.%K(%K, i1)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is POP then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @llvm.ctpop.%K(%K)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is MEMCMP then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare i1 @memcmp%*B(%K, %K, %W)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+	    }
+	    i += 1;
+	}
     }
 
     proc GenSub(node: Ast): boolean;	// forward
@@ -96,6 +169,18 @@ package llvm
 	 
     }
 
+    proc PWidth(t: Type)
+    {
+	if t != 0 then
+	    f.uint(t@.width/Target.membits);
+    }
+
+    proc PAlign(t: Type)
+    {
+	if t != 0 then
+	    f.uint(t@.align/Target.membits);
+    }
+
     proc PType(t: Type)
     {   var size: type.BitSize;
 
@@ -132,7 +217,6 @@ package llvm
 	    {
 		if t@.packed then
 		{   // LLVM doesn't do bit pack arrays, handle as integers
-//f.str("PType packed array\n");
 		    size = target.isize(t@.size);
 		    f.chr('i'); f.uint(size);
 		}
@@ -347,6 +431,7 @@ package llvm
 	var c: Char;
 	var n: ast.NSubNodes;
 	var node: Ast;
+	var t: Type;
 
 	i = 0;
 	loop
@@ -365,10 +450,15 @@ package llvm
 		    }
 		    node = anode@.child[n];
 		}
+		t = node@.type;
+		while c == '*' do
+		{   if t != 0 then t = t@.base;
+		    i += 1;  c = fmt[i];
+		}
 		if c
-		is 'B' then PType(node@.type);
-		is 'A' then PType(node@.type@.base);
-		is 'C' then PType(node@.type@.base@.base);
+		is 'K' then PType(t);
+		is 'A' then PAlign(t);
+		is 'B' then PWidth(t);
 		is 'T' then NodeType(node);
 		is 'I' then NodeName(node);
 		is 'N' then NodeSrc(node);
@@ -391,69 +481,6 @@ package llvm
     {
 	f.str("%rv.");
 	f.uint(n);
-    }
-
-    proc DeclareIntrinsics()
-    {   var i: Intrinsics;
-
-	i = MEMCPY;
-	while i < END do
-	{   if UsedIntrinsic[i] != 0 then
-	    if i
-	    is MEMCPY then
-		Print("declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\n", 0);
-	    is MEMSET then
-		Print("declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\n", 0);
-	    is MEMCMP then
-	    {   if UsedIntrinsic[i]&0x01 != 0 then
-		    Print("declare i1 @memcmp1(i8*, i8*, %W)\n", 0);
-		if UsedIntrinsic[i]&0x02 != 0 then
-		    Print("declare i1 @memcmp2(i16*, i16*, %W)\n", 0);
-		if UsedIntrinsic[i]&0x08 != 0 then
-		    Print("declare i1 @memcmp4(i32*, i32*, %W)\n", 0);
-		if UsedIntrinsic[i]&0x80 != 0 then
-		    Print("declare i1 @memcmp8(i64*, i64*, %W)\n", 0);
-	    }
-	    is BSWAP then
-	    {   if UsedIntrinsic[i]&0x02 != 0 then
-		    Print("declare i16 @llvm.bswap.i16(i16)\n", 0);
-		if UsedIntrinsic[i]&0x08 != 0 then
-		    Print("declare i32 @llvm.bswap.i32(i32)\n", 0);
-		if UsedIntrinsic[i]&0x80 != 0 then
-		    Print("declare i64 @llvm.bswap.i64(i64)\n", 0);
-	    }
-	    is CLZ then
-	    {   if UsedIntrinsic[i]&0x01 != 0 then
-		    Print("declare i8 @llvm.ctlz.i8(i8, i1)\n", 0);
-		if UsedIntrinsic[i]&0x02 != 0 then
-		    Print("declare i16 @llvm.ctlz.i16(i16, i1)\n", 0);
-		if UsedIntrinsic[i]&0x08 != 0 then
-		    Print("declare i32 @llvm.ctlz.i32(i32, i1)\n", 0);
-		if UsedIntrinsic[i]&0x80 != 0 then
-		    Print("declare i64 @llvm.ctlz.i64(i64, i1)\n", 0);
-	    }        
-	    is CTZ then
-	    {   if UsedIntrinsic[i]&0x01 != 0 then
-		    Print("declare i8 @llvm.cttz.i8(i8, i1)\n", 0);
-		if UsedIntrinsic[i]&0x02 != 0 then
-		    Print("declare i16 @llvm.cttz.i16(i16, i1)\n", 0);
-		if UsedIntrinsic[i]&0x08 != 0 then
-		    Print("declare i32 @llvm.cttz.i32(i32, i1)\n", 0);
-		if UsedIntrinsic[i]&0x80 != 0 then
-		    Print("declare i64 @llvm.cttz.i64(i64, i1)\n", 0);
-	    }        
-	    is POP then
-	    {   if UsedIntrinsic[i]&0x01 != 0 then
-		    Print("declare i8 @llvm.ctpop.i8(i8)\n", 0);
-		if UsedIntrinsic[i]&0x02 != 0 then
-		    Print("declare i16 @llvm.ctpop.i16(i16)\n", 0);
-		if UsedIntrinsic[i]&0x08 != 0 then
-		    Print("declare i32 @llvm.ctpop.i32(i32)\n", 0);
-		if UsedIntrinsic[i]&0x80 != 0 then
-		    Print("declare i64 @llvm.ctpop.i64(i64)\n", 0);
-	    }        
-	    i += 1;
-	}
     }
 
     proc Alignment(t: Type)
@@ -683,7 +710,7 @@ package llvm
 	{   DclType(s@.type);
 	    if s@.linkage
 	    is LOCAL then
-	    {   Print("\t%I = alloca %B", node);
+	    {   Print("\t%I = alloca %K", node);
 		if rhs != 0 then     // initialized local
 		{   if node@.type@.kind <= REF then // scalar
 		    {   f.nl();
@@ -693,13 +720,13 @@ package llvm
 			f.str("store ");
 			NodeType(rhs); f.chr(' ');
 			NodeSrc(rhs);
-			Print(", %B* %D", node);
+			Print(", %K* %D", node);
 		    }
 		    else lex.ErrorS(NOTIMPL, "initialized local composites");
 		}
 	    }
 	    is NORMAL then
-	    {   Print("%I = internal global %B ", node);
+	    {   Print("%I = internal global %K ", node);
 		if rhs != 0 then
 		    Constant(rhs);
 		else
@@ -708,7 +735,7 @@ package llvm
 		Section(s@.section, true);
 	    }
 	    is GLOBAL then
-	    {   Print("%I = global %B ", node);
+	    {   Print("%I = global %K ", node);
 		if rhs != 0 then
 		    Constant(rhs);
 		else
@@ -717,7 +744,7 @@ package llvm
 		Section(s@.section, true);
 	    }
 	    is WEAK then
-	    {   Print("%I = weak global %B ", node);
+	    {   Print("%I = weak global %K ", node);
 		if rhs != 0 then
 		    Constant(rhs);
 		else
@@ -726,7 +753,7 @@ package llvm
 		Section(s@.section, true);
 	    }
 	    is EXTERN then
-		Print("%I = external global %B", node);
+		Print("%I = external global %K", node);
 	    f.nl();
 	    if feature.gflag then llvmdb.DefVar(s);
 	}
@@ -735,8 +762,7 @@ package llvm
     proc DclString(node: Ast)
     {   var n: StringRange;
 
-//err.str("DclString\n");
-	Print("%S = internal constant %B ", node);
+	Print("%S = internal constant %K ", node);
 	n = StringRange(node@.type.Span());
 	PString(node@.symb@.ident, n, true);
 	f.nl();
@@ -747,12 +773,8 @@ package llvm
     proc ConstScan(node: Ast)
     {   var i: ast.NSubNodes;
 
-//err.str("ConstScan\n");
 	if node@.op == BYREF && node@.child[0].op == SCON then
-	{
-//f.str("ConstScan: BYREF SCON\n");
 	    DclString(node@.child[0]);
-	}
 	else
 	{   i = 0;
 	    while i < node@.num do
@@ -770,8 +792,8 @@ package llvm
 	{   DclType(s@.type);
 	    ConstScan(node);
 	    if s@.linkage
-	    is NORMAL then Print("%I = internal constant %B ", node);
-	    is GLOBAL then Print("%I = constant %B ", node);
+	    is NORMAL then Print("%I = internal constant %K ", node);
+	    is GLOBAL then Print("%I = constant %K ", node);
 	    Constant(node@.child[0]);
 	    Alignment(s@.type);
 	    Section(s@.section, true);
@@ -781,9 +803,8 @@ package llvm
 
     proc DclAggregate(node: Ast)
     {
-//err.str("DclAggregate\n");
 	ConstScan(node);
-	Print("%S = internal constant %B ", node);
+	Print("%S = internal constant %K ", node);
 	Constant(node);
 	// FIXME: Alignment(node@.type)?
 	f.nl();
@@ -984,10 +1005,6 @@ package llvm
 	// LLVM wants i8* types
 	node@.child[0] = ast.Cast(node@.child[0], pbytetype);
 	node@.child[1] = ast.Cast(node@.child[1], pbytetype);
-/* {
-err.str("Copy: from=\n"); ast.Dump(node@.child[1]);
-err.str("to=\n"); ast.Dump(node@.child[0]);
-} */
 	GenSub(node@.child[0]);
 	GenSub(node@.child[1]);
 	// LLVM wants count to be register width
@@ -997,7 +1014,7 @@ err.str("to=\n"); ast.Dump(node@.child[0]);
 	// FIXME: find alignment, here or during parsing?
 	Print(
 	   "\tcall void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\n", node);
-	UseIntrinsic(MEMCPY, 8);
+	UseIntrinsic(MEMCPY, 1, 0);     // FIXME - alignment
     }
 
     proc Set(node: Ast)
@@ -1011,7 +1028,7 @@ err.str("to=\n"); ast.Dump(node@.child[0]);
 	GenSub(node@.child[2]);
 	Print(
 	   "\tcall void @llvm.memset.p0i8.%W(i8* %0N, %1T %1N, %2T %2N, i32 %3N, i1 0)\n", node);
-	UseIntrinsic(MEMSET, 8);
+	UseIntrinsic(MEMSET, 1, 0);     // FIXME - alignment
     }
 
     proc GetChunkSize(size: _uint, align: _uint): 0..target.IntSizesMax
@@ -1050,12 +1067,6 @@ err.str("to=\n"); ast.Dump(node@.child[0]);
 	i = GetChunkSize(length, align);
 	size = Target.isizes[i].size/Target.membits;
 	align = Target.isizes[i].align/Target.membits;
-/*
-{ err.str("Array compare: length=");
-if length == 0 then err.str("variable"); else err.uint(length);
-err.str(" size="); err.uint(size);
-err.str(" align="); err.uint(align);}
-*/
 	if length != 0 && length <= size then	// can do with one load
 	{
 	    node@.child[0] = ast.Cast(node@.child[0], puinttype[i]);
@@ -1071,7 +1082,6 @@ err.str(" align="); err.uint(align);}
 		    mask = ~((1 << ((size-length)*8)) -1);
 		else	// assume LE
 		    mask = (1 << (length*8)) - 1;
-/* { err.str(" mask=0x"); err.hex64(mask);} */
 		node@.child[0] = ast.New2(XOR, puinttype[i]@.base,
 					  node@.child[0], node.child[1]);
 		node@.child[0] = ast.New2(AND, puinttype[i]@.base,
@@ -1087,7 +1097,6 @@ err.str(" align="); err.uint(align);}
 		Print("\t%N = icmp eq %0T %0N, %1N\n", node);
 	    else
 		Print("\t%N = icmp ne %0T %0N, %1N\n", node);
-/* { err.nl();} */
 	    return true;
 	}
 	else
@@ -1107,17 +1116,14 @@ err.str(" align="); err.uint(align);}
 	    GenSub(node@.child[2]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    node@.width = 1;
-	    Print("\t%N = call i1 @memcmp", node);
-	    f.uint(puinttype[i]@.base@.width/Target.membits);
-	    Print("(%0T %0N, %1T %1N, %2T %2N)\n", node);
-	    UseIntrinsic(MEMCMP, size*Target@.membits);
+	    Print("\t%N = call i1 @memcmp%0*B(%0T %0N, %1T %1N, %2T %2N)\n", node);
+	    UseIntrinsic(MEMCMP, size, puinttype[i]);
 	    if node@.op == ANE then     // ugly invert in place
 	    {   node@.child[0].seqno = node@.seqno;
 		node@.seqno = Tseqno;  Tseqno += 1;
 		Print("\t%N = xor i1 %0N, true\n", node);
 	    }
 	}
-/* { err.nl();} */
 	return false;
     }
 
@@ -1146,27 +1152,27 @@ err.str(" align="); err.uint(align);}
 	    Print("\t%N = fptosi %0T %0N to %T", node);
 	is REVB then
 	{   Print("\t%N = call %T @llvm.bswap.%T(%T %0N)", node);
-	    UseIntrinsic(BSWAP, node@.width);
+	    UseIntrinsic(BSWAP, node@.width/Target@.membits, node@.type);
 	}
 	is CLZ then
 	{   Print("\t%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)", node);
-	    UseIntrinsic(CLZ, node@.width);
+	    UseIntrinsic(CLZ, node@.width/Target@.membits, node@.type);
 	}
 	is CLZNZ then
 	{   Print("\t%N = call %T @llvm.ctlz.%T(%0T %0N, i1 true)", node);
-	    UseIntrinsic(CLZ, node@.width);
+	    UseIntrinsic(CLZ, node@.width/Target@.membits, node@.type);
 	}
 	is CTZ then
 	{   Print("\t%N = call %T @llvm.cttz.%T(%0T %0N, i1 false)", node);
-	    UseIntrinsic(CTZ, node@.width);
+	    UseIntrinsic(CTZ, node@.width/Target@.membits, node@.type);
 	}
 	is CTZNZ then
 	{   Print("\t%N = call %T @llvm.cttz.%T(%0T %0N, i1 true)", node);
-	    UseIntrinsic(CTZ, node@.width);
+	    UseIntrinsic(CTZ, node@.width/Target@.membits, node@.type);
 	}
 	is POP then
 	{   Print("\t%N = call %T @llvm.ctpop.%T(%0T %0N)", node);
-	    UseIntrinsic(POP, node@.width);
+	    UseIntrinsic(POP, node@.width/Target@.membits, node@.type);
 	}
 	PEndLine(node);
 	return false;
@@ -1342,7 +1348,6 @@ err.str(" align="); err.uint(align);}
 		    ps@.declared = true;
 		}
 	    }
-//
 	    is ABS then			    // must convert
 	    {   rhs = node@.child[0];
 		lhs = ast.New1(NEG, rhs@.type, rhs);
@@ -1365,7 +1370,6 @@ err.str(" align="); err.uint(align);}
 		node = ast.Child(node, rhs);    // must return same node
 		node@.op = IFEXPR;
 	    }
-//
 	    is ASM then return;     // ignore SCONs under an ASM
 	    i = 0;
 	    while i < node@.num do
@@ -1576,7 +1580,6 @@ err.str(" align="); err.uint(align);}
 	    s = s@.next;
 	    i += 1;
 	}
-//err.str("BitfieldOffset="); err.uint(foffs); err.nl();
 	return foffs;
     }
 
@@ -1630,7 +1633,7 @@ err.str(" align="); err.uint(align);}
 	else
 	{   t = t@.base;
 	    // load the container of the bitfield as a UINT
-	    tree = ast.New1(LOAD, type.TargetUintType(t@.width), offs);
+	    tree = ast.New1(LOAD, target.utype(t@.width), offs);
 	    tree@.width = tree@.type@.width;
 	    // make sure the endian is correct
 	    if tree@.width > Target.membits && 
@@ -1639,10 +1642,6 @@ err.str(" align="); err.uint(align);}
 	}
 	// make register sized, this simplifies things
 	tree = ast.ExtendT(tree, type.wordtype);
-/* {
-err.str("BitfieldRewrite tree=\n"); ast.Dump(tree);
-err.str("varb=\n"); ast.Dump(varb);
-err.str("offs=\n"); ast.Dump(offs); } */
 	return tree,    // return the loaded container,
 	       varb,    // the shift computation,
 	       offs;    // and the base address 
@@ -1684,9 +1683,6 @@ err.str("offs=\n"); ast.Dump(offs); } */
 	    tree = ast.New2(AND, type.wordtype, tree, mask);
 	    // possibly narrow the size
 	    tree = ast.Extend(tree, load@.width, true);
-/* {
-err.str("BFLoad size="); err.uint(load@.width);
-err.str(" tree=\n"); ast.Dump(tree); } */
 	    GenSub(tree);
 	    load@.child[0] = tree;      // load@.op == LOAD, we're done with it
 	    load@.seqno = tree@.seqno;  // copy up seqno of node below
@@ -1755,9 +1751,6 @@ err.str(" tree=\n"); ast.Dump(tree); } */
 		    rhs = ast.New1(REVB, rhs@.type, rhs);
 		store@.child[i] = lhs;
 		store@.child[n+i] = rhs;
-/* {
-err.str("BFStore size="); err.uint(lhs@.type@.base@.width);
-err.str(" tree=\n"); ast.Dump(store); } */
 	    }
 	    GenSub(rhs);	// rhs first
 	    i += 1;
@@ -1774,7 +1767,7 @@ err.str(" tree=\n"); ast.Dump(store); } */
 		    f.str("volatile ");
 		NodeType(rhs); f.chr(' ');
 		NodeSrc(rhs);
-		Print(", %B %D", lhs);
+		Print(", %K %D", lhs);
 		if lhs@.type@.base@.unalgn then
 		{   f.str(", align ");
 		    f.uint64(lhs@.type@.base@.align/Target.membits);
@@ -1822,10 +1815,6 @@ err.str(" tree=\n"); ast.Dump(store); } */
 	term = false;
 	if node == 0 then return term;
 	if node@.seqno != 0 then return term;
-//{   err.str("node "); err.uint(Snode@.seqno);
-//    err.str(" visited before, ignoring.\n");
-//    return term;
-//}
 	if node@.op
 	is NOP then { GenSub(node@.child[0]); node@.seqno = node@.child[0]@.seqno; }
 	is FILE then
@@ -1858,12 +1847,12 @@ f.flush();
 	is BYREF then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = getelementptr %B %0N\n", node);
+	    Print("\t%N = getelementptr %K %0N\n", node);
 	}
 	is OFFSET then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = getelementptr %0B %0N, %W 0, i32 ", node);
+	    Print("\t%N = getelementptr %0K %0N, %W 0, i32 ", node);
 	    f.uint32(_uint32(node@.valu));
 	    f.nl();
 	}
@@ -1873,7 +1862,7 @@ f.flush();
 	    node@.child[1] = ast.ExtendT(node@.child[1], type.wordtype);
 	    GenSub(node@.child[1]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = getelementptr %0B %0N, %W 0, %1T %1N\n", node);
+	    Print("\t%N = getelementptr %0K %0N, %W 0, %1T %1N\n", node);
 	}
 	is SLICE then
 	{   var nextseqno: seqnoT;
@@ -1887,7 +1876,7 @@ f.flush();
 	    nextseqno = Tseqno; Tseqno += 1;
 	    Print("\t%N = getelementptr %0T %0N, %W 0, %1T %1N\n", node);
 	    f.chr('\t'); PTempName(nextseqno);
-	    Print(" = bitcast %C* %N to %T\n", node);
+	    Print(" = bitcast %**K* %N to %T\n", node);
 	    node@.seqno = nextseqno;
 	}	
 	is CAST then
@@ -1895,7 +1884,7 @@ f.flush();
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    if node@.type@.kind == REF then
 	    {   if node@.child[0]@.type@.kind == REF then
-		    Print("\t%N = bitcast %0B %0N to %B\n", node);
+		    Print("\t%N = bitcast %0K %0N to %K\n", node);
 		else
 		    Print("\t%N = inttoptr %0T %0N to %T\n", node);
 	    }
@@ -1903,7 +1892,7 @@ f.flush();
 	    {   if node@.child[0]@.type@.kind == REF then
 		    Print("\t%N = ptrtoint %0T %0N to %T\n", node);
 		else
-		    Print("\t%N = bitcast %0B %0N to %B\n", node);
+		    Print("\t%N = bitcast %0K %0N to %K\n", node);
 	    }
 	}	
 	is ZEXT then  ChangeSize(node, "zext");

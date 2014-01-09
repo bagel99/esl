@@ -61,7 +61,7 @@ package type
     var uintptrtype: Type;
     var memtype: Type;
     var addrtype: Type;
-    const NINTS = 4;		// number of integer types supported
+    const NINTS = 6;		// number of integer types supported
     var uinttypes: [NINTS]Type;
     var inttypes:  [NINTS]Type;
     const NFLOATS = 2;

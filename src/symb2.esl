@@ -84,8 +84,7 @@ package symb
 	// predefined _uint*, _int*
 	type.wordtype = type.NewBuiltin(UINT, "_uint", Target.regsize);
 	type.swordtype = type.NewBuiltin(SINT, "_int", Target.regsize);
-	// FIXME - what if target address size is not regsize?
-	type.uintptrtype = type.NewBuiltin(UINT, "_uintptr", Target.regsize);
+	type.uintptrtype = type.NewBuiltin(UINT, "_uintptr", Target.ptr.size);
 	type.uinttypes[0] = type.NewBuiltin(UINT, "_uint8",   8);
 	type.inttypes[0]  = type.NewBuiltin(SINT, "_int8",    8);
 	type.uinttypes[1] = type.NewBuiltin(UINT, "_uint16", 16);
@@ -94,6 +93,10 @@ package symb
 	type.inttypes[2]  = type.NewBuiltin(SINT, "_int32",  32);
 	type.uinttypes[3] = type.NewBuiltin(UINT, "_uint64", 64);
 	type.inttypes[3]  = type.NewBuiltin(SINT, "_int64",  64);
+	if Target.isizes[4].size != 0 then
+	{   type.uinttypes[4] = type.NewBuiltin(UINT, "_uint128", 128);
+	    type.inttypes[4] = type.NewBuiltin(SINT, "_int128", 128);
+	}
 
 	// the float types
 	type.floattypes[0] = type.NewBuiltin(FLOAT, "_float32", 32);
