@@ -6,7 +6,7 @@ package stmt
     const isthenlist:[3]TokenT = { KIS, KTHEN, NONE };
     const iselselist:[3]TokenT = { KIS, KELSE, NONE };
     const thenlist:[2]TokenT = { KTHEN, NONE };
-    const elselist:[2]TokenT = { KELSE, NONE };
+    const elselist:[3]TokenT = { KELSE, KELIF, NONE };
     const aslist:[2]TokenT = { KAS, NONE };
     const withlist:[2]TokenT = { KWITH, NONE };
     const fromlist:[3]TokenT = { KFROM, KIN, NONE };
@@ -27,8 +27,10 @@ package stmt
     const skipstmt: [2]TokenT = { SEMI, NONE };
     const iflist: [2]TokenT = {KIF, NONE };
 
-    proc CCSkip(tok: TokenT)
-    {
+    proc CCSkip()
+    {   var tok: TokenT;
+
+	tok = Token;
 //lex.WhereAmI("Beg skip");
 	if tok == GBEG then
 	{   lex.Skip(skipgroup);
@@ -36,13 +38,14 @@ package stmt
 	}
 	else
 	{   // Have to treat if statement differently
-	    tok = lex.Keyword(iflist);
+	    if tok == ID then
+		tok = lex.Keyword(iflist);
 	    if tok == KIF then
 	    {   tok = lex.Skip(isthenlist);
 		if tok
 		is KTHEN then
 		{   tok = Next();
-		    CCSkip(tok);
+		    CCSkip();
 		    tok = lex.Keyword(elselist);
 		}
 		is KIS then
@@ -51,7 +54,7 @@ package stmt
 			tok = lex.Skip(thenlist);
 			if tok == KTHEN then
 			{   tok = Next();
-			    CCSkip(tok);
+			    CCSkip();
 			}
 			tok = lex.Keyword(iselselist);
 		      exit tok != KIS;
@@ -59,7 +62,11 @@ package stmt
 		}
 		if tok == KELSE then
 		{   tok = Next();
-		    CCSkip(tok);
+		    CCSkip();
+		}        
+		else if tok == KELIF then
+		{   Token = KIF;    // fake following if
+		    CCSkip();
 		}        
 	    }
 	    else
@@ -100,6 +107,8 @@ package stmt
 	return tree;
     }
 
+    proc CCIfStmt(nest: NestType): Ast;     // forward
+
     proc CCIfTail(ctree: Ast, nest: NestType): Ast
     {   var tree: Ast;
 	var tok: TokenT;
@@ -122,7 +131,7 @@ package stmt
 	    if doneit then
 		tree = CCDo(nest);
 	    else
-		CCSkip(tok);
+		CCSkip();
 	}
 	is KIS then
 	{   doneit = false;
@@ -157,7 +166,7 @@ package stmt
 		    doneit = true;
 		}
 		else
-		    CCSkip(tok);  
+		    CCSkip();  
 		tok = lex.Keyword(isthenlist);
 	      exit tok != KIS;
 	    }
@@ -170,8 +179,15 @@ package stmt
 	    if !doneit then
 		tree = CCDo(nest);
 	    else
-		CCSkip(tok);
-	}	    
+		CCSkip();
+	}
+	else if tok == KELIF then
+	{   Token = KIF;    // fake a following if
+	    if !doneit then
+		tree = CCDo(nest);
+	    else
+		CCSkip();
+	}
 	return tree;
     }
 
@@ -877,7 +893,7 @@ package stmt
 	else
 	    lex.Error(BADIF);
 	tok = lex.Keyword(elselist);
-	if tok == KELSE then	// "else" is abiguous, could be assignment
+	if tok == KELSE || tok == KELIF then // abiguous, could be assignment
 	{   s = symb.FindTop(lex.Ident);
 	    tok2 = Next();
 	    if s != 0 then	// else is also a valid symbol, disabiguate
@@ -894,7 +910,10 @@ package stmt
 		    tree = ast.New2(SEQ, 0, tree, stree);
 	    }
 	    else	// really the else part
-	    {   stree = Statement();
+	    {   if tok == KELIF then
+		    stree = If();
+		else    // ELSE
+		    stree = Statement();
 		tree = ast.Child(tree, stree);
 	    }
 	}

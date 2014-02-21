@@ -468,7 +468,9 @@ package type
 		align = target.ialign(t@.size);
 	    }
 	    is FLOAT then
-	        t@.width = t@.size;
+	    {   t@.width = t@.size;
+		align = target.ialign(t@.size); // FIXME - falign?
+	    }
 	    is REF then 
 	    {   // Make sure anonymous base types are final
 		if t@.base != 0 && t@.base@.name == 0 then
@@ -493,7 +495,7 @@ package type
 		    {   Final(f@.type);
 			if f@.type@.flex then
 			{   if f@.next != 0 then    // flex must be final field
-				lex.Error(BADFLEX);
+				lex.ErrorI(BADFLEX, f@.ident);
 			    else
 				t@.flex = true;     // mark record as flex
 			}
@@ -553,6 +555,8 @@ package type
 		    else
 			align = target.ialign(t@.size);
 		}
+		if t@.packed && target.isize(t@.size) == 0 then
+		    lex.Error(BADPACKED);
 	    }
 	    is ARRAY then 
 	    {   if t@.base != 0 then
@@ -574,6 +578,8 @@ err.nl();
 		    else
 			align = target.ialign(t@.size);
 		}
+		if t@.packed && target.isize(t@.size) == 0 then
+		    lex.Error(BADPACKED);
 	    }
 	    if t@.alignattr then
 	    {   if t@.align < align then
@@ -715,9 +721,9 @@ err.nl();
 	t@.base = bt;
 	if bt != 0 then
 	{   if bt@.kind == RECORD then
-	    {	// copy the record type
+	    {	// copy the fields in the base record
 		bs = bt@.list;
-		while bs != 0 do
+		while bs != 0 && !bs@.type@.flex do
 		{   s = symb.New(FIELD, bs@.ident, PRIVATE);
 		    if ps != 0 then ps@.next = s; else t@.list = s;
 		    ps = s;

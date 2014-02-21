@@ -21,6 +21,7 @@ package lex
 	ARRAYCOPY,  BADINXEXP,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,
 	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
+	BADPACKED,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -106,6 +107,7 @@ package lex
 	[FORWNOFIX]=    "Unresolved forward symbol: ",
 	[BADFOR] =      "Syntax error in for statement",
 	[SECTNAME] =    "Expected section name",
+	[BADPACKED] =   "Packed record or array too large",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
@@ -126,7 +128,7 @@ package lex
 	KASM,   KCALL,
 	KRET,   KIF,	KWHILE,				// must be contiguous
 	KFOR,	KLOOP,	KEXIT,
-	KTHEN,	KELSE,	KIS,    KDO,	KWITH,  KAS,
+	KTHEN,	KELIF,  KELSE,	KIS,    KDO,	KWITH,  KAS,
 	KIN,	KFROM,	KTO,    KBY,			// for loop support
 	// attributes begin here
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
@@ -196,6 +198,7 @@ package lex
 	[KLOOP] =	"loop",
 	[KEXIT] =	"exit",
 	[KTHEN] =	"then",
+	[KELIF] =       "elif",
 	[KELSE] =	"else",
 	[KIS] =		"is",
 	[KDO] =		"do",
