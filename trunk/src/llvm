@@ -1,6 +1,9 @@
 #!/bin/sh
+#
 # Run a .ll file through the LLVM backend
+#
 LLVM=$HOME/work/llvm-3.3/build/Release+Asserts/bin		# !!!FIX THIS!!!
+#LLVM=/usr/bin
 DEBUG=
 ARCH=
 INLINE=
@@ -18,11 +21,13 @@ done
 if [ "$ARCH" == "" ]
 then	# target same as host
   ARCH=`uname -m`
-  case $ARCH in
-    i686)   ARCH=x86;;
-    x86_64) ARCH=x86-64;;
-  esac
 fi
+# map ARCH into something LLVM knows about
+case $ARCH in
+  i686)   ARCH=x86;;
+  x86_64) ARCH=x86-64;;
+  s390x)  ARCH=systemz;;
+esac
 case `uname -s` in
   Darwin)
     TRIPLE="-mtriple=x86_64-apple-darwin" ;;

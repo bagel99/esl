@@ -266,10 +266,11 @@ package symb
 	s = FindTop(name);
 	loop
 	{   tok = Next();
-	  exit s == 0 || s@.kind != PACK || tok != DOT;
+	  exit tok != DOT;
 	    tok = Next();
 	  exit tok != ID;
-	    s = FindLocal(s@.symblist, lex.Ident);
+	    if s != 0 then
+		s = FindLocal(s@.symblist, lex.Ident);
 	}
 	return s != 0;
     }

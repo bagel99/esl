@@ -19,6 +19,10 @@ else
   ifeq ($(ARCH), i686)
     CFLAGS=-m32
     ARCH=x86
+  else
+    ifeq ($(ARCH), s390x)
+      CFLAGS="-march=z10"
+    endif
   endif
 endif
 
