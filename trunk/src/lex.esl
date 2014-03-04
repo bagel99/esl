@@ -21,7 +21,7 @@ package lex
 	ARRAYCOPY,  BADINXEXP,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,
 	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
-	BADPACKED,
+	BADPACKED,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -108,6 +108,10 @@ package lex
 	[BADFOR] =      "Syntax error in for statement",
 	[SECTNAME] =    "Expected section name",
 	[BADPACKED] =   "Packed record or array too large",
+	[NOSIZE] =      "Can not specify size for fixed sized object",
+	[NEEDSIZE] =    "Must specify size for variable sized object",
+	[BADSIZE] =     "Specified size smaller that actual object size",
+	[BADAT] =       "Illegal field offset specified",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
@@ -132,7 +136,7 @@ package lex
 	KIN,	KFROM,	KTO,    KBY,			// for loop support
 	// attributes begin here
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
-	KRO,	KWO,	KINPUT,	KOUTPUT,
+	KRO,	KWO,	KINPUT,	KOUTPUT,KAT,
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
 	KINLINE,KNOINLINE,KINTR,KWEAK,
 	// type properties begin here
@@ -218,6 +222,7 @@ package lex
 	[KWO] =		"wo",
 	[KINPUT] =	"in",
 	[KOUTPUT] =	"out",
+	[KAT] =		"at",
 	[KEXTERN] =	"external",	// attributes for vars and procs
 	[KGLOBAL] =	"global",
 	[KSECTION] =	"section",
