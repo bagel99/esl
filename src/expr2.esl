@@ -166,9 +166,21 @@ package expr
 		    tree@.type = ct;
 		}
 		else lex.Error(BADCOMPV);
+		tok = Next();
 	    }
-	    else lex.Error(EXPCONST);
-	    tok = Next();
+	    else if cs@.kind == TYPE then   // cast
+	    {   tok = Next();
+		if tok == PBEG then
+		{   tok = Next();
+		    tree = Bool(0);
+		    lex.Expect(PEND);
+		    tree = ast.Cast(tree, cs@.type);
+		}
+	    }
+	    else
+	    {   lex.Error(EXPCONST);
+		tok = Next();
+	    }
 	}
 	else lex.ErrorI(UNDEFID, lex.Ident);
 	return tree;
@@ -891,7 +903,7 @@ ast.Dump(tree);
 	if tok == PBEG then
 	{   tok = Next();
 	    if !t@.flex then
-		lex.ErrorS(NOTIMPL, "not a variable sized type");
+		lex.Error(NOSIZE);
 	    temp = Const(type.wordtype);
 	    temp = ast.New2(MUL, type.wordtype, temp,
 		ast.Const(type.wordtype, FindFlexSize(t)));
@@ -899,7 +911,7 @@ ast.Dump(tree);
 	    tok = lex.Expect(PEND);
 	}
 	else if t@.flex then
-	    lex.ErrorS(NOTIMPL, "size of variable sized type not specified");
+	    lex.Error(NEEDSIZE);
 	return size;
     }
 
@@ -926,7 +938,7 @@ ast.Dump(tree);
 	if tok == PBEG then
 	{   tok = Next();
 	    if !t@.flex then
-		lex.ErrorS(NOTIMPL, "not a variable sized type");
+		lex.Error(NOSIZE);
 	    temp = Const(type.wordtype);
 	    temp = ast.New2(MUL, type.wordtype, temp,
 		ast.Const(type.wordtype, FindFlexSize(t)));
@@ -934,7 +946,7 @@ ast.Dump(tree);
 	    tok = lex.Expect(PEND);
 	}
 	else if t@.flex then
-	    lex.ErrorS(NOTIMPL, "size of variable sized type not specified");
+	    lex.Error(NEEDSIZE);
 	if tok == COMMA then
 	{   tok = Next();
 	    space = Const(type.wordtype);
@@ -1029,7 +1041,7 @@ ast.Dump(tree);
 		if tok == PBEG then
 		{   tok = Next();
 		    if !t@.flex then
-			lex.ErrorS(NOTIMPL, "not a variable sized type");
+			lex.Error(NOSIZE);
 		    temp = Const(type.wordtype);
 		    temp = ast.New2(MUL, type.wordtype, temp,
 			ast.Const(type.wordtype, FindFlexSize(t)));

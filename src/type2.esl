@@ -321,6 +321,13 @@ package type
 			    is KSECTION then
 			    {   XSection(s);
 			    }
+			    is KAT then
+			    {   if tok == PBEG then
+				{   tok = Next();
+				    s@.xaddr = expr.ConstValue(type.wordtype);
+				    lex.Expect(PEND);
+				}
+			    }
 			}
 			else
 			    lex.ErrorI(BADATTR, lex.Ident);
@@ -342,10 +349,15 @@ package type
     }
 
     const nattrlist:[]TokenT = { NONE };
-
     proc TypeAttributes(t: Type): Type
     {
 	return Attributes(0, t, nattrlist);
+    }
+
+    const fattrlist:[]TokenT = { KAT, NONE };
+    proc FieldAttributes(s: Symb, t: Type): Type
+    {
+	return Attributes(s, t, fattrlist);
     }
 
     const vattrlist:[5]TokenT = { KEXTERN, KGLOBAL, KWEAK, KSECTION, NONE };
@@ -379,19 +391,46 @@ package type
 
     proc FieldPad(prev: Symb, pad: BitSize, index: symb.OffsT): symb.OffsT
     {   var last, s: Symb;
+	var t: Type;
 
-	last = prev@.next;
-	while pad > 0 do
-	{   s = symb.New(FIELD, "_", PRIVATE);
-	    s@.type = bytetype;
-	    s@.addr = index;
-	    s@.ispad = true;
-	    prev@.next = s;
-	    prev = s;
-	    index += 1;    
-	    pad -= 1;
+	if pad > 1 then
+	{   t = type.New(ARRAY);
+	    t@.index = type.wordtype;
+	    t@.base = type.bytetype;
+	    t@.lo = 0;
+	    t@.hi = pad - 1;
+	    t@.size = pad * Target.membits;
+	    t@.width = t@.size;
+	    t@.align = type.bytetype@.align;
+	    t@.final = true;
 	}
-	prev@.next = last;
+	else
+	    t = type.bytetype;
+	s = symb.New(FIELD, "_", PRIVATE);
+	s@.type = t;
+	s@.addr = index;
+	s@.ispad = true;
+	s@.next = prev@.next;
+	prev@.next = s;
+	index += 1;    
+	return index;	
+    }
+
+    proc BitFieldPad(prev: Symb, pad: BitSize, index: symb.OffsT): symb.OffsT
+    {   var last, s: Symb;
+	var t: Type;
+
+	t = type.New(UINT);
+	t@.size = pad;
+	t@.width = pad;
+	t@.final = true;
+	s = symb.New(FIELD, "_", PRIVATE);
+	s@.type = t;
+	s@.addr = index;
+	s@.ispad = true;
+	s@.next = prev@.next;
+	prev@.next = s;
+	index += 1;    
 	return index;	
     }
 
@@ -423,7 +462,7 @@ package type
 	var tlo, thi: BitSize;
 	var f, prev: Symb;
 	var index: symb.OffsT;
-	var offs, mod: BitSize;
+	var offs, mod, falign, atoffs: BitSize;
 
 	if t != 0 && !t@.final then
 	{
@@ -499,27 +538,58 @@ package type
 			    else
 				t@.flex = true;     // mark record as flex
 			}
+			atoffs = f@.xaddr;
+//if atoffs != 0 then {
+//err.str("offs="); err.uint(offs); err.str(" atoffs="); err.uint(atoffs); err.nl(); }
 			if t@.packed then
 			{   f@.type = ForcePacked(f@.type);
+			    if atoffs != 0 && atoffs < offs then
+				lex.Error(BADAT);
+			    else if atoffs > offs then
+			    {
+				index = BitFieldPad(prev,
+						(atoffs-offs), index);
+				offs = atoffs;
+			    }
 			    offs += f@.type@.size;
 			}
 			else
-			{   var falign: BitSize;
-			    falign = f@.type@.align;
+			{   falign = f@.type@.align;
 			    if t@.alignattr && t@.align < falign then
 				f@.type = ForceUnAligned(f@.type, t@.align);
 			    if f@.type@.unalgn then
 				t@.nofpad = true;
 			    else
 			    {
-//err.str("offs="); err.uint(offs); err.str(" falign="); err.uint(falign); err.nl();
-				mod = offs % falign;
-				if mod != 0 then
-				{   // field needs padding
-				    index = FieldPad(prev,
-						(falign-mod)/Target.membits,
-						index);
-				    offs += falign - mod;
+				if atoffs != 0 then
+				{   atoffs = atoffs * Target.membits;
+//err.str("offs="); err.uint(offs); err.str(" atoffs="); err.uint(atoffs); err.nl();
+				    if atoffs != 0 && atoffs < offs then
+					lex.Error(BADAT);
+				    else if atoffs > offs then
+				    {
+					index = FieldPad(prev,
+						    (atoffs-offs)/Target.membits, index);
+					offs = atoffs;
+				    }
+				}
+				else
+				{   // normal placement
+				    if falign == 0 then
+				    {   lex.ErrorS(COMPILER, "Field align is zero");
+//err.str(f@.ident); err.nl();
+//type.DumpT(f@.type, true);
+				    }
+				    else
+				    {
+					mod = offs % falign;
+					if mod != 0 then
+					{   // field needs padding
+					    index = FieldPad(prev,
+						(falign-mod)/Target.membits, index);
+					    offs += falign - mod;
+					}
+				    }
 				}
 			    }
 			    offs += f@.type@.width;
@@ -534,6 +604,18 @@ package type
 		}
 		if t@.size == 0 then    // no explicit attribute
 		    t@.size = offs;
+		else
+		{   if t@.size < offs then
+		    {
+			lex.Error(BADSIZE);
+//err.str("size="); err.uint(t@.size);
+//err.str(" offs="); err.uint(offs); err.nl();
+//type.DumpT(t, true);
+		    }
+		    else if !t@.packed && t@.size > offs then
+		    {   index = FieldPad(prev, (t@.size-offs)/Target.membits, index);
+		    }
+		}
 		if t@.width == 0 then
 		{   if offs <= Target.regsize  && !t@.noepad then
 			t@.width = target.isize(offs);
@@ -595,7 +677,8 @@ err.nl();
     proc Enum(bt: Type): Type
     {   var tok: TokenT;
 	var t: Type;
-	var vn, pvn: Symb;
+	var vn, pvn, vnl: Symb;
+	var vv: Ast;
 	var v, vmax: _uint32;
 
 	tok = Next();
@@ -624,26 +707,50 @@ err.nl();
 	    else lex.Error(BASEENUM);
 	}
 	loop
-	{   if tok == ID then
+	{   vnl = 0;
+	    if tok == PBEG then
+	    {   tok = Next();
+		loop
+		{   if tok == ID then
+		    {   if !symb.IsUniqueLocal(t@.list, lex.Ident) then
+			    lex.ErrorI(DEFID, lex.Ident);
+			vn = symb.New(CONSTANT, lex.Ident, PRIVATE);
+			vn@.next = vnl;
+			vnl = vn;
+			tok = Next();
+		    }
+		    else
+			lex.Error(EXPECTID);
+		  exit tok == PEND;
+		    tok = lex.Expect(COMMA);
+		  exit tok == PEND;
+		}
+		tok = lex.Expect(PEND);
+	    }
+	    else if tok == ID then
 	    {   if !symb.IsUniqueLocal(t@.list, lex.Ident) then
 		    lex.ErrorI(DEFID, lex.Ident);
-		vn = symb.New(CONSTANT, lex.Ident, PRIVATE);
-		if pvn != 0 then pvn@.next = vn;
-			    else t@.list = vn;
-		pvn = vn;
+		vnl = symb.New(CONSTANT, lex.Ident, PRIVATE);
 		tok = Next();
-		if tok == ASGN then
-		{   tok = Next();
-		    vn@.const = expr.Const(type.wordtype);
-		    vn@.const@.type = t;
-		    tok = Token;
-		    v = _uint32(vn@.const@.valu);
-		}
-		else
-		    vn@.const = ast.Const(t, v);
 	    }
 	    else
 		lex.Error(EXPECTID);
+	    if tok == ASGN then
+	    {   tok = Next();
+		vv = expr.Const(type.wordtype);
+		vv@.type = t;
+		v = _uint32(vv@.valu);
+		tok = Token;
+	    }
+	    else
+		vv = ast.Const(t, v);
+	    while vnl != 0 do
+	    {   vnl@.const = vv;
+		if pvn != 0 then pvn@.next = vnl;
+			    else t@.list = vnl;
+		pvn = vnl;
+		vnl = vnl@.next;
+	    }
 	    if v > vmax then vmax = v;
 	  exit tok == PEND;
 	    tok = lex.Expect(COMMA);
@@ -751,7 +858,7 @@ err.nl();
 		s@.type = ft;
 		tok = Token;
 		if tok == COLON then
-		{   s@.type = TypeAttributes(ft);
+		{   s@.type = FieldAttributes(s, ft);
 		    tok = Token;
 		}
 		if tok == ASGN then
@@ -1070,7 +1177,12 @@ if debug.tests[2] then {
 		    {   err.strn(blanks, indent+2);
 			err.str(s@.ident);
 			err.str(" (");
-			err.uint(offs);
+			if t@.packed then
+			    err.uint16(offs);
+			else
+			{   err.str("0x");
+			    err.hex16(offs);
+			}
 			err.str("): ");
 			Dump2(s@.type, indent+2, full);
 			if t@.packed then
