@@ -32,7 +32,7 @@ package llvm
     var labthis: seqnoT;	// label sequence number of this basic block
     var loopexit: seqnoT;	// label sequence number for this loop exit
     type Intrinsics:
-    (   MEMCPY, MEMMOVE, MEMSET, MEMCMP, BSWAP,
+    (   MEMCPY, MEMMOVE, MEMSET, MEMCMP, ZLEN, BSWAP,
 	CLZ, CTZ, POP,
 	END
     );
@@ -111,6 +111,13 @@ package llvm
 		{   do
 		    {   dummy.type = piu@.type;
 			Print("declare i1 @memcmp%*B(%K, %K, %W)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is ZLEN then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %W @memlen%*A(%K)\n", dummy);
 			piu = piu@.next;
 		    } while piu != 0;
 		}
@@ -325,23 +332,30 @@ package llvm
 	f.chr(package_delimiter);
     }
 
+    proc PMethod(s: Symb)
+    {   var bs: Symb;
+	var bt: Type;
+
+	bt = s@.parmlist@.type;
+	if bt@.kind == REF then bt = bt@.base;
+	bs = bt@.name;
+	if bs@.package != 0 then
+	    PPkgPfx(bs@.package);
+	f.str(bs@.ident);
+	f.chr(package_delimiter);
+    }
+    
     proc PName(s: Symb)
     {
 	if s@.linkage
-	is FORMAL, LOCAL then  { f.chr('%'); f.str(s@.ident); }
+	is FORMAL, LOCAL then
+	{   f.chr('%');
+	    f.str(s@.ident);
+	}
 	is NORMAL, INLINE then
 	{   f.chr('@');
 	    if s@.kind == PROC && s@.bound then
-	    {   var bs: Symb;
-		var bt: Type;
-		bt = s@.parmlist@.type;
-		if bt@.kind == REF then bt = bt@.base;
-		bs = bt@.name;
-		if bs@.package != 0 then
-		    PPkgPfx(bs@.package);
-		f.str(bs@.ident);
-		f.chr(package_delimiter);
-	    }
+		PMethod(s);
 	    else
 	    {   if s@.package != 0 then
 		    PPkgPfx(s@.package);
@@ -350,8 +364,10 @@ package llvm
 	}
 	is GLOBAL, WEAK, EXTERN then
 	{   f.chr('@');
-	    if s@.altsymb != 0 then
-		f.str(s@.altsymb@.ident);
+	    if s@.kind == PROC && s@.bound then
+		PMethod(s);
+            if s@.altsymb != 0 then
+                f.str(s@.altsymb@.ident);
 	    else
 		f.str(s@.ident);
 	}
@@ -1125,6 +1141,29 @@ package llvm
 	    }
 	}
 	return false;
+    }
+
+    proc ZLen(node: Ast)
+    {   var align: _uint;
+	var t, at, bt: Type;
+
+//err.str("ZLen:\n");
+//ast.Dump(node);
+	at = node@.child[0]@.type@.base;    // assert at@.kind == ARRAY
+	bt = at@.base;			    // base type of array
+	t = type.Clone(bt);
+	t@.align = at@.align;
+	t = type.MakeRef(t);
+//err.str("at="); type.DumpT(at, true);  err.nl();
+//err.str("bt="); type.DumpT(bt, true);  err.nl();
+//err.str("t="); type.DumpT(t, true);  err.nl();
+	node@.child[0]= ast.Cast(node@.child[0], t);
+	GenSub(node@.child[0]);
+	node@.child[0]@.type = t;
+	align = _uint(node@.child[1]@.valu);
+	node@.seqno = Tseqno;  Tseqno += 1;
+	Print("\t%N = call %T @memlen%0*A(%0T %0N)\n", node);
+	UseIntrinsic(ZLEN, align, t);
     }
 
     proc UnaryOp(node: Ast): boolean
@@ -1901,6 +1940,7 @@ f.flush();
 	is REVB, NOT, NEG, FNEG, FCVTL, FCVTS, CVTUF, CVTIF, CVTFU, CVTFI then
 	    UnaryOp(node);
 	is CLZ, CLZNZ, CTZ, CTZNZ, POP then UnaryOp(node);
+	is ZLEN then ZLen(node);
 	is ADD then BinaryOp(node, "add");
 	is SUB then BinaryOp(node, "sub");
 	is MUL then BinaryOp(node, "mul");

@@ -21,7 +21,7 @@ package lex
 	ARRAYCOPY,  BADINXEXP,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,
 	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
-	BADPACKED,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
+	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -107,7 +107,8 @@ package lex
 	[FORWNOFIX]=    "Unresolved forward symbol: ",
 	[BADFOR] =      "Syntax error in for statement",
 	[SECTNAME] =    "Expected section name",
-	[BADPACKED] =   "Packed record or array too large",
+	[BADPCKREC] =   "Packed record too large",
+	[BADPCKARR] =   "Packed array too large",
 	[NOSIZE] =      "Can not specify size for fixed sized object",
 	[NEEDSIZE] =    "Must specify size for variable sized object",
 	[BADSIZE] =     "Specified size smaller that actual object size",
