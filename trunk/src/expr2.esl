@@ -1154,6 +1154,20 @@ ast.Dump(tree);
 		    tree = ast.OpMinMax(op, lhs, rhs);
 		}
 	    }
+	    is ZLEN then
+	    {   var align: _uint;
+	        lhs = GetLHS();
+		if lhs@.op == LOAD && lhs@.type@.kind == ARRAY then	// undo LOAD
+		    lhs = lhs@.child[0];
+		if lhs@.type@.kind != REF || lhs@.type@.base@.kind != ARRAY ||
+		   lhs@.type@.base@.base@.kind != UINT ||
+		   lhs@.type@.base@.base@.width != Target.membits then
+		    lex.Error(OPTYPE);
+	        align = GetAlignment(lhs);
+	        tree = ast.New2(ZLEN, type.wordtype, lhs,
+				ast.Const(type.wordtype, align));
+		tree@.width = type.wordtype@.width;
+	    }
 	    is CLZ   then tree = IntrinsicUnary(CLZ);
 	    is CLZNZ then tree = IntrinsicUnary(CLZNZ);
 	    is CTZ   then tree = IntrinsicUnary(CTZ);

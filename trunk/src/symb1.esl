@@ -8,7 +8,7 @@ package symb
     type OffsT: 0..0xFFFF;
     type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
 	CLZ, CLZNZ, CTZ, CTZNZ, POP,
-	CVT, NEW, DEL, ZERO );
+	CVT, NEW, DEL, ZERO, ZLEN );
     type SymbNode:
     {
 	next:	  @SymbNode;	// for lists

@@ -638,7 +638,7 @@ package type
 			align = target.ialign(t@.size);
 		}
 		if t@.packed && target.isize(t@.size) == 0 then
-		    lex.Error(BADPACKED);
+		    lex.Error(BADPCKREC);
 	    }
 	    is ARRAY then 
 	    {   if t@.base != 0 then
@@ -661,7 +661,7 @@ err.nl();
 			align = target.ialign(t@.size);
 		}
 		if t@.packed && target.isize(t@.size) == 0 then
-		    lex.Error(BADPACKED);
+		    lex.Error(BADPCKARR);
 	    }
 	    if t@.alignattr then
 	    {   if t@.align < align then
