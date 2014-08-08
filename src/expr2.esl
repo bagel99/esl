@@ -792,7 +792,7 @@ ast.Dump(tree);
 	if to@.kind
 	is REF then
 	{   if to@.base != 0 then
-	    {   if fm@.kind == REF && type.Compat(to, fm) then
+	    {   if fm@.kind == REF && (to@.base == type.memtype || type.Compat(to, fm)) then
 		{   if fm != to then
 		    {   tree = ast.Cast(tree, to);
 			fm = tree@.type;
@@ -1921,10 +1921,17 @@ ast.Dump(tree);
 
 	rv = 0;
 	tree = Bool(t);
-	if tree != 0 && tree@.op == CONST then
-	{   // FIXME: should check that types are compatable
-	    rv = tree@.valu;
-	    // free(tree)
+	if tree != 0 then
+	{   if tree@.op == CONST then
+	    {   // FIXME: should check that types are compatable
+		rv = tree@.valu;
+		// free(tree)
+	    }
+	    else if tree@.op == LOAD &&
+		    tree@.child[0]@.op == CONST then
+	    {
+		rv = tree@.child[0]@.valu;
+	    }
 	}
 	else
 	    lex.Error(EXPCONST);
