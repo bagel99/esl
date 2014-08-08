@@ -357,7 +357,6 @@ package stmt
 	    if tok == ASGN then
 	    {   tok = Next();
 		tree = expr.Const(t);
-		s@.const = tree;
 		if tree != 0 then
 		{   if t == 0 then
 			t = tree@.type;
@@ -370,9 +369,13 @@ package stmt
 			    tree = ast.Dup(tree);   // dup in case re-using
 			    tree@.type = t;
 			}
+			else if t != tree@.type then
+			{
+			    tree = ast.Dup(tree);   // dup in case re-using
+			    tree@.type = t;
+			}
 		    }
-		    if t@.flex then
-			t = tree@.type;
+		    s@.const = tree;
 		    tree = ast.New1(DCLCON, t, tree);
 		    tree@.symb = s;
 		}
@@ -1134,10 +1137,16 @@ package stmt
 				    if tok == ID then
 				    {   ns = symb.FindLocal(ns@.symblist, lex.Ident);
 					if ns != 0 then
-					{   if s@.kind == TYPE && 
-					       ns@.kind == TYPE then
+					{   if s@.kind == TYPE && ns@.kind == TYPE then
 						// fix inter-package fwd type
 						type.FwdFix(ns, s@.type);
+					    elif s@.kind == PROC && ns@.kind == PROC &&
+					         ns@.forward then
+					    {
+err.str("Fix cross package forward proc\n");
+symb.DumpS(s);
+symb.DumpS(ns);
+					    }
 					    else lex.Error(NOTTYPE);
 					}
 					else lex.ErrorI(UNDEFID, lex.Ident);

@@ -908,115 +908,126 @@ return:
 @S.65 = internal constant [14 x i8] c"Not a pointer\00"
 @S.66 = internal constant [13 x i8] c"Not an array\00"
 @S.67 = internal constant [33 x i8] c"Array copy with undefined length\00"
-@S.68 = internal constant [13 x i8] c"Not a record\00"
-@S.69 = internal constant [35 x i8] c"Syntax error in record declaration\00"
-@S.70 = internal constant [27 x i8] c"Base type must be a record\00"
-@S.71 = internal constant [33 x i8] c"Base type must be an enumeration\00"
-@S.72 = internal constant [41 x i8] c"Insufficient arguments to procedure call\00"
-@S.73 = internal constant [37 x i8] c"Too many arguments to procedure call\00"
-@S.74 = internal constant [49 x i8] c"Actual parameter type not compatible with formal\00"
-@S.75 = internal constant [22 x i8] c"Too many initializers\00"
-@S.76 = internal constant [32 x i8] c"Const requires a constant value\00"
-@S.77 = internal constant [43 x i8] c"Expression must be a compile-time constant\00"
-@S.78 = internal constant [22 x i8] c"Unable to open file: \00"
-@S.79 = internal constant [29 x i8] c"Expected variable identifier\00"
-@S.80 = internal constant [35 x i8] c"Flexible array must be final field\00"
-@S.81 = internal constant [28 x i8] c"Unresolved forward symbol: \00"
-@S.82 = internal constant [30 x i8] c"Syntax error in for statement\00"
-@S.83 = internal constant [24 x i8] c"Program defined error: \00"
-@S.84 = internal constant [26 x i8] c"Internal compiler error: \00"
-@lex_ErrMsg = internal constant [79 x [0 x i8]*] [ [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8]* @S.6 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.7 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8]* @S.8 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8]* @S.9 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8]* @S.10 )  to [0 x i8]* ), [0 x i8]* bitcast( [42 x i8]* getelementptr( [42 x i8]* @S.11 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.12 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8]* @S.13 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.14 )  to [0 x i8]* ), [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8]* @S.15 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.16 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.17 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8]* @S.18 )  to [0 x i8]* ), [0 x i8]* bitcast( [53 x i8]* getelementptr( [53 x i8]* @S.19 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.20 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.21 )  to [0 x i8]* ), [0 x i8]* bitcast( [16 x i8]* getelementptr( [16 x i8]* @S.22 )  to [0 x i8]* ), [0 x i8]* bitcast( [11 x i8]* getelementptr( [11 x i8]* @S.23 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.24 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.25 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.26 )  to [0 x i8]* ), [0 x i8]* bitcast( [18 x i8]* getelementptr( [18 x i8]* @S.27 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8]* @S.28 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8]* @S.29 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.30 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.31 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.32 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.33 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.34 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.35 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8]* @S.36 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.37 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.38 )  to [0 x i8]* ), [0 x i8]* bitcast( [45 x i8]* getelementptr( [45 x i8]* @S.39 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8]* @S.40 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8]* @S.41 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8]* @S.42 )  to [0 x i8]* ), [0 x i8]* bitcast( [46 x i8]* getelementptr( [46 x i8]* @S.43 )  to [0 x i8]* ), [0 x i8]* bitcast( [19 x i8]* getelementptr( [19 x i8]* @S.44 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.45 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.46 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.47 )  to [0 x i8]* ), [0 x i8]* bitcast( [36 x i8]* getelementptr( [36 x i8]* @S.48 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8]* @S.49 )  to [0 x i8]* ), [0 x i8]* bitcast( [51 x i8]* getelementptr( [51 x i8]* @S.50 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8]* @S.51 )  to [0 x i8]* ), [0 x i8]* bitcast( [51 x i8]* getelementptr( [51 x i8]* @S.52 )  to [0 x i8]* ), [0 x i8]* bitcast( [54 x i8]* getelementptr( [54 x i8]* @S.53 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.54 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8]* @S.55 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8]* @S.56 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.57 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.58 )  to [0 x i8]* ), [0 x i8]* bitcast( [41 x i8]* getelementptr( [41 x i8]* @S.59 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.60 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8]* @S.61 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8]* @S.62 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8]* @S.63 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8]* @S.64 )  to [0 x i8]* ), [0 x i8]* bitcast( [14 x i8]* getelementptr( [14 x i8]* @S.65 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8]* @S.66 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.67 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8]* @S.68 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8]* @S.69 )  to [0 x i8]* ), [0 x i8]* bitcast( [27 x i8]* getelementptr( [27 x i8]* @S.70 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.71 )  to [0 x i8]* ), [0 x i8]* bitcast( [41 x i8]* getelementptr( [41 x i8]* @S.72 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8]* @S.73 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8]* @S.74 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.75 )  to [0 x i8]* ), [0 x i8]* bitcast( [32 x i8]* getelementptr( [32 x i8]* @S.76 )  to [0 x i8]* ), [0 x i8]* bitcast( [43 x i8]* getelementptr( [43 x i8]* @S.77 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.78 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8]* @S.79 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8]* @S.80 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.81 )  to [0 x i8]* ), [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8]* @S.82 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8]* @S.83 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.84 )  to [0 x i8]* ) ], align 4
-@S.86 = internal constant [1 x i8] c"\00"
-@S.87 = internal constant [10 x i8] c"ENDOFFILE\00"
-@S.88 = internal constant [2 x i8] c".\00"
-@S.89 = internal constant [2 x i8] c":\00"
-@S.90 = internal constant [2 x i8] c";\00"
-@S.91 = internal constant [2 x i8] c",\00"
-@S.92 = internal constant [3 x i8] c"..\00"
-@S.93 = internal constant [2 x i8] c"@\00"
-@S.94 = internal constant [2 x i8] c"?\00"
-@S.95 = internal constant [2 x i8] c"=\00"
-@S.96 = internal constant [3 x i8] c"+=\00"
-@S.97 = internal constant [3 x i8] c"-=\00"
-@S.98 = internal constant [2 x i8] c"!\00"
-@S.99 = internal constant [2 x i8] c"~\00"
-@S.100 = internal constant [2 x i8] c"+\00"
-@S.101 = internal constant [2 x i8] c"-\00"
-@S.102 = internal constant [2 x i8] c"|\00"
-@S.103 = internal constant [2 x i8] c"^\00"
-@S.104 = internal constant [2 x i8] c"*\00"
-@S.105 = internal constant [2 x i8] c"/\00"
-@S.106 = internal constant [2 x i8] c"%\00"
-@S.107 = internal constant [3 x i8] c"<<\00"
-@S.108 = internal constant [3 x i8] c">>\00"
-@S.109 = internal constant [2 x i8] c"&\00"
-@S.110 = internal constant [3 x i8] c"==\00"
-@S.111 = internal constant [3 x i8] c"!=\00"
-@S.112 = internal constant [2 x i8] c"<\00"
-@S.113 = internal constant [2 x i8] c">\00"
-@S.114 = internal constant [3 x i8] c"<=\00"
-@S.115 = internal constant [3 x i8] c">=\00"
-@S.116 = internal constant [3 x i8] c"&&\00"
-@S.117 = internal constant [3 x i8] c"||\00"
-@S.118 = internal constant [2 x i8] c"(\00"
-@S.119 = internal constant [2 x i8] c")\00"
-@S.120 = internal constant [2 x i8] c"[\00"
-@S.121 = internal constant [2 x i8] c"]\00"
-@S.122 = internal constant [2 x i8] c"{\00"
-@S.123 = internal constant [2 x i8] c"}\00"
-@S.124 = internal constant [7 x i8] c"NUMBER\00"
-@S.125 = internal constant [5 x i8] c"FNUM\00"
-@S.126 = internal constant [7 x i8] c"STRING\00"
-@S.127 = internal constant [6 x i8] c"IDENT\00"
-@S.128 = internal constant [5 x i8] c"type\00"
-@S.129 = internal constant [4 x i8] c"var\00"
-@S.130 = internal constant [6 x i8] c"const\00"
-@S.131 = internal constant [7 x i8] c"import\00"
-@S.132 = internal constant [6 x i8] c"alias\00"
-@S.133 = internal constant [6 x i8] c"error\00"
-@S.134 = internal constant [5 x i8] c"proc\00"
-@S.135 = internal constant [8 x i8] c"package\00"
-@S.136 = internal constant [4 x i8] c"asm\00"
-@S.137 = internal constant [5 x i8] c"call\00"
-@S.138 = internal constant [7 x i8] c"return\00"
-@S.139 = internal constant [3 x i8] c"if\00"
-@S.140 = internal constant [6 x i8] c"while\00"
-@S.141 = internal constant [4 x i8] c"for\00"
-@S.142 = internal constant [5 x i8] c"loop\00"
-@S.143 = internal constant [5 x i8] c"exit\00"
-@S.144 = internal constant [5 x i8] c"then\00"
-@S.145 = internal constant [5 x i8] c"else\00"
-@S.146 = internal constant [3 x i8] c"is\00"
-@S.147 = internal constant [3 x i8] c"do\00"
-@S.148 = internal constant [5 x i8] c"with\00"
-@S.149 = internal constant [3 x i8] c"as\00"
-@S.150 = internal constant [3 x i8] c"in\00"
-@S.151 = internal constant [5 x i8] c"from\00"
-@S.152 = internal constant [3 x i8] c"to\00"
-@S.153 = internal constant [3 x i8] c"by\00"
-@S.154 = internal constant [7 x i8] c"packed\00"
-@S.155 = internal constant [6 x i8] c"nopad\00"
-@S.156 = internal constant [4 x i8] c"lsb\00"
-@S.157 = internal constant [4 x i8] c"msb\00"
-@S.158 = internal constant [3 x i8] c"le\00"
-@S.159 = internal constant [3 x i8] c"be\00"
-@S.160 = internal constant [3 x i8] c"ro\00"
-@S.161 = internal constant [3 x i8] c"wo\00"
-@S.162 = internal constant [3 x i8] c"in\00"
-@S.163 = internal constant [4 x i8] c"out\00"
-@S.164 = internal constant [9 x i8] c"external\00"
-@S.165 = internal constant [7 x i8] c"global\00"
-@S.166 = internal constant [8 x i8] c"section\00"
-@S.167 = internal constant [6 x i8] c"align\00"
-@S.168 = internal constant [7 x i8] c"inline\00"
-@S.169 = internal constant [9 x i8] c"noinline\00"
-@S.170 = internal constant [10 x i8] c"interrupt\00"
-@S.171 = internal constant [4 x i8] c"min\00"
-@S.172 = internal constant [4 x i8] c"max\00"
-@S.173 = internal constant [5 x i8] c"bits\00"
-@S.174 = internal constant [5 x i8] c"size\00"
-@S.175 = internal constant [4 x i8] c"len\00"
-@lex_keywords = internal constant [90 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8]* @S.86 )  to [0 x i8]* ), [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.87 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.88 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.89 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.90 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.91 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.92 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.93 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.94 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.95 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.96 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.97 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.98 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.99 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.100 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.101 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.102 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.103 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.104 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.105 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.106 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.107 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.108 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.109 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.110 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.111 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.112 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.113 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.114 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.115 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.116 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.117 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.118 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.119 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.120 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.121 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.122 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.123 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.124 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.125 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.126 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.127 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.128 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.129 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.130 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.131 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.132 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.133 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.134 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.135 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.136 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.137 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.138 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.139 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.140 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.141 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.142 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.143 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.144 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.145 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.146 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.147 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.148 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.149 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.150 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.151 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.152 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.153 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.154 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.155 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.156 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.157 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.158 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.159 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.160 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.161 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.162 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.163 )  to [0 x i8]* ), [0 x i8]* bitcast( [9 x i8]* getelementptr( [9 x i8]* @S.164 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.165 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.166 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.167 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.168 )  to [0 x i8]* ), [0 x i8]* bitcast( [9 x i8]* getelementptr( [9 x i8]* @S.169 )  to [0 x i8]* ), [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.170 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.171 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.172 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.173 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.174 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.175 )  to [0 x i8]* ) ], align 4
+@S.68 = internal constant [20 x i8] c"Illegal array index\00"
+@S.69 = internal constant [13 x i8] c"Not a record\00"
+@S.70 = internal constant [35 x i8] c"Syntax error in record declaration\00"
+@S.71 = internal constant [27 x i8] c"Base type must be a record\00"
+@S.72 = internal constant [33 x i8] c"Base type must be an enumeration\00"
+@S.73 = internal constant [41 x i8] c"Insufficient arguments to procedure call\00"
+@S.74 = internal constant [37 x i8] c"Too many arguments to procedure call\00"
+@S.75 = internal constant [49 x i8] c"Actual parameter type not compatible with formal\00"
+@S.76 = internal constant [22 x i8] c"Too many initializers\00"
+@S.77 = internal constant [32 x i8] c"Const requires a constant value\00"
+@S.78 = internal constant [43 x i8] c"Expression must be a compile-time constant\00"
+@S.79 = internal constant [22 x i8] c"Unable to open file: \00"
+@S.80 = internal constant [29 x i8] c"Expected variable identifier\00"
+@S.81 = internal constant [35 x i8] c"Flexible array must be final field\00"
+@S.82 = internal constant [28 x i8] c"Unresolved forward symbol: \00"
+@S.83 = internal constant [30 x i8] c"Syntax error in for statement\00"
+@S.84 = internal constant [22 x i8] c"Expected section name\00"
+@S.85 = internal constant [24 x i8] c"Packed record too large\00"
+@S.86 = internal constant [23 x i8] c"Packed array too large\00"
+@S.87 = internal constant [44 x i8] c"Can not specify size for fixed sized object\00"
+@S.88 = internal constant [44 x i8] c"Must specify size for variable sized object\00"
+@S.89 = internal constant [47 x i8] c"Specified size smaller that actual object size\00"
+@S.90 = internal constant [31 x i8] c"Illegal field offset specified\00"
+@S.91 = internal constant [24 x i8] c"Program defined error: \00"
+@S.92 = internal constant [26 x i8] c"Internal compiler error: \00"
+@lex_ErrMsg = internal constant [87 x [0 x i8]*] [ [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8]* @S.6 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.7 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8]* @S.8 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8]* @S.9 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8]* @S.10 )  to [0 x i8]* ), [0 x i8]* bitcast( [42 x i8]* getelementptr( [42 x i8]* @S.11 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.12 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8]* @S.13 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.14 )  to [0 x i8]* ), [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8]* @S.15 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.16 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.17 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8]* @S.18 )  to [0 x i8]* ), [0 x i8]* bitcast( [53 x i8]* getelementptr( [53 x i8]* @S.19 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.20 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.21 )  to [0 x i8]* ), [0 x i8]* bitcast( [16 x i8]* getelementptr( [16 x i8]* @S.22 )  to [0 x i8]* ), [0 x i8]* bitcast( [11 x i8]* getelementptr( [11 x i8]* @S.23 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.24 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.25 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.26 )  to [0 x i8]* ), [0 x i8]* bitcast( [18 x i8]* getelementptr( [18 x i8]* @S.27 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8]* @S.28 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8]* @S.29 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.30 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.31 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.32 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.33 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.34 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.35 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8]* @S.36 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.37 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.38 )  to [0 x i8]* ), [0 x i8]* bitcast( [45 x i8]* getelementptr( [45 x i8]* @S.39 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8]* @S.40 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8]* @S.41 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8]* @S.42 )  to [0 x i8]* ), [0 x i8]* bitcast( [46 x i8]* getelementptr( [46 x i8]* @S.43 )  to [0 x i8]* ), [0 x i8]* bitcast( [19 x i8]* getelementptr( [19 x i8]* @S.44 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.45 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.46 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.47 )  to [0 x i8]* ), [0 x i8]* bitcast( [36 x i8]* getelementptr( [36 x i8]* @S.48 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8]* @S.49 )  to [0 x i8]* ), [0 x i8]* bitcast( [51 x i8]* getelementptr( [51 x i8]* @S.50 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8]* @S.51 )  to [0 x i8]* ), [0 x i8]* bitcast( [51 x i8]* getelementptr( [51 x i8]* @S.52 )  to [0 x i8]* ), [0 x i8]* bitcast( [54 x i8]* getelementptr( [54 x i8]* @S.53 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.54 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8]* @S.55 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8]* @S.56 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.57 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.58 )  to [0 x i8]* ), [0 x i8]* bitcast( [41 x i8]* getelementptr( [41 x i8]* @S.59 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.60 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8]* @S.61 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8]* @S.62 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8]* @S.63 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8]* @S.64 )  to [0 x i8]* ), [0 x i8]* bitcast( [14 x i8]* getelementptr( [14 x i8]* @S.65 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8]* @S.66 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.67 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.68 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8]* @S.69 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8]* @S.70 )  to [0 x i8]* ), [0 x i8]* bitcast( [27 x i8]* getelementptr( [27 x i8]* @S.71 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8]* @S.72 )  to [0 x i8]* ), [0 x i8]* bitcast( [41 x i8]* getelementptr( [41 x i8]* @S.73 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8]* @S.74 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8]* @S.75 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.76 )  to [0 x i8]* ), [0 x i8]* bitcast( [32 x i8]* getelementptr( [32 x i8]* @S.77 )  to [0 x i8]* ), [0 x i8]* bitcast( [43 x i8]* getelementptr( [43 x i8]* @S.78 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.79 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8]* @S.80 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8]* @S.81 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8]* @S.82 )  to [0 x i8]* ), [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8]* @S.83 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.84 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8]* @S.85 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.86 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8]* @S.87 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8]* @S.88 )  to [0 x i8]* ), [0 x i8]* bitcast( [47 x i8]* getelementptr( [47 x i8]* @S.89 )  to [0 x i8]* ), [0 x i8]* bitcast( [31 x i8]* getelementptr( [31 x i8]* @S.90 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8]* @S.91 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8]* @S.92 )  to [0 x i8]* ) ], align 4
+@S.94 = internal constant [1 x i8] c"\00"
+@S.95 = internal constant [10 x i8] c"ENDOFFILE\00"
+@S.96 = internal constant [2 x i8] c".\00"
+@S.97 = internal constant [2 x i8] c":\00"
+@S.98 = internal constant [2 x i8] c";\00"
+@S.99 = internal constant [2 x i8] c",\00"
+@S.100 = internal constant [3 x i8] c"..\00"
+@S.101 = internal constant [2 x i8] c"@\00"
+@S.102 = internal constant [2 x i8] c"?\00"
+@S.103 = internal constant [2 x i8] c"=\00"
+@S.104 = internal constant [3 x i8] c"+=\00"
+@S.105 = internal constant [3 x i8] c"-=\00"
+@S.106 = internal constant [2 x i8] c"!\00"
+@S.107 = internal constant [2 x i8] c"~\00"
+@S.108 = internal constant [2 x i8] c"+\00"
+@S.109 = internal constant [2 x i8] c"-\00"
+@S.110 = internal constant [2 x i8] c"|\00"
+@S.111 = internal constant [2 x i8] c"^\00"
+@S.112 = internal constant [2 x i8] c"*\00"
+@S.113 = internal constant [2 x i8] c"/\00"
+@S.114 = internal constant [2 x i8] c"%\00"
+@S.115 = internal constant [3 x i8] c"<<\00"
+@S.116 = internal constant [3 x i8] c">>\00"
+@S.117 = internal constant [2 x i8] c"&\00"
+@S.118 = internal constant [3 x i8] c"==\00"
+@S.119 = internal constant [3 x i8] c"!=\00"
+@S.120 = internal constant [2 x i8] c"<\00"
+@S.121 = internal constant [2 x i8] c">\00"
+@S.122 = internal constant [3 x i8] c"<=\00"
+@S.123 = internal constant [3 x i8] c">=\00"
+@S.124 = internal constant [3 x i8] c"&&\00"
+@S.125 = internal constant [3 x i8] c"||\00"
+@S.126 = internal constant [2 x i8] c"(\00"
+@S.127 = internal constant [2 x i8] c")\00"
+@S.128 = internal constant [2 x i8] c"[\00"
+@S.129 = internal constant [2 x i8] c"]\00"
+@S.130 = internal constant [2 x i8] c"{\00"
+@S.131 = internal constant [2 x i8] c"}\00"
+@S.132 = internal constant [7 x i8] c"NUMBER\00"
+@S.133 = internal constant [5 x i8] c"FNUM\00"
+@S.134 = internal constant [7 x i8] c"STRING\00"
+@S.135 = internal constant [6 x i8] c"IDENT\00"
+@S.136 = internal constant [5 x i8] c"type\00"
+@S.137 = internal constant [4 x i8] c"var\00"
+@S.138 = internal constant [6 x i8] c"const\00"
+@S.139 = internal constant [7 x i8] c"import\00"
+@S.140 = internal constant [6 x i8] c"alias\00"
+@S.141 = internal constant [6 x i8] c"error\00"
+@S.142 = internal constant [5 x i8] c"proc\00"
+@S.143 = internal constant [8 x i8] c"package\00"
+@S.144 = internal constant [4 x i8] c"asm\00"
+@S.145 = internal constant [5 x i8] c"call\00"
+@S.146 = internal constant [7 x i8] c"return\00"
+@S.147 = internal constant [3 x i8] c"if\00"
+@S.148 = internal constant [6 x i8] c"while\00"
+@S.149 = internal constant [4 x i8] c"for\00"
+@S.150 = internal constant [5 x i8] c"loop\00"
+@S.151 = internal constant [5 x i8] c"exit\00"
+@S.152 = internal constant [5 x i8] c"then\00"
+@S.153 = internal constant [5 x i8] c"elif\00"
+@S.154 = internal constant [5 x i8] c"else\00"
+@S.155 = internal constant [3 x i8] c"is\00"
+@S.156 = internal constant [3 x i8] c"do\00"
+@S.157 = internal constant [5 x i8] c"with\00"
+@S.158 = internal constant [3 x i8] c"as\00"
+@S.159 = internal constant [3 x i8] c"in\00"
+@S.160 = internal constant [5 x i8] c"from\00"
+@S.161 = internal constant [3 x i8] c"to\00"
+@S.162 = internal constant [3 x i8] c"by\00"
+@S.163 = internal constant [7 x i8] c"packed\00"
+@S.164 = internal constant [6 x i8] c"nopad\00"
+@S.165 = internal constant [4 x i8] c"lsb\00"
+@S.166 = internal constant [4 x i8] c"msb\00"
+@S.167 = internal constant [3 x i8] c"le\00"
+@S.168 = internal constant [3 x i8] c"be\00"
+@S.169 = internal constant [3 x i8] c"ro\00"
+@S.170 = internal constant [3 x i8] c"wo\00"
+@S.171 = internal constant [3 x i8] c"in\00"
+@S.172 = internal constant [4 x i8] c"out\00"
+@S.173 = internal constant [3 x i8] c"at\00"
+@S.174 = internal constant [9 x i8] c"external\00"
+@S.175 = internal constant [7 x i8] c"global\00"
+@S.176 = internal constant [8 x i8] c"section\00"
+@S.177 = internal constant [6 x i8] c"align\00"
+@S.178 = internal constant [7 x i8] c"inline\00"
+@S.179 = internal constant [9 x i8] c"noinline\00"
+@S.180 = internal constant [10 x i8] c"interrupt\00"
+@S.181 = internal constant [5 x i8] c"weak\00"
+@S.182 = internal constant [4 x i8] c"min\00"
+@S.183 = internal constant [4 x i8] c"max\00"
+@S.184 = internal constant [5 x i8] c"bits\00"
+@S.185 = internal constant [5 x i8] c"size\00"
+@S.186 = internal constant [4 x i8] c"len\00"
+@lex_keywords = internal constant [93 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8]* @S.94 )  to [0 x i8]* ), [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.95 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.96 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.97 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.98 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.99 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.100 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.101 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.102 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.103 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.104 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.105 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.106 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.107 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.108 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.109 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.110 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.111 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.112 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.113 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.114 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.115 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.116 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.117 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.118 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.119 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.120 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.121 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.122 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.123 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.124 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.125 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.126 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.127 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.128 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.129 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.130 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8]* @S.131 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.132 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.133 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.134 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.135 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.136 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.137 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.138 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.139 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.140 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.141 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.142 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.143 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.144 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.145 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.146 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.147 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.148 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.149 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.150 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.151 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.152 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.153 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.154 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.155 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.156 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.157 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.158 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.159 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.160 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.161 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.162 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.163 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.164 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.165 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.166 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.167 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.168 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.169 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.170 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.171 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.172 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.173 )  to [0 x i8]* ), [0 x i8]* bitcast( [9 x i8]* getelementptr( [9 x i8]* @S.174 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.175 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.176 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.177 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.178 )  to [0 x i8]* ), [0 x i8]* bitcast( [9 x i8]* getelementptr( [9 x i8]* @S.179 )  to [0 x i8]* ), [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.180 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.181 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.182 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.183 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.184 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.185 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.186 )  to [0 x i8]* ) ], align 4
 @lex_StringMax = internal constant i32 4095, align 4
 @lex_IdentMax = internal constant i32 255, align 4
 @lex_BufSize = internal constant i32 4096, align 4
@@ -1059,11 +1070,11 @@ return:
 	%5 = load i16* %rv.0
 	ret i16 %5
 }
-@S.176 = internal constant [3 x i8] c": \00"
-@S.177 = internal constant [28 x i8] c"\0AToo many errors, quiting.\0A\00"
+@S.187 = internal constant [3 x i8] c": \00"
+@S.188 = internal constant [28 x i8] c"\0AToo many errors, quiting.\0A\00"
 declare external void @exit(i32)
-@S.178 = internal constant [8 x i8] c"Error: \00"
-@S.179 = internal constant [10 x i8] c"Warning: \00"
+@S.189 = internal constant [8 x i8] c"Error: \00"
+@S.190 = internal constant [10 x i8] c"Warning: \00"
 define internal void @lex_ErrorSub(i8 zeroext %error$) nounwind {
 L.0:
 	%error = alloca i8
@@ -1095,7 +1106,7 @@ L.1:
 	%16 = call i16 @lex_Lineno()
 	%17 = zext i16 %16 to i32
 	call void @sys_fildes_uint(i32 2, i32 %17)
-	%18 = getelementptr [3 x i8]* @S.176
+	%18 = getelementptr [3 x i8]* @S.187
 	%19 = bitcast [3 x i8]* %18 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %19)
 	%20 = load i8* %error
@@ -1109,25 +1120,25 @@ L.4:
 	%25 = icmp uge i8 %24, 10
 	br i1 %25, label %L.7, label %L.6
 L.7:
-	%26 = getelementptr [28 x i8]* @S.177
+	%26 = getelementptr [28 x i8]* @S.188
 	%27 = bitcast [28 x i8]* %26 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %27)
 	call void @exit(i32 1)
 	br label %L.6
 L.6:
-	%28 = getelementptr [8 x i8]* @S.178
+	%28 = getelementptr [8 x i8]* @S.189
 	%29 = bitcast [8 x i8]* %28 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %29)
 	br label %L.3
 L.5:
-	%30 = getelementptr [10 x i8]* @S.179
+	%30 = getelementptr [10 x i8]* @S.190
 	%31 = bitcast [10 x i8]* %30 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %31)
 	br label %L.3
 L.3:
 	%32 = load i8* %error
 	%33 = zext i8 %32 to i32
-	%34 = getelementptr [79 x [0 x i8]*]* @lex_ErrMsg, i32 0, i32 %33
+	%34 = getelementptr [87 x [0 x i8]*]* @lex_ErrMsg, i32 0, i32 %33
 	%35 = load [0 x i8]** %34
 	%36 = bitcast [0 x i8]* %35 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %36)
@@ -1189,7 +1200,7 @@ L.0:
 	call void @sys_fildes_chr(i32 2, i8 39)
 	%1 = load i8* %tok
 	%2 = zext i8 %1 to i32
-	%3 = getelementptr [90 x [0 x i8]*]* @lex_keywords, i32 0, i32 %2
+	%3 = getelementptr [93 x [0 x i8]*]* @lex_keywords, i32 0, i32 %2
 	%4 = load [0 x i8]** %3
 	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %5)
@@ -1274,12 +1285,12 @@ return:
 	%37 = load %lex.SearchPathEntry** %rv.0
 	ret %lex.SearchPathEntry* %37
 }
-@S.180 = internal constant [14 x i8] c"Search path \22\00"
-@S.181 = internal constant [3 x i8] c"\22\0A\00"
+@S.191 = internal constant [14 x i8] c"Search path \22\00"
+@S.192 = internal constant [3 x i8] c"\22\0A\00"
 define internal void @lex_SearchPathPrint() nounwind {
 L.0:
 	%pp = alloca %lex.SearchPathEntry*
-	%0 = getelementptr [14 x i8]* @S.180
+	%0 = getelementptr [14 x i8]* @S.191
 	%1 = bitcast [14 x i8]* %0 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %1)
 	%2 = load %lex.SearchPathEntry** @lex_pathhead
@@ -1304,7 +1315,7 @@ L.3:
 	store %lex.SearchPathEntry* %13, %lex.SearchPathEntry** %pp
 	br label %L.1
 L.2:
-	%14 = getelementptr [3 x i8]* @S.181
+	%14 = getelementptr [3 x i8]* @S.192
 	%15 = bitcast [3 x i8]* %14 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %15)
 	br label %return
@@ -1361,12 +1372,13 @@ return:
 	%25 = load %lex.FileListEntry** %rv.0
 	ret %lex.FileListEntry* %25
 }
-@S.182 = internal constant [2 x i8] c"/\00"
+@S.193 = internal constant [2 x i8] c"/\00"
+@S.194 = internal constant [5 x i8] c".esl\00"
 declare external i32 @open([0 x i8]*, i32, i32)
-@S.183 = internal constant [2 x i8] c".\00"
-@S.184 = internal constant [13 x i8] c"Open  file \22\00"
-@S.185 = internal constant [3 x i8] c"\22\0A\00"
-@S.186 = internal constant [5 x i8] c" \5C\0A \00"
+@S.195 = internal constant [2 x i8] c".\00"
+@S.196 = internal constant [13 x i8] c"Open  file \22\00"
+@S.197 = internal constant [3 x i8] c"\22\0A\00"
+@S.198 = internal constant [5 x i8] c" \5C\0A \00"
 define internal zeroext i8 @lex_FileOpen([0 x i8]* %filename$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -1398,7 +1410,7 @@ L.6:
 	%10 = bitcast [0 x i8]* %9 to [0 x i8]*
 	call void @zstr_copy([0 x i8]* %6, [0 x i8]* %10, i32 1024)
 	%11 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
-	%12 = getelementptr [2 x i8]* @S.182
+	%12 = getelementptr [2 x i8]* @S.193
 	%13 = bitcast [2 x i8]* %12 to [0 x i8]*
 	call void @zstr_cat([0 x i8]* %11, [0 x i8]* %13, i32 1024)
 	%14 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
@@ -1409,246 +1421,242 @@ L.6:
 	%18 = bitcast [0 x i8]* %17 to [0 x i8]*
 	call void @zstr_cat([0 x i8]* %16, [0 x i8]* %18, i32 1024)
 	%19 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
-	%20 = call i32 @open([0 x i8]* %19, i32 0, i32 0)
-	store i32 %20, i32* %fd
-	%21 = load i32* %fd
-	%22 = icmp sge i32 %21, 0
-	br i1 %22, label %L.5, label %L.7
+	%20 = getelementptr [5 x i8]* @S.194
+	%21 = bitcast [5 x i8]* %20 to [0 x i8]*
+	call void @zstr_cat([0 x i8]* %19, [0 x i8]* %21, i32 1024)
+	%22 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
+	%23 = call i32 @open([0 x i8]* %22, i32 0, i32 0)
+	store i32 %23, i32* %fd
+	%24 = load i32* %fd
+	%25 = icmp sge i32 %24, 0
+	br i1 %25, label %L.5, label %L.7
 L.7:
-	%23 = load %lex.SearchPathEntry** %pp
-	%24 = getelementptr %lex.SearchPathEntry* %23, i32 0, i32 0
-	%25 = load %lex.SearchPathEntry** %24
-	%26 = bitcast %lex.SearchPathEntry* %25 to %lex.SearchPathEntry*
-	store %lex.SearchPathEntry* %26, %lex.SearchPathEntry** %pp
+	%26 = load %lex.SearchPathEntry** %pp
+	%27 = getelementptr %lex.SearchPathEntry* %26, i32 0, i32 0
+	%28 = load %lex.SearchPathEntry** %27
+	%29 = bitcast %lex.SearchPathEntry* %28 to %lex.SearchPathEntry*
+	store %lex.SearchPathEntry* %29, %lex.SearchPathEntry** %pp
 	br label %L.4
 L.5:
 	br label %L.1
 L.3:
-	%27 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
-	%28 = load [0 x i8]** %filename
-	%29 = bitcast [0 x i8]* %28 to [0 x i8]*
-	call void @zstr_copy([0 x i8]* %27, [0 x i8]* %29, i32 1024)
 	%30 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
-	%31 = call i32 @open([0 x i8]* %30, i32 0, i32 0)
-	store i32 %31, i32* %fd
-	%32 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
-	%33 = call i32 @zstr_rfind([0 x i8]* %32, i8 47, i32 1024)
-	store i32 %33, i32* %i
-	%34 = load i32* %i
-	%35 = icmp eq i32 %34, 1024
-	br i1 %35, label %L.9, label %L.10
+	%31 = load [0 x i8]** %filename
+	%32 = bitcast [0 x i8]* %31 to [0 x i8]*
+	call void @zstr_copy([0 x i8]* %30, [0 x i8]* %32, i32 1024)
+	%33 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
+	%34 = call i32 @open([0 x i8]* %33, i32 0, i32 0)
+	store i32 %34, i32* %fd
+	%35 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
+	%36 = call i32 @zstr_rfind([0 x i8]* %35, i8 47, i32 1024)
+	store i32 %36, i32* %i
+	%37 = load i32* %i
+	%38 = icmp eq i32 %37, 1024
+	br i1 %38, label %L.9, label %L.10
 L.9:
-	%36 = getelementptr [2 x i8]* @S.183
-	%37 = bitcast [2 x i8]* %36 to [0 x i8]*
-	%38 = call %lex.SearchPathEntry* @lex_SearchPathAdd([0 x i8]* %37, i8 1)
-	store %lex.SearchPathEntry* %38, %lex.SearchPathEntry** %pp
+	%39 = getelementptr [2 x i8]* @S.195
+	%40 = bitcast [2 x i8]* %39 to [0 x i8]*
+	%41 = call %lex.SearchPathEntry* @lex_SearchPathAdd([0 x i8]* %40, i8 1)
+	store %lex.SearchPathEntry* %41, %lex.SearchPathEntry** %pp
 	store i32 0, i32* %i
 	br label %L.8
 L.10:
-	%39 = load i32* %i
-	%40 = getelementptr [1024 x i8]* %pathbuf, i32 0, i32 %39
-	store i8 0, i8* %40
-	%41 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
-	%42 = call %lex.SearchPathEntry* @lex_SearchPathAdd([0 x i8]* %41, i8 1)
-	store %lex.SearchPathEntry* %42, %lex.SearchPathEntry** %pp
-	%43 = load i32* %i
-	%44 = add i32 %43, 1
-	store i32 %44, i32* %i
+	%42 = load i32* %i
+	%43 = getelementptr [1024 x i8]* %pathbuf, i32 0, i32 %42
+	store i8 0, i8* %43
+	%44 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
+	%45 = call %lex.SearchPathEntry* @lex_SearchPathAdd([0 x i8]* %44, i8 1)
+	store %lex.SearchPathEntry* %45, %lex.SearchPathEntry** %pp
+	%46 = load i32* %i
+	%47 = add i32 %46, 1
+	store i32 %47, i32* %i
 	br label %L.8
 L.8:
 	br label %L.1
 L.1:
-	%45 = load i32* %fd
-	%46 = icmp slt i32 %45, 0
-	br i1 %46, label %L.12, label %L.11
+	%48 = load i32* %fd
+	%49 = icmp slt i32 %48, 0
+	br i1 %49, label %L.12, label %L.11
 L.12:
 	store i8 0, i8* %rv.0
 	br label %return
 L.11:
-	%47 = load [0 x i8]** %filename
-	%48 = bitcast [0 x i8]* %47 to [0 x i8]*
-	%49 = call %lex.FileListEntry* @lex_FileListAdd([0 x i8]* %48)
-	store %lex.FileListEntry* %49, %lex.FileListEntry** %fp
-	%50 = getelementptr %A.2* @debug, i32 0, i32 2
-	%51 = load i8* %50
-	%52 = icmp ne i8 %51, 0
-	br i1 %52, label %L.14, label %L.13
+	%50 = load [0 x i8]** %filename
+	%51 = bitcast [0 x i8]* %50 to [0 x i8]*
+	%52 = call %lex.FileListEntry* @lex_FileListAdd([0 x i8]* %51)
+	store %lex.FileListEntry* %52, %lex.FileListEntry** %fp
+	%53 = getelementptr %A.2* @debug, i32 0, i32 2
+	%54 = load i8* %53
+	%55 = icmp ne i8 %54, 0
+	br i1 %55, label %L.14, label %L.13
 L.14:
-	%53 = getelementptr [13 x i8]* @S.184
-	%54 = bitcast [13 x i8]* %53 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %54)
-	%55 = load %lex.SearchPathEntry** %pp
-	%56 = icmp ne %lex.SearchPathEntry* %55, null
-	br i1 %56, label %L.16, label %L.15
+	%56 = getelementptr [13 x i8]* @S.196
+	%57 = bitcast [13 x i8]* %56 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %57)
+	%58 = load %lex.SearchPathEntry** %pp
+	%59 = icmp ne %lex.SearchPathEntry* %58, null
+	br i1 %59, label %L.16, label %L.15
 L.16:
-	%57 = load %lex.SearchPathEntry** %pp
-	%58 = getelementptr %lex.SearchPathEntry* %57, i32 0, i32 1
-	%59 = getelementptr [0 x i8]* %58
-	%60 = bitcast [0 x i8]* %59 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %60)
+	%60 = load %lex.SearchPathEntry** %pp
+	%61 = getelementptr %lex.SearchPathEntry* %60, i32 0, i32 1
+	%62 = getelementptr [0 x i8]* %61
+	%63 = bitcast [0 x i8]* %62 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %63)
 	call void @sys_fildes_chr(i32 2, i8 47)
 	br label %L.15
 L.15:
-	%61 = load i32* %i
-	%62 = getelementptr [1024 x i8]* %pathbuf, i32 0, i32 %61
-	%63 = bitcast i8* %62 to [1024 x i8]*
-	%64 = getelementptr [1024 x i8]* %63
-	%65 = bitcast [1024 x i8]* %64 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %65)
-	%66 = getelementptr [3 x i8]* @S.185
-	%67 = bitcast [3 x i8]* %66 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %67)
+	%64 = load i32* %i
+	%65 = getelementptr [1024 x i8]* %pathbuf, i32 0, i32 %64
+	%66 = bitcast i8* %65 to [1024 x i8]*
+	%67 = getelementptr [1024 x i8]* %66
+	%68 = bitcast [1024 x i8]* %67 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %68)
+	%69 = getelementptr [3 x i8]* @S.197
+	%70 = bitcast [3 x i8]* %69 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %70)
 	br label %L.13
 L.13:
-	%68 = getelementptr %A.3* @feature, i32 0, i32 2
-	%69 = load i8* %68
-	%70 = icmp ne i8 %69, 0
-	br i1 %70, label %L.18, label %L.17
+	%71 = getelementptr %A.3* @feature, i32 0, i32 2
+	%72 = load i8* %71
+	%73 = icmp ne i8 %72, 0
+	br i1 %73, label %L.18, label %L.17
 L.18:
-	%71 = getelementptr [5 x i8]* @S.186
-	%72 = bitcast [5 x i8]* %71 to [0 x i8]*
-	call void @sys_fildes_str(i32 1, [0 x i8]* %72)
-	%73 = load %lex.SearchPathEntry** %pp
-	%74 = icmp ne %lex.SearchPathEntry* %73, null
-	br i1 %74, label %L.19, label %L.20
+	%74 = getelementptr [5 x i8]* @S.198
+	%75 = bitcast [5 x i8]* %74 to [0 x i8]*
+	call void @sys_fildes_str(i32 1, [0 x i8]* %75)
+	%76 = load %lex.SearchPathEntry** %pp
+	%77 = icmp ne %lex.SearchPathEntry* %76, null
+	br i1 %77, label %L.19, label %L.20
 L.19:
-	%75 = load %lex.SearchPathEntry** %pp
-	%76 = getelementptr %lex.SearchPathEntry* %75, i32 0, i32 1
-	%77 = getelementptr [0 x i8]* %76, i32 0, i32 0
-	%78 = load i8* %77
-	%79 = icmp ne i8 %78, 46
-	br i1 %79, label %L.22, label %L.21
+	%78 = load %lex.SearchPathEntry** %pp
+	%79 = getelementptr %lex.SearchPathEntry* %78, i32 0, i32 1
+	%80 = getelementptr [0 x i8]* %79, i32 0, i32 0
+	%81 = load i8* %80
+	%82 = icmp ne i8 %81, 46
+	br i1 %82, label %L.22, label %L.21
 L.21:
-	%80 = load %lex.SearchPathEntry** %pp
-	%81 = getelementptr %lex.SearchPathEntry* %80, i32 0, i32 1
-	%82 = getelementptr [0 x i8]* %81, i32 0, i32 1
-	%83 = load i8* %82
-	%84 = icmp ne i8 %83, 0
+	%83 = load %lex.SearchPathEntry** %pp
+	%84 = getelementptr %lex.SearchPathEntry* %83, i32 0, i32 1
+	%85 = getelementptr [0 x i8]* %84, i32 0, i32 1
+	%86 = load i8* %85
+	%87 = icmp ne i8 %86, 0
 	br label %L.22
 L.22:
-	%85 = phi i1 [ true, %L.19 ], [ %84, %L.21 ]
+	%88 = phi i1 [ true, %L.19 ], [ %87, %L.21 ]
 	br label %L.20
 L.20:
-	%86 = phi i1 [ false, %L.18 ], [ %85, %L.22 ]
-	br i1 %86, label %L.24, label %L.23
+	%89 = phi i1 [ false, %L.18 ], [ %88, %L.22 ]
+	br i1 %89, label %L.24, label %L.23
 L.24:
-	%87 = load %lex.SearchPathEntry** %pp
-	%88 = getelementptr %lex.SearchPathEntry* %87, i32 0, i32 1
-	%89 = getelementptr [0 x i8]* %88
-	%90 = bitcast [0 x i8]* %89 to [0 x i8]*
-	call void @sys_fildes_str(i32 1, [0 x i8]* %90)
+	%90 = load %lex.SearchPathEntry** %pp
+	%91 = getelementptr %lex.SearchPathEntry* %90, i32 0, i32 1
+	%92 = getelementptr [0 x i8]* %91
+	%93 = bitcast [0 x i8]* %92 to [0 x i8]*
+	call void @sys_fildes_str(i32 1, [0 x i8]* %93)
 	call void @sys_fildes_chr(i32 1, i8 47)
 	br label %L.23
 L.23:
-	%91 = load i32* %i
-	%92 = getelementptr [1024 x i8]* %pathbuf, i32 0, i32 %91
-	%93 = bitcast i8* %92 to [1024 x i8]*
-	%94 = getelementptr [1024 x i8]* %93
-	%95 = bitcast [1024 x i8]* %94 to [0 x i8]*
-	call void @sys_fildes_str(i32 1, [0 x i8]* %95)
+	%94 = load i32* %i
+	%95 = getelementptr [1024 x i8]* %pathbuf, i32 0, i32 %94
+	%96 = bitcast i8* %95 to [1024 x i8]*
+	%97 = getelementptr [1024 x i8]* %96
+	%98 = bitcast [1024 x i8]* %97 to [0 x i8]*
+	call void @sys_fildes_str(i32 1, [0 x i8]* %98)
 	br label %L.17
 L.17:
-	%96 = call [0 x i8]* @malloc(i32 4120)
-	%97 = bitcast [0 x i8]* %96 to %lex.FileContext*
-	store %lex.FileContext* %97, %lex.FileContext** %nf
-	%98 = load %lex.FileListEntry** %fp
-	%99 = load %lex.FileContext** %nf
-	%100 = getelementptr %lex.FileContext* %99, i32 0, i32 2
-	store %lex.FileListEntry* %98, %lex.FileListEntry** %100
-	%101 = load %lex.SearchPathEntry** %pp
+	%99 = call [0 x i8]* @malloc(i32 4120)
+	%100 = bitcast [0 x i8]* %99 to %lex.FileContext*
+	store %lex.FileContext* %100, %lex.FileContext** %nf
+	%101 = load %lex.FileListEntry** %fp
 	%102 = load %lex.FileContext** %nf
-	%103 = getelementptr %lex.FileContext* %102, i32 0, i32 1
-	store %lex.SearchPathEntry* %101, %lex.SearchPathEntry** %103
-	%104 = load i32* %fd
+	%103 = getelementptr %lex.FileContext* %102, i32 0, i32 2
+	store %lex.FileListEntry* %101, %lex.FileListEntry** %103
+	%104 = load %lex.SearchPathEntry** %pp
 	%105 = load %lex.FileContext** %nf
-	%106 = getelementptr %lex.FileContext* %105, i32 0, i32 3
-	store i32 %104, i32* %106
-	%107 = load %lex.FileContext** %nf
-	%108 = getelementptr %lex.FileContext* %107, i32 0, i32 4
-	store i16 1, i16* %108
-	%109 = load %lex.FileContext** %nf
-	%110 = getelementptr %lex.FileContext* %109, i32 0, i32 5
-	store i16 0, i16* %110
-	%111 = load %lex.FileContext** %nf
-	%112 = getelementptr %lex.FileContext* %111, i32 0, i32 6
-	store i16 0, i16* %112
-	%113 = load %lex.FileContext** @lex_f
-	%114 = bitcast %lex.FileContext* %113 to %lex.FileContext*
-	%115 = load %lex.FileContext** %nf
-	%116 = getelementptr %lex.FileContext* %115, i32 0, i32 0
-	store %lex.FileContext* %114, %lex.FileContext** %116
-	%117 = load %lex.FileContext** %nf
-	store %lex.FileContext* %117, %lex.FileContext** @lex_f
+	%106 = getelementptr %lex.FileContext* %105, i32 0, i32 1
+	store %lex.SearchPathEntry* %104, %lex.SearchPathEntry** %106
+	%107 = load i32* %fd
+	%108 = load %lex.FileContext** %nf
+	%109 = getelementptr %lex.FileContext* %108, i32 0, i32 3
+	store i32 %107, i32* %109
+	%110 = load %lex.FileContext** %nf
+	%111 = getelementptr %lex.FileContext* %110, i32 0, i32 4
+	store i16 1, i16* %111
+	%112 = load %lex.FileContext** %nf
+	%113 = getelementptr %lex.FileContext* %112, i32 0, i32 5
+	store i16 0, i16* %113
+	%114 = load %lex.FileContext** %nf
+	%115 = getelementptr %lex.FileContext* %114, i32 0, i32 6
+	store i16 0, i16* %115
+	%116 = load %lex.FileContext** @lex_f
+	%117 = bitcast %lex.FileContext* %116 to %lex.FileContext*
+	%118 = load %lex.FileContext** %nf
+	%119 = getelementptr %lex.FileContext* %118, i32 0, i32 0
+	store %lex.FileContext* %117, %lex.FileContext** %119
+	%120 = load %lex.FileContext** %nf
+	store %lex.FileContext* %120, %lex.FileContext** @lex_f
 	store i8 1, i8* %rv.0
 	br label %return
 return:
-	%118 = load i8* %rv.0
-	ret i8 %118
+	%121 = load i8* %rv.0
+	ret i8 %121
 }
-@S.187 = internal constant [5 x i8] c".esl\00"
 define internal zeroext i8 @lex_FileCheck([0 x i8]* %filename$) nounwind {
 L.0:
 	%rv.0 = alloca i8
 	%filename = alloca [0 x i8]*
 	store [0 x i8]* %filename$, [0 x i8]** %filename
 	%fp = alloca %lex.FileListEntry*
-	%sfx = alloca i32
-	%0 = load [0 x i8]** %filename
-	%1 = bitcast [0 x i8]* %0 to [0 x i8]*
-	%2 = getelementptr [5 x i8]* @S.187
-	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
-	call void @zstr_cat([0 x i8]* %1, [0 x i8]* %3, i32 255)
-	%4 = load %lex.FileListEntry** @lex_filehead
-	store %lex.FileListEntry* %4, %lex.FileListEntry** %fp
+	%0 = load %lex.FileListEntry** @lex_filehead
+	store %lex.FileListEntry* %0, %lex.FileListEntry** %fp
 	br label %L.1
 L.1:
-	%5 = load %lex.FileListEntry** %fp
-	%6 = icmp ne %lex.FileListEntry* %5, null
-	%7 = xor i1 %6, true
-	br i1 %7, label %L.2, label %L.3
+	%1 = load %lex.FileListEntry** %fp
+	%2 = icmp ne %lex.FileListEntry* %1, null
+	%3 = xor i1 %2, true
+	br i1 %3, label %L.2, label %L.3
 L.3:
-	%8 = load %lex.FileListEntry** %fp
-	%9 = getelementptr %lex.FileListEntry* %8, i32 0, i32 1
-	%10 = getelementptr [0 x i8]* %9
-	%11 = bitcast [0 x i8]* %10 to [0 x i8]*
-	%12 = load [0 x i8]** %filename
-	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
-	%14 = load i32* %sfx
-	%15 = call i8 @zstr_eq([0 x i8]* %11, [0 x i8]* %13, i32 %14)
-	%16 = icmp ne i8 %15, 0
-	br i1 %16, label %L.5, label %L.4
+	%4 = load %lex.FileListEntry** %fp
+	%5 = getelementptr %lex.FileListEntry* %4, i32 0, i32 1
+	%6 = getelementptr [0 x i8]* %5
+	%7 = bitcast [0 x i8]* %6 to [0 x i8]*
+	%8 = load [0 x i8]** %filename
+	%9 = bitcast [0 x i8]* %8 to [0 x i8]*
+	%10 = call i8 @zstr_eq([0 x i8]* %7, [0 x i8]* %9, i32 256)
+	%11 = icmp ne i8 %10, 0
+	br i1 %11, label %L.5, label %L.4
 L.5:
 	store i8 0, i8* %rv.0
 	br label %return
 L.4:
-	%17 = load %lex.FileListEntry** %fp
-	%18 = getelementptr %lex.FileListEntry* %17, i32 0, i32 0
-	%19 = load %lex.FileListEntry** %18
-	%20 = bitcast %lex.FileListEntry* %19 to %lex.FileListEntry*
-	store %lex.FileListEntry* %20, %lex.FileListEntry** %fp
+	%12 = load %lex.FileListEntry** %fp
+	%13 = getelementptr %lex.FileListEntry* %12, i32 0, i32 0
+	%14 = load %lex.FileListEntry** %13
+	%15 = bitcast %lex.FileListEntry* %14 to %lex.FileListEntry*
+	store %lex.FileListEntry* %15, %lex.FileListEntry** %fp
 	br label %L.1
 L.2:
-	%21 = load [0 x i8]** %filename
-	%22 = bitcast [0 x i8]* %21 to [0 x i8]*
-	%23 = call i8 @lex_FileOpen([0 x i8]* %22)
-	%24 = icmp ne i8 %23, 0
-	br i1 %24, label %L.7, label %L.6
+	%16 = load [0 x i8]** %filename
+	%17 = bitcast [0 x i8]* %16 to [0 x i8]*
+	%18 = call i8 @lex_FileOpen([0 x i8]* %17)
+	%19 = icmp ne i8 %18, 0
+	br i1 %19, label %L.7, label %L.6
 L.7:
 	store i8 1, i8* %rv.0
 	br label %return
 L.6:
-	%25 = load [0 x i8]** %filename
-	%26 = bitcast [0 x i8]* %25 to [0 x i8]*
-	call void @lex_ErrorI(i8 72, [0 x i8]* %26)
+	%20 = load [0 x i8]** %filename
+	%21 = bitcast [0 x i8]* %20 to [0 x i8]*
+	call void @lex_ErrorI(i8 73, [0 x i8]* %21)
 	store i8 0, i8* %rv.0
 	br label %return
 return:
-	%27 = load i8* %rv.0
-	ret i8 %27
+	%22 = load i8* %rv.0
+	ret i8 %22
 }
 declare external void @close(i32)
-@S.188 = internal constant [13 x i8] c"Close file \22\00"
-@S.189 = internal constant [3 x i8] c"\22\0A\00"
+@S.199 = internal constant [13 x i8] c"Close file \22\00"
+@S.200 = internal constant [3 x i8] c"\22\0A\00"
 define internal void @lex_FileClose() nounwind {
 L.0:
 	%of = alloca %lex.FileContext*
@@ -1665,7 +1673,7 @@ L.2:
 	%7 = icmp ne i8 %6, 0
 	br i1 %7, label %L.4, label %L.3
 L.4:
-	%8 = getelementptr [13 x i8]* @S.188
+	%8 = getelementptr [13 x i8]* @S.199
 	%9 = bitcast [13 x i8]* %8 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %9)
 	%10 = load %lex.FileContext** @lex_f
@@ -1691,7 +1699,7 @@ L.5:
 	%24 = getelementptr [0 x i8]* %23
 	%25 = bitcast [0 x i8]* %24 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %25)
-	%26 = getelementptr [3 x i8]* @S.189
+	%26 = getelementptr [3 x i8]* @S.200
 	%27 = bitcast [3 x i8]* %26 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %27)
 	br label %L.3
@@ -3598,7 +3606,7 @@ L.5:
 	%8 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
 	%9 = load i8* %tok
 	%10 = zext i8 %9 to i32
-	%11 = getelementptr [90 x [0 x i8]*]* @lex_keywords, i32 0, i32 %10
+	%11 = getelementptr [93 x [0 x i8]*]* @lex_keywords, i32 0, i32 %10
 	%12 = load [0 x i8]** %11
 	%13 = getelementptr [0 x i8]* %12
 	%14 = bitcast [0 x i8]* %13 to [0 x i8]*
@@ -3667,9 +3675,9 @@ return:
 	%14 = load i8* %rv.0
 	ret i8 %14
 }
-@S.192 = internal constant [7 x i8] c" line=\00"
-@S.193 = internal constant [6 x i8] c" tok=\00"
-@S.194 = internal constant [3 x i8] c" \22\00"
+@S.203 = internal constant [7 x i8] c" line=\00"
+@S.204 = internal constant [6 x i8] c" tok=\00"
+@S.205 = internal constant [3 x i8] c" \22\00"
 define internal void @lex_WhereAmI([0 x i8]* %msg$) nounwind {
 L.0:
 	%msg = alloca [0 x i8]*
@@ -3677,18 +3685,18 @@ L.0:
 	%0 = load [0 x i8]** %msg
 	%1 = bitcast [0 x i8]* %0 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %1)
-	%2 = getelementptr [7 x i8]* @S.192
+	%2 = getelementptr [7 x i8]* @S.203
 	%3 = bitcast [7 x i8]* %2 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %3)
 	%4 = call i16 @lex_Lineno()
 	%5 = zext i16 %4 to i32
 	call void @sys_fildes_uint(i32 2, i32 %5)
-	%6 = getelementptr [6 x i8]* @S.193
+	%6 = getelementptr [6 x i8]* @S.204
 	%7 = bitcast [6 x i8]* %6 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %7)
 	%8 = load i8* @lex_Token
 	%9 = zext i8 %8 to i32
-	%10 = getelementptr [90 x [0 x i8]*]* @lex_keywords, i32 0, i32 %9
+	%10 = getelementptr [93 x [0 x i8]*]* @lex_keywords, i32 0, i32 %9
 	%11 = load [0 x i8]** %10
 	%12 = bitcast [0 x i8]* %11 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %12)
@@ -3696,7 +3704,7 @@ L.0:
 	%14 = icmp eq i8 %13, 41
 	br i1 %14, label %L.2, label %L.1
 L.2:
-	%15 = getelementptr [3 x i8]* @S.194
+	%15 = getelementptr [3 x i8]* @S.205
 	%16 = bitcast [3 x i8]* %15 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %16)
 	%17 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
@@ -3757,7 +3765,7 @@ L.10:
 	%16 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
 	%17 = load i8* %ttok
 	%18 = zext i8 %17 to i32
-	%19 = getelementptr [90 x [0 x i8]*]* @lex_keywords, i32 0, i32 %18
+	%19 = getelementptr [93 x [0 x i8]*]* @lex_keywords, i32 0, i32 %18
 	%20 = load [0 x i8]** %19
 	%21 = getelementptr [0 x i8]* %20
 	%22 = bitcast [0 x i8]* %21 to [0 x i8]*
@@ -3847,7 +3855,7 @@ return:
 }
 %type.TypeListEntry = type {%type.TypeListEntry*, %type.TypeNode*}
 %ast.AstNode = type {i8, i8, i16, i16, i16, i16, i16, i32, %type.TypeNode*, %symb.SymbNode*, i64, [0 x %ast.AstNode*]}
-%symb.SymbNode = type {%symb.SymbNode*, %type.TypeNode*, %symb.SymbNode*, %symb.SymbNode*, %type.TypeListEntry*, %symb.SymbNode*, %symb.SymbNode*, %ast.AstNode*, i64, i16, i16, i16, i8, i8, i8, i8, i8, i8, i8, i8, i8, [0 x i8]}
+%symb.SymbNode = type {%symb.SymbNode*, %type.TypeNode*, %symb.SymbNode*, %symb.SymbNode*, %type.TypeListEntry*, %symb.SymbNode*, %symb.SymbNode*, %symb.SymbNode*, %ast.AstNode*, i64, i16, i16, i16, i8, i8, i8, i8, i8, i8, i8, i8, i8, [0 x i8]}
 %type.TypeNode = type {%type.TypeNode*, %type.TypeNode*, %type.TypeNode*, %symb.SymbNode*, %symb.SymbNode*, %symb.SymbNode*, %type.TypeNode*, i64, i64, i32, i32, i32, i16, i16, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8, i8}
 @type_unkntype = internal global %type.TypeNode* zeroinitializer, align 4
 @type_booltype = internal global %type.TypeNode* zeroinitializer, align 4
@@ -3858,9 +3866,9 @@ return:
 @type_uintptrtype = internal global %type.TypeNode* zeroinitializer, align 4
 @type_memtype = internal global %type.TypeNode* zeroinitializer, align 4
 @type_addrtype = internal global %type.TypeNode* zeroinitializer, align 4
-@type_NINTS = internal constant i32 4, align 4
-@type_uinttypes = internal global [4 x %type.TypeNode*] zeroinitializer, align 4
-@type_inttypes = internal global [4 x %type.TypeNode*] zeroinitializer, align 4
+@type_NINTS = internal constant i32 6, align 4
+@type_uinttypes = internal global [6 x %type.TypeNode*] zeroinitializer, align 4
+@type_inttypes = internal global [6 x %type.TypeNode*] zeroinitializer, align 4
 @type_NFLOATS = internal constant i32 2, align 4
 @type_floattypes = internal global [2 x %type.TypeNode*] zeroinitializer, align 4
 define internal i32 @type_TypeNode_Span(%type.TypeNode* %t$) nounwind {
@@ -3894,93 +3902,94 @@ return:
 	%13 = load i32* %rv.0
 	ret i32 %13
 }
-@target_IntSizesMax = internal constant i32 8, align 4
 @target_TargetsMax = internal constant i32 31, align 4
 @target_DefaultTarget = internal constant [4 x i8] c"x86\00", align 1
 @target_TargetName = internal global [0 x i8]* zeroinitializer, align 4
 @target_Triple = internal global [0 x i8]* zeroinitializer, align 4
 %target.SizeAlign = type {i8, i8}
-%target.ModelT = type {i8, i8, i8, i8, i8, i8, %target.SizeAlign, [8 x %target.SizeAlign]}
-@target_Model32LEU = internal constant %target.ModelT { i8 2, i8 2, i8 8, i8 32, i8 0, i8 4, %target.SizeAlign { i8 32, i8 32 }, [8 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 32 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
-@target_Model32LEA = internal constant %target.ModelT { i8 2, i8 2, i8 8, i8 32, i8 1, i8 4, %target.SizeAlign { i8 32, i8 32 }, [8 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 32 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
-@target_Model64LEU = internal constant %target.ModelT { i8 2, i8 2, i8 8, i8 64, i8 0, i8 4, %target.SizeAlign { i8 64, i8 64 }, [8 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 64 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
-@target_Model32BEA = internal constant %target.ModelT { i8 1, i8 1, i8 8, i8 32, i8 1, i8 4, %target.SizeAlign { i8 32, i8 32 }, [8 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 32 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
-@target_Model64BEA = internal constant %target.ModelT { i8 1, i8 1, i8 8, i8 64, i8 1, i8 4, %target.SizeAlign { i8 64, i8 64 }, [8 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 64 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
-@target_Model16LEA = internal constant %target.ModelT { i8 2, i8 2, i8 8, i8 16, i8 1, i8 3, %target.SizeAlign { i8 16, i8 16 }, [8 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 16 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
+%target.ModelT = type {i8, i8, i8, i8, i8, i8, %target.SizeAlign, [6 x %target.SizeAlign]}
+@target_Model32LEU = internal constant %target.ModelT { i8 2, i8 2, i8 8, i8 32, i8 0, i8 4, %target.SizeAlign { i8 32, i8 32 }, [6 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 32 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
+@target_Model32LEA = internal constant %target.ModelT { i8 2, i8 2, i8 8, i8 32, i8 1, i8 4, %target.SizeAlign { i8 32, i8 32 }, [6 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 32 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
+@target_Model64LEU = internal constant %target.ModelT { i8 2, i8 2, i8 8, i8 64, i8 0, i8 5, %target.SizeAlign { i8 64, i8 64 }, [6 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 64 }, %target.SizeAlign { i8 128, i8 64 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
+@target_Model32BEA = internal constant %target.ModelT { i8 1, i8 1, i8 8, i8 32, i8 1, i8 5, %target.SizeAlign { i8 32, i8 32 }, [6 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 32 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
+@target_Model64BEA = internal constant %target.ModelT { i8 1, i8 1, i8 8, i8 64, i8 1, i8 4, %target.SizeAlign { i8 64, i8 64 }, [6 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 64 }, %target.SizeAlign { i8 128, i8 128 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
+@target_Model16LEA = internal constant %target.ModelT { i8 2, i8 2, i8 8, i8 16, i8 1, i8 3, %target.SizeAlign { i8 16, i8 16 }, [6 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 16 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
 %target.TargetT = type {[0 x i8]*, [0 x i8]*, %target.ModelT*}
-@S.267 = internal constant [4 x i8] c"x86\00"
-@S.268 = internal constant [23 x i8] c"i386-unknown-linux-gnu\00"
-@S.270 = internal constant [5 x i8] c"i386\00"
-@S.271 = internal constant [23 x i8] c"i386-unknown-linux-gnu\00"
-@S.273 = internal constant [5 x i8] c"i486\00"
-@S.274 = internal constant [23 x i8] c"i486-unknown-linux-gnu\00"
-@S.276 = internal constant [5 x i8] c"i586\00"
-@S.277 = internal constant [23 x i8] c"i586-unknown-linux-gnu\00"
-@S.279 = internal constant [5 x i8] c"i686\00"
-@S.280 = internal constant [23 x i8] c"i686-unknown-linux-gnu\00"
-@S.282 = internal constant [7 x i8] c"x86-64\00"
-@S.283 = internal constant [25 x i8] c"x86_64-unknown-linux-gnu\00"
-@S.285 = internal constant [7 x i8] c"x86_64\00"
-@S.286 = internal constant [25 x i8] c"x86_64-unknown-linux-gnu\00"
-@S.288 = internal constant [14 x i8] c"x86_64-darwin\00"
-@S.289 = internal constant [22 x i8] c"x86_64-apple-darwin10\00"
-@S.291 = internal constant [10 x i8] c"cortex-m0\00"
-@S.292 = internal constant [25 x i8] c"thumbv6m-unknown-unknown\00"
-@S.294 = internal constant [10 x i8] c"cortex-m3\00"
-@S.295 = internal constant [25 x i8] c"thumbv7m-unknown-unknown\00"
-@S.297 = internal constant [16 x i8] c"cortex-m3-align\00"
-@S.298 = internal constant [25 x i8] c"thumbv7m-unknown-unknown\00"
-@S.300 = internal constant [10 x i8] c"cortex-m4\00"
-@S.301 = internal constant [25 x i8] c"thumbv7m-unknown-unknown\00"
-@S.303 = internal constant [8 x i8] c"arm920t\00"
-@S.304 = internal constant [22 x i8] c"thumb-unknown-unknown\00"
-@S.306 = internal constant [5 x i8] c"mips\00"
-@S.307 = internal constant [21 x i8] c"mips-unknown-unknown\00"
-@S.309 = internal constant [7 x i8] c"mipsle\00"
-@S.310 = internal constant [21 x i8] c"mips-unknown-unknown\00"
-@S.312 = internal constant [6 x i8] c"xcore\00"
-@S.313 = internal constant [22 x i8] c"xcore-unknown-unknown\00"
-@S.315 = internal constant [5 x i8] c"bfin\00"
-@S.316 = internal constant [21 x i8] c"bfin-unknown-unknown\00"
-@S.318 = internal constant [6 x i8] c"ppc32\00"
-@S.319 = internal constant [20 x i8] c"ppc32-unknown-linux\00"
-@S.321 = internal constant [6 x i8] c"ppc64\00"
-@S.322 = internal constant [20 x i8] c"ppc64-unknown-linux\00"
-@S.324 = internal constant [6 x i8] c"s390x\00"
-@S.325 = internal constant [22 x i8] c"systemz-unknown-linux\00"
-@S.327 = internal constant [8 x i8] c"systemz\00"
-@S.328 = internal constant [22 x i8] c"systemz-unknown-linux\00"
-@S.330 = internal constant [7 x i8] c"msp430\00"
-@S.331 = internal constant [23 x i8] c"msp430-generic-generic\00"
-@target_Targets = internal constant [22 x %target.TargetT] [ %target.TargetT { [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.267 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.268 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.270 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.271 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.273 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.274 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.276 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.277 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.279 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.280 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.282 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.283 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.285 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.286 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [14 x i8]* getelementptr( [14 x i8]* @S.288 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.289 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.291 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.292 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.294 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.295 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [16 x i8]* getelementptr( [16 x i8]* @S.297 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.298 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.300 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.301 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.303 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.304 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.306 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8]* @S.307 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32BEA )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.309 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8]* @S.310 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.312 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.313 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.315 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8]* @S.316 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.318 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.319 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32BEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.321 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.322 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.324 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.325 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.327 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.328 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.330 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.331 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model16LEA )  } ], align 4
+@S.266 = internal constant [4 x i8] c"x86\00"
+@S.267 = internal constant [23 x i8] c"i386-unknown-linux-gnu\00"
+@S.269 = internal constant [5 x i8] c"i386\00"
+@S.270 = internal constant [23 x i8] c"i386-unknown-linux-gnu\00"
+@S.272 = internal constant [5 x i8] c"i486\00"
+@S.273 = internal constant [23 x i8] c"i486-unknown-linux-gnu\00"
+@S.275 = internal constant [5 x i8] c"i586\00"
+@S.276 = internal constant [23 x i8] c"i586-unknown-linux-gnu\00"
+@S.278 = internal constant [5 x i8] c"i686\00"
+@S.279 = internal constant [23 x i8] c"i686-unknown-linux-gnu\00"
+@S.281 = internal constant [7 x i8] c"x86-64\00"
+@S.282 = internal constant [25 x i8] c"x86_64-unknown-linux-gnu\00"
+@S.284 = internal constant [7 x i8] c"x86_64\00"
+@S.285 = internal constant [25 x i8] c"x86_64-unknown-linux-gnu\00"
+@S.287 = internal constant [14 x i8] c"x86_64-darwin\00"
+@S.288 = internal constant [22 x i8] c"x86_64-apple-darwin10\00"
+@S.290 = internal constant [10 x i8] c"cortex-m0\00"
+@S.291 = internal constant [25 x i8] c"thumbv6m-unknown-unknown\00"
+@S.293 = internal constant [10 x i8] c"cortex-m3\00"
+@S.294 = internal constant [25 x i8] c"thumbv7m-unknown-unknown\00"
+@S.296 = internal constant [16 x i8] c"cortex-m3-align\00"
+@S.297 = internal constant [25 x i8] c"thumbv7m-unknown-unknown\00"
+@S.299 = internal constant [10 x i8] c"cortex-m4\00"
+@S.300 = internal constant [25 x i8] c"thumbv7m-unknown-unknown\00"
+@S.302 = internal constant [8 x i8] c"arm920t\00"
+@S.303 = internal constant [22 x i8] c"thumb-unknown-unknown\00"
+@S.305 = internal constant [5 x i8] c"mips\00"
+@S.306 = internal constant [21 x i8] c"mips-unknown-unknown\00"
+@S.308 = internal constant [7 x i8] c"mipsle\00"
+@S.309 = internal constant [21 x i8] c"mips-unknown-unknown\00"
+@S.311 = internal constant [6 x i8] c"xcore\00"
+@S.312 = internal constant [22 x i8] c"xcore-unknown-unknown\00"
+@S.314 = internal constant [5 x i8] c"bfin\00"
+@S.315 = internal constant [21 x i8] c"bfin-unknown-unknown\00"
+@S.317 = internal constant [6 x i8] c"ppc32\00"
+@S.318 = internal constant [20 x i8] c"ppc32-unknown-linux\00"
+@S.320 = internal constant [6 x i8] c"ppc64\00"
+@S.321 = internal constant [20 x i8] c"ppc64-unknown-linux\00"
+@S.323 = internal constant [6 x i8] c"s390x\00"
+@S.324 = internal constant [22 x i8] c"systemz-unknown-linux\00"
+@S.326 = internal constant [8 x i8] c"systemz\00"
+@S.327 = internal constant [22 x i8] c"systemz-unknown-linux\00"
+@S.329 = internal constant [8 x i8] c"aarch64\00"
+@S.330 = internal constant [22 x i8] c"aarch64-unknown-linux\00"
+@S.332 = internal constant [7 x i8] c"msp430\00"
+@S.333 = internal constant [23 x i8] c"msp430-generic-generic\00"
+@target_Targets = internal constant [23 x %target.TargetT] [ %target.TargetT { [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.266 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.267 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.269 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.270 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.272 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.273 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.275 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.276 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.278 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.279 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.281 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.282 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.284 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.285 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [14 x i8]* getelementptr( [14 x i8]* @S.287 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.288 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.290 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.291 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.293 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.294 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [16 x i8]* getelementptr( [16 x i8]* @S.296 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.297 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8]* @S.299 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8]* @S.300 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.302 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.303 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.305 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8]* @S.306 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32BEA )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.308 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8]* @S.309 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.311 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.312 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.314 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8]* @S.315 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.317 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.318 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model32BEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.320 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8]* @S.321 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.323 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.324 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.326 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.327 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.329 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8]* @S.330 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.332 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8]* @S.333 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT* @target_Model16LEA )  } ], align 4
 @target_Target = internal global %target.ModelT* zeroinitializer, align 4
-@S.332 = internal constant [42 x i8] c"Supported targets and generated triples:\0A\00"
-@S.333 = internal constant [3 x i8] c": \00"
+@S.334 = internal constant [42 x i8] c"Supported targets and generated triples:\0A\00"
+@S.335 = internal constant [3 x i8] c": \00"
 define internal void @target_list() nounwind {
 L.0:
 	%i = alloca i32
-	%0 = getelementptr [42 x i8]* @S.332
+	%0 = getelementptr [42 x i8]* @S.334
 	%1 = bitcast [42 x i8]* %0 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %1)
 	store i32 0, i32* %i
 	br label %L.1
 L.1:
 	%2 = load i32* %i
-	%3 = icmp ult i32 %2, 22
+	%3 = icmp ult i32 %2, 23
 	%4 = xor i1 %3, true
 	br i1 %4, label %L.2, label %L.3
 L.3:
 	%5 = load i32* %i
-	%6 = getelementptr [22 x %target.TargetT]* @target_Targets, i32 0, i32 %5
+	%6 = getelementptr [23 x %target.TargetT]* @target_Targets, i32 0, i32 %5
 	%7 = getelementptr %target.TargetT* %6, i32 0, i32 0
 	%8 = load [0 x i8]** %7
 	%9 = bitcast [0 x i8]* %8 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %9)
-	%10 = getelementptr [3 x i8]* @S.333
+	%10 = getelementptr [3 x i8]* @S.335
 	%11 = bitcast [3 x i8]* %10 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %11)
 	%12 = load i32* %i
-	%13 = getelementptr [22 x %target.TargetT]* @target_Targets, i32 0, i32 %12
+	%13 = getelementptr [23 x %target.TargetT]* @target_Targets, i32 0, i32 %12
 	%14 = getelementptr %target.TargetT* %13, i32 0, i32 1
 	%15 = load [0 x i8]** %14
 	%16 = bitcast [0 x i8]* %15 to [0 x i8]*
@@ -4013,14 +4022,14 @@ L.1:
 	br label %L.3
 L.3:
 	%3 = load i32* %i
-	%4 = icmp ult i32 %3, 22
+	%4 = icmp ult i32 %3, 23
 	%5 = xor i1 %4, true
 	br i1 %5, label %L.4, label %L.5
 L.5:
 	%6 = load [0 x i8]** %name
 	%7 = bitcast [0 x i8]* %6 to [0 x i8]*
 	%8 = load i32* %i
-	%9 = getelementptr [22 x %target.TargetT]* @target_Targets, i32 0, i32 %8
+	%9 = getelementptr [23 x %target.TargetT]* @target_Targets, i32 0, i32 %8
 	%10 = getelementptr %target.TargetT* %9, i32 0, i32 0
 	%11 = load [0 x i8]** %10
 	%12 = bitcast [0 x i8]* %11 to [0 x i8]*
@@ -4029,19 +4038,19 @@ L.5:
 	br i1 %14, label %L.7, label %L.6
 L.7:
 	%15 = load i32* %i
-	%16 = getelementptr [22 x %target.TargetT]* @target_Targets, i32 0, i32 %15
+	%16 = getelementptr [23 x %target.TargetT]* @target_Targets, i32 0, i32 %15
 	%17 = getelementptr %target.TargetT* %16, i32 0, i32 2
 	%18 = load %target.ModelT** %17
 	%19 = bitcast %target.ModelT* %18 to %target.ModelT*
 	store %target.ModelT* %19, %target.ModelT** @target_Target
 	%20 = load i32* %i
-	%21 = getelementptr [22 x %target.TargetT]* @target_Targets, i32 0, i32 %20
+	%21 = getelementptr [23 x %target.TargetT]* @target_Targets, i32 0, i32 %20
 	%22 = getelementptr %target.TargetT* %21, i32 0, i32 0
 	%23 = load [0 x i8]** %22
 	%24 = bitcast [0 x i8]* %23 to [0 x i8]*
 	store [0 x i8]* %24, [0 x i8]** @target_TargetName
 	%25 = load i32* %i
-	%26 = getelementptr [22 x %target.TargetT]* @target_Targets, i32 0, i32 %25
+	%26 = getelementptr [23 x %target.TargetT]* @target_Targets, i32 0, i32 %25
 	%27 = getelementptr %target.TargetT* %26, i32 0, i32 1
 	%28 = load [0 x i8]** %27
 	%29 = bitcast [0 x i8]* %28 to [0 x i8]*
@@ -4080,7 +4089,7 @@ L.4:
 	%6 = getelementptr %target.ModelT* %5, i32 0, i32 7
 	%7 = load i8* %i
 	%8 = zext i8 %7 to i32
-	%9 = getelementptr [8 x %target.SizeAlign]* %6, i32 0, i32 %8
+	%9 = getelementptr [6 x %target.SizeAlign]* %6, i32 0, i32 %8
 	%10 = getelementptr %target.SizeAlign* %9, i32 0, i32 0
 	%11 = load i8* %10
 	%12 = zext i8 %11 to i32
@@ -4101,7 +4110,7 @@ L.2:
 	%20 = getelementptr %target.ModelT* %19, i32 0, i32 7
 	%21 = load i8* %i
 	%22 = zext i8 %21 to i32
-	%23 = getelementptr [8 x %target.SizeAlign]* %20, i32 0, i32 %22
+	%23 = getelementptr [6 x %target.SizeAlign]* %20, i32 0, i32 %22
 	%24 = getelementptr %target.SizeAlign* %23, i32 0, i32 0
 	%25 = load i8* %24
 	%26 = zext i8 %25 to i32
@@ -4131,7 +4140,7 @@ L.4:
 	%6 = getelementptr %target.ModelT* %5, i32 0, i32 7
 	%7 = load i8* %i
 	%8 = zext i8 %7 to i32
-	%9 = getelementptr [8 x %target.SizeAlign]* %6, i32 0, i32 %8
+	%9 = getelementptr [6 x %target.SizeAlign]* %6, i32 0, i32 %8
 	%10 = getelementptr %target.SizeAlign* %9, i32 0, i32 0
 	%11 = load i8* %10
 	%12 = zext i8 %11 to i32
@@ -4152,7 +4161,7 @@ L.2:
 	%20 = getelementptr %target.ModelT* %19, i32 0, i32 7
 	%21 = load i8* %i
 	%22 = zext i8 %21 to i32
-	%23 = getelementptr [8 x %target.SizeAlign]* %20, i32 0, i32 %22
+	%23 = getelementptr [6 x %target.SizeAlign]* %20, i32 0, i32 %22
 	%24 = getelementptr %target.SizeAlign* %23, i32 0, i32 1
 	%25 = load i8* %24
 	%26 = zext i8 %25 to i32
@@ -4161,6 +4170,100 @@ L.2:
 return:
 	%27 = load i32* %rv.0
 	ret i32 %27
+}
+define internal %type.TypeNode* @target_utype(i32 %bits$) nounwind {
+L.0:
+	%rv.0 = alloca %type.TypeNode*
+	%bits = alloca i32
+	store i32 %bits$, i32* %bits
+	%i = alloca i8
+	store i8 0, i8* %i
+	br label %L.1
+L.1:
+	%0 = load i8* %i
+	%1 = load %target.ModelT** @target_Target
+	%2 = getelementptr %target.ModelT* %1, i32 0, i32 5
+	%3 = load i8* %2
+	%4 = icmp ult i8 %0, %3
+	br i1 %4, label %L.4, label %L.5
+L.4:
+	%5 = load %target.ModelT** @target_Target
+	%6 = getelementptr %target.ModelT* %5, i32 0, i32 7
+	%7 = load i8* %i
+	%8 = zext i8 %7 to i32
+	%9 = getelementptr [6 x %target.SizeAlign]* %6, i32 0, i32 %8
+	%10 = getelementptr %target.SizeAlign* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = zext i8 %11 to i32
+	%13 = load i32* %bits
+	%14 = icmp ult i32 %12, %13
+	br label %L.5
+L.5:
+	%15 = phi i1 [ false, %L.1 ], [ %14, %L.4 ]
+	%16 = xor i1 %15, true
+	br i1 %16, label %L.2, label %L.3
+L.3:
+	%17 = load i8* %i
+	%18 = add i8 %17, 1
+	store i8 %18, i8* %i
+	br label %L.1
+L.2:
+	%19 = load i8* %i
+	%20 = zext i8 %19 to i32
+	%21 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 %20
+	%22 = load %type.TypeNode** %21
+	store %type.TypeNode* %22, %type.TypeNode** %rv.0
+	br label %return
+return:
+	%23 = load %type.TypeNode** %rv.0
+	ret %type.TypeNode* %23
+}
+define internal %type.TypeNode* @target_stype(i32 %bits$) nounwind {
+L.0:
+	%rv.0 = alloca %type.TypeNode*
+	%bits = alloca i32
+	store i32 %bits$, i32* %bits
+	%i = alloca i8
+	store i8 0, i8* %i
+	br label %L.1
+L.1:
+	%0 = load i8* %i
+	%1 = load %target.ModelT** @target_Target
+	%2 = getelementptr %target.ModelT* %1, i32 0, i32 5
+	%3 = load i8* %2
+	%4 = icmp ult i8 %0, %3
+	br i1 %4, label %L.4, label %L.5
+L.4:
+	%5 = load %target.ModelT** @target_Target
+	%6 = getelementptr %target.ModelT* %5, i32 0, i32 7
+	%7 = load i8* %i
+	%8 = zext i8 %7 to i32
+	%9 = getelementptr [6 x %target.SizeAlign]* %6, i32 0, i32 %8
+	%10 = getelementptr %target.SizeAlign* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = zext i8 %11 to i32
+	%13 = load i32* %bits
+	%14 = icmp ult i32 %12, %13
+	br label %L.5
+L.5:
+	%15 = phi i1 [ false, %L.1 ], [ %14, %L.4 ]
+	%16 = xor i1 %15, true
+	br i1 %16, label %L.2, label %L.3
+L.3:
+	%17 = load i8* %i
+	%18 = add i8 %17, 1
+	store i8 %18, i8* %i
+	br label %L.1
+L.2:
+	%19 = load i8* %i
+	%20 = zext i8 %19 to i32
+	%21 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 %20
+	%22 = load %type.TypeNode** %21
+	store %type.TypeNode* %22, %type.TypeNode** %rv.0
+	br label %return
+return:
+	%23 = load %type.TypeNode** %rv.0
+	ret %type.TypeNode* %23
 }
 @symb_NestMax = internal constant i32 31, align 4
 @symb_level = internal global i8 0, align 1
@@ -4171,7 +4274,7 @@ return:
 @symb_libdel = internal global %symb.SymbNode* zeroinitializer, align 4
 %symb.symblist = type {%symb.SymbNode*, %symb.SymbNode*, %symb.SymbNode*}
 @symb_symbs = internal global [32 x %symb.symblist] zeroinitializer, align 4
-@S.334 = internal constant [2 x i8] c"_\00"
+@S.336 = internal constant [2 x i8] c"_\00"
 define internal zeroext i8 @symb_IsAnon([0 x i8]* %id$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -4179,7 +4282,7 @@ L.0:
 	store [0 x i8]* %id$, [0 x i8]** %id
 	%0 = load [0 x i8]** %id
 	%1 = bitcast [0 x i8]* %0 to [0 x i8]*
-	%2 = getelementptr [2 x i8]* @S.334
+	%2 = getelementptr [2 x i8]* @S.336
 	%3 = bitcast [2 x i8]* %2 to [0 x i8]*
 	%4 = call i8 @zstr_eq([0 x i8]* %1, [0 x i8]* %3, i32 255)
 	store i8 %4, i8* %rv.0
@@ -4250,7 +4353,7 @@ L.3:
 	br i1 %6, label %L.4, label %L.5
 L.5:
 	%7 = load %symb.SymbNode** %s
-	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 21
+	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 22
 	%9 = getelementptr [0 x i8]* %8
 	%10 = bitcast [0 x i8]* %9 to [0 x i8]*
 	%11 = load [0 x i8]** %id
@@ -4294,7 +4397,7 @@ L.1:
 	br i1 %6, label %L.4, label %L.5
 L.4:
 	%7 = load %symb.SymbNode** %s
-	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 21
+	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 22
 	%9 = getelementptr [0 x i8]* %8
 	%10 = bitcast [0 x i8]* %9 to [0 x i8]*
 	%11 = load [0 x i8]** %name
@@ -4391,7 +4494,7 @@ L.3:
 	br i1 %8, label %L.6, label %L.7
 L.6:
 	%9 = load %symb.SymbNode** %s
-	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 21
+	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 22
 	%11 = getelementptr [0 x i8]* %10
 	%12 = bitcast [0 x i8]* %11 to [0 x i8]*
 	%13 = load [0 x i8]** %name
@@ -4419,7 +4522,7 @@ L.1:
 	br i1 %25, label %L.9, label %L.8
 L.9:
 	%26 = load %symb.SymbNode** %s
-	%27 = getelementptr %symb.SymbNode* %26, i32 0, i32 14
+	%27 = getelementptr %symb.SymbNode* %26, i32 0, i32 15
 	%28 = load i8* %27
 	%29 = icmp ne i8 %28, 0
 	br i1 %29, label %L.11, label %L.12
@@ -4438,13 +4541,13 @@ L.8:
 	%33 = load [0 x i8]** %name
 	%34 = bitcast [0 x i8]* %33 to [0 x i8]*
 	%35 = call i32 @zstr_len([0 x i8]* %34, i32 255)
-	%36 = add i32 56, %35
+	%36 = add i32 60, %35
 	%37 = add i32 %36, 1
 	%38 = call [0 x i8]* @malloc(i32 %37)
 	%39 = bitcast [0 x i8]* %38 to %symb.SymbNode*
 	store %symb.SymbNode* %39, %symb.SymbNode** %s
 	%40 = load %symb.SymbNode** %s
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 21
+	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 22
 	%42 = getelementptr [0 x i8]* %41
 	%43 = bitcast [0 x i8]* %42 to [0 x i8]*
 	%44 = load [0 x i8]** %name
@@ -4454,11 +4557,11 @@ L.8:
 	%47 = bitcast [0 x i8]* %46 to [0 x i8]*
 	%48 = call i8 @symb_IsUTF8([0 x i8]* %47)
 	%49 = load %symb.SymbNode** %s
-	%50 = getelementptr %symb.SymbNode* %49, i32 0, i32 19
+	%50 = getelementptr %symb.SymbNode* %49, i32 0, i32 20
 	store i8 %48, i8* %50
 	%51 = load i8* %kind
 	%52 = load %symb.SymbNode** %s
-	%53 = getelementptr %symb.SymbNode* %52, i32 0, i32 12
+	%53 = getelementptr %symb.SymbNode* %52, i32 0, i32 13
 	store i8 %51, i8* %53
 	%54 = load %symb.SymbNode** %s
 	%55 = getelementptr %symb.SymbNode* %54, i32 0, i32 0
@@ -4468,7 +4571,7 @@ L.8:
 	br i1 %57, label %L.14, label %L.15
 L.14:
 	%58 = load %symb.SymbNode** %s
-	%59 = getelementptr %symb.SymbNode* %58, i32 0, i32 13
+	%59 = getelementptr %symb.SymbNode* %58, i32 0, i32 14
 	store i8 1, i8* %59
 	%60 = load %symb.SymbNode** @symb_curproc
 	%61 = bitcast %symb.SymbNode* %60 to %symb.SymbNode*
@@ -4482,7 +4585,7 @@ L.15:
 	br i1 %65, label %L.17, label %L.18
 L.17:
 	%66 = load %symb.SymbNode** %s
-	%67 = getelementptr %symb.SymbNode* %66, i32 0, i32 13
+	%67 = getelementptr %symb.SymbNode* %66, i32 0, i32 14
 	store i8 2, i8* %67
 	%68 = load %symb.SymbNode** @symb_curpack
 	%69 = bitcast %symb.SymbNode* %68 to %symb.SymbNode*
@@ -4492,7 +4595,7 @@ L.17:
 	br label %L.16
 L.18:
 	%72 = load %symb.SymbNode** %s
-	%73 = getelementptr %symb.SymbNode* %72, i32 0, i32 13
+	%73 = getelementptr %symb.SymbNode* %72, i32 0, i32 14
 	store i8 3, i8* %73
 	%74 = load %symb.SymbNode** %s
 	%75 = getelementptr %symb.SymbNode* %74, i32 0, i32 2
@@ -4503,7 +4606,7 @@ L.16:
 L.13:
 	%76 = call i16 @lex_Lineno()
 	%77 = load %symb.SymbNode** %s
-	%78 = getelementptr %symb.SymbNode* %77, i32 0, i32 10
+	%78 = getelementptr %symb.SymbNode* %77, i32 0, i32 11
 	store i16 %76, i16* %78
 	%79 = load i8* %vis
 	%80 = icmp eq i8 %79, 0
@@ -4520,7 +4623,7 @@ return:
 	%83 = load %symb.SymbNode** %rv.0
 	ret %symb.SymbNode* %83
 }
-@S.335 = internal constant [2 x i8] c"/\00"
+@S.337 = internal constant [2 x i8] c"/\00"
 define internal %symb.SymbNode* @symb_NewFile([0 x i8]* %path$, [0 x i8]* %file$) nounwind {
 L.0:
 	%rv.0 = alloca %symb.SymbNode*
@@ -4534,7 +4637,7 @@ L.0:
 	%2 = bitcast [0 x i8]* %1 to [0 x i8]*
 	call void @zstr_copy([0 x i8]* %0, [0 x i8]* %2, i32 1024)
 	%3 = bitcast [1024 x i8]* %full to [0 x i8]*
-	%4 = getelementptr [2 x i8]* @S.335
+	%4 = getelementptr [2 x i8]* @S.337
 	%5 = bitcast [2 x i8]* %4 to [0 x i8]*
 	call void @zstr_cat([0 x i8]* %3, [0 x i8]* %5, i32 1024)
 	%6 = bitcast [1024 x i8]* %full to [0 x i8]*
@@ -4548,6 +4651,47 @@ L.0:
 return:
 	%11 = load %symb.SymbNode** %rv.0
 	ret %symb.SymbNode* %11
+}
+define internal %symb.SymbNode* @symb_NewString([0 x i8]* %string$) nounwind {
+L.0:
+	%rv.0 = alloca %symb.SymbNode*
+	%string = alloca [0 x i8]*
+	store [0 x i8]* %string$, [0 x i8]** %string
+	%s = alloca %symb.SymbNode*
+	%len = alloca i32
+	%0 = load [0 x i8]** %string
+	%1 = bitcast [0 x i8]* %0 to [0 x i8]*
+	%2 = call i32 @zstr_len([0 x i8]* %1, i32 4095)
+	store i32 %2, i32* %len
+	%3 = load i32* %len
+	%4 = add i32 60, %3
+	%5 = add i32 %4, 1
+	%6 = call [0 x i8]* @malloc(i32 %5)
+	%7 = bitcast [0 x i8]* %6 to %symb.SymbNode*
+	store %symb.SymbNode* %7, %symb.SymbNode** %s
+	%8 = load %symb.SymbNode** %s
+	%9 = bitcast %symb.SymbNode* %8 to i8*
+	call void @llvm.memset.p0i8.i32(i8* %9, i8 0, i32 60, i32 4, i1 0)
+	%10 = load %symb.SymbNode** %s
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 22
+	%12 = getelementptr [0 x i8]* %11
+	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
+	%14 = load [0 x i8]** %string
+	%15 = bitcast [0 x i8]* %14 to [0 x i8]*
+	call void @zstr_copy([0 x i8]* %13, [0 x i8]* %15, i32 4095)
+	%16 = load %symb.SymbNode** %s
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 13
+	store i8 9, i8* %17
+	%18 = call i16 @lex_Lineno()
+	%19 = load %symb.SymbNode** %s
+	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 11
+	store i16 %18, i16* %20
+	%21 = load %symb.SymbNode** %s
+	store %symb.SymbNode* %21, %symb.SymbNode** %rv.0
+	br label %return
+return:
+	%22 = load %symb.SymbNode** %rv.0
+	ret %symb.SymbNode* %22
 }
 define internal %symb.SymbNode* @symb_Clone(%symb.SymbNode* %os$, [0 x i8]* %name$) nounwind {
 L.0:
@@ -4591,7 +4735,7 @@ L.1:
 	br i1 %3, label %L.2, label %L.3
 L.3:
 	%4 = load %symb.SymbNode** %s
-	%5 = getelementptr %symb.SymbNode* %4, i32 0, i32 21
+	%5 = getelementptr %symb.SymbNode* %4, i32 0, i32 22
 	%6 = getelementptr [0 x i8]* %5
 	%7 = bitcast [0 x i8]* %6 to [0 x i8]*
 	%8 = load [0 x i8]** %name
@@ -4601,7 +4745,7 @@ L.3:
 	br i1 %11, label %L.5, label %L.4
 L.5:
 	%12 = load %symb.SymbNode** %s
-	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 12
+	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 13
 	%14 = load i8* %13
 	%15 = icmp eq i8 %14, 8
 	br i1 %15, label %L.7, label %L.6
@@ -4648,7 +4792,7 @@ L.1:
 	br i1 %2, label %L.4, label %L.5
 L.4:
 	%3 = load %symb.SymbNode** %s
-	%4 = getelementptr %symb.SymbNode* %3, i32 0, i32 21
+	%4 = getelementptr %symb.SymbNode* %3, i32 0, i32 22
 	%5 = getelementptr [0 x i8]* %4
 	%6 = bitcast [0 x i8]* %5 to [0 x i8]*
 	%7 = load [0 x i8]** %name
@@ -4765,7 +4909,7 @@ L.14:
 	br i1 %39, label %L.18, label %L.17
 L.17:
 	%40 = load %symb.SymbNode** %s
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 12
+	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 13
 	%42 = load i8* %41
 	%43 = icmp ne i8 %42, 6
 	br label %L.18
@@ -4811,7 +4955,7 @@ L.1:
 	br i1 %10, label %L.4, label %L.3
 L.4:
 	%11 = load %symb.SymbNode** %s
-	%12 = getelementptr %symb.SymbNode* %11, i32 0, i32 18
+	%12 = getelementptr %symb.SymbNode* %11, i32 0, i32 19
 	store i8 1, i8* %12
 	%13 = load %symb.SymbNode** %s
 	store %symb.SymbNode* %13, %symb.SymbNode** %rv.0
@@ -4847,7 +4991,7 @@ L.0:
 	br i1 %4, label %L.1, label %L.2
 L.1:
 	%5 = load %symb.SymbNode** %s
-	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 12
+	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 13
 	%7 = load i8* %6
 	%8 = icmp eq i8 %7, 6
 	br label %L.2
@@ -4884,7 +5028,7 @@ L.0:
 	br i1 %4, label %L.2, label %L.3
 L.2:
 	%5 = load %symb.SymbNode** %s
-	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 12
+	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 13
 	%7 = load i8* %6
 	%8 = load i8* %kind
 	%9 = icmp ne i8 %7, %8
@@ -4900,7 +5044,7 @@ L.8:
 	call void @lex_Error(i8 26)
 	br label %L.7
 L.9:
-	call void @lex_Error(i8 73)
+	call void @lex_Error(i8 74)
 	br label %L.7
 L.6:
 	br label %L.7
@@ -4936,49 +5080,39 @@ L.0:
 L.1:
 	%3 = call i8 @lex_Next()
 	store i8 %3, i8* %tok
-	%4 = load %symb.SymbNode** %s
-	%5 = icmp eq %symb.SymbNode* %4, null
-	br i1 %5, label %L.7, label %L.6
-L.6:
-	%6 = load %symb.SymbNode** %s
-	%7 = getelementptr %symb.SymbNode* %6, i32 0, i32 12
-	%8 = load i8* %7
-	%9 = icmp ne i8 %8, 6
-	br label %L.7
-L.7:
-	%10 = phi i1 [ true, %L.1 ], [ %9, %L.6 ]
-	br i1 %10, label %L.5, label %L.4
+	%4 = load i8* %tok
+	%5 = icmp ne i8 %4, 2
+	br i1 %5, label %L.2, label %L.3
+L.3:
+	%6 = call i8 @lex_Next()
+	store i8 %6, i8* %tok
+	%7 = load i8* %tok
+	%8 = icmp ne i8 %7, 41
+	br i1 %8, label %L.2, label %L.4
 L.4:
-	%11 = load i8* %tok
-	%12 = icmp ne i8 %11, 2
+	%9 = load %symb.SymbNode** %s
+	%10 = icmp ne %symb.SymbNode* %9, null
+	br i1 %10, label %L.6, label %L.5
+L.6:
+	%11 = load %symb.SymbNode** %s
+	%12 = getelementptr %symb.SymbNode* %11, i32 0, i32 5
+	%13 = load %symb.SymbNode** %12
+	%14 = bitcast %symb.SymbNode* %13 to %symb.SymbNode*
+	%15 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%16 = call %symb.SymbNode* @symb_FindLocal(%symb.SymbNode* %14, [0 x i8]* %15)
+	store %symb.SymbNode* %16, %symb.SymbNode** %s
 	br label %L.5
 L.5:
-	%13 = phi i1 [ true, %L.7 ], [ %12, %L.4 ]
-	br i1 %13, label %L.2, label %L.3
-L.3:
-	%14 = call i8 @lex_Next()
-	store i8 %14, i8* %tok
-	%15 = load i8* %tok
-	%16 = icmp ne i8 %15, 41
-	br i1 %16, label %L.2, label %L.8
-L.8:
-	%17 = load %symb.SymbNode** %s
-	%18 = getelementptr %symb.SymbNode* %17, i32 0, i32 5
-	%19 = load %symb.SymbNode** %18
-	%20 = bitcast %symb.SymbNode* %19 to %symb.SymbNode*
-	%21 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%22 = call %symb.SymbNode* @symb_FindLocal(%symb.SymbNode* %20, [0 x i8]* %21)
-	store %symb.SymbNode* %22, %symb.SymbNode** %s
 	br label %L.1
 L.2:
-	%23 = load %symb.SymbNode** %s
-	%24 = icmp ne %symb.SymbNode* %23, null
-	%25 = zext i1 %24 to i8
-	store i8 %25, i8* %rv.0
+	%17 = load %symb.SymbNode** %s
+	%18 = icmp ne %symb.SymbNode* %17, null
+	%19 = zext i1 %18 to i8
+	store i8 %19, i8* %rv.0
 	br label %return
 return:
-	%26 = load i8* %rv.0
-	ret i8 %26
+	%20 = load i8* %rv.0
+	ret i8 %20
 }
 define internal %symb.SymbNode* @symb_Save() nounwind {
 L.0:
@@ -5071,8 +5205,8 @@ return:
 	%39 = load %symb.SymbNode** %rv.0
 	ret %symb.SymbNode* %39
 }
-@S.336 = internal constant [4 x i8] c"In \00"
-@S.337 = internal constant [10 x i8] c" unused: \00"
+@S.338 = internal constant [4 x i8] c"In \00"
+@S.339 = internal constant [10 x i8] c" unused: \00"
 define internal void @symb_Pop() nounwind {
 L.0:
 	%0 = load i8* @symb_level
@@ -5106,14 +5240,14 @@ L.8:
 	br i1 %15, label %L.9, label %L.10
 L.10:
 	%16 = load %symb.SymbNode** %s
-	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 18
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 19
 	%18 = load i8* %17
 	%19 = icmp ne i8 %18, 0
 	%20 = xor i1 %19, true
 	br i1 %20, label %L.11, label %L.12
 L.11:
 	%21 = load %symb.SymbNode** %s
-	%22 = getelementptr %symb.SymbNode* %21, i32 0, i32 13
+	%22 = getelementptr %symb.SymbNode* %21, i32 0, i32 14
 	%23 = load i8* %22
 	%24 = icmp ne i8 %23, 0
 	br label %L.12
@@ -5121,7 +5255,7 @@ L.12:
 	%25 = phi i1 [ false, %L.10 ], [ %24, %L.11 ]
 	br i1 %25, label %L.14, label %L.13
 L.14:
-	%26 = getelementptr [4 x i8]* @S.336
+	%26 = getelementptr [4 x i8]* @S.338
 	%27 = bitcast [4 x i8]* %26 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %27)
 	%28 = load %symb.SymbNode** @symb_curpack
@@ -5129,7 +5263,7 @@ L.14:
 	br i1 %29, label %L.16, label %L.15
 L.16:
 	%30 = load %symb.SymbNode** @symb_curpack
-	%31 = getelementptr %symb.SymbNode* %30, i32 0, i32 21
+	%31 = getelementptr %symb.SymbNode* %30, i32 0, i32 22
 	%32 = getelementptr [0 x i8]* %31
 	%33 = bitcast [0 x i8]* %32 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %33)
@@ -5137,15 +5271,15 @@ L.16:
 	br label %L.15
 L.15:
 	%34 = load %symb.SymbNode** @symb_curproc
-	%35 = getelementptr %symb.SymbNode* %34, i32 0, i32 21
+	%35 = getelementptr %symb.SymbNode* %34, i32 0, i32 22
 	%36 = getelementptr [0 x i8]* %35
 	%37 = bitcast [0 x i8]* %36 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %37)
-	%38 = getelementptr [10 x i8]* @S.337
+	%38 = getelementptr [10 x i8]* @S.339
 	%39 = bitcast [10 x i8]* %38 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %39)
 	%40 = load %symb.SymbNode** %s
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 21
+	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 22
 	%42 = getelementptr [0 x i8]* %41
 	%43 = bitcast [0 x i8]* %42 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %43)
@@ -5172,7 +5306,7 @@ L.1:
 return:
 	ret void
 }
-@ast_NumChildDefault = internal constant [89 x i8] [ i8 0, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 0, i8 0, i8 0, i8 8, i8 2, i8 0, i8 1, i8 2, i8 3, i8 1, i8 1, i8 4, i8 5, i8 5, i8 4, i8 4, i8 4, i8 4, i8 4, i8 1, i8 1, i8 2, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 3, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 3, i8 3, i8 3, i8 3, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 3, i8 8, i8 1, i8 2, i8 3, i8 8, i8 4, i8 1, i8 3 ], align 1
+@ast_NumChildDefault = internal constant [92 x i8] [ i8 0, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 0, i8 0, i8 0, i8 8, i8 2, i8 0, i8 1, i8 2, i8 3, i8 1, i8 1, i8 4, i8 5, i8 5, i8 4, i8 4, i8 4, i8 4, i8 4, i8 1, i8 1, i8 2, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 3, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 1, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 3, i8 3, i8 3, i8 3, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 2, i8 3, i8 8, i8 1, i8 2, i8 3, i8 8, i8 4, i8 1, i8 3 ], align 1
 @ast_Null = internal global %ast.AstNode* zeroinitializer, align 4
 define internal %ast.AstNode* @ast_Alloc(i8 zeroext %op$, i16 zeroext %nc$) nounwind {
 L.0:
@@ -5389,7 +5523,7 @@ L.0:
 	%0 = load i8* %op
 	%1 = load i8* %op
 	%2 = zext i8 %1 to i32
-	%3 = getelementptr [89 x i8]* @ast_NumChildDefault, i32 0, i32 %2
+	%3 = getelementptr [92 x i8]* @ast_NumChildDefault, i32 0, i32 %2
 	%4 = load i8* %3
 	%5 = zext i8 %4 to i16
 	%6 = call %ast.AstNode* @ast_Alloc(i8 %0, i16 %5)
@@ -5430,7 +5564,7 @@ L.0:
 	%n = alloca i16
 	%0 = load i8* %op
 	%1 = zext i8 %0 to i32
-	%2 = getelementptr [89 x i8]* @ast_NumChildDefault, i32 0, i32 %1
+	%2 = getelementptr [92 x i8]* @ast_NumChildDefault, i32 0, i32 %1
 	%3 = load i8* %2
 	%4 = zext i8 %3 to i16
 	store i16 %4, i16* %n
@@ -5492,7 +5626,7 @@ L.0:
 	%n = alloca i16
 	%0 = load i8* %op
 	%1 = zext i8 %0 to i32
-	%2 = getelementptr [89 x i8]* @ast_NumChildDefault, i32 0, i32 %1
+	%2 = getelementptr [92 x i8]* @ast_NumChildDefault, i32 0, i32 %1
 	%3 = load i8* %2
 	%4 = zext i8 %3 to i16
 	store i16 %4, i16* %n
@@ -5562,7 +5696,7 @@ L.0:
 	%n = alloca i16
 	%0 = load i8* %op
 	%1 = zext i8 %0 to i32
-	%2 = getelementptr [89 x i8]* @ast_NumChildDefault, i32 0, i32 %1
+	%2 = getelementptr [92 x i8]* @ast_NumChildDefault, i32 0, i32 %1
 	%3 = load i8* %2
 	%4 = zext i8 %3 to i16
 	store i16 %4, i16* %n
@@ -5858,96 +5992,143 @@ L.2:
 	%6 = getelementptr %ast.AstNode* %5, i32 0, i32 0
 	%7 = load i8* %6
 	%8 = icmp ne i8 %7, 7
-	br i1 %8, label %L.5, label %L.4
-L.5:
+	br i1 %8, label %L.4, label %L.5
+L.4:
 	%9 = load %ast.AstNode** %tree
-	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 8
-	%11 = load %type.TypeNode** %10
-	%12 = getelementptr %type.TypeNode* %11, i32 0, i32 14
-	%13 = load i8* %12
-	%14 = icmp eq i8 %13, 3
-	br i1 %14, label %L.7, label %L.8
+	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = icmp ne i8 %11, 8
+	br label %L.5
+L.5:
+	%13 = phi i1 [ false, %L.2 ], [ %12, %L.4 ]
+	br i1 %13, label %L.7, label %L.6
 L.7:
-	%15 = load %ast.AstNode** %tree
-	%16 = getelementptr %ast.AstNode* %15, i32 0, i32 8
-	%17 = load %type.TypeNode** %16
-	%18 = load %ast.AstNode** %tree
-	%19 = call %ast.AstNode* @ast_New1(i8 30, %type.TypeNode* %17, %ast.AstNode* %18)
-	store %ast.AstNode* %19, %ast.AstNode** %tree
-	br label %L.6
-L.8:
+	%14 = load %ast.AstNode** %tree
+	%15 = getelementptr %ast.AstNode* %14, i32 0, i32 8
+	%16 = load %type.TypeNode** %15
+	%17 = getelementptr %type.TypeNode* %16, i32 0, i32 14
+	%18 = load i8* %17
+	%19 = zext i8 %18 to i32
+	switch i32 %19, label %L.8 [
+		i32 4, label %L.10
+		i32 3, label %L.11
+	]
+L.10:
 	%20 = load %ast.AstNode** %tree
 	%21 = getelementptr %ast.AstNode* %20, i32 0, i32 8
 	%22 = load %type.TypeNode** %21
 	%23 = load %ast.AstNode** %tree
-	%24 = call %ast.AstNode* @ast_New1(i8 29, %type.TypeNode* %22, %ast.AstNode* %23)
+	%24 = call %ast.AstNode* @ast_New1(i8 37, %type.TypeNode* %22, %ast.AstNode* %23)
 	store %ast.AstNode* %24, %ast.AstNode** %tree
-	br label %L.6
-L.6:
-	br label %L.4
-L.4:
-	%25 = load i32* %size
-	%26 = load %ast.AstNode** %tree
-	%27 = getelementptr %ast.AstNode* %26, i32 0, i32 7
-	store i32 %25, i32* %27
-	br label %L.1
-L.3:
-	%28 = load %ast.AstNode** %tree
-	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 7
-	%30 = load i32* %29
-	%31 = load i32* %size
-	%32 = icmp ugt i32 %30, %31
-	br i1 %32, label %L.10, label %L.9
-L.10:
-	%33 = load %ast.AstNode** %tree
-	%34 = getelementptr %ast.AstNode* %33, i32 0, i32 0
-	%35 = load i8* %34
-	%36 = icmp ne i8 %35, 7
-	br i1 %36, label %L.12, label %L.13
-L.12:
-	%37 = load %ast.AstNode** %tree
-	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 8
-	%39 = load %type.TypeNode** %38
-	%40 = load %ast.AstNode** %tree
-	%41 = call %ast.AstNode* @ast_New1(i8 31, %type.TypeNode* %39, %ast.AstNode* %40)
-	store %ast.AstNode* %41, %ast.AstNode** %tree
-	%42 = getelementptr %A.3* @feature, i32 0, i32 4
-	%43 = load i8* %42
-	%44 = icmp ne i8 %43, 0
-	br i1 %44, label %L.14, label %L.15
-L.14:
-	%45 = load i8* %iscast
-	%46 = icmp ne i8 %45, 0
-	%47 = xor i1 %46, true
-	br label %L.15
-L.15:
-	%48 = phi i1 [ false, %L.12 ], [ %47, %L.14 ]
-	br i1 %48, label %L.17, label %L.16
-L.17:
-	call void @lex_Error(i8 2)
-	br label %L.16
-L.16:
-	br label %L.11
-L.13:
-	%49 = load %ast.AstNode** %tree
-	%50 = load i32* %size
-	call void @ast_CheckConstTruncate(%ast.AstNode* %49, i32 %50)
-	br label %L.11
+	br label %L.9
 L.11:
-	%51 = load i32* %size
-	%52 = load %ast.AstNode** %tree
-	%53 = getelementptr %ast.AstNode* %52, i32 0, i32 7
-	store i32 %51, i32* %53
+	%25 = load %ast.AstNode** %tree
+	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 8
+	%27 = load %type.TypeNode** %26
+	%28 = load %ast.AstNode** %tree
+	%29 = call %ast.AstNode* @ast_New1(i8 30, %type.TypeNode* %27, %ast.AstNode* %28)
+	store %ast.AstNode* %29, %ast.AstNode** %tree
+	br label %L.9
+L.8:
+	%30 = load %ast.AstNode** %tree
+	%31 = getelementptr %ast.AstNode* %30, i32 0, i32 8
+	%32 = load %type.TypeNode** %31
+	%33 = load %ast.AstNode** %tree
+	%34 = call %ast.AstNode* @ast_New1(i8 29, %type.TypeNode* %32, %ast.AstNode* %33)
+	store %ast.AstNode* %34, %ast.AstNode** %tree
 	br label %L.9
 L.9:
+	br label %L.6
+L.6:
+	%35 = load i32* %size
+	%36 = load %ast.AstNode** %tree
+	%37 = getelementptr %ast.AstNode* %36, i32 0, i32 7
+	store i32 %35, i32* %37
+	br label %L.1
+L.3:
+	%38 = load %ast.AstNode** %tree
+	%39 = getelementptr %ast.AstNode* %38, i32 0, i32 7
+	%40 = load i32* %39
+	%41 = load i32* %size
+	%42 = icmp ugt i32 %40, %41
+	br i1 %42, label %L.13, label %L.12
+L.13:
+	%43 = load %ast.AstNode** %tree
+	%44 = getelementptr %ast.AstNode* %43, i32 0, i32 0
+	%45 = load i8* %44
+	%46 = icmp ne i8 %45, 7
+	br i1 %46, label %L.14, label %L.15
+L.14:
+	%47 = load %ast.AstNode** %tree
+	%48 = getelementptr %ast.AstNode* %47, i32 0, i32 0
+	%49 = load i8* %48
+	%50 = icmp ne i8 %49, 8
+	br label %L.15
+L.15:
+	%51 = phi i1 [ false, %L.13 ], [ %50, %L.14 ]
+	br i1 %51, label %L.17, label %L.18
+L.17:
+	%52 = load %ast.AstNode** %tree
+	%53 = getelementptr %ast.AstNode* %52, i32 0, i32 8
+	%54 = load %type.TypeNode** %53
+	%55 = getelementptr %type.TypeNode* %54, i32 0, i32 14
+	%56 = load i8* %55
+	%57 = icmp eq i8 %56, 4
+	br i1 %57, label %L.20, label %L.21
+L.20:
+	%58 = load %ast.AstNode** %tree
+	%59 = getelementptr %ast.AstNode* %58, i32 0, i32 8
+	%60 = load %type.TypeNode** %59
+	%61 = load %ast.AstNode** %tree
+	%62 = call %ast.AstNode* @ast_New1(i8 38, %type.TypeNode* %60, %ast.AstNode* %61)
+	store %ast.AstNode* %62, %ast.AstNode** %tree
+	br label %L.19
+L.21:
+	%63 = load %ast.AstNode** %tree
+	%64 = getelementptr %ast.AstNode* %63, i32 0, i32 8
+	%65 = load %type.TypeNode** %64
+	%66 = load %ast.AstNode** %tree
+	%67 = call %ast.AstNode* @ast_New1(i8 31, %type.TypeNode* %65, %ast.AstNode* %66)
+	store %ast.AstNode* %67, %ast.AstNode** %tree
+	br label %L.19
+L.19:
+	%68 = getelementptr %A.3* @feature, i32 0, i32 4
+	%69 = load i8* %68
+	%70 = icmp ne i8 %69, 0
+	br i1 %70, label %L.22, label %L.23
+L.22:
+	%71 = load i8* %iscast
+	%72 = icmp ne i8 %71, 0
+	%73 = xor i1 %72, true
+	br label %L.23
+L.23:
+	%74 = phi i1 [ false, %L.19 ], [ %73, %L.22 ]
+	br i1 %74, label %L.25, label %L.24
+L.25:
+	call void @lex_Error(i8 2)
+	br label %L.24
+L.24:
+	br label %L.16
+L.18:
+	%75 = load %ast.AstNode** %tree
+	%76 = load i32* %size
+	call void @ast_CheckConstTruncate(%ast.AstNode* %75, i32 %76)
+	br label %L.16
+L.16:
+	%77 = load i32* %size
+	%78 = load %ast.AstNode** %tree
+	%79 = getelementptr %ast.AstNode* %78, i32 0, i32 7
+	store i32 %77, i32* %79
+	br label %L.12
+L.12:
 	br label %L.1
 L.1:
-	%54 = load %ast.AstNode** %tree
-	store %ast.AstNode* %54, %ast.AstNode** %rv.0
+	%80 = load %ast.AstNode** %tree
+	store %ast.AstNode* %80, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%55 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %55
+	%81 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %81
 }
 define internal %ast.AstNode* @ast_ExtendT(%ast.AstNode* %tree$, %type.TypeNode* %t$) nounwind {
 L.0:
@@ -6331,6 +6512,1369 @@ return:
 	%168 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %168
 }
+define internal %ast.AstNode* @ast_ForceBoolean(%ast.AstNode* %tree$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* %tree$, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %tree
+	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 8
+	%2 = load %type.TypeNode** %1
+	%3 = icmp ne %type.TypeNode* %2, null
+	br i1 %3, label %L.1, label %L.2
+L.1:
+	%4 = load %ast.AstNode** %tree
+	%5 = getelementptr %ast.AstNode* %4, i32 0, i32 8
+	%6 = load %type.TypeNode** %5
+	%7 = load %type.TypeNode** @type_booltype
+	%8 = call i8 @type_Compat(%type.TypeNode* %6, %type.TypeNode* %7)
+	%9 = icmp ne i8 %8, 0
+	%10 = xor i1 %9, true
+	br label %L.2
+L.2:
+	%11 = phi i1 [ false, %L.0 ], [ %10, %L.1 ]
+	br i1 %11, label %L.4, label %L.3
+L.4:
+	call void @lex_Error(i8 48)
+	br label %L.3
+L.3:
+	%12 = load %ast.AstNode** %tree
+	%13 = getelementptr %ast.AstNode* %12, i32 0, i32 7
+	%14 = load i32* %13
+	%15 = icmp ugt i32 %14, 1
+	br i1 %15, label %L.6, label %L.5
+L.6:
+	%16 = load %ast.AstNode** %tree
+	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 0
+	%18 = load i8* %17
+	%19 = icmp ne i8 %18, 7
+	br i1 %19, label %L.8, label %L.7
+L.8:
+	%20 = load %type.TypeNode** @type_booltype
+	%21 = load %ast.AstNode** %tree
+	%22 = load %ast.AstNode** %tree
+	%23 = getelementptr %ast.AstNode* %22, i32 0, i32 8
+	%24 = load %type.TypeNode** %23
+	%25 = call %ast.AstNode* @ast_Const(%type.TypeNode* %24, i64 0)
+	%26 = call %ast.AstNode* @ast_New2(i8 55, %type.TypeNode* %20, %ast.AstNode* %21, %ast.AstNode* %25)
+	store %ast.AstNode* %26, %ast.AstNode** %tree
+	br label %L.7
+L.7:
+	%27 = load %ast.AstNode** %tree
+	%28 = getelementptr %ast.AstNode* %27, i32 0, i32 7
+	store i32 1, i32* %28
+	br label %L.5
+L.5:
+	%29 = load %ast.AstNode** %tree
+	store %ast.AstNode* %29, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%30 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %30
+}
+define internal i32 @ast_popcnt(i64 %x$) nounwind {
+L.0:
+	%rv.0 = alloca i32
+	%x = alloca i64
+	store i64 %x$, i64* %x
+	%n = alloca i32
+	store i32 0, i32* %n
+	br label %L.1
+L.1:
+	%0 = load i64* %x
+	%1 = icmp ne i64 %0, 0
+	%2 = xor i1 %1, true
+	br i1 %2, label %L.2, label %L.3
+L.3:
+	%3 = load i32* %n
+	%4 = add i32 %3, 1
+	store i32 %4, i32* %n
+	%5 = load i64* %x
+	%6 = load i64* %x
+	%7 = sub i64 %6, 1
+	%8 = and i64 %5, %7
+	store i64 %8, i64* %x
+	br label %L.1
+L.2:
+	%9 = load i32* %n
+	store i32 %9, i32* %rv.0
+	br label %return
+return:
+	%10 = load i32* %rv.0
+	ret i32 %10
+}
+@S.341 = internal constant [26 x i8] c"Unhandled unary operation\00"
+define internal %ast.AstNode* @ast_OpUnary(i8 zeroext %op$, %ast.AstNode* %rhs$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%rhs = alloca %ast.AstNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %rhs
+	%1 = icmp ne %ast.AstNode* %0, null
+	br i1 %1, label %L.2, label %L.1
+L.2:
+	%2 = load %ast.AstNode** %rhs
+	%3 = getelementptr %ast.AstNode* %2, i32 0, i32 0
+	%4 = load i8* %3
+	%5 = icmp eq i8 %4, 7
+	br i1 %5, label %L.4, label %L.5
+L.4:
+	%6 = load i8* %op
+	%7 = zext i8 %6 to i32
+	switch i32 %7, label %L.6 [
+		i32 33, label %L.8
+		i32 34, label %L.9
+		i32 77, label %L.10
+		i32 35, label %L.11
+		i32 43, label %L.12
+		i32 44, label %L.12
+		i32 45, label %L.13
+		i32 46, label %L.13
+		i32 47, label %L.14
+	]
+L.8:
+	%8 = load %ast.AstNode** %rhs
+	%9 = getelementptr %ast.AstNode* %8, i32 0, i32 10
+	%10 = load i64* %9
+	%11 = sub i64 0, %10
+	%12 = load %ast.AstNode** %rhs
+	%13 = getelementptr %ast.AstNode* %12, i32 0, i32 10
+	store i64 %11, i64* %13
+	br label %L.7
+L.9:
+	%14 = load %ast.AstNode** %rhs
+	%15 = getelementptr %ast.AstNode* %14, i32 0, i32 10
+	%16 = load i64* %15
+	%17 = xor i64 %16, -1
+	%18 = load %ast.AstNode** %rhs
+	%19 = getelementptr %ast.AstNode* %18, i32 0, i32 10
+	store i64 %17, i64* %19
+	br label %L.7
+L.10:
+	%20 = load %ast.AstNode** %rhs
+	%21 = getelementptr %ast.AstNode* %20, i32 0, i32 10
+	%22 = load i64* %21
+	%23 = xor i64 %22, 1
+	%24 = load %ast.AstNode** %rhs
+	%25 = getelementptr %ast.AstNode* %24, i32 0, i32 10
+	store i64 %23, i64* %25
+	br label %L.7
+L.11:
+	%26 = load %ast.AstNode** %rhs
+	%27 = getelementptr %ast.AstNode* %26, i32 0, i32 8
+	%28 = load %type.TypeNode** %27
+	%29 = getelementptr %type.TypeNode* %28, i32 0, i32 14
+	%30 = load i8* %29
+	%31 = icmp eq i8 %30, 3
+	br i1 %31, label %L.15, label %L.16
+L.15:
+	%32 = load %ast.AstNode** %rhs
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 10
+	%34 = load i64* %33
+	%35 = icmp slt i64 %34, 0
+	br label %L.16
+L.16:
+	%36 = phi i1 [ false, %L.11 ], [ %35, %L.15 ]
+	br i1 %36, label %L.18, label %L.17
+L.18:
+	%37 = load %ast.AstNode** %rhs
+	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 10
+	%39 = load i64* %38
+	%40 = sub i64 0, %39
+	%41 = load %ast.AstNode** %rhs
+	%42 = getelementptr %ast.AstNode* %41, i32 0, i32 10
+	store i64 %40, i64* %42
+	br label %L.17
+L.17:
+	br label %L.7
+L.12:
+	%43 = load %ast.AstNode** %rhs
+	%44 = getelementptr %ast.AstNode* %43, i32 0, i32 10
+	%45 = load i64* %44
+	%46 = icmp eq i64 %45, 0
+	br i1 %46, label %L.20, label %L.21
+L.20:
+	%47 = load %ast.AstNode** %rhs
+	%48 = getelementptr %ast.AstNode* %47, i32 0, i32 7
+	%49 = load i32* %48
+	%50 = zext i32 %49 to i64
+	%51 = load %ast.AstNode** %rhs
+	%52 = getelementptr %ast.AstNode* %51, i32 0, i32 10
+	store i64 %50, i64* %52
+	br label %L.19
+L.21:
+	%53 = load %ast.AstNode** %rhs
+	%54 = getelementptr %ast.AstNode* %53, i32 0, i32 10
+	%55 = load i64* %54
+	%56 = call i64 @llvm.ctlz.i64(i64 %55, i1 true)
+	%57 = load %target.ModelT** @target_Target
+	%58 = getelementptr %target.ModelT* %57, i32 0, i32 2
+	%59 = load i8* %58
+	%60 = zext i8 %59 to i64
+	%61 = mul i64 8, %60
+	%62 = load %ast.AstNode** %rhs
+	%63 = getelementptr %ast.AstNode* %62, i32 0, i32 7
+	%64 = load i32* %63
+	%65 = zext i32 %64 to i64
+	%66 = sub i64 %61, %65
+	%67 = sub i64 %56, %66
+	%68 = load %ast.AstNode** %rhs
+	%69 = getelementptr %ast.AstNode* %68, i32 0, i32 10
+	store i64 %67, i64* %69
+	br label %L.19
+L.19:
+	br label %L.7
+L.13:
+	%70 = load %ast.AstNode** %rhs
+	%71 = getelementptr %ast.AstNode* %70, i32 0, i32 10
+	%72 = load i64* %71
+	%73 = icmp eq i64 %72, 0
+	br i1 %73, label %L.23, label %L.24
+L.23:
+	%74 = load %ast.AstNode** %rhs
+	%75 = getelementptr %ast.AstNode* %74, i32 0, i32 10
+	store i64 0, i64* %75
+	br label %L.22
+L.24:
+	%76 = load %ast.AstNode** %rhs
+	%77 = getelementptr %ast.AstNode* %76, i32 0, i32 10
+	%78 = load i64* %77
+	%79 = call i64 @llvm.cttz.i64(i64 %78, i1 true)
+	%80 = load %ast.AstNode** %rhs
+	%81 = getelementptr %ast.AstNode* %80, i32 0, i32 10
+	store i64 %79, i64* %81
+	br label %L.22
+L.22:
+	br label %L.7
+L.14:
+	%82 = load %ast.AstNode** %rhs
+	%83 = getelementptr %ast.AstNode* %82, i32 0, i32 10
+	%84 = load i64* %83
+	%85 = call i32 @ast_popcnt(i64 %84)
+	%86 = zext i32 %85 to i64
+	%87 = load %ast.AstNode** %rhs
+	%88 = getelementptr %ast.AstNode* %87, i32 0, i32 10
+	store i64 %86, i64* %88
+	br label %L.7
+L.6:
+	%89 = getelementptr [26 x i8]* @S.341
+	%90 = bitcast [26 x i8]* %89 to [0 x i8]*
+	call void @lex_ErrorS(i8 86, [0 x i8]* %90)
+	br label %L.7
+L.7:
+	%91 = load %ast.AstNode** %rhs
+	store %ast.AstNode* %91, %ast.AstNode** %tree
+	br label %L.3
+L.5:
+	%92 = load i8* %op
+	%93 = load %ast.AstNode** %rhs
+	%94 = getelementptr %ast.AstNode* %93, i32 0, i32 8
+	%95 = load %type.TypeNode** %94
+	%96 = load %ast.AstNode** %rhs
+	%97 = call %ast.AstNode* @ast_New1(i8 %92, %type.TypeNode* %95, %ast.AstNode* %96)
+	store %ast.AstNode* %97, %ast.AstNode** %tree
+	br label %L.3
+L.3:
+	br label %L.1
+L.1:
+	%98 = load %ast.AstNode** %tree
+	store %ast.AstNode* %98, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%99 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %99
+}
+define internal %ast.AstNode* @ast_OpBool(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %lhs
+	%1 = icmp ne %ast.AstNode* %0, null
+	br i1 %1, label %L.1, label %L.2
+L.1:
+	%2 = load %ast.AstNode** %rhs
+	%3 = icmp ne %ast.AstNode* %2, null
+	br label %L.2
+L.2:
+	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
+	br i1 %4, label %L.4, label %L.3
+L.4:
+	%5 = load %ast.AstNode** %lhs
+	%6 = call %ast.AstNode* @ast_ForceBoolean(%ast.AstNode* %5)
+	store %ast.AstNode* %6, %ast.AstNode** %lhs
+	%7 = load %ast.AstNode** %rhs
+	%8 = call %ast.AstNode* @ast_ForceBoolean(%ast.AstNode* %7)
+	store %ast.AstNode* %8, %ast.AstNode** %rhs
+	%9 = load %ast.AstNode** %lhs
+	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = icmp eq i8 %11, 7
+	br i1 %12, label %L.5, label %L.6
+L.5:
+	%13 = load %ast.AstNode** %rhs
+	%14 = getelementptr %ast.AstNode* %13, i32 0, i32 0
+	%15 = load i8* %14
+	%16 = icmp eq i8 %15, 7
+	br label %L.6
+L.6:
+	%17 = phi i1 [ false, %L.4 ], [ %16, %L.5 ]
+	br i1 %17, label %L.8, label %L.9
+L.8:
+	%18 = load i8* %op
+	%19 = zext i8 %18 to i32
+	switch i32 %19, label %L.10 [
+		i32 76, label %L.12
+		i32 75, label %L.13
+	]
+L.12:
+	%20 = load %ast.AstNode** %lhs
+	%21 = getelementptr %ast.AstNode* %20, i32 0, i32 10
+	%22 = load i64* %21
+	%23 = load %ast.AstNode** %rhs
+	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 10
+	%25 = load i64* %24
+	%26 = or i64 %22, %25
+	%27 = load %ast.AstNode** %lhs
+	%28 = getelementptr %ast.AstNode* %27, i32 0, i32 10
+	store i64 %26, i64* %28
+	br label %L.11
+L.13:
+	%29 = load %ast.AstNode** %lhs
+	%30 = getelementptr %ast.AstNode* %29, i32 0, i32 10
+	%31 = load i64* %30
+	%32 = load %ast.AstNode** %rhs
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 10
+	%34 = load i64* %33
+	%35 = and i64 %31, %34
+	%36 = load %ast.AstNode** %lhs
+	%37 = getelementptr %ast.AstNode* %36, i32 0, i32 10
+	store i64 %35, i64* %37
+	br label %L.11
+L.10:
+	br label %L.11
+L.11:
+	%38 = load %ast.AstNode** %lhs
+	store %ast.AstNode* %38, %ast.AstNode** %tree
+	br label %L.7
+L.9:
+	%39 = load i8* %op
+	%40 = load %type.TypeNode** @type_booltype
+	%41 = load %ast.AstNode** %lhs
+	%42 = load %ast.AstNode** %rhs
+	%43 = call %ast.AstNode* @ast_New2(i8 %39, %type.TypeNode* %40, %ast.AstNode* %41, %ast.AstNode* %42)
+	store %ast.AstNode* %43, %ast.AstNode** %tree
+	br label %L.7
+L.7:
+	br label %L.3
+L.3:
+	%44 = load %ast.AstNode** %tree
+	store %ast.AstNode* %44, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%45 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %45
+}
+define internal %ast.AstNode* @ast_OpBinary(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$, %type.TypeNode* %t$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	%t = alloca %type.TypeNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%sl = alloca i32
+	%sr = alloca i32
+	%0 = load %ast.AstNode** %lhs
+	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 7
+	%2 = load i32* %1
+	store i32 %2, i32* %sl
+	%3 = load %ast.AstNode** %rhs
+	%4 = getelementptr %ast.AstNode* %3, i32 0, i32 7
+	%5 = load i32* %4
+	store i32 %5, i32* %sr
+	%6 = load %type.TypeNode** %t
+	%7 = icmp ne %type.TypeNode* %6, null
+	br i1 %7, label %L.1, label %L.2
+L.1:
+	%8 = load %type.TypeNode** %t
+	%9 = getelementptr %type.TypeNode* %8, i32 0, i32 10
+	%10 = load i32* %9
+	%11 = load i32* %sl
+	%12 = icmp ugt i32 %10, %11
+	br label %L.2
+L.2:
+	%13 = phi i1 [ false, %L.0 ], [ %12, %L.1 ]
+	br i1 %13, label %L.4, label %L.3
+L.4:
+	%14 = load %ast.AstNode** %lhs
+	%15 = load %type.TypeNode** %t
+	%16 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %14, %type.TypeNode* %15)
+	store %ast.AstNode* %16, %ast.AstNode** %lhs
+	%17 = load %type.TypeNode** %t
+	%18 = getelementptr %type.TypeNode* %17, i32 0, i32 10
+	%19 = load i32* %18
+	store i32 %19, i32* %sl
+	br label %L.3
+L.3:
+	%20 = load i32* %sl
+	%21 = load i32* %sr
+	%22 = icmp ugt i32 %20, %21
+	br i1 %22, label %L.6, label %L.7
+L.6:
+	%23 = load %ast.AstNode** %rhs
+	%24 = load i32* %sl
+	%25 = call %ast.AstNode* @ast_Extend(%ast.AstNode* %23, i32 %24, i8 0)
+	store %ast.AstNode* %25, %ast.AstNode** %rhs
+	br label %L.5
+L.7:
+	%26 = load i32* %sr
+	%27 = load i32* %sl
+	%28 = icmp ugt i32 %26, %27
+	br i1 %28, label %L.9, label %L.8
+L.9:
+	%29 = load %ast.AstNode** %lhs
+	%30 = load i32* %sr
+	%31 = call %ast.AstNode* @ast_Extend(%ast.AstNode* %29, i32 %30, i8 0)
+	store %ast.AstNode* %31, %ast.AstNode** %lhs
+	br label %L.8
+L.8:
+	br label %L.5
+L.5:
+	%32 = load i8* %op
+	%33 = load %ast.AstNode** %lhs
+	%34 = getelementptr %ast.AstNode* %33, i32 0, i32 8
+	%35 = load %type.TypeNode** %34
+	%36 = load %ast.AstNode** %lhs
+	%37 = load %ast.AstNode** %rhs
+	%38 = call %ast.AstNode* @ast_New2(i8 %32, %type.TypeNode* %35, %ast.AstNode* %36, %ast.AstNode* %37)
+	store %ast.AstNode* %38, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%39 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %39
+}
+define internal %ast.AstNode* @ast_OpAdd(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$, %type.TypeNode* %t$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	%t = alloca %type.TypeNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %lhs
+	%1 = icmp ne %ast.AstNode* %0, null
+	br i1 %1, label %L.1, label %L.2
+L.1:
+	%2 = load %ast.AstNode** %rhs
+	%3 = icmp ne %ast.AstNode* %2, null
+	br label %L.2
+L.2:
+	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
+	br i1 %4, label %L.4, label %L.3
+L.4:
+	%5 = load %ast.AstNode** %lhs
+	%6 = getelementptr %ast.AstNode* %5, i32 0, i32 0
+	%7 = load i8* %6
+	%8 = icmp eq i8 %7, 7
+	br i1 %8, label %L.5, label %L.6
+L.5:
+	%9 = load %ast.AstNode** %rhs
+	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = icmp eq i8 %11, 7
+	br label %L.6
+L.6:
+	%13 = phi i1 [ false, %L.4 ], [ %12, %L.5 ]
+	br i1 %13, label %L.8, label %L.9
+L.8:
+	%14 = load i8* %op
+	%15 = zext i8 %14 to i32
+	switch i32 %15, label %L.10 [
+		i32 49, label %L.12
+		i32 50, label %L.13
+	]
+L.12:
+	%16 = load %ast.AstNode** %lhs
+	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 10
+	%18 = load i64* %17
+	%19 = load %ast.AstNode** %rhs
+	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 10
+	%21 = load i64* %20
+	%22 = add i64 %18, %21
+	store i64 %22, i64* %17
+	br label %L.11
+L.13:
+	%23 = load %ast.AstNode** %lhs
+	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 10
+	%25 = load i64* %24
+	%26 = load %ast.AstNode** %rhs
+	%27 = getelementptr %ast.AstNode* %26, i32 0, i32 10
+	%28 = load i64* %27
+	%29 = sub i64 %25, %28
+	store i64 %29, i64* %24
+	br label %L.11
+L.10:
+	br label %L.11
+L.11:
+	%30 = load %ast.AstNode** %lhs
+	store %ast.AstNode* %30, %ast.AstNode** %tree
+	br label %L.7
+L.9:
+	%31 = load i8* %op
+	%32 = load %ast.AstNode** %lhs
+	%33 = load %ast.AstNode** %rhs
+	%34 = load %type.TypeNode** %t
+	%35 = call %ast.AstNode* @ast_OpBinary(i8 %31, %ast.AstNode* %32, %ast.AstNode* %33, %type.TypeNode* %34)
+	store %ast.AstNode* %35, %ast.AstNode** %tree
+	br label %L.7
+L.7:
+	br label %L.3
+L.3:
+	%36 = load %ast.AstNode** %tree
+	store %ast.AstNode* %36, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%37 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %37
+}
+define internal %ast.AstNode* @ast_OpMul(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$, %type.TypeNode* %t$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	%t = alloca %type.TypeNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %lhs
+	%1 = icmp ne %ast.AstNode* %0, null
+	br i1 %1, label %L.1, label %L.2
+L.1:
+	%2 = load %ast.AstNode** %rhs
+	%3 = icmp ne %ast.AstNode* %2, null
+	br label %L.2
+L.2:
+	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
+	br i1 %4, label %L.4, label %L.3
+L.4:
+	%5 = load %ast.AstNode** %lhs
+	%6 = getelementptr %ast.AstNode* %5, i32 0, i32 0
+	%7 = load i8* %6
+	%8 = icmp eq i8 %7, 7
+	br i1 %8, label %L.5, label %L.6
+L.5:
+	%9 = load %ast.AstNode** %rhs
+	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = icmp eq i8 %11, 7
+	br label %L.6
+L.6:
+	%13 = phi i1 [ false, %L.4 ], [ %12, %L.5 ]
+	br i1 %13, label %L.8, label %L.9
+L.8:
+	%14 = load i8* %op
+	%15 = zext i8 %14 to i32
+	switch i32 %15, label %L.10 [
+		i32 51, label %L.12
+		i32 68, label %L.13
+		i32 70, label %L.13
+	]
+L.12:
+	%16 = load %ast.AstNode** %lhs
+	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 10
+	%18 = load i64* %17
+	%19 = load %ast.AstNode** %rhs
+	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 10
+	%21 = load i64* %20
+	%22 = mul i64 %18, %21
+	%23 = load %ast.AstNode** %lhs
+	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 10
+	store i64 %22, i64* %24
+	br label %L.11
+L.13:
+	%25 = load %ast.AstNode** %lhs
+	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 10
+	%27 = load i64* %26
+	%28 = load %ast.AstNode** %rhs
+	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 10
+	%30 = load i64* %29
+	%31 = shl i64 %27, %30
+	%32 = load %ast.AstNode** %lhs
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 10
+	store i64 %31, i64* %33
+	br label %L.11
+L.10:
+	br label %L.11
+L.11:
+	%34 = load %ast.AstNode** %lhs
+	store %ast.AstNode* %34, %ast.AstNode** %tree
+	br label %L.7
+L.9:
+	%35 = load i8* %op
+	%36 = load %ast.AstNode** %lhs
+	%37 = load %ast.AstNode** %rhs
+	%38 = load %type.TypeNode** %t
+	%39 = call %ast.AstNode* @ast_OpBinary(i8 %35, %ast.AstNode* %36, %ast.AstNode* %37, %type.TypeNode* %38)
+	store %ast.AstNode* %39, %ast.AstNode** %tree
+	br label %L.7
+L.7:
+	br label %L.3
+L.3:
+	%40 = load %ast.AstNode** %tree
+	store %ast.AstNode* %40, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%41 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %41
+}
+define internal %ast.AstNode* @ast_OpDiv(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$, %type.TypeNode* %t$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	%t = alloca %type.TypeNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %lhs
+	%1 = icmp ne %ast.AstNode* %0, null
+	br i1 %1, label %L.1, label %L.2
+L.1:
+	%2 = load %ast.AstNode** %rhs
+	%3 = icmp ne %ast.AstNode* %2, null
+	br label %L.2
+L.2:
+	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
+	br i1 %4, label %L.4, label %L.3
+L.4:
+	%5 = load %ast.AstNode** %lhs
+	%6 = getelementptr %ast.AstNode* %5, i32 0, i32 0
+	%7 = load i8* %6
+	%8 = icmp eq i8 %7, 7
+	br i1 %8, label %L.5, label %L.6
+L.5:
+	%9 = load %ast.AstNode** %rhs
+	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = icmp eq i8 %11, 7
+	br label %L.6
+L.6:
+	%13 = phi i1 [ false, %L.4 ], [ %12, %L.5 ]
+	br i1 %13, label %L.8, label %L.9
+L.8:
+	%14 = load i8* %op
+	%15 = zext i8 %14 to i32
+	switch i32 %15, label %L.10 [
+		i32 52, label %L.12
+		i32 53, label %L.13
+		i32 69, label %L.14
+		i32 71, label %L.15
+	]
+L.12:
+	%16 = load %ast.AstNode** %lhs
+	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 10
+	%18 = load i64* %17
+	%19 = load %ast.AstNode** %rhs
+	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 10
+	%21 = load i64* %20
+	%22 = udiv i64 %18, %21
+	%23 = load %ast.AstNode** %lhs
+	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 10
+	store i64 %22, i64* %24
+	br label %L.11
+L.13:
+	%25 = load %ast.AstNode** %lhs
+	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 10
+	%27 = load i64* %26
+	%28 = load %ast.AstNode** %rhs
+	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 10
+	%30 = load i64* %29
+	%31 = urem i64 %27, %30
+	%32 = load %ast.AstNode** %lhs
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 10
+	store i64 %31, i64* %33
+	br label %L.11
+L.14:
+	%34 = load %ast.AstNode** %lhs
+	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 10
+	%36 = load i64* %35
+	%37 = load %ast.AstNode** %rhs
+	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 10
+	%39 = load i64* %38
+	%40 = lshr i64 %36, %39
+	%41 = load %ast.AstNode** %lhs
+	%42 = getelementptr %ast.AstNode* %41, i32 0, i32 10
+	store i64 %40, i64* %42
+	br label %L.11
+L.15:
+	%43 = load %ast.AstNode** %lhs
+	%44 = getelementptr %ast.AstNode* %43, i32 0, i32 10
+	%45 = load i64* %44
+	%46 = load %ast.AstNode** %rhs
+	%47 = getelementptr %ast.AstNode* %46, i32 0, i32 10
+	%48 = load i64* %47
+	%49 = shl i64 %45, %48
+	%50 = load %ast.AstNode** %lhs
+	%51 = getelementptr %ast.AstNode* %50, i32 0, i32 10
+	store i64 %49, i64* %51
+	br label %L.11
+L.10:
+	br label %L.11
+L.11:
+	%52 = load %ast.AstNode** %lhs
+	store %ast.AstNode* %52, %ast.AstNode** %tree
+	br label %L.7
+L.9:
+	%53 = load i8* %op
+	%54 = load %ast.AstNode** %lhs
+	%55 = load %ast.AstNode** %rhs
+	%56 = load %type.TypeNode** %t
+	%57 = call %ast.AstNode* @ast_OpBinary(i8 %53, %ast.AstNode* %54, %ast.AstNode* %55, %type.TypeNode* %56)
+	store %ast.AstNode* %57, %ast.AstNode** %tree
+	br label %L.7
+L.7:
+	br label %L.3
+L.3:
+	%58 = load %ast.AstNode** %tree
+	store %ast.AstNode* %58, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%59 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %59
+}
+define internal %ast.AstNode* @ast_OpMinMax(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %lhs
+	%1 = icmp ne %ast.AstNode* %0, null
+	br i1 %1, label %L.1, label %L.2
+L.1:
+	%2 = load %ast.AstNode** %rhs
+	%3 = icmp ne %ast.AstNode* %2, null
+	br label %L.2
+L.2:
+	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
+	br i1 %4, label %L.4, label %L.3
+L.4:
+	%5 = load %ast.AstNode** %lhs
+	%6 = getelementptr %ast.AstNode* %5, i32 0, i32 0
+	%7 = load i8* %6
+	%8 = icmp eq i8 %7, 7
+	br i1 %8, label %L.5, label %L.6
+L.5:
+	%9 = load %ast.AstNode** %rhs
+	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = icmp eq i8 %11, 7
+	br label %L.6
+L.6:
+	%13 = phi i1 [ false, %L.4 ], [ %12, %L.5 ]
+	br i1 %13, label %L.8, label %L.9
+L.8:
+	%14 = load i8* %op
+	%15 = zext i8 %14 to i32
+	switch i32 %15, label %L.10 [
+		i32 64, label %L.12
+		i32 65, label %L.13
+		i32 66, label %L.14
+		i32 67, label %L.15
+	]
+L.12:
+	%16 = load %ast.AstNode** %rhs
+	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 10
+	%18 = load i64* %17
+	%19 = load %ast.AstNode** %lhs
+	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 10
+	%21 = load i64* %20
+	%22 = icmp ult i64 %18, %21
+	br i1 %22, label %L.17, label %L.16
+L.17:
+	%23 = load %ast.AstNode** %rhs
+	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 10
+	%25 = load i64* %24
+	%26 = load %ast.AstNode** %lhs
+	%27 = getelementptr %ast.AstNode* %26, i32 0, i32 10
+	store i64 %25, i64* %27
+	br label %L.16
+L.16:
+	br label %L.11
+L.13:
+	%28 = load %ast.AstNode** %rhs
+	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 10
+	%30 = load i64* %29
+	%31 = load %ast.AstNode** %lhs
+	%32 = getelementptr %ast.AstNode* %31, i32 0, i32 10
+	%33 = load i64* %32
+	%34 = icmp ugt i64 %30, %33
+	br i1 %34, label %L.19, label %L.18
+L.19:
+	%35 = load %ast.AstNode** %rhs
+	%36 = getelementptr %ast.AstNode* %35, i32 0, i32 10
+	%37 = load i64* %36
+	%38 = load %ast.AstNode** %lhs
+	%39 = getelementptr %ast.AstNode* %38, i32 0, i32 10
+	store i64 %37, i64* %39
+	br label %L.18
+L.18:
+	br label %L.11
+L.14:
+	%40 = load %ast.AstNode** %rhs
+	%41 = getelementptr %ast.AstNode* %40, i32 0, i32 10
+	%42 = load i64* %41
+	%43 = load %ast.AstNode** %lhs
+	%44 = getelementptr %ast.AstNode* %43, i32 0, i32 10
+	%45 = load i64* %44
+	%46 = icmp slt i64 %42, %45
+	br i1 %46, label %L.21, label %L.20
+L.21:
+	%47 = load %ast.AstNode** %rhs
+	%48 = getelementptr %ast.AstNode* %47, i32 0, i32 10
+	%49 = load i64* %48
+	%50 = load %ast.AstNode** %lhs
+	%51 = getelementptr %ast.AstNode* %50, i32 0, i32 10
+	store i64 %49, i64* %51
+	br label %L.20
+L.20:
+	br label %L.11
+L.15:
+	%52 = load %ast.AstNode** %rhs
+	%53 = getelementptr %ast.AstNode* %52, i32 0, i32 10
+	%54 = load i64* %53
+	%55 = load %ast.AstNode** %lhs
+	%56 = getelementptr %ast.AstNode* %55, i32 0, i32 10
+	%57 = load i64* %56
+	%58 = icmp sgt i64 %54, %57
+	br i1 %58, label %L.23, label %L.22
+L.23:
+	%59 = load %ast.AstNode** %rhs
+	%60 = getelementptr %ast.AstNode* %59, i32 0, i32 10
+	%61 = load i64* %60
+	%62 = load %ast.AstNode** %lhs
+	%63 = getelementptr %ast.AstNode* %62, i32 0, i32 10
+	store i64 %61, i64* %63
+	br label %L.22
+L.22:
+	br label %L.11
+L.10:
+	br label %L.11
+L.11:
+	%64 = load %ast.AstNode** %lhs
+	store %ast.AstNode* %64, %ast.AstNode** %tree
+	br label %L.7
+L.9:
+	%65 = load i8* %op
+	%66 = load %ast.AstNode** %lhs
+	%67 = load %ast.AstNode** %rhs
+	%68 = call %ast.AstNode* @ast_OpBinary(i8 %65, %ast.AstNode* %66, %ast.AstNode* %67, %type.TypeNode* null)
+	store %ast.AstNode* %68, %ast.AstNode** %tree
+	br label %L.7
+L.7:
+	br label %L.3
+L.3:
+	%69 = load %ast.AstNode** %tree
+	store %ast.AstNode* %69, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%70 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %70
+}
+define internal %ast.AstNode* @ast_OpLogic(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %lhs
+	%1 = icmp ne %ast.AstNode* %0, null
+	br i1 %1, label %L.1, label %L.2
+L.1:
+	%2 = load %ast.AstNode** %rhs
+	%3 = icmp ne %ast.AstNode* %2, null
+	br label %L.2
+L.2:
+	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
+	br i1 %4, label %L.4, label %L.3
+L.4:
+	%5 = load %ast.AstNode** %lhs
+	%6 = getelementptr %ast.AstNode* %5, i32 0, i32 0
+	%7 = load i8* %6
+	%8 = icmp eq i8 %7, 7
+	br i1 %8, label %L.5, label %L.6
+L.5:
+	%9 = load %ast.AstNode** %rhs
+	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = icmp eq i8 %11, 7
+	br label %L.6
+L.6:
+	%13 = phi i1 [ false, %L.4 ], [ %12, %L.5 ]
+	br i1 %13, label %L.8, label %L.9
+L.8:
+	%14 = load i8* %op
+	%15 = zext i8 %14 to i32
+	switch i32 %15, label %L.10 [
+		i32 73, label %L.12
+		i32 74, label %L.13
+		i32 72, label %L.14
+	]
+L.12:
+	%16 = load %ast.AstNode** %lhs
+	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 10
+	%18 = load i64* %17
+	%19 = load %ast.AstNode** %rhs
+	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 10
+	%21 = load i64* %20
+	%22 = or i64 %18, %21
+	%23 = load %ast.AstNode** %lhs
+	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 10
+	store i64 %22, i64* %24
+	br label %L.11
+L.13:
+	%25 = load %ast.AstNode** %lhs
+	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 10
+	%27 = load i64* %26
+	%28 = load %ast.AstNode** %rhs
+	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 10
+	%30 = load i64* %29
+	%31 = xor i64 %27, %30
+	%32 = load %ast.AstNode** %lhs
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 10
+	store i64 %31, i64* %33
+	br label %L.11
+L.14:
+	%34 = load %ast.AstNode** %lhs
+	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 10
+	%36 = load i64* %35
+	%37 = load %ast.AstNode** %rhs
+	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 10
+	%39 = load i64* %38
+	%40 = and i64 %36, %39
+	%41 = load %ast.AstNode** %lhs
+	%42 = getelementptr %ast.AstNode* %41, i32 0, i32 10
+	store i64 %40, i64* %42
+	br label %L.11
+L.10:
+	br label %L.11
+L.11:
+	%43 = load %ast.AstNode** %lhs
+	store %ast.AstNode* %43, %ast.AstNode** %tree
+	br label %L.7
+L.9:
+	%44 = load i8* %op
+	%45 = load %ast.AstNode** %lhs
+	%46 = load %ast.AstNode** %rhs
+	%47 = call %ast.AstNode* @ast_OpBinary(i8 %44, %ast.AstNode* %45, %ast.AstNode* %46, %type.TypeNode* null)
+	store %ast.AstNode* %47, %ast.AstNode** %tree
+	br label %L.7
+L.7:
+	br label %L.3
+L.3:
+	%48 = load %ast.AstNode** %tree
+	store %ast.AstNode* %48, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%49 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %49
+}
+define internal %ast.AstNode* @ast_OpCompare(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	%tree = alloca %ast.AstNode*
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %lhs
+	%1 = icmp ne %ast.AstNode* %0, null
+	br i1 %1, label %L.1, label %L.2
+L.1:
+	%2 = load %ast.AstNode** %rhs
+	%3 = icmp ne %ast.AstNode* %2, null
+	br label %L.2
+L.2:
+	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
+	br i1 %4, label %L.4, label %L.3
+L.4:
+	%5 = load %ast.AstNode** %lhs
+	%6 = getelementptr %ast.AstNode* %5, i32 0, i32 0
+	%7 = load i8* %6
+	%8 = icmp eq i8 %7, 7
+	br i1 %8, label %L.5, label %L.6
+L.5:
+	%9 = load %ast.AstNode** %rhs
+	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
+	%11 = load i8* %10
+	%12 = icmp eq i8 %11, 7
+	br label %L.6
+L.6:
+	%13 = phi i1 [ false, %L.4 ], [ %12, %L.5 ]
+	br i1 %13, label %L.8, label %L.9
+L.8:
+	%14 = load i8* %op
+	%15 = zext i8 %14 to i32
+	switch i32 %15, label %L.10 [
+		i32 54, label %L.12
+		i32 55, label %L.13
+		i32 56, label %L.14
+		i32 57, label %L.15
+		i32 58, label %L.16
+		i32 59, label %L.17
+		i32 60, label %L.18
+		i32 61, label %L.19
+		i32 62, label %L.20
+		i32 63, label %L.21
+	]
+L.12:
+	%16 = load %ast.AstNode** %lhs
+	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 10
+	%18 = load i64* %17
+	%19 = load %ast.AstNode** %rhs
+	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 10
+	%21 = load i64* %20
+	%22 = icmp eq i64 %18, %21
+	%23 = zext i1 %22 to i32
+	%24 = zext i32 %23 to i64
+	%25 = load %ast.AstNode** %lhs
+	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 10
+	store i64 %24, i64* %26
+	br label %L.11
+L.13:
+	%27 = load %ast.AstNode** %lhs
+	%28 = getelementptr %ast.AstNode* %27, i32 0, i32 10
+	%29 = load i64* %28
+	%30 = load %ast.AstNode** %rhs
+	%31 = getelementptr %ast.AstNode* %30, i32 0, i32 10
+	%32 = load i64* %31
+	%33 = icmp ne i64 %29, %32
+	%34 = zext i1 %33 to i32
+	%35 = zext i32 %34 to i64
+	%36 = load %ast.AstNode** %lhs
+	%37 = getelementptr %ast.AstNode* %36, i32 0, i32 10
+	store i64 %35, i64* %37
+	br label %L.11
+L.14:
+	%38 = load %ast.AstNode** %lhs
+	%39 = getelementptr %ast.AstNode* %38, i32 0, i32 10
+	%40 = load i64* %39
+	%41 = load %ast.AstNode** %rhs
+	%42 = getelementptr %ast.AstNode* %41, i32 0, i32 10
+	%43 = load i64* %42
+	%44 = icmp ult i64 %40, %43
+	%45 = zext i1 %44 to i32
+	%46 = zext i32 %45 to i64
+	%47 = load %ast.AstNode** %lhs
+	%48 = getelementptr %ast.AstNode* %47, i32 0, i32 10
+	store i64 %46, i64* %48
+	br label %L.11
+L.15:
+	%49 = load %ast.AstNode** %lhs
+	%50 = getelementptr %ast.AstNode* %49, i32 0, i32 10
+	%51 = load i64* %50
+	%52 = load %ast.AstNode** %rhs
+	%53 = getelementptr %ast.AstNode* %52, i32 0, i32 10
+	%54 = load i64* %53
+	%55 = icmp ugt i64 %51, %54
+	%56 = zext i1 %55 to i32
+	%57 = zext i32 %56 to i64
+	%58 = load %ast.AstNode** %lhs
+	%59 = getelementptr %ast.AstNode* %58, i32 0, i32 10
+	store i64 %57, i64* %59
+	br label %L.11
+L.16:
+	%60 = load %ast.AstNode** %lhs
+	%61 = getelementptr %ast.AstNode* %60, i32 0, i32 10
+	%62 = load i64* %61
+	%63 = load %ast.AstNode** %rhs
+	%64 = getelementptr %ast.AstNode* %63, i32 0, i32 10
+	%65 = load i64* %64
+	%66 = icmp ule i64 %62, %65
+	%67 = zext i1 %66 to i32
+	%68 = zext i32 %67 to i64
+	%69 = load %ast.AstNode** %lhs
+	%70 = getelementptr %ast.AstNode* %69, i32 0, i32 10
+	store i64 %68, i64* %70
+	br label %L.11
+L.17:
+	%71 = load %ast.AstNode** %lhs
+	%72 = getelementptr %ast.AstNode* %71, i32 0, i32 10
+	%73 = load i64* %72
+	%74 = load %ast.AstNode** %rhs
+	%75 = getelementptr %ast.AstNode* %74, i32 0, i32 10
+	%76 = load i64* %75
+	%77 = icmp uge i64 %73, %76
+	%78 = zext i1 %77 to i32
+	%79 = zext i32 %78 to i64
+	%80 = load %ast.AstNode** %lhs
+	%81 = getelementptr %ast.AstNode* %80, i32 0, i32 10
+	store i64 %79, i64* %81
+	br label %L.11
+L.18:
+	%82 = load %ast.AstNode** %lhs
+	%83 = getelementptr %ast.AstNode* %82, i32 0, i32 10
+	%84 = load i64* %83
+	%85 = load %ast.AstNode** %rhs
+	%86 = getelementptr %ast.AstNode* %85, i32 0, i32 10
+	%87 = load i64* %86
+	%88 = icmp slt i64 %84, %87
+	%89 = zext i1 %88 to i32
+	%90 = zext i32 %89 to i64
+	%91 = load %ast.AstNode** %lhs
+	%92 = getelementptr %ast.AstNode* %91, i32 0, i32 10
+	store i64 %90, i64* %92
+	br label %L.11
+L.19:
+	%93 = load %ast.AstNode** %lhs
+	%94 = getelementptr %ast.AstNode* %93, i32 0, i32 10
+	%95 = load i64* %94
+	%96 = load %ast.AstNode** %rhs
+	%97 = getelementptr %ast.AstNode* %96, i32 0, i32 10
+	%98 = load i64* %97
+	%99 = icmp sgt i64 %95, %98
+	%100 = zext i1 %99 to i32
+	%101 = zext i32 %100 to i64
+	%102 = load %ast.AstNode** %lhs
+	%103 = getelementptr %ast.AstNode* %102, i32 0, i32 10
+	store i64 %101, i64* %103
+	br label %L.11
+L.20:
+	%104 = load %ast.AstNode** %lhs
+	%105 = getelementptr %ast.AstNode* %104, i32 0, i32 10
+	%106 = load i64* %105
+	%107 = load %ast.AstNode** %rhs
+	%108 = getelementptr %ast.AstNode* %107, i32 0, i32 10
+	%109 = load i64* %108
+	%110 = icmp sle i64 %106, %109
+	%111 = zext i1 %110 to i32
+	%112 = zext i32 %111 to i64
+	%113 = load %ast.AstNode** %lhs
+	%114 = getelementptr %ast.AstNode* %113, i32 0, i32 10
+	store i64 %112, i64* %114
+	br label %L.11
+L.21:
+	%115 = load %ast.AstNode** %lhs
+	%116 = getelementptr %ast.AstNode* %115, i32 0, i32 10
+	%117 = load i64* %116
+	%118 = load %ast.AstNode** %rhs
+	%119 = getelementptr %ast.AstNode* %118, i32 0, i32 10
+	%120 = load i64* %119
+	%121 = icmp sge i64 %117, %120
+	%122 = zext i1 %121 to i32
+	%123 = zext i32 %122 to i64
+	%124 = load %ast.AstNode** %lhs
+	%125 = getelementptr %ast.AstNode* %124, i32 0, i32 10
+	store i64 %123, i64* %125
+	br label %L.11
+L.10:
+	br label %L.11
+L.11:
+	%126 = load %ast.AstNode** %lhs
+	store %ast.AstNode* %126, %ast.AstNode** %tree
+	br label %L.7
+L.9:
+	%127 = load %ast.AstNode** %lhs
+	%128 = getelementptr %ast.AstNode* %127, i32 0, i32 8
+	%129 = load %type.TypeNode** %128
+	%130 = getelementptr %type.TypeNode* %129, i32 0, i32 14
+	%131 = load i8* %130
+	%132 = icmp eq i8 %131, 5
+	br i1 %132, label %L.23, label %L.22
+L.22:
+	%133 = load %ast.AstNode** %lhs
+	%134 = getelementptr %ast.AstNode* %133, i32 0, i32 8
+	%135 = load %type.TypeNode** %134
+	%136 = getelementptr %type.TypeNode* %135, i32 0, i32 14
+	%137 = load i8* %136
+	%138 = icmp eq i8 %137, 8
+	br label %L.23
+L.23:
+	%139 = phi i1 [ true, %L.9 ], [ %138, %L.22 ]
+	br i1 %139, label %L.25, label %L.24
+L.25:
+	%140 = load %ast.AstNode** %rhs
+	%141 = getelementptr %ast.AstNode* %140, i32 0, i32 0
+	%142 = load i8* %141
+	%143 = icmp eq i8 %142, 7
+	br i1 %143, label %L.27, label %L.26
+L.27:
+	%144 = load i8* %op
+	%145 = icmp eq i8 %144, 54
+	br i1 %145, label %L.29, label %L.28
+L.28:
+	%146 = load i8* %op
+	%147 = icmp eq i8 %146, 55
+	br label %L.29
+L.29:
+	%148 = phi i1 [ true, %L.27 ], [ %147, %L.28 ]
+	br i1 %148, label %L.31, label %L.30
+L.31:
+	%149 = load %target.ModelT** @target_Target
+	%150 = getelementptr %target.ModelT* %149, i32 0, i32 6
+	%151 = getelementptr %target.SizeAlign* %150, i32 0, i32 0
+	%152 = load i8* %151
+	%153 = zext i8 %152 to i32
+	%154 = load %ast.AstNode** %rhs
+	%155 = getelementptr %ast.AstNode* %154, i32 0, i32 7
+	store i32 %153, i32* %155
+	br label %L.30
+L.30:
+	br label %L.26
+L.26:
+	br label %L.24
+L.24:
+	%156 = load i8* %op
+	%157 = load %ast.AstNode** %lhs
+	%158 = load %ast.AstNode** %rhs
+	%159 = call %ast.AstNode* @ast_OpBinary(i8 %156, %ast.AstNode* %157, %ast.AstNode* %158, %type.TypeNode* null)
+	store %ast.AstNode* %159, %ast.AstNode** %tree
+	br label %L.7
+L.7:
+	%160 = load %type.TypeNode** @type_booltype
+	%161 = load %ast.AstNode** %tree
+	%162 = getelementptr %ast.AstNode* %161, i32 0, i32 8
+	store %type.TypeNode* %160, %type.TypeNode** %162
+	%163 = load %ast.AstNode** %tree
+	%164 = getelementptr %ast.AstNode* %163, i32 0, i32 7
+	store i32 1, i32* %164
+	br label %L.3
+L.3:
+	%165 = load %ast.AstNode** %tree
+	store %ast.AstNode* %165, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%166 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %166
+}
+define internal %ast.AstNode* @ast_OpFloat(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$, %type.TypeNode* %t$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%op = alloca i8
+	%lhs = alloca %ast.AstNode*
+	%rhs = alloca %ast.AstNode*
+	%t = alloca %type.TypeNode*
+	store i8 %op$, i8* %op
+	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
+	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%tree = alloca %ast.AstNode*
+	%sl = alloca i32
+	%sr = alloca i32
+	store %ast.AstNode* null, %ast.AstNode** %tree
+	%0 = load %ast.AstNode** %lhs
+	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 7
+	%2 = load i32* %1
+	store i32 %2, i32* %sl
+	%3 = load %ast.AstNode** %rhs
+	%4 = getelementptr %ast.AstNode* %3, i32 0, i32 7
+	%5 = load i32* %4
+	store i32 %5, i32* %sr
+	%6 = load %type.TypeNode** %t
+	%7 = icmp ne %type.TypeNode* %6, null
+	br i1 %7, label %L.1, label %L.2
+L.1:
+	%8 = load %type.TypeNode** %t
+	%9 = getelementptr %type.TypeNode* %8, i32 0, i32 10
+	%10 = load i32* %9
+	%11 = load i32* %sl
+	%12 = icmp ugt i32 %10, %11
+	br label %L.2
+L.2:
+	%13 = phi i1 [ false, %L.0 ], [ %12, %L.1 ]
+	br i1 %13, label %L.4, label %L.3
+L.4:
+	%14 = load %ast.AstNode** %lhs
+	%15 = load %type.TypeNode** %t
+	%16 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %14, %type.TypeNode* %15)
+	store %ast.AstNode* %16, %ast.AstNode** %lhs
+	%17 = load %type.TypeNode** %t
+	%18 = getelementptr %type.TypeNode* %17, i32 0, i32 10
+	%19 = load i32* %18
+	store i32 %19, i32* %sl
+	br label %L.3
+L.3:
+	%20 = load i32* %sl
+	%21 = load i32* %sr
+	%22 = icmp ugt i32 %20, %21
+	br i1 %22, label %L.6, label %L.7
+L.6:
+	%23 = load %ast.AstNode** %rhs
+	%24 = load %ast.AstNode** %lhs
+	%25 = getelementptr %ast.AstNode* %24, i32 0, i32 8
+	%26 = load %type.TypeNode** %25
+	%27 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %23, %type.TypeNode* %26)
+	store %ast.AstNode* %27, %ast.AstNode** %rhs
+	br label %L.5
+L.7:
+	%28 = load i32* %sr
+	%29 = load i32* %sl
+	%30 = icmp ugt i32 %28, %29
+	br i1 %30, label %L.9, label %L.8
+L.9:
+	%31 = load %ast.AstNode** %lhs
+	%32 = load %ast.AstNode** %rhs
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 8
+	%34 = load %type.TypeNode** %33
+	%35 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %31, %type.TypeNode* %34)
+	store %ast.AstNode* %35, %ast.AstNode** %lhs
+	br label %L.8
+L.8:
+	br label %L.5
+L.5:
+	%36 = load i8* %op
+	%37 = load %ast.AstNode** %lhs
+	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 8
+	%39 = load %type.TypeNode** %38
+	%40 = load %ast.AstNode** %lhs
+	%41 = load %ast.AstNode** %rhs
+	%42 = call %ast.AstNode* @ast_New2(i8 %36, %type.TypeNode* %39, %ast.AstNode* %40, %ast.AstNode* %41)
+	store %ast.AstNode* %42, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%43 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %43
+}
 define internal void @ast_Init() nounwind {
 L.0:
 	%0 = load %type.TypeNode** @type_unkntype
@@ -6340,104 +7884,107 @@ L.0:
 return:
 	ret void
 }
-@S.340 = internal constant [5 x i8] c"NULL\00"
-@S.341 = internal constant [4 x i8] c"NOP\00"
-@S.342 = internal constant [5 x i8] c"TYPE\00"
-@S.343 = internal constant [5 x i8] c"FILE\00"
-@S.344 = internal constant [8 x i8] c"PACKAGE\00"
-@S.345 = internal constant [7 x i8] c"DCLVAR\00"
-@S.346 = internal constant [7 x i8] c"DCLCON\00"
-@S.347 = internal constant [6 x i8] c"CONST\00"
-@S.348 = internal constant [7 x i8] c"FCONST\00"
-@S.349 = internal constant [7 x i8] c"STRCON\00"
-@S.355 = internal constant [6 x i8] c"CLIST\00"
-@S.354 = internal constant [7 x i8] c"CRANGE\00"
-@S.350 = internal constant [4 x i8] c"VAR\00"
-@S.357 = internal constant [7 x i8] c"OFFSET\00"
-@S.358 = internal constant [6 x i8] c"INDEX\00"
-@S.359 = internal constant [6 x i8] c"SLICE\00"
-@S.360 = internal constant [6 x i8] c"BYREF\00"
-@S.356 = internal constant [5 x i8] c"CAST\00"
-@S.351 = internal constant [5 x i8] c"CALL\00"
-@S.352 = internal constant [6 x i8] c"CALLI\00"
-@S.353 = internal constant [4 x i8] c"ASM\00"
-@S.361 = internal constant [4 x i8] c"SET\00"
-@S.362 = internal constant [5 x i8] c"COPY\00"
-@S.363 = internal constant [6 x i8] c"ACOPY\00"
-@S.364 = internal constant [4 x i8] c"AEQ\00"
-@S.365 = internal constant [4 x i8] c"ANE\00"
-@S.366 = internal constant [6 x i8] c"GETRV\00"
-@S.367 = internal constant [5 x i8] c"LOAD\00"
-@S.368 = internal constant [6 x i8] c"STORE\00"
-@S.369 = internal constant [5 x i8] c"ZEXT\00"
-@S.370 = internal constant [5 x i8] c"SEXT\00"
-@S.371 = internal constant [6 x i8] c"TRUNC\00"
-@S.372 = internal constant [5 x i8] c"REVB\00"
-@S.373 = internal constant [4 x i8] c"NEG\00"
-@S.374 = internal constant [4 x i8] c"NOT\00"
-@S.375 = internal constant [4 x i8] c"ABS\00"
-@S.376 = internal constant [5 x i8] c"FNEG\00"
-@S.377 = internal constant [6 x i8] c"CVTUF\00"
-@S.378 = internal constant [6 x i8] c"CVTIF\00"
-@S.379 = internal constant [6 x i8] c"CVTFU\00"
-@S.380 = internal constant [6 x i8] c"CVTFI\00"
-@S.381 = internal constant [4 x i8] c"CLZ\00"
-@S.382 = internal constant [6 x i8] c"CLZNZ\00"
-@S.383 = internal constant [4 x i8] c"CTZ\00"
-@S.384 = internal constant [6 x i8] c"CTZNZ\00"
-@S.385 = internal constant [4 x i8] c"POP\00"
-@S.386 = internal constant [4 x i8] c"ADD\00"
-@S.387 = internal constant [4 x i8] c"SUB\00"
-@S.388 = internal constant [4 x i8] c"MUL\00"
-@S.389 = internal constant [4 x i8] c"DIV\00"
-@S.390 = internal constant [4 x i8] c"MOD\00"
-@S.391 = internal constant [3 x i8] c"EQ\00"
-@S.392 = internal constant [3 x i8] c"NE\00"
-@S.393 = internal constant [4 x i8] c"ULT\00"
-@S.394 = internal constant [4 x i8] c"UGT\00"
-@S.395 = internal constant [4 x i8] c"ULE\00"
-@S.396 = internal constant [4 x i8] c"UGE\00"
-@S.397 = internal constant [4 x i8] c"SLT\00"
-@S.398 = internal constant [4 x i8] c"SGT\00"
-@S.399 = internal constant [4 x i8] c"SLE\00"
-@S.400 = internal constant [4 x i8] c"SGE\00"
-@S.401 = internal constant [5 x i8] c"UMIN\00"
-@S.402 = internal constant [5 x i8] c"UMAX\00"
-@S.403 = internal constant [5 x i8] c"SMIN\00"
-@S.404 = internal constant [5 x i8] c"SMAX\00"
-@S.405 = internal constant [4 x i8] c"LSL\00"
-@S.406 = internal constant [4 x i8] c"LSR\00"
-@S.407 = internal constant [4 x i8] c"ASL\00"
-@S.408 = internal constant [4 x i8] c"ASR\00"
-@S.409 = internal constant [4 x i8] c"AND\00"
-@S.410 = internal constant [3 x i8] c"OR\00"
-@S.411 = internal constant [4 x i8] c"XOR\00"
-@S.412 = internal constant [5 x i8] c"BAND\00"
-@S.413 = internal constant [4 x i8] c"BOR\00"
-@S.414 = internal constant [5 x i8] c"BNOT\00"
-@S.415 = internal constant [5 x i8] c"FADD\00"
-@S.416 = internal constant [5 x i8] c"FSUB\00"
-@S.417 = internal constant [5 x i8] c"FMUL\00"
-@S.418 = internal constant [5 x i8] c"FDIV\00"
-@S.419 = internal constant [5 x i8] c"FREM\00"
-@S.420 = internal constant [7 x i8] c"IFEXPR\00"
-@S.421 = internal constant [4 x i8] c"SEQ\00"
-@S.422 = internal constant [5 x i8] c"LOOP\00"
-@S.423 = internal constant [5 x i8] c"EXIT\00"
-@S.424 = internal constant [3 x i8] c"IF\00"
-@S.425 = internal constant [4 x i8] c"SEL\00"
-@S.426 = internal constant [3 x i8] c"IS\00"
-@S.427 = internal constant [4 x i8] c"RET\00"
-@S.428 = internal constant [5 x i8] c"PROC\00"
-@ast_OpName = internal constant [89 x [0 x i8]*] [ [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.340 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.341 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.342 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.343 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.344 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.345 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.346 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.347 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.348 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.349 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.355 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.354 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.350 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.357 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.358 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.359 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.360 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.356 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.351 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.352 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.353 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.361 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.362 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.363 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.364 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.365 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.366 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.367 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.368 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.369 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.370 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.371 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.372 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.373 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.374 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.375 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.376 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.377 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.378 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.379 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.380 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.381 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.382 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.383 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.384 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.385 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.386 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.387 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.388 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.389 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.390 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.391 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.392 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.393 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.394 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.395 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.396 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.397 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.398 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.399 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.400 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.401 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.402 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.403 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.404 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.405 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.406 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.407 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.408 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.409 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.410 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.411 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.412 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.413 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.414 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.415 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.416 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.417 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.418 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.419 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.420 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.421 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.422 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.423 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.424 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.425 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.426 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.427 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.428 )  to [0 x i8]* ) ], align 4
-@S.429 = internal constant [5 x i8] c"(sz=\00"
-@S.430 = internal constant [5 x i8] c" ln=\00"
-@S.431 = internal constant [5 x i8] c" nc=\00"
-@S.432 = internal constant [8 x i8] c" value \00"
-@S.433 = internal constant [5 x i8] c" id \00"
-@S.434 = internal constant [9 x i8] c" value \22\00"
-@S.435 = internal constant [7 x i8] c" name \00"
-@S.436 = internal constant [7 x i8] c"*NULL*\00"
+@S.343 = internal constant [5 x i8] c"NULL\00"
+@S.344 = internal constant [4 x i8] c"NOP\00"
+@S.345 = internal constant [5 x i8] c"TYPE\00"
+@S.346 = internal constant [5 x i8] c"FILE\00"
+@S.347 = internal constant [8 x i8] c"PACKAGE\00"
+@S.348 = internal constant [7 x i8] c"DCLVAR\00"
+@S.349 = internal constant [7 x i8] c"DCLCON\00"
+@S.350 = internal constant [6 x i8] c"CONST\00"
+@S.351 = internal constant [7 x i8] c"FCONST\00"
+@S.352 = internal constant [7 x i8] c"STRCON\00"
+@S.358 = internal constant [6 x i8] c"CLIST\00"
+@S.357 = internal constant [7 x i8] c"CRANGE\00"
+@S.353 = internal constant [4 x i8] c"VAR\00"
+@S.360 = internal constant [7 x i8] c"OFFSET\00"
+@S.361 = internal constant [6 x i8] c"INDEX\00"
+@S.362 = internal constant [6 x i8] c"SLICE\00"
+@S.363 = internal constant [6 x i8] c"BYREF\00"
+@S.359 = internal constant [5 x i8] c"CAST\00"
+@S.354 = internal constant [5 x i8] c"CALL\00"
+@S.355 = internal constant [6 x i8] c"CALLI\00"
+@S.356 = internal constant [4 x i8] c"ASM\00"
+@S.364 = internal constant [4 x i8] c"SET\00"
+@S.365 = internal constant [5 x i8] c"COPY\00"
+@S.366 = internal constant [6 x i8] c"ACOPY\00"
+@S.367 = internal constant [4 x i8] c"AEQ\00"
+@S.368 = internal constant [4 x i8] c"ANE\00"
+@S.369 = internal constant [6 x i8] c"GETRV\00"
+@S.370 = internal constant [5 x i8] c"LOAD\00"
+@S.371 = internal constant [6 x i8] c"STORE\00"
+@S.372 = internal constant [5 x i8] c"ZEXT\00"
+@S.373 = internal constant [5 x i8] c"SEXT\00"
+@S.374 = internal constant [6 x i8] c"TRUNC\00"
+@S.375 = internal constant [5 x i8] c"REVB\00"
+@S.376 = internal constant [4 x i8] c"NEG\00"
+@S.377 = internal constant [4 x i8] c"NOT\00"
+@S.378 = internal constant [4 x i8] c"ABS\00"
+@S.379 = internal constant [5 x i8] c"FNEG\00"
+@S.380 = internal constant [6 x i8] c"FCVTL\00"
+@S.381 = internal constant [6 x i8] c"FCVTS\00"
+@S.382 = internal constant [6 x i8] c"CVTUF\00"
+@S.383 = internal constant [6 x i8] c"CVTIF\00"
+@S.384 = internal constant [6 x i8] c"CVTFU\00"
+@S.385 = internal constant [6 x i8] c"CVTFI\00"
+@S.386 = internal constant [4 x i8] c"CLZ\00"
+@S.387 = internal constant [6 x i8] c"CLZNZ\00"
+@S.388 = internal constant [4 x i8] c"CTZ\00"
+@S.389 = internal constant [6 x i8] c"CTZNZ\00"
+@S.390 = internal constant [4 x i8] c"POP\00"
+@S.391 = internal constant [5 x i8] c"ZLEN\00"
+@S.392 = internal constant [4 x i8] c"ADD\00"
+@S.393 = internal constant [4 x i8] c"SUB\00"
+@S.394 = internal constant [4 x i8] c"MUL\00"
+@S.395 = internal constant [4 x i8] c"DIV\00"
+@S.396 = internal constant [4 x i8] c"MOD\00"
+@S.397 = internal constant [3 x i8] c"EQ\00"
+@S.398 = internal constant [3 x i8] c"NE\00"
+@S.399 = internal constant [4 x i8] c"ULT\00"
+@S.400 = internal constant [4 x i8] c"UGT\00"
+@S.401 = internal constant [4 x i8] c"ULE\00"
+@S.402 = internal constant [4 x i8] c"UGE\00"
+@S.403 = internal constant [4 x i8] c"SLT\00"
+@S.404 = internal constant [4 x i8] c"SGT\00"
+@S.405 = internal constant [4 x i8] c"SLE\00"
+@S.406 = internal constant [4 x i8] c"SGE\00"
+@S.407 = internal constant [5 x i8] c"UMIN\00"
+@S.408 = internal constant [5 x i8] c"UMAX\00"
+@S.409 = internal constant [5 x i8] c"SMIN\00"
+@S.410 = internal constant [5 x i8] c"SMAX\00"
+@S.411 = internal constant [4 x i8] c"LSL\00"
+@S.412 = internal constant [4 x i8] c"LSR\00"
+@S.413 = internal constant [4 x i8] c"ASL\00"
+@S.414 = internal constant [4 x i8] c"ASR\00"
+@S.415 = internal constant [4 x i8] c"AND\00"
+@S.416 = internal constant [3 x i8] c"OR\00"
+@S.417 = internal constant [4 x i8] c"XOR\00"
+@S.418 = internal constant [5 x i8] c"BAND\00"
+@S.419 = internal constant [4 x i8] c"BOR\00"
+@S.420 = internal constant [5 x i8] c"BNOT\00"
+@S.421 = internal constant [5 x i8] c"FADD\00"
+@S.422 = internal constant [5 x i8] c"FSUB\00"
+@S.423 = internal constant [5 x i8] c"FMUL\00"
+@S.424 = internal constant [5 x i8] c"FDIV\00"
+@S.425 = internal constant [5 x i8] c"FREM\00"
+@S.426 = internal constant [7 x i8] c"IFEXPR\00"
+@S.427 = internal constant [4 x i8] c"SEQ\00"
+@S.428 = internal constant [5 x i8] c"LOOP\00"
+@S.429 = internal constant [5 x i8] c"EXIT\00"
+@S.430 = internal constant [3 x i8] c"IF\00"
+@S.431 = internal constant [4 x i8] c"SEL\00"
+@S.432 = internal constant [3 x i8] c"IS\00"
+@S.433 = internal constant [4 x i8] c"RET\00"
+@S.434 = internal constant [5 x i8] c"PROC\00"
+@ast_OpName = internal constant [92 x [0 x i8]*] [ [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.343 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.344 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.345 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.346 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.347 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.348 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.349 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.350 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.351 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.352 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.358 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.357 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.353 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.360 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.361 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.362 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.363 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.359 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.354 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.355 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.356 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.364 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.365 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.366 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.367 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.368 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.369 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.370 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.371 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.372 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.373 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.374 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.375 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.376 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.377 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.378 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.379 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.380 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.381 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.382 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.383 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.384 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.385 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.386 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.387 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.388 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.389 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.390 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.391 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.392 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.393 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.394 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.395 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.396 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.397 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.398 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.399 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.400 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.401 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.402 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.403 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.404 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.405 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.406 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.407 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.408 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.409 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.410 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.411 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.412 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.413 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.414 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.415 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.416 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.417 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.418 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.419 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.420 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.421 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.422 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.423 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.424 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.425 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.426 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.427 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.428 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.429 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.430 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.431 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.432 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.433 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.434 )  to [0 x i8]* ) ], align 4
+@S.435 = internal constant [5 x i8] c"(sz=\00"
+@S.436 = internal constant [5 x i8] c" ln=\00"
+@S.437 = internal constant [5 x i8] c" nc=\00"
+@S.438 = internal constant [8 x i8] c" value \00"
+@S.439 = internal constant [5 x i8] c" id \00"
+@S.440 = internal constant [9 x i8] c" value \22\00"
+@S.441 = internal constant [7 x i8] c" name \00"
+@S.442 = internal constant [7 x i8] c"*NULL*\00"
 define internal void @ast_Print(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -6461,18 +8008,18 @@ L.1:
 	%8 = getelementptr %ast.AstNode* %7, i32 0, i32 0
 	%9 = load i8* %8
 	%10 = zext i8 %9 to i32
-	%11 = getelementptr [89 x [0 x i8]*]* @ast_OpName, i32 0, i32 %10
+	%11 = getelementptr [92 x [0 x i8]*]* @ast_OpName, i32 0, i32 %10
 	%12 = load [0 x i8]** %11
 	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %13)
-	%14 = getelementptr [5 x i8]* @S.429
+	%14 = getelementptr [5 x i8]* @S.435
 	%15 = bitcast [5 x i8]* %14 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %15)
 	%16 = load %ast.AstNode** %node
 	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 7
 	%18 = load i32* %17
 	call void @sys_fildes_uint(i32 2, i32 %18)
-	%19 = getelementptr [5 x i8]* @S.430
+	%19 = getelementptr [5 x i8]* @S.436
 	%20 = bitcast [5 x i8]* %19 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %20)
 	%21 = load %ast.AstNode** %node
@@ -6480,7 +8027,7 @@ L.1:
 	%23 = load i16* %22
 	%24 = zext i16 %23 to i32
 	call void @sys_fildes_uint(i32 2, i32 %24)
-	%25 = getelementptr [5 x i8]* @S.431
+	%25 = getelementptr [5 x i8]* @S.437
 	%26 = bitcast [5 x i8]* %25 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %26)
 	%27 = load %ast.AstNode** %node
@@ -6497,18 +8044,18 @@ L.1:
 		i32 13, label %L.5
 		i32 22, label %L.5
 		i32 26, label %L.5
-		i32 41, label %L.5
 		i32 43, label %L.5
+		i32 45, label %L.5
 		i32 9, label %L.6
 		i32 5, label %L.7
 		i32 12, label %L.7
-		i32 88, label %L.7
+		i32 91, label %L.7
 		i32 18, label %L.7
 		i32 3, label %L.7
 		i32 4, label %L.7
 	]
 L.5:
-	%35 = getelementptr [8 x i8]* @S.432
+	%35 = getelementptr [8 x i8]* @S.438
 	%36 = bitcast [8 x i8]* %35 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %36)
 	%37 = load %ast.AstNode** %node
@@ -6542,7 +8089,7 @@ L.12:
 L.10:
 	br label %L.4
 L.6:
-	%54 = getelementptr [5 x i8]* @S.433
+	%54 = getelementptr [5 x i8]* @S.439
 	%55 = bitcast [5 x i8]* %54 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %55)
 	%56 = load %ast.AstNode** %node
@@ -6550,44 +8097,45 @@ L.6:
 	%58 = load i64* %57
 	%59 = trunc i64 %58 to i32
 	call void @sys_fildes_uint32(i32 2, i32 %59)
-	%60 = getelementptr [9 x i8]* @S.434
+	%60 = getelementptr [9 x i8]* @S.440
 	%61 = bitcast [9 x i8]* %60 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %61)
 	%62 = load %ast.AstNode** %node
 	%63 = getelementptr %ast.AstNode* %62, i32 0, i32 9
 	%64 = load %symb.SymbNode** %63
-	%65 = bitcast %symb.SymbNode* %64 to [0 x i8]*
-	%66 = bitcast [0 x i8]* %65 to [0 x i8]*
-	%67 = load %ast.AstNode** %node
-	%68 = getelementptr %ast.AstNode* %67, i32 0, i32 8
-	%69 = load %type.TypeNode** %68
-	%70 = call i32 @type_TypeNode_Span(%type.TypeNode* %69)
-	%71 = sub i32 %70, 1
-	call void @sys_fildes_strn(i32 2, [0 x i8]* %66, i32 %71)
+	%65 = getelementptr %symb.SymbNode* %64, i32 0, i32 22
+	%66 = getelementptr [0 x i8]* %65
+	%67 = bitcast [0 x i8]* %66 to [0 x i8]*
+	%68 = load %ast.AstNode** %node
+	%69 = getelementptr %ast.AstNode* %68, i32 0, i32 8
+	%70 = load %type.TypeNode** %69
+	%71 = call i32 @type_TypeNode_Span(%type.TypeNode* %70)
+	%72 = sub i32 %71, 1
+	call void @sys_fildes_strn(i32 2, [0 x i8]* %67, i32 %72)
 	call void @sys_fildes_chr(i32 2, i8 34)
 	br label %L.4
 L.7:
-	%72 = getelementptr [7 x i8]* @S.435
-	%73 = bitcast [7 x i8]* %72 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %73)
-	%74 = load %ast.AstNode** %node
-	%75 = getelementptr %ast.AstNode* %74, i32 0, i32 9
-	%76 = load %symb.SymbNode** %75
-	store %symb.SymbNode* %76, %symb.SymbNode** %s
-	%77 = load %symb.SymbNode** %s
-	%78 = icmp ne %symb.SymbNode* %77, null
-	br i1 %78, label %L.14, label %L.15
+	%73 = getelementptr [7 x i8]* @S.441
+	%74 = bitcast [7 x i8]* %73 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %74)
+	%75 = load %ast.AstNode** %node
+	%76 = getelementptr %ast.AstNode* %75, i32 0, i32 9
+	%77 = load %symb.SymbNode** %76
+	store %symb.SymbNode* %77, %symb.SymbNode** %s
+	%78 = load %symb.SymbNode** %s
+	%79 = icmp ne %symb.SymbNode* %78, null
+	br i1 %79, label %L.14, label %L.15
 L.14:
-	%79 = load %symb.SymbNode** %s
-	%80 = getelementptr %symb.SymbNode* %79, i32 0, i32 21
-	%81 = getelementptr [0 x i8]* %80
-	%82 = bitcast [0 x i8]* %81 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %82)
+	%80 = load %symb.SymbNode** %s
+	%81 = getelementptr %symb.SymbNode* %80, i32 0, i32 22
+	%82 = getelementptr [0 x i8]* %81
+	%83 = bitcast [0 x i8]* %82 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %83)
 	br label %L.13
 L.15:
-	%83 = getelementptr [7 x i8]* @S.436
-	%84 = bitcast [7 x i8]* %83 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %84)
+	%84 = getelementptr [7 x i8]* @S.442
+	%85 = bitcast [7 x i8]* %84 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %85)
 	br label %L.13
 L.13:
 	br label %L.4
@@ -6595,13 +8143,13 @@ L.3:
 	br label %L.4
 L.4:
 	call void @sys_fildes_chr(i32 2, i8 41)
-	%85 = load %type.TypeNode** %t
-	%86 = icmp ne %type.TypeNode* %85, null
-	br i1 %86, label %L.17, label %L.16
+	%86 = load %type.TypeNode** %t
+	%87 = icmp ne %type.TypeNode* %86, null
+	br i1 %87, label %L.17, label %L.16
 L.17:
 	call void @sys_fildes_chr(i32 2, i8 58)
-	%87 = load %type.TypeNode** %t
-	call void @type_DumpT(%type.TypeNode* %87, i8 0)
+	%88 = load %type.TypeNode** %t
+	call void @type_DumpT(%type.TypeNode* %88, i8 0)
 	br label %L.16
 L.16:
 	call void @sys_fildes_nl(i32 2)
@@ -6610,7 +8158,7 @@ return:
 	ret void
 }
 @ast_blanks = internal constant [65 x i8] c"                                                                \00", align 1
-@S.438 = internal constant [8 x i8] c"*NULL*\0A\00"
+@S.444 = internal constant [8 x i8] c"*NULL*\0A\00"
 define internal void @ast_DumpSub(%ast.AstNode* %tree$, i32 %level$) nounwind {
 L.0:
 	%tree = alloca %ast.AstNode*
@@ -6625,7 +8173,7 @@ L.0:
 	%4 = icmp eq %ast.AstNode* %3, null
 	br i1 %4, label %L.2, label %L.3
 L.2:
-	%5 = getelementptr [8 x i8]* @S.438
+	%5 = getelementptr [8 x i8]* @S.444
 	%6 = bitcast [8 x i8]* %5 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %6)
 	br label %L.1
@@ -6688,7 +8236,7 @@ L.0:
 	%3 = load i8* %valu
 	%4 = zext i8 %3 to i16
 	%5 = load %symb.SymbNode** %s
-	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 9
+	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 10
 	store i16 %4, i16* %6
 	br label %return
 return:
@@ -6708,8 +8256,8 @@ L.0:
 	%2 = call %symb.SymbNode* @symb_New(i8 5, [0 x i8]* %1, i8 0)
 	store %symb.SymbNode* %2, %symb.SymbNode** %s
 	%3 = load %symb.SymbNode** %s
-	%4 = getelementptr %symb.SymbNode* %3, i32 0, i32 13
-	store i8 4, i8* %4
+	%4 = getelementptr %symb.SymbNode* %3, i32 0, i32 14
+	store i8 5, i8* %4
 	%5 = load %type.TypeNode** %rett
 	%6 = icmp ne %type.TypeNode* %5, null
 	br i1 %6, label %L.2, label %L.1
@@ -6739,7 +8287,7 @@ return:
 	%20 = load %symb.SymbNode** %rv.0
 	ret %symb.SymbNode* %20
 }
-@S.439 = internal constant [2 x i8] c"_\00"
+@S.445 = internal constant [2 x i8] c"_\00"
 define internal void @symb_AddLibFormal(%symb.SymbNode* %s$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -6749,12 +8297,12 @@ L.0:
 	%fs = alloca %symb.SymbNode*
 	%pfs = alloca %symb.SymbNode*
 	%tfs = alloca %symb.SymbNode*
-	%0 = getelementptr [2 x i8]* @S.439
+	%0 = getelementptr [2 x i8]* @S.445
 	%1 = bitcast [2 x i8]* %0 to [0 x i8]*
 	%2 = call %symb.SymbNode* @symb_New(i8 3, [0 x i8]* %1, i8 2)
 	store %symb.SymbNode* %2, %symb.SymbNode** %fs
 	%3 = load %symb.SymbNode** %fs
-	%4 = getelementptr %symb.SymbNode* %3, i32 0, i32 13
+	%4 = getelementptr %symb.SymbNode* %3, i32 0, i32 14
 	store i8 0, i8* %4
 	%5 = load %type.TypeNode** %t
 	%6 = load %symb.SymbNode** %fs
@@ -6804,43 +8352,46 @@ L.4:
 return:
 	ret void
 }
-@S.440 = internal constant [5 x i8] c"true\00"
-@S.441 = internal constant [6 x i8] c"false\00"
-@S.442 = internal constant [9 x i8] c"_boolean\00"
-@S.443 = internal constant [8 x i8] c"boolean\00"
-@S.444 = internal constant [6 x i8] c"false\00"
-@S.445 = internal constant [5 x i8] c"true\00"
-@S.446 = internal constant [6 x i8] c"_byte\00"
-@S.447 = internal constant [8 x i8] c"_memory\00"
-@S.448 = internal constant [9 x i8] c"_address\00"
-@S.449 = internal constant [6 x i8] c"_uint\00"
-@S.450 = internal constant [5 x i8] c"_int\00"
-@S.451 = internal constant [9 x i8] c"_uintptr\00"
-@S.452 = internal constant [7 x i8] c"_uint8\00"
-@S.453 = internal constant [6 x i8] c"_int8\00"
-@S.454 = internal constant [8 x i8] c"_uint16\00"
-@S.455 = internal constant [7 x i8] c"_int16\00"
-@S.456 = internal constant [8 x i8] c"_uint32\00"
-@S.457 = internal constant [7 x i8] c"_int32\00"
-@S.458 = internal constant [8 x i8] c"_uint64\00"
-@S.459 = internal constant [7 x i8] c"_int64\00"
-@S.460 = internal constant [9 x i8] c"_float32\00"
-@S.461 = internal constant [9 x i8] c"_float64\00"
-@S.462 = internal constant [9 x i8] c"_defined\00"
-@S.463 = internal constant [5 x i8] c"_abs\00"
-@S.464 = internal constant [5 x i8] c"_min\00"
-@S.465 = internal constant [5 x i8] c"_max\00"
-@S.466 = internal constant [5 x i8] c"_clz\00"
-@S.467 = internal constant [7 x i8] c"_clznz\00"
-@S.468 = internal constant [5 x i8] c"_ctz\00"
-@S.469 = internal constant [7 x i8] c"_ctznz\00"
-@S.470 = internal constant [5 x i8] c"_pop\00"
-@S.471 = internal constant [5 x i8] c"_cvt\00"
-@S.472 = internal constant [5 x i8] c"_new\00"
-@S.473 = internal constant [8 x i8] c"_delete\00"
-@S.474 = internal constant [6 x i8] c"_zero\00"
-@S.475 = internal constant [9 x i8] c"memalloc\00"
-@S.476 = internal constant [8 x i8] c"memfree\00"
+@S.446 = internal constant [5 x i8] c"true\00"
+@S.447 = internal constant [6 x i8] c"false\00"
+@S.448 = internal constant [9 x i8] c"_boolean\00"
+@S.449 = internal constant [8 x i8] c"boolean\00"
+@S.450 = internal constant [6 x i8] c"false\00"
+@S.451 = internal constant [5 x i8] c"true\00"
+@S.452 = internal constant [6 x i8] c"_byte\00"
+@S.453 = internal constant [8 x i8] c"_memory\00"
+@S.454 = internal constant [9 x i8] c"_address\00"
+@S.455 = internal constant [6 x i8] c"_uint\00"
+@S.456 = internal constant [5 x i8] c"_int\00"
+@S.457 = internal constant [9 x i8] c"_uintptr\00"
+@S.458 = internal constant [7 x i8] c"_uint8\00"
+@S.459 = internal constant [6 x i8] c"_int8\00"
+@S.460 = internal constant [8 x i8] c"_uint16\00"
+@S.461 = internal constant [7 x i8] c"_int16\00"
+@S.462 = internal constant [8 x i8] c"_uint32\00"
+@S.463 = internal constant [7 x i8] c"_int32\00"
+@S.464 = internal constant [8 x i8] c"_uint64\00"
+@S.465 = internal constant [7 x i8] c"_int64\00"
+@S.466 = internal constant [9 x i8] c"_uint128\00"
+@S.467 = internal constant [8 x i8] c"_int128\00"
+@S.468 = internal constant [9 x i8] c"_float32\00"
+@S.469 = internal constant [9 x i8] c"_float64\00"
+@S.470 = internal constant [9 x i8] c"_defined\00"
+@S.471 = internal constant [5 x i8] c"_abs\00"
+@S.472 = internal constant [5 x i8] c"_min\00"
+@S.473 = internal constant [5 x i8] c"_max\00"
+@S.474 = internal constant [5 x i8] c"_clz\00"
+@S.475 = internal constant [7 x i8] c"_clznz\00"
+@S.476 = internal constant [5 x i8] c"_ctz\00"
+@S.477 = internal constant [7 x i8] c"_ctznz\00"
+@S.478 = internal constant [5 x i8] c"_pop\00"
+@S.479 = internal constant [5 x i8] c"_cvt\00"
+@S.480 = internal constant [5 x i8] c"_new\00"
+@S.481 = internal constant [8 x i8] c"_delete\00"
+@S.482 = internal constant [6 x i8] c"_zero\00"
+@S.483 = internal constant [6 x i8] c"_zlen\00"
+@S.484 = internal constant [9 x i8] c"memalloc\00"
+@S.485 = internal constant [8 x i8] c"memfree\00"
 define internal void @symb_InitDecl() nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -6853,7 +8404,7 @@ L.0:
 	%1 = load %type.TypeNode** %t
 	%2 = getelementptr %type.TypeNode* %1, i32 0, i32 9
 	store i32 1, i32* %2
-	%3 = getelementptr [5 x i8]* @S.440
+	%3 = getelementptr [5 x i8]* @S.446
 	%4 = bitcast [5 x i8]* %3 to [0 x i8]*
 	%5 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %4, i8 2)
 	store %symb.SymbNode* %5, %symb.SymbNode** %s1
@@ -6861,9 +8412,9 @@ L.0:
 	%7 = call %ast.AstNode* @ast_Const(%type.TypeNode* %6, i64 1)
 	%8 = bitcast %ast.AstNode* %7 to %ast.AstNode*
 	%9 = load %symb.SymbNode** %s1
-	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 7
+	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 8
 	store %ast.AstNode* %8, %ast.AstNode** %10
-	%11 = getelementptr [6 x i8]* @S.441
+	%11 = getelementptr [6 x i8]* @S.447
 	%12 = bitcast [6 x i8]* %11 to [0 x i8]*
 	%13 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %12, i8 2)
 	store %symb.SymbNode* %13, %symb.SymbNode** %s0
@@ -6871,7 +8422,7 @@ L.0:
 	%15 = call %ast.AstNode* @ast_Const(%type.TypeNode* %14, i64 0)
 	%16 = bitcast %ast.AstNode* %15 to %ast.AstNode*
 	%17 = load %symb.SymbNode** %s0
-	%18 = getelementptr %symb.SymbNode* %17, i32 0, i32 7
+	%18 = getelementptr %symb.SymbNode* %17, i32 0, i32 8
 	store %ast.AstNode* %16, %ast.AstNode** %18
 	%19 = load %symb.SymbNode** %s1
 	%20 = bitcast %symb.SymbNode* %19 to %symb.SymbNode*
@@ -6885,7 +8436,7 @@ L.0:
 	store %symb.SymbNode* %24, %symb.SymbNode** %26
 	%27 = load %type.TypeNode** %t
 	call void @type_Final(%type.TypeNode* %27)
-	%28 = getelementptr [9 x i8]* @S.442
+	%28 = getelementptr [9 x i8]* @S.448
 	%29 = bitcast [9 x i8]* %28 to [0 x i8]*
 	%30 = call %symb.SymbNode* @symb_New(i8 2, [0 x i8]* %29, i8 0)
 	store %symb.SymbNode* %30, %symb.SymbNode** %s
@@ -6901,11 +8452,11 @@ L.0:
 	%38 = load %type.TypeNode** %t
 	store %type.TypeNode* %38, %type.TypeNode** @type_booltype
 	%39 = load %symb.SymbNode** %s
-	%40 = getelementptr [8 x i8]* @S.443
+	%40 = getelementptr [8 x i8]* @S.449
 	%41 = bitcast [8 x i8]* %40 to [0 x i8]*
 	%42 = call %symb.SymbNode* @symb_Clone(%symb.SymbNode* %39, [0 x i8]* %41)
 	store %symb.SymbNode* %42, %symb.SymbNode** %s
-	%43 = getelementptr [6 x i8]* @S.444
+	%43 = getelementptr [6 x i8]* @S.450
 	%44 = bitcast [6 x i8]* %43 to [0 x i8]*
 	%45 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %44, i8 0)
 	store %symb.SymbNode* %45, %symb.SymbNode** %s
@@ -6917,9 +8468,9 @@ L.0:
 	%50 = call %ast.AstNode* @ast_Const(%type.TypeNode* %49, i64 0)
 	%51 = bitcast %ast.AstNode* %50 to %ast.AstNode*
 	%52 = load %symb.SymbNode** %s
-	%53 = getelementptr %symb.SymbNode* %52, i32 0, i32 7
+	%53 = getelementptr %symb.SymbNode* %52, i32 0, i32 8
 	store %ast.AstNode* %51, %ast.AstNode** %53
-	%54 = getelementptr [5 x i8]* @S.445
+	%54 = getelementptr [5 x i8]* @S.451
 	%55 = bitcast [5 x i8]* %54 to [0 x i8]*
 	%56 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %55, i8 0)
 	store %symb.SymbNode* %56, %symb.SymbNode** %s
@@ -6931,9 +8482,9 @@ L.0:
 	%61 = call %ast.AstNode* @ast_Const(%type.TypeNode* %60, i64 1)
 	%62 = bitcast %ast.AstNode* %61 to %ast.AstNode*
 	%63 = load %symb.SymbNode** %s
-	%64 = getelementptr %symb.SymbNode* %63, i32 0, i32 7
+	%64 = getelementptr %symb.SymbNode* %63, i32 0, i32 8
 	store %ast.AstNode* %62, %ast.AstNode** %64
-	%65 = getelementptr [6 x i8]* @S.446
+	%65 = getelementptr [6 x i8]* @S.452
 	%66 = bitcast [6 x i8]* %65 to [0 x i8]*
 	%67 = load %target.ModelT** @target_Target
 	%68 = getelementptr %target.ModelT* %67, i32 0, i32 2
@@ -6941,7 +8492,7 @@ L.0:
 	%70 = zext i8 %69 to i32
 	%71 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %66, i32 %70)
 	store %type.TypeNode* %71, %type.TypeNode** @type_bytetype
-	%72 = getelementptr [8 x i8]* @S.447
+	%72 = getelementptr [8 x i8]* @S.453
 	%73 = bitcast [8 x i8]* %72 to [0 x i8]*
 	%74 = call %type.TypeNode* @type_NewBuiltin(i8 6, [0 x i8]* %73, i32 0)
 	store %type.TypeNode* %74, %type.TypeNode** @type_memtype
@@ -6960,7 +8511,7 @@ L.0:
 	%85 = load %type.TypeNode** @type_memtype
 	%86 = getelementptr %type.TypeNode* %85, i32 0, i32 25
 	store i8 1, i8* %86
-	%87 = getelementptr [9 x i8]* @S.448
+	%87 = getelementptr [9 x i8]* @S.454
 	%88 = bitcast [9 x i8]* %87 to [0 x i8]*
 	%89 = load %target.ModelT** @target_Target
 	%90 = getelementptr %target.ModelT* %89, i32 0, i32 6
@@ -6984,7 +8535,7 @@ L.0:
 	store i32 %103, i32* %105
 	%106 = load %type.TypeNode** %taddr
 	store %type.TypeNode* %106, %type.TypeNode** @type_addrtype
-	%107 = getelementptr [6 x i8]* @S.449
+	%107 = getelementptr [6 x i8]* @S.455
 	%108 = bitcast [6 x i8]* %107 to [0 x i8]*
 	%109 = load %target.ModelT** @target_Target
 	%110 = getelementptr %target.ModelT* %109, i32 0, i32 3
@@ -6992,7 +8543,7 @@ L.0:
 	%112 = zext i8 %111 to i32
 	%113 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %108, i32 %112)
 	store %type.TypeNode* %113, %type.TypeNode** @type_wordtype
-	%114 = getelementptr [5 x i8]* @S.450
+	%114 = getelementptr [5 x i8]* @S.456
 	%115 = bitcast [5 x i8]* %114 to [0 x i8]*
 	%116 = load %target.ModelT** @target_Target
 	%117 = getelementptr %target.ModelT* %116, i32 0, i32 3
@@ -7000,149 +8551,173 @@ L.0:
 	%119 = zext i8 %118 to i32
 	%120 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %115, i32 %119)
 	store %type.TypeNode* %120, %type.TypeNode** @type_swordtype
-	%121 = getelementptr [9 x i8]* @S.451
+	%121 = getelementptr [9 x i8]* @S.457
 	%122 = bitcast [9 x i8]* %121 to [0 x i8]*
 	%123 = load %target.ModelT** @target_Target
-	%124 = getelementptr %target.ModelT* %123, i32 0, i32 3
-	%125 = load i8* %124
-	%126 = zext i8 %125 to i32
-	%127 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %122, i32 %126)
-	store %type.TypeNode* %127, %type.TypeNode** @type_uintptrtype
-	%128 = getelementptr [7 x i8]* @S.452
-	%129 = bitcast [7 x i8]* %128 to [0 x i8]*
-	%130 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %129, i32 8)
-	%131 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 0
-	store %type.TypeNode* %130, %type.TypeNode** %131
-	%132 = getelementptr [6 x i8]* @S.453
-	%133 = bitcast [6 x i8]* %132 to [0 x i8]*
-	%134 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %133, i32 8)
-	%135 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 0
-	store %type.TypeNode* %134, %type.TypeNode** %135
-	%136 = getelementptr [8 x i8]* @S.454
-	%137 = bitcast [8 x i8]* %136 to [0 x i8]*
-	%138 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %137, i32 16)
-	%139 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 1
-	store %type.TypeNode* %138, %type.TypeNode** %139
-	%140 = getelementptr [7 x i8]* @S.455
-	%141 = bitcast [7 x i8]* %140 to [0 x i8]*
-	%142 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %141, i32 16)
-	%143 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 1
-	store %type.TypeNode* %142, %type.TypeNode** %143
-	%144 = getelementptr [8 x i8]* @S.456
-	%145 = bitcast [8 x i8]* %144 to [0 x i8]*
-	%146 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %145, i32 32)
-	%147 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 2
-	store %type.TypeNode* %146, %type.TypeNode** %147
-	%148 = getelementptr [7 x i8]* @S.457
-	%149 = bitcast [7 x i8]* %148 to [0 x i8]*
-	%150 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %149, i32 32)
-	%151 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 2
-	store %type.TypeNode* %150, %type.TypeNode** %151
-	%152 = getelementptr [8 x i8]* @S.458
-	%153 = bitcast [8 x i8]* %152 to [0 x i8]*
-	%154 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %153, i32 64)
-	%155 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 3
-	store %type.TypeNode* %154, %type.TypeNode** %155
-	%156 = getelementptr [7 x i8]* @S.459
-	%157 = bitcast [7 x i8]* %156 to [0 x i8]*
-	%158 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %157, i32 64)
-	%159 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 3
-	store %type.TypeNode* %158, %type.TypeNode** %159
-	%160 = getelementptr [9 x i8]* @S.460
-	%161 = bitcast [9 x i8]* %160 to [0 x i8]*
-	%162 = call %type.TypeNode* @type_NewBuiltin(i8 4, [0 x i8]* %161, i32 32)
-	%163 = getelementptr [2 x %type.TypeNode*]* @type_floattypes, i32 0, i32 0
-	store %type.TypeNode* %162, %type.TypeNode** %163
-	%164 = getelementptr [9 x i8]* @S.461
-	%165 = bitcast [9 x i8]* %164 to [0 x i8]*
-	%166 = call %type.TypeNode* @type_NewBuiltin(i8 4, [0 x i8]* %165, i32 64)
-	%167 = getelementptr [2 x %type.TypeNode*]* @type_floattypes, i32 0, i32 1
-	store %type.TypeNode* %166, %type.TypeNode** %167
-	%168 = getelementptr [2 x %type.TypeNode*]* @type_floattypes, i32 0, i32 1
-	%169 = load %type.TypeNode** %168
-	store %type.TypeNode* %169, %type.TypeNode** @type_floattype
-	%170 = call %type.TypeNode* @type_New(i8 0)
-	store %type.TypeNode* %170, %type.TypeNode** @type_unkntype
-	%171 = load %target.ModelT** @target_Target
-	%172 = getelementptr %target.ModelT* %171, i32 0, i32 2
-	%173 = load i8* %172
-	%174 = zext i8 %173 to i32
-	%175 = load %type.TypeNode** @type_unkntype
-	%176 = getelementptr %type.TypeNode* %175, i32 0, i32 9
-	store i32 %174, i32* %176
-	%177 = load %target.ModelT** @target_Target
-	%178 = getelementptr %target.ModelT* %177, i32 0, i32 2
-	%179 = load i8* %178
-	%180 = zext i8 %179 to i32
-	%181 = load %type.TypeNode** @type_unkntype
-	%182 = getelementptr %type.TypeNode* %181, i32 0, i32 11
-	store i32 %180, i32* %182
-	%183 = getelementptr [9 x i8]* @S.462
-	%184 = bitcast [9 x i8]* %183 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %184, i8 1)
-	%185 = getelementptr [5 x i8]* @S.463
-	%186 = bitcast [5 x i8]* %185 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %186, i8 2)
-	%187 = getelementptr [5 x i8]* @S.464
-	%188 = bitcast [5 x i8]* %187 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %188, i8 3)
-	%189 = getelementptr [5 x i8]* @S.465
-	%190 = bitcast [5 x i8]* %189 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %190, i8 4)
-	%191 = getelementptr [5 x i8]* @S.466
-	%192 = bitcast [5 x i8]* %191 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %192, i8 5)
-	%193 = getelementptr [7 x i8]* @S.467
-	%194 = bitcast [7 x i8]* %193 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %194, i8 6)
-	%195 = getelementptr [5 x i8]* @S.468
-	%196 = bitcast [5 x i8]* %195 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %196, i8 7)
-	%197 = getelementptr [7 x i8]* @S.469
-	%198 = bitcast [7 x i8]* %197 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %198, i8 8)
-	%199 = getelementptr [5 x i8]* @S.470
-	%200 = bitcast [5 x i8]* %199 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %200, i8 9)
-	%201 = getelementptr [5 x i8]* @S.471
-	%202 = bitcast [5 x i8]* %201 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %202, i8 10)
-	%203 = getelementptr [5 x i8]* @S.472
-	%204 = bitcast [5 x i8]* %203 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %204, i8 11)
-	%205 = getelementptr [8 x i8]* @S.473
-	%206 = bitcast [8 x i8]* %205 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %206, i8 12)
-	%207 = getelementptr [6 x i8]* @S.474
-	%208 = bitcast [6 x i8]* %207 to [0 x i8]*
-	call void @symb_NewIntrinsic([0 x i8]* %208, i8 13)
-	%209 = getelementptr [9 x i8]* @S.475
-	%210 = bitcast [9 x i8]* %209 to [0 x i8]*
-	%211 = load %type.TypeNode** %taddr
-	%212 = call %symb.SymbNode* @symb_NewLibrary([0 x i8]* %210, %type.TypeNode* %211)
-	store %symb.SymbNode* %212, %symb.SymbNode** @symb_libnew
-	%213 = load %symb.SymbNode** @symb_libnew
-	%214 = load %type.TypeNode** @type_wordtype
-	call void @symb_AddLibFormal(%symb.SymbNode* %213, %type.TypeNode* %214)
-	%215 = load %symb.SymbNode** @symb_libnew
-	%216 = load %type.TypeNode** @type_wordtype
-	call void @symb_AddLibFormal(%symb.SymbNode* %215, %type.TypeNode* %216)
-	%217 = load %symb.SymbNode** @symb_libnew
-	%218 = load %type.TypeNode** @type_wordtype
-	call void @symb_AddLibFormal(%symb.SymbNode* %217, %type.TypeNode* %218)
-	%219 = getelementptr [8 x i8]* @S.476
-	%220 = bitcast [8 x i8]* %219 to [0 x i8]*
-	%221 = call %symb.SymbNode* @symb_NewLibrary([0 x i8]* %220, %type.TypeNode* null)
-	store %symb.SymbNode* %221, %symb.SymbNode** @symb_libdel
-	%222 = load %symb.SymbNode** @symb_libdel
-	%223 = load %type.TypeNode** %taddr
-	call void @symb_AddLibFormal(%symb.SymbNode* %222, %type.TypeNode* %223)
-	%224 = load %symb.SymbNode** @symb_libdel
-	%225 = load %type.TypeNode** @type_wordtype
-	call void @symb_AddLibFormal(%symb.SymbNode* %224, %type.TypeNode* %225)
-	%226 = load %symb.SymbNode** @symb_libdel
-	%227 = load %type.TypeNode** @type_wordtype
-	call void @symb_AddLibFormal(%symb.SymbNode* %226, %type.TypeNode* %227)
+	%124 = getelementptr %target.ModelT* %123, i32 0, i32 6
+	%125 = getelementptr %target.SizeAlign* %124, i32 0, i32 0
+	%126 = load i8* %125
+	%127 = zext i8 %126 to i32
+	%128 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %122, i32 %127)
+	store %type.TypeNode* %128, %type.TypeNode** @type_uintptrtype
+	%129 = getelementptr [7 x i8]* @S.458
+	%130 = bitcast [7 x i8]* %129 to [0 x i8]*
+	%131 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %130, i32 8)
+	%132 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 0
+	store %type.TypeNode* %131, %type.TypeNode** %132
+	%133 = getelementptr [6 x i8]* @S.459
+	%134 = bitcast [6 x i8]* %133 to [0 x i8]*
+	%135 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %134, i32 8)
+	%136 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 0
+	store %type.TypeNode* %135, %type.TypeNode** %136
+	%137 = getelementptr [8 x i8]* @S.460
+	%138 = bitcast [8 x i8]* %137 to [0 x i8]*
+	%139 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %138, i32 16)
+	%140 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 1
+	store %type.TypeNode* %139, %type.TypeNode** %140
+	%141 = getelementptr [7 x i8]* @S.461
+	%142 = bitcast [7 x i8]* %141 to [0 x i8]*
+	%143 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %142, i32 16)
+	%144 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 1
+	store %type.TypeNode* %143, %type.TypeNode** %144
+	%145 = getelementptr [8 x i8]* @S.462
+	%146 = bitcast [8 x i8]* %145 to [0 x i8]*
+	%147 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %146, i32 32)
+	%148 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 2
+	store %type.TypeNode* %147, %type.TypeNode** %148
+	%149 = getelementptr [7 x i8]* @S.463
+	%150 = bitcast [7 x i8]* %149 to [0 x i8]*
+	%151 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %150, i32 32)
+	%152 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 2
+	store %type.TypeNode* %151, %type.TypeNode** %152
+	%153 = getelementptr [8 x i8]* @S.464
+	%154 = bitcast [8 x i8]* %153 to [0 x i8]*
+	%155 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %154, i32 64)
+	%156 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 3
+	store %type.TypeNode* %155, %type.TypeNode** %156
+	%157 = getelementptr [7 x i8]* @S.465
+	%158 = bitcast [7 x i8]* %157 to [0 x i8]*
+	%159 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %158, i32 64)
+	%160 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 3
+	store %type.TypeNode* %159, %type.TypeNode** %160
+	%161 = load %target.ModelT** @target_Target
+	%162 = getelementptr %target.ModelT* %161, i32 0, i32 7
+	%163 = getelementptr [6 x %target.SizeAlign]* %162, i32 0, i32 4
+	%164 = getelementptr %target.SizeAlign* %163, i32 0, i32 0
+	%165 = load i8* %164
+	%166 = icmp ne i8 %165, 0
+	br i1 %166, label %L.2, label %L.1
+L.2:
+	%167 = getelementptr [9 x i8]* @S.466
+	%168 = bitcast [9 x i8]* %167 to [0 x i8]*
+	%169 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %168, i32 128)
+	%170 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 4
+	store %type.TypeNode* %169, %type.TypeNode** %170
+	%171 = getelementptr [8 x i8]* @S.467
+	%172 = bitcast [8 x i8]* %171 to [0 x i8]*
+	%173 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %172, i32 128)
+	%174 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 4
+	store %type.TypeNode* %173, %type.TypeNode** %174
+	br label %L.1
+L.1:
+	%175 = getelementptr [9 x i8]* @S.468
+	%176 = bitcast [9 x i8]* %175 to [0 x i8]*
+	%177 = call %type.TypeNode* @type_NewBuiltin(i8 4, [0 x i8]* %176, i32 32)
+	%178 = getelementptr [2 x %type.TypeNode*]* @type_floattypes, i32 0, i32 0
+	store %type.TypeNode* %177, %type.TypeNode** %178
+	%179 = getelementptr [9 x i8]* @S.469
+	%180 = bitcast [9 x i8]* %179 to [0 x i8]*
+	%181 = call %type.TypeNode* @type_NewBuiltin(i8 4, [0 x i8]* %180, i32 64)
+	%182 = getelementptr [2 x %type.TypeNode*]* @type_floattypes, i32 0, i32 1
+	store %type.TypeNode* %181, %type.TypeNode** %182
+	%183 = getelementptr [2 x %type.TypeNode*]* @type_floattypes, i32 0, i32 1
+	%184 = load %type.TypeNode** %183
+	store %type.TypeNode* %184, %type.TypeNode** @type_floattype
+	%185 = call %type.TypeNode* @type_New(i8 0)
+	store %type.TypeNode* %185, %type.TypeNode** @type_unkntype
+	%186 = load %target.ModelT** @target_Target
+	%187 = getelementptr %target.ModelT* %186, i32 0, i32 2
+	%188 = load i8* %187
+	%189 = zext i8 %188 to i32
+	%190 = load %type.TypeNode** @type_unkntype
+	%191 = getelementptr %type.TypeNode* %190, i32 0, i32 9
+	store i32 %189, i32* %191
+	%192 = load %target.ModelT** @target_Target
+	%193 = getelementptr %target.ModelT* %192, i32 0, i32 2
+	%194 = load i8* %193
+	%195 = zext i8 %194 to i32
+	%196 = load %type.TypeNode** @type_unkntype
+	%197 = getelementptr %type.TypeNode* %196, i32 0, i32 11
+	store i32 %195, i32* %197
+	%198 = getelementptr [9 x i8]* @S.470
+	%199 = bitcast [9 x i8]* %198 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %199, i8 1)
+	%200 = getelementptr [5 x i8]* @S.471
+	%201 = bitcast [5 x i8]* %200 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %201, i8 2)
+	%202 = getelementptr [5 x i8]* @S.472
+	%203 = bitcast [5 x i8]* %202 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %203, i8 3)
+	%204 = getelementptr [5 x i8]* @S.473
+	%205 = bitcast [5 x i8]* %204 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %205, i8 4)
+	%206 = getelementptr [5 x i8]* @S.474
+	%207 = bitcast [5 x i8]* %206 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %207, i8 5)
+	%208 = getelementptr [7 x i8]* @S.475
+	%209 = bitcast [7 x i8]* %208 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %209, i8 6)
+	%210 = getelementptr [5 x i8]* @S.476
+	%211 = bitcast [5 x i8]* %210 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %211, i8 7)
+	%212 = getelementptr [7 x i8]* @S.477
+	%213 = bitcast [7 x i8]* %212 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %213, i8 8)
+	%214 = getelementptr [5 x i8]* @S.478
+	%215 = bitcast [5 x i8]* %214 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %215, i8 9)
+	%216 = getelementptr [5 x i8]* @S.479
+	%217 = bitcast [5 x i8]* %216 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %217, i8 10)
+	%218 = getelementptr [5 x i8]* @S.480
+	%219 = bitcast [5 x i8]* %218 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %219, i8 11)
+	%220 = getelementptr [8 x i8]* @S.481
+	%221 = bitcast [8 x i8]* %220 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %221, i8 12)
+	%222 = getelementptr [6 x i8]* @S.482
+	%223 = bitcast [6 x i8]* %222 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %223, i8 13)
+	%224 = getelementptr [6 x i8]* @S.483
+	%225 = bitcast [6 x i8]* %224 to [0 x i8]*
+	call void @symb_NewIntrinsic([0 x i8]* %225, i8 14)
+	%226 = getelementptr [9 x i8]* @S.484
+	%227 = bitcast [9 x i8]* %226 to [0 x i8]*
+	%228 = load %type.TypeNode** %taddr
+	%229 = call %symb.SymbNode* @symb_NewLibrary([0 x i8]* %227, %type.TypeNode* %228)
+	store %symb.SymbNode* %229, %symb.SymbNode** @symb_libnew
+	%230 = load %symb.SymbNode** @symb_libnew
+	%231 = load %type.TypeNode** @type_wordtype
+	call void @symb_AddLibFormal(%symb.SymbNode* %230, %type.TypeNode* %231)
+	%232 = load %symb.SymbNode** @symb_libnew
+	%233 = load %type.TypeNode** @type_wordtype
+	call void @symb_AddLibFormal(%symb.SymbNode* %232, %type.TypeNode* %233)
+	%234 = load %symb.SymbNode** @symb_libnew
+	%235 = load %type.TypeNode** @type_wordtype
+	call void @symb_AddLibFormal(%symb.SymbNode* %234, %type.TypeNode* %235)
+	%236 = getelementptr [8 x i8]* @S.485
+	%237 = bitcast [8 x i8]* %236 to [0 x i8]*
+	%238 = call %symb.SymbNode* @symb_NewLibrary([0 x i8]* %237, %type.TypeNode* null)
+	store %symb.SymbNode* %238, %symb.SymbNode** @symb_libdel
+	%239 = load %symb.SymbNode** @symb_libdel
+	%240 = load %type.TypeNode** %taddr
+	call void @symb_AddLibFormal(%symb.SymbNode* %239, %type.TypeNode* %240)
+	%241 = load %symb.SymbNode** @symb_libdel
+	%242 = load %type.TypeNode** @type_wordtype
+	call void @symb_AddLibFormal(%symb.SymbNode* %241, %type.TypeNode* %242)
+	%243 = load %symb.SymbNode** @symb_libdel
+	%244 = load %type.TypeNode** @type_wordtype
+	call void @symb_AddLibFormal(%symb.SymbNode* %243, %type.TypeNode* %244)
 	br label %return
 return:
 	ret void
@@ -7168,7 +8743,7 @@ L.0:
 	store %symb.SymbNode* %s$, %symb.SymbNode** %s
 	store i8 %full$, i8* %full
 	%0 = load %symb.SymbNode** %s
-	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 21
+	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 22
 	%2 = getelementptr [0 x i8]* %1
 	%3 = bitcast [0 x i8]* %2 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %3)
@@ -7182,7 +8757,7 @@ L.0:
 return:
 	ret void
 }
-@S.477 = internal constant [3 x i8] c", \00"
+@S.486 = internal constant [3 x i8] c", \00"
 define internal void @symb_DumpFormals(%symb.SymbNode* %ss$) nounwind {
 L.0:
 	%ss = alloca %symb.SymbNode*
@@ -7205,7 +8780,7 @@ L.3:
 	%8 = icmp eq %symb.SymbNode* %7, null
 	br i1 %8, label %L.4, label %L.5
 L.5:
-	%9 = getelementptr [3 x i8]* @S.477
+	%9 = getelementptr [3 x i8]* @S.486
 	%10 = bitcast [3 x i8]* %9 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %10)
 	br label %L.3
@@ -7217,40 +8792,40 @@ L.1:
 return:
 	ret void
 }
-@S.478 = internal constant [9 x i8] c": global\00"
-@S.479 = internal constant [11 x i8] c": external\00"
-@S.480 = internal constant [9 x i8] c": fixed(\00"
-@S.481 = internal constant [3 x i8] c"(\22\00"
-@S.482 = internal constant [3 x i8] c"\22)\00"
+@S.487 = internal constant [9 x i8] c": global\00"
+@S.488 = internal constant [11 x i8] c": external\00"
+@S.489 = internal constant [9 x i8] c": fixed(\00"
+@S.490 = internal constant [3 x i8] c"(\22\00"
+@S.491 = internal constant [3 x i8] c"\22)\00"
 define internal void @symb_DumpLinkage(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
 	store %symb.SymbNode* %s$, %symb.SymbNode** %s
 	%0 = load %symb.SymbNode** %s
-	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 13
+	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 14
 	%2 = load i8* %1
 	%3 = zext i8 %2 to i32
 	switch i32 %3, label %L.1 [
 		i32 3, label %L.3
-		i32 4, label %L.4
-		i32 5, label %L.5
+		i32 5, label %L.4
+		i32 6, label %L.5
 	]
 L.3:
-	%4 = getelementptr [9 x i8]* @S.478
+	%4 = getelementptr [9 x i8]* @S.487
 	%5 = bitcast [9 x i8]* %4 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %5)
 	br label %L.2
 L.4:
-	%6 = getelementptr [11 x i8]* @S.479
+	%6 = getelementptr [11 x i8]* @S.488
 	%7 = bitcast [11 x i8]* %6 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %7)
 	br label %L.2
 L.5:
-	%8 = getelementptr [9 x i8]* @S.480
+	%8 = getelementptr [9 x i8]* @S.489
 	%9 = bitcast [9 x i8]* %8 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %9)
 	%10 = load %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 8
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 9
 	%12 = load i64* %11
 	call void @sys_fildes_hex64(i32 2, i64 %12)
 	call void @sys_fildes_chr(i32 2, i8 41)
@@ -7264,17 +8839,17 @@ L.2:
 	%16 = icmp ne %symb.SymbNode* %15, null
 	br i1 %16, label %L.7, label %L.6
 L.7:
-	%17 = getelementptr [3 x i8]* @S.481
+	%17 = getelementptr [3 x i8]* @S.490
 	%18 = bitcast [3 x i8]* %17 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %18)
 	%19 = load %symb.SymbNode** %s
 	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 6
 	%21 = load %symb.SymbNode** %20
-	%22 = getelementptr %symb.SymbNode* %21, i32 0, i32 21
+	%22 = getelementptr %symb.SymbNode* %21, i32 0, i32 22
 	%23 = getelementptr [0 x i8]* %22
 	%24 = bitcast [0 x i8]* %23 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %24)
-	%25 = getelementptr [3 x i8]* @S.482
+	%25 = getelementptr [3 x i8]* @S.491
 	%26 = bitcast [3 x i8]* %25 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %26)
 	br label %L.6
@@ -7283,25 +8858,26 @@ L.6:
 return:
 	ret void
 }
-@S.483 = internal constant [10 x i8] c"constant \00"
-@S.484 = internal constant [6 x i8] c"type \00"
-@S.485 = internal constant [5 x i8] c"var \00"
-@S.486 = internal constant [7 x i8] c"field \00"
-@S.487 = internal constant [6 x i8] c"proc \00"
-@S.488 = internal constant [11 x i8] c"intrinsic \00"
-@S.489 = internal constant [3 x i8] c"()\00"
-@S.490 = internal constant [9 x i8] c"package \00"
-@S.491 = internal constant [7 x i8] c"alias \00"
-@S.492 = internal constant [5 x i8] c" to \00"
-@S.493 = internal constant [11 x i8] c"undefined \00"
-@S.494 = internal constant [11 x i8] c" (forward)\00"
+@S.492 = internal constant [10 x i8] c"constant \00"
+@S.493 = internal constant [6 x i8] c"type \00"
+@S.494 = internal constant [5 x i8] c"var \00"
+@S.495 = internal constant [7 x i8] c"field \00"
+@S.496 = internal constant [6 x i8] c"proc \00"
+@S.497 = internal constant [11 x i8] c"intrinsic \00"
+@S.498 = internal constant [3 x i8] c"()\00"
+@S.499 = internal constant [9 x i8] c"package \00"
+@S.500 = internal constant [7 x i8] c"alias \00"
+@S.501 = internal constant [5 x i8] c" to \00"
+@S.502 = internal constant [8 x i8] c"string \00"
+@S.503 = internal constant [11 x i8] c"undefined \00"
+@S.504 = internal constant [11 x i8] c" (forward)\00"
 define internal void @symb_DumpS(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
 	store %symb.SymbNode* %s$, %symb.SymbNode** %s
 	%tl = alloca %type.TypeListEntry*
 	%0 = load %symb.SymbNode** %s
-	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 12
+	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 13
 	%2 = load i8* %1
 	%3 = zext i8 %2 to i32
 	switch i32 %3, label %L.1 [
@@ -7312,9 +8888,10 @@ L.0:
 		i32 5, label %L.7
 		i32 6, label %L.8
 		i32 8, label %L.9
+		i32 9, label %L.10
 	]
 L.3:
-	%4 = getelementptr [10 x i8]* @S.483
+	%4 = getelementptr [10 x i8]* @S.492
 	%5 = bitcast [10 x i8]* %4 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %5)
 	%6 = load %symb.SymbNode** %s
@@ -7323,47 +8900,47 @@ L.3:
 	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 1
 	%9 = load %type.TypeNode** %8
 	%10 = icmp ne %type.TypeNode* %9, null
-	br i1 %10, label %L.12, label %L.13
-L.12:
+	br i1 %10, label %L.13, label %L.14
+L.13:
 	%11 = load %symb.SymbNode** %s
 	%12 = getelementptr %symb.SymbNode* %11, i32 0, i32 1
 	%13 = load %type.TypeNode** %12
 	%14 = getelementptr %type.TypeNode* %13, i32 0, i32 14
 	%15 = load i8* %14
 	%16 = icmp ule i8 %15, 5
-	br label %L.13
-L.13:
-	%17 = phi i1 [ false, %L.3 ], [ %16, %L.12 ]
-	br i1 %17, label %L.10, label %L.11
-L.10:
+	br label %L.14
+L.14:
+	%17 = phi i1 [ false, %L.3 ], [ %16, %L.13 ]
+	br i1 %17, label %L.11, label %L.12
+L.11:
 	%18 = load %symb.SymbNode** %s
-	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 7
+	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 8
 	%20 = load %ast.AstNode** %19
 	%21 = icmp ne %ast.AstNode* %20, null
-	br label %L.11
-L.11:
-	%22 = phi i1 [ false, %L.13 ], [ %21, %L.10 ]
-	br i1 %22, label %L.15, label %L.14
-L.15:
+	br label %L.12
+L.12:
+	%22 = phi i1 [ false, %L.14 ], [ %21, %L.11 ]
+	br i1 %22, label %L.16, label %L.15
+L.16:
 	call void @sys_fildes_chr(i32 2, i8 61)
 	%23 = load %symb.SymbNode** %s
-	%24 = getelementptr %symb.SymbNode* %23, i32 0, i32 7
+	%24 = getelementptr %symb.SymbNode* %23, i32 0, i32 8
 	%25 = load %ast.AstNode** %24
 	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 10
 	%27 = load i64* %26
 	call void @sys_fildes_hex64(i32 2, i64 %27)
-	br label %L.14
-L.14:
+	br label %L.15
+L.15:
 	br label %L.2
 L.4:
-	%28 = getelementptr [6 x i8]* @S.484
+	%28 = getelementptr [6 x i8]* @S.493
 	%29 = bitcast [6 x i8]* %28 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %29)
 	%30 = load %symb.SymbNode** %s
 	call void @symb_DumpST(%symb.SymbNode* %30, i8 1)
 	br label %L.2
 L.5:
-	%31 = getelementptr [5 x i8]* @S.485
+	%31 = getelementptr [5 x i8]* @S.494
 	%32 = bitcast [5 x i8]* %31 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %32)
 	%33 = load %symb.SymbNode** %s
@@ -7372,27 +8949,27 @@ L.5:
 	call void @symb_DumpLinkage(%symb.SymbNode* %34)
 	br label %L.2
 L.6:
-	%35 = getelementptr [7 x i8]* @S.486
+	%35 = getelementptr [7 x i8]* @S.495
 	%36 = bitcast [7 x i8]* %35 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %36)
 	%37 = load %symb.SymbNode** %s
-	%38 = getelementptr %symb.SymbNode* %37, i32 0, i32 21
+	%38 = getelementptr %symb.SymbNode* %37, i32 0, i32 22
 	%39 = getelementptr [0 x i8]* %38
 	%40 = bitcast [0 x i8]* %39 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %40)
 	br label %L.2
 L.7:
 	%41 = load %symb.SymbNode** %s
-	%42 = getelementptr %symb.SymbNode* %41, i32 0, i32 9
+	%42 = getelementptr %symb.SymbNode* %41, i32 0, i32 10
 	%43 = load i16* %42
 	%44 = icmp eq i16 %43, 0
-	br i1 %44, label %L.17, label %L.18
-L.17:
-	%45 = getelementptr [6 x i8]* @S.487
+	br i1 %44, label %L.18, label %L.19
+L.18:
+	%45 = getelementptr [6 x i8]* @S.496
 	%46 = bitcast [6 x i8]* %45 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %46)
 	%47 = load %symb.SymbNode** %s
-	%48 = getelementptr %symb.SymbNode* %47, i32 0, i32 21
+	%48 = getelementptr %symb.SymbNode* %47, i32 0, i32 22
 	%49 = getelementptr [0 x i8]* %48
 	%50 = bitcast [0 x i8]* %49 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %50)
@@ -7407,11 +8984,11 @@ L.17:
 	store %type.TypeListEntry* %57, %type.TypeListEntry** %tl
 	%58 = load %type.TypeListEntry** %tl
 	%59 = icmp ne %type.TypeListEntry* %58, null
-	br i1 %59, label %L.20, label %L.19
-L.20:
-	call void @sys_fildes_chr(i32 2, i8 58)
-	br label %L.21
+	br i1 %59, label %L.21, label %L.20
 L.21:
+	call void @sys_fildes_chr(i32 2, i8 58)
+	br label %L.22
+L.22:
 	%60 = load %type.TypeListEntry** %tl
 	%61 = getelementptr %type.TypeListEntry* %60, i32 0, i32 1
 	%62 = load %type.TypeNode** %61
@@ -7424,91 +9001,101 @@ L.21:
 	store %type.TypeListEntry* %67, %type.TypeListEntry** %tl
 	%68 = load %type.TypeListEntry** %tl
 	%69 = icmp eq %type.TypeListEntry* %68, null
-	br i1 %69, label %L.22, label %L.23
-L.23:
+	br i1 %69, label %L.23, label %L.24
+L.24:
 	call void @sys_fildes_chr(i32 2, i8 44)
-	br label %L.21
-L.22:
-	br label %L.19
+	br label %L.22
+L.23:
+	br label %L.20
+L.20:
+	br label %L.17
 L.19:
-	br label %L.16
-L.18:
-	%70 = getelementptr [11 x i8]* @S.488
+	%70 = getelementptr [11 x i8]* @S.497
 	%71 = bitcast [11 x i8]* %70 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %71)
 	%72 = load %symb.SymbNode** %s
-	%73 = getelementptr %symb.SymbNode* %72, i32 0, i32 21
+	%73 = getelementptr %symb.SymbNode* %72, i32 0, i32 22
 	%74 = getelementptr [0 x i8]* %73
 	%75 = bitcast [0 x i8]* %74 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %75)
-	%76 = getelementptr [3 x i8]* @S.489
+	%76 = getelementptr [3 x i8]* @S.498
 	%77 = bitcast [3 x i8]* %76 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %77)
-	br label %L.16
-L.16:
+	br label %L.17
+L.17:
 	%78 = load %symb.SymbNode** %s
 	call void @symb_DumpLinkage(%symb.SymbNode* %78)
 	br label %L.2
 L.8:
-	%79 = getelementptr [9 x i8]* @S.490
+	%79 = getelementptr [9 x i8]* @S.499
 	%80 = bitcast [9 x i8]* %79 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %80)
 	%81 = load %symb.SymbNode** %s
-	%82 = getelementptr %symb.SymbNode* %81, i32 0, i32 21
+	%82 = getelementptr %symb.SymbNode* %81, i32 0, i32 22
 	%83 = getelementptr [0 x i8]* %82
 	%84 = bitcast [0 x i8]* %83 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %84)
 	br label %L.2
 L.9:
-	%85 = getelementptr [7 x i8]* @S.491
+	%85 = getelementptr [7 x i8]* @S.500
 	%86 = bitcast [7 x i8]* %85 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %86)
 	%87 = load %symb.SymbNode** %s
-	%88 = getelementptr %symb.SymbNode* %87, i32 0, i32 21
+	%88 = getelementptr %symb.SymbNode* %87, i32 0, i32 22
 	%89 = getelementptr [0 x i8]* %88
 	%90 = bitcast [0 x i8]* %89 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %90)
-	%91 = getelementptr [5 x i8]* @S.492
+	%91 = getelementptr [5 x i8]* @S.501
 	%92 = bitcast [5 x i8]* %91 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %92)
 	%93 = load %symb.SymbNode** %s
 	%94 = getelementptr %symb.SymbNode* %93, i32 0, i32 5
 	%95 = load %symb.SymbNode** %94
-	%96 = getelementptr %symb.SymbNode* %95, i32 0, i32 21
+	%96 = getelementptr %symb.SymbNode* %95, i32 0, i32 22
 	%97 = getelementptr [0 x i8]* %96
 	%98 = bitcast [0 x i8]* %97 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %98)
 	br label %L.2
-L.1:
-	%99 = getelementptr [11 x i8]* @S.493
-	%100 = bitcast [11 x i8]* %99 to [0 x i8]*
+L.10:
+	%99 = getelementptr [8 x i8]* @S.502
+	%100 = bitcast [8 x i8]* %99 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %100)
 	%101 = load %symb.SymbNode** %s
-	%102 = getelementptr %symb.SymbNode* %101, i32 0, i32 21
+	%102 = getelementptr %symb.SymbNode* %101, i32 0, i32 22
 	%103 = getelementptr [0 x i8]* %102
 	%104 = bitcast [0 x i8]* %103 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %104)
 	br label %L.2
-L.2:
-	%105 = load %symb.SymbNode** %s
-	%106 = getelementptr %symb.SymbNode* %105, i32 0, i32 14
-	%107 = load i8* %106
-	%108 = icmp ne i8 %107, 0
-	br i1 %108, label %L.25, label %L.24
-L.25:
-	%109 = getelementptr [11 x i8]* @S.494
-	%110 = bitcast [11 x i8]* %109 to [0 x i8]*
+L.1:
+	%105 = getelementptr [11 x i8]* @S.503
+	%106 = bitcast [11 x i8]* %105 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %106)
+	%107 = load %symb.SymbNode** %s
+	%108 = getelementptr %symb.SymbNode* %107, i32 0, i32 22
+	%109 = getelementptr [0 x i8]* %108
+	%110 = bitcast [0 x i8]* %109 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %110)
-	br label %L.24
-L.24:
+	br label %L.2
+L.2:
+	%111 = load %symb.SymbNode** %s
+	%112 = getelementptr %symb.SymbNode* %111, i32 0, i32 15
+	%113 = load i8* %112
+	%114 = icmp ne i8 %113, 0
+	br i1 %114, label %L.26, label %L.25
+L.26:
+	%115 = getelementptr [11 x i8]* @S.504
+	%116 = bitcast [11 x i8]* %115 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %116)
+	br label %L.25
+L.25:
 	call void @sys_fildes_nl(i32 2)
 	br label %return
 return:
 	ret void
 }
-@S.495 = internal constant [11 x i8] c"*** level \00"
-@S.496 = internal constant [10 x i8] c" package \00"
-@S.497 = internal constant [6 x i8] c" ***\0A\00"
+@S.505 = internal constant [11 x i8] c"*** level \00"
+@S.506 = internal constant [10 x i8] c" package \00"
+@S.507 = internal constant [6 x i8] c" ***\0A\00"
 define internal void @symb_Dump(i8 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i8
@@ -7538,7 +9125,7 @@ L.1:
 	store i32 %10, i32* %i
 	br label %L.4
 L.4:
-	%11 = getelementptr [11 x i8]* @S.495
+	%11 = getelementptr [11 x i8]* @S.505
 	%12 = bitcast [11 x i8]* %11 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %12)
 	%13 = load i32* %i
@@ -7550,20 +9137,20 @@ L.4:
 	%18 = icmp ne %symb.SymbNode* %17, null
 	br i1 %18, label %L.7, label %L.6
 L.7:
-	%19 = getelementptr [10 x i8]* @S.496
+	%19 = getelementptr [10 x i8]* @S.506
 	%20 = bitcast [10 x i8]* %19 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %20)
 	%21 = load i32* %i
 	%22 = getelementptr [32 x %symb.symblist]* @symb_symbs, i32 0, i32 %21
 	%23 = getelementptr %symb.symblist* %22, i32 0, i32 2
 	%24 = load %symb.SymbNode** %23
-	%25 = getelementptr %symb.SymbNode* %24, i32 0, i32 21
+	%25 = getelementptr %symb.SymbNode* %24, i32 0, i32 22
 	%26 = getelementptr [0 x i8]* %25
 	%27 = bitcast [0 x i8]* %26 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %27)
 	br label %L.6
 L.6:
-	%28 = getelementptr [6 x i8]* @S.497
+	%28 = getelementptr [6 x i8]* @S.507
 	%29 = bitcast [6 x i8]* %28 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %29)
 	%30 = load i32* %i
@@ -7629,7 +9216,7 @@ L.0:
 	%12 = load %type.fwd** %f
 	store %type.fwd* %12, %type.fwd** @type_fwdlist
 	%13 = load %symb.SymbNode** %s
-	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 14
+	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 15
 	store i8 1, i8* %14
 	br label %return
 return:
@@ -7699,7 +9286,7 @@ L.4:
 	br label %L.1
 L.2:
 	%28 = load %symb.SymbNode** %s
-	%29 = getelementptr %symb.SymbNode* %28, i32 0, i32 14
+	%29 = getelementptr %symb.SymbNode* %28, i32 0, i32 15
 	store i8 0, i8* %29
 	br label %return
 return:
@@ -7727,7 +9314,7 @@ L.2:
 L.1:
 	%9 = load i32* %f
 	%10 = load %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 21
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 22
 	%12 = getelementptr [0 x i8]* %11
 	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
 	call void @sys_fildes_str(i32 %9, [0 x i8]* %13)
@@ -7759,7 +9346,7 @@ L.2:
 L.1:
 	%9 = load i32* %f
 	%10 = load %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 21
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 22
 	%12 = getelementptr [0 x i8]* %11
 	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
 	call void @sys_fildes_str(i32 %9, [0 x i8]* %13)
@@ -7780,7 +9367,7 @@ L.1:
 	%3 = xor i1 %2, true
 	br i1 %3, label %L.2, label %L.3
 L.3:
-	call void @lex_ErrorSub(i8 75)
+	call void @lex_ErrorSub(i8 76)
 	%4 = load %type.fwd** %f
 	%5 = getelementptr %type.fwd* %4, i32 0, i32 1
 	%6 = load %symb.SymbNode** %5
@@ -7926,15 +9513,15 @@ return:
 	%29 = load i8* %rv.0
 	ret i8 %29
 }
-@S.499 = internal constant [7 x i8] c"UKNOWN\00"
-@S.500 = internal constant [5 x i8] c"ENUM\00"
-@S.501 = internal constant [5 x i8] c"UINT\00"
-@S.502 = internal constant [5 x i8] c"SINT\00"
-@S.503 = internal constant [4 x i8] c"REF\00"
-@S.504 = internal constant [6 x i8] c"ARRAY\00"
-@S.505 = internal constant [7 x i8] c"RECORD\00"
-@S.506 = internal constant [8 x i8] c"REFPROC\00"
-@type_KindName = internal constant [9 x [0 x i8]*] [ [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.499 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.500 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.501 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.502 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.503 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.504 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.505 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.506 )  to [0 x i8]* ), [0 x i8]* null ], align 4
+@S.509 = internal constant [7 x i8] c"UKNOWN\00"
+@S.510 = internal constant [5 x i8] c"ENUM\00"
+@S.511 = internal constant [5 x i8] c"UINT\00"
+@S.512 = internal constant [5 x i8] c"SINT\00"
+@S.513 = internal constant [4 x i8] c"REF\00"
+@S.514 = internal constant [6 x i8] c"ARRAY\00"
+@S.515 = internal constant [7 x i8] c"RECORD\00"
+@S.516 = internal constant [8 x i8] c"REFPROC\00"
+@type_KindName = internal constant [9 x [0 x i8]*] [ [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.509 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.510 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.511 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.512 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.513 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.514 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.515 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.516 )  to [0 x i8]* ), [0 x i8]* null ], align 4
 define internal zeroext i8 @type_Compat(%type.TypeNode* %t1$, %type.TypeNode* %t2$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -8232,95 +9819,6 @@ return:
 	%25 = load i8* %rv.0
 	ret i8 %25
 }
-define internal %type.TypeNode* @type_TargetUintType(i32 %size$) nounwind {
-L.0:
-	%rv.0 = alloca %type.TypeNode*
-	%size = alloca i32
-	store i32 %size$, i32* %size
-	%i = alloca i8
-	store i8 0, i8* %i
-	br label %L.1
-L.1:
-	%0 = load i8* %i
-	%1 = load %target.ModelT** @target_Target
-	%2 = getelementptr %target.ModelT* %1, i32 0, i32 5
-	%3 = load i8* %2
-	%4 = icmp ult i8 %0, %3
-	br i1 %4, label %L.4, label %L.5
-L.4:
-	%5 = load i32* %size
-	%6 = load %target.ModelT** @target_Target
-	%7 = getelementptr %target.ModelT* %6, i32 0, i32 7
-	%8 = load i8* %i
-	%9 = zext i8 %8 to i32
-	%10 = getelementptr [8 x %target.SizeAlign]* %7, i32 0, i32 %9
-	%11 = getelementptr %target.SizeAlign* %10, i32 0, i32 0
-	%12 = load i8* %11
-	%13 = zext i8 %12 to i32
-	%14 = icmp ugt i32 %5, %13
-	br label %L.5
-L.5:
-	%15 = phi i1 [ false, %L.1 ], [ %14, %L.4 ]
-	%16 = xor i1 %15, true
-	br i1 %16, label %L.2, label %L.3
-L.3:
-	%17 = load i8* %i
-	%18 = add i8 %17, 1
-	store i8 %18, i8* %i
-	br label %L.1
-L.2:
-	%19 = load i8* %i
-	%20 = zext i8 %19 to i32
-	%21 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 %20
-	%22 = load %type.TypeNode** %21
-	store %type.TypeNode* %22, %type.TypeNode** %rv.0
-	br label %return
-return:
-	%23 = load %type.TypeNode** %rv.0
-	ret %type.TypeNode* %23
-}
-define internal %type.TypeNode* @type_ExactTargetUintType(i32 %bits$) nounwind {
-L.0:
-	%rv.0 = alloca %type.TypeNode*
-	%bits = alloca i32
-	store i32 %bits$, i32* %bits
-	%i = alloca i8
-	store i8 0, i8* %i
-	br label %L.1
-L.1:
-	%0 = load i8* %i
-	%1 = icmp ult i8 %0, 4
-	%2 = xor i1 %1, true
-	br i1 %2, label %L.2, label %L.3
-L.3:
-	%3 = load i32* %bits
-	%4 = load i8* %i
-	%5 = zext i8 %4 to i32
-	%6 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 %5
-	%7 = load %type.TypeNode** %6
-	%8 = getelementptr %type.TypeNode* %7, i32 0, i32 9
-	%9 = load i32* %8
-	%10 = icmp eq i32 %3, %9
-	br i1 %10, label %L.5, label %L.4
-L.5:
-	%11 = load i8* %i
-	%12 = zext i8 %11 to i32
-	%13 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 %12
-	%14 = load %type.TypeNode** %13
-	store %type.TypeNode* %14, %type.TypeNode** %rv.0
-	br label %return
-L.4:
-	%15 = load i8* %i
-	%16 = add i8 %15, 1
-	store i8 %16, i8* %i
-	br label %L.1
-L.2:
-	store %type.TypeNode* null, %type.TypeNode** %rv.0
-	br label %return
-return:
-	%17 = load %type.TypeNode** %rv.0
-	ret %type.TypeNode* %17
-}
 define internal %type.TypeNode* @type_New(i8 zeroext %kind$) nounwind {
 L.0:
 	%rv.0 = alloca %type.TypeNode*
@@ -8493,10 +9991,12 @@ return:
 }
 @type_askip1 = internal constant [4 x i8] [ i8 33, i8 4, i8 0, i8 0 ], align 1
 @type_askip2 = internal constant [5 x i8] [ i8 5, i8 33, i8 4, i8 0, i8 0 ], align 1
-define internal void @type_XLinkage(%symb.SymbNode* %s$) nounwind {
+define internal void @type_XLinkage(%symb.SymbNode* %s$, i8 zeroext %constok$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
+	%constok = alloca i8
 	store %symb.SymbNode* %s$, %symb.SymbNode** %s
+	store i8 %constok$, i8* %constok
 	%tok = alloca i8
 	%0 = load i8* @lex_Token
 	store i8 %0, i8* %tok
@@ -8511,7 +10011,7 @@ L.2:
 	br i1 %5, label %L.4, label %L.5
 L.4:
 	%6 = bitcast [4096 x i8]* @lex_StringBuf to [0 x i8]*
-	%7 = call %symb.SymbNode* @symb_New(i8 8, [0 x i8]* %6, i8 2)
+	%7 = call %symb.SymbNode* @symb_NewString([0 x i8]* %6)
 	%8 = bitcast %symb.SymbNode* %7 to %symb.SymbNode*
 	%9 = load %symb.SymbNode** %s
 	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 6
@@ -8520,24 +10020,65 @@ L.4:
 	store i8 %11, i8* %tok
 	br label %L.3
 L.5:
-	%12 = load %type.TypeNode** @type_wordtype
-	%13 = call i64 @expr_ConstValue(%type.TypeNode* %12)
-	%14 = load %symb.SymbNode** %s
-	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 8
-	store i64 %13, i64* %15
+	%12 = load i8* %constok
+	%13 = icmp ne i8 %12, 0
+	br i1 %13, label %L.7, label %L.6
+L.7:
+	%14 = load %type.TypeNode** @type_wordtype
+	%15 = call i64 @expr_ConstValue(%type.TypeNode* %14)
 	%16 = load %symb.SymbNode** %s
-	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 13
-	store i8 5, i8* %17
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 9
+	store i64 %15, i64* %17
+	%18 = load %symb.SymbNode** %s
+	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 14
+	store i8 6, i8* %19
+	br label %L.6
+L.6:
 	br label %L.3
 L.3:
-	%18 = call i8 @lex_Expect(i8 33)
+	%20 = call i8 @lex_Expect(i8 33)
 	br label %L.1
 L.1:
 	br label %return
 return:
 	ret void
 }
-@type_tattrlist = internal constant [14 x i8] [ i8 68, i8 69, i8 70, i8 71, i8 72, i8 73, i8 74, i8 75, i8 76, i8 77, i8 88, i8 87, i8 81, i8 0 ], align 1
+define internal void @type_XSection(%symb.SymbNode* %s$) nounwind {
+L.0:
+	%s = alloca %symb.SymbNode*
+	store %symb.SymbNode* %s$, %symb.SymbNode** %s
+	%tok = alloca i8
+	%0 = load i8* @lex_Token
+	store i8 %0, i8* %tok
+	%1 = load i8* %tok
+	%2 = icmp eq i8 %1, 32
+	br i1 %2, label %L.2, label %L.1
+L.2:
+	%3 = call i8 @lex_Next()
+	store i8 %3, i8* %tok
+	%4 = load i8* %tok
+	%5 = icmp eq i8 %4, 40
+	br i1 %5, label %L.4, label %L.3
+L.4:
+	%6 = bitcast [4096 x i8]* @lex_StringBuf to [0 x i8]*
+	%7 = call %symb.SymbNode* @symb_NewString([0 x i8]* %6)
+	%8 = bitcast %symb.SymbNode* %7 to %symb.SymbNode*
+	%9 = load %symb.SymbNode** %s
+	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 7
+	store %symb.SymbNode* %8, %symb.SymbNode** %10
+	%11 = call i8 @lex_Next()
+	store i8 %11, i8* %tok
+	%12 = call i8 @lex_Expect(i8 33)
+	br label %return
+L.3:
+	br label %L.1
+L.1:
+	call void @lex_Error(i8 78)
+	br label %return
+return:
+	ret void
+}
+@type_tattrlist = internal constant [14 x i8] [ i8 69, i8 70, i8 71, i8 72, i8 73, i8 74, i8 75, i8 76, i8 77, i8 78, i8 91, i8 90, i8 83, i8 0 ], align 1
 define internal %type.TypeNode* @type_Attributes(%symb.SymbNode* %s$, %type.TypeNode* %t$, [0 x i8]* %sattrlist$) nounwind {
 L.0:
 	%rv.0 = alloca %type.TypeNode*
@@ -8589,19 +10130,19 @@ L.9:
 	%20 = load i8* %atok
 	%21 = zext i8 %20 to i32
 	switch i32 %21, label %L.11 [
-		i32 68, label %L.13
-		i32 69, label %L.14
-		i32 70, label %L.15
-		i32 71, label %L.16
-		i32 72, label %L.17
-		i32 73, label %L.18
-		i32 74, label %L.19
-		i32 75, label %L.20
-		i32 76, label %L.21
-		i32 77, label %L.22
-		i32 88, label %L.23
-		i32 87, label %L.24
-		i32 81, label %L.25
+		i32 69, label %L.13
+		i32 70, label %L.14
+		i32 71, label %L.15
+		i32 72, label %L.16
+		i32 73, label %L.17
+		i32 74, label %L.18
+		i32 75, label %L.19
+		i32 76, label %L.20
+		i32 77, label %L.21
+		i32 78, label %L.22
+		i32 91, label %L.23
+		i32 90, label %L.24
+		i32 83, label %L.25
 	]
 L.13:
 	%22 = load %type.TypeNode** %t
@@ -8761,98 +10302,120 @@ L.38:
 	%104 = load i8* %atok
 	%105 = zext i8 %104 to i32
 	switch i32 %105, label %L.40 [
-		i32 82, label %L.42
-		i32 83, label %L.43
-		i32 79, label %L.44
-		i32 78, label %L.45
+		i32 84, label %L.42
+		i32 85, label %L.43
+		i32 81, label %L.44
+		i32 87, label %L.45
 		i32 80, label %L.46
+		i32 82, label %L.47
+		i32 79, label %L.48
 	]
 L.42:
 	%106 = load %symb.SymbNode** %s
-	%107 = getelementptr %symb.SymbNode* %106, i32 0, i32 13
-	store i8 6, i8* %107
+	%107 = getelementptr %symb.SymbNode* %106, i32 0, i32 14
+	store i8 7, i8* %107
 	br label %L.41
 L.43:
 	%108 = load %symb.SymbNode** %s
-	%109 = getelementptr %symb.SymbNode* %108, i32 0, i32 13
-	store i8 7, i8* %109
+	%109 = getelementptr %symb.SymbNode* %108, i32 0, i32 14
+	store i8 8, i8* %109
 	br label %L.41
 L.44:
 	%110 = load %symb.SymbNode** %s
-	%111 = getelementptr %symb.SymbNode* %110, i32 0, i32 13
-	store i8 3, i8* %111
-	%112 = load %symb.SymbNode** %s
-	call void @type_XLinkage(%symb.SymbNode* %112)
+	%111 = getelementptr %symb.SymbNode* %110, i32 0, i32 14
+	%112 = load i8* %111
+	%113 = icmp ne i8 %112, 4
+	br i1 %113, label %L.50, label %L.49
+L.50:
+	%114 = load %symb.SymbNode** %s
+	%115 = getelementptr %symb.SymbNode* %114, i32 0, i32 14
+	store i8 3, i8* %115
+	br label %L.49
+L.49:
+	%116 = load %symb.SymbNode** %s
+	call void @type_XLinkage(%symb.SymbNode* %116, i8 0)
 	br label %L.41
 L.45:
-	%113 = load %symb.SymbNode** %s
-	%114 = getelementptr %symb.SymbNode* %113, i32 0, i32 13
-	store i8 4, i8* %114
-	%115 = load %symb.SymbNode** %s
-	call void @type_XLinkage(%symb.SymbNode* %115)
+	%117 = load %symb.SymbNode** %s
+	%118 = getelementptr %symb.SymbNode* %117, i32 0, i32 14
+	store i8 4, i8* %118
+	%119 = load %symb.SymbNode** %s
+	call void @type_XLinkage(%symb.SymbNode* %119, i8 0)
 	br label %L.41
 L.46:
-	%116 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 32, [0 x i8]* %116)
-	%117 = load i8* %tok
-	%118 = icmp eq i8 %117, 32
-	br i1 %118, label %L.48, label %L.47
-L.48:
-	%119 = call i8 @lex_Next()
-	store i8 %119, i8* %tok
-	%120 = bitcast [4 x i8]* @type_askip1 to [0 x i8]*
-	%121 = call i8 @lex_Skip([0 x i8]* %120)
-	store i8 %121, i8* %tok
-	br label %L.47
+	%120 = load %symb.SymbNode** %s
+	%121 = getelementptr %symb.SymbNode* %120, i32 0, i32 14
+	store i8 5, i8* %121
+	%122 = load %symb.SymbNode** %s
+	call void @type_XLinkage(%symb.SymbNode* %122, i8 1)
+	br label %L.41
 L.47:
+	%123 = load %symb.SymbNode** %s
+	call void @type_XSection(%symb.SymbNode* %123)
+	br label %L.41
+L.48:
+	%124 = load i8* %tok
+	%125 = icmp eq i8 %124, 32
+	br i1 %125, label %L.52, label %L.51
+L.52:
+	%126 = call i8 @lex_Next()
+	store i8 %126, i8* %tok
+	%127 = load %type.TypeNode** @type_wordtype
+	%128 = call i64 @expr_ConstValue(%type.TypeNode* %127)
+	%129 = load %symb.SymbNode** %s
+	%130 = getelementptr %symb.SymbNode* %129, i32 0, i32 9
+	store i64 %128, i64* %130
+	%131 = call i8 @lex_Expect(i8 33)
+	br label %L.51
+L.51:
 	br label %L.41
 L.40:
 	br label %L.41
 L.41:
 	br label %L.37
 L.39:
-	%122 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 32, [0 x i8]* %122)
+	%132 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 32, [0 x i8]* %132)
 	br label %L.37
 L.37:
 	br label %L.34
 L.36:
-	%123 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 32, [0 x i8]* %123)
-	%124 = call i8 @lex_Next()
-	store i8 %124, i8* %tok
+	%133 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 32, [0 x i8]* %133)
+	%134 = call i8 @lex_Next()
+	store i8 %134, i8* %tok
 	br label %L.34
 L.34:
 	br label %L.6
 L.6:
 	br label %L.3
 L.5:
-	%125 = load i8* %tok
-	%126 = icmp ne i8 %125, 4
-	br i1 %126, label %L.50, label %L.49
-L.50:
+	%135 = load i8* %tok
+	%136 = icmp ne i8 %135, 4
+	br i1 %136, label %L.54, label %L.53
+L.54:
 	call void @lex_Error(i8 18)
-	%127 = bitcast [5 x i8]* @type_askip2 to [0 x i8]*
-	%128 = call i8 @lex_Skip([0 x i8]* %127)
-	store i8 %128, i8* %tok
-	br label %L.49
-L.49:
+	%137 = bitcast [5 x i8]* @type_askip2 to [0 x i8]*
+	%138 = call i8 @lex_Skip([0 x i8]* %137)
+	store i8 %138, i8* %tok
+	br label %L.53
+L.53:
 	br label %L.3
 L.3:
-	%129 = load i8* @lex_Token
-	store i8 %129, i8* %tok
-	%130 = load i8* %tok
-	%131 = icmp ne i8 %130, 5
-	br i1 %131, label %L.2, label %L.51
-L.51:
+	%139 = load i8* @lex_Token
+	store i8 %139, i8* %tok
+	%140 = load i8* %tok
+	%141 = icmp ne i8 %140, 5
+	br i1 %141, label %L.2, label %L.55
+L.55:
 	br label %L.1
 L.2:
-	%132 = load %type.TypeNode** %t
-	store %type.TypeNode* %132, %type.TypeNode** %rv.0
+	%142 = load %type.TypeNode** %t
+	store %type.TypeNode* %142, %type.TypeNode** %rv.0
 	br label %return
 return:
-	%133 = load %type.TypeNode** %rv.0
-	ret %type.TypeNode* %133
+	%143 = load %type.TypeNode** %rv.0
+	ret %type.TypeNode* %143
 }
 @type_nattrlist = internal constant [1 x i8] [ i8 0 ], align 1
 define internal %type.TypeNode* @type_TypeAttributes(%type.TypeNode* %t$) nounwind {
@@ -8869,7 +10432,25 @@ return:
 	%3 = load %type.TypeNode** %rv.0
 	ret %type.TypeNode* %3
 }
-@type_vattrlist = internal constant [4 x i8] [ i8 78, i8 79, i8 0, i8 0 ], align 1
+@type_fattrlist = internal constant [2 x i8] [ i8 79, i8 0 ], align 1
+define internal %type.TypeNode* @type_FieldAttributes(%symb.SymbNode* %s$, %type.TypeNode* %t$) nounwind {
+L.0:
+	%rv.0 = alloca %type.TypeNode*
+	%s = alloca %symb.SymbNode*
+	%t = alloca %type.TypeNode*
+	store %symb.SymbNode* %s$, %symb.SymbNode** %s
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%0 = load %symb.SymbNode** %s
+	%1 = load %type.TypeNode** %t
+	%2 = bitcast [2 x i8]* @type_fattrlist to [0 x i8]*
+	%3 = call %type.TypeNode* @type_Attributes(%symb.SymbNode* %0, %type.TypeNode* %1, [0 x i8]* %2)
+	store %type.TypeNode* %3, %type.TypeNode** %rv.0
+	br label %return
+return:
+	%4 = load %type.TypeNode** %rv.0
+	ret %type.TypeNode* %4
+}
+@type_vattrlist = internal constant [5 x i8] [ i8 80, i8 81, i8 87, i8 82, i8 0 ], align 1
 define internal %type.TypeNode* @type_VarAttributes(%symb.SymbNode* %s$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca %type.TypeNode*
@@ -8879,7 +10460,7 @@ L.0:
 	store %type.TypeNode* %t$, %type.TypeNode** %t
 	%0 = load %symb.SymbNode** %s
 	%1 = load %type.TypeNode** %t
-	%2 = bitcast [4 x i8]* @type_vattrlist to [0 x i8]*
+	%2 = bitcast [5 x i8]* @type_vattrlist to [0 x i8]*
 	%3 = call %type.TypeNode* @type_Attributes(%symb.SymbNode* %0, %type.TypeNode* %1, [0 x i8]* %2)
 	store %type.TypeNode* %3, %type.TypeNode** %rv.0
 	br label %return
@@ -8887,7 +10468,7 @@ return:
 	%4 = load %type.TypeNode** %rv.0
 	ret %type.TypeNode* %4
 }
-@type_pattrlist = internal constant [5 x i8] [ i8 78, i8 79, i8 82, i8 83, i8 0 ], align 1
+@type_pattrlist = internal constant [7 x i8] [ i8 80, i8 81, i8 87, i8 82, i8 84, i8 85, i8 0 ], align 1
 define internal void @type_ProcAttributes(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -8897,7 +10478,7 @@ L.0:
 	%1 = load %symb.SymbNode** %s
 	%2 = getelementptr %symb.SymbNode* %1, i32 0, i32 1
 	%3 = load %type.TypeNode** %2
-	%4 = bitcast [5 x i8]* @type_pattrlist to [0 x i8]*
+	%4 = bitcast [7 x i8]* @type_pattrlist to [0 x i8]*
 	%5 = call %type.TypeNode* @type_Attributes(%symb.SymbNode* %0, %type.TypeNode* %3, [0 x i8]* %4)
 	store %type.TypeNode* %5, %type.TypeNode** %t
 	%6 = load %type.TypeNode** %t
@@ -8943,7 +10524,7 @@ return:
 	%11 = load i8* %rv.0
 	ret i8 %11
 }
-@S.513 = internal constant [2 x i8] c"_\00"
+@S.524 = internal constant [2 x i8] c"_\00"
 define internal zeroext i16 @type_FieldPad(%symb.SymbNode* %prev$, i32 %pad$, i16 zeroext %index$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -8955,53 +10536,153 @@ L.0:
 	store i16 %index$, i16* %index
 	%last = alloca %symb.SymbNode*
 	%s = alloca %symb.SymbNode*
-	%0 = load %symb.SymbNode** %prev
-	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 0
-	%2 = load %symb.SymbNode** %1
-	%3 = bitcast %symb.SymbNode* %2 to %symb.SymbNode*
-	store %symb.SymbNode* %3, %symb.SymbNode** %last
+	%t = alloca %type.TypeNode*
+	%0 = load i32* %pad
+	%1 = icmp ugt i32 %0, 1
+	br i1 %1, label %L.2, label %L.3
+L.2:
+	%2 = call %type.TypeNode* @type_New(i8 6)
+	store %type.TypeNode* %2, %type.TypeNode** %t
+	%3 = load %type.TypeNode** @type_wordtype
+	%4 = bitcast %type.TypeNode* %3 to %type.TypeNode*
+	%5 = load %type.TypeNode** %t
+	%6 = getelementptr %type.TypeNode* %5, i32 0, i32 2
+	store %type.TypeNode* %4, %type.TypeNode** %6
+	%7 = load %type.TypeNode** @type_bytetype
+	%8 = bitcast %type.TypeNode* %7 to %type.TypeNode*
+	%9 = load %type.TypeNode** %t
+	%10 = getelementptr %type.TypeNode* %9, i32 0, i32 0
+	store %type.TypeNode* %8, %type.TypeNode** %10
+	%11 = load %type.TypeNode** %t
+	%12 = getelementptr %type.TypeNode* %11, i32 0, i32 7
+	store i64 0, i64* %12
+	%13 = load i32* %pad
+	%14 = zext i32 %13 to i64
+	%15 = sub i64 %14, 1
+	%16 = load %type.TypeNode** %t
+	%17 = getelementptr %type.TypeNode* %16, i32 0, i32 8
+	store i64 %15, i64* %17
+	%18 = load i32* %pad
+	%19 = load %target.ModelT** @target_Target
+	%20 = getelementptr %target.ModelT* %19, i32 0, i32 2
+	%21 = load i8* %20
+	%22 = zext i8 %21 to i32
+	%23 = mul i32 %18, %22
+	%24 = load %type.TypeNode** %t
+	%25 = getelementptr %type.TypeNode* %24, i32 0, i32 9
+	store i32 %23, i32* %25
+	%26 = load %type.TypeNode** %t
+	%27 = getelementptr %type.TypeNode* %26, i32 0, i32 9
+	%28 = load i32* %27
+	%29 = load %type.TypeNode** %t
+	%30 = getelementptr %type.TypeNode* %29, i32 0, i32 10
+	store i32 %28, i32* %30
+	%31 = load %type.TypeNode** @type_bytetype
+	%32 = getelementptr %type.TypeNode* %31, i32 0, i32 11
+	%33 = load i32* %32
+	%34 = load %type.TypeNode** %t
+	%35 = getelementptr %type.TypeNode* %34, i32 0, i32 11
+	store i32 %33, i32* %35
+	%36 = load %type.TypeNode** %t
+	%37 = getelementptr %type.TypeNode* %36, i32 0, i32 30
+	store i8 1, i8* %37
+	br label %L.1
+L.3:
+	%38 = load %type.TypeNode** @type_bytetype
+	store %type.TypeNode* %38, %type.TypeNode** %t
 	br label %L.1
 L.1:
+	%39 = getelementptr [2 x i8]* @S.524
+	%40 = bitcast [2 x i8]* %39 to [0 x i8]*
+	%41 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %40, i8 2)
+	store %symb.SymbNode* %41, %symb.SymbNode** %s
+	%42 = load %type.TypeNode** %t
+	%43 = load %symb.SymbNode** %s
+	%44 = getelementptr %symb.SymbNode* %43, i32 0, i32 1
+	store %type.TypeNode* %42, %type.TypeNode** %44
+	%45 = load i16* %index
+	%46 = load %symb.SymbNode** %s
+	%47 = getelementptr %symb.SymbNode* %46, i32 0, i32 10
+	store i16 %45, i16* %47
+	%48 = load %symb.SymbNode** %s
+	%49 = getelementptr %symb.SymbNode* %48, i32 0, i32 18
+	store i8 1, i8* %49
+	%50 = load %symb.SymbNode** %prev
+	%51 = getelementptr %symb.SymbNode* %50, i32 0, i32 0
+	%52 = load %symb.SymbNode** %51
+	%53 = load %symb.SymbNode** %s
+	%54 = getelementptr %symb.SymbNode* %53, i32 0, i32 0
+	store %symb.SymbNode* %52, %symb.SymbNode** %54
+	%55 = load %symb.SymbNode** %s
+	%56 = bitcast %symb.SymbNode* %55 to %symb.SymbNode*
+	%57 = load %symb.SymbNode** %prev
+	%58 = getelementptr %symb.SymbNode* %57, i32 0, i32 0
+	store %symb.SymbNode* %56, %symb.SymbNode** %58
+	%59 = load i16* %index
+	%60 = add i16 %59, 1
+	store i16 %60, i16* %index
+	%61 = load i16* %index
+	store i16 %61, i16* %rv.0
+	br label %return
+return:
+	%62 = load i16* %rv.0
+	ret i16 %62
+}
+@S.525 = internal constant [2 x i8] c"_\00"
+define internal zeroext i16 @type_BitFieldPad(%symb.SymbNode* %prev$, i32 %pad$, i16 zeroext %index$) nounwind {
+L.0:
+	%rv.0 = alloca i16
+	%prev = alloca %symb.SymbNode*
+	%pad = alloca i32
+	%index = alloca i16
+	store %symb.SymbNode* %prev$, %symb.SymbNode** %prev
+	store i32 %pad$, i32* %pad
+	store i16 %index$, i16* %index
+	%last = alloca %symb.SymbNode*
+	%s = alloca %symb.SymbNode*
+	%t = alloca %type.TypeNode*
+	%0 = call %type.TypeNode* @type_New(i8 2)
+	store %type.TypeNode* %0, %type.TypeNode** %t
+	%1 = load i32* %pad
+	%2 = load %type.TypeNode** %t
+	%3 = getelementptr %type.TypeNode* %2, i32 0, i32 9
+	store i32 %1, i32* %3
 	%4 = load i32* %pad
-	%5 = icmp ugt i32 %4, 0
-	%6 = xor i1 %5, true
-	br i1 %6, label %L.2, label %L.3
-L.3:
-	%7 = getelementptr [2 x i8]* @S.513
-	%8 = bitcast [2 x i8]* %7 to [0 x i8]*
-	%9 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %8, i8 2)
-	store %symb.SymbNode* %9, %symb.SymbNode** %s
-	%10 = load %type.TypeNode** @type_bytetype
-	%11 = load %symb.SymbNode** %s
-	%12 = getelementptr %symb.SymbNode* %11, i32 0, i32 1
-	store %type.TypeNode* %10, %type.TypeNode** %12
-	%13 = load i16* %index
-	%14 = load %symb.SymbNode** %s
-	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 9
-	store i16 %13, i16* %15
+	%5 = load %type.TypeNode** %t
+	%6 = getelementptr %type.TypeNode* %5, i32 0, i32 10
+	store i32 %4, i32* %6
+	%7 = load %type.TypeNode** %t
+	%8 = getelementptr %type.TypeNode* %7, i32 0, i32 30
+	store i8 1, i8* %8
+	%9 = getelementptr [2 x i8]* @S.525
+	%10 = bitcast [2 x i8]* %9 to [0 x i8]*
+	%11 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %10, i8 2)
+	store %symb.SymbNode* %11, %symb.SymbNode** %s
+	%12 = load %type.TypeNode** %t
+	%13 = load %symb.SymbNode** %s
+	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 1
+	store %type.TypeNode* %12, %type.TypeNode** %14
+	%15 = load i16* %index
 	%16 = load %symb.SymbNode** %s
-	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 17
-	store i8 1, i8* %17
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 10
+	store i16 %15, i16* %17
 	%18 = load %symb.SymbNode** %s
-	%19 = bitcast %symb.SymbNode* %18 to %symb.SymbNode*
+	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 18
+	store i8 1, i8* %19
 	%20 = load %symb.SymbNode** %prev
 	%21 = getelementptr %symb.SymbNode* %20, i32 0, i32 0
-	store %symb.SymbNode* %19, %symb.SymbNode** %21
-	%22 = load %symb.SymbNode** %s
-	store %symb.SymbNode* %22, %symb.SymbNode** %prev
-	%23 = load i16* %index
-	%24 = add i16 %23, 1
-	store i16 %24, i16* %index
-	%25 = load i32* %pad
-	%26 = sub i32 %25, 1
-	store i32 %26, i32* %pad
-	br label %L.1
-L.2:
-	%27 = load %symb.SymbNode** %last
-	%28 = bitcast %symb.SymbNode* %27 to %symb.SymbNode*
-	%29 = load %symb.SymbNode** %prev
-	%30 = getelementptr %symb.SymbNode* %29, i32 0, i32 0
-	store %symb.SymbNode* %28, %symb.SymbNode** %30
+	%22 = load %symb.SymbNode** %21
+	%23 = load %symb.SymbNode** %s
+	%24 = getelementptr %symb.SymbNode* %23, i32 0, i32 0
+	store %symb.SymbNode* %22, %symb.SymbNode** %24
+	%25 = load %symb.SymbNode** %s
+	%26 = bitcast %symb.SymbNode* %25 to %symb.SymbNode*
+	%27 = load %symb.SymbNode** %prev
+	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 0
+	store %symb.SymbNode* %26, %symb.SymbNode** %28
+	%29 = load i16* %index
+	%30 = add i16 %29, 1
+	store i16 %30, i16* %index
 	%31 = load i16* %index
 	store i16 %31, i16* %rv.0
 	br label %return
@@ -9056,7 +10737,43 @@ return:
 	%21 = load %type.TypeNode** %rv.0
 	ret %type.TypeNode* %21
 }
-@S.514 = internal constant [23 x i8] c"Array of aligned items\00"
+@S.527 = internal constant [6 x i8] c"UTYPE\00"
+@S.528 = internal constant [5 x i8] c"ENUM\00"
+@S.529 = internal constant [5 x i8] c"UINT\00"
+@S.530 = internal constant [5 x i8] c"SINT\00"
+@S.531 = internal constant [6 x i8] c"FLOAT\00"
+@S.532 = internal constant [4 x i8] c"REF\00"
+@S.533 = internal constant [6 x i8] c"ARRAY\00"
+@S.534 = internal constant [7 x i8] c"RECORD\00"
+@S.535 = internal constant [8 x i8] c"REFPROC\00"
+@type_DumpType_tname = internal constant [9 x [0 x i8]*] [ [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.527 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.528 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.529 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8]* @S.530 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.531 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.532 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8]* @S.533 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8]* @S.534 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8]* @S.535 )  to [0 x i8]* ) ], align 4
+define internal void @type_DumpType([0 x i8]* %msg$, %type.TypeNode* %t$) nounwind {
+L.0:
+	%msg = alloca [0 x i8]*
+	%t = alloca %type.TypeNode*
+	store [0 x i8]* %msg$, [0 x i8]** %msg
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%0 = load [0 x i8]** %msg
+	%1 = bitcast [0 x i8]* %0 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %1)
+	%2 = load %type.TypeNode** %t
+	%3 = getelementptr %type.TypeNode* %2, i32 0, i32 14
+	%4 = load i8* %3
+	%5 = zext i8 %4 to i32
+	%6 = getelementptr [9 x [0 x i8]*]* @type_DumpType_tname, i32 0, i32 %5
+	%7 = load [0 x i8]** %6
+	%8 = bitcast [0 x i8]* %7 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %8)
+	call void @sys_fildes_nl(i32 2)
+	%9 = load %type.TypeNode** %t
+	call void @type_DumpT(%type.TypeNode* %9, i8 1)
+	call void @sys_fildes_nl(i32 2)
+	br label %return
+return:
+	ret void
+}
+@S.536 = internal constant [20 x i8] c"Field align is zero\00"
+@S.537 = internal constant [23 x i8] c"Array of aligned items\00"
 define internal void @type_Final(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -9069,6 +10786,8 @@ L.0:
 	%index = alloca i16
 	%offs = alloca i32
 	%mod = alloca i32
+	%falign = alloca i32
+	%atoffs = alloca i32
 	%0 = load %type.TypeNode** %t
 	%1 = icmp ne %type.TypeNode* %0, null
 	br i1 %1, label %L.1, label %L.2
@@ -9163,613 +10882,850 @@ L.13:
 	%57 = load i8* %56
 	%58 = zext i8 %57 to i32
 	switch i32 %58, label %L.17 [
-		i32 1, label %L.19
-		i32 2, label %L.19
-		i32 3, label %L.20
-		i32 5, label %L.21
-		i32 8, label %L.22
-		i32 7, label %L.23
-		i32 6, label %L.24
+		i32 0, label %L.19
+		i32 1, label %L.20
+		i32 2, label %L.20
+		i32 3, label %L.21
+		i32 4, label %L.22
+		i32 5, label %L.23
+		i32 8, label %L.24
+		i32 7, label %L.25
+		i32 6, label %L.26
 	]
 L.19:
 	%59 = load %type.TypeNode** %t
-	%60 = getelementptr %type.TypeNode* %59, i32 0, i32 9
+	%60 = getelementptr %type.TypeNode* %59, i32 0, i32 11
 	%61 = load i32* %60
-	%62 = icmp eq i32 %61, 0
-	br i1 %62, label %L.26, label %L.25
-L.26:
-	%63 = load %type.TypeNode** %t
-	%64 = getelementptr %type.TypeNode* %63, i32 0, i32 8
-	%65 = load i64* %64
-	%66 = call i8 @type_bitsize(i64 %65)
-	%67 = zext i8 %66 to i32
-	%68 = load %type.TypeNode** %t
-	%69 = getelementptr %type.TypeNode* %68, i32 0, i32 9
-	store i32 %67, i32* %69
-	br label %L.25
-L.25:
-	%70 = load %type.TypeNode** %t
-	%71 = getelementptr %type.TypeNode* %70, i32 0, i32 10
-	%72 = load i32* %71
-	%73 = icmp eq i32 %72, 0
-	br i1 %73, label %L.28, label %L.27
-L.28:
-	%74 = load %type.TypeNode** %t
-	%75 = getelementptr %type.TypeNode* %74, i32 0, i32 9
-	%76 = load i32* %75
-	%77 = call i32 @target_isize(i32 %76)
-	%78 = load %type.TypeNode** %t
-	%79 = getelementptr %type.TypeNode* %78, i32 0, i32 10
-	store i32 %77, i32* %79
-	br label %L.27
-L.27:
-	%80 = load %type.TypeNode** %t
-	%81 = getelementptr %type.TypeNode* %80, i32 0, i32 9
-	%82 = load i32* %81
-	%83 = call i32 @target_ialign(i32 %82)
-	store i32 %83, i32* %align
+	store i32 %61, i32* %align
 	br label %L.18
 L.20:
-	%84 = load %type.TypeNode** %t
-	%85 = getelementptr %type.TypeNode* %84, i32 0, i32 9
-	%86 = load i32* %85
-	%87 = icmp eq i32 %86, 0
-	br i1 %87, label %L.30, label %L.29
+	%62 = load %type.TypeNode** %t
+	%63 = getelementptr %type.TypeNode* %62, i32 0, i32 9
+	%64 = load i32* %63
+	%65 = icmp eq i32 %64, 0
+	br i1 %65, label %L.28, label %L.27
+L.28:
+	%66 = load %type.TypeNode** %t
+	%67 = getelementptr %type.TypeNode* %66, i32 0, i32 8
+	%68 = load i64* %67
+	%69 = call i8 @type_bitsize(i64 %68)
+	%70 = zext i8 %69 to i32
+	%71 = load %type.TypeNode** %t
+	%72 = getelementptr %type.TypeNode* %71, i32 0, i32 9
+	store i32 %70, i32* %72
+	br label %L.27
+L.27:
+	%73 = load %type.TypeNode** %t
+	%74 = getelementptr %type.TypeNode* %73, i32 0, i32 10
+	%75 = load i32* %74
+	%76 = icmp eq i32 %75, 0
+	br i1 %76, label %L.30, label %L.29
 L.30:
-	%88 = load %type.TypeNode** %t
-	%89 = getelementptr %type.TypeNode* %88, i32 0, i32 7
-	%90 = load i64* %89
-	%91 = xor i64 %90, -1
-	%92 = call i8 @type_bitsize(i64 %91)
-	%93 = zext i8 %92 to i32
-	store i32 %93, i32* %tlo
-	%94 = load %type.TypeNode** %t
-	%95 = getelementptr %type.TypeNode* %94, i32 0, i32 8
-	%96 = load i64* %95
-	%97 = call i8 @type_bitsize(i64 %96)
-	%98 = zext i8 %97 to i32
-	store i32 %98, i32* %thi
-	%99 = load i32* %tlo
-	%100 = load i32* %thi
-	%101 = icmp ugt i32 %99, %100
-	br i1 %101, label %L.32, label %L.33
-L.32:
-	%102 = load i32* %tlo
-	%103 = add i32 %102, 1
-	%104 = load %type.TypeNode** %t
-	%105 = getelementptr %type.TypeNode* %104, i32 0, i32 9
-	store i32 %103, i32* %105
-	br label %L.31
-L.33:
-	%106 = load i32* %thi
-	%107 = add i32 %106, 1
-	%108 = load %type.TypeNode** %t
-	%109 = getelementptr %type.TypeNode* %108, i32 0, i32 9
-	store i32 %107, i32* %109
-	br label %L.31
-L.31:
+	%77 = load %type.TypeNode** %t
+	%78 = getelementptr %type.TypeNode* %77, i32 0, i32 9
+	%79 = load i32* %78
+	%80 = call i32 @target_isize(i32 %79)
+	%81 = load %type.TypeNode** %t
+	%82 = getelementptr %type.TypeNode* %81, i32 0, i32 10
+	store i32 %80, i32* %82
 	br label %L.29
 L.29:
-	%110 = load %type.TypeNode** %t
-	%111 = getelementptr %type.TypeNode* %110, i32 0, i32 10
-	%112 = load i32* %111
-	%113 = icmp eq i32 %112, 0
-	br i1 %113, label %L.35, label %L.34
-L.35:
-	%114 = load %type.TypeNode** %t
-	%115 = getelementptr %type.TypeNode* %114, i32 0, i32 9
-	%116 = load i32* %115
-	%117 = call i32 @target_isize(i32 %116)
-	%118 = load %type.TypeNode** %t
-	%119 = getelementptr %type.TypeNode* %118, i32 0, i32 10
-	store i32 %117, i32* %119
-	br label %L.34
-L.34:
-	%120 = load %type.TypeNode** %t
-	%121 = getelementptr %type.TypeNode* %120, i32 0, i32 9
-	%122 = load i32* %121
-	%123 = call i32 @target_ialign(i32 %122)
-	store i32 %123, i32* %align
+	%83 = load %type.TypeNode** %t
+	%84 = getelementptr %type.TypeNode* %83, i32 0, i32 9
+	%85 = load i32* %84
+	%86 = call i32 @target_ialign(i32 %85)
+	store i32 %86, i32* %align
 	br label %L.18
 L.21:
-	%124 = load %type.TypeNode** %t
-	%125 = getelementptr %type.TypeNode* %124, i32 0, i32 0
-	%126 = load %type.TypeNode** %125
-	%127 = icmp ne %type.TypeNode* %126, null
-	br i1 %127, label %L.36, label %L.37
-L.36:
-	%128 = load %type.TypeNode** %t
-	%129 = getelementptr %type.TypeNode* %128, i32 0, i32 0
-	%130 = load %type.TypeNode** %129
-	%131 = getelementptr %type.TypeNode* %130, i32 0, i32 3
-	%132 = load %symb.SymbNode** %131
-	%133 = icmp eq %symb.SymbNode* %132, null
-	br label %L.37
+	%87 = load %type.TypeNode** %t
+	%88 = getelementptr %type.TypeNode* %87, i32 0, i32 9
+	%89 = load i32* %88
+	%90 = icmp eq i32 %89, 0
+	br i1 %90, label %L.32, label %L.31
+L.32:
+	%91 = load %type.TypeNode** %t
+	%92 = getelementptr %type.TypeNode* %91, i32 0, i32 7
+	%93 = load i64* %92
+	%94 = xor i64 %93, -1
+	%95 = call i8 @type_bitsize(i64 %94)
+	%96 = zext i8 %95 to i32
+	store i32 %96, i32* %tlo
+	%97 = load %type.TypeNode** %t
+	%98 = getelementptr %type.TypeNode* %97, i32 0, i32 8
+	%99 = load i64* %98
+	%100 = call i8 @type_bitsize(i64 %99)
+	%101 = zext i8 %100 to i32
+	store i32 %101, i32* %thi
+	%102 = load i32* %tlo
+	%103 = load i32* %thi
+	%104 = icmp ugt i32 %102, %103
+	br i1 %104, label %L.34, label %L.35
+L.34:
+	%105 = load i32* %tlo
+	%106 = add i32 %105, 1
+	%107 = load %type.TypeNode** %t
+	%108 = getelementptr %type.TypeNode* %107, i32 0, i32 9
+	store i32 %106, i32* %108
+	br label %L.33
+L.35:
+	%109 = load i32* %thi
+	%110 = add i32 %109, 1
+	%111 = load %type.TypeNode** %t
+	%112 = getelementptr %type.TypeNode* %111, i32 0, i32 9
+	store i32 %110, i32* %112
+	br label %L.33
+L.33:
+	br label %L.31
+L.31:
+	%113 = load %type.TypeNode** %t
+	%114 = getelementptr %type.TypeNode* %113, i32 0, i32 10
+	%115 = load i32* %114
+	%116 = icmp eq i32 %115, 0
+	br i1 %116, label %L.37, label %L.36
 L.37:
-	%134 = phi i1 [ false, %L.21 ], [ %133, %L.36 ]
-	br i1 %134, label %L.39, label %L.38
-L.39:
-	%135 = load %type.TypeNode** %t
-	%136 = getelementptr %type.TypeNode* %135, i32 0, i32 0
-	%137 = load %type.TypeNode** %136
-	%138 = bitcast %type.TypeNode* %137 to %type.TypeNode*
-	call void @type_Final(%type.TypeNode* %138)
-	br label %L.38
-L.38:
-	%139 = load %target.ModelT** @target_Target
-	%140 = getelementptr %target.ModelT* %139, i32 0, i32 6
-	%141 = getelementptr %target.SizeAlign* %140, i32 0, i32 0
-	%142 = load i8* %141
-	%143 = zext i8 %142 to i32
-	%144 = load %type.TypeNode** %t
-	%145 = getelementptr %type.TypeNode* %144, i32 0, i32 9
-	store i32 %143, i32* %145
-	%146 = load %target.ModelT** @target_Target
-	%147 = getelementptr %target.ModelT* %146, i32 0, i32 6
-	%148 = getelementptr %target.SizeAlign* %147, i32 0, i32 0
-	%149 = load i8* %148
-	%150 = zext i8 %149 to i32
-	%151 = load %type.TypeNode** %t
-	%152 = getelementptr %type.TypeNode* %151, i32 0, i32 10
-	store i32 %150, i32* %152
-	%153 = load %target.ModelT** @target_Target
-	%154 = getelementptr %target.ModelT* %153, i32 0, i32 6
-	%155 = getelementptr %target.SizeAlign* %154, i32 0, i32 1
-	%156 = load i8* %155
-	%157 = zext i8 %156 to i32
-	store i32 %157, i32* %align
+	%117 = load %type.TypeNode** %t
+	%118 = getelementptr %type.TypeNode* %117, i32 0, i32 9
+	%119 = load i32* %118
+	%120 = call i32 @target_isize(i32 %119)
+	%121 = load %type.TypeNode** %t
+	%122 = getelementptr %type.TypeNode* %121, i32 0, i32 10
+	store i32 %120, i32* %122
+	br label %L.36
+L.36:
+	%123 = load %type.TypeNode** %t
+	%124 = getelementptr %type.TypeNode* %123, i32 0, i32 9
+	%125 = load i32* %124
+	%126 = call i32 @target_ialign(i32 %125)
+	store i32 %126, i32* %align
 	br label %L.18
 L.22:
+	%127 = load %type.TypeNode** %t
+	%128 = getelementptr %type.TypeNode* %127, i32 0, i32 9
+	%129 = load i32* %128
+	%130 = load %type.TypeNode** %t
+	%131 = getelementptr %type.TypeNode* %130, i32 0, i32 10
+	store i32 %129, i32* %131
+	%132 = load %type.TypeNode** %t
+	%133 = getelementptr %type.TypeNode* %132, i32 0, i32 9
+	%134 = load i32* %133
+	%135 = call i32 @target_ialign(i32 %134)
+	store i32 %135, i32* %align
+	br label %L.18
+L.23:
+	%136 = load %type.TypeNode** %t
+	%137 = getelementptr %type.TypeNode* %136, i32 0, i32 0
+	%138 = load %type.TypeNode** %137
+	%139 = icmp ne %type.TypeNode* %138, null
+	br i1 %139, label %L.38, label %L.39
+L.38:
+	%140 = load %type.TypeNode** %t
+	%141 = getelementptr %type.TypeNode* %140, i32 0, i32 0
+	%142 = load %type.TypeNode** %141
+	%143 = getelementptr %type.TypeNode* %142, i32 0, i32 3
+	%144 = load %symb.SymbNode** %143
+	%145 = icmp eq %symb.SymbNode* %144, null
+	br label %L.39
+L.39:
+	%146 = phi i1 [ false, %L.23 ], [ %145, %L.38 ]
+	br i1 %146, label %L.41, label %L.40
+L.41:
+	%147 = load %type.TypeNode** %t
+	%148 = getelementptr %type.TypeNode* %147, i32 0, i32 0
+	%149 = load %type.TypeNode** %148
+	%150 = bitcast %type.TypeNode* %149 to %type.TypeNode*
+	call void @type_Final(%type.TypeNode* %150)
+	br label %L.40
+L.40:
+	%151 = load %target.ModelT** @target_Target
+	%152 = getelementptr %target.ModelT* %151, i32 0, i32 6
+	%153 = getelementptr %target.SizeAlign* %152, i32 0, i32 0
+	%154 = load i8* %153
+	%155 = zext i8 %154 to i32
+	%156 = load %type.TypeNode** %t
+	%157 = getelementptr %type.TypeNode* %156, i32 0, i32 9
+	store i32 %155, i32* %157
 	%158 = load %target.ModelT** @target_Target
 	%159 = getelementptr %target.ModelT* %158, i32 0, i32 6
 	%160 = getelementptr %target.SizeAlign* %159, i32 0, i32 0
 	%161 = load i8* %160
 	%162 = zext i8 %161 to i32
 	%163 = load %type.TypeNode** %t
-	%164 = getelementptr %type.TypeNode* %163, i32 0, i32 9
+	%164 = getelementptr %type.TypeNode* %163, i32 0, i32 10
 	store i32 %162, i32* %164
 	%165 = load %target.ModelT** @target_Target
 	%166 = getelementptr %target.ModelT* %165, i32 0, i32 6
-	%167 = getelementptr %target.SizeAlign* %166, i32 0, i32 0
+	%167 = getelementptr %target.SizeAlign* %166, i32 0, i32 1
 	%168 = load i8* %167
 	%169 = zext i8 %168 to i32
-	%170 = load %type.TypeNode** %t
-	%171 = getelementptr %type.TypeNode* %170, i32 0, i32 10
-	store i32 %169, i32* %171
-	%172 = load %target.ModelT** @target_Target
-	%173 = getelementptr %target.ModelT* %172, i32 0, i32 6
-	%174 = getelementptr %target.SizeAlign* %173, i32 0, i32 1
-	%175 = load i8* %174
-	%176 = zext i8 %175 to i32
-	store i32 %176, i32* %align
+	store i32 %169, i32* %align
 	br label %L.18
-L.23:
+L.24:
+	%170 = load %target.ModelT** @target_Target
+	%171 = getelementptr %target.ModelT* %170, i32 0, i32 6
+	%172 = getelementptr %target.SizeAlign* %171, i32 0, i32 0
+	%173 = load i8* %172
+	%174 = zext i8 %173 to i32
+	%175 = load %type.TypeNode** %t
+	%176 = getelementptr %type.TypeNode* %175, i32 0, i32 9
+	store i32 %174, i32* %176
+	%177 = load %target.ModelT** @target_Target
+	%178 = getelementptr %target.ModelT* %177, i32 0, i32 6
+	%179 = getelementptr %target.SizeAlign* %178, i32 0, i32 0
+	%180 = load i8* %179
+	%181 = zext i8 %180 to i32
+	%182 = load %type.TypeNode** %t
+	%183 = getelementptr %type.TypeNode* %182, i32 0, i32 10
+	store i32 %181, i32* %183
+	%184 = load %target.ModelT** @target_Target
+	%185 = getelementptr %target.ModelT* %184, i32 0, i32 6
+	%186 = getelementptr %target.SizeAlign* %185, i32 0, i32 1
+	%187 = load i8* %186
+	%188 = zext i8 %187 to i32
+	store i32 %188, i32* %align
+	br label %L.18
+L.25:
 	store i16 0, i16* %index
 	store i32 0, i32* %offs
 	store i32 0, i32* %align
 	store %symb.SymbNode* null, %symb.SymbNode** %prev
-	%177 = load %type.TypeNode** %t
-	%178 = getelementptr %type.TypeNode* %177, i32 0, i32 4
-	%179 = load %symb.SymbNode** %178
-	%180 = bitcast %symb.SymbNode* %179 to %symb.SymbNode*
-	store %symb.SymbNode* %180, %symb.SymbNode** %f
-	br label %L.40
-L.40:
-	%181 = load %symb.SymbNode** %f
-	%182 = icmp ne %symb.SymbNode* %181, null
-	%183 = xor i1 %182, true
-	br i1 %183, label %L.41, label %L.42
+	%189 = load %type.TypeNode** %t
+	%190 = getelementptr %type.TypeNode* %189, i32 0, i32 4
+	%191 = load %symb.SymbNode** %190
+	%192 = bitcast %symb.SymbNode* %191 to %symb.SymbNode*
+	store %symb.SymbNode* %192, %symb.SymbNode** %f
+	br label %L.42
 L.42:
-	%184 = load %symb.SymbNode** %f
-	%185 = getelementptr %symb.SymbNode* %184, i32 0, i32 1
-	%186 = load %type.TypeNode** %185
-	%187 = icmp ne %type.TypeNode* %186, null
-	br i1 %187, label %L.44, label %L.43
+	%193 = load %symb.SymbNode** %f
+	%194 = icmp ne %symb.SymbNode* %193, null
+	%195 = xor i1 %194, true
+	br i1 %195, label %L.43, label %L.44
 L.44:
-	%188 = load %symb.SymbNode** %f
-	%189 = getelementptr %symb.SymbNode* %188, i32 0, i32 1
-	%190 = load %type.TypeNode** %189
-	call void @type_Final(%type.TypeNode* %190)
-	%191 = load %symb.SymbNode** %f
-	%192 = getelementptr %symb.SymbNode* %191, i32 0, i32 1
-	%193 = load %type.TypeNode** %192
-	%194 = getelementptr %type.TypeNode* %193, i32 0, i32 25
-	%195 = load i8* %194
-	%196 = icmp ne i8 %195, 0
-	br i1 %196, label %L.46, label %L.45
+	%196 = load %symb.SymbNode** %f
+	%197 = getelementptr %symb.SymbNode* %196, i32 0, i32 1
+	%198 = load %type.TypeNode** %197
+	%199 = icmp ne %type.TypeNode* %198, null
+	br i1 %199, label %L.46, label %L.45
 L.46:
-	%197 = load %symb.SymbNode** %f
-	%198 = getelementptr %symb.SymbNode* %197, i32 0, i32 0
-	%199 = load %symb.SymbNode** %198
-	%200 = icmp ne %symb.SymbNode* %199, null
-	br i1 %200, label %L.48, label %L.49
+	%200 = load %symb.SymbNode** %f
+	%201 = getelementptr %symb.SymbNode* %200, i32 0, i32 1
+	%202 = load %type.TypeNode** %201
+	call void @type_Final(%type.TypeNode* %202)
+	%203 = load %symb.SymbNode** %f
+	%204 = getelementptr %symb.SymbNode* %203, i32 0, i32 1
+	%205 = load %type.TypeNode** %204
+	%206 = getelementptr %type.TypeNode* %205, i32 0, i32 25
+	%207 = load i8* %206
+	%208 = icmp ne i8 %207, 0
+	br i1 %208, label %L.48, label %L.47
 L.48:
-	call void @lex_Error(i8 74)
-	br label %L.47
+	%209 = load %symb.SymbNode** %f
+	%210 = getelementptr %symb.SymbNode* %209, i32 0, i32 0
+	%211 = load %symb.SymbNode** %210
+	%212 = icmp ne %symb.SymbNode* %211, null
+	br i1 %212, label %L.50, label %L.51
+L.50:
+	%213 = load %symb.SymbNode** %f
+	%214 = getelementptr %symb.SymbNode* %213, i32 0, i32 22
+	%215 = getelementptr [0 x i8]* %214
+	%216 = bitcast [0 x i8]* %215 to [0 x i8]*
+	call void @lex_ErrorI(i8 75, [0 x i8]* %216)
+	br label %L.49
+L.51:
+	%217 = load %type.TypeNode** %t
+	%218 = getelementptr %type.TypeNode* %217, i32 0, i32 25
+	store i8 1, i8* %218
+	br label %L.49
 L.49:
-	%201 = load %type.TypeNode** %t
-	%202 = getelementptr %type.TypeNode* %201, i32 0, i32 25
-	store i8 1, i8* %202
 	br label %L.47
 L.47:
-	br label %L.45
-L.45:
-	%203 = load %type.TypeNode** %t
-	%204 = getelementptr %type.TypeNode* %203, i32 0, i32 21
-	%205 = load i8* %204
-	%206 = icmp ne i8 %205, 0
-	br i1 %206, label %L.51, label %L.52
-L.51:
-	%207 = load %symb.SymbNode** %f
-	%208 = getelementptr %symb.SymbNode* %207, i32 0, i32 1
-	%209 = load %type.TypeNode** %208
-	%210 = call %type.TypeNode* @type_ForcePacked(%type.TypeNode* %209)
-	%211 = load %symb.SymbNode** %f
-	%212 = getelementptr %symb.SymbNode* %211, i32 0, i32 1
-	store %type.TypeNode* %210, %type.TypeNode** %212
-	%213 = load i32* %offs
-	%214 = load %symb.SymbNode** %f
-	%215 = getelementptr %symb.SymbNode* %214, i32 0, i32 1
-	%216 = load %type.TypeNode** %215
-	%217 = getelementptr %type.TypeNode* %216, i32 0, i32 9
-	%218 = load i32* %217
-	%219 = add i32 %213, %218
-	store i32 %219, i32* %offs
-	br label %L.50
-L.52:
-	%falign = alloca i32
-	%220 = load %symb.SymbNode** %f
-	%221 = getelementptr %symb.SymbNode* %220, i32 0, i32 1
-	%222 = load %type.TypeNode** %221
-	%223 = getelementptr %type.TypeNode* %222, i32 0, i32 11
-	%224 = load i32* %223
-	store i32 %224, i32* %falign
-	%225 = load %type.TypeNode** %t
-	%226 = getelementptr %type.TypeNode* %225, i32 0, i32 20
-	%227 = load i8* %226
-	%228 = icmp ne i8 %227, 0
-	br i1 %228, label %L.53, label %L.54
+	%219 = load %symb.SymbNode** %f
+	%220 = getelementptr %symb.SymbNode* %219, i32 0, i32 9
+	%221 = load i64* %220
+	%222 = trunc i64 %221 to i32
+	store i32 %222, i32* %atoffs
+	%223 = load %type.TypeNode** %t
+	%224 = getelementptr %type.TypeNode* %223, i32 0, i32 21
+	%225 = load i8* %224
+	%226 = icmp ne i8 %225, 0
+	br i1 %226, label %L.53, label %L.54
 L.53:
-	%229 = load %type.TypeNode** %t
-	%230 = getelementptr %type.TypeNode* %229, i32 0, i32 11
-	%231 = load i32* %230
-	%232 = load i32* %falign
-	%233 = icmp ult i32 %231, %232
-	br label %L.54
-L.54:
-	%234 = phi i1 [ false, %L.52 ], [ %233, %L.53 ]
-	br i1 %234, label %L.56, label %L.55
-L.56:
-	%235 = load %symb.SymbNode** %f
-	%236 = getelementptr %symb.SymbNode* %235, i32 0, i32 1
-	%237 = load %type.TypeNode** %236
-	%238 = load %type.TypeNode** %t
-	%239 = getelementptr %type.TypeNode* %238, i32 0, i32 11
-	%240 = load i32* %239
-	%241 = call %type.TypeNode* @type_ForceUnAligned(%type.TypeNode* %237, i32 %240)
-	%242 = load %symb.SymbNode** %f
-	%243 = getelementptr %symb.SymbNode* %242, i32 0, i32 1
-	store %type.TypeNode* %241, %type.TypeNode** %243
-	br label %L.55
+	%227 = load %symb.SymbNode** %f
+	%228 = getelementptr %symb.SymbNode* %227, i32 0, i32 1
+	%229 = load %type.TypeNode** %228
+	%230 = call %type.TypeNode* @type_ForcePacked(%type.TypeNode* %229)
+	%231 = load %symb.SymbNode** %f
+	%232 = getelementptr %symb.SymbNode* %231, i32 0, i32 1
+	store %type.TypeNode* %230, %type.TypeNode** %232
+	%233 = load i32* %atoffs
+	%234 = icmp ne i32 %233, 0
+	br i1 %234, label %L.55, label %L.56
 L.55:
-	%244 = load %symb.SymbNode** %f
-	%245 = getelementptr %symb.SymbNode* %244, i32 0, i32 1
-	%246 = load %type.TypeNode** %245
-	%247 = getelementptr %type.TypeNode* %246, i32 0, i32 22
-	%248 = load i8* %247
-	%249 = icmp ne i8 %248, 0
-	br i1 %249, label %L.58, label %L.59
+	%235 = load i32* %atoffs
+	%236 = load i32* %offs
+	%237 = icmp ult i32 %235, %236
+	br label %L.56
+L.56:
+	%238 = phi i1 [ false, %L.53 ], [ %237, %L.55 ]
+	br i1 %238, label %L.58, label %L.59
 L.58:
-	%250 = load %type.TypeNode** %t
-	%251 = getelementptr %type.TypeNode* %250, i32 0, i32 24
-	store i8 1, i8* %251
+	call void @lex_Error(i8 84)
 	br label %L.57
 L.59:
-	%252 = load i32* %offs
-	%253 = load i32* %falign
-	%254 = urem i32 %252, %253
-	store i32 %254, i32* %mod
-	%255 = load i32* %mod
-	%256 = icmp ne i32 %255, 0
-	br i1 %256, label %L.61, label %L.60
+	%239 = load i32* %atoffs
+	%240 = load i32* %offs
+	%241 = icmp ugt i32 %239, %240
+	br i1 %241, label %L.61, label %L.60
 L.61:
-	%257 = load %symb.SymbNode** %prev
-	%258 = load i32* %falign
-	%259 = load i32* %mod
-	%260 = sub i32 %258, %259
-	%261 = load %target.ModelT** @target_Target
-	%262 = getelementptr %target.ModelT* %261, i32 0, i32 2
-	%263 = load i8* %262
-	%264 = zext i8 %263 to i32
-	%265 = udiv i32 %260, %264
-	%266 = load i16* %index
-	%267 = call i16 @type_FieldPad(%symb.SymbNode* %257, i32 %265, i16 %266)
-	store i16 %267, i16* %index
-	%268 = load i32* %offs
-	%269 = load i32* %falign
-	%270 = load i32* %mod
-	%271 = sub i32 %269, %270
-	%272 = add i32 %268, %271
-	store i32 %272, i32* %offs
+	%242 = load %symb.SymbNode** %prev
+	%243 = load i32* %atoffs
+	%244 = load i32* %offs
+	%245 = sub i32 %243, %244
+	%246 = load i16* %index
+	%247 = call i16 @type_BitFieldPad(%symb.SymbNode* %242, i32 %245, i16 %246)
+	store i16 %247, i16* %index
+	%248 = load i32* %atoffs
+	store i32 %248, i32* %offs
 	br label %L.60
 L.60:
 	br label %L.57
 L.57:
-	%273 = load i32* %offs
-	%274 = load %symb.SymbNode** %f
-	%275 = getelementptr %symb.SymbNode* %274, i32 0, i32 1
-	%276 = load %type.TypeNode** %275
-	%277 = getelementptr %type.TypeNode* %276, i32 0, i32 10
-	%278 = load i32* %277
-	%279 = add i32 %273, %278
-	store i32 %279, i32* %offs
-	%280 = load i32* %falign
-	%281 = load i32* %align
-	%282 = icmp ugt i32 %280, %281
-	br i1 %282, label %L.63, label %L.62
-L.63:
-	%283 = load i32* %falign
-	store i32 %283, i32* %align
-	br label %L.62
+	%249 = load i32* %offs
+	%250 = load %symb.SymbNode** %f
+	%251 = getelementptr %symb.SymbNode* %250, i32 0, i32 1
+	%252 = load %type.TypeNode** %251
+	%253 = getelementptr %type.TypeNode* %252, i32 0, i32 9
+	%254 = load i32* %253
+	%255 = add i32 %249, %254
+	store i32 %255, i32* %offs
+	br label %L.52
+L.54:
+	%256 = load %symb.SymbNode** %f
+	%257 = getelementptr %symb.SymbNode* %256, i32 0, i32 1
+	%258 = load %type.TypeNode** %257
+	%259 = getelementptr %type.TypeNode* %258, i32 0, i32 11
+	%260 = load i32* %259
+	store i32 %260, i32* %falign
+	%261 = load %type.TypeNode** %t
+	%262 = getelementptr %type.TypeNode* %261, i32 0, i32 20
+	%263 = load i8* %262
+	%264 = icmp ne i8 %263, 0
+	br i1 %264, label %L.62, label %L.63
 L.62:
-	br label %L.50
-L.50:
-	br label %L.43
-L.43:
-	%284 = load i16* %index
-	%285 = load %symb.SymbNode** %f
-	%286 = getelementptr %symb.SymbNode* %285, i32 0, i32 9
-	store i16 %284, i16* %286
-	%287 = load i16* %index
-	%288 = add i16 %287, 1
-	store i16 %288, i16* %index
-	%289 = load %symb.SymbNode** %f
-	store %symb.SymbNode* %289, %symb.SymbNode** %prev
-	%290 = load %symb.SymbNode** %f
-	%291 = getelementptr %symb.SymbNode* %290, i32 0, i32 0
-	%292 = load %symb.SymbNode** %291
-	%293 = bitcast %symb.SymbNode* %292 to %symb.SymbNode*
-	store %symb.SymbNode* %293, %symb.SymbNode** %f
-	br label %L.40
-L.41:
-	%294 = load %type.TypeNode** %t
-	%295 = getelementptr %type.TypeNode* %294, i32 0, i32 9
-	%296 = load i32* %295
-	%297 = icmp eq i32 %296, 0
-	br i1 %297, label %L.65, label %L.64
+	%265 = load %type.TypeNode** %t
+	%266 = getelementptr %type.TypeNode* %265, i32 0, i32 11
+	%267 = load i32* %266
+	%268 = load i32* %falign
+	%269 = icmp ult i32 %267, %268
+	br label %L.63
+L.63:
+	%270 = phi i1 [ false, %L.54 ], [ %269, %L.62 ]
+	br i1 %270, label %L.65, label %L.64
 L.65:
-	%298 = load i32* %offs
-	%299 = load %type.TypeNode** %t
-	%300 = getelementptr %type.TypeNode* %299, i32 0, i32 9
-	store i32 %298, i32* %300
+	%271 = load %symb.SymbNode** %f
+	%272 = getelementptr %symb.SymbNode* %271, i32 0, i32 1
+	%273 = load %type.TypeNode** %272
+	%274 = load %type.TypeNode** %t
+	%275 = getelementptr %type.TypeNode* %274, i32 0, i32 11
+	%276 = load i32* %275
+	%277 = call %type.TypeNode* @type_ForceUnAligned(%type.TypeNode* %273, i32 %276)
+	%278 = load %symb.SymbNode** %f
+	%279 = getelementptr %symb.SymbNode* %278, i32 0, i32 1
+	store %type.TypeNode* %277, %type.TypeNode** %279
 	br label %L.64
 L.64:
-	%301 = load %type.TypeNode** %t
-	%302 = getelementptr %type.TypeNode* %301, i32 0, i32 10
-	%303 = load i32* %302
-	%304 = icmp eq i32 %303, 0
-	br i1 %304, label %L.67, label %L.66
+	%280 = load %symb.SymbNode** %f
+	%281 = getelementptr %symb.SymbNode* %280, i32 0, i32 1
+	%282 = load %type.TypeNode** %281
+	%283 = getelementptr %type.TypeNode* %282, i32 0, i32 22
+	%284 = load i8* %283
+	%285 = icmp ne i8 %284, 0
+	br i1 %285, label %L.67, label %L.68
 L.67:
-	%305 = load i32* %offs
-	%306 = load %target.ModelT** @target_Target
-	%307 = getelementptr %target.ModelT* %306, i32 0, i32 3
-	%308 = load i8* %307
-	%309 = zext i8 %308 to i32
-	%310 = icmp ule i32 %305, %309
-	br i1 %310, label %L.68, label %L.69
-L.68:
-	%311 = load %type.TypeNode** %t
-	%312 = getelementptr %type.TypeNode* %311, i32 0, i32 23
-	%313 = load i8* %312
-	%314 = icmp ne i8 %313, 0
-	%315 = xor i1 %314, true
-	br label %L.69
-L.69:
-	%316 = phi i1 [ false, %L.67 ], [ %315, %L.68 ]
-	br i1 %316, label %L.71, label %L.72
-L.71:
-	%317 = load i32* %offs
-	%318 = call i32 @target_isize(i32 %317)
-	%319 = load %type.TypeNode** %t
-	%320 = getelementptr %type.TypeNode* %319, i32 0, i32 10
-	store i32 %318, i32* %320
-	br label %L.70
-L.72:
-	%321 = load i32* %offs
-	%322 = load %type.TypeNode** %t
-	%323 = getelementptr %type.TypeNode* %322, i32 0, i32 10
-	store i32 %321, i32* %323
-	br label %L.70
-L.70:
+	%286 = load %type.TypeNode** %t
+	%287 = getelementptr %type.TypeNode* %286, i32 0, i32 24
+	store i8 1, i8* %287
 	br label %L.66
-L.66:
-	%324 = load i32* %align
-	%325 = icmp ugt i32 %324, 0
-	br i1 %325, label %L.74, label %L.75
-L.74:
-	%326 = load %type.TypeNode** %t
-	%327 = getelementptr %type.TypeNode* %326, i32 0, i32 10
-	%328 = load i32* %327
-	%329 = load i32* %align
-	%330 = urem i32 %328, %329
-	store i32 %330, i32* %mod
-	%331 = load i32* %mod
-	%332 = icmp ne i32 %331, 0
-	br i1 %332, label %L.76, label %L.77
-L.76:
-	%333 = load %type.TypeNode** %t
-	%334 = getelementptr %type.TypeNode* %333, i32 0, i32 23
-	%335 = load i8* %334
-	%336 = icmp ne i8 %335, 0
-	%337 = xor i1 %336, true
-	br label %L.77
-L.77:
-	%338 = phi i1 [ false, %L.74 ], [ %337, %L.76 ]
-	br i1 %338, label %L.79, label %L.78
-L.79:
-	%339 = load %type.TypeNode** %t
-	%340 = getelementptr %type.TypeNode* %339, i32 0, i32 10
-	%341 = load i32* %340
-	%342 = load i32* %align
-	%343 = load i32* %mod
-	%344 = sub i32 %342, %343
-	%345 = add i32 %341, %344
-	store i32 %345, i32* %340
-	br label %L.78
-L.78:
-	br label %L.73
-L.75:
-	%346 = load %type.TypeNode** %t
-	%347 = getelementptr %type.TypeNode* %346, i32 0, i32 9
-	%348 = load i32* %347
-	%349 = call i32 @target_ialign(i32 %348)
-	store i32 %349, i32* %align
+L.68:
+	%288 = load i32* %atoffs
+	%289 = icmp ne i32 %288, 0
+	br i1 %289, label %L.70, label %L.71
+L.70:
+	%290 = load i32* %atoffs
+	%291 = load %target.ModelT** @target_Target
+	%292 = getelementptr %target.ModelT* %291, i32 0, i32 2
+	%293 = load i8* %292
+	%294 = zext i8 %293 to i32
+	%295 = mul i32 %290, %294
+	store i32 %295, i32* %atoffs
+	%296 = load i32* %atoffs
+	%297 = icmp ne i32 %296, 0
+	br i1 %297, label %L.72, label %L.73
+L.72:
+	%298 = load i32* %atoffs
+	%299 = load i32* %offs
+	%300 = icmp ult i32 %298, %299
 	br label %L.73
 L.73:
-	br label %L.18
-L.24:
-	%350 = load %type.TypeNode** %t
-	%351 = getelementptr %type.TypeNode* %350, i32 0, i32 0
-	%352 = load %type.TypeNode** %351
-	%353 = icmp ne %type.TypeNode* %352, null
-	br i1 %353, label %L.81, label %L.80
+	%301 = phi i1 [ false, %L.70 ], [ %300, %L.72 ]
+	br i1 %301, label %L.75, label %L.76
+L.75:
+	call void @lex_Error(i8 84)
+	br label %L.74
+L.76:
+	%302 = load i32* %atoffs
+	%303 = load i32* %offs
+	%304 = icmp ugt i32 %302, %303
+	br i1 %304, label %L.78, label %L.77
+L.78:
+	%305 = load %symb.SymbNode** %prev
+	%306 = load i32* %atoffs
+	%307 = load i32* %offs
+	%308 = sub i32 %306, %307
+	%309 = load %target.ModelT** @target_Target
+	%310 = getelementptr %target.ModelT* %309, i32 0, i32 2
+	%311 = load i8* %310
+	%312 = zext i8 %311 to i32
+	%313 = udiv i32 %308, %312
+	%314 = load i16* %index
+	%315 = call i16 @type_FieldPad(%symb.SymbNode* %305, i32 %313, i16 %314)
+	store i16 %315, i16* %index
+	%316 = load i32* %atoffs
+	store i32 %316, i32* %offs
+	br label %L.77
+L.77:
+	br label %L.74
+L.74:
+	br label %L.69
+L.71:
+	%317 = load i32* %falign
+	%318 = icmp eq i32 %317, 0
+	br i1 %318, label %L.80, label %L.81
+L.80:
+	%319 = getelementptr [20 x i8]* @S.536
+	%320 = bitcast [20 x i8]* %319 to [0 x i8]*
+	call void @lex_ErrorS(i8 86, [0 x i8]* %320)
+	br label %L.79
 L.81:
-	%354 = load %type.TypeNode** %t
-	%355 = getelementptr %type.TypeNode* %354, i32 0, i32 0
-	%356 = load %type.TypeNode** %355
-	%357 = bitcast %type.TypeNode* %356 to %type.TypeNode*
-	call void @type_Final(%type.TypeNode* %357)
-	%358 = load %type.TypeNode** %t
-	%359 = getelementptr %type.TypeNode* %358, i32 0, i32 21
-	%360 = load i8* %359
-	%361 = icmp ne i8 %360, 0
-	br i1 %361, label %L.83, label %L.82
+	%321 = load i32* %offs
+	%322 = load i32* %falign
+	%323 = urem i32 %321, %322
+	store i32 %323, i32* %mod
+	%324 = load i32* %mod
+	%325 = icmp ne i32 %324, 0
+	br i1 %325, label %L.83, label %L.82
 L.83:
-	%362 = load %type.TypeNode** %t
-	%363 = getelementptr %type.TypeNode* %362, i32 0, i32 0
-	%364 = load %type.TypeNode** %363
-	%365 = bitcast %type.TypeNode* %364 to %type.TypeNode*
-	%366 = call %type.TypeNode* @type_ForcePacked(%type.TypeNode* %365)
-	%367 = bitcast %type.TypeNode* %366 to %type.TypeNode*
-	%368 = load %type.TypeNode** %t
-	%369 = getelementptr %type.TypeNode* %368, i32 0, i32 0
-	store %type.TypeNode* %367, %type.TypeNode** %369
+	%326 = load %symb.SymbNode** %prev
+	%327 = load i32* %falign
+	%328 = load i32* %mod
+	%329 = sub i32 %327, %328
+	%330 = load %target.ModelT** @target_Target
+	%331 = getelementptr %target.ModelT* %330, i32 0, i32 2
+	%332 = load i8* %331
+	%333 = zext i8 %332 to i32
+	%334 = udiv i32 %329, %333
+	%335 = load i16* %index
+	%336 = call i16 @type_FieldPad(%symb.SymbNode* %326, i32 %334, i16 %335)
+	store i16 %336, i16* %index
+	%337 = load i32* %offs
+	%338 = load i32* %falign
+	%339 = load i32* %mod
+	%340 = sub i32 %338, %339
+	%341 = add i32 %337, %340
+	store i32 %341, i32* %offs
 	br label %L.82
 L.82:
+	br label %L.79
+L.79:
+	br label %L.69
+L.69:
+	br label %L.66
+L.66:
+	%342 = load i32* %offs
+	%343 = load %symb.SymbNode** %f
+	%344 = getelementptr %symb.SymbNode* %343, i32 0, i32 1
+	%345 = load %type.TypeNode** %344
+	%346 = getelementptr %type.TypeNode* %345, i32 0, i32 10
+	%347 = load i32* %346
+	%348 = add i32 %342, %347
+	store i32 %348, i32* %offs
+	%349 = load i32* %falign
+	%350 = load i32* %align
+	%351 = icmp ugt i32 %349, %350
+	br i1 %351, label %L.85, label %L.84
+L.85:
+	%352 = load i32* %falign
+	store i32 %352, i32* %align
+	br label %L.84
+L.84:
+	br label %L.52
+L.52:
+	br label %L.45
+L.45:
+	%353 = load i16* %index
+	%354 = load %symb.SymbNode** %f
+	%355 = getelementptr %symb.SymbNode* %354, i32 0, i32 10
+	store i16 %353, i16* %355
+	%356 = load i16* %index
+	%357 = add i16 %356, 1
+	store i16 %357, i16* %index
+	%358 = load %symb.SymbNode** %f
+	store %symb.SymbNode* %358, %symb.SymbNode** %prev
+	%359 = load %symb.SymbNode** %f
+	%360 = getelementptr %symb.SymbNode* %359, i32 0, i32 0
+	%361 = load %symb.SymbNode** %360
+	%362 = bitcast %symb.SymbNode* %361 to %symb.SymbNode*
+	store %symb.SymbNode* %362, %symb.SymbNode** %f
+	br label %L.42
+L.43:
+	%363 = load %type.TypeNode** %t
+	%364 = getelementptr %type.TypeNode* %363, i32 0, i32 9
+	%365 = load i32* %364
+	%366 = icmp eq i32 %365, 0
+	br i1 %366, label %L.87, label %L.88
+L.87:
+	%367 = load i32* %offs
+	%368 = load %type.TypeNode** %t
+	%369 = getelementptr %type.TypeNode* %368, i32 0, i32 9
+	store i32 %367, i32* %369
+	br label %L.86
+L.88:
 	%370 = load %type.TypeNode** %t
 	%371 = getelementptr %type.TypeNode* %370, i32 0, i32 9
 	%372 = load i32* %371
-	%373 = icmp eq i32 %372, 0
-	br i1 %373, label %L.85, label %L.84
-L.85:
-	%374 = load %type.TypeNode** %t
-	%375 = getelementptr %type.TypeNode* %374, i32 0, i32 0
-	%376 = load %type.TypeNode** %375
-	%377 = getelementptr %type.TypeNode* %376, i32 0, i32 9
-	%378 = load i32* %377
-	%379 = load %type.TypeNode** %t
-	%380 = call i32 @type_TypeNode_Span(%type.TypeNode* %379)
-	%381 = mul i32 %378, %380
-	%382 = load %type.TypeNode** %t
-	%383 = getelementptr %type.TypeNode* %382, i32 0, i32 9
-	store i32 %381, i32* %383
-	br label %L.84
-L.84:
-	%384 = load %type.TypeNode** %t
-	%385 = getelementptr %type.TypeNode* %384, i32 0, i32 10
-	%386 = load i32* %385
-	%387 = icmp eq i32 %386, 0
-	br i1 %387, label %L.87, label %L.86
-L.87:
-	%388 = load %type.TypeNode** %t
-	%389 = getelementptr %type.TypeNode* %388, i32 0, i32 9
-	%390 = load i32* %389
-	%391 = load %type.TypeNode** %t
-	%392 = getelementptr %type.TypeNode* %391, i32 0, i32 10
-	store i32 %390, i32* %392
+	%373 = load i32* %offs
+	%374 = icmp ult i32 %372, %373
+	br i1 %374, label %L.90, label %L.91
+L.90:
+	call void @lex_Error(i8 83)
+	br label %L.89
+L.91:
+	%375 = load %type.TypeNode** %t
+	%376 = getelementptr %type.TypeNode* %375, i32 0, i32 21
+	%377 = load i8* %376
+	%378 = icmp ne i8 %377, 0
+	%379 = xor i1 %378, true
+	br i1 %379, label %L.92, label %L.93
+L.92:
+	%380 = load %type.TypeNode** %t
+	%381 = getelementptr %type.TypeNode* %380, i32 0, i32 9
+	%382 = load i32* %381
+	%383 = load i32* %offs
+	%384 = icmp ugt i32 %382, %383
+	br label %L.93
+L.93:
+	%385 = phi i1 [ false, %L.91 ], [ %384, %L.92 ]
+	br i1 %385, label %L.95, label %L.94
+L.95:
+	%386 = load %symb.SymbNode** %prev
+	%387 = load %type.TypeNode** %t
+	%388 = getelementptr %type.TypeNode* %387, i32 0, i32 9
+	%389 = load i32* %388
+	%390 = load i32* %offs
+	%391 = sub i32 %389, %390
+	%392 = load %target.ModelT** @target_Target
+	%393 = getelementptr %target.ModelT* %392, i32 0, i32 2
+	%394 = load i8* %393
+	%395 = zext i8 %394 to i32
+	%396 = udiv i32 %391, %395
+	%397 = load i16* %index
+	%398 = call i16 @type_FieldPad(%symb.SymbNode* %386, i32 %396, i16 %397)
+	store i16 %398, i16* %index
+	br label %L.94
+L.94:
+	br label %L.89
+L.89:
 	br label %L.86
 L.86:
-	%393 = load %type.TypeNode** %t
-	%394 = getelementptr %type.TypeNode* %393, i32 0, i32 0
-	%395 = load %type.TypeNode** %394
-	%396 = getelementptr %type.TypeNode* %395, i32 0, i32 10
-	%397 = load i32* %396
-	%398 = load %type.TypeNode** %t
-	%399 = getelementptr %type.TypeNode* %398, i32 0, i32 0
-	%400 = load %type.TypeNode** %399
-	%401 = getelementptr %type.TypeNode* %400, i32 0, i32 11
-	%402 = load i32* %401
-	%403 = icmp ult i32 %397, %402
-	br i1 %403, label %L.89, label %L.88
-L.89:
-	%404 = getelementptr [23 x i8]* @S.514
-	%405 = bitcast [23 x i8]* %404 to [0 x i8]*
-	call void @lex_ErrorS(i8 0, [0 x i8]* %405)
-	%406 = load %type.TypeNode** %t
-	%407 = getelementptr %type.TypeNode* %406, i32 0, i32 0
-	%408 = load %type.TypeNode** %407
-	%409 = bitcast %type.TypeNode* %408 to %type.TypeNode*
-	call void @type_DumpT(%type.TypeNode* %409, i8 1)
-	call void @sys_fildes_nl(i32 2)
-	br label %L.88
-L.88:
-	%410 = load %type.TypeNode** %t
-	%411 = getelementptr %type.TypeNode* %410, i32 0, i32 21
-	%412 = load i8* %411
-	%413 = icmp ne i8 %412, 0
-	%414 = xor i1 %413, true
-	br i1 %414, label %L.91, label %L.92
-L.91:
-	%415 = load %type.TypeNode** %t
-	%416 = getelementptr %type.TypeNode* %415, i32 0, i32 0
-	%417 = load %type.TypeNode** %416
-	%418 = getelementptr %type.TypeNode* %417, i32 0, i32 11
-	%419 = load i32* %418
-	store i32 %419, i32* %align
-	br label %L.90
-L.92:
+	%399 = load %type.TypeNode** %t
+	%400 = getelementptr %type.TypeNode* %399, i32 0, i32 10
+	%401 = load i32* %400
+	%402 = icmp eq i32 %401, 0
+	br i1 %402, label %L.97, label %L.96
+L.97:
+	%403 = load i32* %offs
+	%404 = load %target.ModelT** @target_Target
+	%405 = getelementptr %target.ModelT* %404, i32 0, i32 3
+	%406 = load i8* %405
+	%407 = zext i8 %406 to i32
+	%408 = icmp ule i32 %403, %407
+	br i1 %408, label %L.98, label %L.99
+L.98:
+	%409 = load %type.TypeNode** %t
+	%410 = getelementptr %type.TypeNode* %409, i32 0, i32 23
+	%411 = load i8* %410
+	%412 = icmp ne i8 %411, 0
+	%413 = xor i1 %412, true
+	br label %L.99
+L.99:
+	%414 = phi i1 [ false, %L.97 ], [ %413, %L.98 ]
+	br i1 %414, label %L.101, label %L.102
+L.101:
+	%415 = load i32* %offs
+	%416 = call i32 @target_isize(i32 %415)
+	%417 = load %type.TypeNode** %t
+	%418 = getelementptr %type.TypeNode* %417, i32 0, i32 10
+	store i32 %416, i32* %418
+	br label %L.100
+L.102:
+	%419 = load i32* %offs
 	%420 = load %type.TypeNode** %t
-	%421 = getelementptr %type.TypeNode* %420, i32 0, i32 9
-	%422 = load i32* %421
-	%423 = call i32 @target_ialign(i32 %422)
-	store i32 %423, i32* %align
-	br label %L.90
-L.90:
-	br label %L.80
-L.80:
+	%421 = getelementptr %type.TypeNode* %420, i32 0, i32 10
+	store i32 %419, i32* %421
+	br label %L.100
+L.100:
+	br label %L.96
+L.96:
+	%422 = load i32* %align
+	%423 = icmp ugt i32 %422, 0
+	br i1 %423, label %L.104, label %L.105
+L.104:
+	%424 = load %type.TypeNode** %t
+	%425 = getelementptr %type.TypeNode* %424, i32 0, i32 10
+	%426 = load i32* %425
+	%427 = load i32* %align
+	%428 = urem i32 %426, %427
+	store i32 %428, i32* %mod
+	%429 = load i32* %mod
+	%430 = icmp ne i32 %429, 0
+	br i1 %430, label %L.106, label %L.107
+L.106:
+	%431 = load %type.TypeNode** %t
+	%432 = getelementptr %type.TypeNode* %431, i32 0, i32 23
+	%433 = load i8* %432
+	%434 = icmp ne i8 %433, 0
+	%435 = xor i1 %434, true
+	br label %L.107
+L.107:
+	%436 = phi i1 [ false, %L.104 ], [ %435, %L.106 ]
+	br i1 %436, label %L.109, label %L.108
+L.109:
+	%437 = load %type.TypeNode** %t
+	%438 = getelementptr %type.TypeNode* %437, i32 0, i32 10
+	%439 = load i32* %438
+	%440 = load i32* %align
+	%441 = load i32* %mod
+	%442 = sub i32 %440, %441
+	%443 = add i32 %439, %442
+	store i32 %443, i32* %438
+	br label %L.108
+L.108:
+	br label %L.103
+L.105:
+	%444 = load %type.TypeNode** %t
+	%445 = getelementptr %type.TypeNode* %444, i32 0, i32 23
+	%446 = load i8* %445
+	%447 = icmp ne i8 %446, 0
+	br i1 %447, label %L.111, label %L.112
+L.111:
+	%448 = load %type.TypeNode** %t
+	%449 = getelementptr %type.TypeNode* %448, i32 0, i32 21
+	%450 = load i8* %449
+	%451 = icmp ne i8 %450, 0
+	br i1 %451, label %L.114, label %L.115
+L.114:
+	store i32 1, i32* %align
+	br label %L.113
+L.115:
+	%452 = load %target.ModelT** @target_Target
+	%453 = getelementptr %target.ModelT* %452, i32 0, i32 2
+	%454 = load i8* %453
+	%455 = zext i8 %454 to i32
+	store i32 %455, i32* %align
+	br label %L.113
+L.113:
+	br label %L.110
+L.112:
+	%456 = load %type.TypeNode** %t
+	%457 = getelementptr %type.TypeNode* %456, i32 0, i32 9
+	%458 = load i32* %457
+	%459 = call i32 @target_ialign(i32 %458)
+	store i32 %459, i32* %align
+	br label %L.110
+L.110:
+	br label %L.103
+L.103:
+	%460 = load %type.TypeNode** %t
+	%461 = getelementptr %type.TypeNode* %460, i32 0, i32 21
+	%462 = load i8* %461
+	%463 = icmp ne i8 %462, 0
+	br i1 %463, label %L.116, label %L.117
+L.116:
+	%464 = load %type.TypeNode** %t
+	%465 = getelementptr %type.TypeNode* %464, i32 0, i32 9
+	%466 = load i32* %465
+	%467 = call i32 @target_isize(i32 %466)
+	%468 = icmp eq i32 %467, 0
+	br label %L.117
+L.117:
+	%469 = phi i1 [ false, %L.103 ], [ %468, %L.116 ]
+	br i1 %469, label %L.119, label %L.118
+L.119:
+	call void @lex_Error(i8 79)
+	br label %L.118
+L.118:
+	br label %L.18
+L.26:
+	%470 = load %type.TypeNode** %t
+	%471 = getelementptr %type.TypeNode* %470, i32 0, i32 0
+	%472 = load %type.TypeNode** %471
+	%473 = icmp ne %type.TypeNode* %472, null
+	br i1 %473, label %L.121, label %L.120
+L.121:
+	%474 = load %type.TypeNode** %t
+	%475 = getelementptr %type.TypeNode* %474, i32 0, i32 0
+	%476 = load %type.TypeNode** %475
+	%477 = bitcast %type.TypeNode* %476 to %type.TypeNode*
+	call void @type_Final(%type.TypeNode* %477)
+	%478 = load %type.TypeNode** %t
+	%479 = getelementptr %type.TypeNode* %478, i32 0, i32 21
+	%480 = load i8* %479
+	%481 = icmp ne i8 %480, 0
+	br i1 %481, label %L.123, label %L.122
+L.123:
+	%482 = load %type.TypeNode** %t
+	%483 = getelementptr %type.TypeNode* %482, i32 0, i32 0
+	%484 = load %type.TypeNode** %483
+	%485 = bitcast %type.TypeNode* %484 to %type.TypeNode*
+	%486 = call %type.TypeNode* @type_ForcePacked(%type.TypeNode* %485)
+	%487 = bitcast %type.TypeNode* %486 to %type.TypeNode*
+	%488 = load %type.TypeNode** %t
+	%489 = getelementptr %type.TypeNode* %488, i32 0, i32 0
+	store %type.TypeNode* %487, %type.TypeNode** %489
+	br label %L.122
+L.122:
+	%490 = load %type.TypeNode** %t
+	%491 = getelementptr %type.TypeNode* %490, i32 0, i32 9
+	%492 = load i32* %491
+	%493 = icmp eq i32 %492, 0
+	br i1 %493, label %L.125, label %L.124
+L.125:
+	%494 = load %type.TypeNode** %t
+	%495 = getelementptr %type.TypeNode* %494, i32 0, i32 0
+	%496 = load %type.TypeNode** %495
+	%497 = getelementptr %type.TypeNode* %496, i32 0, i32 9
+	%498 = load i32* %497
+	%499 = load %type.TypeNode** %t
+	%500 = call i32 @type_TypeNode_Span(%type.TypeNode* %499)
+	%501 = mul i32 %498, %500
+	%502 = load %type.TypeNode** %t
+	%503 = getelementptr %type.TypeNode* %502, i32 0, i32 9
+	store i32 %501, i32* %503
+	br label %L.124
+L.124:
+	%504 = load %type.TypeNode** %t
+	%505 = getelementptr %type.TypeNode* %504, i32 0, i32 10
+	%506 = load i32* %505
+	%507 = icmp eq i32 %506, 0
+	br i1 %507, label %L.127, label %L.126
+L.127:
+	%508 = load %type.TypeNode** %t
+	%509 = getelementptr %type.TypeNode* %508, i32 0, i32 9
+	%510 = load i32* %509
+	%511 = load %type.TypeNode** %t
+	%512 = getelementptr %type.TypeNode* %511, i32 0, i32 10
+	store i32 %510, i32* %512
+	br label %L.126
+L.126:
+	%513 = load %type.TypeNode** %t
+	%514 = getelementptr %type.TypeNode* %513, i32 0, i32 0
+	%515 = load %type.TypeNode** %514
+	%516 = getelementptr %type.TypeNode* %515, i32 0, i32 10
+	%517 = load i32* %516
+	%518 = load %type.TypeNode** %t
+	%519 = getelementptr %type.TypeNode* %518, i32 0, i32 0
+	%520 = load %type.TypeNode** %519
+	%521 = getelementptr %type.TypeNode* %520, i32 0, i32 11
+	%522 = load i32* %521
+	%523 = icmp ult i32 %517, %522
+	br i1 %523, label %L.129, label %L.128
+L.129:
+	%524 = getelementptr [23 x i8]* @S.537
+	%525 = bitcast [23 x i8]* %524 to [0 x i8]*
+	call void @lex_ErrorS(i8 0, [0 x i8]* %525)
+	%526 = load %type.TypeNode** %t
+	%527 = getelementptr %type.TypeNode* %526, i32 0, i32 0
+	%528 = load %type.TypeNode** %527
+	%529 = bitcast %type.TypeNode* %528 to %type.TypeNode*
+	call void @type_DumpT(%type.TypeNode* %529, i8 1)
+	call void @sys_fildes_nl(i32 2)
+	br label %L.128
+L.128:
+	%530 = load %type.TypeNode** %t
+	%531 = getelementptr %type.TypeNode* %530, i32 0, i32 21
+	%532 = load i8* %531
+	%533 = icmp ne i8 %532, 0
+	%534 = xor i1 %533, true
+	br i1 %534, label %L.131, label %L.132
+L.131:
+	%535 = load %type.TypeNode** %t
+	%536 = getelementptr %type.TypeNode* %535, i32 0, i32 0
+	%537 = load %type.TypeNode** %536
+	%538 = getelementptr %type.TypeNode* %537, i32 0, i32 11
+	%539 = load i32* %538
+	store i32 %539, i32* %align
+	br label %L.130
+L.132:
+	%540 = load %type.TypeNode** %t
+	%541 = getelementptr %type.TypeNode* %540, i32 0, i32 9
+	%542 = load i32* %541
+	%543 = call i32 @target_ialign(i32 %542)
+	store i32 %543, i32* %align
+	br label %L.130
+L.130:
+	br label %L.120
+L.120:
+	%544 = load %type.TypeNode** %t
+	%545 = getelementptr %type.TypeNode* %544, i32 0, i32 21
+	%546 = load i8* %545
+	%547 = icmp ne i8 %546, 0
+	br i1 %547, label %L.133, label %L.134
+L.133:
+	%548 = load %type.TypeNode** %t
+	%549 = getelementptr %type.TypeNode* %548, i32 0, i32 9
+	%550 = load i32* %549
+	%551 = call i32 @target_isize(i32 %550)
+	%552 = icmp eq i32 %551, 0
+	br label %L.134
+L.134:
+	%553 = phi i1 [ false, %L.120 ], [ %552, %L.133 ]
+	br i1 %553, label %L.136, label %L.135
+L.136:
+	call void @lex_Error(i8 80)
+	br label %L.135
+L.135:
 	br label %L.18
 L.17:
 	br label %L.18
 L.18:
-	%424 = load %type.TypeNode** %t
-	%425 = getelementptr %type.TypeNode* %424, i32 0, i32 20
-	%426 = load i8* %425
-	%427 = icmp ne i8 %426, 0
-	br i1 %427, label %L.94, label %L.95
-L.94:
-	%428 = load %type.TypeNode** %t
-	%429 = getelementptr %type.TypeNode* %428, i32 0, i32 11
-	%430 = load i32* %429
-	%431 = load i32* %align
-	%432 = icmp ult i32 %430, %431
-	br i1 %432, label %L.97, label %L.96
-L.97:
-	%433 = load %type.TypeNode** %t
-	%434 = getelementptr %type.TypeNode* %433, i32 0, i32 22
-	store i8 1, i8* %434
-	br label %L.96
-L.96:
-	br label %L.93
-L.95:
-	%435 = load i32* %align
-	%436 = load %type.TypeNode** %t
-	%437 = getelementptr %type.TypeNode* %436, i32 0, i32 11
-	store i32 %435, i32* %437
-	br label %L.93
-L.93:
-	%438 = load %type.TypeNode** %t
-	%439 = getelementptr %type.TypeNode* %438, i32 0, i32 30
-	store i8 1, i8* %439
+	%554 = load %type.TypeNode** %t
+	%555 = getelementptr %type.TypeNode* %554, i32 0, i32 20
+	%556 = load i8* %555
+	%557 = icmp ne i8 %556, 0
+	br i1 %557, label %L.138, label %L.139
+L.138:
+	%558 = load %type.TypeNode** %t
+	%559 = getelementptr %type.TypeNode* %558, i32 0, i32 11
+	%560 = load i32* %559
+	%561 = load i32* %align
+	%562 = icmp ult i32 %560, %561
+	br i1 %562, label %L.141, label %L.140
+L.141:
+	%563 = load %type.TypeNode** %t
+	%564 = getelementptr %type.TypeNode* %563, i32 0, i32 22
+	store i8 1, i8* %564
+	br label %L.140
+L.140:
+	br label %L.137
+L.139:
+	%565 = load i32* %align
+	%566 = load %type.TypeNode** %t
+	%567 = getelementptr %type.TypeNode* %566, i32 0, i32 11
+	store i32 %565, i32* %567
+	br label %L.137
+L.137:
+	%568 = load %type.TypeNode** %t
+	%569 = getelementptr %type.TypeNode* %568, i32 0, i32 30
+	store i8 1, i8* %569
 	br label %L.3
 L.3:
 	br label %return
@@ -9785,6 +11741,8 @@ L.0:
 	%t = alloca %type.TypeNode*
 	%vn = alloca %symb.SymbNode*
 	%pvn = alloca %symb.SymbNode*
+	%vnl = alloca %symb.SymbNode*
+	%vv = alloca %ast.AstNode*
 	%v = alloca i32
 	%vmax = alloca i32
 	%0 = call i8 @lex_Next()
@@ -9823,7 +11781,7 @@ L.6:
 	br i1 %18, label %L.7, label %L.8
 L.8:
 	%19 = load %symb.SymbNode** %vb
-	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 21
+	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 22
 	%21 = getelementptr [0 x i8]* %20
 	%22 = bitcast [0 x i8]* %21 to [0 x i8]*
 	%23 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %22, i8 2)
@@ -9849,13 +11807,13 @@ L.9:
 	%34 = load %symb.SymbNode** %vn
 	store %symb.SymbNode* %34, %symb.SymbNode** %pvn
 	%35 = load %symb.SymbNode** %vb
-	%36 = getelementptr %symb.SymbNode* %35, i32 0, i32 7
+	%36 = getelementptr %symb.SymbNode* %35, i32 0, i32 8
 	%37 = load %ast.AstNode** %36
 	%38 = load %symb.SymbNode** %vn
-	%39 = getelementptr %symb.SymbNode* %38, i32 0, i32 7
+	%39 = getelementptr %symb.SymbNode* %38, i32 0, i32 8
 	store %ast.AstNode* %37, %ast.AstNode** %39
 	%40 = load %symb.SymbNode** %vb
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 7
+	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 8
 	%42 = load %ast.AstNode** %41
 	%43 = getelementptr %ast.AstNode* %42, i32 0, i32 10
 	%44 = load i64* %43
@@ -9882,139 +11840,210 @@ L.7:
 	store i32 %55, i32* %v
 	br label %L.3
 L.5:
-	call void @lex_Error(i8 65)
+	call void @lex_Error(i8 66)
 	br label %L.3
 L.3:
 	br label %L.1
 L.1:
 	br label %L.14
 L.14:
+	store %symb.SymbNode* null, %symb.SymbNode** %vnl
 	%56 = load i8* %tok
-	%57 = icmp eq i8 %56, 41
+	%57 = icmp eq i8 %56, 32
 	br i1 %57, label %L.17, label %L.18
 L.17:
-	%58 = load %type.TypeNode** %t
-	%59 = getelementptr %type.TypeNode* %58, i32 0, i32 4
-	%60 = load %symb.SymbNode** %59
-	%61 = bitcast %symb.SymbNode* %60 to %symb.SymbNode*
-	%62 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%63 = call i8 @symb_IsUniqueLocal(%symb.SymbNode* %61, [0 x i8]* %62)
-	%64 = icmp ne i8 %63, 0
-	%65 = xor i1 %64, true
-	br i1 %65, label %L.20, label %L.19
-L.20:
-	%66 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %66)
+	%58 = call i8 @lex_Next()
+	store i8 %58, i8* %tok
 	br label %L.19
 L.19:
-	%67 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%68 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %67, i8 2)
-	store %symb.SymbNode* %68, %symb.SymbNode** %vn
-	%69 = load %symb.SymbNode** %pvn
-	%70 = icmp ne %symb.SymbNode* %69, null
-	br i1 %70, label %L.22, label %L.23
+	%59 = load i8* %tok
+	%60 = icmp eq i8 %59, 41
+	br i1 %60, label %L.22, label %L.23
 L.22:
-	%71 = load %symb.SymbNode** %vn
-	%72 = bitcast %symb.SymbNode* %71 to %symb.SymbNode*
-	%73 = load %symb.SymbNode** %pvn
-	%74 = getelementptr %symb.SymbNode* %73, i32 0, i32 0
-	store %symb.SymbNode* %72, %symb.SymbNode** %74
-	br label %L.21
-L.23:
-	%75 = load %symb.SymbNode** %vn
-	%76 = bitcast %symb.SymbNode* %75 to %symb.SymbNode*
-	%77 = load %type.TypeNode** %t
-	%78 = getelementptr %type.TypeNode* %77, i32 0, i32 4
-	store %symb.SymbNode* %76, %symb.SymbNode** %78
-	br label %L.21
-L.21:
-	%79 = load %symb.SymbNode** %vn
-	store %symb.SymbNode* %79, %symb.SymbNode** %pvn
-	%80 = call i8 @lex_Next()
-	store i8 %80, i8* %tok
-	%81 = load i8* %tok
-	%82 = icmp eq i8 %81, 9
-	br i1 %82, label %L.25, label %L.26
+	%61 = load %type.TypeNode** %t
+	%62 = getelementptr %type.TypeNode* %61, i32 0, i32 4
+	%63 = load %symb.SymbNode** %62
+	%64 = bitcast %symb.SymbNode* %63 to %symb.SymbNode*
+	%65 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%66 = call i8 @symb_IsUniqueLocal(%symb.SymbNode* %64, [0 x i8]* %65)
+	%67 = icmp ne i8 %66, 0
+	%68 = xor i1 %67, true
+	br i1 %68, label %L.25, label %L.24
 L.25:
-	%83 = call i8 @lex_Next()
-	store i8 %83, i8* %tok
-	%84 = load %type.TypeNode** @type_wordtype
-	%85 = call %ast.AstNode* @expr_Const(%type.TypeNode* %84)
-	%86 = bitcast %ast.AstNode* %85 to %ast.AstNode*
-	%87 = load %symb.SymbNode** %vn
-	%88 = getelementptr %symb.SymbNode* %87, i32 0, i32 7
-	store %ast.AstNode* %86, %ast.AstNode** %88
-	%89 = load %type.TypeNode** %t
-	%90 = load %symb.SymbNode** %vn
-	%91 = getelementptr %symb.SymbNode* %90, i32 0, i32 7
-	%92 = load %ast.AstNode** %91
-	%93 = getelementptr %ast.AstNode* %92, i32 0, i32 8
-	store %type.TypeNode* %89, %type.TypeNode** %93
-	%94 = load i8* @lex_Token
-	store i8 %94, i8* %tok
-	%95 = load %symb.SymbNode** %vn
-	%96 = getelementptr %symb.SymbNode* %95, i32 0, i32 7
-	%97 = load %ast.AstNode** %96
-	%98 = getelementptr %ast.AstNode* %97, i32 0, i32 10
-	%99 = load i64* %98
-	%100 = trunc i64 %99 to i32
-	store i32 %100, i32* %v
-	br label %L.24
-L.26:
-	%101 = load %type.TypeNode** %t
-	%102 = load i32* %v
-	%103 = zext i32 %102 to i64
-	%104 = call %ast.AstNode* @ast_Const(%type.TypeNode* %101, i64 %103)
-	%105 = bitcast %ast.AstNode* %104 to %ast.AstNode*
-	%106 = load %symb.SymbNode** %vn
-	%107 = getelementptr %symb.SymbNode* %106, i32 0, i32 7
-	store %ast.AstNode* %105, %ast.AstNode** %107
+	%69 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 20, [0 x i8]* %69)
 	br label %L.24
 L.24:
+	%70 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%71 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %70, i8 2)
+	store %symb.SymbNode* %71, %symb.SymbNode** %vn
+	%72 = load %symb.SymbNode** %vnl
+	%73 = bitcast %symb.SymbNode* %72 to %symb.SymbNode*
+	%74 = load %symb.SymbNode** %vn
+	%75 = getelementptr %symb.SymbNode* %74, i32 0, i32 0
+	store %symb.SymbNode* %73, %symb.SymbNode** %75
+	%76 = load %symb.SymbNode** %vn
+	store %symb.SymbNode* %76, %symb.SymbNode** %vnl
+	%77 = call i8 @lex_Next()
+	store i8 %77, i8* %tok
+	br label %L.21
+L.23:
+	call void @lex_Error(i8 18)
+	br label %L.21
+L.21:
+	%78 = load i8* %tok
+	%79 = icmp eq i8 %78, 33
+	br i1 %79, label %L.20, label %L.26
+L.26:
+	%80 = call i8 @lex_Expect(i8 5)
+	store i8 %80, i8* %tok
+	%81 = load i8* %tok
+	%82 = icmp eq i8 %81, 33
+	br i1 %82, label %L.20, label %L.27
+L.27:
+	br label %L.19
+L.20:
+	%83 = call i8 @lex_Expect(i8 33)
+	store i8 %83, i8* %tok
 	br label %L.16
 L.18:
+	%84 = load i8* %tok
+	%85 = icmp eq i8 %84, 41
+	br i1 %85, label %L.29, label %L.30
+L.29:
+	%86 = load %type.TypeNode** %t
+	%87 = getelementptr %type.TypeNode* %86, i32 0, i32 4
+	%88 = load %symb.SymbNode** %87
+	%89 = bitcast %symb.SymbNode* %88 to %symb.SymbNode*
+	%90 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%91 = call i8 @symb_IsUniqueLocal(%symb.SymbNode* %89, [0 x i8]* %90)
+	%92 = icmp ne i8 %91, 0
+	%93 = xor i1 %92, true
+	br i1 %93, label %L.32, label %L.31
+L.32:
+	%94 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 20, [0 x i8]* %94)
+	br label %L.31
+L.31:
+	%95 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%96 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %95, i8 2)
+	store %symb.SymbNode* %96, %symb.SymbNode** %vnl
+	%97 = call i8 @lex_Next()
+	store i8 %97, i8* %tok
+	br label %L.28
+L.30:
 	call void @lex_Error(i8 18)
+	br label %L.28
+L.28:
 	br label %L.16
 L.16:
-	%108 = load i32* %v
-	%109 = load i32* %vmax
-	%110 = icmp ugt i32 %108, %109
-	br i1 %110, label %L.28, label %L.27
-L.28:
-	%111 = load i32* %v
-	store i32 %111, i32* %vmax
-	br label %L.27
-L.27:
-	%112 = load i8* %tok
-	%113 = icmp eq i8 %112, 33
-	br i1 %113, label %L.15, label %L.29
-L.29:
-	%114 = call i8 @lex_Expect(i8 5)
-	store i8 %114, i8* %tok
-	%115 = load i8* %tok
-	%116 = icmp eq i8 %115, 33
-	br i1 %116, label %L.15, label %L.30
-L.30:
-	%117 = load i32* %v
-	%118 = add i32 %117, 1
-	store i32 %118, i32* %v
+	%98 = load i8* %tok
+	%99 = icmp eq i8 %98, 9
+	br i1 %99, label %L.34, label %L.35
+L.34:
+	%100 = call i8 @lex_Next()
+	store i8 %100, i8* %tok
+	%101 = load %type.TypeNode** @type_wordtype
+	%102 = call %ast.AstNode* @expr_Const(%type.TypeNode* %101)
+	store %ast.AstNode* %102, %ast.AstNode** %vv
+	%103 = load %type.TypeNode** %t
+	%104 = load %ast.AstNode** %vv
+	%105 = getelementptr %ast.AstNode* %104, i32 0, i32 8
+	store %type.TypeNode* %103, %type.TypeNode** %105
+	%106 = load %ast.AstNode** %vv
+	%107 = getelementptr %ast.AstNode* %106, i32 0, i32 10
+	%108 = load i64* %107
+	%109 = trunc i64 %108 to i32
+	store i32 %109, i32* %v
+	%110 = load i8* @lex_Token
+	store i8 %110, i8* %tok
+	br label %L.33
+L.35:
+	%111 = load %type.TypeNode** %t
+	%112 = load i32* %v
+	%113 = zext i32 %112 to i64
+	%114 = call %ast.AstNode* @ast_Const(%type.TypeNode* %111, i64 %113)
+	store %ast.AstNode* %114, %ast.AstNode** %vv
+	br label %L.33
+L.33:
+	br label %L.36
+L.36:
+	%115 = load %symb.SymbNode** %vnl
+	%116 = icmp ne %symb.SymbNode* %115, null
+	%117 = xor i1 %116, true
+	br i1 %117, label %L.37, label %L.38
+L.38:
+	%118 = load %ast.AstNode** %vv
+	%119 = bitcast %ast.AstNode* %118 to %ast.AstNode*
+	%120 = load %symb.SymbNode** %vnl
+	%121 = getelementptr %symb.SymbNode* %120, i32 0, i32 8
+	store %ast.AstNode* %119, %ast.AstNode** %121
+	%122 = load %symb.SymbNode** %pvn
+	%123 = icmp ne %symb.SymbNode* %122, null
+	br i1 %123, label %L.40, label %L.41
+L.40:
+	%124 = load %symb.SymbNode** %vnl
+	%125 = bitcast %symb.SymbNode* %124 to %symb.SymbNode*
+	%126 = load %symb.SymbNode** %pvn
+	%127 = getelementptr %symb.SymbNode* %126, i32 0, i32 0
+	store %symb.SymbNode* %125, %symb.SymbNode** %127
+	br label %L.39
+L.41:
+	%128 = load %symb.SymbNode** %vnl
+	%129 = bitcast %symb.SymbNode* %128 to %symb.SymbNode*
+	%130 = load %type.TypeNode** %t
+	%131 = getelementptr %type.TypeNode* %130, i32 0, i32 4
+	store %symb.SymbNode* %129, %symb.SymbNode** %131
+	br label %L.39
+L.39:
+	%132 = load %symb.SymbNode** %vnl
+	store %symb.SymbNode* %132, %symb.SymbNode** %pvn
+	%133 = load %symb.SymbNode** %vnl
+	%134 = getelementptr %symb.SymbNode* %133, i32 0, i32 0
+	%135 = load %symb.SymbNode** %134
+	%136 = bitcast %symb.SymbNode* %135 to %symb.SymbNode*
+	store %symb.SymbNode* %136, %symb.SymbNode** %vnl
+	br label %L.36
+L.37:
+	%137 = load i32* %v
+	%138 = load i32* %vmax
+	%139 = icmp ugt i32 %137, %138
+	br i1 %139, label %L.43, label %L.42
+L.43:
+	%140 = load i32* %v
+	store i32 %140, i32* %vmax
+	br label %L.42
+L.42:
+	%141 = load i8* %tok
+	%142 = icmp eq i8 %141, 33
+	br i1 %142, label %L.15, label %L.44
+L.44:
+	%143 = call i8 @lex_Expect(i8 5)
+	store i8 %143, i8* %tok
+	%144 = load i8* %tok
+	%145 = icmp eq i8 %144, 33
+	br i1 %145, label %L.15, label %L.45
+L.45:
+	%146 = load i32* %v
+	%147 = add i32 %146, 1
+	store i32 %147, i32* %v
 	br label %L.14
 L.15:
-	%119 = call i8 @lex_Expect(i8 33)
-	%120 = load %type.TypeNode** %t
-	%121 = getelementptr %type.TypeNode* %120, i32 0, i32 7
-	store i64 0, i64* %121
-	%122 = load i32* %vmax
-	%123 = zext i32 %122 to i64
-	%124 = load %type.TypeNode** %t
-	%125 = getelementptr %type.TypeNode* %124, i32 0, i32 8
-	store i64 %123, i64* %125
-	%126 = load %type.TypeNode** %t
-	store %type.TypeNode* %126, %type.TypeNode** %rv.0
+	%148 = call i8 @lex_Expect(i8 33)
+	%149 = load %type.TypeNode** %t
+	%150 = getelementptr %type.TypeNode* %149, i32 0, i32 7
+	store i64 0, i64* %150
+	%151 = load i32* %vmax
+	%152 = zext i32 %151 to i64
+	%153 = load %type.TypeNode** %t
+	%154 = getelementptr %type.TypeNode* %153, i32 0, i32 8
+	store i64 %152, i64* %154
+	%155 = load %type.TypeNode** %t
+	store %type.TypeNode* %155, %type.TypeNode** %rv.0
 	br label %return
 return:
-	%127 = load %type.TypeNode** %rv.0
-	ret %type.TypeNode* %127
+	%156 = load %type.TypeNode** %rv.0
+	ret %type.TypeNode* %156
 }
 define internal void @type_RangeEnum(%type.TypeNode* %t$, %type.TypeNode* %bt$) nounwind {
 L.0:
@@ -10052,7 +12081,7 @@ L.1:
 L.4:
 	%14 = load i32* %vlo
 	%15 = load %symb.SymbNode** %vb
-	%16 = getelementptr %symb.SymbNode* %15, i32 0, i32 7
+	%16 = getelementptr %symb.SymbNode* %15, i32 0, i32 8
 	%17 = load %ast.AstNode** %16
 	%18 = getelementptr %ast.AstNode* %17, i32 0, i32 10
 	%19 = load i64* %18
@@ -10084,7 +12113,7 @@ L.6:
 L.9:
 	%34 = load i32* %vhi
 	%35 = load %symb.SymbNode** %vb
-	%36 = getelementptr %symb.SymbNode* %35, i32 0, i32 7
+	%36 = getelementptr %symb.SymbNode* %35, i32 0, i32 8
 	%37 = load %ast.AstNode** %36
 	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 10
 	%39 = load i64* %38
@@ -10097,21 +12126,21 @@ L.10:
 	br i1 %43, label %L.7, label %L.8
 L.8:
 	%44 = load %symb.SymbNode** %vb
-	%45 = getelementptr %symb.SymbNode* %44, i32 0, i32 21
+	%45 = getelementptr %symb.SymbNode* %44, i32 0, i32 22
 	%46 = getelementptr [0 x i8]* %45
 	%47 = bitcast [0 x i8]* %46 to [0 x i8]*
 	%48 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %47, i8 2)
 	store %symb.SymbNode* %48, %symb.SymbNode** %vn
 	%49 = load %type.TypeNode** %t
 	%50 = load %symb.SymbNode** %vb
-	%51 = getelementptr %symb.SymbNode* %50, i32 0, i32 7
+	%51 = getelementptr %symb.SymbNode* %50, i32 0, i32 8
 	%52 = load %ast.AstNode** %51
 	%53 = getelementptr %ast.AstNode* %52, i32 0, i32 10
 	%54 = load i64* %53
 	%55 = call %ast.AstNode* @ast_Const(%type.TypeNode* %49, i64 %54)
 	%56 = bitcast %ast.AstNode* %55 to %ast.AstNode*
 	%57 = load %symb.SymbNode** %vn
-	%58 = getelementptr %symb.SymbNode* %57, i32 0, i32 7
+	%58 = getelementptr %symb.SymbNode* %57, i32 0, i32 8
 	store %ast.AstNode* %56, %ast.AstNode** %58
 	%59 = load %symb.SymbNode** %pvn
 	%60 = icmp ne %symb.SymbNode* %59, null
@@ -10144,7 +12173,121 @@ L.7:
 return:
 	ret void
 }
-@S.515 = internal constant [20 x i8] c"field inital values\00"
+define internal %type.TypeNode* @type_Range(%ast.AstNode* %vlo$) nounwind {
+L.0:
+	%rv.0 = alloca %type.TypeNode*
+	%vlo = alloca %ast.AstNode*
+	store %ast.AstNode* %vlo$, %ast.AstNode** %vlo
+	%t = alloca %type.TypeNode*
+	%tok = alloca i8
+	%vhi = alloca %ast.AstNode*
+	%0 = load %type.TypeNode** @type_unkntype
+	store %type.TypeNode* %0, %type.TypeNode** %t
+	%1 = load i8* @lex_Token
+	%2 = icmp eq i8 %1, 6
+	br i1 %2, label %L.2, label %L.3
+L.2:
+	%3 = call i8 @lex_Next()
+	store i8 %3, i8* %tok
+	%4 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
+	store %ast.AstNode* %4, %ast.AstNode** %vhi
+	%5 = load %ast.AstNode** %vlo
+	%6 = icmp ne %ast.AstNode* %5, null
+	br i1 %6, label %L.4, label %L.5
+L.4:
+	%7 = load %ast.AstNode** %vhi
+	%8 = icmp ne %ast.AstNode* %7, null
+	br label %L.5
+L.5:
+	%9 = phi i1 [ false, %L.2 ], [ %8, %L.4 ]
+	br i1 %9, label %L.7, label %L.6
+L.7:
+	%10 = load %ast.AstNode** %vlo
+	%11 = getelementptr %ast.AstNode* %10, i32 0, i32 0
+	%12 = load i8* %11
+	%13 = icmp eq i8 %12, 7
+	br i1 %13, label %L.8, label %L.9
+L.8:
+	%14 = load %ast.AstNode** %vhi
+	%15 = getelementptr %ast.AstNode* %14, i32 0, i32 0
+	%16 = load i8* %15
+	%17 = icmp eq i8 %16, 7
+	br label %L.9
+L.9:
+	%18 = phi i1 [ false, %L.7 ], [ %17, %L.8 ]
+	br i1 %18, label %L.11, label %L.12
+L.11:
+	%19 = load %ast.AstNode** %vlo
+	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 8
+	%21 = load %type.TypeNode** %20
+	%22 = getelementptr %type.TypeNode* %21, i32 0, i32 14
+	%23 = load i8* %22
+	%24 = zext i8 %23 to i32
+	switch i32 %24, label %L.13 [
+		i32 1, label %L.15
+		i32 2, label %L.15
+		i32 3, label %L.15
+	]
+L.15:
+	%25 = load %ast.AstNode** %vlo
+	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 8
+	%27 = load %type.TypeNode** %26
+	%28 = getelementptr %type.TypeNode* %27, i32 0, i32 14
+	%29 = load i8* %28
+	%30 = call %type.TypeNode* @type_New(i8 %29)
+	store %type.TypeNode* %30, %type.TypeNode** %t
+	%31 = load %ast.AstNode** %vlo
+	%32 = getelementptr %ast.AstNode* %31, i32 0, i32 10
+	%33 = load i64* %32
+	%34 = load %type.TypeNode** %t
+	%35 = getelementptr %type.TypeNode* %34, i32 0, i32 7
+	store i64 %33, i64* %35
+	%36 = load %ast.AstNode** %vhi
+	%37 = getelementptr %ast.AstNode* %36, i32 0, i32 10
+	%38 = load i64* %37
+	%39 = load %type.TypeNode** %t
+	%40 = getelementptr %type.TypeNode* %39, i32 0, i32 8
+	store i64 %38, i64* %40
+	%41 = load %ast.AstNode** %vlo
+	%42 = getelementptr %ast.AstNode* %41, i32 0, i32 8
+	%43 = load %type.TypeNode** %42
+	%44 = getelementptr %type.TypeNode* %43, i32 0, i32 14
+	%45 = load i8* %44
+	%46 = icmp eq i8 %45, 1
+	br i1 %46, label %L.17, label %L.16
+L.17:
+	%47 = load %type.TypeNode** %t
+	%48 = load %ast.AstNode** %vlo
+	%49 = getelementptr %ast.AstNode* %48, i32 0, i32 8
+	%50 = load %type.TypeNode** %49
+	call void @type_RangeEnum(%type.TypeNode* %47, %type.TypeNode* %50)
+	br label %L.16
+L.16:
+	br label %L.14
+L.13:
+	call void @lex_Error(i8 31)
+	br label %L.14
+L.14:
+	br label %L.10
+L.12:
+	call void @lex_Error(i8 72)
+	br label %L.10
+L.10:
+	br label %L.6
+L.6:
+	br label %L.1
+L.3:
+	call void @lex_ErrorT(i8 17, i8 6)
+	br label %L.1
+L.1:
+	%51 = load %type.TypeNode** %t
+	store %type.TypeNode* %51, %type.TypeNode** %rv.0
+	br label %return
+return:
+	%52 = load %type.TypeNode** %rv.0
+	ret %type.TypeNode* %52
+}
+@S.538 = internal constant [20 x i8] c"field inital values\00"
 define internal %type.TypeNode* @type_Record(%type.TypeNode* %bt$) nounwind {
 L.0:
 	%rv.0 = alloca %type.TypeNode*
@@ -10185,160 +12328,173 @@ L.4:
 L.6:
 	%16 = load %symb.SymbNode** %bs
 	%17 = icmp ne %symb.SymbNode* %16, null
-	%18 = xor i1 %17, true
-	br i1 %18, label %L.7, label %L.8
-L.8:
-	%19 = load %symb.SymbNode** %bs
-	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 21
-	%21 = getelementptr [0 x i8]* %20
-	%22 = bitcast [0 x i8]* %21 to [0 x i8]*
-	%23 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %22, i8 2)
-	store %symb.SymbNode* %23, %symb.SymbNode** %s
-	%24 = load %symb.SymbNode** %ps
-	%25 = icmp ne %symb.SymbNode* %24, null
-	br i1 %25, label %L.10, label %L.11
-L.10:
-	%26 = load %symb.SymbNode** %s
-	%27 = bitcast %symb.SymbNode* %26 to %symb.SymbNode*
-	%28 = load %symb.SymbNode** %ps
-	%29 = getelementptr %symb.SymbNode* %28, i32 0, i32 0
-	store %symb.SymbNode* %27, %symb.SymbNode** %29
-	br label %L.9
-L.11:
-	%30 = load %symb.SymbNode** %s
-	%31 = bitcast %symb.SymbNode* %30 to %symb.SymbNode*
-	%32 = load %type.TypeNode** %t
-	%33 = getelementptr %type.TypeNode* %32, i32 0, i32 4
-	store %symb.SymbNode* %31, %symb.SymbNode** %33
-	br label %L.9
+	br i1 %17, label %L.9, label %L.10
 L.9:
+	%18 = load %symb.SymbNode** %bs
+	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 1
+	%20 = load %type.TypeNode** %19
+	%21 = getelementptr %type.TypeNode* %20, i32 0, i32 25
+	%22 = load i8* %21
+	%23 = icmp ne i8 %22, 0
+	%24 = xor i1 %23, true
+	br label %L.10
+L.10:
+	%25 = phi i1 [ false, %L.6 ], [ %24, %L.9 ]
+	%26 = xor i1 %25, true
+	br i1 %26, label %L.7, label %L.8
+L.8:
+	%27 = load %symb.SymbNode** %bs
+	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 22
+	%29 = getelementptr [0 x i8]* %28
+	%30 = bitcast [0 x i8]* %29 to [0 x i8]*
+	%31 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %30, i8 2)
+	store %symb.SymbNode* %31, %symb.SymbNode** %s
+	%32 = load %symb.SymbNode** %ps
+	%33 = icmp ne %symb.SymbNode* %32, null
+	br i1 %33, label %L.12, label %L.13
+L.12:
 	%34 = load %symb.SymbNode** %s
-	store %symb.SymbNode* %34, %symb.SymbNode** %ps
-	%35 = load %symb.SymbNode** %bs
-	%36 = getelementptr %symb.SymbNode* %35, i32 0, i32 1
-	%37 = load %type.TypeNode** %36
+	%35 = bitcast %symb.SymbNode* %34 to %symb.SymbNode*
+	%36 = load %symb.SymbNode** %ps
+	%37 = getelementptr %symb.SymbNode* %36, i32 0, i32 0
+	store %symb.SymbNode* %35, %symb.SymbNode** %37
+	br label %L.11
+L.13:
 	%38 = load %symb.SymbNode** %s
-	%39 = getelementptr %symb.SymbNode* %38, i32 0, i32 1
-	store %type.TypeNode* %37, %type.TypeNode** %39
-	%40 = load %symb.SymbNode** %bs
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 0
-	%42 = load %symb.SymbNode** %41
-	%43 = bitcast %symb.SymbNode* %42 to %symb.SymbNode*
-	store %symb.SymbNode* %43, %symb.SymbNode** %bs
+	%39 = bitcast %symb.SymbNode* %38 to %symb.SymbNode*
+	%40 = load %type.TypeNode** %t
+	%41 = getelementptr %type.TypeNode* %40, i32 0, i32 4
+	store %symb.SymbNode* %39, %symb.SymbNode** %41
+	br label %L.11
+L.11:
+	%42 = load %symb.SymbNode** %s
+	store %symb.SymbNode* %42, %symb.SymbNode** %ps
+	%43 = load %symb.SymbNode** %bs
+	%44 = getelementptr %symb.SymbNode* %43, i32 0, i32 1
+	%45 = load %type.TypeNode** %44
+	%46 = load %symb.SymbNode** %s
+	%47 = getelementptr %symb.SymbNode* %46, i32 0, i32 1
+	store %type.TypeNode* %45, %type.TypeNode** %47
+	%48 = load %symb.SymbNode** %bs
+	%49 = getelementptr %symb.SymbNode* %48, i32 0, i32 0
+	%50 = load %symb.SymbNode** %49
+	%51 = bitcast %symb.SymbNode* %50 to %symb.SymbNode*
+	store %symb.SymbNode* %51, %symb.SymbNode** %bs
 	br label %L.6
 L.7:
 	br label %L.3
 L.5:
 	store %type.TypeNode* null, %type.TypeNode** %bt
-	call void @lex_Error(i8 64)
+	call void @lex_Error(i8 65)
 	br label %L.3
 L.3:
 	br label %L.1
 L.1:
-	br label %L.12
-L.12:
-	%44 = load i8* %tok
-	%45 = icmp eq i8 %44, 41
-	%46 = xor i1 %45, true
-	br i1 %46, label %L.13, label %L.14
+	br label %L.14
 L.14:
-	%47 = call i8 @lex_Next()
-	store i8 %47, i8* %tok
-	%48 = load i8* %tok
-	%49 = zext i8 %48 to i32
-	switch i32 %49, label %L.15 [
-		i32 3, label %L.17
+	%52 = load i8* %tok
+	%53 = icmp eq i8 %52, 41
+	%54 = xor i1 %53, true
+	br i1 %54, label %L.15, label %L.16
+L.16:
+	%55 = call i8 @lex_Next()
+	store i8 %55, i8* %tok
+	%56 = load i8* %tok
+	%57 = zext i8 %56 to i32
+	switch i32 %57, label %L.17 [
+		i32 3, label %L.19
 	]
-L.17:
-	%50 = load %type.TypeNode** %t
-	%51 = getelementptr %type.TypeNode* %50, i32 0, i32 4
-	%52 = load %symb.SymbNode** %51
-	%53 = bitcast %symb.SymbNode* %52 to %symb.SymbNode*
-	%54 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%55 = call i8 @symb_IsUniqueLocal(%symb.SymbNode* %53, [0 x i8]* %54)
-	%56 = icmp ne i8 %55, 0
-	%57 = xor i1 %56, true
-	br i1 %57, label %L.19, label %L.18
 L.19:
-	%58 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %58)
-	br label %L.18
-L.18:
-	%59 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%60 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %59, i8 2)
-	store %symb.SymbNode* %60, %symb.SymbNode** %s
-	%61 = load %symb.SymbNode** %ps
-	%62 = icmp ne %symb.SymbNode* %61, null
-	br i1 %62, label %L.21, label %L.22
+	%58 = load %type.TypeNode** %t
+	%59 = getelementptr %type.TypeNode* %58, i32 0, i32 4
+	%60 = load %symb.SymbNode** %59
+	%61 = bitcast %symb.SymbNode* %60 to %symb.SymbNode*
+	%62 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%63 = call i8 @symb_IsUniqueLocal(%symb.SymbNode* %61, [0 x i8]* %62)
+	%64 = icmp ne i8 %63, 0
+	%65 = xor i1 %64, true
+	br i1 %65, label %L.21, label %L.20
 L.21:
-	%63 = load %symb.SymbNode** %s
-	%64 = bitcast %symb.SymbNode* %63 to %symb.SymbNode*
-	%65 = load %symb.SymbNode** %ps
-	%66 = getelementptr %symb.SymbNode* %65, i32 0, i32 0
-	store %symb.SymbNode* %64, %symb.SymbNode** %66
-	br label %L.20
-L.22:
-	%67 = load %symb.SymbNode** %s
-	%68 = bitcast %symb.SymbNode* %67 to %symb.SymbNode*
-	%69 = load %type.TypeNode** %t
-	%70 = getelementptr %type.TypeNode* %69, i32 0, i32 4
-	store %symb.SymbNode* %68, %symb.SymbNode** %70
+	%66 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 20, [0 x i8]* %66)
 	br label %L.20
 L.20:
-	%71 = load %symb.SymbNode** %s
-	store %symb.SymbNode* %71, %symb.SymbNode** %ps
-	%72 = call i8 @lex_Next()
-	store i8 %72, i8* %tok
-	%73 = load i8* %tok
-	%74 = call %type.TypeNode* @type_Def(i8 %73, %type.TypeNode* null)
-	store %type.TypeNode* %74, %type.TypeNode** %ft
-	%75 = load %type.TypeNode** %ft
-	%76 = load %symb.SymbNode** %s
-	%77 = getelementptr %symb.SymbNode* %76, i32 0, i32 1
-	store %type.TypeNode* %75, %type.TypeNode** %77
-	%78 = load i8* @lex_Token
-	store i8 %78, i8* %tok
-	%79 = load i8* %tok
-	%80 = icmp eq i8 %79, 3
-	br i1 %80, label %L.24, label %L.23
-L.24:
-	%81 = load %type.TypeNode** %ft
-	%82 = call %type.TypeNode* @type_TypeAttributes(%type.TypeNode* %81)
-	%83 = load %symb.SymbNode** %s
-	%84 = getelementptr %symb.SymbNode* %83, i32 0, i32 1
-	store %type.TypeNode* %82, %type.TypeNode** %84
-	%85 = load i8* @lex_Token
-	store i8 %85, i8* %tok
-	br label %L.23
+	%67 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%68 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %67, i8 2)
+	store %symb.SymbNode* %68, %symb.SymbNode** %s
+	%69 = load %symb.SymbNode** %ps
+	%70 = icmp ne %symb.SymbNode* %69, null
+	br i1 %70, label %L.23, label %L.24
 L.23:
-	%86 = load i8* %tok
-	%87 = icmp eq i8 %86, 9
-	br i1 %87, label %L.26, label %L.25
+	%71 = load %symb.SymbNode** %s
+	%72 = bitcast %symb.SymbNode* %71 to %symb.SymbNode*
+	%73 = load %symb.SymbNode** %ps
+	%74 = getelementptr %symb.SymbNode* %73, i32 0, i32 0
+	store %symb.SymbNode* %72, %symb.SymbNode** %74
+	br label %L.22
+L.24:
+	%75 = load %symb.SymbNode** %s
+	%76 = bitcast %symb.SymbNode* %75 to %symb.SymbNode*
+	%77 = load %type.TypeNode** %t
+	%78 = getelementptr %type.TypeNode* %77, i32 0, i32 4
+	store %symb.SymbNode* %76, %symb.SymbNode** %78
+	br label %L.22
+L.22:
+	%79 = load %symb.SymbNode** %s
+	store %symb.SymbNode* %79, %symb.SymbNode** %ps
+	%80 = call i8 @lex_Next()
+	store i8 %80, i8* %tok
+	%81 = load i8* %tok
+	%82 = call %type.TypeNode* @type_Def(i8 %81, %type.TypeNode* null)
+	store %type.TypeNode* %82, %type.TypeNode** %ft
+	%83 = load %type.TypeNode** %ft
+	%84 = load %symb.SymbNode** %s
+	%85 = getelementptr %symb.SymbNode* %84, i32 0, i32 1
+	store %type.TypeNode* %83, %type.TypeNode** %85
+	%86 = load i8* @lex_Token
+	store i8 %86, i8* %tok
+	%87 = load i8* %tok
+	%88 = icmp eq i8 %87, 3
+	br i1 %88, label %L.26, label %L.25
 L.26:
-	%88 = call i8 @lex_Next()
-	store i8 %88, i8* %tok
-	%89 = getelementptr [20 x i8]* @S.515
-	%90 = bitcast [20 x i8]* %89 to [0 x i8]*
-	call void @lex_ErrorS(i8 0, [0 x i8]* %90)
+	%89 = load %symb.SymbNode** %s
+	%90 = load %type.TypeNode** %ft
+	%91 = call %type.TypeNode* @type_FieldAttributes(%symb.SymbNode* %89, %type.TypeNode* %90)
+	%92 = load %symb.SymbNode** %s
+	%93 = getelementptr %symb.SymbNode* %92, i32 0, i32 1
+	store %type.TypeNode* %91, %type.TypeNode** %93
+	%94 = load i8* @lex_Token
+	store i8 %94, i8* %tok
 	br label %L.25
 L.25:
-	br label %L.16
+	%95 = load i8* %tok
+	%96 = icmp eq i8 %95, 9
+	br i1 %96, label %L.28, label %L.27
+L.28:
+	%97 = call i8 @lex_Next()
+	store i8 %97, i8* %tok
+	%98 = getelementptr [20 x i8]* @S.538
+	%99 = bitcast [20 x i8]* %98 to [0 x i8]*
+	call void @lex_ErrorS(i8 0, [0 x i8]* %99)
+	br label %L.27
+L.27:
+	br label %L.18
+L.17:
+	call void @lex_Error(i8 64)
+	br label %L.18
+L.18:
+	%100 = call i8 @lex_Expect(i8 4)
+	store i8 %100, i8* %tok
+	br label %L.14
 L.15:
-	call void @lex_Error(i8 63)
-	br label %L.16
-L.16:
-	%91 = call i8 @lex_Expect(i8 4)
-	store i8 %91, i8* %tok
-	br label %L.12
-L.13:
-	%92 = call i8 @lex_Expect(i8 37)
-	store i8 %92, i8* %tok
-	%93 = load %type.TypeNode** %t
-	store %type.TypeNode* %93, %type.TypeNode** %rv.0
+	%101 = call i8 @lex_Expect(i8 37)
+	store i8 %101, i8* %tok
+	%102 = load %type.TypeNode** %t
+	store %type.TypeNode* %102, %type.TypeNode** %rv.0
 	br label %return
 return:
-	%94 = load %type.TypeNode** %rv.0
-	ret %type.TypeNode* %94
+	%103 = load %type.TypeNode** %rv.0
+	ret %type.TypeNode* %103
 }
 define internal %type.TypeNode* @type_Array() nounwind {
 L.0:
@@ -10346,6 +12502,7 @@ L.0:
 	%tok = alloca i8
 	%t = alloca %type.TypeNode*
 	%bt = alloca %type.TypeNode*
+	%tree = alloca %ast.AstNode*
 	%0 = call i8 @lex_Next()
 	store i8 %0, i8* %tok
 	%1 = call %type.TypeNode* @type_New(i8 6)
@@ -10354,7 +12511,6 @@ L.0:
 	%3 = icmp ne i8 %2, 35
 	br i1 %3, label %L.2, label %L.3
 L.2:
-	%tree = alloca %ast.AstNode*
 	%4 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
 	store %ast.AstNode* %4, %ast.AstNode** %tree
 	%5 = load %ast.AstNode** %tree
@@ -10370,62 +12526,92 @@ L.5:
 		i32 2, label %L.9
 	]
 L.8:
-	%11 = load %type.TypeNode** %t
-	%12 = getelementptr %type.TypeNode* %11, i32 0, i32 7
-	store i64 0, i64* %12
+	%11 = load i8* @lex_Token
+	%12 = icmp eq i8 %11, 6
+	br i1 %12, label %L.11, label %L.12
+L.11:
 	%13 = load %ast.AstNode** %tree
-	%14 = getelementptr %ast.AstNode* %13, i32 0, i32 10
-	%15 = load i64* %14
-	%16 = sub i64 %15, 1
-	%17 = load %type.TypeNode** %t
-	%18 = getelementptr %type.TypeNode* %17, i32 0, i32 8
-	store i64 %16, i64* %18
-	%19 = load %type.TypeNode** @type_wordtype
-	%20 = bitcast %type.TypeNode* %19 to %type.TypeNode*
-	%21 = load %type.TypeNode** %t
-	%22 = getelementptr %type.TypeNode* %21, i32 0, i32 2
-	store %type.TypeNode* %20, %type.TypeNode** %22
+	%14 = call %type.TypeNode* @type_Range(%ast.AstNode* %13)
+	%15 = bitcast %type.TypeNode* %14 to %type.TypeNode*
+	%16 = load %type.TypeNode** %t
+	%17 = getelementptr %type.TypeNode* %16, i32 0, i32 2
+	store %type.TypeNode* %15, %type.TypeNode** %17
+	%18 = load %type.TypeNode** %t
+	%19 = getelementptr %type.TypeNode* %18, i32 0, i32 2
+	%20 = load %type.TypeNode** %19
+	%21 = getelementptr %type.TypeNode* %20, i32 0, i32 7
+	%22 = load i64* %21
+	%23 = load %type.TypeNode** %t
+	%24 = getelementptr %type.TypeNode* %23, i32 0, i32 7
+	store i64 %22, i64* %24
+	%25 = load %type.TypeNode** %t
+	%26 = getelementptr %type.TypeNode* %25, i32 0, i32 2
+	%27 = load %type.TypeNode** %26
+	%28 = getelementptr %type.TypeNode* %27, i32 0, i32 8
+	%29 = load i64* %28
+	%30 = load %type.TypeNode** %t
+	%31 = getelementptr %type.TypeNode* %30, i32 0, i32 8
+	store i64 %29, i64* %31
+	br label %L.10
+L.12:
+	%32 = load %type.TypeNode** %t
+	%33 = getelementptr %type.TypeNode* %32, i32 0, i32 7
+	store i64 0, i64* %33
+	%34 = load %ast.AstNode** %tree
+	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 10
+	%36 = load i64* %35
+	%37 = sub i64 %36, 1
+	%38 = load %type.TypeNode** %t
+	%39 = getelementptr %type.TypeNode* %38, i32 0, i32 8
+	store i64 %37, i64* %39
+	%40 = load %type.TypeNode** @type_wordtype
+	%41 = bitcast %type.TypeNode* %40 to %type.TypeNode*
+	%42 = load %type.TypeNode** %t
+	%43 = getelementptr %type.TypeNode* %42, i32 0, i32 2
+	store %type.TypeNode* %41, %type.TypeNode** %43
+	br label %L.10
+L.10:
 	br label %L.7
 L.9:
-	%23 = load %ast.AstNode** %tree
-	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 8
-	%25 = load %type.TypeNode** %24
-	%26 = getelementptr %type.TypeNode* %25, i32 0, i32 14
-	%27 = load i8* %26
-	%28 = zext i8 %27 to i32
-	switch i32 %28, label %L.10 [
-		i32 1, label %L.12
-		i32 2, label %L.12
+	%44 = load %ast.AstNode** %tree
+	%45 = getelementptr %ast.AstNode* %44, i32 0, i32 8
+	%46 = load %type.TypeNode** %45
+	%47 = getelementptr %type.TypeNode* %46, i32 0, i32 14
+	%48 = load i8* %47
+	%49 = zext i8 %48 to i32
+	switch i32 %49, label %L.13 [
+		i32 1, label %L.15
+		i32 2, label %L.15
 	]
-L.12:
-	%29 = load %ast.AstNode** %tree
-	%30 = getelementptr %ast.AstNode* %29, i32 0, i32 8
-	%31 = load %type.TypeNode** %30
-	%32 = getelementptr %type.TypeNode* %31, i32 0, i32 7
-	%33 = load i64* %32
-	%34 = load %type.TypeNode** %t
-	%35 = getelementptr %type.TypeNode* %34, i32 0, i32 7
-	store i64 %33, i64* %35
-	%36 = load %ast.AstNode** %tree
-	%37 = getelementptr %ast.AstNode* %36, i32 0, i32 8
-	%38 = load %type.TypeNode** %37
-	%39 = getelementptr %type.TypeNode* %38, i32 0, i32 8
-	%40 = load i64* %39
-	%41 = load %type.TypeNode** %t
-	%42 = getelementptr %type.TypeNode* %41, i32 0, i32 8
-	store i64 %40, i64* %42
-	%43 = load %ast.AstNode** %tree
-	%44 = getelementptr %ast.AstNode* %43, i32 0, i32 8
-	%45 = load %type.TypeNode** %44
-	%46 = bitcast %type.TypeNode* %45 to %type.TypeNode*
-	%47 = load %type.TypeNode** %t
-	%48 = getelementptr %type.TypeNode* %47, i32 0, i32 2
-	store %type.TypeNode* %46, %type.TypeNode** %48
-	br label %L.11
-L.10:
+L.15:
+	%50 = load %ast.AstNode** %tree
+	%51 = getelementptr %ast.AstNode* %50, i32 0, i32 8
+	%52 = load %type.TypeNode** %51
+	%53 = getelementptr %type.TypeNode* %52, i32 0, i32 7
+	%54 = load i64* %53
+	%55 = load %type.TypeNode** %t
+	%56 = getelementptr %type.TypeNode* %55, i32 0, i32 7
+	store i64 %54, i64* %56
+	%57 = load %ast.AstNode** %tree
+	%58 = getelementptr %ast.AstNode* %57, i32 0, i32 8
+	%59 = load %type.TypeNode** %58
+	%60 = getelementptr %type.TypeNode* %59, i32 0, i32 8
+	%61 = load i64* %60
+	%62 = load %type.TypeNode** %t
+	%63 = getelementptr %type.TypeNode* %62, i32 0, i32 8
+	store i64 %61, i64* %63
+	%64 = load %ast.AstNode** %tree
+	%65 = getelementptr %ast.AstNode* %64, i32 0, i32 8
+	%66 = load %type.TypeNode** %65
+	%67 = bitcast %type.TypeNode* %66 to %type.TypeNode*
+	%68 = load %type.TypeNode** %t
+	%69 = getelementptr %type.TypeNode* %68, i32 0, i32 2
+	store %type.TypeNode* %67, %type.TypeNode** %69
+	br label %L.14
+L.13:
 	call void @lex_Error(i8 24)
-	br label %L.11
-L.11:
+	br label %L.14
+L.14:
 	br label %L.7
 L.6:
 	call void @lex_Error(i8 24)
@@ -10435,29 +12621,29 @@ L.7:
 L.4:
 	br label %L.1
 L.3:
-	%49 = load %type.TypeNode** %t
-	%50 = getelementptr %type.TypeNode* %49, i32 0, i32 25
-	store i8 1, i8* %50
+	%70 = load %type.TypeNode** %t
+	%71 = getelementptr %type.TypeNode* %70, i32 0, i32 25
+	store i8 1, i8* %71
 	br label %L.1
 L.1:
-	%51 = call i8 @lex_Expect(i8 35)
-	store i8 %51, i8* %tok
-	%52 = load i8* %tok
-	%53 = call %type.TypeNode* @type_Def(i8 %52, %type.TypeNode* null)
-	store %type.TypeNode* %53, %type.TypeNode** %bt
-	%54 = load %type.TypeNode** %bt
-	%55 = bitcast %type.TypeNode* %54 to %type.TypeNode*
-	%56 = load %type.TypeNode** %t
-	%57 = getelementptr %type.TypeNode* %56, i32 0, i32 0
-	store %type.TypeNode* %55, %type.TypeNode** %57
-	%58 = load %type.TypeNode** %t
-	store %type.TypeNode* %58, %type.TypeNode** %rv.0
+	%72 = call i8 @lex_Expect(i8 35)
+	store i8 %72, i8* %tok
+	%73 = load i8* %tok
+	%74 = call %type.TypeNode* @type_Def(i8 %73, %type.TypeNode* null)
+	store %type.TypeNode* %74, %type.TypeNode** %bt
+	%75 = load %type.TypeNode** %bt
+	%76 = bitcast %type.TypeNode* %75 to %type.TypeNode*
+	%77 = load %type.TypeNode** %t
+	%78 = getelementptr %type.TypeNode* %77, i32 0, i32 0
+	store %type.TypeNode* %76, %type.TypeNode** %78
+	%79 = load %type.TypeNode** %t
+	store %type.TypeNode* %79, %type.TypeNode** %rv.0
 	br label %return
 return:
-	%59 = load %type.TypeNode** %rv.0
-	ret %type.TypeNode* %59
+	%80 = load %type.TypeNode** %rv.0
+	ret %type.TypeNode* %80
 }
-@S.516 = internal constant [41 x i8] c"Aggregate parameter by value not allowed\00"
+@S.539 = internal constant [41 x i8] c"Aggregate parameter by value not allowed\00"
 define internal void @type_DefProc(%symb.SymbNode* %procs$, %symb.SymbNode* %meths$) nounwind {
 L.0:
 	%procs = alloca %symb.SymbNode*
@@ -10521,7 +12707,7 @@ L.13:
 	%26 = call i8 @lex_Next()
 	store i8 %26, i8* %tok
 	%27 = load %symb.SymbNode** %s
-	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 13
+	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 14
 	store i8 0, i8* %28
 	%29 = load %type.TypeNode** @type_unkntype
 	store %type.TypeNode* %29, %type.TypeNode** %t
@@ -10565,7 +12751,7 @@ L.22:
 	%49 = xor i1 %48, true
 	br i1 %49, label %L.24, label %L.23
 L.24:
-	%50 = getelementptr [41 x i8]* @S.516
+	%50 = getelementptr [41 x i8]* @S.539
 	%51 = bitcast [41 x i8]* %50 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %51)
 	br label %L.23
@@ -10712,7 +12898,7 @@ L.0:
 	br i1 %3, label %L.1, label %L.2
 L.1:
 	%4 = load %symb.SymbNode** %s
-	%5 = getelementptr %symb.SymbNode* %4, i32 0, i32 12
+	%5 = getelementptr %symb.SymbNode* %4, i32 0, i32 13
 	%6 = load i8* %5
 	%7 = icmp ne i8 %6, 2
 	br label %L.2
@@ -10826,107 +13012,6 @@ return:
 	%44 = load %type.TypeNode** %rv.0
 	ret %type.TypeNode* %44
 }
-define internal %type.TypeNode* @type_Range(%ast.AstNode* %vlo$) nounwind {
-L.0:
-	%rv.0 = alloca %type.TypeNode*
-	%vlo = alloca %ast.AstNode*
-	store %ast.AstNode* %vlo$, %ast.AstNode** %vlo
-	%t = alloca %type.TypeNode*
-	%tok = alloca i8
-	%vhi = alloca %ast.AstNode*
-	%0 = load %type.TypeNode** @type_unkntype
-	store %type.TypeNode* %0, %type.TypeNode** %t
-	%1 = load i8* @lex_Token
-	%2 = icmp eq i8 %1, 6
-	br i1 %2, label %L.2, label %L.3
-L.2:
-	%3 = call i8 @lex_Next()
-	store i8 %3, i8* %tok
-	%4 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
-	store %ast.AstNode* %4, %ast.AstNode** %vhi
-	%5 = load %ast.AstNode** %vlo
-	%6 = getelementptr %ast.AstNode* %5, i32 0, i32 0
-	%7 = load i8* %6
-	%8 = icmp eq i8 %7, 7
-	br i1 %8, label %L.4, label %L.5
-L.4:
-	%9 = load %ast.AstNode** %vhi
-	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 0
-	%11 = load i8* %10
-	%12 = icmp eq i8 %11, 7
-	br label %L.5
-L.5:
-	%13 = phi i1 [ false, %L.2 ], [ %12, %L.4 ]
-	br i1 %13, label %L.7, label %L.8
-L.7:
-	%14 = load %ast.AstNode** %vlo
-	%15 = getelementptr %ast.AstNode* %14, i32 0, i32 8
-	%16 = load %type.TypeNode** %15
-	%17 = getelementptr %type.TypeNode* %16, i32 0, i32 14
-	%18 = load i8* %17
-	%19 = zext i8 %18 to i32
-	switch i32 %19, label %L.9 [
-		i32 1, label %L.11
-		i32 2, label %L.11
-		i32 3, label %L.11
-	]
-L.11:
-	%20 = load %ast.AstNode** %vlo
-	%21 = getelementptr %ast.AstNode* %20, i32 0, i32 8
-	%22 = load %type.TypeNode** %21
-	%23 = getelementptr %type.TypeNode* %22, i32 0, i32 14
-	%24 = load i8* %23
-	%25 = call %type.TypeNode* @type_New(i8 %24)
-	store %type.TypeNode* %25, %type.TypeNode** %t
-	%26 = load %ast.AstNode** %vlo
-	%27 = getelementptr %ast.AstNode* %26, i32 0, i32 10
-	%28 = load i64* %27
-	%29 = load %type.TypeNode** %t
-	%30 = getelementptr %type.TypeNode* %29, i32 0, i32 7
-	store i64 %28, i64* %30
-	%31 = load %ast.AstNode** %vhi
-	%32 = getelementptr %ast.AstNode* %31, i32 0, i32 10
-	%33 = load i64* %32
-	%34 = load %type.TypeNode** %t
-	%35 = getelementptr %type.TypeNode* %34, i32 0, i32 8
-	store i64 %33, i64* %35
-	%36 = load %ast.AstNode** %vlo
-	%37 = getelementptr %ast.AstNode* %36, i32 0, i32 8
-	%38 = load %type.TypeNode** %37
-	%39 = getelementptr %type.TypeNode* %38, i32 0, i32 14
-	%40 = load i8* %39
-	%41 = icmp eq i8 %40, 1
-	br i1 %41, label %L.13, label %L.12
-L.13:
-	%42 = load %type.TypeNode** %t
-	%43 = load %ast.AstNode** %vlo
-	%44 = getelementptr %ast.AstNode* %43, i32 0, i32 8
-	%45 = load %type.TypeNode** %44
-	call void @type_RangeEnum(%type.TypeNode* %42, %type.TypeNode* %45)
-	br label %L.12
-L.12:
-	br label %L.10
-L.9:
-	call void @lex_Error(i8 31)
-	br label %L.10
-L.10:
-	br label %L.6
-L.8:
-	call void @lex_Error(i8 71)
-	br label %L.6
-L.6:
-	br label %L.1
-L.3:
-	call void @lex_ErrorT(i8 17, i8 6)
-	br label %L.1
-L.1:
-	%46 = load %type.TypeNode** %t
-	store %type.TypeNode* %46, %type.TypeNode** %rv.0
-	br label %return
-return:
-	%47 = load %type.TypeNode** %rv.0
-	ret %type.TypeNode* %47
-}
 define internal %type.TypeNode* @type_Def(i8 zeroext %tok$, %type.TypeNode* %bt$) nounwind {
 L.0:
 	%rv.0 = alloca %type.TypeNode*
@@ -10968,7 +13053,7 @@ L.4:
 	br i1 %9, label %L.11, label %L.12
 L.11:
 	%10 = load %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 12
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 13
 	%12 = load i8* %11
 	%13 = zext i8 %12 to i32
 	switch i32 %13, label %L.13 [
@@ -11172,36 +13257,38 @@ return:
 	%45 = load %type.TypeNode** %rv.0
 	ret %type.TypeNode* %45
 }
-@S.518 = internal constant [1 x i8] c"\00"
-@S.519 = internal constant [4 x i8] c"msb\00"
-@S.520 = internal constant [4 x i8] c"lsb\00"
-@type_bitorderstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8]* @S.518 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.519 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.520 )  to [0 x i8]* ) ], align 4
-@S.522 = internal constant [1 x i8] c"\00"
-@S.523 = internal constant [3 x i8] c"be\00"
-@S.524 = internal constant [3 x i8] c"le\00"
-@type_memorderstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8]* @S.522 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.523 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.524 )  to [0 x i8]* ) ], align 4
-@S.526 = internal constant [3 x i8] c"RW\00"
-@S.527 = internal constant [3 x i8] c"RO\00"
-@S.528 = internal constant [3 x i8] c"WO\00"
-@type_accessstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.526 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.527 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.528 )  to [0 x i8]* ) ], align 4
+@S.541 = internal constant [1 x i8] c"\00"
+@S.542 = internal constant [4 x i8] c"msb\00"
+@S.543 = internal constant [4 x i8] c"lsb\00"
+@type_bitorderstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8]* @S.541 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.542 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8]* @S.543 )  to [0 x i8]* ) ], align 4
+@S.545 = internal constant [1 x i8] c"\00"
+@S.546 = internal constant [3 x i8] c"be\00"
+@S.547 = internal constant [3 x i8] c"le\00"
+@type_memorderstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8]* @S.545 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.546 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.547 )  to [0 x i8]* ) ], align 4
+@S.549 = internal constant [3 x i8] c"RW\00"
+@S.550 = internal constant [3 x i8] c"RO\00"
+@S.551 = internal constant [3 x i8] c"WO\00"
+@type_accessstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.549 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.550 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8]* @S.551 )  to [0 x i8]* ) ], align 4
 @type_blanks = internal constant [65 x i8] c"                                                                \00", align 1
-@S.530 = internal constant [3 x i8] c"..\00"
-@S.531 = internal constant [3 x i8] c"..\00"
-@S.532 = internal constant [3 x i8] c", \00"
-@S.533 = internal constant [3 x i8] c"{\0A\00"
-@S.534 = internal constant [3 x i8] c" (\00"
-@S.535 = internal constant [4 x i8] c"): \00"
-@S.536 = internal constant [3 x i8] c"..\00"
-@S.537 = internal constant [3 x i8] c"@_\00"
-@S.538 = internal constant [10 x i8] c"*UNKNOWN*\00"
-@S.539 = internal constant [7 x i8] c" size=\00"
-@S.540 = internal constant [7 x i8] c" attr=\00"
-@S.541 = internal constant [8 x i8] c"unalgn \00"
-@S.542 = internal constant [8 x i8] c"packed \00"
-@S.543 = internal constant [8 x i8] c"noepad \00"
-@S.544 = internal constant [8 x i8] c"nofpad \00"
-@S.545 = internal constant [13 x i8] c"\0A\09methods:\0A\09\00"
-@S.546 = internal constant [4 x i8] c"???\00"
+@S.553 = internal constant [3 x i8] c"..\00"
+@S.554 = internal constant [3 x i8] c"..\00"
+@S.555 = internal constant [3 x i8] c", \00"
+@S.556 = internal constant [8 x i8] c"<float>\00"
+@S.557 = internal constant [3 x i8] c"{\0A\00"
+@S.558 = internal constant [3 x i8] c" (\00"
+@S.559 = internal constant [3 x i8] c"0x\00"
+@S.560 = internal constant [4 x i8] c"): \00"
+@S.561 = internal constant [3 x i8] c"..\00"
+@S.562 = internal constant [3 x i8] c"@_\00"
+@S.563 = internal constant [10 x i8] c"*UNKNOWN*\00"
+@S.564 = internal constant [7 x i8] c" size=\00"
+@S.565 = internal constant [7 x i8] c" attr=\00"
+@S.566 = internal constant [8 x i8] c"unalgn \00"
+@S.567 = internal constant [8 x i8] c"packed \00"
+@S.568 = internal constant [8 x i8] c"noepad \00"
+@S.569 = internal constant [8 x i8] c"nofpad \00"
+@S.570 = internal constant [13 x i8] c"\0A\09methods:\0A\09\00"
+@S.571 = internal constant [4 x i8] c"???\00"
 define internal void @type_Dump2(%type.TypeNode* %t$, i32 %indent$, i8 zeroext %full$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -11233,7 +13320,7 @@ L.7:
 	%10 = load %type.TypeNode** %t
 	%11 = getelementptr %type.TypeNode* %10, i32 0, i32 3
 	%12 = load %symb.SymbNode** %11
-	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 21
+	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 22
 	%14 = getelementptr [0 x i8]* %13
 	%15 = bitcast [0 x i8]* %14 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %15)
@@ -11247,17 +13334,18 @@ L.8:
 		i32 2, label %L.11
 		i32 3, label %L.12
 		i32 1, label %L.13
-		i32 7, label %L.14
-		i32 6, label %L.15
-		i32 5, label %L.16
-		i32 8, label %L.17
+		i32 4, label %L.14
+		i32 7, label %L.15
+		i32 6, label %L.16
+		i32 5, label %L.17
+		i32 8, label %L.18
 	]
 L.11:
 	%20 = load %type.TypeNode** %t
 	%21 = getelementptr %type.TypeNode* %20, i32 0, i32 7
 	%22 = load i64* %21
 	call void @sys_fildes_uint64(i32 2, i64 %22)
-	%23 = getelementptr [3 x i8]* @S.530
+	%23 = getelementptr [3 x i8]* @S.553
 	%24 = bitcast [3 x i8]* %23 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %24)
 	%25 = load %type.TypeNode** %t
@@ -11270,7 +13358,7 @@ L.12:
 	%29 = getelementptr %type.TypeNode* %28, i32 0, i32 7
 	%30 = load i64* %29
 	call void @sys_fildes_int64(i32 2, i64 %30)
-	%31 = getelementptr [3 x i8]* @S.531
+	%31 = getelementptr [3 x i8]* @S.554
 	%32 = bitcast [3 x i8]* %31 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %32)
 	%33 = load %type.TypeNode** %t
@@ -11285,21 +13373,21 @@ L.13:
 	%38 = load %symb.SymbNode** %37
 	%39 = bitcast %symb.SymbNode* %38 to %symb.SymbNode*
 	store %symb.SymbNode* %39, %symb.SymbNode** %s
-	br label %L.18
-L.18:
+	br label %L.19
+L.19:
 	%40 = load %symb.SymbNode** %s
 	%41 = icmp ne %symb.SymbNode* %40, null
 	%42 = xor i1 %41, true
-	br i1 %42, label %L.19, label %L.20
-L.20:
+	br i1 %42, label %L.20, label %L.21
+L.21:
 	%43 = load %symb.SymbNode** %s
-	%44 = getelementptr %symb.SymbNode* %43, i32 0, i32 21
+	%44 = getelementptr %symb.SymbNode* %43, i32 0, i32 22
 	%45 = getelementptr [0 x i8]* %44
 	%46 = bitcast [0 x i8]* %45 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %46)
 	call void @sys_fildes_chr(i32 2, i8 61)
 	%47 = load %symb.SymbNode** %s
-	%48 = getelementptr %symb.SymbNode* %47, i32 0, i32 7
+	%48 = getelementptr %symb.SymbNode* %47, i32 0, i32 8
 	%49 = load %ast.AstNode** %48
 	%50 = getelementptr %ast.AstNode* %49, i32 0, i32 10
 	%51 = load i64* %50
@@ -11312,375 +13400,394 @@ L.20:
 	store %symb.SymbNode* %56, %symb.SymbNode** %s
 	%57 = load %symb.SymbNode** %s
 	%58 = icmp eq %symb.SymbNode* %57, null
-	br i1 %58, label %L.19, label %L.21
-L.21:
-	%59 = getelementptr [3 x i8]* @S.532
+	br i1 %58, label %L.20, label %L.22
+L.22:
+	%59 = getelementptr [3 x i8]* @S.555
 	%60 = bitcast [3 x i8]* %59 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %60)
-	br label %L.18
-L.19:
+	br label %L.19
+L.20:
 	call void @sys_fildes_chr(i32 2, i8 41)
 	br label %L.10
 L.14:
-	%61 = getelementptr [3 x i8]* @S.533
-	%62 = bitcast [3 x i8]* %61 to [0 x i8]*
+	%61 = getelementptr [8 x i8]* @S.556
+	%62 = bitcast [8 x i8]* %61 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %62)
+	br label %L.10
+L.15:
+	%63 = getelementptr [3 x i8]* @S.557
+	%64 = bitcast [3 x i8]* %63 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %64)
 	store i16 0, i16* %offs
-	%63 = load %type.TypeNode** %t
-	%64 = getelementptr %type.TypeNode* %63, i32 0, i32 4
-	%65 = load %symb.SymbNode** %64
-	%66 = bitcast %symb.SymbNode* %65 to %symb.SymbNode*
-	store %symb.SymbNode* %66, %symb.SymbNode** %s
-	br label %L.22
-L.22:
-	%67 = load %symb.SymbNode** %s
-	%68 = icmp ne %symb.SymbNode* %67, null
-	%69 = xor i1 %68, true
-	br i1 %69, label %L.23, label %L.24
-L.24:
-	%70 = bitcast [65 x i8]* @type_blanks to [0 x i8]*
-	%71 = load i32* %indent
-	%72 = add i32 %71, 2
-	call void @sys_fildes_strn(i32 2, [0 x i8]* %70, i32 %72)
-	%73 = load %symb.SymbNode** %s
-	%74 = getelementptr %symb.SymbNode* %73, i32 0, i32 21
-	%75 = getelementptr [0 x i8]* %74
-	%76 = bitcast [0 x i8]* %75 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %76)
-	%77 = getelementptr [3 x i8]* @S.534
-	%78 = bitcast [3 x i8]* %77 to [0 x i8]*
+	%65 = load %type.TypeNode** %t
+	%66 = getelementptr %type.TypeNode* %65, i32 0, i32 4
+	%67 = load %symb.SymbNode** %66
+	%68 = bitcast %symb.SymbNode* %67 to %symb.SymbNode*
+	store %symb.SymbNode* %68, %symb.SymbNode** %s
+	br label %L.23
+L.23:
+	%69 = load %symb.SymbNode** %s
+	%70 = icmp ne %symb.SymbNode* %69, null
+	%71 = xor i1 %70, true
+	br i1 %71, label %L.24, label %L.25
+L.25:
+	%72 = bitcast [65 x i8]* @type_blanks to [0 x i8]*
+	%73 = load i32* %indent
+	%74 = add i32 %73, 2
+	call void @sys_fildes_strn(i32 2, [0 x i8]* %72, i32 %74)
+	%75 = load %symb.SymbNode** %s
+	%76 = getelementptr %symb.SymbNode* %75, i32 0, i32 22
+	%77 = getelementptr [0 x i8]* %76
+	%78 = bitcast [0 x i8]* %77 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %78)
-	%79 = load i16* %offs
-	%80 = zext i16 %79 to i32
-	call void @sys_fildes_uint(i32 2, i32 %80)
-	%81 = getelementptr [4 x i8]* @S.535
-	%82 = bitcast [4 x i8]* %81 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %82)
-	%83 = load %symb.SymbNode** %s
-	%84 = getelementptr %symb.SymbNode* %83, i32 0, i32 1
-	%85 = load %type.TypeNode** %84
-	%86 = load i32* %indent
-	%87 = add i32 %86, 2
-	%88 = load i8* %full
-	call void @type_Dump2(%type.TypeNode* %85, i32 %87, i8 %88)
-	%89 = load %type.TypeNode** %t
-	%90 = getelementptr %type.TypeNode* %89, i32 0, i32 21
-	%91 = load i8* %90
-	%92 = icmp ne i8 %91, 0
-	br i1 %92, label %L.26, label %L.27
-L.26:
-	%93 = load i16* %offs
-	%94 = load %symb.SymbNode** %s
-	%95 = getelementptr %symb.SymbNode* %94, i32 0, i32 1
-	%96 = load %type.TypeNode** %95
-	%97 = getelementptr %type.TypeNode* %96, i32 0, i32 9
-	%98 = load i32* %97
-	%99 = trunc i32 %98 to i16
-	%100 = add i16 %93, %99
-	store i16 %100, i16* %offs
-	br label %L.25
+	%79 = getelementptr [3 x i8]* @S.558
+	%80 = bitcast [3 x i8]* %79 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %80)
+	%81 = load %type.TypeNode** %t
+	%82 = getelementptr %type.TypeNode* %81, i32 0, i32 21
+	%83 = load i8* %82
+	%84 = icmp ne i8 %83, 0
+	br i1 %84, label %L.27, label %L.28
 L.27:
+	%85 = load i16* %offs
+	call void @sys_fildes_uint16(i32 2, i16 %85)
+	br label %L.26
+L.28:
+	%86 = getelementptr [3 x i8]* @S.559
+	%87 = bitcast [3 x i8]* %86 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %87)
+	%88 = load i16* %offs
+	call void @sys_fildes_hex16(i32 2, i16 %88)
+	br label %L.26
+L.26:
+	%89 = getelementptr [4 x i8]* @S.560
+	%90 = bitcast [4 x i8]* %89 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %90)
+	%91 = load %symb.SymbNode** %s
+	%92 = getelementptr %symb.SymbNode* %91, i32 0, i32 1
+	%93 = load %type.TypeNode** %92
+	%94 = load i32* %indent
+	%95 = add i32 %94, 2
+	%96 = load i8* %full
+	call void @type_Dump2(%type.TypeNode* %93, i32 %95, i8 %96)
+	%97 = load %type.TypeNode** %t
+	%98 = getelementptr %type.TypeNode* %97, i32 0, i32 21
+	%99 = load i8* %98
+	%100 = icmp ne i8 %99, 0
+	br i1 %100, label %L.30, label %L.31
+L.30:
 	%101 = load i16* %offs
 	%102 = load %symb.SymbNode** %s
 	%103 = getelementptr %symb.SymbNode* %102, i32 0, i32 1
 	%104 = load %type.TypeNode** %103
-	%105 = getelementptr %type.TypeNode* %104, i32 0, i32 10
+	%105 = getelementptr %type.TypeNode* %104, i32 0, i32 9
 	%106 = load i32* %105
-	%107 = load %target.ModelT** @target_Target
-	%108 = getelementptr %target.ModelT* %107, i32 0, i32 2
-	%109 = load i8* %108
-	%110 = zext i8 %109 to i32
-	%111 = udiv i32 %106, %110
-	%112 = trunc i32 %111 to i16
-	%113 = add i16 %101, %112
-	store i16 %113, i16* %offs
-	br label %L.25
-L.25:
+	%107 = trunc i32 %106 to i16
+	%108 = add i16 %101, %107
+	store i16 %108, i16* %offs
+	br label %L.29
+L.31:
+	%109 = load i16* %offs
+	%110 = load %symb.SymbNode** %s
+	%111 = getelementptr %symb.SymbNode* %110, i32 0, i32 1
+	%112 = load %type.TypeNode** %111
+	%113 = getelementptr %type.TypeNode* %112, i32 0, i32 10
+	%114 = load i32* %113
+	%115 = load %target.ModelT** @target_Target
+	%116 = getelementptr %target.ModelT* %115, i32 0, i32 2
+	%117 = load i8* %116
+	%118 = zext i8 %117 to i32
+	%119 = udiv i32 %114, %118
+	%120 = trunc i32 %119 to i16
+	%121 = add i16 %109, %120
+	store i16 %121, i16* %offs
+	br label %L.29
+L.29:
 	call void @sys_fildes_nl(i32 2)
-	%114 = load %symb.SymbNode** %s
-	%115 = getelementptr %symb.SymbNode* %114, i32 0, i32 0
-	%116 = load %symb.SymbNode** %115
-	%117 = bitcast %symb.SymbNode* %116 to %symb.SymbNode*
-	store %symb.SymbNode* %117, %symb.SymbNode** %s
-	br label %L.22
-L.23:
+	%122 = load %symb.SymbNode** %s
+	%123 = getelementptr %symb.SymbNode* %122, i32 0, i32 0
+	%124 = load %symb.SymbNode** %123
+	%125 = bitcast %symb.SymbNode* %124 to %symb.SymbNode*
+	store %symb.SymbNode* %125, %symb.SymbNode** %s
+	br label %L.23
+L.24:
 	call void @sys_fildes_chr(i32 2, i8 125)
 	br label %L.10
-L.15:
-	call void @sys_fildes_chr(i32 2, i8 91)
-	%118 = load %type.TypeNode** %t
-	%119 = getelementptr %type.TypeNode* %118, i32 0, i32 25
-	%120 = load i8* %119
-	%121 = icmp ne i8 %120, 0
-	br i1 %121, label %L.29, label %L.30
-L.29:
-	call void @sys_fildes_chr(i32 2, i8 42)
-	br label %L.28
-L.30:
-	%122 = load %type.TypeNode** %t
-	%123 = getelementptr %type.TypeNode* %122, i32 0, i32 7
-	%124 = load i64* %123
-	%125 = trunc i64 %124 to i32
-	call void @sys_fildes_uint32(i32 2, i32 %125)
-	%126 = getelementptr [3 x i8]* @S.536
-	%127 = bitcast [3 x i8]* %126 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %127)
-	%128 = load %type.TypeNode** %t
-	%129 = getelementptr %type.TypeNode* %128, i32 0, i32 8
-	%130 = load i64* %129
-	%131 = trunc i64 %130 to i32
-	call void @sys_fildes_uint32(i32 2, i32 %131)
-	br label %L.28
-L.28:
-	call void @sys_fildes_chr(i32 2, i8 93)
-	%132 = load %type.TypeNode** %t
-	%133 = getelementptr %type.TypeNode* %132, i32 0, i32 0
-	%134 = load %type.TypeNode** %133
-	%135 = bitcast %type.TypeNode* %134 to %type.TypeNode*
-	%136 = load i32* %indent
-	%137 = load i8* %full
-	call void @type_Dump2(%type.TypeNode* %135, i32 %136, i8 %137)
-	br label %L.10
 L.16:
-	call void @sys_fildes_chr(i32 2, i8 64)
-	%138 = load %type.TypeNode** %t
-	%139 = getelementptr %type.TypeNode* %138, i32 0, i32 0
-	%140 = load %type.TypeNode** %139
-	%141 = icmp ne %type.TypeNode* %140, null
-	br i1 %141, label %L.31, label %L.32
-L.31:
-	%142 = load %type.TypeNode** %t
-	%143 = getelementptr %type.TypeNode* %142, i32 0, i32 0
-	%144 = load %type.TypeNode** %143
-	%145 = getelementptr %type.TypeNode* %144, i32 0, i32 3
-	%146 = load %symb.SymbNode** %145
-	%147 = icmp ne %symb.SymbNode* %146, null
+	call void @sys_fildes_chr(i32 2, i8 91)
+	%126 = load %type.TypeNode** %t
+	%127 = getelementptr %type.TypeNode* %126, i32 0, i32 25
+	%128 = load i8* %127
+	%129 = icmp ne i8 %128, 0
+	br i1 %129, label %L.33, label %L.34
+L.33:
+	call void @sys_fildes_chr(i32 2, i8 42)
+	br label %L.32
+L.34:
+	%130 = load %type.TypeNode** %t
+	%131 = getelementptr %type.TypeNode* %130, i32 0, i32 7
+	%132 = load i64* %131
+	%133 = trunc i64 %132 to i32
+	call void @sys_fildes_uint32(i32 2, i32 %133)
+	%134 = getelementptr [3 x i8]* @S.561
+	%135 = bitcast [3 x i8]* %134 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %135)
+	%136 = load %type.TypeNode** %t
+	%137 = getelementptr %type.TypeNode* %136, i32 0, i32 8
+	%138 = load i64* %137
+	%139 = trunc i64 %138 to i32
+	call void @sys_fildes_uint32(i32 2, i32 %139)
 	br label %L.32
 L.32:
-	%148 = phi i1 [ false, %L.16 ], [ %147, %L.31 ]
-	br i1 %148, label %L.34, label %L.35
-L.34:
-	%149 = load %type.TypeNode** %t
-	%150 = getelementptr %type.TypeNode* %149, i32 0, i32 0
-	%151 = load %type.TypeNode** %150
-	%152 = getelementptr %type.TypeNode* %151, i32 0, i32 3
-	%153 = load %symb.SymbNode** %152
-	%154 = getelementptr %symb.SymbNode* %153, i32 0, i32 21
-	%155 = getelementptr [0 x i8]* %154
-	%156 = bitcast [0 x i8]* %155 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %156)
-	br label %L.33
+	call void @sys_fildes_chr(i32 2, i8 93)
+	%140 = load %type.TypeNode** %t
+	%141 = getelementptr %type.TypeNode* %140, i32 0, i32 0
+	%142 = load %type.TypeNode** %141
+	%143 = bitcast %type.TypeNode* %142 to %type.TypeNode*
+	%144 = load i32* %indent
+	%145 = load i8* %full
+	call void @type_Dump2(%type.TypeNode* %143, i32 %144, i8 %145)
+	br label %L.10
+L.17:
+	call void @sys_fildes_chr(i32 2, i8 64)
+	%146 = load %type.TypeNode** %t
+	%147 = getelementptr %type.TypeNode* %146, i32 0, i32 0
+	%148 = load %type.TypeNode** %147
+	%149 = icmp ne %type.TypeNode* %148, null
+	br i1 %149, label %L.35, label %L.36
 L.35:
+	%150 = load %type.TypeNode** %t
+	%151 = getelementptr %type.TypeNode* %150, i32 0, i32 0
+	%152 = load %type.TypeNode** %151
+	%153 = getelementptr %type.TypeNode* %152, i32 0, i32 3
+	%154 = load %symb.SymbNode** %153
+	%155 = icmp ne %symb.SymbNode* %154, null
+	br label %L.36
+L.36:
+	%156 = phi i1 [ false, %L.17 ], [ %155, %L.35 ]
+	br i1 %156, label %L.38, label %L.39
+L.38:
 	%157 = load %type.TypeNode** %t
 	%158 = getelementptr %type.TypeNode* %157, i32 0, i32 0
 	%159 = load %type.TypeNode** %158
-	%160 = bitcast %type.TypeNode* %159 to %type.TypeNode*
-	%161 = load i32* %indent
-	%162 = load i8* %full
-	call void @type_Dump2(%type.TypeNode* %160, i32 %161, i8 %162)
-	br label %L.33
-L.33:
-	br label %L.10
-L.17:
-	%163 = getelementptr [3 x i8]* @S.537
-	%164 = bitcast [3 x i8]* %163 to [0 x i8]*
+	%160 = getelementptr %type.TypeNode* %159, i32 0, i32 3
+	%161 = load %symb.SymbNode** %160
+	%162 = getelementptr %symb.SymbNode* %161, i32 0, i32 22
+	%163 = getelementptr [0 x i8]* %162
+	%164 = bitcast [0 x i8]* %163 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %164)
+	br label %L.37
+L.39:
 	%165 = load %type.TypeNode** %t
-	%166 = getelementptr %type.TypeNode* %165, i32 0, i32 4
-	%167 = load %symb.SymbNode** %166
-	%168 = getelementptr %symb.SymbNode* %167, i32 0, i32 3
-	%169 = load %symb.SymbNode** %168
-	%170 = bitcast %symb.SymbNode* %169 to %symb.SymbNode*
-	call void @symb_DumpFormals(%symb.SymbNode* %170)
+	%166 = getelementptr %type.TypeNode* %165, i32 0, i32 0
+	%167 = load %type.TypeNode** %166
+	%168 = bitcast %type.TypeNode* %167 to %type.TypeNode*
+	%169 = load i32* %indent
+	%170 = load i8* %full
+	call void @type_Dump2(%type.TypeNode* %168, i32 %169, i8 %170)
+	br label %L.37
+L.37:
+	br label %L.10
+L.18:
+	%171 = getelementptr [3 x i8]* @S.562
+	%172 = bitcast [3 x i8]* %171 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %172)
+	%173 = load %type.TypeNode** %t
+	%174 = getelementptr %type.TypeNode* %173, i32 0, i32 4
+	%175 = load %symb.SymbNode** %174
+	%176 = getelementptr %symb.SymbNode* %175, i32 0, i32 3
+	%177 = load %symb.SymbNode** %176
+	%178 = bitcast %symb.SymbNode* %177 to %symb.SymbNode*
+	call void @symb_DumpFormals(%symb.SymbNode* %178)
 	br label %L.10
 L.9:
-	%171 = getelementptr [10 x i8]* @S.538
-	%172 = bitcast [10 x i8]* %171 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %172)
+	%179 = getelementptr [10 x i8]* @S.563
+	%180 = bitcast [10 x i8]* %179 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %180)
 	br label %L.10
 L.10:
-	%173 = getelementptr [7 x i8]* @S.539
-	%174 = bitcast [7 x i8]* %173 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %174)
-	%175 = load %type.TypeNode** %t
-	%176 = getelementptr %type.TypeNode* %175, i32 0, i32 9
-	%177 = load i32* %176
-	call void @sys_fildes_uint(i32 2, i32 %177)
+	%181 = getelementptr [7 x i8]* @S.564
+	%182 = bitcast [7 x i8]* %181 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %182)
+	%183 = load %type.TypeNode** %t
+	%184 = getelementptr %type.TypeNode* %183, i32 0, i32 9
+	%185 = load i32* %184
+	call void @sys_fildes_uint(i32 2, i32 %185)
 	call void @sys_fildes_chr(i32 2, i8 58)
-	%178 = load %type.TypeNode** %t
-	%179 = getelementptr %type.TypeNode* %178, i32 0, i32 10
-	%180 = load i32* %179
-	call void @sys_fildes_uint(i32 2, i32 %180)
-	call void @sys_fildes_chr(i32 2, i8 58)
-	%181 = load %type.TypeNode** %t
-	%182 = getelementptr %type.TypeNode* %181, i32 0, i32 11
-	%183 = load i32* %182
-	call void @sys_fildes_uint(i32 2, i32 %183)
-	%184 = getelementptr [7 x i8]* @S.540
-	%185 = bitcast [7 x i8]* %184 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %185)
 	%186 = load %type.TypeNode** %t
-	%187 = getelementptr %type.TypeNode* %186, i32 0, i32 22
-	%188 = load i8* %187
-	%189 = icmp ne i8 %188, 0
-	br i1 %189, label %L.37, label %L.36
-L.37:
-	%190 = getelementptr [8 x i8]* @S.541
-	%191 = bitcast [8 x i8]* %190 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %191)
-	br label %L.36
-L.36:
-	%192 = load %type.TypeNode** %t
-	%193 = getelementptr %type.TypeNode* %192, i32 0, i32 21
-	%194 = load i8* %193
-	%195 = icmp ne i8 %194, 0
-	br i1 %195, label %L.39, label %L.38
-L.39:
-	%196 = getelementptr [8 x i8]* @S.542
-	%197 = bitcast [8 x i8]* %196 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %197)
-	br label %L.38
-L.38:
-	%198 = load %type.TypeNode** %t
-	%199 = getelementptr %type.TypeNode* %198, i32 0, i32 23
-	%200 = load i8* %199
-	%201 = icmp ne i8 %200, 0
-	br i1 %201, label %L.41, label %L.40
+	%187 = getelementptr %type.TypeNode* %186, i32 0, i32 10
+	%188 = load i32* %187
+	call void @sys_fildes_uint(i32 2, i32 %188)
+	call void @sys_fildes_chr(i32 2, i8 58)
+	%189 = load %type.TypeNode** %t
+	%190 = getelementptr %type.TypeNode* %189, i32 0, i32 11
+	%191 = load i32* %190
+	call void @sys_fildes_uint(i32 2, i32 %191)
+	%192 = getelementptr [7 x i8]* @S.565
+	%193 = bitcast [7 x i8]* %192 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %193)
+	%194 = load %type.TypeNode** %t
+	%195 = getelementptr %type.TypeNode* %194, i32 0, i32 22
+	%196 = load i8* %195
+	%197 = icmp ne i8 %196, 0
+	br i1 %197, label %L.41, label %L.40
 L.41:
-	%202 = getelementptr [8 x i8]* @S.543
-	%203 = bitcast [8 x i8]* %202 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %203)
+	%198 = getelementptr [8 x i8]* @S.566
+	%199 = bitcast [8 x i8]* %198 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %199)
 	br label %L.40
 L.40:
-	%204 = load %type.TypeNode** %t
-	%205 = getelementptr %type.TypeNode* %204, i32 0, i32 24
-	%206 = load i8* %205
-	%207 = icmp ne i8 %206, 0
-	br i1 %207, label %L.43, label %L.42
+	%200 = load %type.TypeNode** %t
+	%201 = getelementptr %type.TypeNode* %200, i32 0, i32 21
+	%202 = load i8* %201
+	%203 = icmp ne i8 %202, 0
+	br i1 %203, label %L.43, label %L.42
 L.43:
-	%208 = getelementptr [8 x i8]* @S.544
-	%209 = bitcast [8 x i8]* %208 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %209)
+	%204 = getelementptr [8 x i8]* @S.567
+	%205 = bitcast [8 x i8]* %204 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %205)
 	br label %L.42
 L.42:
-	call void @sys_fildes_chr(i32 2, i8 58)
-	%210 = load %type.TypeNode** %t
-	%211 = getelementptr %type.TypeNode* %210, i32 0, i32 16
-	%212 = load i8* %211
-	%213 = load %target.ModelT** @target_Target
-	%214 = getelementptr %target.ModelT* %213, i32 0, i32 0
-	%215 = load i8* %214
-	%216 = icmp ne i8 %212, %215
-	br i1 %216, label %L.45, label %L.44
+	%206 = load %type.TypeNode** %t
+	%207 = getelementptr %type.TypeNode* %206, i32 0, i32 23
+	%208 = load i8* %207
+	%209 = icmp ne i8 %208, 0
+	br i1 %209, label %L.45, label %L.44
 L.45:
-	%217 = load %type.TypeNode** %t
-	%218 = getelementptr %type.TypeNode* %217, i32 0, i32 16
-	%219 = load i8* %218
-	%220 = zext i8 %219 to i32
-	%221 = getelementptr [3 x [0 x i8]*]* @type_memorderstr, i32 0, i32 %220
-	%222 = load [0 x i8]** %221
-	%223 = bitcast [0 x i8]* %222 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %223)
+	%210 = getelementptr [8 x i8]* @S.568
+	%211 = bitcast [8 x i8]* %210 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %211)
 	br label %L.44
 L.44:
-	call void @sys_fildes_chr(i32 2, i8 58)
-	%224 = load %type.TypeNode** %t
-	%225 = getelementptr %type.TypeNode* %224, i32 0, i32 15
-	%226 = load i8* %225
-	%227 = load %target.ModelT** @target_Target
-	%228 = getelementptr %target.ModelT* %227, i32 0, i32 1
-	%229 = load i8* %228
-	%230 = icmp ne i8 %226, %229
-	br i1 %230, label %L.47, label %L.46
+	%212 = load %type.TypeNode** %t
+	%213 = getelementptr %type.TypeNode* %212, i32 0, i32 24
+	%214 = load i8* %213
+	%215 = icmp ne i8 %214, 0
+	br i1 %215, label %L.47, label %L.46
 L.47:
-	%231 = load %type.TypeNode** %t
-	%232 = getelementptr %type.TypeNode* %231, i32 0, i32 15
-	%233 = load i8* %232
-	%234 = zext i8 %233 to i32
-	%235 = getelementptr [3 x [0 x i8]*]* @type_bitorderstr, i32 0, i32 %234
-	%236 = load [0 x i8]** %235
-	%237 = bitcast [0 x i8]* %236 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %237)
+	%216 = getelementptr [8 x i8]* @S.569
+	%217 = bitcast [8 x i8]* %216 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %217)
 	br label %L.46
 L.46:
 	call void @sys_fildes_chr(i32 2, i8 58)
-	%238 = load %type.TypeNode** %t
-	%239 = getelementptr %type.TypeNode* %238, i32 0, i32 17
-	%240 = load i8* %239
-	%241 = icmp ne i8 %240, 0
-	br i1 %241, label %L.49, label %L.48
+	%218 = load %type.TypeNode** %t
+	%219 = getelementptr %type.TypeNode* %218, i32 0, i32 16
+	%220 = load i8* %219
+	%221 = load %target.ModelT** @target_Target
+	%222 = getelementptr %target.ModelT* %221, i32 0, i32 0
+	%223 = load i8* %222
+	%224 = icmp ne i8 %220, %223
+	br i1 %224, label %L.49, label %L.48
 L.49:
-	%242 = load %type.TypeNode** %t
-	%243 = getelementptr %type.TypeNode* %242, i32 0, i32 17
-	%244 = load i8* %243
-	%245 = zext i8 %244 to i32
-	%246 = getelementptr [3 x [0 x i8]*]* @type_accessstr, i32 0, i32 %245
-	%247 = load [0 x i8]** %246
-	%248 = bitcast [0 x i8]* %247 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %248)
+	%225 = load %type.TypeNode** %t
+	%226 = getelementptr %type.TypeNode* %225, i32 0, i32 16
+	%227 = load i8* %226
+	%228 = zext i8 %227 to i32
+	%229 = getelementptr [3 x [0 x i8]*]* @type_memorderstr, i32 0, i32 %228
+	%230 = load [0 x i8]** %229
+	%231 = bitcast [0 x i8]* %230 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %231)
 	br label %L.48
 L.48:
 	call void @sys_fildes_chr(i32 2, i8 58)
-	%249 = load %type.TypeNode** %t
-	%250 = getelementptr %type.TypeNode* %249, i32 0, i32 26
-	%251 = load i8* %250
-	%252 = icmp ne i8 %251, 0
-	br i1 %252, label %L.51, label %L.50
+	%232 = load %type.TypeNode** %t
+	%233 = getelementptr %type.TypeNode* %232, i32 0, i32 15
+	%234 = load i8* %233
+	%235 = load %target.ModelT** @target_Target
+	%236 = getelementptr %target.ModelT* %235, i32 0, i32 1
+	%237 = load i8* %236
+	%238 = icmp ne i8 %234, %237
+	br i1 %238, label %L.51, label %L.50
 L.51:
-	call void @sys_fildes_chr(i32 2, i8 73)
+	%239 = load %type.TypeNode** %t
+	%240 = getelementptr %type.TypeNode* %239, i32 0, i32 15
+	%241 = load i8* %240
+	%242 = zext i8 %241 to i32
+	%243 = getelementptr [3 x [0 x i8]*]* @type_bitorderstr, i32 0, i32 %242
+	%244 = load [0 x i8]** %243
+	%245 = bitcast [0 x i8]* %244 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %245)
 	br label %L.50
 L.50:
-	%253 = load %type.TypeNode** %t
-	%254 = getelementptr %type.TypeNode* %253, i32 0, i32 27
-	%255 = load i8* %254
-	%256 = icmp ne i8 %255, 0
-	br i1 %256, label %L.53, label %L.52
+	call void @sys_fildes_chr(i32 2, i8 58)
+	%246 = load %type.TypeNode** %t
+	%247 = getelementptr %type.TypeNode* %246, i32 0, i32 17
+	%248 = load i8* %247
+	%249 = icmp ne i8 %248, 0
+	br i1 %249, label %L.53, label %L.52
 L.53:
-	call void @sys_fildes_chr(i32 2, i8 79)
+	%250 = load %type.TypeNode** %t
+	%251 = getelementptr %type.TypeNode* %250, i32 0, i32 17
+	%252 = load i8* %251
+	%253 = zext i8 %252 to i32
+	%254 = getelementptr [3 x [0 x i8]*]* @type_accessstr, i32 0, i32 %253
+	%255 = load [0 x i8]** %254
+	%256 = bitcast [0 x i8]* %255 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %256)
 	br label %L.52
 L.52:
+	call void @sys_fildes_chr(i32 2, i8 58)
 	%257 = load %type.TypeNode** %t
-	%258 = getelementptr %type.TypeNode* %257, i32 0, i32 29
-	store i8 1, i8* %258
-	%259 = load %type.TypeNode** %t
-	%260 = getelementptr %type.TypeNode* %259, i32 0, i32 5
-	%261 = load %symb.SymbNode** %260
-	%262 = icmp ne %symb.SymbNode* %261, null
-	br i1 %262, label %L.55, label %L.54
+	%258 = getelementptr %type.TypeNode* %257, i32 0, i32 26
+	%259 = load i8* %258
+	%260 = icmp ne i8 %259, 0
+	br i1 %260, label %L.55, label %L.54
 L.55:
-	%263 = load %type.TypeNode** %t
-	%264 = getelementptr %type.TypeNode* %263, i32 0, i32 5
-	%265 = load %symb.SymbNode** %264
-	%266 = bitcast %symb.SymbNode* %265 to %symb.SymbNode*
-	store %symb.SymbNode* %266, %symb.SymbNode** %s
-	%267 = getelementptr [13 x i8]* @S.545
-	%268 = bitcast [13 x i8]* %267 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %268)
-	br label %L.56
-L.56:
-	%269 = load %symb.SymbNode** %s
-	call void @symb_DumpS(%symb.SymbNode* %269)
-	%270 = load %symb.SymbNode** %s
-	%271 = getelementptr %symb.SymbNode* %270, i32 0, i32 0
-	%272 = load %symb.SymbNode** %271
-	%273 = bitcast %symb.SymbNode* %272 to %symb.SymbNode*
-	store %symb.SymbNode* %273, %symb.SymbNode** %s
-	%274 = load %symb.SymbNode** %s
-	%275 = icmp eq %symb.SymbNode* %274, null
-	br i1 %275, label %L.57, label %L.58
-L.58:
-	call void @sys_fildes_chr(i32 2, i8 9)
-	br label %L.56
-L.57:
+	call void @sys_fildes_chr(i32 2, i8 73)
 	br label %L.54
 L.54:
+	%261 = load %type.TypeNode** %t
+	%262 = getelementptr %type.TypeNode* %261, i32 0, i32 27
+	%263 = load i8* %262
+	%264 = icmp ne i8 %263, 0
+	br i1 %264, label %L.57, label %L.56
+L.57:
+	call void @sys_fildes_chr(i32 2, i8 79)
+	br label %L.56
+L.56:
+	%265 = load %type.TypeNode** %t
+	%266 = getelementptr %type.TypeNode* %265, i32 0, i32 29
+	store i8 1, i8* %266
+	%267 = load %type.TypeNode** %t
+	%268 = getelementptr %type.TypeNode* %267, i32 0, i32 5
+	%269 = load %symb.SymbNode** %268
+	%270 = icmp ne %symb.SymbNode* %269, null
+	br i1 %270, label %L.59, label %L.58
+L.59:
+	%271 = load %type.TypeNode** %t
+	%272 = getelementptr %type.TypeNode* %271, i32 0, i32 5
+	%273 = load %symb.SymbNode** %272
+	%274 = bitcast %symb.SymbNode* %273 to %symb.SymbNode*
+	store %symb.SymbNode* %274, %symb.SymbNode** %s
+	%275 = getelementptr [13 x i8]* @S.570
+	%276 = bitcast [13 x i8]* %275 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %276)
+	br label %L.60
+L.60:
+	%277 = load %symb.SymbNode** %s
+	call void @symb_DumpS(%symb.SymbNode* %277)
+	%278 = load %symb.SymbNode** %s
+	%279 = getelementptr %symb.SymbNode* %278, i32 0, i32 0
+	%280 = load %symb.SymbNode** %279
+	%281 = bitcast %symb.SymbNode* %280 to %symb.SymbNode*
+	store %symb.SymbNode* %281, %symb.SymbNode** %s
+	%282 = load %symb.SymbNode** %s
+	%283 = icmp eq %symb.SymbNode* %282, null
+	br i1 %283, label %L.61, label %L.62
+L.62:
+	call void @sys_fildes_chr(i32 2, i8 9)
+	br label %L.60
+L.61:
+	br label %L.58
+L.58:
 	br label %L.6
 L.6:
 	br label %L.1
 L.3:
-	%276 = getelementptr [4 x i8]* @S.546
-	%277 = bitcast [4 x i8]* %276 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %277)
+	%284 = getelementptr [4 x i8]* @S.571
+	%285 = bitcast [4 x i8]* %284 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %285)
 	br label %L.1
 L.1:
 	br label %return
@@ -11701,67 +13808,7 @@ return:
 	ret void
 }
 @expr_skiplist = internal constant [4 x i8] [ i8 33, i8 37, i8 4, i8 0 ], align 1
-define internal %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %tree$) nounwind {
-L.0:
-	%rv.0 = alloca %ast.AstNode*
-	%tree = alloca %ast.AstNode*
-	store %ast.AstNode* %tree$, %ast.AstNode** %tree
-	%0 = load %ast.AstNode** %tree
-	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 8
-	%2 = load %type.TypeNode** %1
-	%3 = icmp ne %type.TypeNode* %2, null
-	br i1 %3, label %L.1, label %L.2
-L.1:
-	%4 = load %ast.AstNode** %tree
-	%5 = getelementptr %ast.AstNode* %4, i32 0, i32 8
-	%6 = load %type.TypeNode** %5
-	%7 = load %type.TypeNode** @type_booltype
-	%8 = call i8 @type_Compat(%type.TypeNode* %6, %type.TypeNode* %7)
-	%9 = icmp ne i8 %8, 0
-	%10 = xor i1 %9, true
-	br label %L.2
-L.2:
-	%11 = phi i1 [ false, %L.0 ], [ %10, %L.1 ]
-	br i1 %11, label %L.4, label %L.3
-L.4:
-	call void @lex_Error(i8 48)
-	br label %L.3
-L.3:
-	%12 = load %ast.AstNode** %tree
-	%13 = getelementptr %ast.AstNode* %12, i32 0, i32 7
-	%14 = load i32* %13
-	%15 = icmp ugt i32 %14, 1
-	br i1 %15, label %L.6, label %L.5
-L.6:
-	%16 = load %ast.AstNode** %tree
-	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 0
-	%18 = load i8* %17
-	%19 = icmp ne i8 %18, 7
-	br i1 %19, label %L.8, label %L.7
-L.8:
-	%20 = load %type.TypeNode** @type_booltype
-	%21 = load %ast.AstNode** %tree
-	%22 = load %ast.AstNode** %tree
-	%23 = getelementptr %ast.AstNode* %22, i32 0, i32 8
-	%24 = load %type.TypeNode** %23
-	%25 = call %ast.AstNode* @ast_Const(%type.TypeNode* %24, i64 0)
-	%26 = call %ast.AstNode* @ast_New2(i8 52, %type.TypeNode* %20, %ast.AstNode* %21, %ast.AstNode* %25)
-	store %ast.AstNode* %26, %ast.AstNode** %tree
-	br label %L.7
-L.7:
-	%27 = load %ast.AstNode** %tree
-	%28 = getelementptr %ast.AstNode* %27, i32 0, i32 7
-	store i32 1, i32* %28
-	br label %L.5
-L.5:
-	%29 = load %ast.AstNode** %tree
-	store %ast.AstNode* %29, %ast.AstNode** %rv.0
-	br label %return
-return:
-	%30 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %30
-}
-@expr_proplist = internal constant [7 x i8] [ i8 85, i8 86, i8 87, i8 88, i8 81, i8 89, i8 0 ], align 1
+@expr_proplist = internal constant [7 x i8] [ i8 88, i8 89, i8 90, i8 91, i8 83, i8 92, i8 0 ], align 1
 define internal %ast.AstNode* @expr_Property(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -11794,54 +13841,51 @@ L.4:
 	%9 = load %type.TypeNode** %8
 	%10 = bitcast %type.TypeNode* %9 to %type.TypeNode*
 	store %type.TypeNode* %10, %type.TypeNode** %t
-	%11 = load %type.TypeNode** %t
-	%12 = icmp eq %type.TypeNode* %11, null
-	br i1 %12, label %L.6, label %L.5
-L.6:
-	store %ast.AstNode* null, %ast.AstNode** %rv.0
-	br label %return
-L.5:
 	br label %L.2
 L.1:
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.2:
-	%13 = load i8* @lex_Token
-	store i8 %13, i8* %tok
-	%14 = load i8* %tok
-	%15 = icmp eq i8 %14, 41
-	br i1 %15, label %L.8, label %L.9
-L.8:
-	%16 = bitcast [7 x i8]* @expr_proplist to [0 x i8]*
-	%17 = call i8 @lex_Keyword([0 x i8]* %16)
-	store i8 %17, i8* %tok
+	%11 = load i8* @lex_Token
+	store i8 %11, i8* %tok
+	%12 = load i8* %tok
+	%13 = icmp eq i8 %12, 41
+	br i1 %13, label %L.6, label %L.7
+L.6:
+	%14 = bitcast [7 x i8]* @expr_proplist to [0 x i8]*
+	%15 = call i8 @lex_Keyword([0 x i8]* %14)
+	store i8 %15, i8* %tok
+	%16 = load %type.TypeNode** %t
+	%17 = icmp ne %type.TypeNode* %16, null
+	br i1 %17, label %L.9, label %L.10
+L.9:
 	%18 = load i8* %tok
 	%19 = zext i8 %18 to i32
-	switch i32 %19, label %L.10 [
-		i32 85, label %L.12
-		i32 86, label %L.13
-		i32 87, label %L.14
-		i32 88, label %L.15
-		i32 81, label %L.16
-		i32 89, label %L.17
+	switch i32 %19, label %L.11 [
+		i32 88, label %L.13
+		i32 89, label %L.14
+		i32 90, label %L.15
+		i32 91, label %L.16
+		i32 83, label %L.17
+		i32 92, label %L.18
 	]
-L.12:
+L.13:
 	%20 = load %type.TypeNode** %t
 	%21 = load %type.TypeNode** %t
 	%22 = getelementptr %type.TypeNode* %21, i32 0, i32 7
 	%23 = load i64* %22
 	%24 = call %ast.AstNode* @ast_Const(%type.TypeNode* %20, i64 %23)
 	store %ast.AstNode* %24, %ast.AstNode** %tree
-	br label %L.11
-L.13:
+	br label %L.12
+L.14:
 	%25 = load %type.TypeNode** %t
 	%26 = load %type.TypeNode** %t
 	%27 = getelementptr %type.TypeNode* %26, i32 0, i32 8
 	%28 = load i64* %27
 	%29 = call %ast.AstNode* @ast_Const(%type.TypeNode* %25, i64 %28)
 	store %ast.AstNode* %29, %ast.AstNode** %tree
-	br label %L.11
-L.14:
+	br label %L.12
+L.15:
 	%30 = load %type.TypeNode** @type_wordtype
 	%31 = load %type.TypeNode** %t
 	%32 = getelementptr %type.TypeNode* %31, i32 0, i32 9
@@ -11849,8 +13893,8 @@ L.14:
 	%34 = zext i32 %33 to i64
 	%35 = call %ast.AstNode* @ast_Const(%type.TypeNode* %30, i64 %34)
 	store %ast.AstNode* %35, %ast.AstNode** %tree
-	br label %L.11
-L.15:
+	br label %L.12
+L.16:
 	%36 = load %type.TypeNode** @type_wordtype
 	%37 = load %type.TypeNode** %t
 	%38 = getelementptr %type.TypeNode* %37, i32 0, i32 10
@@ -11863,8 +13907,8 @@ L.15:
 	%45 = udiv i64 %40, %44
 	%46 = call %ast.AstNode* @ast_Const(%type.TypeNode* %36, i64 %45)
 	store %ast.AstNode* %46, %ast.AstNode** %tree
-	br label %L.11
-L.16:
+	br label %L.12
+L.17:
 	%47 = load %type.TypeNode** @type_wordtype
 	%48 = load %type.TypeNode** %t
 	%49 = getelementptr %type.TypeNode* %48, i32 0, i32 11
@@ -11877,46 +13921,53 @@ L.16:
 	%56 = udiv i64 %51, %55
 	%57 = call %ast.AstNode* @ast_Const(%type.TypeNode* %47, i64 %56)
 	store %ast.AstNode* %57, %ast.AstNode** %tree
-	br label %L.11
-L.17:
+	br label %L.12
+L.18:
 	%58 = load %type.TypeNode** %t
 	%59 = getelementptr %type.TypeNode* %58, i32 0, i32 14
 	%60 = load i8* %59
 	%61 = icmp eq i8 %60, 6
-	br i1 %61, label %L.19, label %L.20
-L.19:
+	br i1 %61, label %L.20, label %L.21
+L.20:
 	%62 = load %type.TypeNode** @type_wordtype
 	%63 = load %type.TypeNode** %t
 	%64 = call i32 @type_TypeNode_Span(%type.TypeNode* %63)
 	%65 = zext i32 %64 to i64
 	%66 = call %ast.AstNode* @ast_Const(%type.TypeNode* %62, i64 %65)
 	store %ast.AstNode* %66, %ast.AstNode** %tree
-	br label %L.18
-L.20:
+	br label %L.19
+L.21:
 	call void @lex_Error(i8 30)
-	br label %L.18
-L.18:
-	br label %L.11
-L.10:
-	call void @lex_Error(i8 53)
-	br label %L.11
+	br label %L.19
+L.19:
+	br label %L.12
 L.11:
-	br label %L.7
-L.9:
 	call void @lex_Error(i8 53)
-	br label %L.7
+	br label %L.12
+L.12:
+	br label %L.8
+L.10:
+	%67 = load %type.TypeNode** @type_wordtype
+	%68 = call %ast.AstNode* @ast_Const(%type.TypeNode* %67, i64 0)
+	store %ast.AstNode* %68, %ast.AstNode** %tree
+	br label %L.8
+L.8:
+	br label %L.5
 L.7:
-	%67 = call i8 @lex_Next()
-	store i8 %67, i8* %tok
-	%68 = load %ast.AstNode** %tree
-	store %ast.AstNode* %68, %ast.AstNode** %rv.0
+	call void @lex_Error(i8 53)
+	br label %L.5
+L.5:
+	%69 = call i8 @lex_Next()
+	store i8 %69, i8* %tok
+	%70 = load %ast.AstNode** %tree
+	store %ast.AstNode* %70, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%69 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %69
+	%71 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %71
 }
 @expr_strid = internal global i64 0, align 4
-define internal %ast.AstNode* @expr_String() nounwind {
+define internal %ast.AstNode* @expr_NewString() nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
 	%tree = alloca %ast.AstNode*
@@ -11960,26 +14011,23 @@ L.0:
 	%29 = call %ast.AstNode* @ast_New(i8 9, %type.TypeNode* %28)
 	store %ast.AstNode* %29, %ast.AstNode** %tree
 	%30 = bitcast [4096 x i8]* @lex_StringBuf to [0 x i8]*
-	%31 = load i16* @lex_StringLen
-	%32 = zext i16 %31 to i32
-	%33 = call [0 x i8]* @sys_memdup([0 x i8]* %30, i32 %32)
-	%34 = bitcast [0 x i8]* %33 to %symb.SymbNode*
-	%35 = load %ast.AstNode** %tree
-	%36 = getelementptr %ast.AstNode* %35, i32 0, i32 9
-	store %symb.SymbNode* %34, %symb.SymbNode** %36
-	%37 = load i64* @expr_strid
-	%38 = add i64 %37, 1
-	store i64 %38, i64* @expr_strid
-	%39 = load i64* @expr_strid
-	%40 = load %ast.AstNode** %tree
-	%41 = getelementptr %ast.AstNode* %40, i32 0, i32 10
-	store i64 %39, i64* %41
-	%42 = load %ast.AstNode** %tree
-	store %ast.AstNode* %42, %ast.AstNode** %rv.0
+	%31 = call %symb.SymbNode* @symb_NewString([0 x i8]* %30)
+	%32 = load %ast.AstNode** %tree
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 9
+	store %symb.SymbNode* %31, %symb.SymbNode** %33
+	%34 = load i64* @expr_strid
+	%35 = add i64 %34, 1
+	store i64 %35, i64* @expr_strid
+	%36 = load i64* @expr_strid
+	%37 = load %ast.AstNode** %tree
+	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 10
+	store i64 %36, i64* %38
+	%39 = load %ast.AstNode** %tree
+	store %ast.AstNode* %39, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%43 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %43
+	%40 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %40
 }
 define internal %ast.AstNode* @expr_StringCat(%ast.AstNode* %tree$) nounwind {
 L.0:
@@ -12036,37 +14084,62 @@ L.2:
 	%29 = load %ast.AstNode** %tree
 	%30 = getelementptr %ast.AstNode* %29, i32 0, i32 9
 	%31 = load %symb.SymbNode** %30
-	%32 = bitcast %symb.SymbNode* %31 to [0 x i8]*
-	store [0 x i8]* %32, [0 x i8]** %sr
-	%33 = getelementptr [4096 x i8]* @lex_StringBuf, i32 0, i32 0
-	%34 = bitcast i8* %33 to [4096 x i8]*
-	%35 = bitcast [4096 x i8]* %34 to [0 x i8]*
-	%36 = bitcast [0 x i8]* %35 to i8*
-	%37 = load [0 x i8]** %sr
-	%38 = getelementptr [0 x i8]* %37, i32 0, i32 0
-	%39 = bitcast i8* %38 to [0 x i8]*
-	%40 = bitcast [0 x i8]* %39 to i8*
-	%41 = load i32* %nl
-	%42 = load i32* %nl
-	%43 = icmp ult i32 %41, %42
-	%44 = select i1 %43, i32 %41, i32 %42
-	%45 = mul i32 %44, 1
-	call void @llvm.memcpy.p0i8.p0i8.i32(i8* %36, i8* %40, i32 %45, i32 1, i1 0)
-	%46 = bitcast [4096 x i8]* @lex_StringBuf to [0 x i8]*
-	%47 = load i32* %nl
-	%48 = load i32* %nr
-	%49 = add i32 %47, %48
-	%50 = call [0 x i8]* @sys_memdup([0 x i8]* %46, i32 %49)
-	%51 = bitcast [0 x i8]* %50 to %symb.SymbNode*
+	%32 = getelementptr %symb.SymbNode* %31, i32 0, i32 22
+	%33 = getelementptr [0 x i8]* %32
+	%34 = bitcast [0 x i8]* %33 to [0 x i8]*
+	store [0 x i8]* %34, [0 x i8]** %sr
+	%35 = getelementptr [4096 x i8]* @lex_StringBuf, i32 0, i32 0
+	%36 = bitcast i8* %35 to [4096 x i8]*
+	%37 = bitcast [4096 x i8]* %36 to [0 x i8]*
+	%38 = bitcast [0 x i8]* %37 to i8*
+	%39 = load [0 x i8]** %sr
+	%40 = getelementptr [0 x i8]* %39, i32 0, i32 0
+	%41 = bitcast i8* %40 to [0 x i8]*
+	%42 = bitcast [0 x i8]* %41 to i8*
+	%43 = load i32* %nl
+	%44 = load i32* %nl
+	%45 = icmp ult i32 %43, %44
+	%46 = select i1 %45, i32 %43, i32 %44
+	%47 = mul i32 %46, 1
+	call void @llvm.memcpy.p0i8.p0i8.i32(i8* %38, i8* %42, i32 %47, i32 1, i1 0)
+	%48 = bitcast [4096 x i8]* @lex_StringBuf to [0 x i8]*
+	%49 = call %symb.SymbNode* @symb_NewString([0 x i8]* %48)
+	%50 = load %ast.AstNode** %tree
+	%51 = getelementptr %ast.AstNode* %50, i32 0, i32 9
+	store %symb.SymbNode* %49, %symb.SymbNode** %51
 	%52 = load %ast.AstNode** %tree
-	%53 = getelementptr %ast.AstNode* %52, i32 0, i32 9
-	store %symb.SymbNode* %51, %symb.SymbNode** %53
-	%54 = load %ast.AstNode** %tree
-	store %ast.AstNode* %54, %ast.AstNode** %rv.0
+	store %ast.AstNode* %52, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%55 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %55
+	%53 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %53
+}
+define internal %ast.AstNode* @expr_String() nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%tree = alloca %ast.AstNode*
+	%tok = alloca i8
+	%0 = call %ast.AstNode* @expr_NewString()
+	store %ast.AstNode* %0, %ast.AstNode** %tree
+	br label %L.1
+L.1:
+	%1 = call i8 @lex_Next()
+	store i8 %1, i8* %tok
+	%2 = load i8* %tok
+	%3 = icmp ne i8 %2, 40
+	br i1 %3, label %L.2, label %L.3
+L.3:
+	%4 = load %ast.AstNode** %tree
+	%5 = call %ast.AstNode* @expr_StringCat(%ast.AstNode* %4)
+	store %ast.AstNode* %5, %ast.AstNode** %tree
+	br label %L.1
+L.2:
+	%6 = load %ast.AstNode** %tree
+	store %ast.AstNode* %6, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%7 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %7
 }
 define internal %ast.AstNode* @expr_EnumConst(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -12088,7 +14161,7 @@ L.1:
 	br i1 %6, label %L.2, label %L.3
 L.3:
 	%7 = load %symb.SymbNode** %s
-	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 21
+	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 22
 	%9 = getelementptr [0 x i8]* %8
 	%10 = bitcast [0 x i8]* %9 to [0 x i8]*
 	%11 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
@@ -12097,13 +14170,13 @@ L.3:
 	br i1 %13, label %L.5, label %L.4
 L.5:
 	%14 = load %symb.SymbNode** %s
-	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 7
+	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 8
 	%16 = load %ast.AstNode** %15
 	%17 = bitcast %ast.AstNode* %16 to %ast.AstNode*
 	%18 = call %ast.AstNode* @ast_Dup(%ast.AstNode* %17)
 	store %ast.AstNode* %18, %ast.AstNode** %tree
 	%19 = load %symb.SymbNode** %s
-	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 7
+	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 8
 	%21 = load %ast.AstNode** %20
 	%22 = getelementptr %ast.AstNode* %21, i32 0, i32 8
 	%23 = load %type.TypeNode** %22
@@ -12165,7 +14238,7 @@ L.8:
 	%10 = load %ast.AstNode** %node
 	%11 = getelementptr %ast.AstNode* %10, i32 0, i32 9
 	%12 = load %symb.SymbNode** %11
-	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 12
+	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 13
 	%14 = load i8* %13
 	%15 = icmp eq i8 %14, 5
 	%16 = zext i1 %15 to i8
@@ -12175,7 +14248,7 @@ L.9:
 	%17 = load %ast.AstNode** %node
 	%18 = getelementptr %ast.AstNode* %17, i32 0, i32 9
 	%19 = load %symb.SymbNode** %18
-	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 12
+	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 13
 	%21 = load i8* %20
 	%22 = icmp eq i8 %21, 1
 	%23 = zext i1 %22 to i8
@@ -12253,7 +14326,7 @@ L.0:
 	br i1 %3, label %L.2, label %L.3
 L.2:
 	%4 = load %symb.SymbNode** %cs
-	%5 = getelementptr %symb.SymbNode* %4, i32 0, i32 12
+	%5 = getelementptr %symb.SymbNode* %4, i32 0, i32 13
 	%6 = load i8* %5
 	%7 = icmp eq i8 %6, 1
 	br i1 %7, label %L.5, label %L.6
@@ -12269,7 +14342,7 @@ L.5:
 	br i1 %14, label %L.8, label %L.9
 L.8:
 	%15 = load %symb.SymbNode** %cs
-	%16 = getelementptr %symb.SymbNode* %15, i32 0, i32 7
+	%16 = getelementptr %symb.SymbNode* %15, i32 0, i32 8
 	%17 = load %ast.AstNode** %16
 	%18 = bitcast %ast.AstNode* %17 to %ast.AstNode*
 	store %ast.AstNode* %18, %ast.AstNode** %tree
@@ -12282,27 +14355,58 @@ L.9:
 	call void @lex_Error(i8 52)
 	br label %L.7
 L.7:
-	br label %L.4
-L.6:
-	call void @lex_Error(i8 71)
-	br label %L.4
-L.4:
 	%22 = call i8 @lex_Next()
 	store i8 %22, i8* %tok
+	br label %L.4
+L.6:
+	%23 = load %symb.SymbNode** %cs
+	%24 = getelementptr %symb.SymbNode* %23, i32 0, i32 13
+	%25 = load i8* %24
+	%26 = icmp eq i8 %25, 2
+	br i1 %26, label %L.11, label %L.12
+L.11:
+	%27 = call i8 @lex_Next()
+	store i8 %27, i8* %tok
+	%28 = load i8* %tok
+	%29 = icmp eq i8 %28, 32
+	br i1 %29, label %L.14, label %L.13
+L.14:
+	%30 = call i8 @lex_Next()
+	store i8 %30, i8* %tok
+	%31 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
+	store %ast.AstNode* %31, %ast.AstNode** %tree
+	%32 = call i8 @lex_Expect(i8 33)
+	%33 = load %ast.AstNode** %tree
+	%34 = load %symb.SymbNode** %cs
+	%35 = getelementptr %symb.SymbNode* %34, i32 0, i32 1
+	%36 = load %type.TypeNode** %35
+	%37 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %33, %type.TypeNode* %36)
+	store %ast.AstNode* %37, %ast.AstNode** %tree
+	br label %L.13
+L.13:
+	br label %L.10
+L.12:
+	call void @lex_Error(i8 72)
+	%38 = call i8 @lex_Next()
+	store i8 %38, i8* %tok
+	br label %L.10
+L.10:
+	br label %L.4
+L.4:
 	br label %L.1
 L.3:
-	%23 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 19, [0 x i8]* %23)
+	%39 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 19, [0 x i8]* %39)
 	br label %L.1
 L.1:
-	%24 = load %ast.AstNode** %tree
-	store %ast.AstNode* %24, %ast.AstNode** %rv.0
+	%40 = load %ast.AstNode** %tree
+	store %ast.AstNode* %40, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%25 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %25
+	%41 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %41
 }
-@S.549 = internal constant [26 x i8] c"No CLIST for packed array\00"
+@S.574 = internal constant [26 x i8] c"No CLIST for packed array\00"
 define internal %ast.AstNode* @expr_ArrayPack(%type.TypeNode* %t$, %ast.AstNode* %intree$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -12328,9 +14432,9 @@ L.0:
 	%3 = icmp ne i8 %2, 10
 	br i1 %3, label %L.2, label %L.1
 L.2:
-	%4 = getelementptr [26 x i8]* @S.549
+	%4 = getelementptr [26 x i8]* @S.574
 	%5 = bitcast [26 x i8]* %4 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %5)
+	call void @lex_ErrorS(i8 86, [0 x i8]* %5)
 	%6 = load %ast.AstNode** %tree
 	store %ast.AstNode* %6, %ast.AstNode** %rv.0
 	br label %return
@@ -12429,7 +14533,7 @@ L.13:
 	%68 = load i32* %offs
 	%69 = zext i32 %68 to i64
 	%70 = call %ast.AstNode* @ast_Const(%type.TypeNode* %67, i64 %69)
-	%71 = call %ast.AstNode* @ast_New2(i8 65, %type.TypeNode* %65, %ast.AstNode* %66, %ast.AstNode* %70)
+	%71 = call %ast.AstNode* @ast_New2(i8 68, %type.TypeNode* %65, %ast.AstNode* %66, %ast.AstNode* %70)
 	store %ast.AstNode* %71, %ast.AstNode** %node
 	%72 = load %ast.AstNode** %vpart
 	%73 = icmp eq %ast.AstNode* %72, null
@@ -12442,7 +14546,7 @@ L.16:
 	%75 = load %type.TypeNode** %bt
 	%76 = load %ast.AstNode** %vpart
 	%77 = load %ast.AstNode** %node
-	%78 = call %ast.AstNode* @ast_New2(i8 70, %type.TypeNode* %75, %ast.AstNode* %76, %ast.AstNode* %77)
+	%78 = call %ast.AstNode* @ast_New2(i8 73, %type.TypeNode* %75, %ast.AstNode* %76, %ast.AstNode* %77)
 	store %ast.AstNode* %78, %ast.AstNode** %vpart
 	br label %L.14
 L.14:
@@ -12478,7 +14582,7 @@ L.20:
 	%95 = load %type.TypeNode** @type_wordtype
 	%96 = load %ast.AstNode** %tree
 	%97 = load %ast.AstNode** %vpart
-	%98 = call %ast.AstNode* @ast_New2(i8 70, %type.TypeNode* %95, %ast.AstNode* %96, %ast.AstNode* %97)
+	%98 = call %ast.AstNode* @ast_New2(i8 73, %type.TypeNode* %95, %ast.AstNode* %96, %ast.AstNode* %97)
 	store %ast.AstNode* %98, %ast.AstNode** %tree
 	br label %L.19
 L.19:
@@ -12695,7 +14799,7 @@ L.19:
 	br i1 %81, label %L.26, label %L.25
 L.26:
 	store i8 1, i8* %once
-	call void @lex_Error(i8 69)
+	call void @lex_Error(i8 70)
 	br label %L.25
 L.25:
 	br label %L.17
@@ -12810,7 +14914,7 @@ L.41:
 	%148 = xor i1 %147, true
 	br i1 %148, label %L.43, label %L.42
 L.43:
-	call void @lex_Error(i8 70)
+	call void @lex_Error(i8 71)
 	br label %L.42
 L.42:
 	br label %L.39
@@ -12823,17 +14927,15 @@ L.3:
 L.45:
 	%151 = call %ast.AstNode* @expr_String()
 	store %ast.AstNode* %151, %ast.AstNode** %tree
-	%152 = call i8 @lex_Next()
-	store i8 %152, i8* %tok
 	br label %L.44
 L.46:
-	%153 = load i8* %tok
-	%154 = icmp eq i8 %153, 41
-	br i1 %154, label %L.48, label %L.49
+	%152 = load i8* %tok
+	%153 = icmp eq i8 %152, 41
+	br i1 %153, label %L.48, label %L.49
 L.48:
-	%155 = load %type.TypeNode** %t
-	%156 = call %ast.AstNode* @expr_CompositeNamedConstant(%type.TypeNode* %155)
-	store %ast.AstNode* %156, %ast.AstNode** %tree
+	%154 = load %type.TypeNode** %t
+	%155 = call %ast.AstNode* @expr_CompositeNamedConstant(%type.TypeNode* %154)
+	store %ast.AstNode* %155, %ast.AstNode** %tree
 	br label %L.47
 L.49:
 	call void @lex_ErrorT(i8 17, i8 36)
@@ -12843,15 +14945,15 @@ L.47:
 L.44:
 	br label %L.1
 L.1:
-	%157 = load %ast.AstNode** %tree
-	store %ast.AstNode* %157, %ast.AstNode** %rv.0
+	%156 = load %ast.AstNode** %tree
+	store %ast.AstNode* %156, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%158 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %158
+	%157 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %157
 }
-@S.550 = internal constant [27 x i8] c"No CLIST for packed record\00"
-@S.551 = internal constant [33 x i8] c"Malformed LIST for packed record\00"
+@S.575 = internal constant [27 x i8] c"No CLIST for packed record\00"
+@S.576 = internal constant [33 x i8] c"Malformed LIST for packed record\00"
 define internal %ast.AstNode* @expr_RecordPack(%type.TypeNode* %t$, %ast.AstNode* %intree$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -12878,9 +14980,9 @@ L.0:
 	%3 = icmp ne i8 %2, 10
 	br i1 %3, label %L.2, label %L.1
 L.2:
-	%4 = getelementptr [27 x i8]* @S.550
+	%4 = getelementptr [27 x i8]* @S.575
 	%5 = bitcast [27 x i8]* %4 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %5)
+	call void @lex_ErrorS(i8 86, [0 x i8]* %5)
 	%6 = load %ast.AstNode** %tree
 	store %ast.AstNode* %6, %ast.AstNode** %rv.0
 	br label %return
@@ -12953,9 +15055,9 @@ L.11:
 	%47 = icmp uge i16 %43, %46
 	br i1 %47, label %L.14, label %L.13
 L.14:
-	%48 = getelementptr [33 x i8]* @S.551
+	%48 = getelementptr [33 x i8]* @S.576
 	%49 = bitcast [33 x i8]* %48 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %49)
+	call void @lex_ErrorS(i8 86, [0 x i8]* %49)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.13:
@@ -12999,7 +15101,7 @@ L.17:
 	%79 = load i32* %offs
 	%80 = zext i32 %79 to i64
 	%81 = call %ast.AstNode* @ast_Const(%type.TypeNode* %78, i64 %80)
-	%82 = call %ast.AstNode* @ast_New2(i8 65, %type.TypeNode* %76, %ast.AstNode* %77, %ast.AstNode* %81)
+	%82 = call %ast.AstNode* @ast_New2(i8 68, %type.TypeNode* %76, %ast.AstNode* %77, %ast.AstNode* %81)
 	store %ast.AstNode* %82, %ast.AstNode** %node
 	%83 = load %ast.AstNode** %vpart
 	%84 = icmp eq %ast.AstNode* %83, null
@@ -13012,7 +15114,7 @@ L.20:
 	%86 = load %type.TypeNode** %ft
 	%87 = load %ast.AstNode** %vpart
 	%88 = load %ast.AstNode** %node
-	%89 = call %ast.AstNode* @ast_New2(i8 70, %type.TypeNode* %86, %ast.AstNode* %87, %ast.AstNode* %88)
+	%89 = call %ast.AstNode* @ast_New2(i8 73, %type.TypeNode* %86, %ast.AstNode* %87, %ast.AstNode* %88)
 	store %ast.AstNode* %89, %ast.AstNode** %vpart
 	br label %L.18
 L.18:
@@ -13055,7 +15157,7 @@ L.24:
 	%110 = load %type.TypeNode** @type_wordtype
 	%111 = load %ast.AstNode** %tree
 	%112 = load %ast.AstNode** %vpart
-	%113 = call %ast.AstNode* @ast_New2(i8 70, %type.TypeNode* %110, %ast.AstNode* %111, %ast.AstNode* %112)
+	%113 = call %ast.AstNode* @ast_New2(i8 73, %type.TypeNode* %110, %ast.AstNode* %111, %ast.AstNode* %112)
 	store %ast.AstNode* %113, %ast.AstNode** %tree
 	br label %L.23
 L.23:
@@ -13098,7 +15200,7 @@ L.1:
 	br i1 %8, label %L.2, label %L.3
 L.3:
 	%9 = load %symb.SymbNode** %bs
-	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 21
+	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 22
 	%11 = getelementptr [0 x i8]* %10
 	%12 = bitcast [0 x i8]* %11 to [0 x i8]*
 	%13 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %12, i8 2)
@@ -13261,7 +15363,7 @@ L.15:
 	br i1 %33, label %L.18, label %L.19
 L.18:
 	%34 = load %symb.SymbNode** %fs
-	%35 = getelementptr %symb.SymbNode* %34, i32 0, i32 17
+	%35 = getelementptr %symb.SymbNode* %34, i32 0, i32 18
 	%36 = load i8* %35
 	%37 = icmp ne i8 %36, 0
 	br label %L.19
@@ -13299,20 +15401,20 @@ L.20:
 L.23:
 	%53 = load %ast.AstNode** %tree
 	%54 = load %symb.SymbNode** %fs
-	%55 = getelementptr %symb.SymbNode* %54, i32 0, i32 9
+	%55 = getelementptr %symb.SymbNode* %54, i32 0, i32 10
 	%56 = load i16* %55
 	%57 = load %ast.AstNode** %stree
 	%58 = call %ast.AstNode* @ast_ChildIndexed(%ast.AstNode* %53, i16 %56, %ast.AstNode* %57)
 	store %ast.AstNode* %58, %ast.AstNode** %tree
 	%59 = load %symb.SymbNode** %fs
-	%60 = getelementptr %symb.SymbNode* %59, i32 0, i32 9
+	%60 = getelementptr %symb.SymbNode* %59, i32 0, i32 10
 	%61 = load i16* %60
 	%62 = load i16* %max
 	%63 = icmp ugt i16 %61, %62
 	br i1 %63, label %L.26, label %L.25
 L.26:
 	%64 = load %symb.SymbNode** %fs
-	%65 = getelementptr %symb.SymbNode* %64, i32 0, i32 9
+	%65 = getelementptr %symb.SymbNode* %64, i32 0, i32 10
 	%66 = load i16* %65
 	store i16 %66, i16* %max
 	br label %L.25
@@ -13330,7 +15432,7 @@ L.24:
 	br i1 %73, label %L.28, label %L.27
 L.28:
 	store i8 1, i8* %once
-	call void @lex_Error(i8 69)
+	call void @lex_Error(i8 70)
 	br label %L.27
 L.27:
 	br label %L.22
@@ -13357,7 +15459,7 @@ L.30:
 	br i1 %83, label %L.33, label %L.34
 L.33:
 	%84 = load %symb.SymbNode** %fs
-	%85 = getelementptr %symb.SymbNode* %84, i32 0, i32 9
+	%85 = getelementptr %symb.SymbNode* %84, i32 0, i32 10
 	%86 = load i16* %85
 	%87 = load i16* %max
 	%88 = icmp ule i16 %86, %87
@@ -13370,7 +15472,7 @@ L.32:
 	%91 = load %ast.AstNode** %tree
 	%92 = getelementptr %ast.AstNode* %91, i32 0, i32 11
 	%93 = load %symb.SymbNode** %fs
-	%94 = getelementptr %symb.SymbNode* %93, i32 0, i32 9
+	%94 = getelementptr %symb.SymbNode* %93, i32 0, i32 10
 	%95 = load i16* %94
 	%96 = zext i16 %95 to i32
 	%97 = getelementptr [0 x %ast.AstNode*]* %92, i32 0, i32 %96
@@ -13386,7 +15488,7 @@ L.36:
 	%105 = load %ast.AstNode** %tree
 	%106 = getelementptr %ast.AstNode* %105, i32 0, i32 11
 	%107 = load %symb.SymbNode** %fs
-	%108 = getelementptr %symb.SymbNode* %107, i32 0, i32 9
+	%108 = getelementptr %symb.SymbNode* %107, i32 0, i32 10
 	%109 = load i16* %108
 	%110 = zext i16 %109 to i32
 	%111 = getelementptr [0 x %ast.AstNode*]* %106, i32 0, i32 %110
@@ -13409,7 +15511,7 @@ L.37:
 L.39:
 	%119 = load %ast.AstNode** %tree
 	%120 = load %symb.SymbNode** %fs
-	%121 = getelementptr %symb.SymbNode* %120, i32 0, i32 9
+	%121 = getelementptr %symb.SymbNode* %120, i32 0, i32 10
 	%122 = load i16* %121
 	%123 = load %symb.SymbNode** %fs
 	%124 = getelementptr %symb.SymbNode* %123, i32 0, i32 1
@@ -13456,7 +15558,7 @@ L.44:
 	%151 = xor i1 %150, true
 	br i1 %151, label %L.46, label %L.45
 L.46:
-	call void @lex_Error(i8 70)
+	call void @lex_Error(i8 71)
 	br label %L.45
 L.45:
 	br label %L.42
@@ -13682,7 +15784,7 @@ return:
 	%47 = load i32* %rv.0
 	ret i32 %47
 }
-@S.552 = internal constant [30 x i8] c"GetAlignment: unexpected node\00"
+@S.577 = internal constant [30 x i8] c"GetAlignment: unexpected node\00"
 define internal i32 @expr_GetAlignment(%ast.AstNode* %tree$) nounwind {
 L.0:
 	%rv.0 = alloca i32
@@ -13883,7 +15985,7 @@ L.10:
 	store i32 %121, i32* %alignment
 	br label %L.4
 L.3:
-	%122 = getelementptr [30 x i8]* @S.552
+	%122 = getelementptr [30 x i8]* @S.577
 	%123 = bitcast [30 x i8]* %122 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %123)
 	%124 = load %ast.AstNode** %tree
@@ -13977,7 +16079,7 @@ L.5:
 	%55 = load %ast.AstNode** %54
 	%56 = bitcast %ast.AstNode* %55 to %ast.AstNode*
 	%57 = load %ast.AstNode** %size
-	%58 = call %ast.AstNode* @ast_New2(i8 48, %type.TypeNode* %51, %ast.AstNode* %56, %ast.AstNode* %57)
+	%58 = call %ast.AstNode* @ast_New2(i8 51, %type.TypeNode* %51, %ast.AstNode* %56, %ast.AstNode* %57)
 	store %ast.AstNode* %58, %ast.AstNode** %size
 	br label %L.2
 L.1:
@@ -14116,7 +16218,7 @@ L.4:
 	%85 = load %type.TypeNode** @type_wordtype
 	%86 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %84, %type.TypeNode* %85)
 	%87 = load %ast.AstNode** %tree
-	%88 = call %ast.AstNode* @ast_New2(i8 48, %type.TypeNode* %79, %ast.AstNode* %86, %ast.AstNode* %87)
+	%88 = call %ast.AstNode* @ast_New2(i8 51, %type.TypeNode* %79, %ast.AstNode* %86, %ast.AstNode* %87)
 	store %ast.AstNode* %88, %ast.AstNode** %tree
 	br label %L.2
 L.1:
@@ -14136,7 +16238,7 @@ L.13:
 	%94 = load %type.TypeNode** @type_wordtype
 	%95 = load %ast.AstNode** %tree
 	%96 = load %ast.AstNode** %ctree
-	%97 = call %ast.AstNode* @ast_New2(i8 46, %type.TypeNode* %94, %ast.AstNode* %95, %ast.AstNode* %96)
+	%97 = call %ast.AstNode* @ast_New2(i8 49, %type.TypeNode* %94, %ast.AstNode* %95, %ast.AstNode* %96)
 	store %ast.AstNode* %97, %ast.AstNode** %tree
 	br label %L.12
 L.12:
@@ -14372,7 +16474,7 @@ return:
 	%136 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %136
 }
-@S.553 = internal constant [17 x i8] c"Load via non-REF\00"
+@S.578 = internal constant [17 x i8] c"Load via non-REF\00"
 define internal %ast.AstNode* @expr_Load(%ast.AstNode* %tree$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -14406,7 +16508,7 @@ L.5:
 	%9 = load %type.TypeNode** %8
 	%10 = getelementptr %type.TypeNode* %9, i32 0, i32 3
 	%11 = load %symb.SymbNode** %10
-	%12 = getelementptr %symb.SymbNode* %11, i32 0, i32 21
+	%12 = getelementptr %symb.SymbNode* %11, i32 0, i32 22
 	%13 = getelementptr [0 x i8]* %12
 	%14 = bitcast [0 x i8]* %13 to [0 x i8]*
 	call void @lex_ErrorI(i8 29, [0 x i8]* %14)
@@ -14423,9 +16525,9 @@ L.6:
 	%21 = icmp ne i8 %20, 5
 	br i1 %21, label %L.9, label %L.8
 L.9:
-	%22 = getelementptr [17 x i8]* @S.553
+	%22 = getelementptr [17 x i8]* @S.578
 	%23 = bitcast [17 x i8]* %22 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %23)
+	call void @lex_ErrorS(i8 86, [0 x i8]* %23)
 	%24 = load %ast.AstNode** %tree
 	call void @ast_Dump(%ast.AstNode* %24)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
@@ -14668,7 +16770,7 @@ return:
 	%37 = load i8* %rv.0
 	ret i8 %37
 }
-@S.554 = internal constant [34 x i8] c"Ref alignment or endian mismatch\0A\00"
+@S.579 = internal constant [34 x i8] c"Ref alignment or endian mismatch\0A\00"
 define internal %ast.AstNode* @expr_Adjust(%ast.AstNode* %tree$, %type.TypeNode* %to$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -14701,34 +16803,35 @@ L.1:
 		i32 1, label %L.7
 		i32 2, label %L.8
 		i32 3, label %L.9
+		i32 4, label %L.10
 	]
 L.5:
 	%10 = load %type.TypeNode** %to
 	%11 = getelementptr %type.TypeNode* %10, i32 0, i32 0
 	%12 = load %type.TypeNode** %11
 	%13 = icmp ne %type.TypeNode* %12, null
-	br i1 %13, label %L.11, label %L.10
-L.11:
+	br i1 %13, label %L.12, label %L.11
+L.12:
 	%14 = load %type.TypeNode** %fm
 	%15 = getelementptr %type.TypeNode* %14, i32 0, i32 14
 	%16 = load i8* %15
 	%17 = icmp eq i8 %16, 5
-	br i1 %17, label %L.12, label %L.13
-L.12:
+	br i1 %17, label %L.13, label %L.14
+L.13:
 	%18 = load %type.TypeNode** %to
 	%19 = load %type.TypeNode** %fm
 	%20 = call i8 @type_Compat(%type.TypeNode* %18, %type.TypeNode* %19)
 	%21 = icmp ne i8 %20, 0
-	br label %L.13
-L.13:
-	%22 = phi i1 [ false, %L.11 ], [ %21, %L.12 ]
-	br i1 %22, label %L.15, label %L.16
-L.15:
+	br label %L.14
+L.14:
+	%22 = phi i1 [ false, %L.12 ], [ %21, %L.13 ]
+	br i1 %22, label %L.16, label %L.17
+L.16:
 	%23 = load %type.TypeNode** %fm
 	%24 = load %type.TypeNode** %to
 	%25 = icmp ne %type.TypeNode* %23, %24
-	br i1 %25, label %L.18, label %L.17
-L.18:
+	br i1 %25, label %L.19, label %L.18
+L.19:
 	%26 = load %ast.AstNode** %tree
 	%27 = load %type.TypeNode** %to
 	%28 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %26, %type.TypeNode* %27)
@@ -14737,10 +16840,10 @@ L.18:
 	%30 = getelementptr %ast.AstNode* %29, i32 0, i32 8
 	%31 = load %type.TypeNode** %30
 	store %type.TypeNode* %31, %type.TypeNode** %fm
-	br label %L.17
+	br label %L.18
+L.18:
+	br label %L.15
 L.17:
-	br label %L.14
-L.16:
 	%32 = load %ast.AstNode** %tree
 	%33 = call %ast.AstNode* @expr_CoerceToRef(%ast.AstNode* %32)
 	store %ast.AstNode* %33, %ast.AstNode** %tree
@@ -14753,22 +16856,22 @@ L.16:
 	%39 = load %type.TypeNode** %38
 	%40 = load %type.TypeNode** @type_memtype
 	%41 = icmp eq %type.TypeNode* %39, %40
-	br i1 %41, label %L.20, label %L.19
-L.19:
+	br i1 %41, label %L.21, label %L.20
+L.20:
 	%42 = load %type.TypeNode** %to
 	%43 = load %type.TypeNode** %fm
 	%44 = call i8 @type_Compat(%type.TypeNode* %42, %type.TypeNode* %43)
 	%45 = icmp ne i8 %44, 0
-	br label %L.20
-L.20:
-	%46 = phi i1 [ true, %L.16 ], [ %45, %L.19 ]
-	br i1 %46, label %L.22, label %L.23
-L.22:
+	br label %L.21
+L.21:
+	%46 = phi i1 [ true, %L.17 ], [ %45, %L.20 ]
+	br i1 %46, label %L.23, label %L.24
+L.23:
 	%47 = load %type.TypeNode** %fm
 	%48 = load %type.TypeNode** %to
 	%49 = icmp ne %type.TypeNode* %47, %48
-	br i1 %49, label %L.25, label %L.24
-L.25:
+	br i1 %49, label %L.26, label %L.25
+L.26:
 	%50 = load %ast.AstNode** %tree
 	%51 = load %type.TypeNode** %to
 	%52 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %50, %type.TypeNode* %51)
@@ -14777,51 +16880,51 @@ L.25:
 	%54 = getelementptr %ast.AstNode* %53, i32 0, i32 8
 	%55 = load %type.TypeNode** %54
 	store %type.TypeNode* %55, %type.TypeNode** %fm
-	br label %L.24
+	br label %L.25
+L.25:
+	br label %L.22
 L.24:
-	br label %L.21
-L.23:
 	store i8 0, i8* %ok
-	br label %L.21
-L.21:
-	br label %L.14
-L.14:
+	br label %L.22
+L.22:
+	br label %L.15
+L.15:
 	%56 = load %type.TypeNode** %to
 	%57 = getelementptr %type.TypeNode* %56, i32 0, i32 25
 	%58 = load i8* %57
 	%59 = icmp ne i8 %58, 0
-	br i1 %59, label %L.26, label %L.27
-L.26:
+	br i1 %59, label %L.27, label %L.28
+L.27:
 	%60 = load %type.TypeNode** %fm
 	%61 = getelementptr %type.TypeNode* %60, i32 0, i32 25
 	%62 = load i8* %61
 	%63 = icmp ne i8 %62, 0
 	%64 = xor i1 %63, true
-	br label %L.27
-L.27:
-	%65 = phi i1 [ false, %L.14 ], [ %64, %L.26 ]
-	br i1 %65, label %L.29, label %L.28
-L.29:
+	br label %L.28
+L.28:
+	%65 = phi i1 [ false, %L.15 ], [ %64, %L.27 ]
+	br i1 %65, label %L.30, label %L.29
+L.30:
 	%66 = load %type.TypeNode** %to
 	%67 = load %ast.AstNode** %tree
 	%68 = call %ast.AstNode* @ast_New1(i8 17, %type.TypeNode* %66, %ast.AstNode* %67)
 	store %ast.AstNode* %68, %ast.AstNode** %tree
-	br label %L.28
-L.28:
+	br label %L.29
+L.29:
 	%69 = load %type.TypeNode** %to
 	%70 = load %type.TypeNode** %fm
 	%71 = call i8 @expr_CheckRefAttributes(%type.TypeNode* %69, %type.TypeNode* %70)
 	%72 = icmp ne i8 %71, 0
 	%73 = xor i1 %72, true
-	br i1 %73, label %L.31, label %L.30
-L.31:
-	%74 = getelementptr [34 x i8]* @S.554
+	br i1 %73, label %L.32, label %L.31
+L.32:
+	%74 = getelementptr [34 x i8]* @S.579
 	%75 = bitcast [34 x i8]* %74 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %75)
-	br label %L.30
-L.30:
-	br label %L.10
-L.10:
+	br label %L.31
+L.31:
+	br label %L.11
+L.11:
 	br label %L.4
 L.6:
 	%76 = load %type.TypeNode** %to
@@ -14837,20 +16940,20 @@ L.7:
 	%82 = load i8* %ok
 	%83 = icmp ne i8 %82, 0
 	%84 = xor i1 %83, true
-	br i1 %84, label %L.32, label %L.33
-L.32:
+	br i1 %84, label %L.33, label %L.34
+L.33:
 	%85 = load %type.TypeNode** %fm
 	%86 = getelementptr %type.TypeNode* %85, i32 0, i32 14
 	%87 = load i8* %86
 	%88 = icmp eq i8 %87, 2
-	br label %L.33
-L.33:
-	%89 = phi i1 [ false, %L.7 ], [ %88, %L.32 ]
-	br i1 %89, label %L.35, label %L.34
-L.35:
-	store i8 1, i8* %ok
 	br label %L.34
 L.34:
+	%89 = phi i1 [ false, %L.7 ], [ %88, %L.33 ]
+	br i1 %89, label %L.36, label %L.35
+L.36:
+	store i8 1, i8* %ok
+	br label %L.35
+L.35:
 	%90 = load %type.TypeNode** %to
 	%91 = getelementptr %type.TypeNode* %90, i32 0, i32 10
 	%92 = load i32* %91
@@ -14858,14 +16961,14 @@ L.34:
 	%94 = getelementptr %ast.AstNode* %93, i32 0, i32 7
 	%95 = load i32* %94
 	%96 = icmp ne i32 %92, %95
-	br i1 %96, label %L.37, label %L.36
-L.37:
+	br i1 %96, label %L.38, label %L.37
+L.38:
 	%97 = load %ast.AstNode** %tree
 	%98 = load %type.TypeNode** %to
 	%99 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %97, %type.TypeNode* %98)
 	store %ast.AstNode* %99, %ast.AstNode** %tree
-	br label %L.36
-L.36:
+	br label %L.37
+L.37:
 	br label %L.4
 L.8:
 	%100 = load %type.TypeNode** %fm
@@ -14875,35 +16978,35 @@ L.8:
 	%103 = load i8* %ok
 	%104 = icmp ne i8 %103, 0
 	%105 = xor i1 %104, true
-	br i1 %105, label %L.39, label %L.38
-L.39:
+	br i1 %105, label %L.40, label %L.39
+L.40:
 	%106 = load %type.TypeNode** %fm
 	%107 = getelementptr %type.TypeNode* %106, i32 0, i32 14
 	%108 = load i8* %107
 	%109 = zext i8 %108 to i32
-	switch i32 %109, label %L.40 [
-		i32 1, label %L.42
-		i32 3, label %L.43
+	switch i32 %109, label %L.41 [
+		i32 1, label %L.43
+		i32 3, label %L.44
 	]
-L.42:
-	store i8 1, i8* %ok
-	br label %L.41
 L.43:
+	store i8 1, i8* %ok
+	br label %L.42
+L.44:
 	%110 = getelementptr %A.3* @feature, i32 0, i32 4
 	%111 = load i8* %110
 	%112 = icmp ne i8 %111, 0
-	br i1 %112, label %L.45, label %L.44
-L.45:
+	br i1 %112, label %L.46, label %L.45
+L.46:
 	call void @lex_Error(i8 4)
-	br label %L.44
-L.44:
+	br label %L.45
+L.45:
 	store i8 1, i8* %ok
-	br label %L.41
-L.40:
-	br label %L.41
+	br label %L.42
 L.41:
-	br label %L.38
-L.38:
+	br label %L.42
+L.42:
+	br label %L.39
+L.39:
 	%113 = load %type.TypeNode** %to
 	%114 = getelementptr %type.TypeNode* %113, i32 0, i32 10
 	%115 = load i32* %114
@@ -14911,14 +17014,14 @@ L.38:
 	%117 = getelementptr %ast.AstNode* %116, i32 0, i32 7
 	%118 = load i32* %117
 	%119 = icmp ne i32 %115, %118
-	br i1 %119, label %L.47, label %L.46
-L.47:
+	br i1 %119, label %L.48, label %L.47
+L.48:
 	%120 = load %ast.AstNode** %tree
 	%121 = load %type.TypeNode** %to
 	%122 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %120, %type.TypeNode* %121)
 	store %ast.AstNode* %122, %ast.AstNode** %tree
-	br label %L.46
-L.46:
+	br label %L.47
+L.47:
 	br label %L.4
 L.9:
 	%123 = load %type.TypeNode** %fm
@@ -14928,28 +17031,28 @@ L.9:
 	%126 = load i8* %ok
 	%127 = icmp ne i8 %126, 0
 	%128 = xor i1 %127, true
-	br i1 %128, label %L.48, label %L.49
-L.48:
+	br i1 %128, label %L.49, label %L.50
+L.49:
 	%129 = load %type.TypeNode** %fm
 	%130 = getelementptr %type.TypeNode* %129, i32 0, i32 14
 	%131 = load i8* %130
 	%132 = icmp eq i8 %131, 2
-	br label %L.49
-L.49:
-	%133 = phi i1 [ false, %L.9 ], [ %132, %L.48 ]
-	br i1 %133, label %L.51, label %L.50
-L.51:
+	br label %L.50
+L.50:
+	%133 = phi i1 [ false, %L.9 ], [ %132, %L.49 ]
+	br i1 %133, label %L.52, label %L.51
+L.52:
 	%134 = getelementptr %A.3* @feature, i32 0, i32 4
 	%135 = load i8* %134
 	%136 = icmp ne i8 %135, 0
-	br i1 %136, label %L.53, label %L.52
-L.53:
+	br i1 %136, label %L.54, label %L.53
+L.54:
 	call void @lex_Error(i8 3)
-	br label %L.52
-L.52:
+	br label %L.53
+L.53:
 	store i8 1, i8* %ok
-	br label %L.50
-L.50:
+	br label %L.51
+L.51:
 	%137 = load %type.TypeNode** %to
 	%138 = getelementptr %type.TypeNode* %137, i32 0, i32 10
 	%139 = load i32* %138
@@ -14957,241 +17060,49 @@ L.50:
 	%141 = getelementptr %ast.AstNode* %140, i32 0, i32 7
 	%142 = load i32* %141
 	%143 = icmp ne i32 %139, %142
-	br i1 %143, label %L.55, label %L.54
-L.55:
+	br i1 %143, label %L.56, label %L.55
+L.56:
 	%144 = load %ast.AstNode** %tree
 	%145 = load %type.TypeNode** %to
 	%146 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %144, %type.TypeNode* %145)
 	store %ast.AstNode* %146, %ast.AstNode** %tree
-	br label %L.54
-L.54:
+	br label %L.55
+L.55:
 	br label %L.4
-L.3:
-	br label %L.4
-L.4:
-	%147 = load i8* %ok
-	%148 = icmp ne i8 %147, 0
-	%149 = xor i1 %148, true
-	br i1 %149, label %L.57, label %L.56
-L.57:
-	call void @lex_Error(i8 41)
-	br label %L.56
-L.56:
-	%150 = load %ast.AstNode** %tree
-	store %ast.AstNode* %150, %ast.AstNode** %rv.0
-	br label %return
-return:
-	%151 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %151
-}
-define internal i32 @expr_popcnt(i64 %x$) nounwind {
-L.0:
-	%rv.0 = alloca i32
-	%x = alloca i64
-	store i64 %x$, i64* %x
-	%n = alloca i32
-	store i32 0, i32* %n
-	br label %L.1
-L.1:
-	%0 = load i64* %x
-	%1 = icmp ne i64 %0, 0
-	%2 = xor i1 %1, true
-	br i1 %2, label %L.2, label %L.3
-L.3:
-	%3 = load i32* %n
-	%4 = add i32 %3, 1
-	store i32 %4, i32* %n
-	%5 = load i64* %x
-	%6 = load i64* %x
-	%7 = sub i64 %6, 1
-	%8 = and i64 %5, %7
-	store i64 %8, i64* %x
-	br label %L.1
-L.2:
-	%9 = load i32* %n
-	store i32 %9, i32* %rv.0
-	br label %return
-return:
-	%10 = load i32* %rv.0
-	ret i32 %10
-}
-@S.555 = internal constant [26 x i8] c"Unhandled unary operation\00"
-define internal %ast.AstNode* @expr_UnOp(i8 zeroext %op$, %ast.AstNode* %rhs$) nounwind {
-L.0:
-	%rv.0 = alloca %ast.AstNode*
-	%op = alloca i8
-	%rhs = alloca %ast.AstNode*
-	store i8 %op$, i8* %op
-	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
-	%tree = alloca %ast.AstNode*
-	%0 = load %ast.AstNode** %rhs
-	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 0
-	%2 = load i8* %1
-	%3 = icmp eq i8 %2, 7
-	br i1 %3, label %L.2, label %L.3
-L.2:
-	%4 = load %ast.AstNode** %rhs
-	store %ast.AstNode* %4, %ast.AstNode** %tree
-	%5 = load i8* %op
-	%6 = zext i8 %5 to i32
-	switch i32 %6, label %L.4 [
-		i32 33, label %L.6
-		i32 34, label %L.7
-		i32 74, label %L.8
-		i32 35, label %L.9
-		i32 41, label %L.10
-		i32 42, label %L.10
-		i32 43, label %L.11
-		i32 44, label %L.11
-		i32 45, label %L.12
-	]
-L.6:
-	%7 = load %ast.AstNode** %tree
-	%8 = getelementptr %ast.AstNode* %7, i32 0, i32 10
-	%9 = load i64* %8
-	%10 = sub i64 0, %9
-	%11 = load %ast.AstNode** %tree
-	%12 = getelementptr %ast.AstNode* %11, i32 0, i32 10
-	store i64 %10, i64* %12
-	br label %L.5
-L.7:
-	%13 = load %ast.AstNode** %tree
-	%14 = getelementptr %ast.AstNode* %13, i32 0, i32 10
-	%15 = load i64* %14
-	%16 = xor i64 %15, -1
-	%17 = load %ast.AstNode** %tree
-	%18 = getelementptr %ast.AstNode* %17, i32 0, i32 10
-	store i64 %16, i64* %18
-	br label %L.5
-L.8:
-	%19 = load %ast.AstNode** %tree
-	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 10
-	%21 = load i64* %20
-	%22 = xor i64 %21, 1
-	%23 = load %ast.AstNode** %tree
-	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 10
-	store i64 %22, i64* %24
-	br label %L.5
-L.9:
-	%25 = load %ast.AstNode** %tree
-	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 8
-	%27 = load %type.TypeNode** %26
-	%28 = getelementptr %type.TypeNode* %27, i32 0, i32 14
-	%29 = load i8* %28
-	%30 = icmp eq i8 %29, 3
-	br i1 %30, label %L.13, label %L.14
-L.13:
-	%31 = load %ast.AstNode** %tree
-	%32 = getelementptr %ast.AstNode* %31, i32 0, i32 10
-	%33 = load i64* %32
-	%34 = icmp slt i64 %33, 0
-	br label %L.14
-L.14:
-	%35 = phi i1 [ false, %L.9 ], [ %34, %L.13 ]
-	br i1 %35, label %L.16, label %L.15
-L.16:
-	%36 = load %ast.AstNode** %tree
-	%37 = getelementptr %ast.AstNode* %36, i32 0, i32 10
-	%38 = load i64* %37
-	%39 = sub i64 0, %38
-	%40 = load %ast.AstNode** %tree
-	%41 = getelementptr %ast.AstNode* %40, i32 0, i32 10
-	store i64 %39, i64* %41
-	br label %L.15
-L.15:
-	br label %L.5
 L.10:
-	%42 = load %ast.AstNode** %tree
-	%43 = getelementptr %ast.AstNode* %42, i32 0, i32 10
-	%44 = load i64* %43
-	%45 = icmp eq i64 %44, 0
-	br i1 %45, label %L.18, label %L.19
-L.18:
-	%46 = load %ast.AstNode** %tree
-	%47 = getelementptr %ast.AstNode* %46, i32 0, i32 7
-	%48 = load i32* %47
-	%49 = zext i32 %48 to i64
-	%50 = load %ast.AstNode** %tree
-	%51 = getelementptr %ast.AstNode* %50, i32 0, i32 10
-	store i64 %49, i64* %51
-	br label %L.17
-L.19:
-	%52 = load %ast.AstNode** %tree
-	%53 = getelementptr %ast.AstNode* %52, i32 0, i32 10
-	%54 = load i64* %53
-	%55 = call i64 @llvm.ctlz.i64(i64 %54, i1 true)
-	%56 = load %target.ModelT** @target_Target
-	%57 = getelementptr %target.ModelT* %56, i32 0, i32 2
-	%58 = load i8* %57
-	%59 = zext i8 %58 to i64
-	%60 = mul i64 8, %59
-	%61 = load %ast.AstNode** %tree
-	%62 = getelementptr %ast.AstNode* %61, i32 0, i32 7
-	%63 = load i32* %62
-	%64 = zext i32 %63 to i64
-	%65 = sub i64 %60, %64
-	%66 = sub i64 %55, %65
-	%67 = load %ast.AstNode** %tree
-	%68 = getelementptr %ast.AstNode* %67, i32 0, i32 10
-	store i64 %66, i64* %68
-	br label %L.17
-L.17:
-	br label %L.5
-L.11:
-	%69 = load %ast.AstNode** %tree
-	%70 = getelementptr %ast.AstNode* %69, i32 0, i32 10
-	%71 = load i64* %70
-	%72 = icmp eq i64 %71, 0
-	br i1 %72, label %L.21, label %L.22
-L.21:
-	%73 = load %ast.AstNode** %tree
-	%74 = getelementptr %ast.AstNode* %73, i32 0, i32 10
-	store i64 0, i64* %74
-	br label %L.20
-L.22:
-	%75 = load %ast.AstNode** %tree
-	%76 = getelementptr %ast.AstNode* %75, i32 0, i32 10
-	%77 = load i64* %76
-	%78 = call i64 @llvm.cttz.i64(i64 %77, i1 true)
-	%79 = load %ast.AstNode** %tree
-	%80 = getelementptr %ast.AstNode* %79, i32 0, i32 10
-	store i64 %78, i64* %80
-	br label %L.20
-L.20:
-	br label %L.5
-L.12:
-	%81 = load %ast.AstNode** %tree
-	%82 = getelementptr %ast.AstNode* %81, i32 0, i32 10
-	%83 = load i64* %82
-	%84 = call i32 @expr_popcnt(i64 %83)
-	%85 = zext i32 %84 to i64
-	%86 = load %ast.AstNode** %tree
-	%87 = getelementptr %ast.AstNode* %86, i32 0, i32 10
-	store i64 %85, i64* %87
-	br label %L.5
-L.4:
-	%88 = getelementptr [26 x i8]* @S.555
-	%89 = bitcast [26 x i8]* %88 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %89)
-	br label %L.5
-L.5:
-	br label %L.1
+	%147 = load %type.TypeNode** %to
+	%148 = getelementptr %type.TypeNode* %147, i32 0, i32 10
+	%149 = load i32* %148
+	%150 = load %ast.AstNode** %tree
+	%151 = getelementptr %ast.AstNode* %150, i32 0, i32 7
+	%152 = load i32* %151
+	%153 = icmp ne i32 %149, %152
+	br i1 %153, label %L.58, label %L.57
+L.58:
+	%154 = load %ast.AstNode** %tree
+	%155 = load %type.TypeNode** %to
+	%156 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %154, %type.TypeNode* %155)
+	store %ast.AstNode* %156, %ast.AstNode** %tree
+	br label %L.57
+L.57:
+	br label %L.4
 L.3:
-	%90 = load i8* %op
-	%91 = load %ast.AstNode** %rhs
-	%92 = getelementptr %ast.AstNode* %91, i32 0, i32 8
-	%93 = load %type.TypeNode** %92
-	%94 = load %ast.AstNode** %rhs
-	%95 = call %ast.AstNode* @ast_New1(i8 %90, %type.TypeNode* %93, %ast.AstNode* %94)
-	store %ast.AstNode* %95, %ast.AstNode** %tree
-	br label %L.1
-L.1:
-	%96 = load %ast.AstNode** %tree
-	store %ast.AstNode* %96, %ast.AstNode** %rv.0
+	br label %L.4
+L.4:
+	%157 = load i8* %ok
+	%158 = icmp ne i8 %157, 0
+	%159 = xor i1 %158, true
+	br i1 %159, label %L.60, label %L.59
+L.60:
+	call void @lex_Error(i8 41)
+	br label %L.59
+L.59:
+	%160 = load %ast.AstNode** %tree
+	store %ast.AstNode* %160, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%97 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %97
+	%161 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %161
 }
 define internal zeroext i8 @expr_IsSignedBinOp(%ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
 L.0:
@@ -15227,594 +17138,6 @@ L.3:
 return:
 	%13 = load i8* %rv.0
 	ret i8 %13
-}
-define internal %ast.AstNode* @expr_BinOp(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
-L.0:
-	%rv.0 = alloca %ast.AstNode*
-	%op = alloca i8
-	%lhs = alloca %ast.AstNode*
-	%rhs = alloca %ast.AstNode*
-	store i8 %op$, i8* %op
-	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
-	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
-	%tree = alloca %ast.AstNode*
-	%sl = alloca i32
-	%sr = alloca i32
-	%0 = load %ast.AstNode** %lhs
-	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 0
-	%2 = load i8* %1
-	%3 = icmp eq i8 %2, 2
-	br i1 %3, label %L.2, label %L.1
-L.2:
-	%4 = load %ast.AstNode** %lhs
-	%5 = getelementptr %ast.AstNode* %4, i32 0, i32 8
-	%6 = load %type.TypeNode** %5
-	%7 = getelementptr %type.TypeNode* %6, i32 0, i32 3
-	%8 = load %symb.SymbNode** %7
-	%9 = getelementptr %symb.SymbNode* %8, i32 0, i32 21
-	%10 = getelementptr [0 x i8]* %9
-	%11 = bitcast [0 x i8]* %10 to [0 x i8]*
-	call void @lex_ErrorI(i8 29, [0 x i8]* %11)
-	store %ast.AstNode* null, %ast.AstNode** %rv.0
-	br label %return
-L.1:
-	%12 = load %ast.AstNode** %rhs
-	%13 = getelementptr %ast.AstNode* %12, i32 0, i32 0
-	%14 = load i8* %13
-	%15 = icmp eq i8 %14, 2
-	br i1 %15, label %L.4, label %L.3
-L.4:
-	%16 = load %ast.AstNode** %rhs
-	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 8
-	%18 = load %type.TypeNode** %17
-	%19 = getelementptr %type.TypeNode* %18, i32 0, i32 3
-	%20 = load %symb.SymbNode** %19
-	%21 = getelementptr %symb.SymbNode* %20, i32 0, i32 21
-	%22 = getelementptr [0 x i8]* %21
-	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
-	call void @lex_ErrorI(i8 29, [0 x i8]* %23)
-	store %ast.AstNode* null, %ast.AstNode** %rv.0
-	br label %return
-L.3:
-	%24 = load %ast.AstNode** %lhs
-	%25 = getelementptr %ast.AstNode* %24, i32 0, i32 0
-	%26 = load i8* %25
-	%27 = icmp eq i8 %26, 7
-	br i1 %27, label %L.6, label %L.5
-L.6:
-	%28 = load %ast.AstNode** %rhs
-	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 0
-	%30 = load i8* %29
-	%31 = icmp eq i8 %30, 7
-	br i1 %31, label %L.8, label %L.7
-L.8:
-	%32 = load i8* %op
-	%33 = zext i8 %32 to i32
-	switch i32 %33, label %L.9 [
-		i32 46, label %L.11
-		i32 47, label %L.12
-		i32 70, label %L.13
-		i32 71, label %L.14
-		i32 69, label %L.15
-		i32 48, label %L.16
-		i32 49, label %L.17
-		i32 50, label %L.18
-		i32 65, label %L.19
-		i32 67, label %L.19
-		i32 66, label %L.20
-		i32 68, label %L.21
-		i32 61, label %L.22
-		i32 62, label %L.23
-		i32 63, label %L.24
-		i32 64, label %L.25
-		i32 51, label %L.26
-		i32 52, label %L.27
-		i32 53, label %L.28
-		i32 54, label %L.29
-		i32 55, label %L.30
-		i32 56, label %L.31
-		i32 57, label %L.32
-		i32 58, label %L.33
-		i32 59, label %L.34
-		i32 60, label %L.35
-	]
-L.11:
-	%34 = load %ast.AstNode** %lhs
-	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 10
-	%36 = load i64* %35
-	%37 = load %ast.AstNode** %rhs
-	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 10
-	%39 = load i64* %38
-	%40 = add i64 %36, %39
-	store i64 %40, i64* %35
-	%41 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %41, %ast.AstNode** %rv.0
-	br label %return
-L.12:
-	%42 = load %ast.AstNode** %lhs
-	%43 = getelementptr %ast.AstNode* %42, i32 0, i32 10
-	%44 = load i64* %43
-	%45 = load %ast.AstNode** %rhs
-	%46 = getelementptr %ast.AstNode* %45, i32 0, i32 10
-	%47 = load i64* %46
-	%48 = sub i64 %44, %47
-	store i64 %48, i64* %43
-	%49 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %49, %ast.AstNode** %rv.0
-	br label %return
-L.13:
-	%50 = load %ast.AstNode** %lhs
-	%51 = getelementptr %ast.AstNode* %50, i32 0, i32 10
-	%52 = load i64* %51
-	%53 = load %ast.AstNode** %rhs
-	%54 = getelementptr %ast.AstNode* %53, i32 0, i32 10
-	%55 = load i64* %54
-	%56 = or i64 %52, %55
-	%57 = load %ast.AstNode** %lhs
-	%58 = getelementptr %ast.AstNode* %57, i32 0, i32 10
-	store i64 %56, i64* %58
-	%59 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %59, %ast.AstNode** %rv.0
-	br label %return
-L.14:
-	%60 = load %ast.AstNode** %lhs
-	%61 = getelementptr %ast.AstNode* %60, i32 0, i32 10
-	%62 = load i64* %61
-	%63 = load %ast.AstNode** %rhs
-	%64 = getelementptr %ast.AstNode* %63, i32 0, i32 10
-	%65 = load i64* %64
-	%66 = xor i64 %62, %65
-	%67 = load %ast.AstNode** %lhs
-	%68 = getelementptr %ast.AstNode* %67, i32 0, i32 10
-	store i64 %66, i64* %68
-	%69 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %69, %ast.AstNode** %rv.0
-	br label %return
-L.15:
-	%70 = load %ast.AstNode** %lhs
-	%71 = getelementptr %ast.AstNode* %70, i32 0, i32 10
-	%72 = load i64* %71
-	%73 = load %ast.AstNode** %rhs
-	%74 = getelementptr %ast.AstNode* %73, i32 0, i32 10
-	%75 = load i64* %74
-	%76 = and i64 %72, %75
-	%77 = load %ast.AstNode** %lhs
-	%78 = getelementptr %ast.AstNode* %77, i32 0, i32 10
-	store i64 %76, i64* %78
-	%79 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %79, %ast.AstNode** %rv.0
-	br label %return
-L.16:
-	%80 = load %ast.AstNode** %lhs
-	%81 = getelementptr %ast.AstNode* %80, i32 0, i32 10
-	%82 = load i64* %81
-	%83 = load %ast.AstNode** %rhs
-	%84 = getelementptr %ast.AstNode* %83, i32 0, i32 10
-	%85 = load i64* %84
-	%86 = mul i64 %82, %85
-	%87 = load %ast.AstNode** %lhs
-	%88 = getelementptr %ast.AstNode* %87, i32 0, i32 10
-	store i64 %86, i64* %88
-	%89 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %89, %ast.AstNode** %rv.0
-	br label %return
-L.17:
-	%90 = load %ast.AstNode** %lhs
-	%91 = getelementptr %ast.AstNode* %90, i32 0, i32 10
-	%92 = load i64* %91
-	%93 = load %ast.AstNode** %rhs
-	%94 = getelementptr %ast.AstNode* %93, i32 0, i32 10
-	%95 = load i64* %94
-	%96 = udiv i64 %92, %95
-	%97 = load %ast.AstNode** %lhs
-	%98 = getelementptr %ast.AstNode* %97, i32 0, i32 10
-	store i64 %96, i64* %98
-	%99 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %99, %ast.AstNode** %rv.0
-	br label %return
-L.18:
-	%100 = load %ast.AstNode** %lhs
-	%101 = getelementptr %ast.AstNode* %100, i32 0, i32 10
-	%102 = load i64* %101
-	%103 = load %ast.AstNode** %rhs
-	%104 = getelementptr %ast.AstNode* %103, i32 0, i32 10
-	%105 = load i64* %104
-	%106 = urem i64 %102, %105
-	%107 = load %ast.AstNode** %lhs
-	%108 = getelementptr %ast.AstNode* %107, i32 0, i32 10
-	store i64 %106, i64* %108
-	%109 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %109, %ast.AstNode** %rv.0
-	br label %return
-L.19:
-	%110 = load %ast.AstNode** %lhs
-	%111 = getelementptr %ast.AstNode* %110, i32 0, i32 10
-	%112 = load i64* %111
-	%113 = load %ast.AstNode** %rhs
-	%114 = getelementptr %ast.AstNode* %113, i32 0, i32 10
-	%115 = load i64* %114
-	%116 = shl i64 %112, %115
-	%117 = load %ast.AstNode** %lhs
-	%118 = getelementptr %ast.AstNode* %117, i32 0, i32 10
-	store i64 %116, i64* %118
-	%119 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %119, %ast.AstNode** %rv.0
-	br label %return
-L.20:
-	%120 = load %ast.AstNode** %lhs
-	%121 = getelementptr %ast.AstNode* %120, i32 0, i32 10
-	%122 = load i64* %121
-	%123 = load %ast.AstNode** %rhs
-	%124 = getelementptr %ast.AstNode* %123, i32 0, i32 10
-	%125 = load i64* %124
-	%126 = lshr i64 %122, %125
-	%127 = load %ast.AstNode** %lhs
-	%128 = getelementptr %ast.AstNode* %127, i32 0, i32 10
-	store i64 %126, i64* %128
-	%129 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %129, %ast.AstNode** %rv.0
-	br label %return
-L.21:
-	%130 = load %ast.AstNode** %lhs
-	%131 = getelementptr %ast.AstNode* %130, i32 0, i32 10
-	%132 = load i64* %131
-	%133 = load %ast.AstNode** %rhs
-	%134 = getelementptr %ast.AstNode* %133, i32 0, i32 10
-	%135 = load i64* %134
-	%136 = shl i64 %132, %135
-	%137 = load %ast.AstNode** %lhs
-	%138 = getelementptr %ast.AstNode* %137, i32 0, i32 10
-	store i64 %136, i64* %138
-	%139 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %139, %ast.AstNode** %rv.0
-	br label %return
-L.22:
-	%140 = load %ast.AstNode** %rhs
-	%141 = getelementptr %ast.AstNode* %140, i32 0, i32 10
-	%142 = load i64* %141
-	%143 = load %ast.AstNode** %lhs
-	%144 = getelementptr %ast.AstNode* %143, i32 0, i32 10
-	%145 = load i64* %144
-	%146 = icmp ult i64 %142, %145
-	br i1 %146, label %L.37, label %L.36
-L.37:
-	%147 = load %ast.AstNode** %rhs
-	%148 = getelementptr %ast.AstNode* %147, i32 0, i32 10
-	%149 = load i64* %148
-	%150 = load %ast.AstNode** %lhs
-	%151 = getelementptr %ast.AstNode* %150, i32 0, i32 10
-	store i64 %149, i64* %151
-	br label %L.36
-L.36:
-	%152 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %152, %ast.AstNode** %rv.0
-	br label %return
-L.23:
-	%153 = load %ast.AstNode** %rhs
-	%154 = getelementptr %ast.AstNode* %153, i32 0, i32 10
-	%155 = load i64* %154
-	%156 = load %ast.AstNode** %lhs
-	%157 = getelementptr %ast.AstNode* %156, i32 0, i32 10
-	%158 = load i64* %157
-	%159 = icmp ugt i64 %155, %158
-	br i1 %159, label %L.39, label %L.38
-L.39:
-	%160 = load %ast.AstNode** %rhs
-	%161 = getelementptr %ast.AstNode* %160, i32 0, i32 10
-	%162 = load i64* %161
-	%163 = load %ast.AstNode** %lhs
-	%164 = getelementptr %ast.AstNode* %163, i32 0, i32 10
-	store i64 %162, i64* %164
-	br label %L.38
-L.38:
-	%165 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %165, %ast.AstNode** %rv.0
-	br label %return
-L.24:
-	%166 = load %ast.AstNode** %rhs
-	%167 = getelementptr %ast.AstNode* %166, i32 0, i32 10
-	%168 = load i64* %167
-	%169 = load %ast.AstNode** %lhs
-	%170 = getelementptr %ast.AstNode* %169, i32 0, i32 10
-	%171 = load i64* %170
-	%172 = icmp slt i64 %168, %171
-	br i1 %172, label %L.41, label %L.40
-L.41:
-	%173 = load %ast.AstNode** %rhs
-	%174 = getelementptr %ast.AstNode* %173, i32 0, i32 10
-	%175 = load i64* %174
-	%176 = load %ast.AstNode** %lhs
-	%177 = getelementptr %ast.AstNode* %176, i32 0, i32 10
-	store i64 %175, i64* %177
-	br label %L.40
-L.40:
-	%178 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %178, %ast.AstNode** %rv.0
-	br label %return
-L.25:
-	%179 = load %ast.AstNode** %rhs
-	%180 = getelementptr %ast.AstNode* %179, i32 0, i32 10
-	%181 = load i64* %180
-	%182 = load %ast.AstNode** %lhs
-	%183 = getelementptr %ast.AstNode* %182, i32 0, i32 10
-	%184 = load i64* %183
-	%185 = icmp sgt i64 %181, %184
-	br i1 %185, label %L.43, label %L.42
-L.43:
-	%186 = load %ast.AstNode** %rhs
-	%187 = getelementptr %ast.AstNode* %186, i32 0, i32 10
-	%188 = load i64* %187
-	%189 = load %ast.AstNode** %lhs
-	%190 = getelementptr %ast.AstNode* %189, i32 0, i32 10
-	store i64 %188, i64* %190
-	br label %L.42
-L.42:
-	%191 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %191, %ast.AstNode** %rv.0
-	br label %return
-L.26:
-	%192 = load %ast.AstNode** %lhs
-	%193 = getelementptr %ast.AstNode* %192, i32 0, i32 10
-	%194 = load i64* %193
-	%195 = load %ast.AstNode** %rhs
-	%196 = getelementptr %ast.AstNode* %195, i32 0, i32 10
-	%197 = load i64* %196
-	%198 = icmp eq i64 %194, %197
-	%199 = zext i1 %198 to i32
-	%200 = zext i32 %199 to i64
-	%201 = load %ast.AstNode** %lhs
-	%202 = getelementptr %ast.AstNode* %201, i32 0, i32 10
-	store i64 %200, i64* %202
-	%203 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %203, %ast.AstNode** %rv.0
-	br label %return
-L.27:
-	%204 = load %ast.AstNode** %lhs
-	%205 = getelementptr %ast.AstNode* %204, i32 0, i32 10
-	%206 = load i64* %205
-	%207 = load %ast.AstNode** %rhs
-	%208 = getelementptr %ast.AstNode* %207, i32 0, i32 10
-	%209 = load i64* %208
-	%210 = icmp ne i64 %206, %209
-	%211 = zext i1 %210 to i32
-	%212 = zext i32 %211 to i64
-	%213 = load %ast.AstNode** %lhs
-	%214 = getelementptr %ast.AstNode* %213, i32 0, i32 10
-	store i64 %212, i64* %214
-	%215 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %215, %ast.AstNode** %rv.0
-	br label %return
-L.28:
-	%216 = load %ast.AstNode** %lhs
-	%217 = getelementptr %ast.AstNode* %216, i32 0, i32 10
-	%218 = load i64* %217
-	%219 = load %ast.AstNode** %rhs
-	%220 = getelementptr %ast.AstNode* %219, i32 0, i32 10
-	%221 = load i64* %220
-	%222 = icmp ult i64 %218, %221
-	%223 = zext i1 %222 to i32
-	%224 = zext i32 %223 to i64
-	%225 = load %ast.AstNode** %lhs
-	%226 = getelementptr %ast.AstNode* %225, i32 0, i32 10
-	store i64 %224, i64* %226
-	%227 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %227, %ast.AstNode** %rv.0
-	br label %return
-L.29:
-	%228 = load %ast.AstNode** %lhs
-	%229 = getelementptr %ast.AstNode* %228, i32 0, i32 10
-	%230 = load i64* %229
-	%231 = load %ast.AstNode** %rhs
-	%232 = getelementptr %ast.AstNode* %231, i32 0, i32 10
-	%233 = load i64* %232
-	%234 = icmp ugt i64 %230, %233
-	%235 = zext i1 %234 to i32
-	%236 = zext i32 %235 to i64
-	%237 = load %ast.AstNode** %lhs
-	%238 = getelementptr %ast.AstNode* %237, i32 0, i32 10
-	store i64 %236, i64* %238
-	%239 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %239, %ast.AstNode** %rv.0
-	br label %return
-L.30:
-	%240 = load %ast.AstNode** %lhs
-	%241 = getelementptr %ast.AstNode* %240, i32 0, i32 10
-	%242 = load i64* %241
-	%243 = load %ast.AstNode** %rhs
-	%244 = getelementptr %ast.AstNode* %243, i32 0, i32 10
-	%245 = load i64* %244
-	%246 = icmp ule i64 %242, %245
-	%247 = zext i1 %246 to i32
-	%248 = zext i32 %247 to i64
-	%249 = load %ast.AstNode** %lhs
-	%250 = getelementptr %ast.AstNode* %249, i32 0, i32 10
-	store i64 %248, i64* %250
-	%251 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %251, %ast.AstNode** %rv.0
-	br label %return
-L.31:
-	%252 = load %ast.AstNode** %lhs
-	%253 = getelementptr %ast.AstNode* %252, i32 0, i32 10
-	%254 = load i64* %253
-	%255 = load %ast.AstNode** %rhs
-	%256 = getelementptr %ast.AstNode* %255, i32 0, i32 10
-	%257 = load i64* %256
-	%258 = icmp uge i64 %254, %257
-	%259 = zext i1 %258 to i32
-	%260 = zext i32 %259 to i64
-	%261 = load %ast.AstNode** %lhs
-	%262 = getelementptr %ast.AstNode* %261, i32 0, i32 10
-	store i64 %260, i64* %262
-	%263 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %263, %ast.AstNode** %rv.0
-	br label %return
-L.32:
-	%264 = load %ast.AstNode** %lhs
-	%265 = getelementptr %ast.AstNode* %264, i32 0, i32 10
-	%266 = load i64* %265
-	%267 = load %ast.AstNode** %rhs
-	%268 = getelementptr %ast.AstNode* %267, i32 0, i32 10
-	%269 = load i64* %268
-	%270 = icmp slt i64 %266, %269
-	%271 = zext i1 %270 to i32
-	%272 = zext i32 %271 to i64
-	%273 = load %ast.AstNode** %lhs
-	%274 = getelementptr %ast.AstNode* %273, i32 0, i32 10
-	store i64 %272, i64* %274
-	%275 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %275, %ast.AstNode** %rv.0
-	br label %return
-L.33:
-	%276 = load %ast.AstNode** %lhs
-	%277 = getelementptr %ast.AstNode* %276, i32 0, i32 10
-	%278 = load i64* %277
-	%279 = load %ast.AstNode** %rhs
-	%280 = getelementptr %ast.AstNode* %279, i32 0, i32 10
-	%281 = load i64* %280
-	%282 = icmp sgt i64 %278, %281
-	%283 = zext i1 %282 to i32
-	%284 = zext i32 %283 to i64
-	%285 = load %ast.AstNode** %lhs
-	%286 = getelementptr %ast.AstNode* %285, i32 0, i32 10
-	store i64 %284, i64* %286
-	%287 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %287, %ast.AstNode** %rv.0
-	br label %return
-L.34:
-	%288 = load %ast.AstNode** %lhs
-	%289 = getelementptr %ast.AstNode* %288, i32 0, i32 10
-	%290 = load i64* %289
-	%291 = load %ast.AstNode** %rhs
-	%292 = getelementptr %ast.AstNode* %291, i32 0, i32 10
-	%293 = load i64* %292
-	%294 = icmp sle i64 %290, %293
-	%295 = zext i1 %294 to i32
-	%296 = zext i32 %295 to i64
-	%297 = load %ast.AstNode** %lhs
-	%298 = getelementptr %ast.AstNode* %297, i32 0, i32 10
-	store i64 %296, i64* %298
-	%299 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %299, %ast.AstNode** %rv.0
-	br label %return
-L.35:
-	%300 = load %ast.AstNode** %lhs
-	%301 = getelementptr %ast.AstNode* %300, i32 0, i32 10
-	%302 = load i64* %301
-	%303 = load %ast.AstNode** %rhs
-	%304 = getelementptr %ast.AstNode* %303, i32 0, i32 10
-	%305 = load i64* %304
-	%306 = icmp sge i64 %302, %305
-	%307 = zext i1 %306 to i32
-	%308 = zext i32 %307 to i64
-	%309 = load %ast.AstNode** %lhs
-	%310 = getelementptr %ast.AstNode* %309, i32 0, i32 10
-	store i64 %308, i64* %310
-	%311 = load %ast.AstNode** %lhs
-	store %ast.AstNode* %311, %ast.AstNode** %rv.0
-	br label %return
-L.9:
-	br label %L.10
-L.10:
-	br label %L.7
-L.7:
-	br label %L.5
-L.5:
-	%312 = load %ast.AstNode** %lhs
-	%313 = getelementptr %ast.AstNode* %312, i32 0, i32 8
-	%314 = load %type.TypeNode** %313
-	%315 = getelementptr %type.TypeNode* %314, i32 0, i32 14
-	%316 = load i8* %315
-	%317 = icmp eq i8 %316, 5
-	br i1 %317, label %L.45, label %L.44
-L.44:
-	%318 = load %ast.AstNode** %lhs
-	%319 = getelementptr %ast.AstNode* %318, i32 0, i32 8
-	%320 = load %type.TypeNode** %319
-	%321 = getelementptr %type.TypeNode* %320, i32 0, i32 14
-	%322 = load i8* %321
-	%323 = icmp eq i8 %322, 8
-	br label %L.45
-L.45:
-	%324 = phi i1 [ true, %L.5 ], [ %323, %L.44 ]
-	br i1 %324, label %L.47, label %L.46
-L.47:
-	%325 = load %ast.AstNode** %rhs
-	%326 = getelementptr %ast.AstNode* %325, i32 0, i32 0
-	%327 = load i8* %326
-	%328 = icmp eq i8 %327, 7
-	br i1 %328, label %L.49, label %L.48
-L.49:
-	%329 = load i8* %op
-	%330 = icmp eq i8 %329, 51
-	br i1 %330, label %L.51, label %L.50
-L.50:
-	%331 = load i8* %op
-	%332 = icmp eq i8 %331, 52
-	br label %L.51
-L.51:
-	%333 = phi i1 [ true, %L.49 ], [ %332, %L.50 ]
-	br i1 %333, label %L.53, label %L.52
-L.53:
-	%334 = load %target.ModelT** @target_Target
-	%335 = getelementptr %target.ModelT* %334, i32 0, i32 6
-	%336 = getelementptr %target.SizeAlign* %335, i32 0, i32 0
-	%337 = load i8* %336
-	%338 = zext i8 %337 to i32
-	%339 = load %ast.AstNode** %rhs
-	%340 = getelementptr %ast.AstNode* %339, i32 0, i32 7
-	store i32 %338, i32* %340
-	br label %L.52
-L.52:
-	br label %L.48
-L.48:
-	br label %L.46
-L.46:
-	%341 = load %ast.AstNode** %lhs
-	%342 = getelementptr %ast.AstNode* %341, i32 0, i32 7
-	%343 = load i32* %342
-	store i32 %343, i32* %sl
-	%344 = load %ast.AstNode** %rhs
-	%345 = getelementptr %ast.AstNode* %344, i32 0, i32 7
-	%346 = load i32* %345
-	store i32 %346, i32* %sr
-	%347 = load i32* %sl
-	%348 = load i32* %sr
-	%349 = icmp ugt i32 %347, %348
-	br i1 %349, label %L.55, label %L.56
-L.55:
-	%350 = load %ast.AstNode** %rhs
-	%351 = load i32* %sl
-	%352 = call %ast.AstNode* @ast_Extend(%ast.AstNode* %350, i32 %351, i8 0)
-	store %ast.AstNode* %352, %ast.AstNode** %rhs
-	br label %L.54
-L.56:
-	%353 = load i32* %sr
-	%354 = load i32* %sl
-	%355 = icmp ugt i32 %353, %354
-	br i1 %355, label %L.58, label %L.57
-L.58:
-	%356 = load %ast.AstNode** %lhs
-	%357 = load i32* %sr
-	%358 = call %ast.AstNode* @ast_Extend(%ast.AstNode* %356, i32 %357, i8 0)
-	store %ast.AstNode* %358, %ast.AstNode** %lhs
-	br label %L.57
-L.57:
-	br label %L.54
-L.54:
-	%359 = load i8* %op
-	%360 = load %ast.AstNode** %lhs
-	%361 = getelementptr %ast.AstNode* %360, i32 0, i32 8
-	%362 = load %type.TypeNode** %361
-	%363 = load %ast.AstNode** %lhs
-	%364 = load %ast.AstNode** %rhs
-	%365 = call %ast.AstNode* @ast_New2(i8 %359, %type.TypeNode* %362, %ast.AstNode* %363, %ast.AstNode* %364)
-	store %ast.AstNode* %365, %ast.AstNode** %tree
-	%366 = load %ast.AstNode** %tree
-	store %ast.AstNode* %366, %ast.AstNode** %rv.0
-	br label %return
-return:
-	%367 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %367
 }
 define internal i32 @expr_FindFlexSize(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -15910,8 +17233,6 @@ return:
 	%41 = load i32* %rv.0
 	ret i32 %41
 }
-@S.556 = internal constant [26 x i8] c"not a variable sized type\00"
-@S.557 = internal constant [42 x i8] c"size of variable sized type not specified\00"
 define internal %ast.AstNode* @expr_GetSizeSpec(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -15947,51 +17268,47 @@ L.2:
 	%19 = xor i1 %18, true
 	br i1 %19, label %L.5, label %L.4
 L.5:
-	%20 = getelementptr [26 x i8]* @S.556
-	%21 = bitcast [26 x i8]* %20 to [0 x i8]*
-	call void @lex_ErrorS(i8 0, [0 x i8]* %21)
+	call void @lex_Error(i8 81)
 	br label %L.4
 L.4:
+	%20 = load %type.TypeNode** @type_wordtype
+	%21 = call %ast.AstNode* @expr_Const(%type.TypeNode* %20)
+	store %ast.AstNode* %21, %ast.AstNode** %temp
 	%22 = load %type.TypeNode** @type_wordtype
-	%23 = call %ast.AstNode* @expr_Const(%type.TypeNode* %22)
-	store %ast.AstNode* %23, %ast.AstNode** %temp
+	%23 = load %ast.AstNode** %temp
 	%24 = load %type.TypeNode** @type_wordtype
-	%25 = load %ast.AstNode** %temp
-	%26 = load %type.TypeNode** @type_wordtype
-	%27 = load %type.TypeNode** %t
-	%28 = call i32 @expr_FindFlexSize(%type.TypeNode* %27)
-	%29 = zext i32 %28 to i64
-	%30 = call %ast.AstNode* @ast_Const(%type.TypeNode* %26, i64 %29)
-	%31 = call %ast.AstNode* @ast_New2(i8 48, %type.TypeNode* %24, %ast.AstNode* %25, %ast.AstNode* %30)
-	store %ast.AstNode* %31, %ast.AstNode** %temp
-	%32 = load %type.TypeNode** @type_wordtype
-	%33 = load %ast.AstNode** %size
-	%34 = load %ast.AstNode** %temp
-	%35 = call %ast.AstNode* @ast_New2(i8 46, %type.TypeNode* %32, %ast.AstNode* %33, %ast.AstNode* %34)
-	store %ast.AstNode* %35, %ast.AstNode** %size
-	%36 = call i8 @lex_Expect(i8 33)
-	store i8 %36, i8* %tok
+	%25 = load %type.TypeNode** %t
+	%26 = call i32 @expr_FindFlexSize(%type.TypeNode* %25)
+	%27 = zext i32 %26 to i64
+	%28 = call %ast.AstNode* @ast_Const(%type.TypeNode* %24, i64 %27)
+	%29 = call %ast.AstNode* @ast_New2(i8 51, %type.TypeNode* %22, %ast.AstNode* %23, %ast.AstNode* %28)
+	store %ast.AstNode* %29, %ast.AstNode** %temp
+	%30 = load %type.TypeNode** @type_wordtype
+	%31 = load %ast.AstNode** %size
+	%32 = load %ast.AstNode** %temp
+	%33 = call %ast.AstNode* @ast_New2(i8 49, %type.TypeNode* %30, %ast.AstNode* %31, %ast.AstNode* %32)
+	store %ast.AstNode* %33, %ast.AstNode** %size
+	%34 = call i8 @lex_Expect(i8 33)
+	store i8 %34, i8* %tok
 	br label %L.1
 L.3:
-	%37 = load %type.TypeNode** %t
-	%38 = getelementptr %type.TypeNode* %37, i32 0, i32 25
-	%39 = load i8* %38
-	%40 = icmp ne i8 %39, 0
-	br i1 %40, label %L.7, label %L.6
+	%35 = load %type.TypeNode** %t
+	%36 = getelementptr %type.TypeNode* %35, i32 0, i32 25
+	%37 = load i8* %36
+	%38 = icmp ne i8 %37, 0
+	br i1 %38, label %L.7, label %L.6
 L.7:
-	%41 = getelementptr [42 x i8]* @S.557
-	%42 = bitcast [42 x i8]* %41 to [0 x i8]*
-	call void @lex_ErrorS(i8 0, [0 x i8]* %42)
+	call void @lex_Error(i8 82)
 	br label %L.6
 L.6:
 	br label %L.1
 L.1:
-	%43 = load %ast.AstNode** %size
-	store %ast.AstNode* %43, %ast.AstNode** %rv.0
+	%39 = load %ast.AstNode** %size
+	store %ast.AstNode* %39, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%44 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %44
+	%40 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %40
 }
 define internal %ast.AstNode* @expr_GetSpaceSpec(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -16025,8 +17342,6 @@ return:
 	%9 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %9
 }
-@S.558 = internal constant [26 x i8] c"not a variable sized type\00"
-@S.559 = internal constant [42 x i8] c"size of variable sized type not specified\00"
 define internal { %ast.AstNode*, %ast.AstNode* } @expr_SizeSpace(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -16064,71 +17379,67 @@ L.2:
 	%19 = xor i1 %18, true
 	br i1 %19, label %L.5, label %L.4
 L.5:
-	%20 = getelementptr [26 x i8]* @S.558
-	%21 = bitcast [26 x i8]* %20 to [0 x i8]*
-	call void @lex_ErrorS(i8 0, [0 x i8]* %21)
+	call void @lex_Error(i8 81)
 	br label %L.4
 L.4:
+	%20 = load %type.TypeNode** @type_wordtype
+	%21 = call %ast.AstNode* @expr_Const(%type.TypeNode* %20)
+	store %ast.AstNode* %21, %ast.AstNode** %temp
 	%22 = load %type.TypeNode** @type_wordtype
-	%23 = call %ast.AstNode* @expr_Const(%type.TypeNode* %22)
-	store %ast.AstNode* %23, %ast.AstNode** %temp
+	%23 = load %ast.AstNode** %temp
 	%24 = load %type.TypeNode** @type_wordtype
-	%25 = load %ast.AstNode** %temp
-	%26 = load %type.TypeNode** @type_wordtype
-	%27 = load %type.TypeNode** %t
-	%28 = call i32 @expr_FindFlexSize(%type.TypeNode* %27)
-	%29 = zext i32 %28 to i64
-	%30 = call %ast.AstNode* @ast_Const(%type.TypeNode* %26, i64 %29)
-	%31 = call %ast.AstNode* @ast_New2(i8 48, %type.TypeNode* %24, %ast.AstNode* %25, %ast.AstNode* %30)
-	store %ast.AstNode* %31, %ast.AstNode** %temp
-	%32 = load %type.TypeNode** @type_wordtype
-	%33 = load %ast.AstNode** %size
-	%34 = load %ast.AstNode** %temp
-	%35 = call %ast.AstNode* @ast_New2(i8 46, %type.TypeNode* %32, %ast.AstNode* %33, %ast.AstNode* %34)
-	store %ast.AstNode* %35, %ast.AstNode** %size
-	%36 = call i8 @lex_Expect(i8 33)
-	store i8 %36, i8* %tok
+	%25 = load %type.TypeNode** %t
+	%26 = call i32 @expr_FindFlexSize(%type.TypeNode* %25)
+	%27 = zext i32 %26 to i64
+	%28 = call %ast.AstNode* @ast_Const(%type.TypeNode* %24, i64 %27)
+	%29 = call %ast.AstNode* @ast_New2(i8 51, %type.TypeNode* %22, %ast.AstNode* %23, %ast.AstNode* %28)
+	store %ast.AstNode* %29, %ast.AstNode** %temp
+	%30 = load %type.TypeNode** @type_wordtype
+	%31 = load %ast.AstNode** %size
+	%32 = load %ast.AstNode** %temp
+	%33 = call %ast.AstNode* @ast_New2(i8 49, %type.TypeNode* %30, %ast.AstNode* %31, %ast.AstNode* %32)
+	store %ast.AstNode* %33, %ast.AstNode** %size
+	%34 = call i8 @lex_Expect(i8 33)
+	store i8 %34, i8* %tok
 	br label %L.1
 L.3:
-	%37 = load %type.TypeNode** %t
-	%38 = getelementptr %type.TypeNode* %37, i32 0, i32 25
-	%39 = load i8* %38
-	%40 = icmp ne i8 %39, 0
-	br i1 %40, label %L.7, label %L.6
+	%35 = load %type.TypeNode** %t
+	%36 = getelementptr %type.TypeNode* %35, i32 0, i32 25
+	%37 = load i8* %36
+	%38 = icmp ne i8 %37, 0
+	br i1 %38, label %L.7, label %L.6
 L.7:
-	%41 = getelementptr [42 x i8]* @S.559
-	%42 = bitcast [42 x i8]* %41 to [0 x i8]*
-	call void @lex_ErrorS(i8 0, [0 x i8]* %42)
+	call void @lex_Error(i8 82)
 	br label %L.6
 L.6:
 	br label %L.1
 L.1:
-	%43 = load i8* %tok
-	%44 = icmp eq i8 %43, 5
-	br i1 %44, label %L.9, label %L.10
+	%39 = load i8* %tok
+	%40 = icmp eq i8 %39, 5
+	br i1 %40, label %L.9, label %L.10
 L.9:
-	%45 = call i8 @lex_Next()
-	store i8 %45, i8* %tok
-	%46 = load %type.TypeNode** @type_wordtype
-	%47 = call %ast.AstNode* @expr_Const(%type.TypeNode* %46)
-	store %ast.AstNode* %47, %ast.AstNode** %space
+	%41 = call i8 @lex_Next()
+	store i8 %41, i8* %tok
+	%42 = load %type.TypeNode** @type_wordtype
+	%43 = call %ast.AstNode* @expr_Const(%type.TypeNode* %42)
+	store %ast.AstNode* %43, %ast.AstNode** %space
 	br label %L.8
 L.10:
-	%48 = load %type.TypeNode** @type_wordtype
-	%49 = call %ast.AstNode* @ast_Const(%type.TypeNode* %48, i64 0)
-	store %ast.AstNode* %49, %ast.AstNode** %space
+	%44 = load %type.TypeNode** @type_wordtype
+	%45 = call %ast.AstNode* @ast_Const(%type.TypeNode* %44, i64 0)
+	store %ast.AstNode* %45, %ast.AstNode** %space
 	br label %L.8
 L.8:
-	%50 = load %ast.AstNode** %size
-	store %ast.AstNode* %50, %ast.AstNode** %rv.0
-	%51 = load %ast.AstNode** %space
-	store %ast.AstNode* %51, %ast.AstNode** %rv.1
+	%46 = load %ast.AstNode** %size
+	store %ast.AstNode* %46, %ast.AstNode** %rv.0
+	%47 = load %ast.AstNode** %space
+	store %ast.AstNode* %47, %ast.AstNode** %rv.1
 	br label %return
 return:
-	%52 = load %ast.AstNode** %rv.0
-	%53 = load %ast.AstNode** %rv.1
-	%mrv0 = insertvalue { %ast.AstNode*, %ast.AstNode* } undef,%ast.AstNode* %52,0
-	%mrv1 = insertvalue { %ast.AstNode*, %ast.AstNode* } %mrv0,%ast.AstNode* %53,1
+	%48 = load %ast.AstNode** %rv.0
+	%49 = load %ast.AstNode** %rv.1
+	%mrv0 = insertvalue { %ast.AstNode*, %ast.AstNode* } undef,%ast.AstNode* %48,0
+	%mrv1 = insertvalue { %ast.AstNode*, %ast.AstNode* } %mrv0,%ast.AstNode* %49,1
 	ret  { %ast.AstNode*, %ast.AstNode* } %mrv1
 
 }
@@ -16304,8 +17615,7 @@ return:
 	%34 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %34
 }
-@S.560 = internal constant [23 x i8] c"expr.Zero: VAR not REF\00"
-@S.561 = internal constant [26 x i8] c"not a variable sized type\00"
+@S.580 = internal constant [23 x i8] c"expr.Zero: VAR not REF\00"
 define internal %ast.AstNode* @expr_Zero() nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -16365,9 +17675,9 @@ L.10:
 L.9:
 	br label %L.6
 L.8:
-	%31 = getelementptr [23 x i8]* @S.560
+	%31 = getelementptr [23 x i8]* @S.580
 	%32 = bitcast [23 x i8]* %31 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %32)
+	call void @lex_ErrorS(i8 86, [0 x i8]* %32)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.6:
@@ -16405,64 +17715,62 @@ L.12:
 	%59 = xor i1 %58, true
 	br i1 %59, label %L.14, label %L.13
 L.14:
-	%60 = getelementptr [26 x i8]* @S.561
-	%61 = bitcast [26 x i8]* %60 to [0 x i8]*
-	call void @lex_ErrorS(i8 0, [0 x i8]* %61)
+	call void @lex_Error(i8 81)
 	br label %L.13
 L.13:
+	%60 = load %type.TypeNode** @type_wordtype
+	%61 = call %ast.AstNode* @expr_Const(%type.TypeNode* %60)
+	store %ast.AstNode* %61, %ast.AstNode** %temp
 	%62 = load %type.TypeNode** @type_wordtype
-	%63 = call %ast.AstNode* @expr_Const(%type.TypeNode* %62)
-	store %ast.AstNode* %63, %ast.AstNode** %temp
+	%63 = load %ast.AstNode** %temp
 	%64 = load %type.TypeNode** @type_wordtype
-	%65 = load %ast.AstNode** %temp
-	%66 = load %type.TypeNode** @type_wordtype
-	%67 = load %type.TypeNode** %t
-	%68 = call i32 @expr_FindFlexSize(%type.TypeNode* %67)
-	%69 = zext i32 %68 to i64
-	%70 = call %ast.AstNode* @ast_Const(%type.TypeNode* %66, i64 %69)
-	%71 = call %ast.AstNode* @ast_New2(i8 48, %type.TypeNode* %64, %ast.AstNode* %65, %ast.AstNode* %70)
-	store %ast.AstNode* %71, %ast.AstNode** %temp
-	%72 = load %type.TypeNode** @type_wordtype
-	%73 = load %ast.AstNode** %size
-	%74 = load %ast.AstNode** %temp
-	%75 = call %ast.AstNode* @ast_New2(i8 46, %type.TypeNode* %72, %ast.AstNode* %73, %ast.AstNode* %74)
-	store %ast.AstNode* %75, %ast.AstNode** %size
-	%76 = call i8 @lex_Expect(i8 33)
-	store i8 %76, i8* %tok
+	%65 = load %type.TypeNode** %t
+	%66 = call i32 @expr_FindFlexSize(%type.TypeNode* %65)
+	%67 = zext i32 %66 to i64
+	%68 = call %ast.AstNode* @ast_Const(%type.TypeNode* %64, i64 %67)
+	%69 = call %ast.AstNode* @ast_New2(i8 51, %type.TypeNode* %62, %ast.AstNode* %63, %ast.AstNode* %68)
+	store %ast.AstNode* %69, %ast.AstNode** %temp
+	%70 = load %type.TypeNode** @type_wordtype
+	%71 = load %ast.AstNode** %size
+	%72 = load %ast.AstNode** %temp
+	%73 = call %ast.AstNode* @ast_New2(i8 49, %type.TypeNode* %70, %ast.AstNode* %71, %ast.AstNode* %72)
+	store %ast.AstNode* %73, %ast.AstNode** %size
+	%74 = call i8 @lex_Expect(i8 33)
+	store i8 %74, i8* %tok
 	br label %L.11
 L.11:
 	br label %L.4
 L.3:
+	%75 = load %ast.AstNode** %tree
+	%76 = call %ast.AstNode* @expr_GetSize(%ast.AstNode* %75)
+	store %ast.AstNode* %76, %ast.AstNode** %size
 	%77 = load %ast.AstNode** %tree
-	%78 = call %ast.AstNode* @expr_GetSize(%ast.AstNode* %77)
-	store %ast.AstNode* %78, %ast.AstNode** %size
-	%79 = load %ast.AstNode** %tree
-	%80 = call i32 @expr_GetAlignment(%ast.AstNode* %79)
-	store i32 %80, i32* %align
+	%78 = call i32 @expr_GetAlignment(%ast.AstNode* %77)
+	store i32 %78, i32* %align
 	br label %L.4
 L.4:
-	%81 = load %type.TypeNode** @type_unkntype
-	%82 = load %ast.AstNode** %tree
-	%83 = load %type.TypeNode** @type_bytetype
-	%84 = call %ast.AstNode* @ast_Const(%type.TypeNode* %83, i64 0)
-	%85 = load %ast.AstNode** %size
-	%86 = call %ast.AstNode* @ast_New3(i8 21, %type.TypeNode* %81, %ast.AstNode* %82, %ast.AstNode* %84, %ast.AstNode* %85)
-	store %ast.AstNode* %86, %ast.AstNode** %tree
-	%87 = load %ast.AstNode** %tree
-	%88 = load %type.TypeNode** @type_wordtype
-	%89 = load i32* %align
-	%90 = zext i32 %89 to i64
-	%91 = call %ast.AstNode* @ast_Const(%type.TypeNode* %88, i64 %90)
-	%92 = call %ast.AstNode* @ast_Child(%ast.AstNode* %87, %ast.AstNode* %91)
-	store %ast.AstNode* %92, %ast.AstNode** %tree
+	%79 = load %type.TypeNode** @type_unkntype
+	%80 = load %ast.AstNode** %tree
+	%81 = load %type.TypeNode** @type_bytetype
+	%82 = call %ast.AstNode* @ast_Const(%type.TypeNode* %81, i64 0)
+	%83 = load %ast.AstNode** %size
+	%84 = call %ast.AstNode* @ast_New3(i8 21, %type.TypeNode* %79, %ast.AstNode* %80, %ast.AstNode* %82, %ast.AstNode* %83)
+	store %ast.AstNode* %84, %ast.AstNode** %tree
+	%85 = load %ast.AstNode** %tree
+	%86 = load %type.TypeNode** @type_wordtype
+	%87 = load i32* %align
+	%88 = zext i32 %87 to i64
+	%89 = call %ast.AstNode* @ast_Const(%type.TypeNode* %86, i64 %88)
+	%90 = call %ast.AstNode* @ast_Child(%ast.AstNode* %85, %ast.AstNode* %89)
+	store %ast.AstNode* %90, %ast.AstNode** %tree
 	br label %L.1
 L.1:
-	%93 = load %ast.AstNode** %tree
-	store %ast.AstNode* %93, %ast.AstNode** %rv.0
+	%91 = load %ast.AstNode** %tree
+	store %ast.AstNode* %91, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%94 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %94
+	%92 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %92
 }
 define internal %ast.AstNode* @expr_IntrinsicUnary(i8 zeroext %op$) nounwind {
 L.0:
@@ -16472,22 +17780,16 @@ L.0:
 	%tree = alloca %ast.AstNode*
 	%0 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
 	store %ast.AstNode* %0, %ast.AstNode** %tree
-	%1 = load %ast.AstNode** %tree
-	%2 = icmp ne %ast.AstNode* %1, null
-	br i1 %2, label %L.2, label %L.1
-L.2:
-	%3 = load i8* %op
+	%1 = load i8* %op
+	%2 = load %ast.AstNode** %tree
+	%3 = call %ast.AstNode* @ast_OpUnary(i8 %1, %ast.AstNode* %2)
+	store %ast.AstNode* %3, %ast.AstNode** %tree
 	%4 = load %ast.AstNode** %tree
-	%5 = call %ast.AstNode* @expr_UnOp(i8 %3, %ast.AstNode* %4)
-	store %ast.AstNode* %5, %ast.AstNode** %tree
-	br label %L.1
-L.1:
-	%6 = load %ast.AstNode** %tree
-	store %ast.AstNode* %6, %ast.AstNode** %rv.0
+	store %ast.AstNode* %4, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%7 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %7
+	%5 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %5
 }
 define internal %ast.AstNode* @expr_Convert() nounwind {
 L.0:
@@ -16515,7 +17817,7 @@ L.2:
 	br i1 %6, label %L.5, label %L.6
 L.5:
 	%7 = load %symb.SymbNode** %s
-	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 12
+	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 13
 	%9 = load i8* %8
 	%10 = icmp eq i8 %9, 2
 	br i1 %10, label %L.8, label %L.9
@@ -16582,10 +17884,10 @@ L.18:
 		i32 3, label %L.24
 	]
 L.23:
-	store i8 37, i8* %op
+	store i8 39, i8* %op
 	br label %L.22
 L.24:
-	store i8 38, i8* %op
+	store i8 40, i8* %op
 	br label %L.22
 L.21:
 	br label %L.22
@@ -16596,7 +17898,7 @@ L.19:
 	%38 = icmp eq i8 %37, 4
 	br i1 %38, label %L.26, label %L.25
 L.26:
-	store i8 39, i8* %op
+	store i8 41, i8* %op
 	br label %L.25
 L.25:
 	br label %L.17
@@ -16605,7 +17907,7 @@ L.20:
 	%40 = icmp eq i8 %39, 4
 	br i1 %40, label %L.28, label %L.27
 L.28:
-	store i8 40, i8* %op
+	store i8 42, i8* %op
 	br label %L.27
 L.27:
 	br label %L.17
@@ -16645,7 +17947,7 @@ return:
 	%53 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %53
 }
-@S.562 = internal constant [18 x i8] c"Intrinsic unknown\00"
+@S.581 = internal constant [18 x i8] c"Intrinsic unknown\00"
 define internal %ast.AstNode* @expr_Intrinsic(%symb.SymbNode* %ps$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -16667,7 +17969,7 @@ L.2:
 	%3 = call i8 @lex_Next()
 	store i8 %3, i8* %tok
 	%4 = load %symb.SymbNode** %ps
-	%5 = getelementptr %symb.SymbNode* %4, i32 0, i32 9
+	%5 = getelementptr %symb.SymbNode* %4, i32 0, i32 10
 	%6 = load i16* %5
 	%7 = trunc i16 %6 to i8
 	store i8 %7, i8* %which
@@ -16678,21 +17980,22 @@ L.2:
 		i32 2, label %L.7
 		i32 3, label %L.8
 		i32 4, label %L.8
-		i32 5, label %L.9
-		i32 6, label %L.10
-		i32 7, label %L.11
-		i32 8, label %L.12
-		i32 9, label %L.13
-		i32 10, label %L.14
-		i32 13, label %L.15
-		i32 11, label %L.16
-		i32 12, label %L.17
+		i32 14, label %L.9
+		i32 5, label %L.10
+		i32 6, label %L.11
+		i32 7, label %L.12
+		i32 8, label %L.13
+		i32 9, label %L.14
+		i32 10, label %L.15
+		i32 13, label %L.16
+		i32 11, label %L.17
+		i32 12, label %L.18
 	]
 L.6:
 	%10 = load i8* %tok
 	%11 = icmp eq i8 %10, 41
-	br i1 %11, label %L.19, label %L.20
-L.19:
+	br i1 %11, label %L.20, label %L.21
+L.20:
 	%12 = load %type.TypeNode** @type_booltype
 	%13 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
 	%14 = call i8 @symb_IsDefined([0 x i8]* %13)
@@ -16700,177 +18003,255 @@ L.19:
 	%16 = zext i32 %15 to i64
 	%17 = call %ast.AstNode* @ast_Const(%type.TypeNode* %12, i64 %16)
 	store %ast.AstNode* %17, %ast.AstNode** %tree
-	br label %L.18
-L.20:
+	br label %L.19
+L.21:
 	call void @lex_Error(i8 18)
-	br label %L.18
-L.18:
+	br label %L.19
+L.19:
 	br label %L.5
 L.7:
 	%18 = call %ast.AstNode* @expr_IntrinsicUnary(i8 35)
 	store %ast.AstNode* %18, %ast.AstNode** %tree
 	%19 = load %ast.AstNode** %tree
 	%20 = icmp ne %ast.AstNode* %19, null
-	br i1 %20, label %L.21, label %L.22
-L.21:
+	br i1 %20, label %L.22, label %L.23
+L.22:
 	%21 = load %ast.AstNode** %tree
 	%22 = getelementptr %ast.AstNode* %21, i32 0, i32 8
 	%23 = load %type.TypeNode** %22
 	%24 = getelementptr %type.TypeNode* %23, i32 0, i32 14
 	%25 = load i8* %24
 	%26 = icmp eq i8 %25, 3
-	br label %L.22
-L.22:
-	%27 = phi i1 [ false, %L.7 ], [ %26, %L.21 ]
-	br i1 %27, label %L.24, label %L.23
-L.24:
-	%i = alloca i32
-	store i32 0, i32* %i
-	br label %L.25
-L.25:
-	%28 = load i32* %i
-	%29 = icmp ult i32 %28, 4
-	br i1 %29, label %L.28, label %L.29
-L.28:
-	%30 = load %ast.AstNode** %tree
-	%31 = getelementptr %ast.AstNode* %30, i32 0, i32 7
-	%32 = load i32* %31
-	%33 = load i32* %i
-	%34 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 %33
-	%35 = load %type.TypeNode** %34
-	%36 = getelementptr %type.TypeNode* %35, i32 0, i32 9
-	%37 = load i32* %36
-	%38 = icmp ugt i32 %32, %37
-	br label %L.29
-L.29:
-	%39 = phi i1 [ false, %L.25 ], [ %38, %L.28 ]
-	%40 = xor i1 %39, true
-	br i1 %40, label %L.26, label %L.27
-L.27:
-	%41 = load i32* %i
-	%42 = add i32 %41, 1
-	store i32 %42, i32* %i
-	br label %L.25
-L.26:
-	%43 = load i32* %i
-	%44 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 %43
-	%45 = load %type.TypeNode** %44
-	%46 = load %ast.AstNode** %tree
-	%47 = getelementptr %ast.AstNode* %46, i32 0, i32 8
-	store %type.TypeNode* %45, %type.TypeNode** %47
 	br label %L.23
 L.23:
+	%27 = phi i1 [ false, %L.7 ], [ %26, %L.22 ]
+	br i1 %27, label %L.25, label %L.24
+L.25:
+	%28 = load %ast.AstNode** %tree
+	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 7
+	%30 = load i32* %29
+	%31 = call %type.TypeNode* @target_utype(i32 %30)
+	%32 = load %ast.AstNode** %tree
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 8
+	store %type.TypeNode* %31, %type.TypeNode** %33
+	br label %L.24
+L.24:
 	br label %L.5
 L.8:
-	%48 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
-	store %ast.AstNode* %48, %ast.AstNode** %lhs
-	%49 = call i8 @lex_Expect(i8 5)
-	%50 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
-	store %ast.AstNode* %50, %ast.AstNode** %rhs
-	%51 = load %ast.AstNode** %lhs
-	%52 = icmp ne %ast.AstNode* %51, null
-	br i1 %52, label %L.30, label %L.31
-L.30:
-	%53 = load %ast.AstNode** %rhs
-	%54 = icmp ne %ast.AstNode* %53, null
-	br label %L.31
+	%34 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
+	store %ast.AstNode* %34, %ast.AstNode** %lhs
+	%35 = call i8 @lex_Expect(i8 5)
+	%36 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
+	store %ast.AstNode* %36, %ast.AstNode** %rhs
+	%37 = load %ast.AstNode** %lhs
+	%38 = icmp ne %ast.AstNode* %37, null
+	br i1 %38, label %L.26, label %L.27
+L.26:
+	%39 = load %ast.AstNode** %rhs
+	%40 = icmp ne %ast.AstNode* %39, null
+	br label %L.27
+L.27:
+	%41 = phi i1 [ false, %L.8 ], [ %40, %L.26 ]
+	br i1 %41, label %L.29, label %L.28
+L.29:
+	%42 = load %ast.AstNode** %lhs
+	%43 = load %ast.AstNode** %rhs
+	%44 = call i8 @expr_IsSignedBinOp(%ast.AstNode* %42, %ast.AstNode* %43)
+	%45 = icmp ne i8 %44, 0
+	br i1 %45, label %L.31, label %L.32
 L.31:
-	%55 = phi i1 [ false, %L.8 ], [ %54, %L.30 ]
-	br i1 %55, label %L.33, label %L.32
-L.33:
-	%56 = load %ast.AstNode** %lhs
-	%57 = load %ast.AstNode** %rhs
-	%58 = call i8 @expr_IsSignedBinOp(%ast.AstNode* %56, %ast.AstNode* %57)
-	%59 = icmp ne i8 %58, 0
-	br i1 %59, label %L.35, label %L.36
-L.35:
-	%60 = load i8* %which
-	%61 = icmp eq i8 %60, 3
-	br i1 %61, label %L.38, label %L.39
-L.38:
-	store i8 63, i8* %op
-	br label %L.37
-L.39:
-	store i8 64, i8* %op
-	br label %L.37
-L.37:
-	br label %L.34
-L.36:
-	%62 = load i8* %which
-	%63 = icmp eq i8 %62, 3
-	br i1 %63, label %L.41, label %L.42
-L.41:
-	store i8 61, i8* %op
-	br label %L.40
-L.42:
-	store i8 62, i8* %op
-	br label %L.40
-L.40:
-	br label %L.34
+	%46 = load i8* %which
+	%47 = icmp eq i8 %46, 3
+	br i1 %47, label %L.34, label %L.35
 L.34:
-	%64 = load i8* %op
-	%65 = load %ast.AstNode** %lhs
-	%66 = load %ast.AstNode** %rhs
-	%67 = call %ast.AstNode* @expr_BinOp(i8 %64, %ast.AstNode* %65, %ast.AstNode* %66)
-	store %ast.AstNode* %67, %ast.AstNode** %tree
-	br label %L.32
+	store i8 66, i8* %op
+	br label %L.33
+L.35:
+	store i8 67, i8* %op
+	br label %L.33
+L.33:
+	br label %L.30
 L.32:
+	%48 = load i8* %which
+	%49 = icmp eq i8 %48, 3
+	br i1 %49, label %L.37, label %L.38
+L.37:
+	store i8 64, i8* %op
+	br label %L.36
+L.38:
+	store i8 65, i8* %op
+	br label %L.36
+L.36:
+	br label %L.30
+L.30:
+	%50 = load i8* %op
+	%51 = load %ast.AstNode** %lhs
+	%52 = load %ast.AstNode** %rhs
+	%53 = call %ast.AstNode* @ast_OpMinMax(i8 %50, %ast.AstNode* %51, %ast.AstNode* %52)
+	store %ast.AstNode* %53, %ast.AstNode** %tree
+	br label %L.28
+L.28:
 	br label %L.5
 L.9:
-	%68 = call %ast.AstNode* @expr_IntrinsicUnary(i8 41)
-	store %ast.AstNode* %68, %ast.AstNode** %tree
+	%align = alloca i32
+	%54 = call %ast.AstNode* @expr_GetLHS()
+	store %ast.AstNode* %54, %ast.AstNode** %lhs
+	%55 = load %ast.AstNode** %lhs
+	%56 = getelementptr %ast.AstNode* %55, i32 0, i32 0
+	%57 = load i8* %56
+	%58 = icmp eq i8 %57, 27
+	br i1 %58, label %L.39, label %L.40
+L.39:
+	%59 = load %ast.AstNode** %lhs
+	%60 = getelementptr %ast.AstNode* %59, i32 0, i32 8
+	%61 = load %type.TypeNode** %60
+	%62 = getelementptr %type.TypeNode* %61, i32 0, i32 14
+	%63 = load i8* %62
+	%64 = icmp eq i8 %63, 6
+	br label %L.40
+L.40:
+	%65 = phi i1 [ false, %L.9 ], [ %64, %L.39 ]
+	br i1 %65, label %L.42, label %L.41
+L.42:
+	%66 = load %ast.AstNode** %lhs
+	%67 = getelementptr %ast.AstNode* %66, i32 0, i32 11
+	%68 = getelementptr [0 x %ast.AstNode*]* %67, i32 0, i32 0
+	%69 = load %ast.AstNode** %68
+	%70 = bitcast %ast.AstNode* %69 to %ast.AstNode*
+	store %ast.AstNode* %70, %ast.AstNode** %lhs
+	br label %L.41
+L.41:
+	%71 = load %ast.AstNode** %lhs
+	%72 = getelementptr %ast.AstNode* %71, i32 0, i32 8
+	%73 = load %type.TypeNode** %72
+	%74 = getelementptr %type.TypeNode* %73, i32 0, i32 14
+	%75 = load i8* %74
+	%76 = icmp ne i8 %75, 5
+	br i1 %76, label %L.48, label %L.47
+L.47:
+	%77 = load %ast.AstNode** %lhs
+	%78 = getelementptr %ast.AstNode* %77, i32 0, i32 8
+	%79 = load %type.TypeNode** %78
+	%80 = getelementptr %type.TypeNode* %79, i32 0, i32 0
+	%81 = load %type.TypeNode** %80
+	%82 = getelementptr %type.TypeNode* %81, i32 0, i32 14
+	%83 = load i8* %82
+	%84 = icmp ne i8 %83, 6
+	br label %L.48
+L.48:
+	%85 = phi i1 [ true, %L.41 ], [ %84, %L.47 ]
+	br i1 %85, label %L.46, label %L.45
+L.45:
+	%86 = load %ast.AstNode** %lhs
+	%87 = getelementptr %ast.AstNode* %86, i32 0, i32 8
+	%88 = load %type.TypeNode** %87
+	%89 = getelementptr %type.TypeNode* %88, i32 0, i32 0
+	%90 = load %type.TypeNode** %89
+	%91 = getelementptr %type.TypeNode* %90, i32 0, i32 0
+	%92 = load %type.TypeNode** %91
+	%93 = getelementptr %type.TypeNode* %92, i32 0, i32 14
+	%94 = load i8* %93
+	%95 = icmp ne i8 %94, 2
+	br label %L.46
+L.46:
+	%96 = phi i1 [ true, %L.48 ], [ %95, %L.45 ]
+	br i1 %96, label %L.44, label %L.43
+L.43:
+	%97 = load %ast.AstNode** %lhs
+	%98 = getelementptr %ast.AstNode* %97, i32 0, i32 8
+	%99 = load %type.TypeNode** %98
+	%100 = getelementptr %type.TypeNode* %99, i32 0, i32 0
+	%101 = load %type.TypeNode** %100
+	%102 = getelementptr %type.TypeNode* %101, i32 0, i32 0
+	%103 = load %type.TypeNode** %102
+	%104 = getelementptr %type.TypeNode* %103, i32 0, i32 10
+	%105 = load i32* %104
+	%106 = load %target.ModelT** @target_Target
+	%107 = getelementptr %target.ModelT* %106, i32 0, i32 2
+	%108 = load i8* %107
+	%109 = zext i8 %108 to i32
+	%110 = icmp ne i32 %105, %109
+	br label %L.44
+L.44:
+	%111 = phi i1 [ true, %L.46 ], [ %110, %L.43 ]
+	br i1 %111, label %L.50, label %L.49
+L.50:
+	call void @lex_Error(i8 30)
+	br label %L.49
+L.49:
+	%112 = load %ast.AstNode** %lhs
+	%113 = call i32 @expr_GetAlignment(%ast.AstNode* %112)
+	store i32 %113, i32* %align
+	%114 = load %type.TypeNode** @type_wordtype
+	%115 = load %ast.AstNode** %lhs
+	%116 = load %type.TypeNode** @type_wordtype
+	%117 = load i32* %align
+	%118 = zext i32 %117 to i64
+	%119 = call %ast.AstNode* @ast_Const(%type.TypeNode* %116, i64 %118)
+	%120 = call %ast.AstNode* @ast_New2(i8 48, %type.TypeNode* %114, %ast.AstNode* %115, %ast.AstNode* %119)
+	store %ast.AstNode* %120, %ast.AstNode** %tree
+	%121 = load %type.TypeNode** @type_wordtype
+	%122 = getelementptr %type.TypeNode* %121, i32 0, i32 10
+	%123 = load i32* %122
+	%124 = load %ast.AstNode** %tree
+	%125 = getelementptr %ast.AstNode* %124, i32 0, i32 7
+	store i32 %123, i32* %125
 	br label %L.5
 L.10:
-	%69 = call %ast.AstNode* @expr_IntrinsicUnary(i8 42)
-	store %ast.AstNode* %69, %ast.AstNode** %tree
+	%126 = call %ast.AstNode* @expr_IntrinsicUnary(i8 43)
+	store %ast.AstNode* %126, %ast.AstNode** %tree
 	br label %L.5
 L.11:
-	%70 = call %ast.AstNode* @expr_IntrinsicUnary(i8 43)
-	store %ast.AstNode* %70, %ast.AstNode** %tree
+	%127 = call %ast.AstNode* @expr_IntrinsicUnary(i8 44)
+	store %ast.AstNode* %127, %ast.AstNode** %tree
 	br label %L.5
 L.12:
-	%71 = call %ast.AstNode* @expr_IntrinsicUnary(i8 44)
-	store %ast.AstNode* %71, %ast.AstNode** %tree
+	%128 = call %ast.AstNode* @expr_IntrinsicUnary(i8 45)
+	store %ast.AstNode* %128, %ast.AstNode** %tree
 	br label %L.5
 L.13:
-	%72 = call %ast.AstNode* @expr_IntrinsicUnary(i8 45)
-	store %ast.AstNode* %72, %ast.AstNode** %tree
+	%129 = call %ast.AstNode* @expr_IntrinsicUnary(i8 46)
+	store %ast.AstNode* %129, %ast.AstNode** %tree
 	br label %L.5
 L.14:
-	%73 = call %ast.AstNode* @expr_Convert()
-	store %ast.AstNode* %73, %ast.AstNode** %tree
+	%130 = call %ast.AstNode* @expr_IntrinsicUnary(i8 47)
+	store %ast.AstNode* %130, %ast.AstNode** %tree
 	br label %L.5
 L.15:
-	%74 = call %ast.AstNode* @expr_Zero()
-	store %ast.AstNode* %74, %ast.AstNode** %tree
+	%131 = call %ast.AstNode* @expr_Convert()
+	store %ast.AstNode* %131, %ast.AstNode** %tree
 	br label %L.5
 L.16:
-	%75 = call %ast.AstNode* @expr_New()
-	store %ast.AstNode* %75, %ast.AstNode** %tree
+	%132 = call %ast.AstNode* @expr_Zero()
+	store %ast.AstNode* %132, %ast.AstNode** %tree
 	br label %L.5
 L.17:
-	%76 = call %ast.AstNode* @expr_Delete()
-	store %ast.AstNode* %76, %ast.AstNode** %tree
+	%133 = call %ast.AstNode* @expr_New()
+	store %ast.AstNode* %133, %ast.AstNode** %tree
+	br label %L.5
+L.18:
+	%134 = call %ast.AstNode* @expr_Delete()
+	store %ast.AstNode* %134, %ast.AstNode** %tree
 	br label %L.5
 L.4:
-	%77 = getelementptr [18 x i8]* @S.562
-	%78 = bitcast [18 x i8]* %77 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %78)
+	%135 = getelementptr [18 x i8]* @S.581
+	%136 = bitcast [18 x i8]* %135 to [0 x i8]*
+	call void @lex_ErrorS(i8 86, [0 x i8]* %136)
 	br label %L.5
 L.5:
-	%79 = call i8 @lex_Expect(i8 33)
-	store i8 %79, i8* %tok
+	%137 = call i8 @lex_Expect(i8 33)
+	store i8 %137, i8* %tok
 	br label %L.1
 L.3:
 	call void @lex_ErrorT(i8 17, i8 32)
 	br label %L.1
 L.1:
-	%80 = load %ast.AstNode** %tree
-	store %ast.AstNode* %80, %ast.AstNode** %rv.0
+	%138 = load %ast.AstNode** %tree
+	store %ast.AstNode* %138, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%81 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %81
+	%139 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %139
 }
 define internal %ast.AstNode* @expr_Call(%symb.SymbNode* %ps$, %ast.AstNode* %tree$, %ast.AstNode* %arg$) nounwind {
 L.0:
@@ -16972,7 +18353,7 @@ L.14:
 	%50 = icmp eq %symb.SymbNode* %49, null
 	br i1 %50, label %L.17, label %L.16
 L.17:
-	call void @lex_Error(i8 67)
+	call void @lex_Error(i8 68)
 	%51 = bitcast [4 x i8]* @expr_skiplist to [0 x i8]*
 	%52 = call i8 @lex_Skip([0 x i8]* %51)
 	store i8 %52, i8* %tok
@@ -17028,7 +18409,7 @@ L.9:
 	br i1 %77, label %L.21, label %L.22
 L.21:
 	%78 = load %symb.SymbNode** %s
-	%79 = getelementptr %symb.SymbNode* %78, i32 0, i32 13
+	%79 = getelementptr %symb.SymbNode* %78, i32 0, i32 14
 	%80 = load i8* %79
 	%81 = icmp eq i8 %80, 0
 	br label %L.22
@@ -17036,7 +18417,7 @@ L.22:
 	%82 = phi i1 [ false, %L.9 ], [ %81, %L.21 ]
 	br i1 %82, label %L.24, label %L.23
 L.24:
-	call void @lex_Error(i8 66)
+	call void @lex_Error(i8 67)
 	br label %L.23
 L.23:
 	%83 = load %ast.AstNode** %tree
@@ -17093,7 +18474,7 @@ L.2:
 	%4 = load %type.TypeNode** %3
 	store %type.TypeNode* %4, %type.TypeNode** %t
 	%5 = load %symb.SymbNode** %s
-	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 12
+	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 13
 	%7 = load i8* %6
 	%8 = zext i8 %7 to i32
 	switch i32 %8, label %L.3 [
@@ -17135,7 +18516,7 @@ L.10:
 	br i1 %28, label %L.12, label %L.13
 L.12:
 	%29 = load %symb.SymbNode** %s
-	%30 = getelementptr %symb.SymbNode* %29, i32 0, i32 7
+	%30 = getelementptr %symb.SymbNode* %29, i32 0, i32 8
 	%31 = load %ast.AstNode** %30
 	%32 = bitcast %ast.AstNode* %31 to %ast.AstNode*
 	%33 = call %ast.AstNode* @ast_Dup(%ast.AstNode* %32)
@@ -17161,7 +18542,7 @@ L.11:
 	br label %L.4
 L.7:
 	%45 = load %symb.SymbNode** %s
-	%46 = getelementptr %symb.SymbNode* %45, i32 0, i32 9
+	%46 = getelementptr %symb.SymbNode* %45, i32 0, i32 10
 	%47 = load i16* %46
 	%48 = icmp ne i16 %47, 0
 	br i1 %48, label %L.15, label %L.16
@@ -17208,7 +18589,7 @@ L.8:
 	br label %L.4
 L.3:
 	%67 = load %symb.SymbNode** %s
-	%68 = getelementptr %symb.SymbNode* %67, i32 0, i32 21
+	%68 = getelementptr %symb.SymbNode* %67, i32 0, i32 22
 	%69 = getelementptr [0 x i8]* %68
 	%70 = bitcast [0 x i8]* %69 to [0 x i8]*
 	call void @lex_ErrorI(i8 22, [0 x i8]* %70)
@@ -17321,7 +18702,7 @@ L.20:
 	br label %L.19
 L.21:
 	%45 = load %symb.SymbNode** %s
-	%46 = getelementptr %symb.SymbNode* %45, i32 0, i32 21
+	%46 = getelementptr %symb.SymbNode* %45, i32 0, i32 22
 	%47 = getelementptr [0 x i8]* %46
 	%48 = bitcast [0 x i8]* %47 to [0 x i8]*
 	call void @lex_ErrorI(i8 29, [0 x i8]* %48)
@@ -17509,7 +18890,7 @@ L.58:
 	%149 = call %ast.AstNode* @ast_New1(i8 13, %type.TypeNode* %147, %ast.AstNode* %148)
 	store %ast.AstNode* %149, %ast.AstNode** %tree
 	%150 = load %symb.SymbNode** %s
-	%151 = getelementptr %symb.SymbNode* %150, i32 0, i32 9
+	%151 = getelementptr %symb.SymbNode* %150, i32 0, i32 10
 	%152 = load i16* %151
 	%153 = zext i16 %152 to i64
 	%154 = load %ast.AstNode** %tree
@@ -17560,7 +18941,7 @@ L.61:
 	%170 = load %ast.AstNode** %tree
 	%171 = getelementptr %ast.AstNode* %170, i32 0, i32 9
 	%172 = load %symb.SymbNode** %171
-	%173 = getelementptr %symb.SymbNode* %172, i32 0, i32 21
+	%173 = getelementptr %symb.SymbNode* %172, i32 0, i32 22
 	%174 = getelementptr [0 x i8]* %173
 	%175 = bitcast [0 x i8]* %174 to [0 x i8]*
 	call void @lex_ErrorI(i8 29, [0 x i8]* %175)
@@ -17670,7 +19051,7 @@ L.80:
 	%227 = load %ast.AstNode** %tree
 	%228 = getelementptr %ast.AstNode* %227, i32 0, i32 9
 	%229 = load %symb.SymbNode** %228
-	%230 = getelementptr %symb.SymbNode* %229, i32 0, i32 21
+	%230 = getelementptr %symb.SymbNode* %229, i32 0, i32 22
 	%231 = getelementptr [0 x i8]* %230
 	%232 = bitcast [0 x i8]* %231 to [0 x i8]*
 	call void @lex_ErrorI(i8 29, [0 x i8]* %232)
@@ -17756,71 +19137,80 @@ L.95:
 	%277 = bitcast %type.TypeNode* %276 to %type.TypeNode*
 	%278 = call %ast.AstNode* @expr_Bool(%type.TypeNode* %277)
 	store %ast.AstNode* %278, %ast.AstNode** %index
-	%279 = load i8* @lex_Token
-	store i8 %279, i8* %tok
-	%280 = load i8* %tok
-	%281 = icmp eq i8 %280, 3
-	br i1 %281, label %L.98, label %L.99
+	%279 = load %ast.AstNode** %index
+	%280 = icmp eq %ast.AstNode* %279, null
+	br i1 %280, label %L.98, label %L.97
 L.98:
-	%len = alloca %ast.AstNode*
-	%282 = call i8 @lex_Next()
-	store i8 %282, i8* %tok
-	%283 = load %type.TypeNode** %bt
-	%284 = getelementptr %type.TypeNode* %283, i32 0, i32 2
-	%285 = load %type.TypeNode** %284
-	%286 = bitcast %type.TypeNode* %285 to %type.TypeNode*
-	%287 = call %ast.AstNode* @expr_Bool(%type.TypeNode* %286)
-	store %ast.AstNode* %287, %ast.AstNode** %len
-	%288 = load %ast.AstNode** %tree
-	%289 = load %ast.AstNode** %index
-	%290 = load %ast.AstNode** %len
-	%291 = call %ast.AstNode* @expr_Slice(%ast.AstNode* %288, %ast.AstNode* %289, %ast.AstNode* %290)
-	store %ast.AstNode* %291, %ast.AstNode** %tree
-	store i8 1, i8* %done
-	br label %L.97
-L.99:
-	%292 = load %type.TypeNode** %bt
-	%293 = getelementptr %type.TypeNode* %292, i32 0, i32 7
-	%294 = load i64* %293
-	%295 = icmp ne i64 %294, 0
-	br i1 %295, label %L.101, label %L.100
-L.101:
-	%296 = load %type.TypeNode** %bt
-	%297 = getelementptr %type.TypeNode* %296, i32 0, i32 2
-	%298 = load %type.TypeNode** %297
-	%299 = bitcast %type.TypeNode* %298 to %type.TypeNode*
-	%300 = load %ast.AstNode** %index
-	%301 = load %type.TypeNode** %bt
-	%302 = getelementptr %type.TypeNode* %301, i32 0, i32 2
-	%303 = load %type.TypeNode** %302
-	%304 = bitcast %type.TypeNode* %303 to %type.TypeNode*
-	%305 = load %type.TypeNode** %bt
-	%306 = getelementptr %type.TypeNode* %305, i32 0, i32 7
-	%307 = load i64* %306
-	%308 = call %ast.AstNode* @ast_Const(%type.TypeNode* %304, i64 %307)
-	%309 = call %ast.AstNode* @ast_New2(i8 47, %type.TypeNode* %299, %ast.AstNode* %300, %ast.AstNode* %308)
-	store %ast.AstNode* %309, %ast.AstNode** %index
-	br label %L.100
-L.100:
-	%310 = load %type.TypeNode** %bt
-	%311 = getelementptr %type.TypeNode* %310, i32 0, i32 0
-	%312 = load %type.TypeNode** %311
-	%313 = bitcast %type.TypeNode* %312 to %type.TypeNode*
-	%314 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %313)
-	%315 = load %ast.AstNode** %tree
-	%316 = load %ast.AstNode** %index
-	%317 = call %ast.AstNode* @ast_New2(i8 14, %type.TypeNode* %314, %ast.AstNode* %315, %ast.AstNode* %316)
-	store %ast.AstNode* %317, %ast.AstNode** %tree
-	%318 = load %target.ModelT** @target_Target
-	%319 = getelementptr %target.ModelT* %318, i32 0, i32 6
-	%320 = getelementptr %target.SizeAlign* %319, i32 0, i32 0
-	%321 = load i8* %320
-	%322 = zext i8 %321 to i32
-	%323 = load %ast.AstNode** %tree
-	%324 = getelementptr %ast.AstNode* %323, i32 0, i32 7
-	store i32 %322, i32* %324
+	call void @lex_Error(i8 62)
+	%281 = load %ast.AstNode** @ast_Null
+	store %ast.AstNode* %281, %ast.AstNode** %index
 	br label %L.97
 L.97:
+	%282 = load %type.TypeNode** %bt
+	%283 = getelementptr %type.TypeNode* %282, i32 0, i32 7
+	%284 = load i64* %283
+	%285 = icmp ne i64 %284, 0
+	br i1 %285, label %L.100, label %L.99
+L.100:
+	%286 = load %type.TypeNode** %bt
+	%287 = getelementptr %type.TypeNode* %286, i32 0, i32 2
+	%288 = load %type.TypeNode** %287
+	%289 = bitcast %type.TypeNode* %288 to %type.TypeNode*
+	%290 = load %ast.AstNode** %index
+	%291 = load %type.TypeNode** %bt
+	%292 = getelementptr %type.TypeNode* %291, i32 0, i32 2
+	%293 = load %type.TypeNode** %292
+	%294 = bitcast %type.TypeNode* %293 to %type.TypeNode*
+	%295 = load %type.TypeNode** %bt
+	%296 = getelementptr %type.TypeNode* %295, i32 0, i32 7
+	%297 = load i64* %296
+	%298 = call %ast.AstNode* @ast_Const(%type.TypeNode* %294, i64 %297)
+	%299 = call %ast.AstNode* @ast_New2(i8 50, %type.TypeNode* %289, %ast.AstNode* %290, %ast.AstNode* %298)
+	store %ast.AstNode* %299, %ast.AstNode** %index
+	br label %L.99
+L.99:
+	%300 = load i8* @lex_Token
+	store i8 %300, i8* %tok
+	%301 = load i8* %tok
+	%302 = icmp eq i8 %301, 3
+	br i1 %302, label %L.102, label %L.103
+L.102:
+	%len = alloca %ast.AstNode*
+	%303 = call i8 @lex_Next()
+	store i8 %303, i8* %tok
+	%304 = load %type.TypeNode** %bt
+	%305 = getelementptr %type.TypeNode* %304, i32 0, i32 2
+	%306 = load %type.TypeNode** %305
+	%307 = bitcast %type.TypeNode* %306 to %type.TypeNode*
+	%308 = call %ast.AstNode* @expr_Bool(%type.TypeNode* %307)
+	store %ast.AstNode* %308, %ast.AstNode** %len
+	%309 = load %ast.AstNode** %tree
+	%310 = load %ast.AstNode** %index
+	%311 = load %ast.AstNode** %len
+	%312 = call %ast.AstNode* @expr_Slice(%ast.AstNode* %309, %ast.AstNode* %310, %ast.AstNode* %311)
+	store %ast.AstNode* %312, %ast.AstNode** %tree
+	store i8 1, i8* %done
+	br label %L.101
+L.103:
+	%313 = load %type.TypeNode** %bt
+	%314 = getelementptr %type.TypeNode* %313, i32 0, i32 0
+	%315 = load %type.TypeNode** %314
+	%316 = bitcast %type.TypeNode* %315 to %type.TypeNode*
+	%317 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %316)
+	%318 = load %ast.AstNode** %tree
+	%319 = load %ast.AstNode** %index
+	%320 = call %ast.AstNode* @ast_New2(i8 14, %type.TypeNode* %317, %ast.AstNode* %318, %ast.AstNode* %319)
+	store %ast.AstNode* %320, %ast.AstNode** %tree
+	%321 = load %target.ModelT** @target_Target
+	%322 = getelementptr %target.ModelT* %321, i32 0, i32 6
+	%323 = getelementptr %target.SizeAlign* %322, i32 0, i32 0
+	%324 = load i8* %323
+	%325 = zext i8 %324 to i32
+	%326 = load %ast.AstNode** %tree
+	%327 = getelementptr %ast.AstNode* %326, i32 0, i32 7
+	store i32 %325, i32* %327
+	br label %L.101
+L.101:
 	br label %L.94
 L.96:
 	call void @lex_Error(i8 60)
@@ -17831,8 +19221,8 @@ L.86:
 	call void @lex_Error(i8 60)
 	br label %L.84
 L.84:
-	%325 = call i8 @lex_Expect(i8 35)
-	store i8 %325, i8* %tok
+	%328 = call i8 @lex_Expect(i8 35)
+	store i8 %328, i8* %tok
 	br label %L.12
 L.11:
 	store i8 1, i8* %done
@@ -17840,12 +19230,12 @@ L.11:
 L.12:
 	br label %L.4
 L.5:
-	%326 = load %ast.AstNode** %tree
-	store %ast.AstNode* %326, %ast.AstNode** %rv.0
+	%329 = load %ast.AstNode** %tree
+	store %ast.AstNode* %329, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%327 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %327
+	%330 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %330
 }
 define internal %ast.AstNode* @expr_GetLHS() nounwind {
 L.0:
@@ -17881,7 +19271,7 @@ L.8:
 	%14 = load %ast.AstNode** %tree
 	%15 = getelementptr %ast.AstNode* %14, i32 0, i32 9
 	%16 = load %symb.SymbNode** %15
-	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 21
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 22
 	%18 = getelementptr [0 x i8]* %17
 	%19 = bitcast [0 x i8]* %18 to [0 x i8]*
 	call void @lex_ErrorI(i8 29, [0 x i8]* %19)
@@ -17936,7 +19326,7 @@ L.4:
 	%11 = load %type.TypeNode** @type_wordtype
 	%12 = load %ast.AstNode** %tree
 	%13 = load %ast.AstNode** %otree
-	%14 = call %ast.AstNode* @ast_New2(i8 47, %type.TypeNode* %11, %ast.AstNode* %12, %ast.AstNode* %13)
+	%14 = call %ast.AstNode* @ast_New2(i8 50, %type.TypeNode* %11, %ast.AstNode* %12, %ast.AstNode* %13)
 	store %ast.AstNode* %14, %ast.AstNode** %tree
 	%15 = load %ast.AstNode** %tree
 	%16 = load %type.TypeNode** %t
@@ -18226,64 +19616,54 @@ L.5:
 	%139 = load %ast.AstNode** %tree
 	%140 = getelementptr %ast.AstNode* %139, i32 0, i32 10
 	store i64 %138, i64* %140
-	%141 = load i16* @lex_Scale
-	%142 = load %ast.AstNode** %tree
-	%143 = getelementptr %ast.AstNode* %142, i32 0, i32 4
-	store i16 %141, i16* %143
-	%144 = load %type.TypeNode** %et
-	%145 = icmp eq %type.TypeNode* %144, null
-	br i1 %145, label %L.48, label %L.47
+	%141 = load %ast.AstNode** %tree
+	%142 = getelementptr %ast.AstNode* %141, i32 0, i32 7
+	store i32 64, i32* %142
+	%143 = load i16* @lex_Scale
+	%144 = load %ast.AstNode** %tree
+	%145 = getelementptr %ast.AstNode* %144, i32 0, i32 4
+	store i16 %143, i16* %145
+	%146 = load %type.TypeNode** %et
+	%147 = icmp eq %type.TypeNode* %146, null
+	br i1 %147, label %L.48, label %L.47
 L.48:
-	%146 = load %type.TypeNode** @type_floattype
-	%147 = load %ast.AstNode** %tree
-	%148 = getelementptr %ast.AstNode* %147, i32 0, i32 8
-	store %type.TypeNode* %146, %type.TypeNode** %148
+	%148 = load %type.TypeNode** @type_floattype
+	%149 = load %ast.AstNode** %tree
+	%150 = getelementptr %ast.AstNode* %149, i32 0, i32 8
+	store %type.TypeNode* %148, %type.TypeNode** %150
 	br label %L.47
 L.47:
-	%149 = call i8 @lex_Next()
-	store i8 %149, i8* %tok
-	br label %L.2
-L.6:
-	%150 = call %ast.AstNode* @expr_String()
-	store %ast.AstNode* %150, %ast.AstNode** %tree
-	br label %L.49
-L.49:
 	%151 = call i8 @lex_Next()
 	store i8 %151, i8* %tok
-	%152 = load i8* %tok
-	%153 = icmp ne i8 %152, 40
-	br i1 %153, label %L.50, label %L.51
-L.51:
-	%154 = load %ast.AstNode** %tree
-	%155 = call %ast.AstNode* @expr_StringCat(%ast.AstNode* %154)
-	store %ast.AstNode* %155, %ast.AstNode** %tree
-	br label %L.49
-L.50:
+	br label %L.2
+L.6:
+	%152 = call %ast.AstNode* @expr_String()
+	store %ast.AstNode* %152, %ast.AstNode** %tree
 	br label %L.2
 L.7:
-	%156 = call i8 @lex_Next()
+	%153 = call i8 @lex_Next()
+	store i8 %153, i8* %tok
+	%154 = load %type.TypeNode** %et
+	%155 = call %ast.AstNode* @expr_Bool(%type.TypeNode* %154)
+	store %ast.AstNode* %155, %ast.AstNode** %tree
+	%156 = load i8* @lex_Token
 	store i8 %156, i8* %tok
-	%157 = load %type.TypeNode** %et
-	%158 = call %ast.AstNode* @expr_Bool(%type.TypeNode* %157)
-	store %ast.AstNode* %158, %ast.AstNode** %tree
-	%159 = load i8* @lex_Token
-	store i8 %159, i8* %tok
-	%160 = call i8 @lex_Expect(i8 33)
+	%157 = call i8 @lex_Expect(i8 33)
 	br label %L.2
 L.8:
-	%161 = load %type.TypeNode** %et
-	%162 = call %ast.AstNode* @expr_CompositeValue(%type.TypeNode* %161)
-	store %ast.AstNode* %162, %ast.AstNode** %tree
+	%158 = load %type.TypeNode** %et
+	%159 = call %ast.AstNode* @expr_CompositeValue(%type.TypeNode* %158)
+	store %ast.AstNode* %159, %ast.AstNode** %tree
 	br label %L.2
 L.1:
 	br label %L.2
 L.2:
-	%163 = load %ast.AstNode** %tree
-	store %ast.AstNode* %163, %ast.AstNode** %rv.0
+	%160 = load %ast.AstNode** %tree
+	store %ast.AstNode* %160, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%164 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %164
+	%161 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %161
 }
 define internal %ast.AstNode* @expr_Unary(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -18341,12 +19721,12 @@ L.8:
 	br i1 %19, label %L.12, label %L.13
 L.12:
 	%20 = load %ast.AstNode** %tree
-	%21 = call %ast.AstNode* @expr_UnOp(i8 36, %ast.AstNode* %20)
+	%21 = call %ast.AstNode* @ast_OpUnary(i8 36, %ast.AstNode* %20)
 	store %ast.AstNode* %21, %ast.AstNode** %tree
 	br label %L.11
 L.13:
 	%22 = load %ast.AstNode** %tree
-	%23 = call %ast.AstNode* @expr_UnOp(i8 33, %ast.AstNode* %22)
+	%23 = call %ast.AstNode* @ast_OpUnary(i8 33, %ast.AstNode* %22)
 	store %ast.AstNode* %23, %ast.AstNode** %tree
 	%24 = load %ast.AstNode** %tree
 	%25 = getelementptr %ast.AstNode* %24, i32 0, i32 8
@@ -18356,72 +19736,45 @@ L.13:
 	%29 = icmp eq i8 %28, 2
 	br i1 %29, label %L.15, label %L.14
 L.15:
-	%i = alloca i32
-	store i32 0, i32* %i
-	br label %L.16
-L.16:
-	%30 = load i32* %i
-	%31 = icmp ult i32 %30, 4
-	br i1 %31, label %L.19, label %L.20
-L.19:
-	%32 = load %ast.AstNode** %tree
-	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 7
-	%34 = load i32* %33
-	%35 = load i32* %i
-	%36 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 %35
-	%37 = load %type.TypeNode** %36
-	%38 = getelementptr %type.TypeNode* %37, i32 0, i32 9
-	%39 = load i32* %38
-	%40 = icmp ugt i32 %34, %39
-	br label %L.20
-L.20:
-	%41 = phi i1 [ false, %L.16 ], [ %40, %L.19 ]
-	%42 = xor i1 %41, true
-	br i1 %42, label %L.17, label %L.18
-L.18:
-	%43 = load i32* %i
-	%44 = add i32 %43, 1
-	store i32 %44, i32* %i
-	br label %L.16
-L.17:
-	%45 = load i32* %i
-	%46 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 %45
-	%47 = load %type.TypeNode** %46
-	%48 = load %ast.AstNode** %tree
-	%49 = getelementptr %ast.AstNode* %48, i32 0, i32 8
-	store %type.TypeNode* %47, %type.TypeNode** %49
+	%30 = load %ast.AstNode** %tree
+	%31 = getelementptr %ast.AstNode* %30, i32 0, i32 7
+	%32 = load i32* %31
+	%33 = call %type.TypeNode* @target_stype(i32 %32)
+	%34 = load %ast.AstNode** %tree
+	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 8
+	store %type.TypeNode* %33, %type.TypeNode** %35
 	br label %L.14
 L.14:
 	br label %L.11
 L.11:
 	br label %L.7
 L.9:
-	%50 = load %ast.AstNode** %tree
-	%51 = call %ast.AstNode* @expr_UnOp(i8 34, %ast.AstNode* %50)
-	store %ast.AstNode* %51, %ast.AstNode** %tree
+	%36 = load %ast.AstNode** %tree
+	%37 = call %ast.AstNode* @ast_OpUnary(i8 34, %ast.AstNode* %36)
+	store %ast.AstNode* %37, %ast.AstNode** %tree
 	br label %L.7
 L.10:
-	%52 = load %ast.AstNode** %tree
-	%53 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %52)
-	store %ast.AstNode* %53, %ast.AstNode** %tree
-	%54 = load %ast.AstNode** %tree
-	%55 = call %ast.AstNode* @expr_UnOp(i8 74, %ast.AstNode* %54)
-	store %ast.AstNode* %55, %ast.AstNode** %tree
+	%38 = load %ast.AstNode** %tree
+	%39 = call %ast.AstNode* @ast_ForceBoolean(%ast.AstNode* %38)
+	store %ast.AstNode* %39, %ast.AstNode** %tree
+	%40 = load %ast.AstNode** %tree
+	%41 = call %ast.AstNode* @ast_OpUnary(i8 77, %ast.AstNode* %40)
+	store %ast.AstNode* %41, %ast.AstNode** %tree
 	br label %L.7
 L.6:
 	br label %L.7
 L.7:
 	br label %L.4
 L.4:
-	%56 = load %ast.AstNode** %tree
-	store %ast.AstNode* %56, %ast.AstNode** %rv.0
+	%42 = load %ast.AstNode** %tree
+	store %ast.AstNode* %42, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%57 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %57
+	%43 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %43
 }
-@expr_mulop = internal constant [6 x i8] [ i8 48, i8 49, i8 50, i8 65, i8 66, i8 69 ], align 1
-@expr_fmulop = internal constant [6 x i8] [ i8 77, i8 78, i8 79, i8 0, i8 0, i8 0 ], align 1
+@expr_mulop = internal constant [6 x i8] [ i8 51, i8 52, i8 53, i8 68, i8 69, i8 72 ], align 1
+@expr_fmulop = internal constant [6 x i8] [ i8 80, i8 81, i8 82, i8 0, i8 0, i8 0 ], align 1
 define internal %ast.AstNode* @expr_Mul(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -18480,91 +19833,108 @@ L.10:
 	%26 = zext i8 %25 to i32
 	%27 = getelementptr [6 x i8]* @expr_fmulop, i32 0, i32 %26
 	%28 = load i8* %27
-	store i8 %28, i8* %op
+	%29 = load %ast.AstNode** %tree
+	%30 = load %ast.AstNode** %rhs
+	%31 = load %type.TypeNode** %t
+	%32 = call %ast.AstNode* @ast_OpFloat(i8 %28, %ast.AstNode* %29, %ast.AstNode* %30, %type.TypeNode* %31)
+	store %ast.AstNode* %32, %ast.AstNode** %tree
 	br label %L.9
 L.11:
-	%29 = load i8* %stok
-	%30 = sub i8 %29, 18
-	%31 = zext i8 %30 to i32
-	%32 = getelementptr [6 x i8]* @expr_mulop, i32 0, i32 %31
-	%33 = load i8* %32
-	store i8 %33, i8* %op
-	%34 = load %ast.AstNode** %tree
-	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 8
-	%36 = load %type.TypeNode** %35
-	%37 = getelementptr %type.TypeNode* %36, i32 0, i32 14
-	%38 = load i8* %37
-	%39 = icmp eq i8 %38, 3
-	br i1 %39, label %L.13, label %L.12
-L.13:
-	%40 = load i8* %op
-	%41 = zext i8 %40 to i32
-	switch i32 %41, label %L.14 [
-		i32 65, label %L.16
-		i32 66, label %L.17
+	%33 = load i8* %stok
+	%34 = sub i8 %33, 18
+	%35 = zext i8 %34 to i32
+	%36 = getelementptr [6 x i8]* @expr_mulop, i32 0, i32 %35
+	%37 = load i8* %36
+	store i8 %37, i8* %op
+	%38 = load i8* %op
+	%39 = zext i8 %38 to i32
+	switch i32 %39, label %L.12 [
+		i32 72, label %L.14
+		i32 51, label %L.15
+		i32 52, label %L.16
+		i32 53, label %L.16
+		i32 68, label %L.17
+		i32 69, label %L.18
 	]
-L.16:
-	store i8 67, i8* %op
-	br label %L.15
-L.17:
-	store i8 68, i8* %op
-	br label %L.15
 L.14:
-	br label %L.15
+	%40 = load i8* %op
+	%41 = load %ast.AstNode** %tree
+	%42 = load %ast.AstNode** %rhs
+	%43 = call %ast.AstNode* @ast_OpLogic(i8 %40, %ast.AstNode* %41, %ast.AstNode* %42)
+	store %ast.AstNode* %43, %ast.AstNode** %tree
+	br label %L.13
 L.15:
-	br label %L.12
-L.12:
-	%42 = load i8* %op
-	%43 = icmp ne i8 %42, 69
-	br i1 %43, label %L.20, label %L.21
-L.20:
-	%44 = load %type.TypeNode** %t
-	%45 = icmp ne %type.TypeNode* %44, null
-	br label %L.21
-L.21:
-	%46 = phi i1 [ false, %L.12 ], [ %45, %L.20 ]
-	br i1 %46, label %L.18, label %L.19
-L.18:
+	%44 = load i8* %op
+	%45 = load %ast.AstNode** %tree
+	%46 = load %ast.AstNode** %rhs
 	%47 = load %type.TypeNode** %t
-	%48 = getelementptr %type.TypeNode* %47, i32 0, i32 10
-	%49 = load i32* %48
+	%48 = call %ast.AstNode* @ast_OpMul(i8 %44, %ast.AstNode* %45, %ast.AstNode* %46, %type.TypeNode* %47)
+	store %ast.AstNode* %48, %ast.AstNode** %tree
+	br label %L.13
+L.16:
+	%49 = load i8* %op
 	%50 = load %ast.AstNode** %tree
-	%51 = getelementptr %ast.AstNode* %50, i32 0, i32 8
-	%52 = load %type.TypeNode** %51
-	%53 = getelementptr %type.TypeNode* %52, i32 0, i32 10
-	%54 = load i32* %53
-	%55 = icmp ugt i32 %49, %54
+	%51 = load %ast.AstNode** %rhs
+	%52 = load %type.TypeNode** %t
+	%53 = call %ast.AstNode* @ast_OpDiv(i8 %49, %ast.AstNode* %50, %ast.AstNode* %51, %type.TypeNode* %52)
+	store %ast.AstNode* %53, %ast.AstNode** %tree
+	br label %L.13
+L.17:
+	%54 = load %ast.AstNode** %tree
+	%55 = getelementptr %ast.AstNode* %54, i32 0, i32 8
+	%56 = load %type.TypeNode** %55
+	%57 = getelementptr %type.TypeNode* %56, i32 0, i32 14
+	%58 = load i8* %57
+	%59 = icmp eq i8 %58, 3
+	br i1 %59, label %L.20, label %L.19
+L.20:
+	store i8 70, i8* %op
 	br label %L.19
 L.19:
-	%56 = phi i1 [ false, %L.21 ], [ %55, %L.18 ]
-	br i1 %56, label %L.23, label %L.22
-L.23:
-	%57 = load %ast.AstNode** %tree
-	%58 = load %type.TypeNode** %t
-	%59 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %57, %type.TypeNode* %58)
-	store %ast.AstNode* %59, %ast.AstNode** %tree
-	br label %L.22
-L.22:
-	br label %L.9
-L.9:
 	%60 = load i8* %op
 	%61 = load %ast.AstNode** %tree
 	%62 = load %ast.AstNode** %rhs
-	%63 = call %ast.AstNode* @expr_BinOp(i8 %60, %ast.AstNode* %61, %ast.AstNode* %62)
-	store %ast.AstNode* %63, %ast.AstNode** %tree
+	%63 = load %type.TypeNode** %t
+	%64 = call %ast.AstNode* @ast_OpMul(i8 %60, %ast.AstNode* %61, %ast.AstNode* %62, %type.TypeNode* %63)
+	store %ast.AstNode* %64, %ast.AstNode** %tree
+	br label %L.13
+L.18:
+	%65 = load %ast.AstNode** %tree
+	%66 = getelementptr %ast.AstNode* %65, i32 0, i32 8
+	%67 = load %type.TypeNode** %66
+	%68 = getelementptr %type.TypeNode* %67, i32 0, i32 14
+	%69 = load i8* %68
+	%70 = icmp eq i8 %69, 3
+	br i1 %70, label %L.22, label %L.21
+L.22:
+	store i8 71, i8* %op
+	br label %L.21
+L.21:
+	%71 = load i8* %op
+	%72 = load %ast.AstNode** %tree
+	%73 = load %ast.AstNode** %rhs
+	%74 = load %type.TypeNode** %t
+	%75 = call %ast.AstNode* @ast_OpDiv(i8 %71, %ast.AstNode* %72, %ast.AstNode* %73, %type.TypeNode* %74)
+	store %ast.AstNode* %75, %ast.AstNode** %tree
+	br label %L.13
+L.12:
+	br label %L.13
+L.13:
+	br label %L.9
+L.9:
 	br label %L.3
 L.4:
 	br label %L.1
 L.1:
-	%64 = load %ast.AstNode** %tree
-	store %ast.AstNode* %64, %ast.AstNode** %rv.0
+	%76 = load %ast.AstNode** %tree
+	store %ast.AstNode* %76, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%65 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %65
+	%77 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %77
 }
-@expr_addop = internal constant [4 x i8] [ i8 46, i8 47, i8 70, i8 71 ], align 1
-@expr_faddop = internal constant [4 x i8] [ i8 75, i8 76, i8 0, i8 0 ], align 1
+@expr_addop = internal constant [4 x i8] [ i8 49, i8 50, i8 73, i8 74 ], align 1
+@expr_faddop = internal constant [4 x i8] [ i8 78, i8 79, i8 0, i8 0 ], align 1
 define internal %ast.AstNode* @expr_Add(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -18623,109 +19993,54 @@ L.10:
 	%26 = zext i8 %25 to i32
 	%27 = getelementptr [4 x i8]* @expr_faddop, i32 0, i32 %26
 	%28 = load i8* %27
-	store i8 %28, i8* %op
+	%29 = load %ast.AstNode** %tree
+	%30 = load %ast.AstNode** %rhs
+	%31 = load %type.TypeNode** %t
+	%32 = call %ast.AstNode* @ast_OpFloat(i8 %28, %ast.AstNode* %29, %ast.AstNode* %30, %type.TypeNode* %31)
+	store %ast.AstNode* %32, %ast.AstNode** %tree
 	br label %L.9
 L.11:
-	%29 = load i8* %stok
-	%30 = sub i8 %29, 14
-	%31 = zext i8 %30 to i32
-	%32 = getelementptr [4 x i8]* @expr_addop, i32 0, i32 %31
-	%33 = load i8* %32
-	store i8 %33, i8* %op
-	%34 = load i8* %op
-	%35 = icmp ne i8 %34, 70
-	br i1 %35, label %L.16, label %L.17
-L.16:
-	%36 = load i8* %op
-	%37 = icmp ne i8 %36, 71
-	br label %L.17
-L.17:
-	%38 = phi i1 [ false, %L.11 ], [ %37, %L.16 ]
-	br i1 %38, label %L.14, label %L.15
-L.14:
-	%39 = load %type.TypeNode** %t
-	%40 = icmp ne %type.TypeNode* %39, null
-	br label %L.15
-L.15:
-	%41 = phi i1 [ false, %L.17 ], [ %40, %L.14 ]
-	br i1 %41, label %L.12, label %L.13
-L.12:
-	%42 = load %type.TypeNode** %t
-	%43 = getelementptr %type.TypeNode* %42, i32 0, i32 10
-	%44 = load i32* %43
-	%45 = load %ast.AstNode** %tree
-	%46 = getelementptr %ast.AstNode* %45, i32 0, i32 8
-	%47 = load %type.TypeNode** %46
-	%48 = getelementptr %type.TypeNode* %47, i32 0, i32 10
-	%49 = load i32* %48
-	%50 = icmp ugt i32 %44, %49
-	br label %L.13
+	%33 = load i8* %stok
+	%34 = sub i8 %33, 14
+	%35 = zext i8 %34 to i32
+	%36 = getelementptr [4 x i8]* @expr_addop, i32 0, i32 %35
+	%37 = load i8* %36
+	store i8 %37, i8* %op
+	%38 = load i8* %op
+	%39 = icmp ult i8 %38, 73
+	br i1 %39, label %L.13, label %L.14
 L.13:
-	%51 = phi i1 [ false, %L.15 ], [ %50, %L.12 ]
-	br i1 %51, label %L.19, label %L.18
-L.19:
-	%52 = load %ast.AstNode** %tree
-	%53 = load %type.TypeNode** %t
-	%54 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %52, %type.TypeNode* %53)
-	store %ast.AstNode* %54, %ast.AstNode** %tree
-	br label %L.18
-L.18:
+	%40 = load i8* %op
+	%41 = load %ast.AstNode** %tree
+	%42 = load %ast.AstNode** %rhs
+	%43 = load %type.TypeNode** %t
+	%44 = call %ast.AstNode* @ast_OpAdd(i8 %40, %ast.AstNode* %41, %ast.AstNode* %42, %type.TypeNode* %43)
+	store %ast.AstNode* %44, %ast.AstNode** %tree
+	br label %L.12
+L.14:
+	%45 = load i8* %op
+	%46 = load %ast.AstNode** %tree
+	%47 = load %ast.AstNode** %rhs
+	%48 = call %ast.AstNode* @ast_OpLogic(i8 %45, %ast.AstNode* %46, %ast.AstNode* %47)
+	store %ast.AstNode* %48, %ast.AstNode** %tree
+	br label %L.12
+L.12:
 	br label %L.9
 L.9:
-	%55 = load i8* %op
-	%56 = load %ast.AstNode** %tree
-	%57 = load %ast.AstNode** %rhs
-	%58 = call %ast.AstNode* @expr_BinOp(i8 %55, %ast.AstNode* %56, %ast.AstNode* %57)
-	store %ast.AstNode* %58, %ast.AstNode** %tree
 	br label %L.3
 L.4:
 	br label %L.1
 L.1:
-	%59 = load %ast.AstNode** %tree
-	store %ast.AstNode* %59, %ast.AstNode** %rv.0
+	%49 = load %ast.AstNode** %tree
+	store %ast.AstNode* %49, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%60 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %60
+	%50 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %50
 }
-@expr_ucmpop = internal constant [6 x i8] [ i8 51, i8 52, i8 53, i8 54, i8 55, i8 56 ], align 1
-@expr_scmpop = internal constant [6 x i8] [ i8 51, i8 52, i8 57, i8 58, i8 59, i8 60 ], align 1
-define internal %ast.AstNode* @expr_ScalarCompare(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
-L.0:
-	%rv.0 = alloca %ast.AstNode*
-	%op = alloca i8
-	%lhs = alloca %ast.AstNode*
-	%rhs = alloca %ast.AstNode*
-	store i8 %op$, i8* %op
-	store %ast.AstNode* %lhs$, %ast.AstNode** %lhs
-	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
-	%tree = alloca %ast.AstNode*
-	%0 = load i8* %op
-	%1 = load %ast.AstNode** %lhs
-	%2 = load %ast.AstNode** %rhs
-	%3 = call %ast.AstNode* @expr_BinOp(i8 %0, %ast.AstNode* %1, %ast.AstNode* %2)
-	store %ast.AstNode* %3, %ast.AstNode** %tree
-	%4 = load %ast.AstNode** %tree
-	%5 = icmp ne %ast.AstNode* %4, null
-	br i1 %5, label %L.2, label %L.1
-L.2:
-	%6 = load %type.TypeNode** @type_booltype
-	%7 = load %ast.AstNode** %tree
-	%8 = getelementptr %ast.AstNode* %7, i32 0, i32 8
-	store %type.TypeNode* %6, %type.TypeNode** %8
-	%9 = load %ast.AstNode** %tree
-	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 7
-	store i32 1, i32* %10
-	br label %L.1
-L.1:
-	%11 = load %ast.AstNode** %tree
-	store %ast.AstNode* %11, %ast.AstNode** %rv.0
-	br label %return
-return:
-	%12 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %12
-}
-@S.569 = internal constant [36 x i8] c"ArrayCompare: packed and not packed\00"
+@expr_ucmpop = internal constant [6 x i8] [ i8 54, i8 55, i8 56, i8 57, i8 58, i8 59 ], align 1
+@expr_scmpop = internal constant [6 x i8] [ i8 54, i8 55, i8 60, i8 61, i8 62, i8 63 ], align 1
+@S.588 = internal constant [36 x i8] c"ArrayCompare: packed and not packed\00"
 define internal %ast.AstNode* @expr_ArrayCompare(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -18758,7 +20073,7 @@ L.2:
 	%12 = xor i1 %11, true
 	br i1 %12, label %L.4, label %L.3
 L.4:
-	%13 = getelementptr [36 x i8]* @S.569
+	%13 = getelementptr [36 x i8]* @S.588
 	%14 = bitcast [36 x i8]* %13 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %14)
 	br label %L.3
@@ -18767,10 +20082,10 @@ L.3:
 	%16 = icmp eq i8 %15, 24
 	br i1 %16, label %L.6, label %L.7
 L.6:
-	store i8 51, i8* %op
+	store i8 54, i8* %op
 	br label %L.5
 L.7:
-	store i8 52, i8* %op
+	store i8 55, i8* %op
 	br label %L.5
 L.5:
 	%17 = load i8* %op
@@ -19116,7 +20431,7 @@ L.15:
 	%42 = load i8* %op
 	%43 = load %ast.AstNode** %tree
 	%44 = load %ast.AstNode** %rhs
-	%45 = call %ast.AstNode* @expr_ScalarCompare(i8 %42, %ast.AstNode* %43, %ast.AstNode* %44)
+	%45 = call %ast.AstNode* @ast_OpCompare(i8 %42, %ast.AstNode* %43, %ast.AstNode* %44)
 	store %ast.AstNode* %45, %ast.AstNode** %tree
 	br label %L.10
 L.12:
@@ -19127,10 +20442,10 @@ L.12:
 		i32 25, label %L.21
 	]
 L.20:
-	store i8 51, i8* %op
+	store i8 54, i8* %op
 	br label %L.19
 L.21:
-	store i8 52, i8* %op
+	store i8 55, i8* %op
 	br label %L.19
 L.18:
 	store i8 0, i8* %ok
@@ -19143,7 +20458,7 @@ L.23:
 	%50 = load i8* %op
 	%51 = load %ast.AstNode** %tree
 	%52 = load %ast.AstNode** %rhs
-	%53 = call %ast.AstNode* @expr_ScalarCompare(i8 %50, %ast.AstNode* %51, %ast.AstNode* %52)
+	%53 = call %ast.AstNode* @ast_OpCompare(i8 %50, %ast.AstNode* %51, %ast.AstNode* %52)
 	store %ast.AstNode* %53, %ast.AstNode** %tree
 	br label %L.22
 L.22:
@@ -19183,10 +20498,10 @@ L.29:
 		i32 25, label %L.34
 	]
 L.33:
-	store i8 51, i8* %op
+	store i8 54, i8* %op
 	br label %L.32
 L.34:
-	store i8 52, i8* %op
+	store i8 55, i8* %op
 	br label %L.32
 L.31:
 	store i8 0, i8* %ok
@@ -19199,7 +20514,7 @@ L.36:
 	%75 = load i8* %op
 	%76 = load %ast.AstNode** %tree
 	%77 = load %ast.AstNode** %rhs
-	%78 = call %ast.AstNode* @expr_ScalarCompare(i8 %75, %ast.AstNode* %76, %ast.AstNode* %77)
+	%78 = call %ast.AstNode* @ast_OpCompare(i8 %75, %ast.AstNode* %76, %ast.AstNode* %77)
 	store %ast.AstNode* %78, %ast.AstNode** %tree
 	br label %L.35
 L.35:
@@ -19241,10 +20556,10 @@ L.43:
 		i32 25, label %L.48
 	]
 L.47:
-	store i8 51, i8* %op
+	store i8 54, i8* %op
 	br label %L.46
 L.48:
-	store i8 52, i8* %op
+	store i8 55, i8* %op
 	br label %L.46
 L.45:
 	store i8 0, i8* %ok
@@ -19257,7 +20572,7 @@ L.50:
 	%99 = load i8* %op
 	%100 = load %ast.AstNode** %tree
 	%101 = load %ast.AstNode** %rhs
-	%102 = call %ast.AstNode* @expr_ScalarCompare(i8 %99, %ast.AstNode* %100, %ast.AstNode* %101)
+	%102 = call %ast.AstNode* @ast_OpCompare(i8 %99, %ast.AstNode* %100, %ast.AstNode* %101)
 	store %ast.AstNode* %102, %ast.AstNode** %tree
 	br label %L.49
 L.49:
@@ -19350,66 +20665,17 @@ L.3:
 	%9 = call %ast.AstNode* @expr_Compare(%type.TypeNode* %8)
 	store %ast.AstNode* %9, %ast.AstNode** %rhs
 	%10 = load %ast.AstNode** %tree
-	%11 = icmp ne %ast.AstNode* %10, null
-	br i1 %11, label %L.4, label %L.5
-L.4:
-	%12 = load %ast.AstNode** %rhs
-	%13 = icmp ne %ast.AstNode* %12, null
-	br label %L.5
-L.5:
-	%14 = phi i1 [ false, %L.3 ], [ %13, %L.4 ]
-	br i1 %14, label %L.7, label %L.6
-L.7:
-	%15 = load %ast.AstNode** %tree
-	%16 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %15)
-	store %ast.AstNode* %16, %ast.AstNode** %tree
-	%17 = load %ast.AstNode** %rhs
-	%18 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %17)
-	store %ast.AstNode* %18, %ast.AstNode** %rhs
-	%19 = load %ast.AstNode** %tree
-	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 0
-	%21 = load i8* %20
-	%22 = icmp eq i8 %21, 7
-	br i1 %22, label %L.8, label %L.9
-L.8:
-	%23 = load %ast.AstNode** %rhs
-	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 0
-	%25 = load i8* %24
-	%26 = icmp eq i8 %25, 7
-	br label %L.9
-L.9:
-	%27 = phi i1 [ false, %L.7 ], [ %26, %L.8 ]
-	br i1 %27, label %L.11, label %L.12
-L.11:
-	%28 = load %ast.AstNode** %tree
-	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 10
-	%30 = load i64* %29
-	%31 = load %ast.AstNode** %rhs
-	%32 = getelementptr %ast.AstNode* %31, i32 0, i32 10
-	%33 = load i64* %32
-	%34 = and i64 %30, %33
-	%35 = load %ast.AstNode** %tree
-	%36 = getelementptr %ast.AstNode* %35, i32 0, i32 10
-	store i64 %34, i64* %36
-	br label %L.10
-L.12:
-	%37 = load %type.TypeNode** @type_booltype
-	%38 = load %ast.AstNode** %tree
-	%39 = load %ast.AstNode** %rhs
-	%40 = call %ast.AstNode* @ast_New2(i8 72, %type.TypeNode* %37, %ast.AstNode* %38, %ast.AstNode* %39)
-	store %ast.AstNode* %40, %ast.AstNode** %tree
-	br label %L.10
-L.10:
-	br label %L.6
-L.6:
+	%11 = load %ast.AstNode** %rhs
+	%12 = call %ast.AstNode* @ast_OpBool(i8 75, %ast.AstNode* %10, %ast.AstNode* %11)
+	store %ast.AstNode* %12, %ast.AstNode** %tree
 	br label %L.1
 L.2:
-	%41 = load %ast.AstNode** %tree
-	store %ast.AstNode* %41, %ast.AstNode** %rv.0
+	%13 = load %ast.AstNode** %tree
+	store %ast.AstNode* %13, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%42 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %42
+	%14 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %14
 }
 define internal %ast.AstNode* @expr_Bool(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -19438,66 +20704,17 @@ L.3:
 	%9 = call %ast.AstNode* @expr_BoolAnd(%type.TypeNode* %8)
 	store %ast.AstNode* %9, %ast.AstNode** %rhs
 	%10 = load %ast.AstNode** %tree
-	%11 = icmp ne %ast.AstNode* %10, null
-	br i1 %11, label %L.4, label %L.5
-L.4:
-	%12 = load %ast.AstNode** %rhs
-	%13 = icmp ne %ast.AstNode* %12, null
-	br label %L.5
-L.5:
-	%14 = phi i1 [ false, %L.3 ], [ %13, %L.4 ]
-	br i1 %14, label %L.7, label %L.6
-L.7:
-	%15 = load %ast.AstNode** %tree
-	%16 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %15)
-	store %ast.AstNode* %16, %ast.AstNode** %tree
-	%17 = load %ast.AstNode** %rhs
-	%18 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %17)
-	store %ast.AstNode* %18, %ast.AstNode** %rhs
-	%19 = load %ast.AstNode** %tree
-	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 0
-	%21 = load i8* %20
-	%22 = icmp eq i8 %21, 7
-	br i1 %22, label %L.8, label %L.9
-L.8:
-	%23 = load %ast.AstNode** %rhs
-	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 0
-	%25 = load i8* %24
-	%26 = icmp eq i8 %25, 7
-	br label %L.9
-L.9:
-	%27 = phi i1 [ false, %L.7 ], [ %26, %L.8 ]
-	br i1 %27, label %L.11, label %L.12
-L.11:
-	%28 = load %ast.AstNode** %tree
-	%29 = getelementptr %ast.AstNode* %28, i32 0, i32 10
-	%30 = load i64* %29
-	%31 = load %ast.AstNode** %rhs
-	%32 = getelementptr %ast.AstNode* %31, i32 0, i32 10
-	%33 = load i64* %32
-	%34 = or i64 %30, %33
-	%35 = load %ast.AstNode** %tree
-	%36 = getelementptr %ast.AstNode* %35, i32 0, i32 10
-	store i64 %34, i64* %36
-	br label %L.10
-L.12:
-	%37 = load %type.TypeNode** @type_booltype
-	%38 = load %ast.AstNode** %tree
-	%39 = load %ast.AstNode** %rhs
-	%40 = call %ast.AstNode* @ast_New2(i8 73, %type.TypeNode* %37, %ast.AstNode* %38, %ast.AstNode* %39)
-	store %ast.AstNode* %40, %ast.AstNode** %tree
-	br label %L.10
-L.10:
-	br label %L.6
-L.6:
+	%11 = load %ast.AstNode** %rhs
+	%12 = call %ast.AstNode* @ast_OpBool(i8 76, %ast.AstNode* %10, %ast.AstNode* %11)
+	store %ast.AstNode* %12, %ast.AstNode** %tree
 	br label %L.1
 L.2:
-	%41 = load %ast.AstNode** %tree
-	store %ast.AstNode* %41, %ast.AstNode** %rv.0
+	%13 = load %ast.AstNode** %tree
+	store %ast.AstNode* %13, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%42 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %42
+	%14 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %14
 }
 define internal %ast.AstNode* @expr_Const(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -19696,36 +20913,64 @@ L.0:
 	store %ast.AstNode* %1, %ast.AstNode** %tree
 	%2 = load %ast.AstNode** %tree
 	%3 = icmp ne %ast.AstNode* %2, null
-	br i1 %3, label %L.1, label %L.2
-L.1:
+	br i1 %3, label %L.2, label %L.3
+L.2:
 	%4 = load %ast.AstNode** %tree
 	%5 = getelementptr %ast.AstNode* %4, i32 0, i32 0
 	%6 = load i8* %5
 	%7 = icmp eq i8 %6, 7
-	br label %L.2
-L.2:
-	%8 = phi i1 [ false, %L.0 ], [ %7, %L.1 ]
-	br i1 %8, label %L.4, label %L.5
-L.4:
-	%9 = load %ast.AstNode** %tree
-	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 10
-	%11 = load i64* %10
-	store i64 %11, i64* %rv
-	br label %L.3
+	br i1 %7, label %L.5, label %L.6
 L.5:
-	call void @lex_Error(i8 71)
-	br label %L.3
+	%8 = load %ast.AstNode** %tree
+	%9 = getelementptr %ast.AstNode* %8, i32 0, i32 10
+	%10 = load i64* %9
+	store i64 %10, i64* %rv
+	br label %L.4
+L.6:
+	%11 = load %ast.AstNode** %tree
+	%12 = getelementptr %ast.AstNode* %11, i32 0, i32 0
+	%13 = load i8* %12
+	%14 = icmp eq i8 %13, 27
+	br i1 %14, label %L.7, label %L.8
+L.7:
+	%15 = load %ast.AstNode** %tree
+	%16 = getelementptr %ast.AstNode* %15, i32 0, i32 11
+	%17 = getelementptr [0 x %ast.AstNode*]* %16, i32 0, i32 0
+	%18 = load %ast.AstNode** %17
+	%19 = getelementptr %ast.AstNode* %18, i32 0, i32 0
+	%20 = load i8* %19
+	%21 = icmp eq i8 %20, 7
+	br label %L.8
+L.8:
+	%22 = phi i1 [ false, %L.6 ], [ %21, %L.7 ]
+	br i1 %22, label %L.10, label %L.9
+L.10:
+	%23 = load %ast.AstNode** %tree
+	%24 = getelementptr %ast.AstNode* %23, i32 0, i32 11
+	%25 = getelementptr [0 x %ast.AstNode*]* %24, i32 0, i32 0
+	%26 = load %ast.AstNode** %25
+	%27 = getelementptr %ast.AstNode* %26, i32 0, i32 10
+	%28 = load i64* %27
+	store i64 %28, i64* %rv
+	br label %L.9
+L.9:
+	br label %L.4
+L.4:
+	br label %L.1
 L.3:
-	%12 = load i64* %rv
-	store i64 %12, i64* %rv.0
+	call void @lex_Error(i8 72)
+	br label %L.1
+L.1:
+	%29 = load i64* %rv
+	store i64 %29, i64* %rv.0
 	br label %return
 return:
-	%13 = load i64* %rv.0
-	ret i64 %13
+	%30 = load i64* %rv.0
+	ret i64 %30
 }
-define internal [0 x i8]* @expr_ConstString() nounwind {
+define internal %symb.SymbNode* @expr_ConstString() nounwind {
 L.0:
-	%rv.0 = alloca [0 x i8]*
+	%rv.0 = alloca %symb.SymbNode*
 	%tree = alloca %ast.AstNode*
 	%0 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
 	store %ast.AstNode* %0, %ast.AstNode** %tree
@@ -19742,92 +20987,88 @@ L.4:
 	%7 = load %ast.AstNode** %tree
 	%8 = getelementptr %ast.AstNode* %7, i32 0, i32 9
 	%9 = load %symb.SymbNode** %8
-	%10 = bitcast %symb.SymbNode* %9 to [0 x i8]*
-	%11 = bitcast [0 x i8]* %10 to [0 x i8]*
-	store [0 x i8]* %11, [0 x i8]** %rv.0
+	store %symb.SymbNode* %9, %symb.SymbNode** %rv.0
 	br label %return
 L.5:
-	%12 = load %ast.AstNode** %tree
-	%13 = getelementptr %ast.AstNode* %12, i32 0, i32 0
-	%14 = load i8* %13
-	%15 = icmp eq i8 %14, 27
-	br i1 %15, label %L.10, label %L.11
+	%10 = load %ast.AstNode** %tree
+	%11 = getelementptr %ast.AstNode* %10, i32 0, i32 0
+	%12 = load i8* %11
+	%13 = icmp eq i8 %12, 27
+	br i1 %13, label %L.10, label %L.11
 L.10:
-	%16 = load %ast.AstNode** %tree
-	%17 = getelementptr %ast.AstNode* %16, i32 0, i32 11
-	%18 = getelementptr [0 x %ast.AstNode*]* %17, i32 0, i32 0
-	%19 = load %ast.AstNode** %18
-	%20 = getelementptr %ast.AstNode* %19, i32 0, i32 0
-	%21 = load i8* %20
-	%22 = icmp eq i8 %21, 12
+	%14 = load %ast.AstNode** %tree
+	%15 = getelementptr %ast.AstNode* %14, i32 0, i32 11
+	%16 = getelementptr [0 x %ast.AstNode*]* %15, i32 0, i32 0
+	%17 = load %ast.AstNode** %16
+	%18 = getelementptr %ast.AstNode* %17, i32 0, i32 0
+	%19 = load i8* %18
+	%20 = icmp eq i8 %19, 12
 	br label %L.11
 L.11:
-	%23 = phi i1 [ false, %L.5 ], [ %22, %L.10 ]
-	br i1 %23, label %L.8, label %L.9
+	%21 = phi i1 [ false, %L.5 ], [ %20, %L.10 ]
+	br i1 %21, label %L.8, label %L.9
 L.8:
-	%24 = load %ast.AstNode** %tree
-	%25 = getelementptr %ast.AstNode* %24, i32 0, i32 11
-	%26 = getelementptr [0 x %ast.AstNode*]* %25, i32 0, i32 0
-	%27 = load %ast.AstNode** %26
-	%28 = getelementptr %ast.AstNode* %27, i32 0, i32 9
-	%29 = load %symb.SymbNode** %28
-	%30 = getelementptr %symb.SymbNode* %29, i32 0, i32 7
-	%31 = load %ast.AstNode** %30
-	%32 = icmp ne %ast.AstNode* %31, null
+	%22 = load %ast.AstNode** %tree
+	%23 = getelementptr %ast.AstNode* %22, i32 0, i32 11
+	%24 = getelementptr [0 x %ast.AstNode*]* %23, i32 0, i32 0
+	%25 = load %ast.AstNode** %24
+	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 9
+	%27 = load %symb.SymbNode** %26
+	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 8
+	%29 = load %ast.AstNode** %28
+	%30 = icmp ne %ast.AstNode* %29, null
 	br label %L.9
 L.9:
-	%33 = phi i1 [ false, %L.11 ], [ %32, %L.8 ]
-	br i1 %33, label %L.6, label %L.7
+	%31 = phi i1 [ false, %L.11 ], [ %30, %L.8 ]
+	br i1 %31, label %L.6, label %L.7
 L.6:
-	%34 = load %ast.AstNode** %tree
-	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 11
-	%36 = getelementptr [0 x %ast.AstNode*]* %35, i32 0, i32 0
-	%37 = load %ast.AstNode** %36
-	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 9
-	%39 = load %symb.SymbNode** %38
-	%40 = getelementptr %symb.SymbNode* %39, i32 0, i32 7
-	%41 = load %ast.AstNode** %40
-	%42 = getelementptr %ast.AstNode* %41, i32 0, i32 0
-	%43 = load i8* %42
-	%44 = icmp eq i8 %43, 9
+	%32 = load %ast.AstNode** %tree
+	%33 = getelementptr %ast.AstNode* %32, i32 0, i32 11
+	%34 = getelementptr [0 x %ast.AstNode*]* %33, i32 0, i32 0
+	%35 = load %ast.AstNode** %34
+	%36 = getelementptr %ast.AstNode* %35, i32 0, i32 9
+	%37 = load %symb.SymbNode** %36
+	%38 = getelementptr %symb.SymbNode* %37, i32 0, i32 8
+	%39 = load %ast.AstNode** %38
+	%40 = getelementptr %ast.AstNode* %39, i32 0, i32 0
+	%41 = load i8* %40
+	%42 = icmp eq i8 %41, 9
 	br label %L.7
 L.7:
-	%45 = phi i1 [ false, %L.9 ], [ %44, %L.6 ]
-	br i1 %45, label %L.13, label %L.12
+	%43 = phi i1 [ false, %L.9 ], [ %42, %L.6 ]
+	br i1 %43, label %L.13, label %L.12
 L.13:
-	%46 = load %ast.AstNode** %tree
-	%47 = getelementptr %ast.AstNode* %46, i32 0, i32 11
-	%48 = getelementptr [0 x %ast.AstNode*]* %47, i32 0, i32 0
-	%49 = load %ast.AstNode** %48
-	%50 = getelementptr %ast.AstNode* %49, i32 0, i32 9
-	%51 = load %symb.SymbNode** %50
-	%52 = getelementptr %symb.SymbNode* %51, i32 0, i32 7
-	%53 = load %ast.AstNode** %52
-	%54 = getelementptr %ast.AstNode* %53, i32 0, i32 9
-	%55 = load %symb.SymbNode** %54
-	%56 = bitcast %symb.SymbNode* %55 to [0 x i8]*
-	%57 = bitcast [0 x i8]* %56 to [0 x i8]*
-	store [0 x i8]* %57, [0 x i8]** %rv.0
+	%44 = load %ast.AstNode** %tree
+	%45 = getelementptr %ast.AstNode* %44, i32 0, i32 11
+	%46 = getelementptr [0 x %ast.AstNode*]* %45, i32 0, i32 0
+	%47 = load %ast.AstNode** %46
+	%48 = getelementptr %ast.AstNode* %47, i32 0, i32 9
+	%49 = load %symb.SymbNode** %48
+	%50 = getelementptr %symb.SymbNode* %49, i32 0, i32 8
+	%51 = load %ast.AstNode** %50
+	%52 = getelementptr %ast.AstNode* %51, i32 0, i32 9
+	%53 = load %symb.SymbNode** %52
+	store %symb.SymbNode* %53, %symb.SymbNode** %rv.0
 	br label %return
 L.12:
 	br label %L.3
 L.3:
 	br label %L.1
 L.1:
-	store [0 x i8]* null, [0 x i8]** %rv.0
+	store %symb.SymbNode* null, %symb.SymbNode** %rv.0
 	br label %return
 return:
-	%58 = load [0 x i8]** %rv.0
-	ret [0 x i8]* %58
+	%54 = load %symb.SymbNode** %rv.0
+	ret %symb.SymbNode* %54
 }
-@stmt_isthenlist = internal constant [3 x i8] [ i8 60, i8 58, i8 0 ], align 1
-@stmt_iselselist = internal constant [3 x i8] [ i8 60, i8 59, i8 0 ], align 1
+@stmt_isthenlist = internal constant [3 x i8] [ i8 61, i8 58, i8 0 ], align 1
+@stmt_iselselist = internal constant [3 x i8] [ i8 61, i8 60, i8 0 ], align 1
 @stmt_thenlist = internal constant [2 x i8] [ i8 58, i8 0 ], align 1
-@stmt_elselist = internal constant [2 x i8] [ i8 59, i8 0 ], align 1
-@stmt_aslist = internal constant [2 x i8] [ i8 63, i8 0 ], align 1
-@stmt_withlist = internal constant [2 x i8] [ i8 62, i8 0 ], align 1
-@stmt_fromlist = internal constant [3 x i8] [ i8 65, i8 64, i8 0 ], align 1
-@stmt_bylist = internal constant [2 x i8] [ i8 67, i8 0 ], align 1
+@stmt_elselist = internal constant [3 x i8] [ i8 60, i8 59, i8 0 ], align 1
+@stmt_aslist = internal constant [2 x i8] [ i8 64, i8 0 ], align 1
+@stmt_withlist = internal constant [2 x i8] [ i8 63, i8 0 ], align 1
+@stmt_fromlist = internal constant [3 x i8] [ i8 66, i8 65, i8 0 ], align 1
+@stmt_bylist = internal constant [2 x i8] [ i8 68, i8 0 ], align 1
 @stmt_skiplist = internal constant [3 x i8] [ i8 37, i8 4, i8 0 ], align 1
 @stmt_LoopMax = internal constant i32 32, align 4
 @stmt_LoopLevel = internal global i8 0, align 1
@@ -19835,92 +21076,106 @@ return:
 @stmt_skipgroup = internal constant [2 x i8] [ i8 37, i8 0 ], align 1
 @stmt_skipstmt = internal constant [2 x i8] [ i8 4, i8 0 ], align 1
 @stmt_iflist = internal constant [2 x i8] [ i8 53, i8 0 ], align 1
-define internal void @stmt_CCSkip(i8 zeroext %tok$) nounwind {
+define internal void @stmt_CCSkip() nounwind {
 L.0:
 	%tok = alloca i8
-	store i8 %tok$, i8* %tok
-	%0 = load i8* %tok
-	%1 = icmp eq i8 %0, 36
-	br i1 %1, label %L.2, label %L.3
+	%0 = load i8* @lex_Token
+	store i8 %0, i8* %tok
+	%1 = load i8* %tok
+	%2 = icmp eq i8 %1, 36
+	br i1 %2, label %L.2, label %L.3
 L.2:
-	%2 = bitcast [2 x i8]* @stmt_skipgroup to [0 x i8]*
-	%3 = call i8 @lex_Skip([0 x i8]* %2)
-	%4 = call i8 @lex_Expect(i8 37)
+	%3 = bitcast [2 x i8]* @stmt_skipgroup to [0 x i8]*
+	%4 = call i8 @lex_Skip([0 x i8]* %3)
+	%5 = call i8 @lex_Expect(i8 37)
 	br label %L.1
 L.3:
-	%5 = bitcast [2 x i8]* @stmt_iflist to [0 x i8]*
-	%6 = call i8 @lex_Keyword([0 x i8]* %5)
-	store i8 %6, i8* %tok
-	%7 = load i8* %tok
-	%8 = icmp eq i8 %7, 53
-	br i1 %8, label %L.5, label %L.6
+	%6 = load i8* %tok
+	%7 = icmp eq i8 %6, 41
+	br i1 %7, label %L.5, label %L.4
 L.5:
-	%9 = bitcast [3 x i8]* @stmt_isthenlist to [0 x i8]*
-	%10 = call i8 @lex_Skip([0 x i8]* %9)
-	store i8 %10, i8* %tok
-	%11 = load i8* %tok
-	%12 = zext i8 %11 to i32
-	switch i32 %12, label %L.7 [
-		i32 58, label %L.9
-		i32 60, label %L.10
-	]
-L.9:
-	%13 = call i8 @lex_Next()
-	store i8 %13, i8* %tok
-	%14 = load i8* %tok
-	call void @stmt_CCSkip(i8 %14)
-	%15 = bitcast [2 x i8]* @stmt_elselist to [0 x i8]*
-	%16 = call i8 @lex_Keyword([0 x i8]* %15)
-	store i8 %16, i8* %tok
-	br label %L.8
-L.10:
-	br label %L.11
-L.11:
-	%17 = call i8 @lex_Next()
-	store i8 %17, i8* %tok
-	%18 = bitcast [2 x i8]* @stmt_thenlist to [0 x i8]*
-	%19 = call i8 @lex_Skip([0 x i8]* %18)
-	store i8 %19, i8* %tok
-	%20 = load i8* %tok
-	%21 = icmp eq i8 %20, 58
-	br i1 %21, label %L.14, label %L.13
-L.14:
-	%22 = call i8 @lex_Next()
-	store i8 %22, i8* %tok
-	%23 = load i8* %tok
-	call void @stmt_CCSkip(i8 %23)
-	br label %L.13
-L.13:
-	%24 = bitcast [3 x i8]* @stmt_iselselist to [0 x i8]*
-	%25 = call i8 @lex_Keyword([0 x i8]* %24)
-	store i8 %25, i8* %tok
-	%26 = load i8* %tok
-	%27 = icmp ne i8 %26, 60
-	br i1 %27, label %L.12, label %L.15
-L.15:
-	br label %L.11
-L.12:
-	br label %L.8
-L.7:
-	br label %L.8
-L.8:
-	%28 = load i8* %tok
-	%29 = icmp eq i8 %28, 59
-	br i1 %29, label %L.17, label %L.16
-L.17:
-	%30 = call i8 @lex_Next()
-	store i8 %30, i8* %tok
-	%31 = load i8* %tok
-	call void @stmt_CCSkip(i8 %31)
-	br label %L.16
-L.16:
-	br label %L.4
-L.6:
-	%32 = bitcast [2 x i8]* @stmt_skipstmt to [0 x i8]*
-	%33 = call i8 @lex_Skip([0 x i8]* %32)
-	%34 = call i8 @lex_Expect(i8 4)
+	%8 = bitcast [2 x i8]* @stmt_iflist to [0 x i8]*
+	%9 = call i8 @lex_Keyword([0 x i8]* %8)
+	store i8 %9, i8* %tok
 	br label %L.4
 L.4:
+	%10 = load i8* %tok
+	%11 = icmp eq i8 %10, 53
+	br i1 %11, label %L.7, label %L.8
+L.7:
+	%12 = bitcast [3 x i8]* @stmt_isthenlist to [0 x i8]*
+	%13 = call i8 @lex_Skip([0 x i8]* %12)
+	store i8 %13, i8* %tok
+	%14 = load i8* %tok
+	%15 = zext i8 %14 to i32
+	switch i32 %15, label %L.9 [
+		i32 58, label %L.11
+		i32 61, label %L.12
+	]
+L.11:
+	%16 = call i8 @lex_Next()
+	store i8 %16, i8* %tok
+	call void @stmt_CCSkip()
+	%17 = bitcast [3 x i8]* @stmt_elselist to [0 x i8]*
+	%18 = call i8 @lex_Keyword([0 x i8]* %17)
+	store i8 %18, i8* %tok
+	br label %L.10
+L.12:
+	br label %L.13
+L.13:
+	%19 = call i8 @lex_Next()
+	store i8 %19, i8* %tok
+	%20 = bitcast [2 x i8]* @stmt_thenlist to [0 x i8]*
+	%21 = call i8 @lex_Skip([0 x i8]* %20)
+	store i8 %21, i8* %tok
+	%22 = load i8* %tok
+	%23 = icmp eq i8 %22, 58
+	br i1 %23, label %L.16, label %L.15
+L.16:
+	%24 = call i8 @lex_Next()
+	store i8 %24, i8* %tok
+	call void @stmt_CCSkip()
+	br label %L.15
+L.15:
+	%25 = bitcast [3 x i8]* @stmt_iselselist to [0 x i8]*
+	%26 = call i8 @lex_Keyword([0 x i8]* %25)
+	store i8 %26, i8* %tok
+	%27 = load i8* %tok
+	%28 = icmp ne i8 %27, 61
+	br i1 %28, label %L.14, label %L.17
+L.17:
+	br label %L.13
+L.14:
+	br label %L.10
+L.9:
+	br label %L.10
+L.10:
+	%29 = load i8* %tok
+	%30 = icmp eq i8 %29, 60
+	br i1 %30, label %L.19, label %L.20
+L.19:
+	%31 = call i8 @lex_Next()
+	store i8 %31, i8* %tok
+	call void @stmt_CCSkip()
+	br label %L.18
+L.20:
+	%32 = load i8* %tok
+	%33 = icmp eq i8 %32, 59
+	br i1 %33, label %L.22, label %L.21
+L.22:
+	store i8 53, i8* @lex_Token
+	call void @stmt_CCSkip()
+	br label %L.21
+L.21:
+	br label %L.18
+L.18:
+	br label %L.6
+L.8:
+	%34 = bitcast [2 x i8]* @stmt_skipstmt to [0 x i8]*
+	%35 = call i8 @lex_Skip([0 x i8]* %34)
+	%36 = call i8 @lex_Expect(i8 4)
+	br label %L.6
+L.6:
 	br label %L.1
 L.1:
 	br label %return
@@ -19942,7 +21197,7 @@ L.0:
 L.2:
 	%2 = call i8 @lex_Next()
 	store i8 %2, i8* %tok
-	%3 = call %ast.AstNode* @ast_New(i8 81, %type.TypeNode* null)
+	%3 = call %ast.AstNode* @ast_New(i8 84, %type.TypeNode* null)
 	store %ast.AstNode* %3, %ast.AstNode** %tree
 	br label %L.4
 L.4:
@@ -20059,7 +21314,7 @@ L.0:
 	%9 = zext i8 %8 to i32
 	switch i32 %9, label %L.1 [
 		i32 58, label %L.3
-		i32 60, label %L.4
+		i32 61, label %L.4
 	]
 L.3:
 	%10 = call i8 @lex_Next()
@@ -20089,8 +21344,7 @@ L.8:
 	store %ast.AstNode* %23, %ast.AstNode** %tree
 	br label %L.7
 L.9:
-	%24 = load i8* %tok
-	call void @stmt_CCSkip(i8 %24)
+	call void @stmt_CCSkip()
 	br label %L.7
 L.7:
 	br label %L.2
@@ -20101,109 +21355,108 @@ L.10:
 	store i8 0, i8* %doit
 	br label %L.12
 L.12:
-	%25 = call i8 @lex_Next()
-	store i8 %25, i8* %tok
-	%26 = load %type.TypeNode** %t
-	%27 = call i64 @expr_ConstValue(%type.TypeNode* %26)
-	store i64 %27, i64* %vlo
-	%28 = load i64* %vlo
-	store i64 %28, i64* %vhi
-	%29 = load i8* @lex_Token
-	store i8 %29, i8* %tok
-	%30 = load i8* %tok
-	%31 = icmp eq i8 %30, 6
-	br i1 %31, label %L.15, label %L.14
+	%24 = call i8 @lex_Next()
+	store i8 %24, i8* %tok
+	%25 = load %type.TypeNode** %t
+	%26 = call i64 @expr_ConstValue(%type.TypeNode* %25)
+	store i64 %26, i64* %vlo
+	%27 = load i64* %vlo
+	store i64 %27, i64* %vhi
+	%28 = load i8* @lex_Token
+	store i8 %28, i8* %tok
+	%29 = load i8* %tok
+	%30 = icmp eq i8 %29, 6
+	br i1 %30, label %L.15, label %L.14
 L.15:
-	%32 = call i8 @lex_Next()
-	store i8 %32, i8* %tok
-	%33 = load %type.TypeNode** %t
-	%34 = call i64 @expr_ConstValue(%type.TypeNode* %33)
-	store i64 %34, i64* %vhi
+	%31 = call i8 @lex_Next()
+	store i8 %31, i8* %tok
+	%32 = load %type.TypeNode** %t
+	%33 = call i64 @expr_ConstValue(%type.TypeNode* %32)
+	store i64 %33, i64* %vhi
 	br label %L.14
 L.14:
-	%35 = load i64* %vlo
-	%36 = load i64* %vhi
-	%37 = icmp ugt i64 %35, %36
-	br i1 %37, label %L.17, label %L.16
+	%34 = load i64* %vlo
+	%35 = load i64* %vhi
+	%36 = icmp ugt i64 %34, %35
+	br i1 %36, label %L.17, label %L.16
 L.17:
 	br label %L.16
 L.16:
-	%38 = load i8* %doit
-	%39 = icmp ne i8 %38, 0
-	br i1 %39, label %L.19, label %L.18
+	%37 = load i8* %doit
+	%38 = icmp ne i8 %37, 0
+	br i1 %38, label %L.19, label %L.18
 L.18:
-	%40 = load i64* %vlo
-	%41 = load i64* %val
-	%42 = icmp ule i64 %40, %41
-	br i1 %42, label %L.20, label %L.21
+	%39 = load i64* %vlo
+	%40 = load i64* %val
+	%41 = icmp ule i64 %39, %40
+	br i1 %41, label %L.20, label %L.21
 L.20:
-	%43 = load i64* %val
-	%44 = load i64* %vhi
-	%45 = icmp ule i64 %43, %44
+	%42 = load i64* %val
+	%43 = load i64* %vhi
+	%44 = icmp ule i64 %42, %43
 	br label %L.21
 L.21:
-	%46 = phi i1 [ false, %L.18 ], [ %45, %L.20 ]
+	%45 = phi i1 [ false, %L.18 ], [ %44, %L.20 ]
 	br label %L.19
 L.19:
-	%47 = phi i1 [ true, %L.16 ], [ %46, %L.21 ]
-	%48 = zext i1 %47 to i8
-	store i8 %48, i8* %doit
-	%49 = load i8* @lex_Token
-	store i8 %49, i8* %tok
-	%50 = load i8* %tok
-	%51 = icmp ne i8 %50, 5
-	br i1 %51, label %L.13, label %L.22
+	%46 = phi i1 [ true, %L.16 ], [ %45, %L.21 ]
+	%47 = zext i1 %46 to i8
+	store i8 %47, i8* %doit
+	%48 = load i8* @lex_Token
+	store i8 %48, i8* %tok
+	%49 = load i8* %tok
+	%50 = icmp ne i8 %49, 5
+	br i1 %50, label %L.13, label %L.22
 L.22:
 	br label %L.12
 L.13:
-	%52 = bitcast [2 x i8]* @stmt_thenlist to [0 x i8]*
-	%53 = call i8 @lex_Keyword([0 x i8]* %52)
-	store i8 %53, i8* %tok
-	%54 = load i8* %tok
-	%55 = icmp eq i8 %54, 58
-	br i1 %55, label %L.24, label %L.25
+	%51 = bitcast [2 x i8]* @stmt_thenlist to [0 x i8]*
+	%52 = call i8 @lex_Keyword([0 x i8]* %51)
+	store i8 %52, i8* %tok
+	%53 = load i8* %tok
+	%54 = icmp eq i8 %53, 58
+	br i1 %54, label %L.24, label %L.25
 L.24:
-	%56 = call i8 @lex_Next()
-	store i8 %56, i8* %tok
+	%55 = call i8 @lex_Next()
+	store i8 %55, i8* %tok
 	br label %L.23
 L.25:
 	call void @lex_ErrorT(i8 17, i8 58)
 	br label %L.23
 L.23:
-	%57 = load i8* %doit
-	%58 = icmp ne i8 %57, 0
-	br i1 %58, label %L.26, label %L.27
+	%56 = load i8* %doit
+	%57 = icmp ne i8 %56, 0
+	br i1 %57, label %L.26, label %L.27
 L.26:
-	%59 = load i8* %doneit
-	%60 = icmp ne i8 %59, 0
+	%58 = load i8* %doneit
+	%59 = icmp ne i8 %58, 0
 	br label %L.27
 L.27:
-	%61 = phi i1 [ false, %L.23 ], [ %60, %L.26 ]
-	br i1 %61, label %L.29, label %L.28
+	%60 = phi i1 [ false, %L.23 ], [ %59, %L.26 ]
+	br i1 %60, label %L.29, label %L.28
 L.29:
 	store i8 0, i8* %doit
 	br label %L.28
 L.28:
-	%62 = load i8* %doit
-	%63 = icmp ne i8 %62, 0
-	br i1 %63, label %L.31, label %L.32
+	%61 = load i8* %doit
+	%62 = icmp ne i8 %61, 0
+	br i1 %62, label %L.31, label %L.32
 L.31:
-	%64 = load i8* %nest
-	%65 = call %ast.AstNode* @stmt_CCDo(i8 %64)
-	store %ast.AstNode* %65, %ast.AstNode** %tree
+	%63 = load i8* %nest
+	%64 = call %ast.AstNode* @stmt_CCDo(i8 %63)
+	store %ast.AstNode* %64, %ast.AstNode** %tree
 	store i8 1, i8* %doneit
 	br label %L.30
 L.32:
-	%66 = load i8* %tok
-	call void @stmt_CCSkip(i8 %66)
+	call void @stmt_CCSkip()
 	br label %L.30
 L.30:
-	%67 = bitcast [3 x i8]* @stmt_isthenlist to [0 x i8]*
-	%68 = call i8 @lex_Keyword([0 x i8]* %67)
-	store i8 %68, i8* %tok
-	%69 = load i8* %tok
-	%70 = icmp ne i8 %69, 60
-	br i1 %70, label %L.11, label %L.33
+	%65 = bitcast [3 x i8]* @stmt_isthenlist to [0 x i8]*
+	%66 = call i8 @lex_Keyword([0 x i8]* %65)
+	store i8 %66, i8* %tok
+	%67 = load i8* %tok
+	%68 = icmp ne i8 %67, 61
+	br i1 %68, label %L.11, label %L.33
 L.33:
 	br label %L.10
 L.11:
@@ -20212,37 +21465,58 @@ L.1:
 	call void @lex_Error(i8 54)
 	br label %L.2
 L.2:
-	%71 = bitcast [2 x i8]* @stmt_elselist to [0 x i8]*
-	%72 = call i8 @lex_Keyword([0 x i8]* %71)
-	store i8 %72, i8* %tok
-	%73 = load i8* %tok
-	%74 = icmp eq i8 %73, 59
-	br i1 %74, label %L.35, label %L.34
+	%69 = bitcast [3 x i8]* @stmt_elselist to [0 x i8]*
+	%70 = call i8 @lex_Keyword([0 x i8]* %69)
+	store i8 %70, i8* %tok
+	%71 = load i8* %tok
+	%72 = icmp eq i8 %71, 60
+	br i1 %72, label %L.35, label %L.36
 L.35:
-	%75 = call i8 @lex_Next()
-	store i8 %75, i8* %tok
-	%76 = load i8* %doneit
-	%77 = icmp ne i8 %76, 0
-	%78 = xor i1 %77, true
-	br i1 %78, label %L.37, label %L.38
-L.37:
-	%79 = load i8* %nest
-	%80 = call %ast.AstNode* @stmt_CCDo(i8 %79)
-	store %ast.AstNode* %80, %ast.AstNode** %tree
-	br label %L.36
+	%73 = call i8 @lex_Next()
+	store i8 %73, i8* %tok
+	%74 = load i8* %doneit
+	%75 = icmp ne i8 %74, 0
+	%76 = xor i1 %75, true
+	br i1 %76, label %L.38, label %L.39
 L.38:
-	%81 = load i8* %tok
-	call void @stmt_CCSkip(i8 %81)
-	br label %L.36
+	%77 = load i8* %nest
+	%78 = call %ast.AstNode* @stmt_CCDo(i8 %77)
+	store %ast.AstNode* %78, %ast.AstNode** %tree
+	br label %L.37
+L.39:
+	call void @stmt_CCSkip()
+	br label %L.37
+L.37:
+	br label %L.34
 L.36:
+	%79 = load i8* %tok
+	%80 = icmp eq i8 %79, 59
+	br i1 %80, label %L.41, label %L.40
+L.41:
+	store i8 53, i8* @lex_Token
+	%81 = load i8* %doneit
+	%82 = icmp ne i8 %81, 0
+	%83 = xor i1 %82, true
+	br i1 %83, label %L.43, label %L.44
+L.43:
+	%84 = load i8* %nest
+	%85 = call %ast.AstNode* @stmt_CCDo(i8 %84)
+	store %ast.AstNode* %85, %ast.AstNode** %tree
+	br label %L.42
+L.44:
+	call void @stmt_CCSkip()
+	br label %L.42
+L.42:
+	br label %L.40
+L.40:
 	br label %L.34
 L.34:
-	%82 = load %ast.AstNode** %tree
-	store %ast.AstNode* %82, %ast.AstNode** %rv.0
+	%86 = load %ast.AstNode** %tree
+	store %ast.AstNode* %86, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%83 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %83
+	%87 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %87
 }
 define internal %ast.AstNode* @stmt_CCIfStmt(i8 zeroext %nest$) nounwind {
 L.0:
@@ -20265,7 +21539,7 @@ L.2:
 	%7 = phi i1 [ true, %L.0 ], [ %6, %L.1 ]
 	br i1 %7, label %L.4, label %L.3
 L.4:
-	call void @lex_Error(i8 71)
+	call void @lex_Error(i8 72)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.3:
@@ -20318,7 +21592,7 @@ L.7:
 	br i1 %14, label %L.9, label %L.10
 L.9:
 	%15 = load %symb.SymbNode** %bs
-	%16 = getelementptr %symb.SymbNode* %15, i32 0, i32 12
+	%16 = getelementptr %symb.SymbNode* %15, i32 0, i32 13
 	%17 = load i8* %16
 	%18 = icmp eq i8 %17, 2
 	br i1 %18, label %L.12, label %L.13
@@ -20347,7 +21621,7 @@ L.6:
 	br label %L.4
 L.4:
 	%25 = load %symb.SymbNode** %s
-	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 14
+	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 15
 	%27 = load i8* %26
 	%28 = icmp ne i8 %27, 0
 	%29 = xor i1 %28, true
@@ -20413,7 +21687,7 @@ L.22:
 	%61 = getelementptr %symb.SymbNode* %60, i32 0, i32 1
 	store %type.TypeNode* %59, %type.TypeNode** %61
 	%62 = load %symb.SymbNode** %s
-	%63 = getelementptr %symb.SymbNode* %62, i32 0, i32 14
+	%63 = getelementptr %symb.SymbNode* %62, i32 0, i32 15
 	%64 = load i8* %63
 	%65 = icmp ne i8 %64, 0
 	br i1 %65, label %L.25, label %L.24
@@ -20569,81 +21843,89 @@ L.15:
 	%32 = load %type.TypeNode** %t
 	%33 = call %ast.AstNode* @expr_Const(%type.TypeNode* %32)
 	store %ast.AstNode* %33, %ast.AstNode** %iv
-	%34 = load %ast.AstNode** %iv
-	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 8
-	%36 = load %type.TypeNode** %35
-	store %type.TypeNode* %36, %type.TypeNode** %t
-	%37 = load %symb.SymbNode** %s
-	%38 = getelementptr %symb.SymbNode* %37, i32 0, i32 16
-	store i8 1, i8* %38
+	%34 = load %type.TypeNode** %t
+	%35 = getelementptr %type.TypeNode* %34, i32 0, i32 25
+	%36 = load i8* %35
+	%37 = icmp ne i8 %36, 0
+	br i1 %37, label %L.17, label %L.16
+L.17:
+	%38 = load %ast.AstNode** %iv
+	%39 = getelementptr %ast.AstNode* %38, i32 0, i32 8
+	%40 = load %type.TypeNode** %39
+	store %type.TypeNode* %40, %type.TypeNode** %t
+	br label %L.16
+L.16:
+	%41 = load %symb.SymbNode** %s
+	%42 = getelementptr %symb.SymbNode* %41, i32 0, i32 17
+	store i8 1, i8* %42
 	br label %L.14
 L.14:
 	br label %L.9
 L.11:
-	%39 = load %type.TypeNode** @type_unkntype
-	store %type.TypeNode* %39, %type.TypeNode** %t
+	%43 = load %type.TypeNode** @type_unkntype
+	store %type.TypeNode* %43, %type.TypeNode** %t
 	call void @lex_ErrorT(i8 17, i8 3)
 	br label %L.9
 L.9:
-	%40 = load %symb.SymbNode** %ss
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 0
-	%42 = load %symb.SymbNode** %41
-	%43 = icmp eq %symb.SymbNode* %42, null
-	br i1 %43, label %L.17, label %L.18
-L.17:
 	%44 = load %symb.SymbNode** %ss
-	%45 = load %type.TypeNode** %t
-	%46 = load %ast.AstNode** %iv
-	%47 = call %ast.AstNode* @stmt_VarNew(%symb.SymbNode* %44, %type.TypeNode* %45, %ast.AstNode* %46)
-	store %ast.AstNode* %47, %ast.AstNode** %tree
-	br label %L.16
-L.18:
-	%48 = call %ast.AstNode* @ast_New(i8 81, %type.TypeNode* null)
-	store %ast.AstNode* %48, %ast.AstNode** %tree
-	br label %L.19
+	%45 = getelementptr %symb.SymbNode* %44, i32 0, i32 0
+	%46 = load %symb.SymbNode** %45
+	%47 = icmp eq %symb.SymbNode* %46, null
+	br i1 %47, label %L.19, label %L.20
 L.19:
-	%49 = load %symb.SymbNode** %ss
-	%50 = load %type.TypeNode** %t
-	%51 = load %ast.AstNode** %iv
-	%52 = call %ast.AstNode* @stmt_VarNew(%symb.SymbNode* %49, %type.TypeNode* %50, %ast.AstNode* %51)
-	store %ast.AstNode* %52, %ast.AstNode** %stree
-	%53 = load %ast.AstNode** %tree
-	%54 = load %ast.AstNode** %stree
-	%55 = call %ast.AstNode* @ast_Child(%ast.AstNode* %53, %ast.AstNode* %54)
-	store %ast.AstNode* %55, %ast.AstNode** %tree
-	%56 = load %symb.SymbNode** %ss
-	%57 = load %symb.SymbNode** %s
-	%58 = icmp eq %symb.SymbNode* %56, %57
-	br i1 %58, label %L.23, label %L.22
-L.22:
-	%59 = load %symb.SymbNode** %ss
-	%60 = getelementptr %symb.SymbNode* %59, i32 0, i32 0
-	%61 = load %symb.SymbNode** %60
-	%62 = icmp eq %symb.SymbNode* %61, null
-	br label %L.23
-L.23:
-	%63 = phi i1 [ true, %L.19 ], [ %62, %L.22 ]
-	br i1 %63, label %L.20, label %L.21
-L.21:
-	%64 = load %symb.SymbNode** %ss
-	%65 = getelementptr %symb.SymbNode* %64, i32 0, i32 0
-	%66 = load %symb.SymbNode** %65
-	%67 = bitcast %symb.SymbNode* %66 to %symb.SymbNode*
-	store %symb.SymbNode* %67, %symb.SymbNode** %ss
-	br label %L.19
+	%48 = load %symb.SymbNode** %ss
+	%49 = load %type.TypeNode** %t
+	%50 = load %ast.AstNode** %iv
+	%51 = call %ast.AstNode* @stmt_VarNew(%symb.SymbNode* %48, %type.TypeNode* %49, %ast.AstNode* %50)
+	store %ast.AstNode* %51, %ast.AstNode** %tree
+	br label %L.18
 L.20:
-	br label %L.16
-L.16:
-	%68 = call i8 @lex_Expect(i8 4)
-	store i8 %68, i8* %tok
+	%52 = call %ast.AstNode* @ast_New(i8 84, %type.TypeNode* null)
+	store %ast.AstNode* %52, %ast.AstNode** %tree
+	br label %L.21
+L.21:
+	%53 = load %symb.SymbNode** %ss
+	%54 = load %type.TypeNode** %t
+	%55 = load %ast.AstNode** %iv
+	%56 = call %ast.AstNode* @stmt_VarNew(%symb.SymbNode* %53, %type.TypeNode* %54, %ast.AstNode* %55)
+	store %ast.AstNode* %56, %ast.AstNode** %stree
+	%57 = load %ast.AstNode** %tree
+	%58 = load %ast.AstNode** %stree
+	%59 = call %ast.AstNode* @ast_Child(%ast.AstNode* %57, %ast.AstNode* %58)
+	store %ast.AstNode* %59, %ast.AstNode** %tree
+	%60 = load %symb.SymbNode** %ss
+	%61 = load %symb.SymbNode** %s
+	%62 = icmp eq %symb.SymbNode* %60, %61
+	br i1 %62, label %L.25, label %L.24
+L.24:
+	%63 = load %symb.SymbNode** %ss
+	%64 = getelementptr %symb.SymbNode* %63, i32 0, i32 0
+	%65 = load %symb.SymbNode** %64
+	%66 = icmp eq %symb.SymbNode* %65, null
+	br label %L.25
+L.25:
+	%67 = phi i1 [ true, %L.21 ], [ %66, %L.24 ]
+	br i1 %67, label %L.22, label %L.23
+L.23:
+	%68 = load %symb.SymbNode** %ss
+	%69 = getelementptr %symb.SymbNode* %68, i32 0, i32 0
+	%70 = load %symb.SymbNode** %69
+	%71 = bitcast %symb.SymbNode* %70 to %symb.SymbNode*
+	store %symb.SymbNode* %71, %symb.SymbNode** %ss
+	br label %L.21
+L.22:
+	br label %L.18
+L.18:
+	%72 = call i8 @lex_Expect(i8 4)
+	store i8 %72, i8* %tok
 	br label %L.1
 L.1:
-	%69 = load %ast.AstNode** %tree
-	store %ast.AstNode* %69, %ast.AstNode** %rv.0
+	%73 = load %ast.AstNode** %tree
+	store %ast.AstNode* %73, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%70 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %70
+	%74 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %74
 }
 define internal %ast.AstNode* @stmt_ConstDecl() nounwind {
 L.0:
@@ -20701,71 +21983,123 @@ L.9:
 	%22 = call %ast.AstNode* @expr_Const(%type.TypeNode* %21)
 	store %ast.AstNode* %22, %ast.AstNode** %tree
 	%23 = load %ast.AstNode** %tree
-	%24 = bitcast %ast.AstNode* %23 to %ast.AstNode*
-	%25 = load %symb.SymbNode** %s
-	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 7
-	store %ast.AstNode* %24, %ast.AstNode** %26
-	%27 = load %ast.AstNode** %tree
-	%28 = icmp ne %ast.AstNode* %27, null
-	br i1 %28, label %L.12, label %L.11
+	%24 = icmp ne %ast.AstNode* %23, null
+	br i1 %24, label %L.12, label %L.11
 L.12:
-	%29 = load %type.TypeNode** %t
-	%30 = icmp eq %type.TypeNode* %29, null
-	br i1 %30, label %L.14, label %L.13
+	%25 = load %type.TypeNode** %t
+	%26 = icmp eq %type.TypeNode* %25, null
+	br i1 %26, label %L.14, label %L.15
 L.14:
-	%31 = load %ast.AstNode** %tree
-	%32 = getelementptr %ast.AstNode* %31, i32 0, i32 8
-	%33 = load %type.TypeNode** %32
-	store %type.TypeNode* %33, %type.TypeNode** %t
+	%27 = load %ast.AstNode** %tree
+	%28 = getelementptr %ast.AstNode* %27, i32 0, i32 8
+	%29 = load %type.TypeNode** %28
+	store %type.TypeNode* %29, %type.TypeNode** %t
+	br label %L.13
+L.15:
+	%30 = load %type.TypeNode** %t
+	%31 = getelementptr %type.TypeNode* %30, i32 0, i32 25
+	%32 = load i8* %31
+	%33 = icmp ne i8 %32, 0
+	br i1 %33, label %L.17, label %L.18
+L.17:
+	%34 = load %ast.AstNode** %tree
+	%35 = getelementptr %ast.AstNode* %34, i32 0, i32 8
+	%36 = load %type.TypeNode** %35
+	store %type.TypeNode* %36, %type.TypeNode** %t
+	br label %L.16
+L.18:
+	%37 = load %ast.AstNode** %tree
+	%38 = getelementptr %ast.AstNode* %37, i32 0, i32 0
+	%39 = load i8* %38
+	%40 = icmp eq i8 %39, 9
+	br i1 %40, label %L.19, label %L.20
+L.19:
+	%41 = load %type.TypeNode** %t
+	%42 = getelementptr %type.TypeNode* %41, i32 0, i32 8
+	%43 = load i64* %42
+	%44 = load %ast.AstNode** %tree
+	%45 = getelementptr %ast.AstNode* %44, i32 0, i32 8
+	%46 = load %type.TypeNode** %45
+	%47 = getelementptr %type.TypeNode* %46, i32 0, i32 8
+	%48 = load i64* %47
+	%49 = sub i64 %48, 1
+	%50 = icmp eq i64 %43, %49
+	br label %L.20
+L.20:
+	%51 = phi i1 [ false, %L.18 ], [ %50, %L.19 ]
+	br i1 %51, label %L.22, label %L.23
+L.22:
+	%52 = load %ast.AstNode** %tree
+	%53 = call %ast.AstNode* @ast_Dup(%ast.AstNode* %52)
+	store %ast.AstNode* %53, %ast.AstNode** %tree
+	%54 = load %type.TypeNode** %t
+	%55 = load %ast.AstNode** %tree
+	%56 = getelementptr %ast.AstNode* %55, i32 0, i32 8
+	store %type.TypeNode* %54, %type.TypeNode** %56
+	br label %L.21
+L.23:
+	%57 = load %type.TypeNode** %t
+	%58 = load %ast.AstNode** %tree
+	%59 = getelementptr %ast.AstNode* %58, i32 0, i32 8
+	%60 = load %type.TypeNode** %59
+	%61 = icmp ne %type.TypeNode* %57, %60
+	br i1 %61, label %L.25, label %L.24
+L.25:
+	%62 = load %ast.AstNode** %tree
+	%63 = call %ast.AstNode* @ast_Dup(%ast.AstNode* %62)
+	store %ast.AstNode* %63, %ast.AstNode** %tree
+	%64 = load %type.TypeNode** %t
+	%65 = load %ast.AstNode** %tree
+	%66 = getelementptr %ast.AstNode* %65, i32 0, i32 8
+	store %type.TypeNode* %64, %type.TypeNode** %66
+	br label %L.24
+L.24:
+	br label %L.21
+L.21:
+	br label %L.16
+L.16:
 	br label %L.13
 L.13:
-	%34 = load %type.TypeNode** %t
-	%35 = getelementptr %type.TypeNode* %34, i32 0, i32 25
-	%36 = load i8* %35
-	%37 = icmp ne i8 %36, 0
-	br i1 %37, label %L.16, label %L.15
-L.16:
-	%38 = load %ast.AstNode** %tree
-	%39 = getelementptr %ast.AstNode* %38, i32 0, i32 8
-	%40 = load %type.TypeNode** %39
-	store %type.TypeNode* %40, %type.TypeNode** %t
-	br label %L.15
-L.15:
-	%41 = load %type.TypeNode** %t
-	%42 = load %ast.AstNode** %tree
-	%43 = call %ast.AstNode* @ast_New1(i8 6, %type.TypeNode* %41, %ast.AstNode* %42)
-	store %ast.AstNode* %43, %ast.AstNode** %tree
-	%44 = load %symb.SymbNode** %s
-	%45 = load %ast.AstNode** %tree
-	%46 = getelementptr %ast.AstNode* %45, i32 0, i32 9
-	store %symb.SymbNode* %44, %symb.SymbNode** %46
+	%67 = load %ast.AstNode** %tree
+	%68 = bitcast %ast.AstNode* %67 to %ast.AstNode*
+	%69 = load %symb.SymbNode** %s
+	%70 = getelementptr %symb.SymbNode* %69, i32 0, i32 8
+	store %ast.AstNode* %68, %ast.AstNode** %70
+	%71 = load %type.TypeNode** %t
+	%72 = load %ast.AstNode** %tree
+	%73 = call %ast.AstNode* @ast_New1(i8 6, %type.TypeNode* %71, %ast.AstNode* %72)
+	store %ast.AstNode* %73, %ast.AstNode** %tree
+	%74 = load %symb.SymbNode** %s
+	%75 = load %ast.AstNode** %tree
+	%76 = getelementptr %ast.AstNode* %75, i32 0, i32 9
+	store %symb.SymbNode* %74, %symb.SymbNode** %76
 	br label %L.11
 L.11:
-	%47 = load %symb.SymbNode** %s
-	%48 = getelementptr %symb.SymbNode* %47, i32 0, i32 16
-	store i8 1, i8* %48
+	%77 = load %symb.SymbNode** %s
+	%78 = getelementptr %symb.SymbNode* %77, i32 0, i32 17
+	store i8 1, i8* %78
 	br label %L.8
 L.10:
-	call void @lex_Error(i8 70)
+	call void @lex_Error(i8 71)
 	br label %L.8
 L.8:
-	%49 = load %type.TypeNode** %t
-	%50 = load %symb.SymbNode** %s
-	%51 = getelementptr %symb.SymbNode* %50, i32 0, i32 1
-	store %type.TypeNode* %49, %type.TypeNode** %51
+	%79 = load %type.TypeNode** %t
+	%80 = load %symb.SymbNode** %s
+	%81 = getelementptr %symb.SymbNode* %80, i32 0, i32 1
+	store %type.TypeNode* %79, %type.TypeNode** %81
 	br label %L.1
 L.3:
 	call void @lex_Error(i8 18)
 	br label %L.1
 L.1:
-	%52 = call i8 @lex_Expect(i8 4)
-	store i8 %52, i8* %tok
-	%53 = load %ast.AstNode** %tree
-	store %ast.AstNode* %53, %ast.AstNode** %rv.0
+	%82 = call i8 @lex_Expect(i8 4)
+	store i8 %82, i8* %tok
+	%83 = load %ast.AstNode** %tree
+	store %ast.AstNode* %83, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%54 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %54
+	%84 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %84
 }
 define internal zeroext i16 @stmt_EndConstraint([0 x i8]* %what$, i16 zeroext %i$) nounwind {
 L.0:
@@ -20797,7 +22131,7 @@ return:
 	ret i16 %9
 }
 @stmt_Asm_MaxArg = internal constant i32 9, align 4
-@S.582 = internal constant [18 x i8] c"'~' in constraint\00"
+@S.601 = internal constant [18 x i8] c"'~' in constraint\00"
 define internal %ast.AstNode* @stmt_Asm() nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -20828,7 +22162,7 @@ L.2:
 	%5 = call %ast.AstNode* @expr_String()
 	%6 = call %ast.AstNode* @ast_Child(%ast.AstNode* %4, %ast.AstNode* %5)
 	store %ast.AstNode* %6, %ast.AstNode** %tree
-	%7 = call i8 @lex_Next()
+	%7 = load i8* @lex_Token
 	store i8 %7, i8* %tok
 	%8 = load i8* %tok
 	%9 = icmp eq i8 %8, 5
@@ -20847,40 +22181,42 @@ L.7:
 	%14 = load %ast.AstNode** %node
 	%15 = getelementptr %ast.AstNode* %14, i32 0, i32 9
 	%16 = load %symb.SymbNode** %15
-	%17 = bitcast %symb.SymbNode* %16 to [0 x i8]*
-	store [0 x i8]* %17, [0 x i8]** %what
-	%18 = load %ast.AstNode** %tree
-	%19 = load %ast.AstNode** %node
-	%20 = call %ast.AstNode* @ast_Child(%ast.AstNode* %18, %ast.AstNode* %19)
-	store %ast.AstNode* %20, %ast.AstNode** %tree
-	%21 = call i8 @lex_Next()
-	store i8 %21, i8* %tok
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 22
+	%18 = getelementptr [0 x i8]* %17
+	%19 = bitcast [0 x i8]* %18 to [0 x i8]*
+	store [0 x i8]* %19, [0 x i8]** %what
+	%20 = load %ast.AstNode** %tree
+	%21 = load %ast.AstNode** %node
+	%22 = call %ast.AstNode* @ast_Child(%ast.AstNode* %20, %ast.AstNode* %21)
+	store %ast.AstNode* %22, %ast.AstNode** %tree
+	%23 = load i8* @lex_Token
+	store i8 %23, i8* %tok
 	store i16 0, i16* %i
 	br label %L.9
 L.9:
-	%22 = load [0 x i8]** %what
-	%23 = load i16* %i
-	%24 = zext i16 %23 to i32
-	%25 = getelementptr [0 x i8]* %22, i32 0, i32 %24
-	%26 = load i8* %25
-	%27 = icmp ne i8 %26, 0
-	br i1 %27, label %L.12, label %L.13
+	%24 = load [0 x i8]** %what
+	%25 = load i16* %i
+	%26 = zext i16 %25 to i32
+	%27 = getelementptr [0 x i8]* %24, i32 0, i32 %26
+	%28 = load i8* %27
+	%29 = icmp ne i8 %28, 0
+	br i1 %29, label %L.12, label %L.13
 L.12:
-	%28 = load i16* %narg
-	%29 = icmp ult i16 %28, 8
+	%30 = load i16* %narg
+	%31 = icmp ult i16 %30, 8
 	br label %L.13
 L.13:
-	%30 = phi i1 [ false, %L.9 ], [ %29, %L.12 ]
-	%31 = xor i1 %30, true
-	br i1 %31, label %L.10, label %L.11
+	%32 = phi i1 [ false, %L.9 ], [ %31, %L.12 ]
+	%33 = xor i1 %32, true
+	br i1 %33, label %L.10, label %L.11
 L.11:
-	%32 = load [0 x i8]** %what
-	%33 = load i16* %i
-	%34 = zext i16 %33 to i32
-	%35 = getelementptr [0 x i8]* %32, i32 0, i32 %34
-	%36 = load i8* %35
-	%37 = zext i8 %36 to i32
-	switch i32 %37, label %L.14 [
+	%34 = load [0 x i8]** %what
+	%35 = load i16* %i
+	%36 = zext i16 %35 to i32
+	%37 = getelementptr [0 x i8]* %34, i32 0, i32 %36
+	%38 = load i8* %37
+	%39 = zext i8 %38 to i32
+	switch i32 %39, label %L.14 [
 		i32 61, label %L.16
 		i32 48, label %L.17
 		i32 49, label %L.17
@@ -20895,109 +22231,109 @@ L.11:
 		i32 126, label %L.18
 	]
 L.16:
-	%38 = load i16* %i
-	%39 = add i16 %38, 1
-	store i16 %39, i16* %i
-	%40 = load [0 x i8]** %what
-	%41 = load i16* %i
-	%42 = zext i16 %41 to i32
-	%43 = getelementptr [0 x i8]* %40, i32 0, i32 %42
-	%44 = load i8* %43
-	%45 = icmp eq i8 %44, 123
-	br i1 %45, label %L.20, label %L.19
+	%40 = load i16* %i
+	%41 = add i16 %40, 1
+	store i16 %41, i16* %i
+	%42 = load [0 x i8]** %what
+	%43 = load i16* %i
+	%44 = zext i16 %43 to i32
+	%45 = getelementptr [0 x i8]* %42, i32 0, i32 %44
+	%46 = load i8* %45
+	%47 = icmp eq i8 %46, 123
+	br i1 %47, label %L.20, label %L.19
 L.20:
-	%46 = load [0 x i8]** %what
-	%47 = bitcast [0 x i8]* %46 to [0 x i8]*
-	%48 = load i16* %i
-	%49 = call i16 @stmt_EndConstraint([0 x i8]* %47, i16 %48)
-	store i16 %49, i16* %i
+	%48 = load [0 x i8]** %what
+	%49 = bitcast [0 x i8]* %48 to [0 x i8]*
+	%50 = load i16* %i
+	%51 = call i16 @stmt_EndConstraint([0 x i8]* %49, i16 %50)
+	store i16 %51, i16* %i
 	br label %L.19
 L.19:
-	%50 = load i16* %nout
-	%51 = add i16 %50, 1
-	store i16 %51, i16* %nout
-	%52 = load i16* %narg
-	%53 = zext i16 %52 to i32
-	%54 = getelementptr [10 x i8]* %constraints, i32 0, i32 %53
-	store i8 11, i8* %54
-	%55 = load i16* %narg
-	%56 = add i16 %55, 1
-	store i16 %56, i16* %narg
+	%52 = load i16* %nout
+	%53 = add i16 %52, 1
+	store i16 %53, i16* %nout
+	%54 = load i16* %narg
+	%55 = zext i16 %54 to i32
+	%56 = getelementptr [10 x i8]* %constraints, i32 0, i32 %55
+	store i8 11, i8* %56
+	%57 = load i16* %narg
+	%58 = add i16 %57, 1
+	store i16 %58, i16* %narg
 	br label %L.15
 L.17:
-	%57 = load [0 x i8]** %what
-	%58 = load i16* %i
-	%59 = zext i16 %58 to i32
-	%60 = getelementptr [0 x i8]* %57, i32 0, i32 %59
-	%61 = load i8* %60
-	%62 = sub i8 %61, 48
-	%63 = load i16* %narg
-	%64 = zext i16 %63 to i32
-	%65 = getelementptr [10 x i8]* %constraints, i32 0, i32 %64
-	store i8 %62, i8* %65
-	%66 = load i16* %narg
-	%67 = add i16 %66, 1
-	store i16 %67, i16* %narg
+	%59 = load [0 x i8]** %what
+	%60 = load i16* %i
+	%61 = zext i16 %60 to i32
+	%62 = getelementptr [0 x i8]* %59, i32 0, i32 %61
+	%63 = load i8* %62
+	%64 = sub i8 %63, 48
+	%65 = load i16* %narg
+	%66 = zext i16 %65 to i32
+	%67 = getelementptr [10 x i8]* %constraints, i32 0, i32 %66
+	store i8 %64, i8* %67
+	%68 = load i16* %narg
+	%69 = add i16 %68, 1
+	store i16 %69, i16* %narg
 	br label %L.15
 L.18:
-	%68 = getelementptr [18 x i8]* @S.582
-	%69 = bitcast [18 x i8]* %68 to [0 x i8]*
-	call void @lex_ErrorS(i8 0, [0 x i8]* %69)
-	%70 = load [0 x i8]** %what
-	%71 = load i16* %i
-	%72 = zext i16 %71 to i32
-	%73 = getelementptr [0 x i8]* %70, i32 0, i32 %72
-	%74 = load i8* %73
-	%75 = icmp eq i8 %74, 123
-	br i1 %75, label %L.22, label %L.21
+	%70 = getelementptr [18 x i8]* @S.601
+	%71 = bitcast [18 x i8]* %70 to [0 x i8]*
+	call void @lex_ErrorS(i8 0, [0 x i8]* %71)
+	%72 = load [0 x i8]** %what
+	%73 = load i16* %i
+	%74 = zext i16 %73 to i32
+	%75 = getelementptr [0 x i8]* %72, i32 0, i32 %74
+	%76 = load i8* %75
+	%77 = icmp eq i8 %76, 123
+	br i1 %77, label %L.22, label %L.21
 L.22:
-	%76 = load [0 x i8]** %what
-	%77 = bitcast [0 x i8]* %76 to [0 x i8]*
-	%78 = load i16* %i
-	%79 = call i16 @stmt_EndConstraint([0 x i8]* %77, i16 %78)
-	store i16 %79, i16* %i
+	%78 = load [0 x i8]** %what
+	%79 = bitcast [0 x i8]* %78 to [0 x i8]*
+	%80 = load i16* %i
+	%81 = call i16 @stmt_EndConstraint([0 x i8]* %79, i16 %80)
+	store i16 %81, i16* %i
 	br label %L.21
 L.21:
 	br label %L.15
 L.14:
-	%80 = load [0 x i8]** %what
-	%81 = load i16* %i
-	%82 = zext i16 %81 to i32
-	%83 = getelementptr [0 x i8]* %80, i32 0, i32 %82
-	%84 = load i8* %83
-	%85 = icmp eq i8 %84, 123
-	br i1 %85, label %L.24, label %L.23
+	%82 = load [0 x i8]** %what
+	%83 = load i16* %i
+	%84 = zext i16 %83 to i32
+	%85 = getelementptr [0 x i8]* %82, i32 0, i32 %84
+	%86 = load i8* %85
+	%87 = icmp eq i8 %86, 123
+	br i1 %87, label %L.24, label %L.23
 L.24:
-	%86 = load [0 x i8]** %what
-	%87 = bitcast [0 x i8]* %86 to [0 x i8]*
-	%88 = load i16* %i
-	%89 = call i16 @stmt_EndConstraint([0 x i8]* %87, i16 %88)
-	store i16 %89, i16* %i
+	%88 = load [0 x i8]** %what
+	%89 = bitcast [0 x i8]* %88 to [0 x i8]*
+	%90 = load i16* %i
+	%91 = call i16 @stmt_EndConstraint([0 x i8]* %89, i16 %90)
+	store i16 %91, i16* %i
 	br label %L.23
 L.23:
-	%90 = load i16* %narg
-	%91 = zext i16 %90 to i32
-	%92 = getelementptr [10 x i8]* %constraints, i32 0, i32 %91
-	store i8 10, i8* %92
-	%93 = load i16* %narg
-	%94 = add i16 %93, 1
-	store i16 %94, i16* %narg
+	%92 = load i16* %narg
+	%93 = zext i16 %92 to i32
+	%94 = getelementptr [10 x i8]* %constraints, i32 0, i32 %93
+	store i8 10, i8* %94
+	%95 = load i16* %narg
+	%96 = add i16 %95, 1
+	store i16 %96, i16* %narg
 	br label %L.15
 L.15:
-	%95 = load i16* %i
-	%96 = add i16 %95, 1
-	store i16 %96, i16* %i
-	%97 = load [0 x i8]** %what
-	%98 = load i16* %i
-	%99 = zext i16 %98 to i32
-	%100 = getelementptr [0 x i8]* %97, i32 0, i32 %99
-	%101 = load i8* %100
-	%102 = icmp ne i8 %101, 44
-	br i1 %102, label %L.10, label %L.25
+	%97 = load i16* %i
+	%98 = add i16 %97, 1
+	store i16 %98, i16* %i
+	%99 = load [0 x i8]** %what
+	%100 = load i16* %i
+	%101 = zext i16 %100 to i32
+	%102 = getelementptr [0 x i8]* %99, i32 0, i32 %101
+	%103 = load i8* %102
+	%104 = icmp ne i8 %103, 44
+	br i1 %104, label %L.10, label %L.25
 L.25:
-	%103 = load i16* %i
-	%104 = add i16 %103, 1
-	store i16 %104, i16* %i
+	%105 = load i16* %i
+	%106 = add i16 %105, 1
+	store i16 %106, i16* %i
 	br label %L.9
 L.10:
 	br label %L.6
@@ -21009,68 +22345,68 @@ L.6:
 	store i8 0, i8* %no
 	br label %L.26
 L.26:
-	%105 = load i8* %na
-	%106 = zext i8 %105 to i16
-	%107 = load i16* %narg
-	%108 = icmp ult i16 %106, %107
-	%109 = xor i1 %108, true
-	br i1 %109, label %L.27, label %L.28
+	%107 = load i8* %na
+	%108 = zext i8 %107 to i16
+	%109 = load i16* %narg
+	%110 = icmp ult i16 %108, %109
+	%111 = xor i1 %110, true
+	br i1 %111, label %L.27, label %L.28
 L.28:
-	%110 = load i8* %na
-	%111 = zext i8 %110 to i32
-	%112 = getelementptr [10 x i8]* %constraints, i32 0, i32 %111
-	%113 = load i8* %112
-	%114 = icmp ult i8 %113, 10
-	br i1 %114, label %L.30, label %L.31
+	%112 = load i8* %na
+	%113 = zext i8 %112 to i32
+	%114 = getelementptr [10 x i8]* %constraints, i32 0, i32 %113
+	%115 = load i8* %114
+	%116 = icmp ult i8 %115, 10
+	br i1 %116, label %L.30, label %L.31
 L.30:
-	%115 = load i8* %na
-	%116 = zext i8 %115 to i32
-	%117 = getelementptr [10 x i8]* %constraints, i32 0, i32 %116
-	%118 = load i8* %117
-	%119 = zext i8 %118 to i32
-	%120 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %119
-	%121 = load %ast.AstNode** %120
-	%122 = call %ast.AstNode* @expr_Load(%ast.AstNode* %121)
-	store %ast.AstNode* %122, %ast.AstNode** %node
-	%123 = load %ast.AstNode** %tree
-	%124 = load %ast.AstNode** %node
-	%125 = call %ast.AstNode* @ast_Child(%ast.AstNode* %123, %ast.AstNode* %124)
-	store %ast.AstNode* %125, %ast.AstNode** %tree
+	%117 = load i8* %na
+	%118 = zext i8 %117 to i32
+	%119 = getelementptr [10 x i8]* %constraints, i32 0, i32 %118
+	%120 = load i8* %119
+	%121 = zext i8 %120 to i32
+	%122 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %121
+	%123 = load %ast.AstNode** %122
+	%124 = call %ast.AstNode* @expr_Load(%ast.AstNode* %123)
+	store %ast.AstNode* %124, %ast.AstNode** %node
+	%125 = load %ast.AstNode** %tree
+	%126 = load %ast.AstNode** %node
+	%127 = call %ast.AstNode* @ast_Child(%ast.AstNode* %125, %ast.AstNode* %126)
+	store %ast.AstNode* %127, %ast.AstNode** %tree
 	br label %L.29
 L.31:
-	%126 = load i8* %tok
-	%127 = icmp eq i8 %126, 5
-	br i1 %127, label %L.33, label %L.34
+	%128 = load i8* %tok
+	%129 = icmp eq i8 %128, 5
+	br i1 %129, label %L.33, label %L.34
 L.33:
-	%128 = call i8 @lex_Next()
-	store i8 %128, i8* %tok
-	%129 = load i8* %na
-	%130 = zext i8 %129 to i32
-	%131 = getelementptr [10 x i8]* %constraints, i32 0, i32 %130
-	%132 = load i8* %131
-	%133 = icmp eq i8 %132, 11
-	br i1 %133, label %L.36, label %L.37
+	%130 = call i8 @lex_Next()
+	store i8 %130, i8* %tok
+	%131 = load i8* %na
+	%132 = zext i8 %131 to i32
+	%133 = getelementptr [10 x i8]* %constraints, i32 0, i32 %132
+	%134 = load i8* %133
+	%135 = icmp eq i8 %134, 11
+	br i1 %135, label %L.36, label %L.37
 L.36:
-	%134 = call %ast.AstNode* @expr_GetLHS()
-	%135 = load i8* %no
-	%136 = zext i8 %135 to i32
-	%137 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %136
-	store %ast.AstNode* %134, %ast.AstNode** %137
-	%138 = load i8* %no
-	%139 = add i8 %138, 1
-	store i8 %139, i8* %no
+	%136 = call %ast.AstNode* @expr_GetLHS()
+	%137 = load i8* %no
+	%138 = zext i8 %137 to i32
+	%139 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %138
+	store %ast.AstNode* %136, %ast.AstNode** %139
+	%140 = load i8* %no
+	%141 = add i8 %140, 1
+	store i8 %141, i8* %no
 	br label %L.35
 L.37:
-	%140 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
-	store %ast.AstNode* %140, %ast.AstNode** %node
-	%141 = load %ast.AstNode** %tree
-	%142 = load %ast.AstNode** %node
-	%143 = call %ast.AstNode* @ast_Child(%ast.AstNode* %141, %ast.AstNode* %142)
-	store %ast.AstNode* %143, %ast.AstNode** %tree
+	%142 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
+	store %ast.AstNode* %142, %ast.AstNode** %node
+	%143 = load %ast.AstNode** %tree
+	%144 = load %ast.AstNode** %node
+	%145 = call %ast.AstNode* @ast_Child(%ast.AstNode* %143, %ast.AstNode* %144)
+	store %ast.AstNode* %145, %ast.AstNode** %tree
 	br label %L.35
 L.35:
-	%144 = load i8* @lex_Token
-	store i8 %144, i8* %tok
+	%146 = load i8* @lex_Token
+	store i8 %146, i8* %tok
 	br label %L.32
 L.34:
 	call void @lex_ErrorT(i8 17, i8 5)
@@ -21078,9 +22414,9 @@ L.34:
 L.32:
 	br label %L.29
 L.29:
-	%145 = load i8* %na
-	%146 = add i8 %145, 1
-	store i8 %146, i8* %na
+	%147 = load i8* %na
+	%148 = add i8 %147, 1
+	store i8 %148, i8* %na
 	br label %L.26
 L.27:
 	store %type.TypeListEntry* null, %type.TypeListEntry** %tlhead
@@ -21088,157 +22424,157 @@ L.27:
 	store i8 0, i8* %no
 	br label %L.38
 L.38:
-	%147 = load i8* %no
-	%148 = zext i8 %147 to i16
-	%149 = load i16* %nout
-	%150 = icmp ult i16 %148, %149
-	%151 = xor i1 %150, true
-	br i1 %151, label %L.39, label %L.40
+	%149 = load i8* %no
+	%150 = zext i8 %149 to i16
+	%151 = load i16* %nout
+	%152 = icmp ult i16 %150, %151
+	%153 = xor i1 %152, true
+	br i1 %153, label %L.39, label %L.40
 L.40:
-	%152 = call [0 x i8]* @sys_zalloc(i32 8)
-	%153 = bitcast [0 x i8]* %152 to %type.TypeListEntry*
-	store %type.TypeListEntry* %153, %type.TypeListEntry** %tl
-	%154 = load i8* %no
-	%155 = zext i8 %154 to i32
-	%156 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %155
-	%157 = load %ast.AstNode** %156
-	%158 = getelementptr %ast.AstNode* %157, i32 0, i32 8
-	%159 = load %type.TypeNode** %158
-	%160 = getelementptr %type.TypeNode* %159, i32 0, i32 0
+	%154 = call [0 x i8]* @sys_zalloc(i32 8)
+	%155 = bitcast [0 x i8]* %154 to %type.TypeListEntry*
+	store %type.TypeListEntry* %155, %type.TypeListEntry** %tl
+	%156 = load i8* %no
+	%157 = zext i8 %156 to i32
+	%158 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %157
+	%159 = load %ast.AstNode** %158
+	%160 = getelementptr %ast.AstNode* %159, i32 0, i32 8
 	%161 = load %type.TypeNode** %160
-	%162 = bitcast %type.TypeNode* %161 to %type.TypeNode*
-	%163 = load %type.TypeListEntry** %tl
-	%164 = getelementptr %type.TypeListEntry* %163, i32 0, i32 1
-	store %type.TypeNode* %162, %type.TypeNode** %164
-	%165 = load %type.TypeListEntry** %tltail
-	%166 = icmp eq %type.TypeListEntry* %165, null
-	br i1 %166, label %L.42, label %L.43
+	%162 = getelementptr %type.TypeNode* %161, i32 0, i32 0
+	%163 = load %type.TypeNode** %162
+	%164 = bitcast %type.TypeNode* %163 to %type.TypeNode*
+	%165 = load %type.TypeListEntry** %tl
+	%166 = getelementptr %type.TypeListEntry* %165, i32 0, i32 1
+	store %type.TypeNode* %164, %type.TypeNode** %166
+	%167 = load %type.TypeListEntry** %tltail
+	%168 = icmp eq %type.TypeListEntry* %167, null
+	br i1 %168, label %L.42, label %L.43
 L.42:
-	%167 = load %type.TypeListEntry** %tl
-	store %type.TypeListEntry* %167, %type.TypeListEntry** %tlhead
+	%169 = load %type.TypeListEntry** %tl
+	store %type.TypeListEntry* %169, %type.TypeListEntry** %tlhead
 	br label %L.41
 L.43:
-	%168 = load %type.TypeListEntry** %tl
-	%169 = bitcast %type.TypeListEntry* %168 to %type.TypeListEntry*
-	%170 = load %type.TypeListEntry** %tltail
-	%171 = getelementptr %type.TypeListEntry* %170, i32 0, i32 0
-	store %type.TypeListEntry* %169, %type.TypeListEntry** %171
+	%170 = load %type.TypeListEntry** %tl
+	%171 = bitcast %type.TypeListEntry* %170 to %type.TypeListEntry*
+	%172 = load %type.TypeListEntry** %tltail
+	%173 = getelementptr %type.TypeListEntry* %172, i32 0, i32 0
+	store %type.TypeListEntry* %171, %type.TypeListEntry** %173
 	br label %L.41
 L.41:
-	%172 = load %type.TypeListEntry** %tl
-	store %type.TypeListEntry* %172, %type.TypeListEntry** %tltail
-	%173 = load i8* %no
-	%174 = add i8 %173, 1
-	store i8 %174, i8* %no
+	%174 = load %type.TypeListEntry** %tl
+	store %type.TypeListEntry* %174, %type.TypeListEntry** %tltail
+	%175 = load i8* %no
+	%176 = add i8 %175, 1
+	store i8 %176, i8* %no
 	br label %L.38
 L.39:
-	%175 = load %type.TypeListEntry** %tlhead
-	%176 = bitcast %type.TypeListEntry* %175 to %type.TypeNode*
-	%177 = load %ast.AstNode** %tree
-	%178 = getelementptr %ast.AstNode* %177, i32 0, i32 8
-	store %type.TypeNode* %176, %type.TypeNode** %178
-	%179 = load i16* %nout
-	%180 = icmp ugt i16 %179, 0
-	br i1 %180, label %L.45, label %L.44
+	%177 = load %type.TypeListEntry** %tlhead
+	%178 = bitcast %type.TypeListEntry* %177 to %type.TypeNode*
+	%179 = load %ast.AstNode** %tree
+	%180 = getelementptr %ast.AstNode* %179, i32 0, i32 8
+	store %type.TypeNode* %178, %type.TypeNode** %180
+	%181 = load i16* %nout
+	%182 = icmp ugt i16 %181, 0
+	br i1 %182, label %L.45, label %L.44
 L.45:
-	%181 = load %ast.AstNode** %tree
-	store %ast.AstNode* %181, %ast.AstNode** %node
-	%182 = call %ast.AstNode* @ast_New(i8 28, %type.TypeNode* null)
-	store %ast.AstNode* %182, %ast.AstNode** %tree
+	%183 = load %ast.AstNode** %tree
+	store %ast.AstNode* %183, %ast.AstNode** %node
+	%184 = call %ast.AstNode* @ast_New(i8 28, %type.TypeNode* null)
+	store %ast.AstNode* %184, %ast.AstNode** %tree
 	store i8 0, i8* %no
 	br label %L.46
 L.46:
-	%183 = load i8* %no
-	%184 = zext i8 %183 to i16
-	%185 = load i16* %nout
-	%186 = icmp ult i16 %184, %185
-	%187 = xor i1 %186, true
-	br i1 %187, label %L.47, label %L.48
+	%185 = load i8* %no
+	%186 = zext i8 %185 to i16
+	%187 = load i16* %nout
+	%188 = icmp ult i16 %186, %187
+	%189 = xor i1 %188, true
+	br i1 %189, label %L.47, label %L.48
 L.48:
-	%188 = load %ast.AstNode** %tree
-	%189 = load i8* %no
-	%190 = zext i8 %189 to i32
-	%191 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %190
-	%192 = load %ast.AstNode** %191
-	%193 = call %ast.AstNode* @ast_Child(%ast.AstNode* %188, %ast.AstNode* %192)
-	store %ast.AstNode* %193, %ast.AstNode** %tree
-	%194 = load i8* %no
-	%195 = add i8 %194, 1
-	store i8 %195, i8* %no
+	%190 = load %ast.AstNode** %tree
+	%191 = load i8* %no
+	%192 = zext i8 %191 to i32
+	%193 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %192
+	%194 = load %ast.AstNode** %193
+	%195 = call %ast.AstNode* @ast_Child(%ast.AstNode* %190, %ast.AstNode* %194)
+	store %ast.AstNode* %195, %ast.AstNode** %tree
+	%196 = load i8* %no
+	%197 = add i8 %196, 1
+	store i8 %197, i8* %no
 	br label %L.46
 L.47:
-	%196 = load i16* %nout
-	%197 = icmp ugt i16 %196, 1
-	br i1 %197, label %L.50, label %L.51
+	%198 = load i16* %nout
+	%199 = icmp ugt i16 %198, 1
+	br i1 %199, label %L.50, label %L.51
 L.50:
 	store i8 0, i8* %no
 	br label %L.52
 L.52:
-	%198 = load i8* %no
-	%199 = zext i8 %198 to i16
-	%200 = load i16* %nout
-	%201 = icmp ult i16 %199, %200
-	%202 = xor i1 %201, true
-	br i1 %202, label %L.53, label %L.54
+	%200 = load i8* %no
+	%201 = zext i8 %200 to i16
+	%202 = load i16* %nout
+	%203 = icmp ult i16 %201, %202
+	%204 = xor i1 %203, true
+	br i1 %204, label %L.53, label %L.54
 L.54:
-	%203 = load i8* %no
-	%204 = zext i8 %203 to i32
-	%205 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %204
-	%206 = load %ast.AstNode** %205
-	%207 = getelementptr %ast.AstNode* %206, i32 0, i32 8
-	%208 = load %type.TypeNode** %207
-	%209 = getelementptr %type.TypeNode* %208, i32 0, i32 0
+	%205 = load i8* %no
+	%206 = zext i8 %205 to i32
+	%207 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 %206
+	%208 = load %ast.AstNode** %207
+	%209 = getelementptr %ast.AstNode* %208, i32 0, i32 8
 	%210 = load %type.TypeNode** %209
-	%211 = bitcast %type.TypeNode* %210 to %type.TypeNode*
-	%212 = load %ast.AstNode** %node
-	%213 = call %ast.AstNode* @ast_New1(i8 26, %type.TypeNode* %211, %ast.AstNode* %212)
-	store %ast.AstNode* %213, %ast.AstNode** %temp
-	%214 = load %ast.AstNode** %temp
-	%215 = getelementptr %ast.AstNode* %214, i32 0, i32 8
-	%216 = load %type.TypeNode** %215
-	%217 = getelementptr %type.TypeNode* %216, i32 0, i32 10
-	%218 = load i32* %217
-	%219 = load %ast.AstNode** %temp
-	%220 = getelementptr %ast.AstNode* %219, i32 0, i32 7
-	store i32 %218, i32* %220
-	%221 = load i8* %no
-	%222 = zext i8 %221 to i64
-	%223 = load %ast.AstNode** %temp
-	%224 = getelementptr %ast.AstNode* %223, i32 0, i32 10
-	store i64 %222, i64* %224
-	%225 = load %ast.AstNode** %tree
-	%226 = load %ast.AstNode** %temp
-	%227 = call %ast.AstNode* @ast_Child(%ast.AstNode* %225, %ast.AstNode* %226)
-	store %ast.AstNode* %227, %ast.AstNode** %tree
-	%228 = load i8* %no
-	%229 = add i8 %228, 1
-	store i8 %229, i8* %no
+	%211 = getelementptr %type.TypeNode* %210, i32 0, i32 0
+	%212 = load %type.TypeNode** %211
+	%213 = bitcast %type.TypeNode* %212 to %type.TypeNode*
+	%214 = load %ast.AstNode** %node
+	%215 = call %ast.AstNode* @ast_New1(i8 26, %type.TypeNode* %213, %ast.AstNode* %214)
+	store %ast.AstNode* %215, %ast.AstNode** %temp
+	%216 = load %ast.AstNode** %temp
+	%217 = getelementptr %ast.AstNode* %216, i32 0, i32 8
+	%218 = load %type.TypeNode** %217
+	%219 = getelementptr %type.TypeNode* %218, i32 0, i32 10
+	%220 = load i32* %219
+	%221 = load %ast.AstNode** %temp
+	%222 = getelementptr %ast.AstNode* %221, i32 0, i32 7
+	store i32 %220, i32* %222
+	%223 = load i8* %no
+	%224 = zext i8 %223 to i64
+	%225 = load %ast.AstNode** %temp
+	%226 = getelementptr %ast.AstNode* %225, i32 0, i32 10
+	store i64 %224, i64* %226
+	%227 = load %ast.AstNode** %tree
+	%228 = load %ast.AstNode** %temp
+	%229 = call %ast.AstNode* @ast_Child(%ast.AstNode* %227, %ast.AstNode* %228)
+	store %ast.AstNode* %229, %ast.AstNode** %tree
+	%230 = load i8* %no
+	%231 = add i8 %230, 1
+	store i8 %231, i8* %no
 	br label %L.52
 L.53:
 	br label %L.49
 L.51:
-	%230 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 0
-	%231 = load %ast.AstNode** %230
-	%232 = getelementptr %ast.AstNode* %231, i32 0, i32 8
-	%233 = load %type.TypeNode** %232
-	%234 = getelementptr %type.TypeNode* %233, i32 0, i32 0
+	%232 = getelementptr [10 x %ast.AstNode*]* %outputs, i32 0, i32 0
+	%233 = load %ast.AstNode** %232
+	%234 = getelementptr %ast.AstNode* %233, i32 0, i32 8
 	%235 = load %type.TypeNode** %234
-	%236 = bitcast %type.TypeNode* %235 to %type.TypeNode*
-	%237 = load %ast.AstNode** %node
-	%238 = call %ast.AstNode* @ast_New1(i8 1, %type.TypeNode* %236, %ast.AstNode* %237)
-	store %ast.AstNode* %238, %ast.AstNode** %temp
-	%239 = load %ast.AstNode** %temp
-	%240 = getelementptr %ast.AstNode* %239, i32 0, i32 8
-	%241 = load %type.TypeNode** %240
-	%242 = getelementptr %type.TypeNode* %241, i32 0, i32 10
-	%243 = load i32* %242
-	%244 = load %ast.AstNode** %temp
-	%245 = getelementptr %ast.AstNode* %244, i32 0, i32 7
-	store i32 %243, i32* %245
-	%246 = load %ast.AstNode** %tree
-	%247 = load %ast.AstNode** %temp
-	%248 = call %ast.AstNode* @ast_Child(%ast.AstNode* %246, %ast.AstNode* %247)
-	store %ast.AstNode* %248, %ast.AstNode** %tree
+	%236 = getelementptr %type.TypeNode* %235, i32 0, i32 0
+	%237 = load %type.TypeNode** %236
+	%238 = bitcast %type.TypeNode* %237 to %type.TypeNode*
+	%239 = load %ast.AstNode** %node
+	%240 = call %ast.AstNode* @ast_New1(i8 1, %type.TypeNode* %238, %ast.AstNode* %239)
+	store %ast.AstNode* %240, %ast.AstNode** %temp
+	%241 = load %ast.AstNode** %temp
+	%242 = getelementptr %ast.AstNode* %241, i32 0, i32 8
+	%243 = load %type.TypeNode** %242
+	%244 = getelementptr %type.TypeNode* %243, i32 0, i32 10
+	%245 = load i32* %244
+	%246 = load %ast.AstNode** %temp
+	%247 = getelementptr %ast.AstNode* %246, i32 0, i32 7
+	store i32 %245, i32* %247
+	%248 = load %ast.AstNode** %tree
+	%249 = load %ast.AstNode** %temp
+	%250 = call %ast.AstNode* @ast_Child(%ast.AstNode* %248, %ast.AstNode* %249)
+	store %ast.AstNode* %250, %ast.AstNode** %tree
 	br label %L.49
 L.49:
 	br label %L.44
@@ -21250,12 +22586,12 @@ L.3:
 	call void @lex_ErrorT(i8 17, i8 40)
 	br label %L.1
 L.1:
-	%249 = load %ast.AstNode** %tree
-	store %ast.AstNode* %249, %ast.AstNode** %rv.0
+	%251 = load %ast.AstNode** %tree
+	store %ast.AstNode* %251, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%250 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %250
+	%252 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %252
 }
 define internal %ast.AstNode* @stmt_CheckSwap(%ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
 L.0:
@@ -21430,7 +22766,7 @@ return:
 	%31 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %31
 }
-@S.583 = internal constant [20 x i8] c"packed array slices\00"
+@S.602 = internal constant [20 x i8] c"packed array slices\00"
 define internal %ast.AstNode* @stmt_AssignArray(%ast.AstNode* %lhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -21494,7 +22830,7 @@ L.8:
 	%28 = icmp eq i8 %27, 15
 	br i1 %28, label %L.11, label %L.10
 L.11:
-	%29 = getelementptr [20 x i8]* @S.583
+	%29 = getelementptr [20 x i8]* @S.602
 	%30 = bitcast [20 x i8]* %29 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %30)
 	br label %L.10
@@ -21710,7 +23046,7 @@ L.40:
 L.42:
 	%165 = load %ast.AstNode** %lsize
 	%166 = load %ast.AstNode** %rsize
-	%167 = call %ast.AstNode* @expr_BinOp(i8 61, %ast.AstNode* %165, %ast.AstNode* %166)
+	%167 = call %ast.AstNode* @ast_OpMinMax(i8 64, %ast.AstNode* %165, %ast.AstNode* %166)
 	store %ast.AstNode* %167, %ast.AstNode** %lsize
 	br label %L.41
 L.41:
@@ -21729,7 +23065,7 @@ L.31:
 	%178 = zext i8 %177 to i64
 	%179 = udiv i64 %174, %178
 	%180 = call %ast.AstNode* @ast_Const(%type.TypeNode* %172, i64 %179)
-	%181 = call %ast.AstNode* @ast_New2(i8 48, %type.TypeNode* %170, %ast.AstNode* %171, %ast.AstNode* %180)
+	%181 = call %ast.AstNode* @ast_New2(i8 51, %type.TypeNode* %170, %ast.AstNode* %171, %ast.AstNode* %180)
 	store %ast.AstNode* %181, %ast.AstNode** %lsize
 	%182 = load %ast.AstNode** %lhs
 	%183 = call %ast.AstNode* @stmt_ArrayFix(%ast.AstNode* %182)
@@ -21766,7 +23102,7 @@ return:
 	%203 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %203
 }
-@S.584 = internal constant [19 x i8] c"Assign LHS not REF\00"
+@S.603 = internal constant [19 x i8] c"Assign LHS not REF\00"
 define internal %ast.AstNode* @stmt_Assign(%ast.AstNode* %lhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -21880,9 +23216,9 @@ L.21:
 	%45 = icmp ne i8 %44, 5
 	br i1 %45, label %L.23, label %L.24
 L.23:
-	%46 = getelementptr [19 x i8]* @S.584
+	%46 = getelementptr [19 x i8]* @S.603
 	%47 = bitcast [19 x i8]* %46 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %47)
+	call void @lex_ErrorS(i8 86, [0 x i8]* %47)
 	br label %L.22
 L.24:
 	%48 = load %ast.AstNode** %lhs
@@ -22106,16 +23442,16 @@ L.67:
 	%172 = icmp eq i8 %171, 10
 	br i1 %172, label %L.69, label %L.70
 L.69:
-	store i8 46, i8* %op
+	store i8 49, i8* %op
 	br label %L.68
 L.70:
-	store i8 47, i8* %op
+	store i8 50, i8* %op
 	br label %L.68
 L.68:
 	%173 = load i8* %op
 	%174 = load %ast.AstNode** %lrhs
 	%175 = load %ast.AstNode** %rhs
-	%176 = call %ast.AstNode* @expr_BinOp(i8 %173, %ast.AstNode* %174, %ast.AstNode* %175)
+	%176 = call %ast.AstNode* @ast_OpBinary(i8 %173, %ast.AstNode* %174, %ast.AstNode* %175, %type.TypeNode* null)
 	store %ast.AstNode* %176, %ast.AstNode** %rhs
 	br label %L.66
 L.66:
@@ -22207,7 +23543,7 @@ L.0:
 	%tok = alloca i8
 	store %ast.AstNode* null, %ast.AstNode** %tree
 	%0 = load %symb.SymbNode** %s
-	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 12
+	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 13
 	%2 = load i8* %1
 	%3 = icmp eq i8 %2, 6
 	br i1 %3, label %L.2, label %L.1
@@ -22247,7 +23583,7 @@ L.11:
 	%17 = load %ast.AstNode** %tree
 	%18 = getelementptr %ast.AstNode* %17, i32 0, i32 9
 	%19 = load %symb.SymbNode** %18
-	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 21
+	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 22
 	%21 = getelementptr [0 x i8]* %20
 	%22 = bitcast [0 x i8]* %21 to [0 x i8]*
 	call void @lex_ErrorI(i8 29, [0 x i8]* %22)
@@ -22304,7 +23640,7 @@ L.3:
 	call void @lex_Error(i8 56)
 	br label %L.1
 L.1:
-	%5 = call %ast.AstNode* @ast_New(i8 87, %type.TypeNode* null)
+	%5 = call %ast.AstNode* @ast_New(i8 90, %type.TypeNode* null)
 	store %ast.AstNode* %5, %ast.AstNode** %tree
 	%6 = load i8* @lex_Token
 	store i8 %6, i8* %tok
@@ -22455,7 +23791,7 @@ L.0:
 	%tok2 = alloca i8
 	%op = alloca i8
 	store %ast.AstNode* null, %ast.AstNode** %tree
-	store i8 84, i8* %op
+	store i8 87, i8* %op
 	%0 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
 	store %ast.AstNode* %0, %ast.AstNode** %ctree
 	%1 = load %ast.AstNode** %ctree
@@ -22484,11 +23820,11 @@ L.3:
 	br i1 %15, label %L.6, label %L.7
 L.6:
 	%16 = load %ast.AstNode** %ctree
-	%17 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %16)
+	%17 = call %ast.AstNode* @ast_ForceBoolean(%ast.AstNode* %16)
 	store %ast.AstNode* %17, %ast.AstNode** %ctree
 	br label %L.5
 L.7:
-	store i8 85, i8* %op
+	store i8 88, i8* %op
 	br label %L.5
 L.5:
 	%18 = load i8* %op
@@ -22506,13 +23842,13 @@ L.1:
 	%25 = load i8* %tok
 	%26 = zext i8 %25 to i32
 	switch i32 %26, label %L.8 [
-		i32 60, label %L.10
+		i32 61, label %L.10
 		i32 58, label %L.11
 	]
 L.10:
 	br label %L.12
 L.12:
-	%27 = call %ast.AstNode* @ast_New(i8 86, %type.TypeNode* null)
+	%27 = call %ast.AstNode* @ast_New(i8 89, %type.TypeNode* null)
 	store %ast.AstNode* %27, %ast.AstNode** %ctree
 	br label %L.14
 L.14:
@@ -22534,7 +23870,7 @@ L.17:
 	%37 = phi i1 [ false, %L.14 ], [ %36, %L.16 ]
 	br i1 %37, label %L.19, label %L.18
 L.19:
-	call void @lex_Error(i8 71)
+	call void @lex_Error(i8 72)
 	br label %L.18
 L.18:
 	%38 = load i8* @lex_Token
@@ -22558,7 +23894,7 @@ L.23:
 	%49 = icmp ne i8 %48, 7
 	br i1 %49, label %L.25, label %L.24
 L.25:
-	call void @lex_Error(i8 71)
+	call void @lex_Error(i8 72)
 	br label %L.24
 L.24:
 	%50 = load %ast.AstNode** %vlo
@@ -22605,7 +23941,7 @@ L.15:
 	%73 = call i8 @lex_Keyword([0 x i8]* %72)
 	store i8 %73, i8* %tok
 	%74 = load i8* %tok
-	%75 = icmp ne i8 %74, 60
+	%75 = icmp ne i8 %74, 61
 	br i1 %75, label %L.13, label %L.29
 L.29:
 	br label %L.12
@@ -22613,7 +23949,7 @@ L.13:
 	br label %L.9
 L.11:
 	%76 = load i8* %op
-	%77 = icmp eq i8 %76, 85
+	%77 = icmp eq i8 %76, 88
 	br i1 %77, label %L.31, label %L.30
 L.31:
 	call void @lex_Error(i8 48)
@@ -22632,84 +23968,101 @@ L.8:
 	call void @lex_Error(i8 54)
 	br label %L.9
 L.9:
-	%83 = bitcast [2 x i8]* @stmt_elselist to [0 x i8]*
+	%83 = bitcast [3 x i8]* @stmt_elselist to [0 x i8]*
 	%84 = call i8 @lex_Keyword([0 x i8]* %83)
 	store i8 %84, i8* %tok
 	%85 = load i8* %tok
-	%86 = icmp eq i8 %85, 59
-	br i1 %86, label %L.33, label %L.34
+	%86 = icmp eq i8 %85, 60
+	br i1 %86, label %L.33, label %L.32
+L.32:
+	%87 = load i8* %tok
+	%88 = icmp eq i8 %87, 59
+	br label %L.33
 L.33:
-	%87 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%88 = call %symb.SymbNode* @symb_FindTop([0 x i8]* %87)
-	store %symb.SymbNode* %88, %symb.SymbNode** %s
-	%89 = call i8 @lex_Next()
-	store i8 %89, i8* %tok2
-	%90 = load %symb.SymbNode** %s
-	%91 = icmp ne %symb.SymbNode* %90, null
-	br i1 %91, label %L.36, label %L.35
-L.36:
-	%92 = load i8* %tok2
-	%93 = zext i8 %92 to i32
-	switch i32 %93, label %L.37 [
-		i32 9, label %L.39
-		i32 10, label %L.39
-		i32 11, label %L.39
-		i32 34, label %L.39
-		i32 2, label %L.39
-		i32 7, label %L.39
-		i32 32, label %L.39
-	]
-L.39:
-	store i8 41, i8* %tok
-	br label %L.38
-L.37:
-	br label %L.38
-L.38:
-	br label %L.35
+	%89 = phi i1 [ true, %L.9 ], [ %88, %L.32 ]
+	br i1 %89, label %L.35, label %L.36
 L.35:
-	%94 = load i8* %tok
-	%95 = icmp eq i8 %94, 41
-	br i1 %95, label %L.41, label %L.42
+	%90 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%91 = call %symb.SymbNode* @symb_FindTop([0 x i8]* %90)
+	store %symb.SymbNode* %91, %symb.SymbNode** %s
+	%92 = call i8 @lex_Next()
+	store i8 %92, i8* %tok2
+	%93 = load %symb.SymbNode** %s
+	%94 = icmp ne %symb.SymbNode* %93, null
+	br i1 %94, label %L.38, label %L.37
+L.38:
+	%95 = load i8* %tok2
+	%96 = zext i8 %95 to i32
+	switch i32 %96, label %L.39 [
+		i32 9, label %L.41
+		i32 10, label %L.41
+		i32 11, label %L.41
+		i32 34, label %L.41
+		i32 2, label %L.41
+		i32 7, label %L.41
+		i32 32, label %L.41
+	]
 L.41:
-	%96 = load %symb.SymbNode** %s
-	%97 = call %ast.AstNode* @stmt_AssignOrCall(%symb.SymbNode* %96)
-	store %ast.AstNode* %97, %ast.AstNode** %stree
-	%98 = load %ast.AstNode** %tree
-	%99 = call %ast.AstNode* @ast_Child(%ast.AstNode* %98, %ast.AstNode* null)
-	store %ast.AstNode* %99, %ast.AstNode** %tree
-	%100 = load %ast.AstNode** %stree
-	%101 = icmp ne %ast.AstNode* %100, null
-	br i1 %101, label %L.44, label %L.43
-L.44:
-	%102 = load %ast.AstNode** %tree
-	%103 = load %ast.AstNode** %stree
-	%104 = call %ast.AstNode* @ast_New2(i8 81, %type.TypeNode* null, %ast.AstNode* %102, %ast.AstNode* %103)
-	store %ast.AstNode* %104, %ast.AstNode** %tree
-	br label %L.43
-L.43:
+	store i8 41, i8* %tok
 	br label %L.40
-L.42:
-	%105 = call %ast.AstNode* @stmt_Statement()
-	store %ast.AstNode* %105, %ast.AstNode** %stree
-	%106 = load %ast.AstNode** %tree
-	%107 = load %ast.AstNode** %stree
-	%108 = call %ast.AstNode* @ast_Child(%ast.AstNode* %106, %ast.AstNode* %107)
-	store %ast.AstNode* %108, %ast.AstNode** %tree
+L.39:
 	br label %L.40
 L.40:
-	br label %L.32
+	br label %L.37
+L.37:
+	%97 = load i8* %tok
+	%98 = icmp eq i8 %97, 41
+	br i1 %98, label %L.43, label %L.44
+L.43:
+	%99 = load %symb.SymbNode** %s
+	%100 = call %ast.AstNode* @stmt_AssignOrCall(%symb.SymbNode* %99)
+	store %ast.AstNode* %100, %ast.AstNode** %stree
+	%101 = load %ast.AstNode** %tree
+	%102 = call %ast.AstNode* @ast_Child(%ast.AstNode* %101, %ast.AstNode* null)
+	store %ast.AstNode* %102, %ast.AstNode** %tree
+	%103 = load %ast.AstNode** %stree
+	%104 = icmp ne %ast.AstNode* %103, null
+	br i1 %104, label %L.46, label %L.45
+L.46:
+	%105 = load %ast.AstNode** %tree
+	%106 = load %ast.AstNode** %stree
+	%107 = call %ast.AstNode* @ast_New2(i8 84, %type.TypeNode* null, %ast.AstNode* %105, %ast.AstNode* %106)
+	store %ast.AstNode* %107, %ast.AstNode** %tree
+	br label %L.45
+L.45:
+	br label %L.42
+L.44:
+	%108 = load i8* %tok
+	%109 = icmp eq i8 %108, 59
+	br i1 %109, label %L.48, label %L.49
+L.48:
+	%110 = call %ast.AstNode* @stmt_If()
+	store %ast.AstNode* %110, %ast.AstNode** %stree
+	br label %L.47
+L.49:
+	%111 = call %ast.AstNode* @stmt_Statement()
+	store %ast.AstNode* %111, %ast.AstNode** %stree
+	br label %L.47
+L.47:
+	%112 = load %ast.AstNode** %tree
+	%113 = load %ast.AstNode** %stree
+	%114 = call %ast.AstNode* @ast_Child(%ast.AstNode* %112, %ast.AstNode* %113)
+	store %ast.AstNode* %114, %ast.AstNode** %tree
+	br label %L.42
+L.42:
+	br label %L.34
+L.36:
+	%115 = load %ast.AstNode** %tree
+	%116 = call %ast.AstNode* @ast_Child(%ast.AstNode* %115, %ast.AstNode* null)
+	store %ast.AstNode* %116, %ast.AstNode** %tree
+	br label %L.34
 L.34:
-	%109 = load %ast.AstNode** %tree
-	%110 = call %ast.AstNode* @ast_Child(%ast.AstNode* %109, %ast.AstNode* null)
-	store %ast.AstNode* %110, %ast.AstNode** %tree
-	br label %L.32
-L.32:
-	%111 = load %ast.AstNode** %tree
-	store %ast.AstNode* %111, %ast.AstNode** %rv.0
+	%117 = load %ast.AstNode** %tree
+	store %ast.AstNode* %117, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%112 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %112
+	%118 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %118
 }
 define internal %ast.AstNode* @stmt_For() nounwind {
 L.0:
@@ -22741,7 +24094,7 @@ L.2:
 	br i1 %6, label %L.4, label %L.5
 L.4:
 	%7 = load %symb.SymbNode** %s
-	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 12
+	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 13
 	%9 = load i8* %8
 	%10 = icmp eq i8 %9, 3
 	br label %L.5
@@ -22780,8 +24133,8 @@ L.6:
 	%28 = load i8* %tok
 	%29 = zext i8 %28 to i32
 	switch i32 %29, label %L.9 [
-		i32 64, label %L.11
-		i32 65, label %L.12
+		i32 65, label %L.11
+		i32 66, label %L.12
 	]
 L.11:
 	%30 = call i8 @lex_Next()
@@ -22799,7 +24152,7 @@ L.14:
 	br i1 %36, label %L.15, label %L.16
 L.15:
 	%37 = load %symb.SymbNode** %s
-	%38 = getelementptr %symb.SymbNode* %37, i32 0, i32 12
+	%38 = getelementptr %symb.SymbNode* %37, i32 0, i32 13
 	%39 = load i8* %38
 	%40 = icmp eq i8 %39, 2
 	br label %L.16
@@ -22849,7 +24202,7 @@ L.19:
 	%68 = load %type.TypeNode** %t
 	%69 = call %ast.AstNode* @ast_Const(%type.TypeNode* %68, i64 1)
 	store %ast.AstNode* %69, %ast.AstNode** %by
-	%70 = call i8 @lex_Expect(i8 61)
+	%70 = call i8 @lex_Expect(i8 62)
 	br label %L.10
 L.12:
 	%71 = call i8 @lex_Next()
@@ -22857,7 +24210,7 @@ L.12:
 	%72 = load %type.TypeNode** %t
 	%73 = call %ast.AstNode* @expr_Bool(%type.TypeNode* %72)
 	store %ast.AstNode* %73, %ast.AstNode** %fm
-	%74 = call i8 @lex_Expect(i8 66)
+	%74 = call i8 @lex_Expect(i8 67)
 	%75 = load %type.TypeNode** %t
 	%76 = call %ast.AstNode* @expr_Bool(%type.TypeNode* %75)
 	store %ast.AstNode* %76, %ast.AstNode** %to
@@ -22865,7 +24218,7 @@ L.12:
 	%78 = call i8 @lex_Keyword([0 x i8]* %77)
 	store i8 %78, i8* %tok
 	%79 = load i8* %tok
-	%80 = icmp eq i8 %79, 67
+	%80 = icmp eq i8 %79, 68
 	br i1 %80, label %L.22, label %L.23
 L.22:
 	%81 = call i8 @lex_Next()
@@ -22880,10 +24233,10 @@ L.23:
 	store %ast.AstNode* %85, %ast.AstNode** %by
 	br label %L.21
 L.21:
-	%86 = call i8 @lex_Expect(i8 61)
+	%86 = call i8 @lex_Expect(i8 62)
 	br label %L.10
 L.9:
-	call void @lex_Error(i8 76)
+	call void @lex_Error(i8 77)
 	%87 = call i8 @lex_Next()
 	store i8 %87, i8* %tok
 	br label %L.10
@@ -22923,8 +24276,8 @@ L.29:
 	%107 = load %ast.AstNode** %ix
 	%108 = call %ast.AstNode* @expr_Load(%ast.AstNode* %107)
 	%109 = load %ast.AstNode** %to
-	%110 = call %ast.AstNode* @ast_New2(i8 54, %type.TypeNode* %106, %ast.AstNode* %108, %ast.AstNode* %109)
-	%111 = call %ast.AstNode* @ast_New1(i8 83, %type.TypeNode* null, %ast.AstNode* %110)
+	%110 = call %ast.AstNode* @ast_New2(i8 57, %type.TypeNode* %106, %ast.AstNode* %108, %ast.AstNode* %109)
+	%111 = call %ast.AstNode* @ast_New1(i8 86, %type.TypeNode* null, %ast.AstNode* %110)
 	store %ast.AstNode* %111, %ast.AstNode** %exit
 	br label %L.28
 L.28:
@@ -22934,7 +24287,7 @@ L.28:
 	%115 = load %ast.AstNode** %ix
 	%116 = call %ast.AstNode* @expr_Load(%ast.AstNode* %115)
 	%117 = load %ast.AstNode** %by
-	%118 = call %ast.AstNode* @ast_New2(i8 46, %type.TypeNode* %114, %ast.AstNode* %116, %ast.AstNode* %117)
+	%118 = call %ast.AstNode* @ast_New2(i8 49, %type.TypeNode* %114, %ast.AstNode* %116, %ast.AstNode* %117)
 	%119 = call %ast.AstNode* @ast_New2(i8 28, %type.TypeNode* %112, %ast.AstNode* %113, %ast.AstNode* %118)
 	store %ast.AstNode* %119, %ast.AstNode** %incr
 	br label %L.24
@@ -22944,14 +24297,14 @@ L.24:
 	%121 = load %ast.AstNode** %exit
 	%122 = load %ast.AstNode** %body
 	%123 = load %ast.AstNode** %incr
-	%124 = call %ast.AstNode* @ast_New3(i8 81, %type.TypeNode* null, %ast.AstNode* %121, %ast.AstNode* %122, %ast.AstNode* %123)
+	%124 = call %ast.AstNode* @ast_New3(i8 84, %type.TypeNode* null, %ast.AstNode* %121, %ast.AstNode* %122, %ast.AstNode* %123)
 	store %ast.AstNode* %124, %ast.AstNode** %body
 	%125 = load %ast.AstNode** %body
-	%126 = call %ast.AstNode* @ast_New1(i8 82, %type.TypeNode* null, %ast.AstNode* %125)
+	%126 = call %ast.AstNode* @ast_New1(i8 85, %type.TypeNode* null, %ast.AstNode* %125)
 	store %ast.AstNode* %126, %ast.AstNode** %body
 	%127 = load %ast.AstNode** %init
 	%128 = load %ast.AstNode** %body
-	%129 = call %ast.AstNode* @ast_New2(i8 81, %type.TypeNode* null, %ast.AstNode* %127, %ast.AstNode* %128)
+	%129 = call %ast.AstNode* @ast_New2(i8 84, %type.TypeNode* null, %ast.AstNode* %127, %ast.AstNode* %128)
 	store %ast.AstNode* %129, %ast.AstNode** %tree
 	br label %L.1
 L.3:
@@ -22986,7 +24339,7 @@ L.2:
 	br i1 %9, label %L.4, label %L.5
 L.4:
 	%10 = load %ast.AstNode** %ctree
-	%11 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %10)
+	%11 = call %ast.AstNode* @ast_ForceBoolean(%ast.AstNode* %10)
 	store %ast.AstNode* %11, %ast.AstNode** %ctree
 	br label %L.3
 L.5:
@@ -22994,25 +24347,25 @@ L.5:
 	br label %L.3
 L.3:
 	%12 = load %ast.AstNode** %ctree
-	%13 = call %ast.AstNode* @ast_New1(i8 74, %type.TypeNode* null, %ast.AstNode* %12)
+	%13 = call %ast.AstNode* @ast_New1(i8 77, %type.TypeNode* null, %ast.AstNode* %12)
 	store %ast.AstNode* %13, %ast.AstNode** %ctree
 	%14 = load %ast.AstNode** %ctree
-	%15 = call %ast.AstNode* @ast_New1(i8 83, %type.TypeNode* null, %ast.AstNode* %14)
+	%15 = call %ast.AstNode* @ast_New1(i8 86, %type.TypeNode* null, %ast.AstNode* %14)
 	store %ast.AstNode* %15, %ast.AstNode** %ctree
 	br label %L.1
 L.1:
 	%16 = load i8* @stmt_LoopLevel
 	%17 = add i8 %16, 1
 	store i8 %17, i8* @stmt_LoopLevel
-	%18 = call i8 @lex_Expect(i8 61)
+	%18 = call i8 @lex_Expect(i8 62)
 	%19 = call %ast.AstNode* @stmt_Statement()
 	store %ast.AstNode* %19, %ast.AstNode** %tree
 	%20 = load %ast.AstNode** %ctree
 	%21 = load %ast.AstNode** %tree
-	%22 = call %ast.AstNode* @ast_New2(i8 81, %type.TypeNode* null, %ast.AstNode* %20, %ast.AstNode* %21)
+	%22 = call %ast.AstNode* @ast_New2(i8 84, %type.TypeNode* null, %ast.AstNode* %20, %ast.AstNode* %21)
 	store %ast.AstNode* %22, %ast.AstNode** %tree
 	%23 = load %ast.AstNode** %tree
-	%24 = call %ast.AstNode* @ast_New1(i8 82, %type.TypeNode* null, %ast.AstNode* %23)
+	%24 = call %ast.AstNode* @ast_New1(i8 85, %type.TypeNode* null, %ast.AstNode* %23)
 	store %ast.AstNode* %24, %ast.AstNode** %tree
 	%25 = load i8* @stmt_LoopLevel
 	%26 = icmp ugt i8 %25, 0
@@ -23057,7 +24410,7 @@ L.2:
 	br i1 %13, label %L.4, label %L.5
 L.4:
 	%14 = load %ast.AstNode** %ctree
-	%15 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %14)
+	%15 = call %ast.AstNode* @ast_ForceBoolean(%ast.AstNode* %14)
 	store %ast.AstNode* %15, %ast.AstNode** %ctree
 	br label %L.3
 L.5:
@@ -23065,19 +24418,19 @@ L.5:
 	br label %L.3
 L.3:
 	%16 = load %ast.AstNode** %ctree
-	%17 = call %ast.AstNode* @ast_New1(i8 74, %type.TypeNode* null, %ast.AstNode* %16)
+	%17 = call %ast.AstNode* @ast_New1(i8 77, %type.TypeNode* null, %ast.AstNode* %16)
 	store %ast.AstNode* %17, %ast.AstNode** %ctree
 	%18 = load %ast.AstNode** %ctree
-	%19 = call %ast.AstNode* @ast_New1(i8 83, %type.TypeNode* null, %ast.AstNode* %18)
+	%19 = call %ast.AstNode* @ast_New1(i8 86, %type.TypeNode* null, %ast.AstNode* %18)
 	store %ast.AstNode* %19, %ast.AstNode** %ctree
 	br label %L.1
 L.1:
 	%20 = load %ast.AstNode** %tree
 	%21 = load %ast.AstNode** %ctree
-	%22 = call %ast.AstNode* @ast_New2(i8 81, %type.TypeNode* null, %ast.AstNode* %20, %ast.AstNode* %21)
+	%22 = call %ast.AstNode* @ast_New2(i8 84, %type.TypeNode* null, %ast.AstNode* %20, %ast.AstNode* %21)
 	store %ast.AstNode* %22, %ast.AstNode** %tree
 	%23 = load %ast.AstNode** %tree
-	%24 = call %ast.AstNode* @ast_New1(i8 82, %type.TypeNode* null, %ast.AstNode* %23)
+	%24 = call %ast.AstNode* @ast_New1(i8 85, %type.TypeNode* null, %ast.AstNode* %23)
 	store %ast.AstNode* %24, %ast.AstNode** %tree
 	%25 = load i8* @stmt_LoopLevel
 	%26 = icmp ugt i8 %25, 0
@@ -23107,7 +24460,7 @@ L.0:
 	%1 = load i8* @stmt_LoopLevel
 	%2 = add i8 %1, 1
 	store i8 %2, i8* @stmt_LoopLevel
-	%3 = call %ast.AstNode* @ast_New(i8 82, %type.TypeNode* null)
+	%3 = call %ast.AstNode* @ast_New(i8 85, %type.TypeNode* null)
 	store %ast.AstNode* %3, %ast.AstNode** %tree
 	%4 = call %ast.AstNode* @stmt_Statement()
 	store %ast.AstNode* %4, %ast.AstNode** %stree
@@ -23148,7 +24501,7 @@ L.2:
 	call void @lex_Error(i8 57)
 	br label %L.1
 L.1:
-	%3 = call %ast.AstNode* @ast_New(i8 83, %type.TypeNode* null)
+	%3 = call %ast.AstNode* @ast_New(i8 86, %type.TypeNode* null)
 	store %ast.AstNode* %3, %ast.AstNode** %tree
 	%4 = load %type.TypeNode** @type_booltype
 	%5 = call %ast.AstNode* @expr_Bool(%type.TypeNode* %4)
@@ -23166,7 +24519,7 @@ L.4:
 	br i1 %13, label %L.6, label %L.7
 L.6:
 	%14 = load %ast.AstNode** %ctree
-	%15 = call %ast.AstNode* @expr_ForceBoolean(%ast.AstNode* %14)
+	%15 = call %ast.AstNode* @ast_ForceBoolean(%ast.AstNode* %14)
 	store %ast.AstNode* %15, %ast.AstNode** %ctree
 	br label %L.5
 L.7:
@@ -23183,7 +24536,7 @@ L.3:
 	%20 = call i8 @lex_Keyword([0 x i8]* %19)
 	store i8 %20, i8* %tok
 	%21 = load i8* %tok
-	%22 = icmp eq i8 %21, 62
+	%22 = icmp eq i8 %21, 63
 	br i1 %22, label %L.9, label %L.10
 L.9:
 	%23 = call i8 @lex_Next()
@@ -23205,6 +24558,7 @@ return:
 	%30 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %30
 }
+@S.604 = internal constant [32 x i8] c"Fix cross package forward proc\0A\00"
 define internal %ast.AstNode* @stmt_Alias() nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -23226,198 +24580,240 @@ L.4:
 	%6 = icmp ne %symb.SymbNode* %5, null
 	br i1 %6, label %L.7, label %L.8
 L.7:
+	br label %L.9
+L.9:
 	%7 = call i8 @lex_Next()
 	store i8 %7, i8* %tok
-	%8 = load i8* %tok
-	%9 = icmp eq i8 %8, 2
-	br i1 %9, label %L.9, label %L.10
-L.9:
-	%10 = load %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 12
-	%12 = load i8* %11
-	%13 = icmp eq i8 %12, 6
-	br label %L.10
-L.10:
-	%14 = phi i1 [ false, %L.7 ], [ %13, %L.9 ]
-	br i1 %14, label %L.12, label %L.11
-L.12:
-	%15 = call i8 @lex_Next()
-	store i8 %15, i8* %tok
-	%16 = load i8* %tok
-	%17 = icmp eq i8 %16, 41
-	br i1 %17, label %L.14, label %L.15
+	%8 = load %symb.SymbNode** %s
+	%9 = icmp eq %symb.SymbNode* %8, null
+	br i1 %9, label %L.15, label %L.14
 L.14:
-	%18 = load %symb.SymbNode** %s
-	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 5
-	%20 = load %symb.SymbNode** %19
-	%21 = bitcast %symb.SymbNode* %20 to %symb.SymbNode*
-	%22 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%23 = call %symb.SymbNode* @symb_FindLocal(%symb.SymbNode* %21, [0 x i8]* %22)
-	store %symb.SymbNode* %23, %symb.SymbNode** %s
-	%24 = load %symb.SymbNode** %s
-	%25 = icmp eq %symb.SymbNode* %24, null
-	br i1 %25, label %L.17, label %L.16
-L.17:
-	%26 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 19, [0 x i8]* %26)
-	br label %L.16
-L.16:
-	%27 = call i8 @lex_Next()
-	store i8 %27, i8* %tok
-	br label %L.13
+	%10 = load i8* %tok
+	%11 = icmp ne i8 %10, 2
+	br label %L.15
 L.15:
-	call void @lex_Error(i8 18)
+	%12 = phi i1 [ true, %L.9 ], [ %11, %L.14 ]
+	br i1 %12, label %L.13, label %L.12
+L.12:
+	%13 = load %symb.SymbNode** %s
+	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 13
+	%15 = load i8* %14
+	%16 = icmp ne i8 %15, 6
 	br label %L.13
 L.13:
-	br label %L.11
+	%17 = phi i1 [ true, %L.15 ], [ %16, %L.12 ]
+	br i1 %17, label %L.10, label %L.11
 L.11:
+	%18 = call i8 @lex_Next()
+	store i8 %18, i8* %tok
+	%19 = load i8* %tok
+	%20 = icmp eq i8 %19, 41
+	br i1 %20, label %L.17, label %L.18
+L.17:
+	%21 = load %symb.SymbNode** %s
+	%22 = getelementptr %symb.SymbNode* %21, i32 0, i32 5
+	%23 = load %symb.SymbNode** %22
+	%24 = bitcast %symb.SymbNode* %23 to %symb.SymbNode*
+	%25 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%26 = call %symb.SymbNode* @symb_FindLocal(%symb.SymbNode* %24, [0 x i8]* %25)
+	store %symb.SymbNode* %26, %symb.SymbNode** %s
+	%27 = load %symb.SymbNode** %s
+	%28 = icmp eq %symb.SymbNode* %27, null
+	br i1 %28, label %L.20, label %L.19
+L.20:
+	%29 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 19, [0 x i8]* %29)
+	br label %L.19
+L.19:
+	br label %L.16
+L.18:
+	call void @lex_Error(i8 18)
+	br label %L.16
+L.16:
+	br label %L.9
+L.10:
 	br label %L.6
 L.8:
-	%28 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 19, [0 x i8]* %28)
-	%29 = call i8 @lex_Next()
-	store i8 %29, i8* %tok
+	%30 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 19, [0 x i8]* %30)
+	%31 = call i8 @lex_Next()
+	store i8 %31, i8* %tok
 	br label %L.6
 L.6:
-	%30 = bitcast [2 x i8]* @stmt_aslist to [0 x i8]*
-	%31 = call i8 @lex_Keyword([0 x i8]* %30)
-	store i8 %31, i8* %tok
-	%32 = load i8* %tok
-	%33 = icmp eq i8 %32, 63
-	br i1 %33, label %L.19, label %L.20
-L.19:
-	%34 = call i8 @lex_Next()
-	store i8 %34, i8* %tok
-	%35 = load i8* %tok
-	%36 = icmp eq i8 %35, 41
-	br i1 %36, label %L.22, label %L.23
+	%32 = bitcast [2 x i8]* @stmt_aslist to [0 x i8]*
+	%33 = call i8 @lex_Keyword([0 x i8]* %32)
+	store i8 %33, i8* %tok
+	%34 = load i8* %tok
+	%35 = icmp eq i8 %34, 64
+	br i1 %35, label %L.22, label %L.23
 L.22:
-	%37 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%38 = call %symb.SymbNode* @symb_FindTop([0 x i8]* %37)
-	store %symb.SymbNode* %38, %symb.SymbNode** %ns
-	%39 = load %symb.SymbNode** %ns
-	%40 = icmp eq %symb.SymbNode* %39, null
-	br i1 %40, label %L.25, label %L.26
+	%36 = call i8 @lex_Next()
+	store i8 %36, i8* %tok
+	%37 = load i8* %tok
+	%38 = icmp eq i8 %37, 41
+	br i1 %38, label %L.25, label %L.26
 L.25:
-	%41 = load %symb.SymbNode** %s
-	%42 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%43 = call %symb.SymbNode* @symb_Clone(%symb.SymbNode* %41, [0 x i8]* %42)
-	store %symb.SymbNode* %43, %symb.SymbNode** %s
-	%44 = call i8 @lex_Next()
-	store i8 %44, i8* %tok
-	br label %L.24
-L.26:
-	%45 = call i8 @lex_Next()
-	store i8 %45, i8* %tok
-	%46 = load %symb.SymbNode** %ns
-	%47 = getelementptr %symb.SymbNode* %46, i32 0, i32 12
-	%48 = load i8* %47
-	%49 = icmp eq i8 %48, 6
-	br i1 %49, label %L.28, label %L.29
+	%39 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%40 = call %symb.SymbNode* @symb_FindTop([0 x i8]* %39)
+	store %symb.SymbNode* %40, %symb.SymbNode** %ns
+	%41 = load %symb.SymbNode** %ns
+	%42 = icmp eq %symb.SymbNode* %41, null
+	br i1 %42, label %L.28, label %L.29
 L.28:
-	%50 = load i8* %tok
-	%51 = icmp eq i8 %50, 2
+	%43 = load %symb.SymbNode** %s
+	%44 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%45 = call %symb.SymbNode* @symb_Clone(%symb.SymbNode* %43, [0 x i8]* %44)
+	store %symb.SymbNode* %45, %symb.SymbNode** %s
+	%46 = call i8 @lex_Next()
+	store i8 %46, i8* %tok
+	br label %L.27
+L.29:
+	%47 = call i8 @lex_Next()
+	store i8 %47, i8* %tok
+	%48 = load %symb.SymbNode** %ns
+	%49 = getelementptr %symb.SymbNode* %48, i32 0, i32 13
+	%50 = load i8* %49
+	%51 = icmp eq i8 %50, 6
 	br i1 %51, label %L.31, label %L.32
 L.31:
-	%52 = call i8 @lex_Next()
-	store i8 %52, i8* %tok
-	%53 = load i8* %tok
-	%54 = icmp eq i8 %53, 41
-	br i1 %54, label %L.34, label %L.35
+	%52 = load i8* %tok
+	%53 = icmp eq i8 %52, 2
+	br i1 %53, label %L.34, label %L.35
 L.34:
-	%55 = load %symb.SymbNode** %ns
-	%56 = getelementptr %symb.SymbNode* %55, i32 0, i32 5
-	%57 = load %symb.SymbNode** %56
-	%58 = bitcast %symb.SymbNode* %57 to %symb.SymbNode*
-	%59 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	%60 = call %symb.SymbNode* @symb_FindLocal(%symb.SymbNode* %58, [0 x i8]* %59)
-	store %symb.SymbNode* %60, %symb.SymbNode** %ns
-	%61 = load %symb.SymbNode** %ns
-	%62 = icmp ne %symb.SymbNode* %61, null
-	br i1 %62, label %L.37, label %L.38
+	%54 = call i8 @lex_Next()
+	store i8 %54, i8* %tok
+	%55 = load i8* %tok
+	%56 = icmp eq i8 %55, 41
+	br i1 %56, label %L.37, label %L.38
 L.37:
-	%63 = load %symb.SymbNode** %s
-	%64 = getelementptr %symb.SymbNode* %63, i32 0, i32 12
-	%65 = load i8* %64
-	%66 = icmp eq i8 %65, 2
-	br i1 %66, label %L.39, label %L.40
-L.39:
-	%67 = load %symb.SymbNode** %ns
-	%68 = getelementptr %symb.SymbNode* %67, i32 0, i32 12
-	%69 = load i8* %68
-	%70 = icmp eq i8 %69, 2
-	br label %L.40
+	%57 = load %symb.SymbNode** %ns
+	%58 = getelementptr %symb.SymbNode* %57, i32 0, i32 5
+	%59 = load %symb.SymbNode** %58
+	%60 = bitcast %symb.SymbNode* %59 to %symb.SymbNode*
+	%61 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	%62 = call %symb.SymbNode* @symb_FindLocal(%symb.SymbNode* %60, [0 x i8]* %61)
+	store %symb.SymbNode* %62, %symb.SymbNode** %ns
+	%63 = load %symb.SymbNode** %ns
+	%64 = icmp ne %symb.SymbNode* %63, null
+	br i1 %64, label %L.40, label %L.41
 L.40:
-	%71 = phi i1 [ false, %L.37 ], [ %70, %L.39 ]
-	br i1 %71, label %L.42, label %L.43
+	%65 = load %symb.SymbNode** %s
+	%66 = getelementptr %symb.SymbNode* %65, i32 0, i32 13
+	%67 = load i8* %66
+	%68 = icmp eq i8 %67, 2
+	br i1 %68, label %L.42, label %L.43
 L.42:
-	%72 = load %symb.SymbNode** %ns
-	%73 = load %symb.SymbNode** %s
-	%74 = getelementptr %symb.SymbNode* %73, i32 0, i32 1
-	%75 = load %type.TypeNode** %74
-	call void @type_FwdFix(%symb.SymbNode* %72, %type.TypeNode* %75)
-	br label %L.41
+	%69 = load %symb.SymbNode** %ns
+	%70 = getelementptr %symb.SymbNode* %69, i32 0, i32 13
+	%71 = load i8* %70
+	%72 = icmp eq i8 %71, 2
+	br label %L.43
 L.43:
+	%73 = phi i1 [ false, %L.40 ], [ %72, %L.42 ]
+	br i1 %73, label %L.45, label %L.46
+L.45:
+	%74 = load %symb.SymbNode** %ns
+	%75 = load %symb.SymbNode** %s
+	%76 = getelementptr %symb.SymbNode* %75, i32 0, i32 1
+	%77 = load %type.TypeNode** %76
+	call void @type_FwdFix(%symb.SymbNode* %74, %type.TypeNode* %77)
+	br label %L.44
+L.46:
+	%78 = load %symb.SymbNode** %s
+	%79 = getelementptr %symb.SymbNode* %78, i32 0, i32 13
+	%80 = load i8* %79
+	%81 = icmp eq i8 %80, 5
+	br i1 %81, label %L.49, label %L.50
+L.49:
+	%82 = load %symb.SymbNode** %ns
+	%83 = getelementptr %symb.SymbNode* %82, i32 0, i32 13
+	%84 = load i8* %83
+	%85 = icmp eq i8 %84, 5
+	br label %L.50
+L.50:
+	%86 = phi i1 [ false, %L.46 ], [ %85, %L.49 ]
+	br i1 %86, label %L.47, label %L.48
+L.47:
+	%87 = load %symb.SymbNode** %ns
+	%88 = getelementptr %symb.SymbNode* %87, i32 0, i32 15
+	%89 = load i8* %88
+	%90 = icmp ne i8 %89, 0
+	br label %L.48
+L.48:
+	%91 = phi i1 [ false, %L.50 ], [ %90, %L.47 ]
+	br i1 %91, label %L.52, label %L.53
+L.52:
+	%92 = getelementptr [32 x i8]* @S.604
+	%93 = bitcast [32 x i8]* %92 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %93)
+	%94 = load %symb.SymbNode** %s
+	call void @symb_DumpS(%symb.SymbNode* %94)
+	%95 = load %symb.SymbNode** %ns
+	call void @symb_DumpS(%symb.SymbNode* %95)
+	br label %L.51
+L.53:
 	call void @lex_Error(i8 26)
-	br label %L.41
+	br label %L.51
+L.51:
+	br label %L.44
+L.44:
+	br label %L.39
 L.41:
+	%96 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 19, [0 x i8]* %96)
+	br label %L.39
+L.39:
+	%97 = call i8 @lex_Next()
+	store i8 %97, i8* %tok
 	br label %L.36
 L.38:
-	%76 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 19, [0 x i8]* %76)
+	call void @lex_Error(i8 18)
 	br label %L.36
 L.36:
-	%77 = call i8 @lex_Next()
-	store i8 %77, i8* %tok
 	br label %L.33
 L.35:
-	call void @lex_Error(i8 18)
+	%98 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 20, [0 x i8]* %98)
 	br label %L.33
 L.33:
 	br label %L.30
 L.32:
-	%78 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %78)
+	%99 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
+	call void @lex_ErrorI(i8 20, [0 x i8]* %99)
 	br label %L.30
 L.30:
 	br label %L.27
-L.29:
-	%79 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %79)
-	br label %L.27
 L.27:
+	br label %L.24
+L.26:
+	call void @lex_Error(i8 18)
 	br label %L.24
 L.24:
 	br label %L.21
 L.23:
-	call void @lex_Error(i8 18)
+	call void @lex_ErrorT(i8 17, i8 64)
 	br label %L.21
 L.21:
-	br label %L.18
-L.20:
-	call void @lex_ErrorT(i8 17, i8 63)
-	br label %L.18
-L.18:
 	br label %L.3
 L.5:
 	call void @lex_Error(i8 18)
 	br label %L.3
 L.3:
-	%80 = load i8* %tok
-	%81 = icmp ne i8 %80, 5
-	br i1 %81, label %L.2, label %L.44
-L.44:
-	%82 = call i8 @lex_Next()
-	store i8 %82, i8* %tok
+	%100 = load i8* %tok
+	%101 = icmp ne i8 %100, 5
+	br i1 %101, label %L.2, label %L.54
+L.54:
+	%102 = call i8 @lex_Next()
+	store i8 %102, i8* %tok
 	br label %L.1
 L.2:
-	%83 = call i8 @lex_Expect(i8 4)
-	store i8 %83, i8* %tok
+	%103 = call i8 @lex_Expect(i8 4)
+	store i8 %103, i8* %tok
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%84 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %84
+	%104 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %104
 }
 define internal %ast.AstNode* @stmt_ErrorStmt() nounwind {
 L.0:
@@ -23430,7 +24826,7 @@ L.0:
 	br i1 %2, label %L.2, label %L.3
 L.2:
 	%3 = bitcast [4096 x i8]* @lex_StringBuf to [0 x i8]*
-	call void @lex_ErrorS(i8 77, [0 x i8]* %3)
+	call void @lex_ErrorS(i8 85, [0 x i8]* %3)
 	%4 = call i8 @lex_Next()
 	store i8 %4, i8* %tok
 	br label %L.1
@@ -23444,7 +24840,7 @@ return:
 	%5 = load %ast.AstNode** %rv.0
 	ret %ast.AstNode* %5
 }
-@stmt_stmtlist = internal constant [15 x i8] [ i8 42, i8 43, i8 44, i8 53, i8 54, i8 56, i8 61, i8 55, i8 57, i8 52, i8 50, i8 46, i8 47, i8 51, i8 0 ], align 1
+@stmt_stmtlist = internal constant [15 x i8] [ i8 42, i8 43, i8 44, i8 53, i8 54, i8 56, i8 62, i8 55, i8 57, i8 52, i8 50, i8 46, i8 47, i8 51, i8 0 ], align 1
 define internal %ast.AstNode* @stmt_Statement() nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -23462,7 +24858,7 @@ L.0:
 L.2:
 	%3 = call i8 @lex_Next()
 	store i8 %3, i8* %tok
-	%4 = call %ast.AstNode* @ast_New(i8 81, %type.TypeNode* null)
+	%4 = call %ast.AstNode* @ast_New(i8 84, %type.TypeNode* null)
 	store %ast.AstNode* %4, %ast.AstNode** %tree
 	br label %L.4
 L.4:
@@ -23534,7 +24930,7 @@ L.17:
 	br label %L.16
 L.18:
 	%31 = load %symb.SymbNode** %s
-	%32 = getelementptr %symb.SymbNode* %31, i32 0, i32 12
+	%32 = getelementptr %symb.SymbNode* %31, i32 0, i32 13
 	%33 = load i8* %32
 	%34 = icmp eq i8 %33, 5
 	br i1 %34, label %L.19, label %L.20
@@ -23583,7 +24979,7 @@ L.13:
 		i32 53, label %L.34
 		i32 55, label %L.35
 		i32 54, label %L.36
-		i32 61, label %L.37
+		i32 62, label %L.37
 		i32 56, label %L.38
 		i32 57, label %L.39
 		i32 52, label %L.40
@@ -23731,7 +25127,7 @@ L.4:
 	%7 = call %symb.SymbNode* @symb_New(i8 3, [0 x i8]* %6, i8 2)
 	store %symb.SymbNode* %7, %symb.SymbNode** %ms
 	%8 = load %symb.SymbNode** %ms
-	%9 = getelementptr %symb.SymbNode* %8, i32 0, i32 13
+	%9 = getelementptr %symb.SymbNode* %8, i32 0, i32 14
 	store i8 0, i8* %9
 	%10 = load %type.TypeNode** @type_unkntype
 	store %type.TypeNode* %10, %type.TypeNode** %t
@@ -23843,7 +25239,7 @@ L.24:
 	br i1 %57, label %L.27, label %L.28
 L.27:
 	%58 = load %symb.SymbNode** %s
-	%59 = getelementptr %symb.SymbNode* %58, i32 0, i32 14
+	%59 = getelementptr %symb.SymbNode* %58, i32 0, i32 15
 	%60 = load i8* %59
 	%61 = icmp ne i8 %60, 0
 	%62 = xor i1 %61, true
@@ -23859,7 +25255,7 @@ L.28:
 	%65 = call %symb.SymbNode* @symb_New(i8 5, [0 x i8]* %64, i8 2)
 	store %symb.SymbNode* %65, %symb.SymbNode** %s
 	%66 = load %symb.SymbNode** %s
-	%67 = getelementptr %symb.SymbNode* %66, i32 0, i32 15
+	%67 = getelementptr %symb.SymbNode* %66, i32 0, i32 16
 	store i8 1, i8* %67
 	%68 = load %type.TypeNode** %mt
 	%69 = getelementptr %type.TypeNode* %68, i32 0, i32 5
@@ -23900,7 +25296,7 @@ L.23:
 	%91 = load %symb.SymbNode** %ms
 	call void @type_DefProc(%symb.SymbNode* %90, %symb.SymbNode* %91)
 	%92 = load %symb.SymbNode** %s
-	%93 = getelementptr %symb.SymbNode* %92, i32 0, i32 14
+	%93 = getelementptr %symb.SymbNode* %92, i32 0, i32 15
 	%94 = load i8* %93
 	%95 = icmp ne i8 %94, 0
 	br i1 %95, label %L.32, label %L.31
@@ -23916,7 +25312,7 @@ L.32:
 	br i1 %103, label %L.34, label %L.33
 L.34:
 	%104 = load %symb.SymbNode** %s
-	%105 = getelementptr %symb.SymbNode* %104, i32 0, i32 21
+	%105 = getelementptr %symb.SymbNode* %104, i32 0, i32 22
 	%106 = getelementptr [0 x i8]* %105
 	%107 = bitcast [0 x i8]* %106 to [0 x i8]*
 	call void @lex_ErrorI(i8 46, [0 x i8]* %107)
@@ -23932,7 +25328,7 @@ L.33:
 	br i1 %114, label %L.36, label %L.35
 L.36:
 	%115 = load %symb.SymbNode** %s
-	%116 = getelementptr %symb.SymbNode* %115, i32 0, i32 21
+	%116 = getelementptr %symb.SymbNode* %115, i32 0, i32 22
 	%117 = getelementptr [0 x i8]* %116
 	%118 = bitcast [0 x i8]* %117 to [0 x i8]*
 	call void @lex_ErrorI(i8 47, [0 x i8]* %118)
@@ -23957,7 +25353,7 @@ L.37:
 	br i1 %125, label %L.40, label %L.41
 L.40:
 	%126 = load %symb.SymbNode** %s
-	%127 = getelementptr %symb.SymbNode* %126, i32 0, i32 14
+	%127 = getelementptr %symb.SymbNode* %126, i32 0, i32 15
 	store i8 0, i8* %127
 	%128 = load %symb.SymbNode** %s
 	store %symb.SymbNode* %128, %symb.SymbNode** @symb_curproc
@@ -23996,7 +25392,7 @@ L.44:
 	store %type.TypeNode* %145, %type.TypeNode** %t
 	%146 = load %type.TypeNode** %t
 	%147 = load %ast.AstNode** %tree
-	%148 = call %ast.AstNode* @ast_New1(i8 88, %type.TypeNode* %146, %ast.AstNode* %147)
+	%148 = call %ast.AstNode* @ast_New1(i8 91, %type.TypeNode* %146, %ast.AstNode* %147)
 	store %ast.AstNode* %148, %ast.AstNode** %tree
 	%149 = load %symb.SymbNode** %s
 	%150 = load %ast.AstNode** %tree
@@ -24037,21 +25433,21 @@ L.41:
 	%172 = call i8 @lex_Next()
 	store i8 %172, i8* %tok
 	%173 = load %symb.SymbNode** %s
-	%174 = getelementptr %symb.SymbNode* %173, i32 0, i32 13
+	%174 = getelementptr %symb.SymbNode* %173, i32 0, i32 14
 	%175 = load i8* %174
 	%176 = zext i8 %175 to i32
 	switch i32 %176, label %L.50 [
-		i32 4, label %L.52
 		i32 5, label %L.52
+		i32 6, label %L.52
 	]
 L.52:
 	%177 = load %symb.SymbNode** %s
-	%178 = getelementptr %symb.SymbNode* %177, i32 0, i32 14
+	%178 = getelementptr %symb.SymbNode* %177, i32 0, i32 15
 	store i8 0, i8* %178
 	br label %L.51
 L.50:
 	%179 = load %symb.SymbNode** %s
-	%180 = getelementptr %symb.SymbNode* %179, i32 0, i32 14
+	%180 = getelementptr %symb.SymbNode* %179, i32 0, i32 15
 	store i8 1, i8* %180
 	br label %L.51
 L.51:
@@ -24106,7 +25502,7 @@ L.0:
 	%rv.0 = alloca %ast.AstNode*
 	%tree = alloca %ast.AstNode*
 	%tok = alloca i8
-	%name = alloca [0 x i8]*
+	%s = alloca %symb.SymbNode*
 	%0 = load i8* @lex_Token
 	store i8 %0, i8* %tok
 	store %ast.AstNode* null, %ast.AstNode** %tree
@@ -24126,33 +25522,34 @@ L.3:
 L.4:
 	%6 = call i8 @lex_Next()
 	store i8 %6, i8* %tok
-	%7 = call [0 x i8]* @expr_ConstString()
-	%8 = bitcast [0 x i8]* %7 to [0 x i8]*
-	store [0 x i8]* %8, [0 x i8]** %name
-	%9 = load [0 x i8]** %name
-	%10 = icmp ne [0 x i8]* %9, null
-	br i1 %10, label %L.6, label %L.5
+	%7 = call %symb.SymbNode* @expr_ConstString()
+	store %symb.SymbNode* %7, %symb.SymbNode** %s
+	%8 = load %symb.SymbNode** %s
+	%9 = icmp ne %symb.SymbNode* %8, null
+	br i1 %9, label %L.6, label %L.5
 L.6:
-	%11 = load [0 x i8]** %name
-	%12 = bitcast [0 x i8]* %11 to [0 x i8]*
-	%13 = call %ast.AstNode* @stmt_ImportSub([0 x i8]* %12)
-	store %ast.AstNode* %13, %ast.AstNode** %tree
+	%10 = load %symb.SymbNode** %s
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 22
+	%12 = getelementptr [0 x i8]* %11
+	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
+	%14 = call %ast.AstNode* @stmt_ImportSub([0 x i8]* %13)
+	store %ast.AstNode* %14, %ast.AstNode** %tree
 	br label %L.5
 L.5:
-	%14 = call i8 @lex_Expect(i8 33)
-	store i8 %14, i8* %tok
+	%15 = call i8 @lex_Expect(i8 33)
+	store i8 %15, i8* %tok
 	br label %L.2
 L.1:
 	br label %L.2
 L.2:
-	%15 = call i8 @lex_Expect(i8 4)
-	store i8 %15, i8* %tok
-	%16 = load %ast.AstNode** %tree
-	store %ast.AstNode* %16, %ast.AstNode** %rv.0
+	%16 = call i8 @lex_Expect(i8 4)
+	store i8 %16, i8* %tok
+	%17 = load %ast.AstNode** %tree
+	store %ast.AstNode* %17, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%17 = load %ast.AstNode** %rv.0
-	ret %ast.AstNode* %17
+	%18 = load %ast.AstNode** %rv.0
+	ret %ast.AstNode* %18
 }
 @stmt_packlist = internal constant [10 x i8] [ i8 42, i8 43, i8 44, i8 48, i8 46, i8 49, i8 45, i8 53, i8 47, i8 0 ], align 1
 define internal %ast.AstNode* @stmt_PkgStmt() nounwind {
@@ -24284,7 +25681,7 @@ L.4:
 	br label %L.3
 L.5:
 	%9 = load %symb.SymbNode** %s
-	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 12
+	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 13
 	%11 = load i8* %10
 	%12 = icmp ne i8 %11, 6
 	br i1 %12, label %L.7, label %L.6
@@ -24307,7 +25704,7 @@ L.9:
 	store %symb.SymbNode* %18, %symb.SymbNode** %pkgsave
 	%19 = load %symb.SymbNode** %s
 	store %symb.SymbNode* %19, %symb.SymbNode** @symb_curpack
-	%20 = call %ast.AstNode* @ast_New(i8 81, %type.TypeNode* null)
+	%20 = call %ast.AstNode* @ast_New(i8 84, %type.TypeNode* null)
 	store %ast.AstNode* %20, %ast.AstNode** %tree
 	%21 = load %symb.SymbNode** %s
 	%22 = getelementptr %symb.SymbNode* %21, i32 0, i32 5
@@ -24525,7 +25922,7 @@ L.0:
 	%17 = load %symb.SymbNode** %s
 	store %symb.SymbNode* %17, %symb.SymbNode** @stmt_CurFile
 	store %symb.SymbNode* null, %symb.SymbNode** @symb_curpack
-	%18 = call %ast.AstNode* @ast_New(i8 81, %type.TypeNode* null)
+	%18 = call %ast.AstNode* @ast_New(i8 84, %type.TypeNode* null)
 	store %ast.AstNode* %18, %ast.AstNode** %tree
 	%19 = call i8 @lex_Next()
 	store i8 %19, i8* %tok
@@ -25398,7 +26795,7 @@ L.0:
 return:
 	ret void
 }
-@S.591 = internal constant [15 x i8] c" = metadata !{\00"
+@S.611 = internal constant [15 x i8] c" = metadata !{\00"
 define internal void @llvmdb_PMetaSeq(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
@@ -25407,16 +26804,16 @@ L.0:
 	call void @llvmdb_PSeq(i16 %0)
 	%1 = load %bout.BufIO** @llvm_f
 	%2 = bitcast %bout.BufIO* %1 to %bout.BufIO*
-	%3 = getelementptr [15 x i8]* @S.591
+	%3 = getelementptr [15 x i8]* @S.611
 	%4 = bitcast [15 x i8]* %3 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %2, [0 x i8]* %4)
 	br label %return
 return:
 	ret void
 }
-@S.592 = internal constant [3 x i8] c"}\0A\00"
-@S.593 = internal constant [3 x i8] c", \00"
-@S.594 = internal constant [3 x i8] c" )\00"
+@S.612 = internal constant [3 x i8] c"}\0A\00"
+@S.613 = internal constant [3 x i8] c", \00"
+@S.614 = internal constant [3 x i8] c" )\00"
 define internal void @llvmdb_PTerminator(i8 zeroext %term$) nounwind {
 L.0:
 	%term = alloca i8
@@ -25431,21 +26828,21 @@ L.0:
 L.3:
 	%2 = load %bout.BufIO** @llvm_f
 	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
-	%4 = getelementptr [3 x i8]* @S.592
+	%4 = getelementptr [3 x i8]* @S.612
 	%5 = bitcast [3 x i8]* %4 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
 	br label %L.2
 L.4:
 	%6 = load %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [3 x i8]* @S.593
+	%8 = getelementptr [3 x i8]* @S.613
 	%9 = bitcast [3 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.2
 L.5:
 	%10 = load %bout.BufIO** @llvm_f
 	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = getelementptr [3 x i8]* @S.594
+	%12 = getelementptr [3 x i8]* @S.614
 	%13 = bitcast [3 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	br label %L.2
@@ -25456,14 +26853,14 @@ L.2:
 return:
 	ret void
 }
-@S.595 = internal constant [5 x i8] c"null\00"
+@S.615 = internal constant [5 x i8] c"null\00"
 define internal void @llvmdb_PNull(i8 zeroext %term$) nounwind {
 L.0:
 	%term = alloca i8
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8]* @S.595
+	%2 = getelementptr [5 x i8]* @S.615
 	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load i8* %term
@@ -25472,7 +26869,7 @@ L.0:
 return:
 	ret void
 }
-@S.596 = internal constant [11 x i8] c"metadata !\00"
+@S.616 = internal constant [11 x i8] c"metadata !\00"
 define internal void @llvmdb_PMetaRef(i16 zeroext %n$, i8 zeroext %term$) nounwind {
 L.0:
 	%n = alloca i16
@@ -25481,7 +26878,7 @@ L.0:
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [11 x i8]* @S.596
+	%2 = getelementptr [11 x i8]* @S.616
 	%3 = bitcast [11 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %bout.BufIO** @llvm_f
@@ -25495,9 +26892,9 @@ L.0:
 return:
 	ret void
 }
-@S.597 = internal constant [4 x i8] c"i1 \00"
-@S.598 = internal constant [5 x i8] c"true\00"
-@S.599 = internal constant [6 x i8] c"false\00"
+@S.617 = internal constant [4 x i8] c"i1 \00"
+@S.618 = internal constant [5 x i8] c"true\00"
+@S.619 = internal constant [6 x i8] c"false\00"
 define internal void @llvmdb_PBoolean(i8 zeroext %b$, i8 zeroext %term$) nounwind {
 L.0:
 	%b = alloca i8
@@ -25506,7 +26903,7 @@ L.0:
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [4 x i8]* @S.597
+	%2 = getelementptr [4 x i8]* @S.617
 	%3 = bitcast [4 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load i8* %b
@@ -25515,14 +26912,14 @@ L.0:
 L.2:
 	%6 = load %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [5 x i8]* @S.598
+	%8 = getelementptr [5 x i8]* @S.618
 	%9 = bitcast [5 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.1
 L.3:
 	%10 = load %bout.BufIO** @llvm_f
 	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = getelementptr [6 x i8]* @S.599
+	%12 = getelementptr [6 x i8]* @S.619
 	%13 = bitcast [6 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	br label %L.1
@@ -25533,7 +26930,7 @@ L.1:
 return:
 	ret void
 }
-@S.600 = internal constant [5 x i8] c"i32 \00"
+@S.620 = internal constant [5 x i8] c"i32 \00"
 define internal void @llvmdb_P32(i32 %v$, i8 zeroext %term$) nounwind {
 L.0:
 	%v = alloca i32
@@ -25542,7 +26939,7 @@ L.0:
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8]* @S.600
+	%2 = getelementptr [5 x i8]* @S.620
 	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %bout.BufIO** @llvm_f
@@ -25555,7 +26952,7 @@ L.0:
 return:
 	ret void
 }
-@S.601 = internal constant [5 x i8] c"i64 \00"
+@S.621 = internal constant [5 x i8] c"i64 \00"
 define internal void @llvmdb_P64(i64 %v$, i8 zeroext %term$) nounwind {
 L.0:
 	%v = alloca i64
@@ -25564,7 +26961,7 @@ L.0:
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8]* @S.601
+	%2 = getelementptr [5 x i8]* @S.621
 	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %bout.BufIO** @llvm_f
@@ -25593,7 +26990,7 @@ L.0:
 return:
 	ret void
 }
-@S.602 = internal constant [12 x i8] c"metadata !\22\00"
+@S.622 = internal constant [12 x i8] c"metadata !\22\00"
 define internal void @llvmdb_PString([0 x i8]* %s$, i8 zeroext %term$) nounwind {
 L.0:
 	%s = alloca [0 x i8]*
@@ -25602,7 +26999,7 @@ L.0:
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [12 x i8]* @S.602
+	%2 = getelementptr [12 x i8]* @S.622
 	%3 = bitcast [12 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load [0 x i8]** %s
@@ -25625,7 +27022,7 @@ L.1:
 return:
 	ret void
 }
-@S.603 = internal constant [12 x i8] c"metadata !\22\00"
+@S.623 = internal constant [12 x i8] c"metadata !\22\00"
 define internal void @llvmdb_PString2([0 x i8]* %s1$, [0 x i8]* %s2$, i8 zeroext %delim$, i8 zeroext %term$) nounwind {
 L.0:
 	%s1 = alloca [0 x i8]*
@@ -25638,7 +27035,7 @@ L.0:
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [12 x i8]* @S.603
+	%2 = getelementptr [12 x i8]* @S.623
 	%3 = bitcast [12 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load [0 x i8]** %s1
@@ -25687,7 +27084,7 @@ L.0:
 	br i1 %1, label %L.1, label %L.2
 L.1:
 	%2 = load %symb.SymbNode** %s
-	%3 = getelementptr %symb.SymbNode* %2, i32 0, i32 21
+	%3 = getelementptr %symb.SymbNode* %2, i32 0, i32 22
 	%4 = getelementptr [0 x i8]* %3
 	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
 	%6 = call i8 @symb_IsAnon([0 x i8]* %5)
@@ -25699,7 +27096,7 @@ L.2:
 	br i1 %9, label %L.4, label %L.5
 L.4:
 	%10 = load %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 21
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 22
 	%12 = getelementptr [0 x i8]* %11
 	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
 	%14 = load i8* %term
@@ -25725,7 +27122,7 @@ L.0:
 	br i1 %1, label %L.1, label %L.2
 L.1:
 	%2 = load %symb.SymbNode** %s
-	%3 = getelementptr %symb.SymbNode* %2, i32 0, i32 21
+	%3 = getelementptr %symb.SymbNode* %2, i32 0, i32 22
 	%4 = getelementptr [0 x i8]* %3
 	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
 	%6 = call i8 @symb_IsAnon([0 x i8]* %5)
@@ -25745,11 +27142,11 @@ L.7:
 	%14 = load %symb.SymbNode** %s
 	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 2
 	%16 = load %symb.SymbNode** %15
-	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 21
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 22
 	%18 = getelementptr [0 x i8]* %17
 	%19 = bitcast [0 x i8]* %18 to [0 x i8]*
 	%20 = load %symb.SymbNode** %s
-	%21 = getelementptr %symb.SymbNode* %20, i32 0, i32 21
+	%21 = getelementptr %symb.SymbNode* %20, i32 0, i32 22
 	%22 = getelementptr [0 x i8]* %21
 	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
 	%24 = load i8* %term
@@ -25757,7 +27154,7 @@ L.7:
 	br label %L.6
 L.8:
 	%25 = load %symb.SymbNode** %s
-	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 21
+	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 22
 	%27 = getelementptr [0 x i8]* %26
 	%28 = bitcast [0 x i8]* %27 to [0 x i8]*
 	%29 = load i8* %term
@@ -25785,7 +27182,7 @@ L.0:
 	br i1 %1, label %L.1, label %L.2
 L.1:
 	%2 = load %symb.SymbNode** %s
-	%3 = getelementptr %symb.SymbNode* %2, i32 0, i32 21
+	%3 = getelementptr %symb.SymbNode* %2, i32 0, i32 22
 	%4 = getelementptr [0 x i8]* %3
 	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
 	%6 = call i8 @symb_IsAnon([0 x i8]* %5)
@@ -25805,11 +27202,11 @@ L.7:
 	%14 = load %symb.SymbNode** %s
 	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 2
 	%16 = load %symb.SymbNode** %15
-	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 21
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 22
 	%18 = getelementptr [0 x i8]* %17
 	%19 = bitcast [0 x i8]* %18 to [0 x i8]*
 	%20 = load %symb.SymbNode** %s
-	%21 = getelementptr %symb.SymbNode* %20, i32 0, i32 21
+	%21 = getelementptr %symb.SymbNode* %20, i32 0, i32 22
 	%22 = getelementptr [0 x i8]* %21
 	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
 	%24 = load i8* %term
@@ -25817,7 +27214,7 @@ L.7:
 	br label %L.6
 L.8:
 	%25 = load %symb.SymbNode** %s
-	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 21
+	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 22
 	%27 = getelementptr [0 x i8]* %26
 	%28 = bitcast [0 x i8]* %27 to [0 x i8]*
 	%29 = load i8* %term
@@ -26099,7 +27496,7 @@ L.2:
 	%12 = load %type.TypeNode** %t
 	%13 = getelementptr %type.TypeNode* %12, i32 0, i32 3
 	%14 = load %symb.SymbNode** %13
-	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 10
+	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 11
 	%16 = load i16* %15
 	%17 = zext i16 %16 to i32
 	call void @llvmdb_P32(i32 %17, i8 0)
@@ -26217,7 +27614,7 @@ L.0:
 	%4 = load %symb.SymbNode** %s
 	call void @llvmdb_PName(%symb.SymbNode* %4, i8 0)
 	%5 = load %symb.SymbNode** %s
-	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 7
+	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 8
 	%7 = load %ast.AstNode** %6
 	%8 = getelementptr %ast.AstNode* %7, i32 0, i32 10
 	%9 = load i64* %8
@@ -26252,7 +27649,7 @@ L.1:
 	br i1 %6, label %L.2, label %L.3
 L.3:
 	%7 = load %symb.SymbNode** %s
-	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 11
+	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 12
 	%9 = load i16* %8
 	%10 = icmp eq i16 %9, 0
 	br i1 %10, label %L.5, label %L.4
@@ -26260,7 +27657,7 @@ L.5:
 	%11 = load %symb.SymbNode** %s
 	%12 = call i16 @llvmdb_DefEnumConst(%symb.SymbNode* %11)
 	%13 = load %symb.SymbNode** %s
-	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 11
+	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 12
 	store i16 %12, i16* %14
 	br label %L.4
 L.4:
@@ -26287,7 +27684,7 @@ L.6:
 	br i1 %26, label %L.7, label %L.8
 L.8:
 	%27 = load %symb.SymbNode** %s
-	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 11
+	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 12
 	%29 = load i16* %28
 	store i16 %29, i16* %tag
 	%30 = load %symb.SymbNode** %s
@@ -26440,7 +27837,7 @@ L.0:
 	%19 = zext i32 %18 to i64
 	call void @llvmdb_P64(i64 %19, i8 0)
 	%20 = load %symb.SymbNode** %s
-	%21 = getelementptr %symb.SymbNode* %20, i32 0, i32 9
+	%21 = getelementptr %symb.SymbNode* %20, i32 0, i32 10
 	%22 = load i16* %21
 	%23 = zext i16 %22 to i64
 	call void @llvmdb_P64(i64 %23, i8 0)
@@ -26499,7 +27896,7 @@ L.1:
 	br i1 %18, label %L.2, label %L.3
 L.3:
 	%19 = load %symb.SymbNode** %s
-	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 11
+	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 12
 	%21 = load i16* %20
 	%22 = icmp eq i16 %21, 0
 	br i1 %22, label %L.5, label %L.4
@@ -26507,7 +27904,7 @@ L.5:
 	%23 = load %symb.SymbNode** %s
 	%24 = call i16 @llvmdb_DefField(%symb.SymbNode* %23)
 	%25 = load %symb.SymbNode** %s
-	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 11
+	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 12
 	store i16 %24, i16* %26
 	br label %L.4
 L.4:
@@ -26534,7 +27931,7 @@ L.6:
 	br i1 %38, label %L.7, label %L.8
 L.8:
 	%39 = load %symb.SymbNode** %s
-	%40 = getelementptr %symb.SymbNode* %39, i32 0, i32 11
+	%40 = getelementptr %symb.SymbNode* %39, i32 0, i32 12
 	%41 = load i16* %40
 	store i16 %41, i16* %tag
 	%42 = load %symb.SymbNode** %s
@@ -26629,7 +28026,7 @@ L.18:
 	br i1 %25, label %L.26, label %L.25
 L.25:
 	%26 = load %type.TypeNode** %t
-	%27 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 0
+	%27 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 0
 	%28 = load %type.TypeNode** %27
 	%29 = icmp eq %type.TypeNode* %26, %28
 	br label %L.26
@@ -26638,7 +28035,7 @@ L.26:
 	br i1 %30, label %L.24, label %L.23
 L.23:
 	%31 = load %type.TypeNode** %t
-	%32 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 1
+	%32 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 1
 	%33 = load %type.TypeNode** %32
 	%34 = icmp eq %type.TypeNode* %31, %33
 	br label %L.24
@@ -26647,7 +28044,7 @@ L.24:
 	br i1 %35, label %L.22, label %L.21
 L.21:
 	%36 = load %type.TypeNode** %t
-	%37 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 2
+	%37 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 2
 	%38 = load %type.TypeNode** %37
 	%39 = icmp eq %type.TypeNode* %36, %38
 	br label %L.22
@@ -26656,7 +28053,7 @@ L.22:
 	br i1 %40, label %L.20, label %L.19
 L.19:
 	%41 = load %type.TypeNode** %t
-	%42 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 3
+	%42 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 3
 	%43 = load %type.TypeNode** %42
 	%44 = icmp eq %type.TypeNode* %41, %43
 	br label %L.20
@@ -26689,7 +28086,7 @@ L.9:
 	br i1 %57, label %L.37, label %L.36
 L.36:
 	%58 = load %type.TypeNode** %t
-	%59 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 0
+	%59 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 0
 	%60 = load %type.TypeNode** %59
 	%61 = icmp eq %type.TypeNode* %58, %60
 	br label %L.37
@@ -26698,7 +28095,7 @@ L.37:
 	br i1 %62, label %L.35, label %L.34
 L.34:
 	%63 = load %type.TypeNode** %t
-	%64 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 1
+	%64 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 1
 	%65 = load %type.TypeNode** %64
 	%66 = icmp eq %type.TypeNode* %63, %65
 	br label %L.35
@@ -26707,7 +28104,7 @@ L.35:
 	br i1 %67, label %L.33, label %L.32
 L.32:
 	%68 = load %type.TypeNode** %t
-	%69 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 2
+	%69 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 2
 	%70 = load %type.TypeNode** %69
 	%71 = icmp eq %type.TypeNode* %68, %70
 	br label %L.33
@@ -26716,7 +28113,7 @@ L.33:
 	br i1 %72, label %L.31, label %L.30
 L.30:
 	%73 = load %type.TypeNode** %t
-	%74 = getelementptr [4 x %type.TypeNode*]* @type_inttypes, i32 0, i32 3
+	%74 = getelementptr [6 x %type.TypeNode*]* @type_inttypes, i32 0, i32 3
 	%75 = load %type.TypeNode** %74
 	%76 = icmp eq %type.TypeNode* %73, %75
 	br label %L.31
@@ -26811,7 +28208,7 @@ L.2:
 return:
 	ret void
 }
-@S.604 = internal constant [8 x i8] c", !dbg \00"
+@S.624 = internal constant [8 x i8] c", !dbg \00"
 define internal void @llvmdb_PLine(i16 zeroext %lineno$) nounwind {
 L.0:
 	%lineno = alloca i16
@@ -26879,7 +28276,7 @@ L.6:
 L.3:
 	%33 = load %bout.BufIO** @llvm_f
 	%34 = bitcast %bout.BufIO* %33 to %bout.BufIO*
-	%35 = getelementptr [8 x i8]* @S.604
+	%35 = getelementptr [8 x i8]* @S.624
 	%36 = bitcast [8 x i8]* %35 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %34, [0 x i8]* %36)
 	%37 = load i16* %tag
@@ -26888,11 +28285,11 @@ L.3:
 return:
 	ret void
 }
-@S.605 = internal constant [41 x i8] c"\09call void @llvm.dbg.declare(metadata !{\00"
-@S.606 = internal constant [3 x i8] c"* \00"
-@S.607 = internal constant [4 x i8] c"}, \00"
-@S.608 = internal constant [11 x i8] c"metadata !\00"
-@S.609 = internal constant [3 x i8] c"* \00"
+@S.625 = internal constant [41 x i8] c"\09call void @llvm.dbg.declare(metadata !{\00"
+@S.626 = internal constant [3 x i8] c"* \00"
+@S.627 = internal constant [4 x i8] c"}, \00"
+@S.628 = internal constant [11 x i8] c"metadata !\00"
+@S.629 = internal constant [3 x i8] c"* \00"
 define internal zeroext i16 @llvmdb_DefVar(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -26904,10 +28301,10 @@ L.0:
 	store i16 %1, i16* @llvmdb_seqno
 	%2 = load i16* @llvmdb_seqno
 	%3 = load %symb.SymbNode** %s
-	%4 = getelementptr %symb.SymbNode* %3, i32 0, i32 11
+	%4 = getelementptr %symb.SymbNode* %3, i32 0, i32 12
 	store i16 %2, i16* %4
 	%5 = load %symb.SymbNode** %s
-	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 13
+	%6 = getelementptr %symb.SymbNode* %5, i32 0, i32 14
 	%7 = load i8* %6
 	%8 = zext i8 %7 to i32
 	switch i32 %8, label %L.1 [
@@ -26917,7 +28314,7 @@ L.0:
 L.3:
 	%9 = load %bout.BufIO** @llvm_f
 	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = getelementptr [41 x i8]* @S.605
+	%11 = getelementptr [41 x i8]* @S.625
 	%12 = bitcast [41 x i8]* %11 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
 	%13 = load %symb.SymbNode** %s
@@ -26926,19 +28323,19 @@ L.3:
 	call void @llvm_PType(%type.TypeNode* %15)
 	%16 = load %bout.BufIO** @llvm_f
 	%17 = bitcast %bout.BufIO* %16 to %bout.BufIO*
-	%18 = getelementptr [3 x i8]* @S.606
+	%18 = getelementptr [3 x i8]* @S.626
 	%19 = bitcast [3 x i8]* %18 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %17, [0 x i8]* %19)
 	%20 = load %symb.SymbNode** %s
 	call void @llvm_PName(%symb.SymbNode* %20)
 	%21 = load %bout.BufIO** @llvm_f
 	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
-	%23 = getelementptr [4 x i8]* @S.607
+	%23 = getelementptr [4 x i8]* @S.627
 	%24 = bitcast [4 x i8]* %23 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
 	%25 = load %bout.BufIO** @llvm_f
 	%26 = bitcast %bout.BufIO* %25 to %bout.BufIO*
-	%27 = getelementptr [11 x i8]* @S.608
+	%27 = getelementptr [11 x i8]* @S.628
 	%28 = bitcast [11 x i8]* %27 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
 	%29 = load %bout.BufIO** @llvm_f
@@ -26950,14 +28347,14 @@ L.3:
 	%34 = bitcast %bout.BufIO* %33 to %bout.BufIO*
 	call void @bout_BufIO_chr(%bout.BufIO* %34, i8 41)
 	%35 = load %symb.SymbNode** %s
-	%36 = getelementptr %symb.SymbNode* %35, i32 0, i32 10
+	%36 = getelementptr %symb.SymbNode* %35, i32 0, i32 11
 	%37 = load i16* %36
 	call void @llvmdb_PLine(i16 %37)
 	%38 = load %bout.BufIO** @llvm_f
 	%39 = bitcast %bout.BufIO* %38 to %bout.BufIO*
 	call void @bout_BufIO_nl(%bout.BufIO* %39)
 	%40 = load %symb.SymbNode** %s
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 13
+	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 14
 	%42 = load i8* %41
 	%43 = icmp ne i8 %42, 0
 	br i1 %43, label %L.5, label %L.4
@@ -26992,7 +28389,7 @@ L.1:
 	%57 = call i16 @llvmdb_DefType(%type.TypeNode* %56)
 	store i16 %57, i16* %tag
 	%58 = load %symb.SymbNode** %s
-	%59 = getelementptr %symb.SymbNode* %58, i32 0, i32 11
+	%59 = getelementptr %symb.SymbNode* %58, i32 0, i32 12
 	%60 = load i16* %59
 	call void @llvmdb_PHeader(i16 %60, i16 52)
 	call void @llvmdb_P32(i32 0, i8 0)
@@ -27005,22 +28402,22 @@ L.1:
 	%63 = load i16* @llvmdb_file
 	call void @llvmdb_PMetaRef(i16 %63, i8 0)
 	%64 = load %symb.SymbNode** %s
-	%65 = getelementptr %symb.SymbNode* %64, i32 0, i32 10
+	%65 = getelementptr %symb.SymbNode* %64, i32 0, i32 11
 	%66 = load i16* %65
 	%67 = zext i16 %66 to i32
 	call void @llvmdb_P32(i32 %67, i8 0)
 	%68 = load i16* %tag
 	call void @llvmdb_PMetaRef(i16 %68, i8 0)
 	%69 = load %symb.SymbNode** %s
-	%70 = getelementptr %symb.SymbNode* %69, i32 0, i32 13
+	%70 = getelementptr %symb.SymbNode* %69, i32 0, i32 14
 	%71 = load i8* %70
 	%72 = icmp eq i8 %71, 2
 	%73 = zext i1 %72 to i32
 	call void @llvmdb_P32(i32 %73, i8 0)
 	%74 = load %symb.SymbNode** %s
-	%75 = getelementptr %symb.SymbNode* %74, i32 0, i32 13
+	%75 = getelementptr %symb.SymbNode* %74, i32 0, i32 14
 	%76 = load i8* %75
-	%77 = icmp ne i8 %76, 4
+	%77 = icmp ne i8 %76, 5
 	%78 = zext i1 %77 to i32
 	call void @llvmdb_P32(i32 %78, i8 0)
 	%79 = load %symb.SymbNode** %s
@@ -27029,7 +28426,7 @@ L.1:
 	call void @llvm_PType(%type.TypeNode* %81)
 	%82 = load %bout.BufIO** @llvm_f
 	%83 = bitcast %bout.BufIO* %82 to %bout.BufIO*
-	%84 = getelementptr [3 x i8]* @S.609
+	%84 = getelementptr [3 x i8]* @S.629
 	%85 = bitcast [3 x i8]* %84 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %83, [0 x i8]* %85)
 	%86 = load %symb.SymbNode** %s
@@ -27257,9 +28654,9 @@ L.0:
 return:
 	ret void
 }
-@S.610 = internal constant [3 x i8] c" (\00"
-@S.611 = internal constant [3 x i8] c", \00"
-@S.612 = internal constant [4 x i8] c")* \00"
+@S.630 = internal constant [3 x i8] c" (\00"
+@S.631 = internal constant [3 x i8] c", \00"
+@S.632 = internal constant [4 x i8] c")* \00"
 define internal void @llvmdb_ProcFinish(%symb.SymbNode* %ps$) nounwind {
 L.0:
 	%ps = alloca %symb.SymbNode*
@@ -27288,7 +28685,7 @@ L.0:
 	%6 = load i16* @llvmdb_file
 	call void @llvmdb_PMetaRef(i16 %6, i8 0)
 	%7 = load %symb.SymbNode** %ps
-	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 10
+	%8 = getelementptr %symb.SymbNode* %7, i32 0, i32 11
 	%9 = load i16* %8
 	%10 = zext i16 %9 to i32
 	call void @llvmdb_P32(i32 %10, i8 0)
@@ -27296,9 +28693,9 @@ L.0:
 	call void @llvmdb_PMetaRef(i16 %11, i8 0)
 	call void @llvmdb_PBoolean(i8 0, i8 0)
 	%12 = load %symb.SymbNode** %ps
-	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 13
+	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 14
 	%14 = load i8* %13
-	%15 = icmp ne i8 %14, 4
+	%15 = icmp ne i8 %14, 5
 	%16 = zext i1 %15 to i8
 	call void @llvmdb_PBoolean(i8 %16, i8 0)
 	call void @llvmdb_P32(i32 0, i8 0)
@@ -27312,7 +28709,7 @@ L.0:
 	call void @llvm_PRetvType(%type.TypeListEntry* %19, i8 0)
 	%20 = load %bout.BufIO** @llvm_f
 	%21 = bitcast %bout.BufIO* %20 to %bout.BufIO*
-	%22 = getelementptr [3 x i8]* @S.610
+	%22 = getelementptr [3 x i8]* @S.630
 	%23 = bitcast [3 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	%24 = load %symb.SymbNode** %ps
@@ -27342,7 +28739,7 @@ L.3:
 L.5:
 	%40 = load %bout.BufIO** @llvm_f
 	%41 = bitcast %bout.BufIO* %40 to %bout.BufIO*
-	%42 = getelementptr [3 x i8]* @S.611
+	%42 = getelementptr [3 x i8]* @S.631
 	%43 = bitcast [3 x i8]* %42 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %41, [0 x i8]* %43)
 	br label %L.4
@@ -27351,7 +28748,7 @@ L.4:
 L.2:
 	%44 = load %bout.BufIO** @llvm_f
 	%45 = bitcast %bout.BufIO* %44 to %bout.BufIO*
-	%46 = getelementptr [4 x i8]* @S.612
+	%46 = getelementptr [4 x i8]* @S.632
 	%47 = bitcast [4 x i8]* %46 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %45, [0 x i8]* %47)
 	%48 = load %symb.SymbNode** %ps
@@ -27367,7 +28764,7 @@ L.2:
 	%52 = load i16* %fvars
 	call void @llvmdb_PMetaRef(i16 %52, i8 0)
 	%53 = load %symb.SymbNode** %ps
-	%54 = getelementptr %symb.SymbNode* %53, i32 0, i32 10
+	%54 = getelementptr %symb.SymbNode* %53, i32 0, i32 11
 	%55 = load i16* %54
 	%56 = zext i16 %55 to i32
 	%57 = add i32 %56, 1
@@ -27380,7 +28777,7 @@ L.2:
 	call void @llvmdb_PMetaRef(i16 %60, i8 1)
 	%61 = load i16* @llvmdb_subr
 	%62 = load %symb.SymbNode** %ps
-	%63 = getelementptr %symb.SymbNode* %62, i32 0, i32 11
+	%63 = getelementptr %symb.SymbNode* %62, i32 0, i32 12
 	store i16 %61, i16* %63
 	%64 = load %symb.SymbNode** %ps
 	%65 = getelementptr %symb.SymbNode* %64, i32 0, i32 0
@@ -27431,7 +28828,7 @@ L.11:
 	%92 = call i16 @llvmdb_DefType(%type.TypeNode* %91)
 	store i16 %92, i16* %ttag
 	%93 = load %symb.SymbNode** %s
-	%94 = getelementptr %symb.SymbNode* %93, i32 0, i32 11
+	%94 = getelementptr %symb.SymbNode* %93, i32 0, i32 12
 	%95 = load i16* %94
 	store i16 %95, i16* %stag
 	%96 = load i16* %stag
@@ -27454,7 +28851,7 @@ L.12:
 	%104 = load i16* @llvmdb_file
 	call void @llvmdb_PMetaRef(i16 %104, i8 0)
 	%105 = load %symb.SymbNode** %s
-	%106 = getelementptr %symb.SymbNode* %105, i32 0, i32 10
+	%106 = getelementptr %symb.SymbNode* %105, i32 0, i32 11
 	%107 = load i16* %106
 	%108 = zext i16 %107 to i32
 	%109 = load i32* %argno
@@ -27477,7 +28874,7 @@ L.10:
 	%118 = load i16* @llvmdb_subr
 	call void @llvmdb_PMetaRef(i16 %118, i8 0)
 	%119 = load %symb.SymbNode** %ps
-	%120 = getelementptr %symb.SymbNode* %119, i32 0, i32 10
+	%120 = getelementptr %symb.SymbNode* %119, i32 0, i32 11
 	%121 = load i16* %120
 	%122 = zext i16 %121 to i32
 	call void @llvmdb_P32(i32 %122, i8 0)
@@ -27504,7 +28901,7 @@ L.16:
 	%134 = call i16 @llvmdb_DefType(%type.TypeNode* %133)
 	store i16 %134, i16* %ttag
 	%135 = load %symb.SymbNode** %s
-	%136 = getelementptr %symb.SymbNode* %135, i32 0, i32 11
+	%136 = getelementptr %symb.SymbNode* %135, i32 0, i32 12
 	%137 = load i16* %136
 	store i16 %137, i16* %stag
 	%138 = load i16* %stag
@@ -27516,7 +28913,7 @@ L.16:
 	%141 = load i16* @llvmdb_file
 	call void @llvmdb_PMetaRef(i16 %141, i8 0)
 	%142 = load %symb.SymbNode** %s
-	%143 = getelementptr %symb.SymbNode* %142, i32 0, i32 10
+	%143 = getelementptr %symb.SymbNode* %142, i32 0, i32 11
 	%144 = load i16* %143
 	%145 = zext i16 %144 to i32
 	call void @llvmdb_P32(i32 %145, i8 0)
@@ -27554,7 +28951,7 @@ L.0:
 return:
 	ret void
 }
-@S.613 = internal constant [1 x i8] c"\00"
+@S.633 = internal constant [1 x i8] c"\00"
 define internal void @llvmdb_FileStart(%symb.SymbNode* %fs$) nounwind {
 L.0:
 	%fs = alloca %symb.SymbNode*
@@ -27562,7 +28959,7 @@ L.0:
 	%i = alloca i32
 	%name = alloca [0 x i8]*
 	%0 = load %symb.SymbNode** %fs
-	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 21
+	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 22
 	%2 = getelementptr [0 x i8]* %1
 	%3 = bitcast [0 x i8]* %2 to [0 x i8]*
 	store [0 x i8]* %3, [0 x i8]** %name
@@ -27573,7 +28970,7 @@ L.0:
 	store i16 %6, i16* @llvmdb_file
 	%7 = load i16* @llvmdb_file
 	%8 = load %symb.SymbNode** %fs
-	%9 = getelementptr %symb.SymbNode* %8, i32 0, i32 11
+	%9 = getelementptr %symb.SymbNode* %8, i32 0, i32 12
 	store i16 %7, i16* %9
 	%10 = load i16* @llvmdb_file
 	call void @llvmdb_PHeader(i16 %10, i16 41)
@@ -27588,7 +28985,7 @@ L.2:
 	%16 = load [0 x i8]** %name
 	%17 = bitcast [0 x i8]* %16 to [0 x i8]*
 	call void @llvmdb_PString([0 x i8]* %17, i8 0)
-	%18 = getelementptr [1 x i8]* @S.613
+	%18 = getelementptr [1 x i8]* @S.633
 	%19 = bitcast [1 x i8]* %18 to [0 x i8]*
 	call void @llvmdb_PString([0 x i8]* %19, i8 0)
 	br label %L.1
@@ -27630,7 +29027,7 @@ L.0:
 	br i1 %5, label %L.2, label %L.3
 L.2:
 	%6 = load %symb.SymbNode** %ps
-	%7 = getelementptr %symb.SymbNode* %6, i32 0, i32 11
+	%7 = getelementptr %symb.SymbNode* %6, i32 0, i32 12
 	%8 = load i16* %7
 	store i16 %8, i16* @llvmdb_file
 	br label %L.1
@@ -27642,10 +29039,10 @@ L.1:
 return:
 	ret void
 }
-@S.614 = internal constant [70 x i8] c"declare void @llvm.dbg.declare(metadata, metadata) nounwind readnone\0A\00"
-@S.615 = internal constant [19 x i8] c"!llvm.dbg.cu = !{!\00"
-@S.616 = internal constant [3 x i8] c"}\0A\00"
-@S.617 = internal constant [4 x i8] c"ESL\00"
+@S.634 = internal constant [70 x i8] c"declare void @llvm.dbg.declare(metadata, metadata) nounwind readnone\0A\00"
+@S.635 = internal constant [19 x i8] c"!llvm.dbg.cu = !{!\00"
+@S.636 = internal constant [3 x i8] c"}\0A\00"
+@S.637 = internal constant [4 x i8] c"ESL\00"
 define internal void @llvmdb_ProgStart(%symb.SymbNode* %fs$, i8 zeroext %opt$) nounwind {
 L.0:
 	%fs = alloca %symb.SymbNode*
@@ -27654,7 +29051,7 @@ L.0:
 	store i8 %opt$, i8* %opt
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [70 x i8]* @S.614
+	%2 = getelementptr [70 x i8]* @S.634
 	%3 = bitcast [70 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	store i16 0, i16* @llvmdb_seqno
@@ -27682,7 +29079,7 @@ L.0:
 	store i16 %16, i16* @llvmdb_globals
 	%17 = load %bout.BufIO** @llvm_f
 	%18 = bitcast %bout.BufIO* %17 to %bout.BufIO*
-	%19 = getelementptr [19 x i8]* @S.615
+	%19 = getelementptr [19 x i8]* @S.635
 	%20 = bitcast [19 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
 	%21 = load %bout.BufIO** @llvm_f
@@ -27692,7 +29089,7 @@ L.0:
 	call void @bout_BufIO_uint(%bout.BufIO* %22, i32 %24)
 	%25 = load %bout.BufIO** @llvm_f
 	%26 = bitcast %bout.BufIO* %25 to %bout.BufIO*
-	%27 = getelementptr [3 x i8]* @S.616
+	%27 = getelementptr [3 x i8]* @S.636
 	%28 = bitcast [3 x i8]* %27 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
 	%29 = load i16* @llvmdb_unit
@@ -27700,12 +29097,12 @@ L.0:
 	call void @llvmdb_P32(i32 0, i8 0)
 	call void @llvmdb_P32(i32 12, i8 0)
 	%30 = load %symb.SymbNode** %fs
-	%31 = getelementptr %symb.SymbNode* %30, i32 0, i32 21
+	%31 = getelementptr %symb.SymbNode* %30, i32 0, i32 22
 	%32 = getelementptr [0 x i8]* %31
 	%33 = bitcast [0 x i8]* %32 to [0 x i8]*
 	call void @llvmdb_PString([0 x i8]* %33, i8 0)
 	call void @llvmdb_PString([0 x i8]* null, i8 0)
-	%34 = getelementptr [4 x i8]* @S.617
+	%34 = getelementptr [4 x i8]* @S.637
 	%35 = bitcast [4 x i8]* %34 to [0 x i8]*
 	call void @llvmdb_PString([0 x i8]* %35, i8 0)
 	call void @llvmdb_PBoolean(i8 1, i8 0)
@@ -27725,7 +29122,7 @@ L.0:
 return:
 	ret void
 }
-@S.618 = internal constant [9 x i8] c"i32 0 }\0A\00"
+@S.638 = internal constant [9 x i8] c"i32 0 }\0A\00"
 define internal void @llvmdb_ProgFinish() nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -27742,7 +29139,7 @@ L.0:
 	call void @llvmdb_PMetaSeq(i16 %3)
 	%4 = load %bout.BufIO** @llvm_f
 	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
-	%6 = getelementptr [9 x i8]* @S.618
+	%6 = getelementptr [9 x i8]* @S.638
 	%7 = bitcast [9 x i8]* %6 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
 	%8 = load i16* @llvmdb_enums
@@ -27770,7 +29167,7 @@ L.4:
 	br i1 %18, label %L.5, label %L.6
 L.6:
 	%19 = load %symb.SymbNode** %s
-	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 11
+	%20 = getelementptr %symb.SymbNode* %19, i32 0, i32 12
 	%21 = load i16* %20
 	store i16 %21, i16* %tag
 	%22 = load %symb.SymbNode** %s
@@ -27817,7 +29214,7 @@ L.12:
 	br i1 %39, label %L.13, label %L.14
 L.14:
 	%40 = load %symb.SymbNode** %s
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 11
+	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 12
 	%42 = load i16* %41
 	store i16 %42, i16* %tag
 	%43 = load %symb.SymbNode** %s
@@ -27852,42 +29249,313 @@ return:
 	ret void
 }
 @llvm_pbytetype = internal global %type.TypeNode* zeroinitializer, align 4
-@llvm_puinttype = internal global [8 x %type.TypeNode*] zeroinitializer, align 4
+@llvm_puinttype = internal global [6 x %type.TypeNode*] zeroinitializer, align 4
 @llvm_Tseqno = internal global i16 0, align 2
 @llvm_Pseqno = internal global i16 0, align 2
 @llvm_Lseqno = internal global i16 0, align 2
 @llvm_Aseqno = internal global i16 0, align 2
 @llvm_labthis = internal global i16 0, align 2
 @llvm_loopexit = internal global i16 0, align 2
-@llvm_UsedIntrinsic = internal global [9 x i16] zeroinitializer, align 2
-define internal void @llvm_UseIntrinsic(i8 zeroext %which$, i32 %width$) nounwind {
+%llvm.IntrinsicUse = type {%llvm.IntrinsicUse*, %type.TypeNode*, i32}
+@llvm_UsedIntrinsic = internal global [10 x %llvm.IntrinsicUse*] zeroinitializer, align 4
+define internal void @llvm_UseIntrinsic(i8 zeroext %which$, i32 %size$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%which = alloca i8
-	%width = alloca i32
+	%size = alloca i32
+	%t = alloca %type.TypeNode*
 	store i8 %which$, i8* %which
-	store i32 %width$, i32* %width
-	%nbytes = alloca i32
-	%0 = load i32* %width
-	%1 = load %target.ModelT** @target_Target
-	%2 = getelementptr %target.ModelT* %1, i32 0, i32 2
-	%3 = load i8* %2
-	%4 = zext i8 %3 to i32
-	%5 = udiv i32 %0, %4
-	store i32 %5, i32* %nbytes
-	%6 = load i8* %which
-	%7 = zext i8 %6 to i32
-	%8 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %7
-	%9 = load i16* %8
-	%10 = zext i16 %9 to i32
-	%11 = load i32* %nbytes
-	%12 = sub i32 %11, 1
-	%13 = shl i32 1, %12
-	%14 = or i32 %10, %13
-	%15 = trunc i32 %14 to i16
-	%16 = load i8* %which
-	%17 = zext i8 %16 to i32
-	%18 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %17
-	store i16 %15, i16* %18
+	store i32 %size$, i32* %size
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%piu = alloca %llvm.IntrinsicUse*
+	%0 = load i32* %size
+	%1 = icmp eq i32 %0, 0
+	br i1 %1, label %L.2, label %L.1
+L.2:
+	store i32 1, i32* %size
+	br label %L.1
+L.1:
+	%2 = load i8* %which
+	%3 = zext i8 %2 to i32
+	%4 = getelementptr [10 x %llvm.IntrinsicUse*]* @llvm_UsedIntrinsic, i32 0, i32 %3
+	%5 = load %llvm.IntrinsicUse** %4
+	store %llvm.IntrinsicUse* %5, %llvm.IntrinsicUse** %piu
+	br label %L.3
+L.3:
+	%6 = load %llvm.IntrinsicUse** %piu
+	%7 = icmp ne %llvm.IntrinsicUse* %6, null
+	br i1 %7, label %L.6, label %L.7
+L.6:
+	%8 = load %llvm.IntrinsicUse** %piu
+	%9 = getelementptr %llvm.IntrinsicUse* %8, i32 0, i32 2
+	%10 = load i32* %9
+	%11 = load i32* %size
+	%12 = icmp ne i32 %10, %11
+	br label %L.7
+L.7:
+	%13 = phi i1 [ false, %L.3 ], [ %12, %L.6 ]
+	%14 = xor i1 %13, true
+	br i1 %14, label %L.4, label %L.5
+L.5:
+	%15 = load %llvm.IntrinsicUse** %piu
+	%16 = getelementptr %llvm.IntrinsicUse* %15, i32 0, i32 0
+	%17 = load %llvm.IntrinsicUse** %16
+	%18 = bitcast %llvm.IntrinsicUse* %17 to %llvm.IntrinsicUse*
+	store %llvm.IntrinsicUse* %18, %llvm.IntrinsicUse** %piu
+	br label %L.3
+L.4:
+	%19 = load %llvm.IntrinsicUse** %piu
+	%20 = icmp eq %llvm.IntrinsicUse* %19, null
+	br i1 %20, label %L.9, label %L.8
+L.9:
+	%21 = call [0 x i8]* @malloc(i32 12)
+	%22 = bitcast [0 x i8]* %21 to %llvm.IntrinsicUse*
+	store %llvm.IntrinsicUse* %22, %llvm.IntrinsicUse** %piu
+	%23 = load i32* %size
+	%24 = load %llvm.IntrinsicUse** %piu
+	%25 = getelementptr %llvm.IntrinsicUse* %24, i32 0, i32 2
+	store i32 %23, i32* %25
+	%26 = load %type.TypeNode** %t
+	%27 = load %llvm.IntrinsicUse** %piu
+	%28 = getelementptr %llvm.IntrinsicUse* %27, i32 0, i32 1
+	store %type.TypeNode* %26, %type.TypeNode** %28
+	%29 = load i8* %which
+	%30 = zext i8 %29 to i32
+	%31 = getelementptr [10 x %llvm.IntrinsicUse*]* @llvm_UsedIntrinsic, i32 0, i32 %30
+	%32 = load %llvm.IntrinsicUse** %31
+	%33 = bitcast %llvm.IntrinsicUse* %32 to %llvm.IntrinsicUse*
+	%34 = load %llvm.IntrinsicUse** %piu
+	%35 = getelementptr %llvm.IntrinsicUse* %34, i32 0, i32 0
+	store %llvm.IntrinsicUse* %33, %llvm.IntrinsicUse** %35
+	%36 = load %llvm.IntrinsicUse** %piu
+	%37 = load i8* %which
+	%38 = zext i8 %37 to i32
+	%39 = getelementptr [10 x %llvm.IntrinsicUse*]* @llvm_UsedIntrinsic, i32 0, i32 %38
+	store %llvm.IntrinsicUse* %36, %llvm.IntrinsicUse** %39
+	br label %L.8
+L.8:
+	br label %return
+return:
+	ret void
+}
+@S.639 = internal constant [72 x i8] c"declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\0A\00"
+@S.640 = internal constant [66 x i8] c"declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\0A\00"
+@S.641 = internal constant [31 x i8] c"declare %K @llvm.bswap.%K(%K)\0A\00"
+@S.642 = internal constant [34 x i8] c"declare %K @llvm.ctlz.%K(%K, i1)\0A\00"
+@S.643 = internal constant [34 x i8] c"declare %K @llvm.cttz.%K(%K, i1)\0A\00"
+@S.644 = internal constant [31 x i8] c"declare %K @llvm.ctpop.%K(%K)\0A\00"
+@S.645 = internal constant [35 x i8] c"declare i1 @memcmp%*B(%K, %K, %W)\0A\00"
+@S.646 = internal constant [27 x i8] c"declare %W @memlen%*A(%K)\0A\00"
+define internal void @llvm_DeclareIntrinsics() nounwind {
+L.0:
+	%i = alloca i8
+	%piu = alloca %llvm.IntrinsicUse*
+	%dummy = alloca %ast.AstNode
+	%0 = getelementptr %ast.AstNode* %dummy, i32 0, i32 8
+	store %type.TypeNode* null, %type.TypeNode** %0
+	store i8 0, i8* %i
+	br label %L.1
+L.1:
+	%1 = load i8* %i
+	%2 = icmp ult i8 %1, 9
+	%3 = xor i1 %2, true
+	br i1 %3, label %L.2, label %L.3
+L.3:
+	%4 = load i8* %i
+	%5 = zext i8 %4 to i32
+	%6 = getelementptr [10 x %llvm.IntrinsicUse*]* @llvm_UsedIntrinsic, i32 0, i32 %5
+	%7 = load %llvm.IntrinsicUse** %6
+	%8 = icmp ne %llvm.IntrinsicUse* %7, null
+	br i1 %8, label %L.5, label %L.4
+L.5:
+	%9 = load i8* %i
+	%10 = zext i8 %9 to i32
+	%11 = getelementptr [10 x %llvm.IntrinsicUse*]* @llvm_UsedIntrinsic, i32 0, i32 %10
+	%12 = load %llvm.IntrinsicUse** %11
+	store %llvm.IntrinsicUse* %12, %llvm.IntrinsicUse** %piu
+	%13 = load i8* %i
+	%14 = zext i8 %13 to i32
+	switch i32 %14, label %L.6 [
+		i32 0, label %L.8
+		i32 2, label %L.9
+		i32 5, label %L.10
+		i32 6, label %L.11
+		i32 7, label %L.12
+		i32 8, label %L.13
+		i32 3, label %L.14
+		i32 4, label %L.15
+	]
+L.8:
+	%15 = getelementptr [72 x i8]* @S.639
+	%16 = bitcast [72 x i8]* %15 to [0 x i8]*
+	%17 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
+	br label %L.7
+L.9:
+	%18 = getelementptr [66 x i8]* @S.640
+	%19 = bitcast [66 x i8]* %18 to [0 x i8]*
+	%20 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %19, %ast.AstNode* %20)
+	br label %L.7
+L.10:
+	br label %L.16
+L.16:
+	%21 = load %llvm.IntrinsicUse** %piu
+	%22 = getelementptr %llvm.IntrinsicUse* %21, i32 0, i32 1
+	%23 = load %type.TypeNode** %22
+	%24 = getelementptr %ast.AstNode* %dummy, i32 0, i32 8
+	store %type.TypeNode* %23, %type.TypeNode** %24
+	%25 = getelementptr [31 x i8]* @S.641
+	%26 = bitcast [31 x i8]* %25 to [0 x i8]*
+	%27 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %26, %ast.AstNode* %27)
+	%28 = load %llvm.IntrinsicUse** %piu
+	%29 = getelementptr %llvm.IntrinsicUse* %28, i32 0, i32 0
+	%30 = load %llvm.IntrinsicUse** %29
+	%31 = bitcast %llvm.IntrinsicUse* %30 to %llvm.IntrinsicUse*
+	store %llvm.IntrinsicUse* %31, %llvm.IntrinsicUse** %piu
+	%32 = load %llvm.IntrinsicUse** %piu
+	%33 = icmp ne %llvm.IntrinsicUse* %32, null
+	%34 = xor i1 %33, true
+	br i1 %34, label %L.17, label %L.18
+L.18:
+	br label %L.16
+L.17:
+	br label %L.7
+L.11:
+	br label %L.19
+L.19:
+	%35 = load %llvm.IntrinsicUse** %piu
+	%36 = getelementptr %llvm.IntrinsicUse* %35, i32 0, i32 1
+	%37 = load %type.TypeNode** %36
+	%38 = getelementptr %ast.AstNode* %dummy, i32 0, i32 8
+	store %type.TypeNode* %37, %type.TypeNode** %38
+	%39 = getelementptr [34 x i8]* @S.642
+	%40 = bitcast [34 x i8]* %39 to [0 x i8]*
+	%41 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %40, %ast.AstNode* %41)
+	%42 = load %llvm.IntrinsicUse** %piu
+	%43 = getelementptr %llvm.IntrinsicUse* %42, i32 0, i32 0
+	%44 = load %llvm.IntrinsicUse** %43
+	%45 = bitcast %llvm.IntrinsicUse* %44 to %llvm.IntrinsicUse*
+	store %llvm.IntrinsicUse* %45, %llvm.IntrinsicUse** %piu
+	%46 = load %llvm.IntrinsicUse** %piu
+	%47 = icmp ne %llvm.IntrinsicUse* %46, null
+	%48 = xor i1 %47, true
+	br i1 %48, label %L.20, label %L.21
+L.21:
+	br label %L.19
+L.20:
+	br label %L.7
+L.12:
+	br label %L.22
+L.22:
+	%49 = load %llvm.IntrinsicUse** %piu
+	%50 = getelementptr %llvm.IntrinsicUse* %49, i32 0, i32 1
+	%51 = load %type.TypeNode** %50
+	%52 = getelementptr %ast.AstNode* %dummy, i32 0, i32 8
+	store %type.TypeNode* %51, %type.TypeNode** %52
+	%53 = getelementptr [34 x i8]* @S.643
+	%54 = bitcast [34 x i8]* %53 to [0 x i8]*
+	%55 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %54, %ast.AstNode* %55)
+	%56 = load %llvm.IntrinsicUse** %piu
+	%57 = getelementptr %llvm.IntrinsicUse* %56, i32 0, i32 0
+	%58 = load %llvm.IntrinsicUse** %57
+	%59 = bitcast %llvm.IntrinsicUse* %58 to %llvm.IntrinsicUse*
+	store %llvm.IntrinsicUse* %59, %llvm.IntrinsicUse** %piu
+	%60 = load %llvm.IntrinsicUse** %piu
+	%61 = icmp ne %llvm.IntrinsicUse* %60, null
+	%62 = xor i1 %61, true
+	br i1 %62, label %L.23, label %L.24
+L.24:
+	br label %L.22
+L.23:
+	br label %L.7
+L.13:
+	br label %L.25
+L.25:
+	%63 = load %llvm.IntrinsicUse** %piu
+	%64 = getelementptr %llvm.IntrinsicUse* %63, i32 0, i32 1
+	%65 = load %type.TypeNode** %64
+	%66 = getelementptr %ast.AstNode* %dummy, i32 0, i32 8
+	store %type.TypeNode* %65, %type.TypeNode** %66
+	%67 = getelementptr [31 x i8]* @S.644
+	%68 = bitcast [31 x i8]* %67 to [0 x i8]*
+	%69 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %68, %ast.AstNode* %69)
+	%70 = load %llvm.IntrinsicUse** %piu
+	%71 = getelementptr %llvm.IntrinsicUse* %70, i32 0, i32 0
+	%72 = load %llvm.IntrinsicUse** %71
+	%73 = bitcast %llvm.IntrinsicUse* %72 to %llvm.IntrinsicUse*
+	store %llvm.IntrinsicUse* %73, %llvm.IntrinsicUse** %piu
+	%74 = load %llvm.IntrinsicUse** %piu
+	%75 = icmp ne %llvm.IntrinsicUse* %74, null
+	%76 = xor i1 %75, true
+	br i1 %76, label %L.26, label %L.27
+L.27:
+	br label %L.25
+L.26:
+	br label %L.7
+L.14:
+	br label %L.28
+L.28:
+	%77 = load %llvm.IntrinsicUse** %piu
+	%78 = getelementptr %llvm.IntrinsicUse* %77, i32 0, i32 1
+	%79 = load %type.TypeNode** %78
+	%80 = getelementptr %ast.AstNode* %dummy, i32 0, i32 8
+	store %type.TypeNode* %79, %type.TypeNode** %80
+	%81 = getelementptr [35 x i8]* @S.645
+	%82 = bitcast [35 x i8]* %81 to [0 x i8]*
+	%83 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %82, %ast.AstNode* %83)
+	%84 = load %llvm.IntrinsicUse** %piu
+	%85 = getelementptr %llvm.IntrinsicUse* %84, i32 0, i32 0
+	%86 = load %llvm.IntrinsicUse** %85
+	%87 = bitcast %llvm.IntrinsicUse* %86 to %llvm.IntrinsicUse*
+	store %llvm.IntrinsicUse* %87, %llvm.IntrinsicUse** %piu
+	%88 = load %llvm.IntrinsicUse** %piu
+	%89 = icmp ne %llvm.IntrinsicUse* %88, null
+	%90 = xor i1 %89, true
+	br i1 %90, label %L.29, label %L.30
+L.30:
+	br label %L.28
+L.29:
+	br label %L.7
+L.15:
+	br label %L.31
+L.31:
+	%91 = load %llvm.IntrinsicUse** %piu
+	%92 = getelementptr %llvm.IntrinsicUse* %91, i32 0, i32 1
+	%93 = load %type.TypeNode** %92
+	%94 = getelementptr %ast.AstNode* %dummy, i32 0, i32 8
+	store %type.TypeNode* %93, %type.TypeNode** %94
+	%95 = getelementptr [27 x i8]* @S.646
+	%96 = bitcast [27 x i8]* %95 to [0 x i8]*
+	%97 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %96, %ast.AstNode* %97)
+	%98 = load %llvm.IntrinsicUse** %piu
+	%99 = getelementptr %llvm.IntrinsicUse* %98, i32 0, i32 0
+	%100 = load %llvm.IntrinsicUse** %99
+	%101 = bitcast %llvm.IntrinsicUse* %100 to %llvm.IntrinsicUse*
+	store %llvm.IntrinsicUse* %101, %llvm.IntrinsicUse** %piu
+	%102 = load %llvm.IntrinsicUse** %piu
+	%103 = icmp ne %llvm.IntrinsicUse* %102, null
+	%104 = xor i1 %103, true
+	br i1 %104, label %L.32, label %L.33
+L.33:
+	br label %L.31
+L.32:
+	br label %L.7
+L.6:
+	br label %L.7
+L.7:
+	br label %L.4
+L.4:
+	%105 = load i8* %i
+	%106 = add i8 %105, 1
+	store i8 %106, i8* %i
+	br label %L.1
+L.2:
 	br label %return
 return:
 	ret void
@@ -27914,8 +29582,8 @@ L.1:
 return:
 	ret void
 }
-@S.619 = internal constant [2 x i8] c"%\00"
-@S.620 = internal constant [2 x i8] c".\00"
+@S.647 = internal constant [2 x i8] c"%\00"
+@S.648 = internal constant [2 x i8] c".\00"
 define internal void @llvm_PTypeName(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -27923,7 +29591,7 @@ L.0:
 	%s = alloca %symb.SymbNode*
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [2 x i8]* @S.619
+	%2 = getelementptr [2 x i8]* @S.647
 	%3 = bitcast [2 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %type.TypeNode** %t
@@ -27946,13 +29614,13 @@ L.5:
 	%16 = load %symb.SymbNode** %s
 	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 2
 	%18 = load %symb.SymbNode** %17
-	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 21
+	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 22
 	%20 = getelementptr [0 x i8]* %19
 	%21 = bitcast [0 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %21)
 	%22 = load %bout.BufIO** @llvm_f
 	%23 = bitcast %bout.BufIO* %22 to %bout.BufIO*
-	%24 = getelementptr [2 x i8]* @S.620
+	%24 = getelementptr [2 x i8]* @S.648
 	%25 = bitcast [2 x i8]* %24 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %23, [0 x i8]* %25)
 	br label %L.4
@@ -27960,7 +29628,7 @@ L.4:
 	%26 = load %bout.BufIO** @llvm_f
 	%27 = bitcast %bout.BufIO* %26 to %bout.BufIO*
 	%28 = load %symb.SymbNode** %s
-	%29 = getelementptr %symb.SymbNode* %28, i32 0, i32 21
+	%29 = getelementptr %symb.SymbNode* %28, i32 0, i32 22
 	%30 = getelementptr [0 x i8]* %29
 	%31 = bitcast [0 x i8]* %30 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %27, [0 x i8]* %31)
@@ -27997,9 +29665,9 @@ L.1:
 return:
 	ret void
 }
-@S.621 = internal constant [2 x i8] c"{\00"
-@S.622 = internal constant [3 x i8] c", \00"
-@S.623 = internal constant [2 x i8] c"}\00"
+@S.649 = internal constant [2 x i8] c"{\00"
+@S.650 = internal constant [3 x i8] c", \00"
+@S.651 = internal constant [2 x i8] c"}\00"
 define internal void @llvm_PRecordType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -28027,7 +29695,7 @@ L.4:
 L.3:
 	%11 = load %bout.BufIO** @llvm_f
 	%12 = bitcast %bout.BufIO* %11 to %bout.BufIO*
-	%13 = getelementptr [2 x i8]* @S.621
+	%13 = getelementptr [2 x i8]* @S.649
 	%14 = bitcast [2 x i8]* %13 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %14)
 	%15 = load %type.TypeNode** %t
@@ -28057,14 +29725,14 @@ L.7:
 L.8:
 	%31 = load %bout.BufIO** @llvm_f
 	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
-	%33 = getelementptr [3 x i8]* @S.622
+	%33 = getelementptr [3 x i8]* @S.650
 	%34 = bitcast [3 x i8]* %33 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %32, [0 x i8]* %34)
 	br label %L.5
 L.6:
 	%35 = load %bout.BufIO** @llvm_f
 	%36 = bitcast %bout.BufIO* %35 to %bout.BufIO*
-	%37 = getelementptr [2 x i8]* @S.623
+	%37 = getelementptr [2 x i8]* @S.651
 	%38 = bitcast [2 x i8]* %37 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %36, [0 x i8]* %38)
 	%39 = load %type.TypeNode** %t
@@ -28091,9 +29759,59 @@ L.11:
 return:
 	ret void
 }
-@S.624 = internal constant [6 x i8] c"float\00"
-@S.625 = internal constant [7 x i8] c"double\00"
-@S.626 = internal constant [4 x i8] c" x \00"
+define internal void @llvm_PWidth(%type.TypeNode* %t$) nounwind {
+L.0:
+	%t = alloca %type.TypeNode*
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%0 = load %type.TypeNode** %t
+	%1 = icmp ne %type.TypeNode* %0, null
+	br i1 %1, label %L.2, label %L.1
+L.2:
+	%2 = load %bout.BufIO** @llvm_f
+	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
+	%4 = load %type.TypeNode** %t
+	%5 = getelementptr %type.TypeNode* %4, i32 0, i32 10
+	%6 = load i32* %5
+	%7 = load %target.ModelT** @target_Target
+	%8 = getelementptr %target.ModelT* %7, i32 0, i32 2
+	%9 = load i8* %8
+	%10 = zext i8 %9 to i32
+	%11 = udiv i32 %6, %10
+	call void @bout_BufIO_uint(%bout.BufIO* %3, i32 %11)
+	br label %L.1
+L.1:
+	br label %return
+return:
+	ret void
+}
+define internal void @llvm_PAlign(%type.TypeNode* %t$) nounwind {
+L.0:
+	%t = alloca %type.TypeNode*
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%0 = load %type.TypeNode** %t
+	%1 = icmp ne %type.TypeNode* %0, null
+	br i1 %1, label %L.2, label %L.1
+L.2:
+	%2 = load %bout.BufIO** @llvm_f
+	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
+	%4 = load %type.TypeNode** %t
+	%5 = getelementptr %type.TypeNode* %4, i32 0, i32 11
+	%6 = load i32* %5
+	%7 = load %target.ModelT** @target_Target
+	%8 = getelementptr %target.ModelT* %7, i32 0, i32 2
+	%9 = load i8* %8
+	%10 = zext i8 %9 to i32
+	%11 = udiv i32 %6, %10
+	call void @bout_BufIO_uint(%bout.BufIO* %3, i32 %11)
+	br label %L.1
+L.1:
+	br label %return
+return:
+	ret void
+}
+@S.652 = internal constant [6 x i8] c"float\00"
+@S.653 = internal constant [7 x i8] c"double\00"
+@S.654 = internal constant [4 x i8] c" x \00"
 define internal void @llvm_PType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -28142,14 +29860,14 @@ L.6:
 L.13:
 	%18 = load %bout.BufIO** @llvm_f
 	%19 = bitcast %bout.BufIO* %18 to %bout.BufIO*
-	%20 = getelementptr [6 x i8]* @S.624
+	%20 = getelementptr [6 x i8]* @S.652
 	%21 = bitcast [6 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	br label %L.12
 L.14:
 	%22 = load %bout.BufIO** @llvm_f
 	%23 = bitcast %bout.BufIO* %22 to %bout.BufIO*
-	%24 = getelementptr [7 x i8]* @S.625
+	%24 = getelementptr [7 x i8]* @S.653
 	%25 = bitcast [7 x i8]* %24 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %23, [0 x i8]* %25)
 	br label %L.12
@@ -28236,7 +29954,7 @@ L.23:
 	call void @bout_BufIO_uint32(%bout.BufIO* %67, i32 %69)
 	%70 = load %bout.BufIO** @llvm_f
 	%71 = bitcast %bout.BufIO* %70 to %bout.BufIO*
-	%72 = getelementptr [4 x i8]* @S.626
+	%72 = getelementptr [4 x i8]* @S.654
 	%73 = bitcast [4 x i8]* %72 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %71, [0 x i8]* %73)
 	%74 = load %type.TypeNode** %t
@@ -28280,8 +29998,8 @@ L.1:
 return:
 	ret void
 }
-@S.627 = internal constant [9 x i8] c" signext\00"
-@S.628 = internal constant [9 x i8] c" zeroext\00"
+@S.655 = internal constant [9 x i8] c" signext\00"
+@S.656 = internal constant [9 x i8] c" zeroext\00"
 define internal void @llvm_PExtend(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -28321,14 +30039,14 @@ L.7:
 L.9:
 	%19 = load %bout.BufIO** @llvm_f
 	%20 = bitcast %bout.BufIO* %19 to %bout.BufIO*
-	%21 = getelementptr [9 x i8]* @S.627
+	%21 = getelementptr [9 x i8]* @S.655
 	%22 = bitcast [9 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	br label %L.8
 L.10:
 	%23 = load %bout.BufIO** @llvm_f
 	%24 = bitcast %bout.BufIO* %23 to %bout.BufIO*
-	%25 = getelementptr [9 x i8]* @S.628
+	%25 = getelementptr [9 x i8]* @S.656
 	%26 = bitcast [9 x i8]* %25 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %24, [0 x i8]* %26)
 	br label %L.8
@@ -28345,10 +30063,10 @@ L.1:
 return:
 	ret void
 }
-@S.629 = internal constant [4 x i8] c" { \00"
-@S.630 = internal constant [3 x i8] c", \00"
-@S.631 = internal constant [3 x i8] c" }\00"
-@S.632 = internal constant [6 x i8] c" void\00"
+@S.657 = internal constant [4 x i8] c" { \00"
+@S.658 = internal constant [3 x i8] c", \00"
+@S.659 = internal constant [3 x i8] c" }\00"
+@S.660 = internal constant [6 x i8] c" void\00"
 define internal void @llvm_PRetvType(%type.TypeListEntry* %tl$, i8 zeroext %extend$) nounwind {
 L.0:
 	%tl = alloca %type.TypeListEntry*
@@ -28368,7 +30086,7 @@ L.2:
 L.5:
 	%6 = load %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [4 x i8]* @S.629
+	%8 = getelementptr [4 x i8]* @S.657
 	%9 = bitcast [4 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.7
@@ -28389,14 +30107,14 @@ L.7:
 L.9:
 	%20 = load %bout.BufIO** @llvm_f
 	%21 = bitcast %bout.BufIO* %20 to %bout.BufIO*
-	%22 = getelementptr [3 x i8]* @S.630
+	%22 = getelementptr [3 x i8]* @S.658
 	%23 = bitcast [3 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	br label %L.7
 L.8:
 	%24 = load %bout.BufIO** @llvm_f
 	%25 = bitcast %bout.BufIO* %24 to %bout.BufIO*
-	%26 = getelementptr [3 x i8]* @S.631
+	%26 = getelementptr [3 x i8]* @S.659
 	%27 = bitcast [3 x i8]* %26 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %25, [0 x i8]* %27)
 	br label %L.4
@@ -28425,7 +30143,7 @@ L.4:
 L.3:
 	%38 = load %bout.BufIO** @llvm_f
 	%39 = bitcast %bout.BufIO* %38 to %bout.BufIO*
-	%40 = getelementptr [6 x i8]* @S.632
+	%40 = getelementptr [6 x i8]* @S.660
 	%41 = bitcast [6 x i8]* %40 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %39, [0 x i8]* %41)
 	br label %L.1
@@ -28434,7 +30152,7 @@ L.1:
 return:
 	ret void
 }
-@S.633 = internal constant [3 x i8] c", \00"
+@S.661 = internal constant [3 x i8] c", \00"
 define internal void @llvm_PParmTypes(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -28464,7 +30182,7 @@ L.3:
 L.4:
 	%14 = load %bout.BufIO** @llvm_f
 	%15 = bitcast %bout.BufIO* %14 to %bout.BufIO*
-	%16 = getelementptr [3 x i8]* @S.633
+	%16 = getelementptr [3 x i8]* @S.661
 	%17 = bitcast [3 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	br label %L.1
@@ -28476,9 +30194,9 @@ L.2:
 return:
 	ret void
 }
-@S.634 = internal constant [5 x i8] c"null\00"
-@S.635 = internal constant [10 x i8] c"inttoptr(\00"
-@S.636 = internal constant [5 x i8] c" to \00"
+@S.662 = internal constant [5 x i8] c"null\00"
+@S.663 = internal constant [10 x i8] c"inttoptr(\00"
+@S.664 = internal constant [5 x i8] c" to \00"
 define internal void @llvm_ConstantRef(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -28494,14 +30212,14 @@ L.0:
 L.2:
 	%5 = load %bout.BufIO** @llvm_f
 	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
-	%7 = getelementptr [5 x i8]* @S.634
+	%7 = getelementptr [5 x i8]* @S.662
 	%8 = bitcast [5 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	br label %L.1
 L.3:
 	%9 = load %bout.BufIO** @llvm_f
 	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = getelementptr [10 x i8]* @S.635
+	%11 = getelementptr [10 x i8]* @S.663
 	%12 = bitcast [10 x i8]* %11 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
 	%13 = load %type.TypeNode** @type_wordtype
@@ -28515,7 +30233,7 @@ L.3:
 	call void @bout_BufIO_uint64(%bout.BufIO* %17, i64 %18)
 	%19 = load %bout.BufIO** @llvm_f
 	%20 = bitcast %bout.BufIO* %19 to %bout.BufIO*
-	%21 = getelementptr [5 x i8]* @S.636
+	%21 = getelementptr [5 x i8]* @S.664
 	%22 = bitcast [5 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	%23 = load %ast.AstNode** %node
@@ -28531,8 +30249,8 @@ L.1:
 return:
 	ret void
 }
-@S.637 = internal constant [5 x i8] c"void\00"
-@S.638 = internal constant [2 x i8] c"i\00"
+@S.665 = internal constant [5 x i8] c"void\00"
+@S.666 = internal constant [2 x i8] c"i\00"
 define internal void @llvm_NodeType(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -28554,7 +30272,7 @@ L.0:
 L.3:
 	%6 = load %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [5 x i8]* @S.637
+	%8 = getelementptr [5 x i8]* @S.665
 	%9 = bitcast [5 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.2
@@ -28579,7 +30297,7 @@ L.6:
 L.1:
 	%19 = load %bout.BufIO** @llvm_f
 	%20 = bitcast %bout.BufIO* %19 to %bout.BufIO*
-	%21 = getelementptr [2 x i8]* @S.638
+	%21 = getelementptr [2 x i8]* @S.666
 	%22 = bitcast [2 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	%23 = load %bout.BufIO** @llvm_f
@@ -28614,7 +30332,7 @@ L.1:
 	%8 = load %bout.BufIO** @llvm_f
 	%9 = bitcast %bout.BufIO* %8 to %bout.BufIO*
 	%10 = load %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 21
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 22
 	%12 = getelementptr [0 x i8]* %11
 	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %9, [0 x i8]* %13)
@@ -28625,25 +30343,83 @@ L.1:
 return:
 	ret void
 }
-@S.639 = internal constant [10 x i8] c"inttoptr(\00"
-@S.640 = internal constant [5 x i8] c" to \00"
-@S.641 = internal constant [3 x i8] c"*)\00"
+define internal void @llvm_PMethod(%symb.SymbNode* %s$) nounwind {
+L.0:
+	%s = alloca %symb.SymbNode*
+	store %symb.SymbNode* %s$, %symb.SymbNode** %s
+	%bs = alloca %symb.SymbNode*
+	%bt = alloca %type.TypeNode*
+	%0 = load %symb.SymbNode** %s
+	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 3
+	%2 = load %symb.SymbNode** %1
+	%3 = getelementptr %symb.SymbNode* %2, i32 0, i32 1
+	%4 = load %type.TypeNode** %3
+	store %type.TypeNode* %4, %type.TypeNode** %bt
+	%5 = load %type.TypeNode** %bt
+	%6 = getelementptr %type.TypeNode* %5, i32 0, i32 14
+	%7 = load i8* %6
+	%8 = icmp eq i8 %7, 5
+	br i1 %8, label %L.2, label %L.1
+L.2:
+	%9 = load %type.TypeNode** %bt
+	%10 = getelementptr %type.TypeNode* %9, i32 0, i32 0
+	%11 = load %type.TypeNode** %10
+	%12 = bitcast %type.TypeNode* %11 to %type.TypeNode*
+	store %type.TypeNode* %12, %type.TypeNode** %bt
+	br label %L.1
+L.1:
+	%13 = load %type.TypeNode** %bt
+	%14 = getelementptr %type.TypeNode* %13, i32 0, i32 3
+	%15 = load %symb.SymbNode** %14
+	%16 = bitcast %symb.SymbNode* %15 to %symb.SymbNode*
+	store %symb.SymbNode* %16, %symb.SymbNode** %bs
+	%17 = load %symb.SymbNode** %bs
+	%18 = getelementptr %symb.SymbNode* %17, i32 0, i32 2
+	%19 = load %symb.SymbNode** %18
+	%20 = icmp ne %symb.SymbNode* %19, null
+	br i1 %20, label %L.4, label %L.3
+L.4:
+	%21 = load %symb.SymbNode** %bs
+	%22 = getelementptr %symb.SymbNode* %21, i32 0, i32 2
+	%23 = load %symb.SymbNode** %22
+	%24 = bitcast %symb.SymbNode* %23 to %symb.SymbNode*
+	call void @llvm_PPkgPfx(%symb.SymbNode* %24)
+	br label %L.3
+L.3:
+	%25 = load %bout.BufIO** @llvm_f
+	%26 = bitcast %bout.BufIO* %25 to %bout.BufIO*
+	%27 = load %symb.SymbNode** %bs
+	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 22
+	%29 = getelementptr [0 x i8]* %28
+	%30 = bitcast [0 x i8]* %29 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %30)
+	%31 = load %bout.BufIO** @llvm_f
+	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %32, i8 95)
+	br label %return
+return:
+	ret void
+}
+@S.667 = internal constant [10 x i8] c"inttoptr(\00"
+@S.668 = internal constant [5 x i8] c" to \00"
+@S.669 = internal constant [3 x i8] c"*)\00"
 define internal void @llvm_PName(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
 	store %symb.SymbNode* %s$, %symb.SymbNode** %s
 	%0 = load %symb.SymbNode** %s
-	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 13
+	%1 = getelementptr %symb.SymbNode* %0, i32 0, i32 14
 	%2 = load i8* %1
 	%3 = zext i8 %2 to i32
 	switch i32 %3, label %L.1 [
 		i32 0, label %L.3
 		i32 1, label %L.3
 		i32 2, label %L.4
-		i32 6, label %L.4
+		i32 7, label %L.4
 		i32 3, label %L.5
 		i32 4, label %L.5
-		i32 5, label %L.6
+		i32 5, label %L.5
+		i32 6, label %L.6
 	]
 L.3:
 	%4 = load %bout.BufIO** @llvm_f
@@ -28652,7 +30428,7 @@ L.3:
 	%6 = load %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
 	%8 = load %symb.SymbNode** %s
-	%9 = getelementptr %symb.SymbNode* %8, i32 0, i32 21
+	%9 = getelementptr %symb.SymbNode* %8, i32 0, i32 22
 	%10 = getelementptr [0 x i8]* %9
 	%11 = bitcast [0 x i8]* %10 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %11)
@@ -28662,13 +30438,13 @@ L.4:
 	%13 = bitcast %bout.BufIO* %12 to %bout.BufIO*
 	call void @bout_BufIO_chr(%bout.BufIO* %13, i8 64)
 	%14 = load %symb.SymbNode** %s
-	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 12
+	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 13
 	%16 = load i8* %15
 	%17 = icmp eq i8 %16, 5
 	br i1 %17, label %L.7, label %L.8
 L.7:
 	%18 = load %symb.SymbNode** %s
-	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 15
+	%19 = getelementptr %symb.SymbNode* %18, i32 0, i32 16
 	%20 = load i8* %19
 	%21 = icmp ne i8 %20, 0
 	br label %L.8
@@ -28676,161 +30452,133 @@ L.8:
 	%22 = phi i1 [ false, %L.4 ], [ %21, %L.7 ]
 	br i1 %22, label %L.10, label %L.11
 L.10:
-	%bs = alloca %symb.SymbNode*
-	%bt = alloca %type.TypeNode*
 	%23 = load %symb.SymbNode** %s
-	%24 = getelementptr %symb.SymbNode* %23, i32 0, i32 3
-	%25 = load %symb.SymbNode** %24
-	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 1
-	%27 = load %type.TypeNode** %26
-	store %type.TypeNode* %27, %type.TypeNode** %bt
-	%28 = load %type.TypeNode** %bt
-	%29 = getelementptr %type.TypeNode* %28, i32 0, i32 14
-	%30 = load i8* %29
-	%31 = icmp eq i8 %30, 5
-	br i1 %31, label %L.13, label %L.12
-L.13:
-	%32 = load %type.TypeNode** %bt
-	%33 = getelementptr %type.TypeNode* %32, i32 0, i32 0
-	%34 = load %type.TypeNode** %33
-	%35 = bitcast %type.TypeNode* %34 to %type.TypeNode*
-	store %type.TypeNode* %35, %type.TypeNode** %bt
-	br label %L.12
-L.12:
-	%36 = load %type.TypeNode** %bt
-	%37 = getelementptr %type.TypeNode* %36, i32 0, i32 3
-	%38 = load %symb.SymbNode** %37
-	%39 = bitcast %symb.SymbNode* %38 to %symb.SymbNode*
-	store %symb.SymbNode* %39, %symb.SymbNode** %bs
-	%40 = load %symb.SymbNode** %bs
-	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 2
-	%42 = load %symb.SymbNode** %41
-	%43 = icmp ne %symb.SymbNode* %42, null
-	br i1 %43, label %L.15, label %L.14
-L.15:
-	%44 = load %symb.SymbNode** %bs
-	%45 = getelementptr %symb.SymbNode* %44, i32 0, i32 2
-	%46 = load %symb.SymbNode** %45
-	%47 = bitcast %symb.SymbNode* %46 to %symb.SymbNode*
-	call void @llvm_PPkgPfx(%symb.SymbNode* %47)
-	br label %L.14
-L.14:
-	%48 = load %bout.BufIO** @llvm_f
-	%49 = bitcast %bout.BufIO* %48 to %bout.BufIO*
-	%50 = load %symb.SymbNode** %bs
-	%51 = getelementptr %symb.SymbNode* %50, i32 0, i32 21
-	%52 = getelementptr [0 x i8]* %51
-	%53 = bitcast [0 x i8]* %52 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %49, [0 x i8]* %53)
-	%54 = load %bout.BufIO** @llvm_f
-	%55 = bitcast %bout.BufIO* %54 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %55, i8 95)
+	call void @llvm_PMethod(%symb.SymbNode* %23)
 	br label %L.9
 L.11:
-	%56 = load %symb.SymbNode** %s
-	%57 = getelementptr %symb.SymbNode* %56, i32 0, i32 2
-	%58 = load %symb.SymbNode** %57
-	%59 = icmp ne %symb.SymbNode* %58, null
-	br i1 %59, label %L.17, label %L.16
-L.17:
-	%60 = load %symb.SymbNode** %s
-	%61 = getelementptr %symb.SymbNode* %60, i32 0, i32 2
-	%62 = load %symb.SymbNode** %61
-	%63 = bitcast %symb.SymbNode* %62 to %symb.SymbNode*
-	call void @llvm_PPkgPfx(%symb.SymbNode* %63)
-	br label %L.16
-L.16:
+	%24 = load %symb.SymbNode** %s
+	%25 = getelementptr %symb.SymbNode* %24, i32 0, i32 2
+	%26 = load %symb.SymbNode** %25
+	%27 = icmp ne %symb.SymbNode* %26, null
+	br i1 %27, label %L.13, label %L.12
+L.13:
+	%28 = load %symb.SymbNode** %s
+	%29 = getelementptr %symb.SymbNode* %28, i32 0, i32 2
+	%30 = load %symb.SymbNode** %29
+	%31 = bitcast %symb.SymbNode* %30 to %symb.SymbNode*
+	call void @llvm_PPkgPfx(%symb.SymbNode* %31)
+	br label %L.12
+L.12:
 	br label %L.9
 L.9:
-	%64 = load %bout.BufIO** @llvm_f
-	%65 = bitcast %bout.BufIO* %64 to %bout.BufIO*
-	%66 = load %symb.SymbNode** %s
-	%67 = getelementptr %symb.SymbNode* %66, i32 0, i32 21
-	%68 = getelementptr [0 x i8]* %67
-	%69 = bitcast [0 x i8]* %68 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %65, [0 x i8]* %69)
+	%32 = load %bout.BufIO** @llvm_f
+	%33 = bitcast %bout.BufIO* %32 to %bout.BufIO*
+	%34 = load %symb.SymbNode** %s
+	%35 = getelementptr %symb.SymbNode* %34, i32 0, i32 22
+	%36 = getelementptr [0 x i8]* %35
+	%37 = bitcast [0 x i8]* %36 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %33, [0 x i8]* %37)
 	br label %L.2
 L.5:
-	%70 = load %bout.BufIO** @llvm_f
-	%71 = bitcast %bout.BufIO* %70 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %71, i8 64)
-	%72 = load %symb.SymbNode** %s
-	%73 = getelementptr %symb.SymbNode* %72, i32 0, i32 6
-	%74 = load %symb.SymbNode** %73
-	%75 = icmp ne %symb.SymbNode* %74, null
-	br i1 %75, label %L.19, label %L.20
+	%38 = load %bout.BufIO** @llvm_f
+	%39 = bitcast %bout.BufIO* %38 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %39, i8 64)
+	%40 = load %symb.SymbNode** %s
+	%41 = getelementptr %symb.SymbNode* %40, i32 0, i32 13
+	%42 = load i8* %41
+	%43 = icmp eq i8 %42, 5
+	br i1 %43, label %L.14, label %L.15
+L.14:
+	%44 = load %symb.SymbNode** %s
+	%45 = getelementptr %symb.SymbNode* %44, i32 0, i32 16
+	%46 = load i8* %45
+	%47 = icmp ne i8 %46, 0
+	br label %L.15
+L.15:
+	%48 = phi i1 [ false, %L.5 ], [ %47, %L.14 ]
+	br i1 %48, label %L.17, label %L.16
+L.17:
+	%49 = load %symb.SymbNode** %s
+	call void @llvm_PMethod(%symb.SymbNode* %49)
+	br label %L.16
+L.16:
+	%50 = load %symb.SymbNode** %s
+	%51 = getelementptr %symb.SymbNode* %50, i32 0, i32 6
+	%52 = load %symb.SymbNode** %51
+	%53 = icmp ne %symb.SymbNode* %52, null
+	br i1 %53, label %L.19, label %L.20
 L.19:
-	%76 = load %bout.BufIO** @llvm_f
-	%77 = bitcast %bout.BufIO* %76 to %bout.BufIO*
-	%78 = load %symb.SymbNode** %s
-	%79 = getelementptr %symb.SymbNode* %78, i32 0, i32 6
-	%80 = load %symb.SymbNode** %79
-	%81 = getelementptr %symb.SymbNode* %80, i32 0, i32 21
-	%82 = getelementptr [0 x i8]* %81
-	%83 = bitcast [0 x i8]* %82 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %77, [0 x i8]* %83)
+	%54 = load %bout.BufIO** @llvm_f
+	%55 = bitcast %bout.BufIO* %54 to %bout.BufIO*
+	%56 = load %symb.SymbNode** %s
+	%57 = getelementptr %symb.SymbNode* %56, i32 0, i32 6
+	%58 = load %symb.SymbNode** %57
+	%59 = getelementptr %symb.SymbNode* %58, i32 0, i32 22
+	%60 = getelementptr [0 x i8]* %59
+	%61 = bitcast [0 x i8]* %60 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %55, [0 x i8]* %61)
 	br label %L.18
 L.20:
-	%84 = load %bout.BufIO** @llvm_f
-	%85 = bitcast %bout.BufIO* %84 to %bout.BufIO*
-	%86 = load %symb.SymbNode** %s
-	%87 = getelementptr %symb.SymbNode* %86, i32 0, i32 21
-	%88 = getelementptr [0 x i8]* %87
-	%89 = bitcast [0 x i8]* %88 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %85, [0 x i8]* %89)
+	%62 = load %bout.BufIO** @llvm_f
+	%63 = bitcast %bout.BufIO* %62 to %bout.BufIO*
+	%64 = load %symb.SymbNode** %s
+	%65 = getelementptr %symb.SymbNode* %64, i32 0, i32 22
+	%66 = getelementptr [0 x i8]* %65
+	%67 = bitcast [0 x i8]* %66 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %63, [0 x i8]* %67)
 	br label %L.18
 L.18:
 	br label %L.2
 L.6:
-	%90 = load %bout.BufIO** @llvm_f
-	%91 = bitcast %bout.BufIO* %90 to %bout.BufIO*
-	%92 = getelementptr [10 x i8]* @S.639
-	%93 = bitcast [10 x i8]* %92 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %91, [0 x i8]* %93)
-	%94 = load %type.TypeNode** @type_wordtype
-	call void @llvm_PType(%type.TypeNode* %94)
-	%95 = load %bout.BufIO** @llvm_f
-	%96 = bitcast %bout.BufIO* %95 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %96, i8 32)
-	%97 = load %bout.BufIO** @llvm_f
-	%98 = bitcast %bout.BufIO* %97 to %bout.BufIO*
-	%99 = load %symb.SymbNode** %s
-	%100 = getelementptr %symb.SymbNode* %99, i32 0, i32 8
-	%101 = load i64* %100
-	call void @bout_BufIO_uint64(%bout.BufIO* %98, i64 %101)
-	%102 = load %bout.BufIO** @llvm_f
-	%103 = bitcast %bout.BufIO* %102 to %bout.BufIO*
-	%104 = getelementptr [5 x i8]* @S.640
-	%105 = bitcast [5 x i8]* %104 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %103, [0 x i8]* %105)
-	%106 = load %symb.SymbNode** %s
-	%107 = getelementptr %symb.SymbNode* %106, i32 0, i32 12
-	%108 = load i8* %107
-	%109 = icmp eq i8 %108, 5
-	br i1 %109, label %L.22, label %L.23
+	%68 = load %bout.BufIO** @llvm_f
+	%69 = bitcast %bout.BufIO* %68 to %bout.BufIO*
+	%70 = getelementptr [10 x i8]* @S.667
+	%71 = bitcast [10 x i8]* %70 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
+	%72 = load %type.TypeNode** @type_wordtype
+	call void @llvm_PType(%type.TypeNode* %72)
+	%73 = load %bout.BufIO** @llvm_f
+	%74 = bitcast %bout.BufIO* %73 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %74, i8 32)
+	%75 = load %bout.BufIO** @llvm_f
+	%76 = bitcast %bout.BufIO* %75 to %bout.BufIO*
+	%77 = load %symb.SymbNode** %s
+	%78 = getelementptr %symb.SymbNode* %77, i32 0, i32 9
+	%79 = load i64* %78
+	call void @bout_BufIO_uint64(%bout.BufIO* %76, i64 %79)
+	%80 = load %bout.BufIO** @llvm_f
+	%81 = bitcast %bout.BufIO* %80 to %bout.BufIO*
+	%82 = getelementptr [5 x i8]* @S.668
+	%83 = bitcast [5 x i8]* %82 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %81, [0 x i8]* %83)
+	%84 = load %symb.SymbNode** %s
+	%85 = getelementptr %symb.SymbNode* %84, i32 0, i32 13
+	%86 = load i8* %85
+	%87 = icmp eq i8 %86, 5
+	br i1 %87, label %L.22, label %L.23
 L.22:
-	%110 = load %symb.SymbNode** %s
-	%111 = getelementptr %symb.SymbNode* %110, i32 0, i32 4
-	%112 = load %type.TypeListEntry** %111
-	call void @llvm_PRetvType(%type.TypeListEntry* %112, i8 1)
-	%113 = load %symb.SymbNode** %s
-	%114 = getelementptr %symb.SymbNode* %113, i32 0, i32 3
-	%115 = load %symb.SymbNode** %114
-	%116 = bitcast %symb.SymbNode* %115 to %symb.SymbNode*
-	call void @llvm_PParmTypes(%symb.SymbNode* %116)
+	%88 = load %symb.SymbNode** %s
+	%89 = getelementptr %symb.SymbNode* %88, i32 0, i32 4
+	%90 = load %type.TypeListEntry** %89
+	call void @llvm_PRetvType(%type.TypeListEntry* %90, i8 1)
+	%91 = load %symb.SymbNode** %s
+	%92 = getelementptr %symb.SymbNode* %91, i32 0, i32 3
+	%93 = load %symb.SymbNode** %92
+	%94 = bitcast %symb.SymbNode* %93 to %symb.SymbNode*
+	call void @llvm_PParmTypes(%symb.SymbNode* %94)
 	br label %L.21
 L.23:
-	%117 = load %symb.SymbNode** %s
-	%118 = getelementptr %symb.SymbNode* %117, i32 0, i32 1
-	%119 = load %type.TypeNode** %118
-	call void @llvm_PType(%type.TypeNode* %119)
+	%95 = load %symb.SymbNode** %s
+	%96 = getelementptr %symb.SymbNode* %95, i32 0, i32 1
+	%97 = load %type.TypeNode** %96
+	call void @llvm_PType(%type.TypeNode* %97)
 	br label %L.21
 L.21:
-	%120 = load %bout.BufIO** @llvm_f
-	%121 = bitcast %bout.BufIO* %120 to %bout.BufIO*
-	%122 = getelementptr [3 x i8]* @S.641
-	%123 = bitcast [3 x i8]* %122 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %121, [0 x i8]* %123)
+	%98 = load %bout.BufIO** @llvm_f
+	%99 = bitcast %bout.BufIO* %98 to %bout.BufIO*
+	%100 = getelementptr [3 x i8]* @S.669
+	%101 = bitcast [3 x i8]* %100 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %99, [0 x i8]* %101)
 	br label %L.2
 L.1:
 	br label %L.2
@@ -28856,7 +30604,7 @@ L.0:
 return:
 	ret void
 }
-@S.642 = internal constant [11 x i8] c"__NoName__\00"
+@S.670 = internal constant [11 x i8] c"__NoName__\00"
 define internal void @llvm_NodeName(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -28876,7 +30624,7 @@ L.2:
 L.3:
 	%6 = load %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [11 x i8]* @S.642
+	%8 = getelementptr [11 x i8]* @S.670
 	%9 = bitcast [11 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.1
@@ -28885,7 +30633,7 @@ L.1:
 return:
 	ret void
 }
-@S.643 = internal constant [4 x i8] c".0e\00"
+@S.671 = internal constant [4 x i8] c".0e\00"
 define internal void @llvm_PFloat(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -28898,7 +30646,7 @@ L.0:
 	call void @bout_BufIO_uint64(%bout.BufIO* %1, i64 %4)
 	%5 = load %bout.BufIO** @llvm_f
 	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
-	%7 = getelementptr [4 x i8]* @S.643
+	%7 = getelementptr [4 x i8]* @S.671
 	%8 = bitcast [4 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	%9 = load %bout.BufIO** @llvm_f
@@ -28912,7 +30660,7 @@ L.0:
 return:
 	ret void
 }
-@S.644 = internal constant [23 x i8] c"Assignment to constant\00"
+@S.672 = internal constant [23 x i8] c"Assignment to constant\00"
 define internal void @llvm_NodeDst(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -28935,9 +30683,9 @@ L.3:
 	%9 = icmp ne i8 %8, 5
 	br i1 %9, label %L.6, label %L.5
 L.6:
-	%10 = getelementptr [23 x i8]* @S.644
+	%10 = getelementptr [23 x i8]* @S.672
 	%11 = bitcast [23 x i8]* %10 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %11)
+	call void @lex_ErrorS(i8 86, [0 x i8]* %11)
 	br label %L.5
 L.5:
 	%12 = load %ast.AstNode** %node
@@ -29066,6 +30814,7 @@ L.0:
 	%c = alloca i8
 	%n = alloca i16
 	%node = alloca %ast.AstNode*
+	%t = alloca %type.TypeNode*
 	store i32 0, i32* %i
 	br label %L.1
 L.1:
@@ -29150,116 +30899,134 @@ L.11:
 L.7:
 	br label %L.8
 L.8:
-	%41 = load i8* %c
-	%42 = zext i8 %41 to i32
-	switch i32 %42, label %L.15 [
-		i32 66, label %L.17
-		i32 65, label %L.18
-		i32 67, label %L.19
-		i32 84, label %L.20
-		i32 73, label %L.21
-		i32 78, label %L.22
-		i32 68, label %L.23
-		i32 87, label %L.24
-		i32 83, label %L.25
-		i32 37, label %L.26
-	]
-L.17:
-	%43 = load %ast.AstNode** %node
-	%44 = getelementptr %ast.AstNode* %43, i32 0, i32 8
-	%45 = load %type.TypeNode** %44
-	call void @llvm_PType(%type.TypeNode* %45)
-	br label %L.16
-L.18:
-	%46 = load %ast.AstNode** %node
-	%47 = getelementptr %ast.AstNode* %46, i32 0, i32 8
-	%48 = load %type.TypeNode** %47
-	%49 = getelementptr %type.TypeNode* %48, i32 0, i32 0
-	%50 = load %type.TypeNode** %49
-	%51 = bitcast %type.TypeNode* %50 to %type.TypeNode*
-	call void @llvm_PType(%type.TypeNode* %51)
-	br label %L.16
-L.19:
-	%52 = load %ast.AstNode** %node
-	%53 = getelementptr %ast.AstNode* %52, i32 0, i32 8
-	%54 = load %type.TypeNode** %53
-	%55 = getelementptr %type.TypeNode* %54, i32 0, i32 0
-	%56 = load %type.TypeNode** %55
-	%57 = getelementptr %type.TypeNode* %56, i32 0, i32 0
-	%58 = load %type.TypeNode** %57
-	%59 = bitcast %type.TypeNode* %58 to %type.TypeNode*
-	call void @llvm_PType(%type.TypeNode* %59)
-	br label %L.16
-L.20:
-	%60 = load %ast.AstNode** %node
-	call void @llvm_NodeType(%ast.AstNode* %60)
-	br label %L.16
-L.21:
-	%61 = load %ast.AstNode** %node
-	call void @llvm_NodeName(%ast.AstNode* %61)
-	br label %L.16
-L.22:
-	%62 = load %ast.AstNode** %node
-	call void @llvm_NodeSrc(%ast.AstNode* %62)
-	br label %L.16
-L.23:
-	%63 = load %ast.AstNode** %node
-	call void @llvm_NodeDst(%ast.AstNode* %63)
-	br label %L.16
-L.24:
-	%64 = load %type.TypeNode** @type_wordtype
-	call void @llvm_PType(%type.TypeNode* %64)
-	br label %L.16
-L.25:
-	%65 = load %bout.BufIO** @llvm_f
-	%66 = bitcast %bout.BufIO* %65 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %66, i8 64)
-	%67 = load %bout.BufIO** @llvm_f
-	%68 = bitcast %bout.BufIO* %67 to %bout.BufIO*
-	%69 = bitcast [3 x i8]* @llvm_scon_prefix to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %68, [0 x i8]* %69)
-	%70 = load %bout.BufIO** @llvm_f
-	%71 = bitcast %bout.BufIO* %70 to %bout.BufIO*
-	%72 = load %ast.AstNode** %node
-	%73 = getelementptr %ast.AstNode* %72, i32 0, i32 10
-	%74 = load i64* %73
-	%75 = trunc i64 %74 to i32
-	call void @bout_BufIO_uint32(%bout.BufIO* %71, i32 %75)
-	br label %L.16
-L.26:
-	%76 = load %bout.BufIO** @llvm_f
-	%77 = bitcast %bout.BufIO* %76 to %bout.BufIO*
-	%78 = load i8* %c
-	call void @bout_BufIO_chr(%bout.BufIO* %77, i8 %78)
-	br label %L.16
+	%41 = load %ast.AstNode** %node
+	%42 = getelementptr %ast.AstNode* %41, i32 0, i32 8
+	%43 = load %type.TypeNode** %42
+	store %type.TypeNode* %43, %type.TypeNode** %t
+	br label %L.15
 L.15:
-	br label %L.16
+	%44 = load i8* %c
+	%45 = icmp eq i8 %44, 42
+	%46 = xor i1 %45, true
+	br i1 %46, label %L.16, label %L.17
+L.17:
+	%47 = load %type.TypeNode** %t
+	%48 = icmp ne %type.TypeNode* %47, null
+	br i1 %48, label %L.19, label %L.18
+L.19:
+	%49 = load %type.TypeNode** %t
+	%50 = getelementptr %type.TypeNode* %49, i32 0, i32 0
+	%51 = load %type.TypeNode** %50
+	%52 = bitcast %type.TypeNode* %51 to %type.TypeNode*
+	store %type.TypeNode* %52, %type.TypeNode** %t
+	br label %L.18
+L.18:
+	%53 = load i32* %i
+	%54 = add i32 %53, 1
+	store i32 %54, i32* %i
+	%55 = load [0 x i8]** %fmt
+	%56 = load i32* %i
+	%57 = getelementptr [0 x i8]* %55, i32 0, i32 %56
+	%58 = load i8* %57
+	store i8 %58, i8* %c
+	br label %L.15
 L.16:
+	%59 = load i8* %c
+	%60 = zext i8 %59 to i32
+	switch i32 %60, label %L.20 [
+		i32 75, label %L.22
+		i32 65, label %L.23
+		i32 66, label %L.24
+		i32 84, label %L.25
+		i32 73, label %L.26
+		i32 78, label %L.27
+		i32 68, label %L.28
+		i32 87, label %L.29
+		i32 83, label %L.30
+		i32 37, label %L.31
+	]
+L.22:
+	%61 = load %type.TypeNode** %t
+	call void @llvm_PType(%type.TypeNode* %61)
+	br label %L.21
+L.23:
+	%62 = load %type.TypeNode** %t
+	call void @llvm_PAlign(%type.TypeNode* %62)
+	br label %L.21
+L.24:
+	%63 = load %type.TypeNode** %t
+	call void @llvm_PWidth(%type.TypeNode* %63)
+	br label %L.21
+L.25:
+	%64 = load %ast.AstNode** %node
+	call void @llvm_NodeType(%ast.AstNode* %64)
+	br label %L.21
+L.26:
+	%65 = load %ast.AstNode** %node
+	call void @llvm_NodeName(%ast.AstNode* %65)
+	br label %L.21
+L.27:
+	%66 = load %ast.AstNode** %node
+	call void @llvm_NodeSrc(%ast.AstNode* %66)
+	br label %L.21
+L.28:
+	%67 = load %ast.AstNode** %node
+	call void @llvm_NodeDst(%ast.AstNode* %67)
+	br label %L.21
+L.29:
+	%68 = load %type.TypeNode** @type_wordtype
+	call void @llvm_PType(%type.TypeNode* %68)
+	br label %L.21
+L.30:
+	%69 = load %bout.BufIO** @llvm_f
+	%70 = bitcast %bout.BufIO* %69 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %70, i8 64)
+	%71 = load %bout.BufIO** @llvm_f
+	%72 = bitcast %bout.BufIO* %71 to %bout.BufIO*
+	%73 = bitcast [3 x i8]* @llvm_scon_prefix to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %72, [0 x i8]* %73)
+	%74 = load %bout.BufIO** @llvm_f
+	%75 = bitcast %bout.BufIO* %74 to %bout.BufIO*
+	%76 = load %ast.AstNode** %node
+	%77 = getelementptr %ast.AstNode* %76, i32 0, i32 10
+	%78 = load i64* %77
+	%79 = trunc i64 %78 to i32
+	call void @bout_BufIO_uint32(%bout.BufIO* %75, i32 %79)
+	br label %L.21
+L.31:
+	%80 = load %bout.BufIO** @llvm_f
+	%81 = bitcast %bout.BufIO* %80 to %bout.BufIO*
+	%82 = load i8* %c
+	call void @bout_BufIO_chr(%bout.BufIO* %81, i8 %82)
+	br label %L.21
+L.20:
+	br label %L.21
+L.21:
 	br label %L.4
 L.6:
-	%79 = load %bout.BufIO** @llvm_f
-	%80 = bitcast %bout.BufIO* %79 to %bout.BufIO*
-	%81 = load i8* %c
-	call void @bout_BufIO_chr(%bout.BufIO* %80, i8 %81)
+	%83 = load %bout.BufIO** @llvm_f
+	%84 = bitcast %bout.BufIO* %83 to %bout.BufIO*
+	%85 = load i8* %c
+	call void @bout_BufIO_chr(%bout.BufIO* %84, i8 %85)
 	br label %L.4
 L.4:
-	%82 = load i32* %i
-	%83 = add i32 %82, 1
-	store i32 %83, i32* %i
+	%86 = load i32* %i
+	%87 = add i32 %86, 1
+	store i32 %87, i32* %i
 	br label %L.1
 L.2:
 	br label %return
 return:
 	ret void
 }
-@S.645 = internal constant [5 x i8] c"%rv.\00"
+@S.673 = internal constant [5 x i8] c"%rv.\00"
 define internal void @llvm_PRetValName(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8]* @S.645
+	%2 = getelementptr [5 x i8]* @S.673
 	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %bout.BufIO** @llvm_f
@@ -29271,339 +31038,93 @@ L.0:
 return:
 	ret void
 }
-@S.646 = internal constant [72 x i8] c"declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\0A\00"
-@S.647 = internal constant [66 x i8] c"declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\0A\00"
-@S.648 = internal constant [35 x i8] c"declare i1 @memcmp1(i8*, i8*, %W)\0A\00"
-@S.649 = internal constant [37 x i8] c"declare i1 @memcmp2(i16*, i16*, %W)\0A\00"
-@S.650 = internal constant [37 x i8] c"declare i1 @memcmp4(i32*, i32*, %W)\0A\00"
-@S.651 = internal constant [37 x i8] c"declare i1 @memcmp8(i64*, i64*, %W)\0A\00"
-@S.652 = internal constant [34 x i8] c"declare i16 @llvm.bswap.i16(i16)\0A\00"
-@S.653 = internal constant [34 x i8] c"declare i32 @llvm.bswap.i32(i32)\0A\00"
-@S.654 = internal constant [34 x i8] c"declare i64 @llvm.bswap.i64(i64)\0A\00"
-@S.655 = internal constant [34 x i8] c"declare i8 @llvm.ctlz.i8(i8, i1)\0A\00"
-@S.656 = internal constant [37 x i8] c"declare i16 @llvm.ctlz.i16(i16, i1)\0A\00"
-@S.657 = internal constant [37 x i8] c"declare i32 @llvm.ctlz.i32(i32, i1)\0A\00"
-@S.658 = internal constant [37 x i8] c"declare i64 @llvm.ctlz.i64(i64, i1)\0A\00"
-@S.659 = internal constant [34 x i8] c"declare i8 @llvm.cttz.i8(i8, i1)\0A\00"
-@S.660 = internal constant [37 x i8] c"declare i16 @llvm.cttz.i16(i16, i1)\0A\00"
-@S.661 = internal constant [37 x i8] c"declare i32 @llvm.cttz.i32(i32, i1)\0A\00"
-@S.662 = internal constant [37 x i8] c"declare i64 @llvm.cttz.i64(i64, i1)\0A\00"
-@S.663 = internal constant [31 x i8] c"declare i8 @llvm.ctpop.i8(i8)\0A\00"
-@S.664 = internal constant [34 x i8] c"declare i16 @llvm.ctpop.i16(i16)\0A\00"
-@S.665 = internal constant [34 x i8] c"declare i32 @llvm.ctpop.i32(i32)\0A\00"
-@S.666 = internal constant [34 x i8] c"declare i64 @llvm.ctpop.i64(i64)\0A\00"
-define internal void @llvm_DeclareIntrinsics() nounwind {
+@S.674 = internal constant [9 x i8] c", align \00"
+define internal void @llvm_Alignment(%type.TypeNode* %t$) nounwind {
 L.0:
-	%i = alloca i8
-	store i8 0, i8* %i
+	%t = alloca %type.TypeNode*
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%n = alloca i32
+	%0 = load %type.TypeNode** %t
+	%1 = getelementptr %type.TypeNode* %0, i32 0, i32 11
+	%2 = load i32* %1
+	store i32 %2, i32* %n
+	%3 = load i32* %n
+	%4 = load %target.ModelT** @target_Target
+	%5 = getelementptr %target.ModelT* %4, i32 0, i32 2
+	%6 = load i8* %5
+	%7 = zext i8 %6 to i32
+	%8 = icmp uge i32 %3, %7
+	br i1 %8, label %L.2, label %L.1
+L.2:
+	%9 = load %bout.BufIO** @llvm_f
+	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
+	%11 = getelementptr [9 x i8]* @S.674
+	%12 = bitcast [9 x i8]* %11 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
+	%13 = load %bout.BufIO** @llvm_f
+	%14 = bitcast %bout.BufIO* %13 to %bout.BufIO*
+	%15 = load i32* %n
+	%16 = load %target.ModelT** @target_Target
+	%17 = getelementptr %target.ModelT* %16, i32 0, i32 2
+	%18 = load i8* %17
+	%19 = zext i8 %18 to i32
+	%20 = udiv i32 %15, %19
+	call void @bout_BufIO_uint(%bout.BufIO* %14, i32 %20)
 	br label %L.1
 L.1:
-	%0 = load i8* %i
-	%1 = icmp ult i8 %0, 8
-	%2 = xor i1 %1, true
-	br i1 %2, label %L.2, label %L.3
-L.3:
-	%3 = load i8* %i
-	%4 = zext i8 %3 to i32
-	%5 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %4
-	%6 = load i16* %5
-	%7 = icmp ne i16 %6, 0
-	br i1 %7, label %L.5, label %L.4
-L.5:
-	%8 = load i8* %i
-	%9 = zext i8 %8 to i32
-	switch i32 %9, label %L.6 [
-		i32 0, label %L.8
-		i32 2, label %L.9
-		i32 3, label %L.10
-		i32 4, label %L.11
-		i32 5, label %L.12
-		i32 6, label %L.13
-		i32 7, label %L.14
-	]
-L.8:
-	%10 = getelementptr [72 x i8]* @S.646
-	%11 = bitcast [72 x i8]* %10 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %11, %ast.AstNode* null)
-	br label %L.7
-L.9:
-	%12 = getelementptr [66 x i8]* @S.647
-	%13 = bitcast [66 x i8]* %12 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %13, %ast.AstNode* null)
-	br label %L.7
-L.10:
-	%14 = load i8* %i
-	%15 = zext i8 %14 to i32
-	%16 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %15
-	%17 = load i16* %16
-	%18 = and i16 %17, 1
-	%19 = icmp ne i16 %18, 0
-	br i1 %19, label %L.16, label %L.15
-L.16:
-	%20 = getelementptr [35 x i8]* @S.648
-	%21 = bitcast [35 x i8]* %20 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %21, %ast.AstNode* null)
-	br label %L.15
-L.15:
-	%22 = load i8* %i
-	%23 = zext i8 %22 to i32
-	%24 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %23
-	%25 = load i16* %24
-	%26 = and i16 %25, 2
-	%27 = icmp ne i16 %26, 0
-	br i1 %27, label %L.18, label %L.17
-L.18:
-	%28 = getelementptr [37 x i8]* @S.649
-	%29 = bitcast [37 x i8]* %28 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %29, %ast.AstNode* null)
-	br label %L.17
-L.17:
-	%30 = load i8* %i
-	%31 = zext i8 %30 to i32
-	%32 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %31
-	%33 = load i16* %32
-	%34 = and i16 %33, 8
-	%35 = icmp ne i16 %34, 0
-	br i1 %35, label %L.20, label %L.19
-L.20:
-	%36 = getelementptr [37 x i8]* @S.650
-	%37 = bitcast [37 x i8]* %36 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %37, %ast.AstNode* null)
-	br label %L.19
-L.19:
-	%38 = load i8* %i
-	%39 = zext i8 %38 to i32
-	%40 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %39
-	%41 = load i16* %40
-	%42 = and i16 %41, 128
-	%43 = icmp ne i16 %42, 0
-	br i1 %43, label %L.22, label %L.21
-L.22:
-	%44 = getelementptr [37 x i8]* @S.651
-	%45 = bitcast [37 x i8]* %44 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %45, %ast.AstNode* null)
-	br label %L.21
-L.21:
-	br label %L.7
-L.11:
-	%46 = load i8* %i
-	%47 = zext i8 %46 to i32
-	%48 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %47
-	%49 = load i16* %48
-	%50 = and i16 %49, 2
-	%51 = icmp ne i16 %50, 0
-	br i1 %51, label %L.24, label %L.23
-L.24:
-	%52 = getelementptr [34 x i8]* @S.652
-	%53 = bitcast [34 x i8]* %52 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %53, %ast.AstNode* null)
-	br label %L.23
-L.23:
-	%54 = load i8* %i
-	%55 = zext i8 %54 to i32
-	%56 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %55
-	%57 = load i16* %56
-	%58 = and i16 %57, 8
-	%59 = icmp ne i16 %58, 0
-	br i1 %59, label %L.26, label %L.25
-L.26:
-	%60 = getelementptr [34 x i8]* @S.653
-	%61 = bitcast [34 x i8]* %60 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %61, %ast.AstNode* null)
-	br label %L.25
-L.25:
-	%62 = load i8* %i
-	%63 = zext i8 %62 to i32
-	%64 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %63
-	%65 = load i16* %64
-	%66 = and i16 %65, 128
-	%67 = icmp ne i16 %66, 0
-	br i1 %67, label %L.28, label %L.27
-L.28:
-	%68 = getelementptr [34 x i8]* @S.654
-	%69 = bitcast [34 x i8]* %68 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %69, %ast.AstNode* null)
-	br label %L.27
-L.27:
-	br label %L.7
-L.12:
-	%70 = load i8* %i
-	%71 = zext i8 %70 to i32
-	%72 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %71
-	%73 = load i16* %72
-	%74 = and i16 %73, 1
-	%75 = icmp ne i16 %74, 0
-	br i1 %75, label %L.30, label %L.29
-L.30:
-	%76 = getelementptr [34 x i8]* @S.655
-	%77 = bitcast [34 x i8]* %76 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %77, %ast.AstNode* null)
-	br label %L.29
-L.29:
-	%78 = load i8* %i
-	%79 = zext i8 %78 to i32
-	%80 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %79
-	%81 = load i16* %80
-	%82 = and i16 %81, 2
-	%83 = icmp ne i16 %82, 0
-	br i1 %83, label %L.32, label %L.31
-L.32:
-	%84 = getelementptr [37 x i8]* @S.656
-	%85 = bitcast [37 x i8]* %84 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %85, %ast.AstNode* null)
-	br label %L.31
-L.31:
-	%86 = load i8* %i
-	%87 = zext i8 %86 to i32
-	%88 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %87
-	%89 = load i16* %88
-	%90 = and i16 %89, 8
-	%91 = icmp ne i16 %90, 0
-	br i1 %91, label %L.34, label %L.33
-L.34:
-	%92 = getelementptr [37 x i8]* @S.657
-	%93 = bitcast [37 x i8]* %92 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %93, %ast.AstNode* null)
-	br label %L.33
-L.33:
-	%94 = load i8* %i
-	%95 = zext i8 %94 to i32
-	%96 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %95
-	%97 = load i16* %96
-	%98 = and i16 %97, 128
-	%99 = icmp ne i16 %98, 0
-	br i1 %99, label %L.36, label %L.35
-L.36:
-	%100 = getelementptr [37 x i8]* @S.658
-	%101 = bitcast [37 x i8]* %100 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %101, %ast.AstNode* null)
-	br label %L.35
-L.35:
-	br label %L.7
-L.13:
-	%102 = load i8* %i
-	%103 = zext i8 %102 to i32
-	%104 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %103
-	%105 = load i16* %104
-	%106 = and i16 %105, 1
-	%107 = icmp ne i16 %106, 0
-	br i1 %107, label %L.38, label %L.37
-L.38:
-	%108 = getelementptr [34 x i8]* @S.659
-	%109 = bitcast [34 x i8]* %108 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %109, %ast.AstNode* null)
-	br label %L.37
-L.37:
-	%110 = load i8* %i
-	%111 = zext i8 %110 to i32
-	%112 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %111
-	%113 = load i16* %112
-	%114 = and i16 %113, 2
-	%115 = icmp ne i16 %114, 0
-	br i1 %115, label %L.40, label %L.39
-L.40:
-	%116 = getelementptr [37 x i8]* @S.660
-	%117 = bitcast [37 x i8]* %116 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %117, %ast.AstNode* null)
-	br label %L.39
-L.39:
-	%118 = load i8* %i
-	%119 = zext i8 %118 to i32
-	%120 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %119
-	%121 = load i16* %120
-	%122 = and i16 %121, 8
-	%123 = icmp ne i16 %122, 0
-	br i1 %123, label %L.42, label %L.41
-L.42:
-	%124 = getelementptr [37 x i8]* @S.661
-	%125 = bitcast [37 x i8]* %124 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %125, %ast.AstNode* null)
-	br label %L.41
-L.41:
-	%126 = load i8* %i
-	%127 = zext i8 %126 to i32
-	%128 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %127
-	%129 = load i16* %128
-	%130 = and i16 %129, 128
-	%131 = icmp ne i16 %130, 0
-	br i1 %131, label %L.44, label %L.43
-L.44:
-	%132 = getelementptr [37 x i8]* @S.662
-	%133 = bitcast [37 x i8]* %132 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %133, %ast.AstNode* null)
-	br label %L.43
-L.43:
-	br label %L.7
-L.14:
-	%134 = load i8* %i
-	%135 = zext i8 %134 to i32
-	%136 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %135
-	%137 = load i16* %136
-	%138 = and i16 %137, 1
-	%139 = icmp ne i16 %138, 0
-	br i1 %139, label %L.46, label %L.45
-L.46:
-	%140 = getelementptr [31 x i8]* @S.663
-	%141 = bitcast [31 x i8]* %140 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %141, %ast.AstNode* null)
-	br label %L.45
-L.45:
-	%142 = load i8* %i
-	%143 = zext i8 %142 to i32
-	%144 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %143
-	%145 = load i16* %144
-	%146 = and i16 %145, 2
-	%147 = icmp ne i16 %146, 0
-	br i1 %147, label %L.48, label %L.47
-L.48:
-	%148 = getelementptr [34 x i8]* @S.664
-	%149 = bitcast [34 x i8]* %148 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %149, %ast.AstNode* null)
-	br label %L.47
-L.47:
-	%150 = load i8* %i
-	%151 = zext i8 %150 to i32
-	%152 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %151
-	%153 = load i16* %152
-	%154 = and i16 %153, 8
-	%155 = icmp ne i16 %154, 0
-	br i1 %155, label %L.50, label %L.49
-L.50:
-	%156 = getelementptr [34 x i8]* @S.665
-	%157 = bitcast [34 x i8]* %156 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %157, %ast.AstNode* null)
-	br label %L.49
-L.49:
-	%158 = load i8* %i
-	%159 = zext i8 %158 to i32
-	%160 = getelementptr [9 x i16]* @llvm_UsedIntrinsic, i32 0, i32 %159
-	%161 = load i16* %160
-	%162 = and i16 %161, 128
-	%163 = icmp ne i16 %162, 0
-	br i1 %163, label %L.52, label %L.51
-L.52:
-	%164 = getelementptr [34 x i8]* @S.666
-	%165 = bitcast [34 x i8]* %164 to [0 x i8]*
-	call void @llvm_Print([0 x i8]* %165, %ast.AstNode* null)
-	br label %L.51
-L.51:
-	br label %L.7
-L.6:
-	br label %L.7
-L.7:
-	br label %L.4
-L.4:
-	%166 = load i8* %i
-	%167 = add i8 %166, 1
-	store i8 %167, i8* %i
-	br label %L.1
-L.2:
 	br label %return
 return:
 	ret void
 }
-@S.667 = internal constant [9 x i8] c" = type \00"
-@S.668 = internal constant [2 x i8] c"i\00"
+@S.675 = internal constant [2 x i8] c",\00"
+@S.676 = internal constant [11 x i8] c" section \22\00"
+@S.677 = internal constant [2 x i8] c"\22\00"
+define internal void @llvm_Section(%symb.SymbNode* %s$, i8 zeroext %comma$) nounwind {
+L.0:
+	%s = alloca %symb.SymbNode*
+	%comma = alloca i8
+	store %symb.SymbNode* %s$, %symb.SymbNode** %s
+	store i8 %comma$, i8* %comma
+	%0 = load %symb.SymbNode** %s
+	%1 = icmp ne %symb.SymbNode* %0, null
+	br i1 %1, label %L.2, label %L.1
+L.2:
+	%2 = load i8* %comma
+	%3 = icmp ne i8 %2, 0
+	br i1 %3, label %L.4, label %L.3
+L.4:
+	%4 = load %bout.BufIO** @llvm_f
+	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
+	%6 = getelementptr [2 x i8]* @S.675
+	%7 = bitcast [2 x i8]* %6 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
+	br label %L.3
+L.3:
+	%8 = load %bout.BufIO** @llvm_f
+	%9 = bitcast %bout.BufIO* %8 to %bout.BufIO*
+	%10 = getelementptr [11 x i8]* @S.676
+	%11 = bitcast [11 x i8]* %10 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %9, [0 x i8]* %11)
+	%12 = load %bout.BufIO** @llvm_f
+	%13 = bitcast %bout.BufIO* %12 to %bout.BufIO*
+	%14 = load %symb.SymbNode** %s
+	%15 = getelementptr %symb.SymbNode* %14, i32 0, i32 22
+	%16 = getelementptr [0 x i8]* %15
+	%17 = bitcast [0 x i8]* %16 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %13, [0 x i8]* %17)
+	%18 = load %bout.BufIO** @llvm_f
+	%19 = bitcast %bout.BufIO* %18 to %bout.BufIO*
+	%20 = getelementptr [2 x i8]* @S.677
+	%21 = bitcast [2 x i8]* %20 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
+	br label %L.1
+L.1:
+	br label %return
+return:
+	ret void
+}
+@S.678 = internal constant [9 x i8] c" = type \00"
+@S.679 = internal constant [2 x i8] c"i\00"
 define internal void @llvm_DclType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -29699,7 +31220,7 @@ L.14:
 	call void @llvm_PTypeName(%type.TypeNode* %48)
 	%49 = load %bout.BufIO** @llvm_f
 	%50 = bitcast %bout.BufIO* %49 to %bout.BufIO*
-	%51 = getelementptr [9 x i8]* @S.667
+	%51 = getelementptr [9 x i8]* @S.678
 	%52 = bitcast [9 x i8]* %51 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %50, [0 x i8]* %52)
 	%53 = load %type.TypeNode** %t
@@ -29715,7 +31236,7 @@ L.17:
 	store i32 %60, i32* %size
 	%61 = load %bout.BufIO** @llvm_f
 	%62 = bitcast %bout.BufIO* %61 to %bout.BufIO*
-	%63 = getelementptr [2 x i8]* @S.668
+	%63 = getelementptr [2 x i8]* @S.679
 	%64 = bitcast [2 x i8]* %63 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %62, [0 x i8]* %64)
 	%65 = load %bout.BufIO** @llvm_f
@@ -29741,14 +31262,15 @@ L.3:
 return:
 	ret void
 }
-@S.669 = internal constant [7 x i8] c"define\00"
-@S.670 = internal constant [8 x i8] c"declare\00"
-@S.671 = internal constant [10 x i8] c" internal\00"
-@S.672 = internal constant [10 x i8] c" external\00"
-@S.673 = internal constant [5 x i8] c" %I(\00"
-@S.674 = internal constant [3 x i8] c" %\00"
-@S.675 = internal constant [3 x i8] c", \00"
-@S.676 = internal constant [2 x i8] c")\00"
+@S.680 = internal constant [7 x i8] c"define\00"
+@S.681 = internal constant [8 x i8] c"declare\00"
+@S.682 = internal constant [10 x i8] c" internal\00"
+@S.683 = internal constant [6 x i8] c" weak\00"
+@S.684 = internal constant [10 x i8] c" external\00"
+@S.685 = internal constant [5 x i8] c" %I(\00"
+@S.686 = internal constant [3 x i8] c" %\00"
+@S.687 = internal constant [3 x i8] c", \00"
+@S.688 = internal constant [2 x i8] c")\00"
 define internal void @llvm_DclProc(%ast.AstNode* %node$, i8 zeroext %isdefine$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -29767,114 +31289,122 @@ L.0:
 L.2:
 	%5 = load %bout.BufIO** @llvm_f
 	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
-	%7 = getelementptr [7 x i8]* @S.669
+	%7 = getelementptr [7 x i8]* @S.680
 	%8 = bitcast [7 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	br label %L.1
 L.3:
 	%9 = load %bout.BufIO** @llvm_f
 	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = getelementptr [8 x i8]* @S.670
+	%11 = getelementptr [8 x i8]* @S.681
 	%12 = bitcast [8 x i8]* %11 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
 	br label %L.1
 L.1:
 	%13 = load %symb.SymbNode** %ps
-	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 13
+	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 14
 	%15 = load i8* %14
 	%16 = zext i8 %15 to i32
 	switch i32 %16, label %L.4 [
 		i32 2, label %L.6
-		i32 6, label %L.6
+		i32 7, label %L.6
 		i32 4, label %L.7
+		i32 5, label %L.8
 	]
 L.6:
 	%17 = load %bout.BufIO** @llvm_f
 	%18 = bitcast %bout.BufIO* %17 to %bout.BufIO*
-	%19 = getelementptr [10 x i8]* @S.671
+	%19 = getelementptr [10 x i8]* @S.682
 	%20 = bitcast [10 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
 	br label %L.5
 L.7:
 	%21 = load %bout.BufIO** @llvm_f
 	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
-	%23 = getelementptr [10 x i8]* @S.672
-	%24 = bitcast [10 x i8]* %23 to [0 x i8]*
+	%23 = getelementptr [6 x i8]* @S.683
+	%24 = bitcast [6 x i8]* %23 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
+	br label %L.5
+L.8:
+	%25 = load %bout.BufIO** @llvm_f
+	%26 = bitcast %bout.BufIO* %25 to %bout.BufIO*
+	%27 = getelementptr [10 x i8]* @S.684
+	%28 = bitcast [10 x i8]* %27 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
 	br label %L.5
 L.4:
 	br label %L.5
 L.5:
-	%25 = load %symb.SymbNode** %ps
-	%26 = getelementptr %symb.SymbNode* %25, i32 0, i32 4
-	%27 = load %type.TypeListEntry** %26
-	call void @llvm_PRetvType(%type.TypeListEntry* %27, i8 1)
-	%28 = getelementptr [5 x i8]* @S.673
-	%29 = bitcast [5 x i8]* %28 to [0 x i8]*
-	%30 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %29, %ast.AstNode* %30)
-	%31 = load %symb.SymbNode** %ps
-	%32 = getelementptr %symb.SymbNode* %31, i32 0, i32 3
-	%33 = load %symb.SymbNode** %32
-	%34 = bitcast %symb.SymbNode* %33 to %symb.SymbNode*
-	store %symb.SymbNode* %34, %symb.SymbNode** %s
-	br label %L.8
-L.8:
-	%35 = load %symb.SymbNode** %s
-	%36 = icmp ne %symb.SymbNode* %35, null
-	%37 = xor i1 %36, true
-	br i1 %37, label %L.9, label %L.10
-L.10:
-	%38 = load %symb.SymbNode** %s
-	%39 = getelementptr %symb.SymbNode* %38, i32 0, i32 1
-	%40 = load %type.TypeNode** %39
-	call void @llvm_PType(%type.TypeNode* %40)
-	%41 = load %symb.SymbNode** %s
-	%42 = getelementptr %symb.SymbNode* %41, i32 0, i32 1
-	%43 = load %type.TypeNode** %42
-	call void @llvm_PExtend(%type.TypeNode* %43)
-	%44 = load i8* %isdefine
-	%45 = icmp ne i8 %44, 0
-	br i1 %45, label %L.12, label %L.11
-L.12:
-	%46 = load %bout.BufIO** @llvm_f
-	%47 = bitcast %bout.BufIO* %46 to %bout.BufIO*
-	%48 = getelementptr [3 x i8]* @S.674
-	%49 = bitcast [3 x i8]* %48 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %47, [0 x i8]* %49)
+	%29 = load %symb.SymbNode** %ps
+	%30 = getelementptr %symb.SymbNode* %29, i32 0, i32 4
+	%31 = load %type.TypeListEntry** %30
+	call void @llvm_PRetvType(%type.TypeListEntry* %31, i8 1)
+	%32 = getelementptr [5 x i8]* @S.685
+	%33 = bitcast [5 x i8]* %32 to [0 x i8]*
+	%34 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %33, %ast.AstNode* %34)
+	%35 = load %symb.SymbNode** %ps
+	%36 = getelementptr %symb.SymbNode* %35, i32 0, i32 3
+	%37 = load %symb.SymbNode** %36
+	%38 = bitcast %symb.SymbNode* %37 to %symb.SymbNode*
+	store %symb.SymbNode* %38, %symb.SymbNode** %s
+	br label %L.9
+L.9:
+	%39 = load %symb.SymbNode** %s
+	%40 = icmp ne %symb.SymbNode* %39, null
+	%41 = xor i1 %40, true
+	br i1 %41, label %L.10, label %L.11
+L.11:
+	%42 = load %symb.SymbNode** %s
+	%43 = getelementptr %symb.SymbNode* %42, i32 0, i32 1
+	%44 = load %type.TypeNode** %43
+	call void @llvm_PType(%type.TypeNode* %44)
+	%45 = load %symb.SymbNode** %s
+	%46 = getelementptr %symb.SymbNode* %45, i32 0, i32 1
+	%47 = load %type.TypeNode** %46
+	call void @llvm_PExtend(%type.TypeNode* %47)
+	%48 = load i8* %isdefine
+	%49 = icmp ne i8 %48, 0
+	br i1 %49, label %L.13, label %L.12
+L.13:
 	%50 = load %bout.BufIO** @llvm_f
 	%51 = bitcast %bout.BufIO* %50 to %bout.BufIO*
-	%52 = load %symb.SymbNode** %s
-	%53 = getelementptr %symb.SymbNode* %52, i32 0, i32 21
-	%54 = getelementptr [0 x i8]* %53
-	%55 = bitcast [0 x i8]* %54 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %51, [0 x i8]* %55)
-	%56 = load %bout.BufIO** @llvm_f
-	%57 = bitcast %bout.BufIO* %56 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %57, i8 36)
-	br label %L.11
-L.11:
-	%58 = load %symb.SymbNode** %s
-	%59 = getelementptr %symb.SymbNode* %58, i32 0, i32 0
-	%60 = load %symb.SymbNode** %59
-	%61 = bitcast %symb.SymbNode* %60 to %symb.SymbNode*
-	store %symb.SymbNode* %61, %symb.SymbNode** %s
+	%52 = getelementptr [3 x i8]* @S.686
+	%53 = bitcast [3 x i8]* %52 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %51, [0 x i8]* %53)
+	%54 = load %bout.BufIO** @llvm_f
+	%55 = bitcast %bout.BufIO* %54 to %bout.BufIO*
+	%56 = load %symb.SymbNode** %s
+	%57 = getelementptr %symb.SymbNode* %56, i32 0, i32 22
+	%58 = getelementptr [0 x i8]* %57
+	%59 = bitcast [0 x i8]* %58 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %55, [0 x i8]* %59)
+	%60 = load %bout.BufIO** @llvm_f
+	%61 = bitcast %bout.BufIO* %60 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %61, i8 36)
+	br label %L.12
+L.12:
 	%62 = load %symb.SymbNode** %s
-	%63 = icmp eq %symb.SymbNode* %62, null
-	br i1 %63, label %L.9, label %L.13
-L.13:
-	%64 = load %bout.BufIO** @llvm_f
-	%65 = bitcast %bout.BufIO* %64 to %bout.BufIO*
-	%66 = getelementptr [3 x i8]* @S.675
-	%67 = bitcast [3 x i8]* %66 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %65, [0 x i8]* %67)
-	br label %L.8
-L.9:
+	%63 = getelementptr %symb.SymbNode* %62, i32 0, i32 0
+	%64 = load %symb.SymbNode** %63
+	%65 = bitcast %symb.SymbNode* %64 to %symb.SymbNode*
+	store %symb.SymbNode* %65, %symb.SymbNode** %s
+	%66 = load %symb.SymbNode** %s
+	%67 = icmp eq %symb.SymbNode* %66, null
+	br i1 %67, label %L.10, label %L.14
+L.14:
 	%68 = load %bout.BufIO** @llvm_f
 	%69 = bitcast %bout.BufIO* %68 to %bout.BufIO*
-	%70 = getelementptr [2 x i8]* @S.676
-	%71 = bitcast [2 x i8]* %70 to [0 x i8]*
+	%70 = getelementptr [3 x i8]* @S.687
+	%71 = bitcast [3 x i8]* %70 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
+	br label %L.9
+L.10:
+	%72 = load %bout.BufIO** @llvm_f
+	%73 = bitcast %bout.BufIO* %72 to %bout.BufIO*
+	%74 = getelementptr [2 x i8]* @S.688
+	%75 = bitcast [2 x i8]* %74 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %73, [0 x i8]* %75)
 	br label %return
 return:
 	ret void
@@ -29968,10 +31498,10 @@ L.4:
 return:
 	ret void
 }
-@S.677 = internal constant [4 x i8] c"0.0\00"
-@S.678 = internal constant [16 x i8] c"zeroinitializer\00"
-@S.679 = internal constant [16 x i8] c"zeroinitializer\00"
-@S.680 = internal constant [5 x i8] c"null\00"
+@S.689 = internal constant [4 x i8] c"0.0\00"
+@S.690 = internal constant [16 x i8] c"zeroinitializer\00"
+@S.691 = internal constant [16 x i8] c"zeroinitializer\00"
+@S.692 = internal constant [5 x i8] c"null\00"
 define internal void @llvm_DefaultInitializer(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -29998,28 +31528,28 @@ L.3:
 L.4:
 	%6 = load %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [4 x i8]* @S.677
+	%8 = getelementptr [4 x i8]* @S.689
 	%9 = bitcast [4 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.2
 L.5:
 	%10 = load %bout.BufIO** @llvm_f
 	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = getelementptr [16 x i8]* @S.678
+	%12 = getelementptr [16 x i8]* @S.690
 	%13 = bitcast [16 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	br label %L.2
 L.6:
 	%14 = load %bout.BufIO** @llvm_f
 	%15 = bitcast %bout.BufIO* %14 to %bout.BufIO*
-	%16 = getelementptr [16 x i8]* @S.679
+	%16 = getelementptr [16 x i8]* @S.691
 	%17 = bitcast [16 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	br label %L.2
 L.7:
 	%18 = load %bout.BufIO** @llvm_f
 	%19 = bitcast %bout.BufIO* %18 to %bout.BufIO*
-	%20 = getelementptr [5 x i8]* @S.680
+	%20 = getelementptr [5 x i8]* @S.692
 	%21 = bitcast [5 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	br label %L.2
@@ -30030,24 +31560,24 @@ L.2:
 return:
 	ret void
 }
-@S.681 = internal constant [16 x i8] c"zeroinitializer\00"
-@S.682 = internal constant [3 x i8] c"{ \00"
-@S.683 = internal constant [2 x i8] c" \00"
-@S.684 = internal constant [3 x i8] c", \00"
-@S.685 = internal constant [3 x i8] c" }\00"
-@S.686 = internal constant [3 x i8] c"[ \00"
-@S.687 = internal constant [2 x i8] c" \00"
-@S.688 = internal constant [3 x i8] c", \00"
-@S.689 = internal constant [3 x i8] c" ]\00"
-@S.690 = internal constant [14 x i8] c"bitcast( %T* \00"
-@S.691 = internal constant [25 x i8] c"getelementptr( %T* %N ) \00"
-@S.692 = internal constant [9 x i8] c" to %T )\00"
-@S.693 = internal constant [13 x i8] c"bitcast( %T \00"
-@S.694 = internal constant [24 x i8] c"getelementptr( %T %N ) \00"
-@S.695 = internal constant [9 x i8] c" to %T )\00"
-@S.696 = internal constant [13 x i8] c"bitcast( %T \00"
-@S.697 = internal constant [24 x i8] c"getelementptr( %T %N ) \00"
-@S.698 = internal constant [9 x i8] c" to %T )\00"
+@S.693 = internal constant [16 x i8] c"zeroinitializer\00"
+@S.694 = internal constant [3 x i8] c"{ \00"
+@S.695 = internal constant [2 x i8] c" \00"
+@S.696 = internal constant [3 x i8] c", \00"
+@S.697 = internal constant [3 x i8] c" }\00"
+@S.698 = internal constant [3 x i8] c"[ \00"
+@S.699 = internal constant [2 x i8] c" \00"
+@S.700 = internal constant [3 x i8] c", \00"
+@S.701 = internal constant [3 x i8] c" ]\00"
+@S.702 = internal constant [14 x i8] c"bitcast( %T* \00"
+@S.703 = internal constant [25 x i8] c"getelementptr( %T* %N ) \00"
+@S.704 = internal constant [9 x i8] c" to %T )\00"
+@S.705 = internal constant [13 x i8] c"bitcast( %T \00"
+@S.706 = internal constant [24 x i8] c"getelementptr( %T %N ) \00"
+@S.707 = internal constant [9 x i8] c" to %T )\00"
+@S.708 = internal constant [13 x i8] c"bitcast( %T \00"
+@S.709 = internal constant [24 x i8] c"getelementptr( %T %N ) \00"
+@S.710 = internal constant [9 x i8] c" to %T )\00"
 define internal void @llvm_Constant(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -30116,7 +31646,7 @@ L.18:
 L.19:
 	%28 = load %bout.BufIO** @llvm_f
 	%29 = bitcast %bout.BufIO* %28 to %bout.BufIO*
-	%30 = getelementptr [16 x i8]* @S.681
+	%30 = getelementptr [16 x i8]* @S.693
 	%31 = bitcast [16 x i8]* %30 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %29, [0 x i8]* %31)
 	br label %L.17
@@ -30160,299 +31690,300 @@ L.20:
 	%50 = load %ast.AstNode** %node
 	%51 = getelementptr %ast.AstNode* %50, i32 0, i32 9
 	%52 = load %symb.SymbNode** %51
-	%53 = bitcast %symb.SymbNode* %52 to [0 x i8]*
-	%54 = bitcast [0 x i8]* %53 to [0 x i8]*
-	%55 = load i16* %n
-	call void @llvm_PString([0 x i8]* %54, i16 %55, i8 1)
+	%53 = getelementptr %symb.SymbNode* %52, i32 0, i32 22
+	%54 = getelementptr [0 x i8]* %53
+	%55 = bitcast [0 x i8]* %54 to [0 x i8]*
+	%56 = load i16* %n
+	call void @llvm_PString([0 x i8]* %55, i16 %56, i8 1)
 	br label %L.4
 L.8:
-	%56 = load %type.TypeNode** %t
-	%57 = getelementptr %type.TypeNode* %56, i32 0, i32 14
-	%58 = load i8* %57
-	%59 = zext i8 %58 to i32
-	switch i32 %59, label %L.23 [
+	%57 = load %type.TypeNode** %t
+	%58 = getelementptr %type.TypeNode* %57, i32 0, i32 14
+	%59 = load i8* %58
+	%60 = zext i8 %59 to i32
+	switch i32 %60, label %L.23 [
 		i32 7, label %L.25
 		i32 6, label %L.26
 	]
 L.25:
-	%60 = load %type.TypeNode** %t
-	%61 = getelementptr %type.TypeNode* %60, i32 0, i32 23
-	%62 = load i8* %61
-	%63 = icmp ne i8 %62, 0
-	br i1 %63, label %L.28, label %L.27
+	%61 = load %type.TypeNode** %t
+	%62 = getelementptr %type.TypeNode* %61, i32 0, i32 23
+	%63 = load i8* %62
+	%64 = icmp ne i8 %63, 0
+	br i1 %64, label %L.28, label %L.27
 L.27:
-	%64 = load %type.TypeNode** %t
-	%65 = getelementptr %type.TypeNode* %64, i32 0, i32 24
-	%66 = load i8* %65
-	%67 = icmp ne i8 %66, 0
+	%65 = load %type.TypeNode** %t
+	%66 = getelementptr %type.TypeNode* %65, i32 0, i32 24
+	%67 = load i8* %66
+	%68 = icmp ne i8 %67, 0
 	br label %L.28
 L.28:
-	%68 = phi i1 [ true, %L.25 ], [ %67, %L.27 ]
-	br i1 %68, label %L.30, label %L.29
+	%69 = phi i1 [ true, %L.25 ], [ %68, %L.27 ]
+	br i1 %69, label %L.30, label %L.29
 L.30:
-	%69 = load %bout.BufIO** @llvm_f
-	%70 = bitcast %bout.BufIO* %69 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %70, i8 60)
+	%70 = load %bout.BufIO** @llvm_f
+	%71 = bitcast %bout.BufIO* %70 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %71, i8 60)
 	br label %L.29
 L.29:
-	%71 = load %bout.BufIO** @llvm_f
-	%72 = bitcast %bout.BufIO* %71 to %bout.BufIO*
-	%73 = getelementptr [3 x i8]* @S.682
-	%74 = bitcast [3 x i8]* %73 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %72, [0 x i8]* %74)
+	%72 = load %bout.BufIO** @llvm_f
+	%73 = bitcast %bout.BufIO* %72 to %bout.BufIO*
+	%74 = getelementptr [3 x i8]* @S.694
+	%75 = bitcast [3 x i8]* %74 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %73, [0 x i8]* %75)
 	store i16 0, i16* %i
 	br label %L.31
 L.31:
-	%75 = load %ast.AstNode** %node
-	%76 = getelementptr %ast.AstNode* %75, i32 0, i32 11
-	%77 = load i16* %i
-	%78 = zext i16 %77 to i32
-	%79 = getelementptr [0 x %ast.AstNode*]* %76, i32 0, i32 %78
-	%80 = load %ast.AstNode** %79
-	%81 = getelementptr %ast.AstNode* %80, i32 0, i32 8
-	%82 = load %type.TypeNode** %81
-	call void @llvm_PType(%type.TypeNode* %82)
-	%83 = load %bout.BufIO** @llvm_f
-	%84 = bitcast %bout.BufIO* %83 to %bout.BufIO*
-	%85 = getelementptr [2 x i8]* @S.683
-	%86 = bitcast [2 x i8]* %85 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %84, [0 x i8]* %86)
-	%87 = load %ast.AstNode** %node
-	%88 = getelementptr %ast.AstNode* %87, i32 0, i32 11
-	%89 = load i16* %i
-	%90 = zext i16 %89 to i32
-	%91 = getelementptr [0 x %ast.AstNode*]* %88, i32 0, i32 %90
-	%92 = load %ast.AstNode** %91
-	%93 = bitcast %ast.AstNode* %92 to %ast.AstNode*
-	call void @llvm_Constant(%ast.AstNode* %93)
-	%94 = load i16* %i
-	%95 = add i16 %94, 1
-	store i16 %95, i16* %i
-	%96 = load i16* %i
-	%97 = load %ast.AstNode** %node
-	%98 = getelementptr %ast.AstNode* %97, i32 0, i32 2
-	%99 = load i16* %98
-	%100 = icmp uge i16 %96, %99
-	br i1 %100, label %L.32, label %L.33
+	%76 = load %ast.AstNode** %node
+	%77 = getelementptr %ast.AstNode* %76, i32 0, i32 11
+	%78 = load i16* %i
+	%79 = zext i16 %78 to i32
+	%80 = getelementptr [0 x %ast.AstNode*]* %77, i32 0, i32 %79
+	%81 = load %ast.AstNode** %80
+	%82 = getelementptr %ast.AstNode* %81, i32 0, i32 8
+	%83 = load %type.TypeNode** %82
+	call void @llvm_PType(%type.TypeNode* %83)
+	%84 = load %bout.BufIO** @llvm_f
+	%85 = bitcast %bout.BufIO* %84 to %bout.BufIO*
+	%86 = getelementptr [2 x i8]* @S.695
+	%87 = bitcast [2 x i8]* %86 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %85, [0 x i8]* %87)
+	%88 = load %ast.AstNode** %node
+	%89 = getelementptr %ast.AstNode* %88, i32 0, i32 11
+	%90 = load i16* %i
+	%91 = zext i16 %90 to i32
+	%92 = getelementptr [0 x %ast.AstNode*]* %89, i32 0, i32 %91
+	%93 = load %ast.AstNode** %92
+	%94 = bitcast %ast.AstNode* %93 to %ast.AstNode*
+	call void @llvm_Constant(%ast.AstNode* %94)
+	%95 = load i16* %i
+	%96 = add i16 %95, 1
+	store i16 %96, i16* %i
+	%97 = load i16* %i
+	%98 = load %ast.AstNode** %node
+	%99 = getelementptr %ast.AstNode* %98, i32 0, i32 2
+	%100 = load i16* %99
+	%101 = icmp uge i16 %97, %100
+	br i1 %101, label %L.32, label %L.33
 L.33:
-	%101 = load %bout.BufIO** @llvm_f
-	%102 = bitcast %bout.BufIO* %101 to %bout.BufIO*
-	%103 = getelementptr [3 x i8]* @S.684
-	%104 = bitcast [3 x i8]* %103 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %102, [0 x i8]* %104)
+	%102 = load %bout.BufIO** @llvm_f
+	%103 = bitcast %bout.BufIO* %102 to %bout.BufIO*
+	%104 = getelementptr [3 x i8]* @S.696
+	%105 = bitcast [3 x i8]* %104 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %103, [0 x i8]* %105)
 	br label %L.31
 L.32:
-	%105 = load %bout.BufIO** @llvm_f
-	%106 = bitcast %bout.BufIO* %105 to %bout.BufIO*
-	%107 = getelementptr [3 x i8]* @S.685
-	%108 = bitcast [3 x i8]* %107 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %106, [0 x i8]* %108)
-	%109 = load %type.TypeNode** %t
-	%110 = getelementptr %type.TypeNode* %109, i32 0, i32 23
-	%111 = load i8* %110
-	%112 = icmp ne i8 %111, 0
-	br i1 %112, label %L.35, label %L.34
+	%106 = load %bout.BufIO** @llvm_f
+	%107 = bitcast %bout.BufIO* %106 to %bout.BufIO*
+	%108 = getelementptr [3 x i8]* @S.697
+	%109 = bitcast [3 x i8]* %108 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %107, [0 x i8]* %109)
+	%110 = load %type.TypeNode** %t
+	%111 = getelementptr %type.TypeNode* %110, i32 0, i32 23
+	%112 = load i8* %111
+	%113 = icmp ne i8 %112, 0
+	br i1 %113, label %L.35, label %L.34
 L.34:
-	%113 = load %type.TypeNode** %t
-	%114 = getelementptr %type.TypeNode* %113, i32 0, i32 24
-	%115 = load i8* %114
-	%116 = icmp ne i8 %115, 0
+	%114 = load %type.TypeNode** %t
+	%115 = getelementptr %type.TypeNode* %114, i32 0, i32 24
+	%116 = load i8* %115
+	%117 = icmp ne i8 %116, 0
 	br label %L.35
 L.35:
-	%117 = phi i1 [ true, %L.32 ], [ %116, %L.34 ]
-	br i1 %117, label %L.37, label %L.36
+	%118 = phi i1 [ true, %L.32 ], [ %117, %L.34 ]
+	br i1 %118, label %L.37, label %L.36
 L.37:
-	%118 = load %bout.BufIO** @llvm_f
-	%119 = bitcast %bout.BufIO* %118 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %119, i8 62)
+	%119 = load %bout.BufIO** @llvm_f
+	%120 = bitcast %bout.BufIO* %119 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %120, i8 62)
 	br label %L.36
 L.36:
 	br label %L.24
 L.26:
-	%120 = load %bout.BufIO** @llvm_f
-	%121 = bitcast %bout.BufIO* %120 to %bout.BufIO*
-	%122 = getelementptr [3 x i8]* @S.686
-	%123 = bitcast [3 x i8]* %122 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %121, [0 x i8]* %123)
+	%121 = load %bout.BufIO** @llvm_f
+	%122 = bitcast %bout.BufIO* %121 to %bout.BufIO*
+	%123 = getelementptr [3 x i8]* @S.698
+	%124 = bitcast [3 x i8]* %123 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %122, [0 x i8]* %124)
 	store i16 0, i16* %i
 	br label %L.38
 L.38:
-	%124 = load %ast.AstNode** %node
-	%125 = getelementptr %ast.AstNode* %124, i32 0, i32 11
-	%126 = load i16* %i
-	%127 = zext i16 %126 to i32
-	%128 = getelementptr [0 x %ast.AstNode*]* %125, i32 0, i32 %127
-	%129 = load %ast.AstNode** %128
-	%130 = getelementptr %ast.AstNode* %129, i32 0, i32 8
-	%131 = load %type.TypeNode** %130
-	call void @llvm_PType(%type.TypeNode* %131)
-	%132 = load %bout.BufIO** @llvm_f
-	%133 = bitcast %bout.BufIO* %132 to %bout.BufIO*
-	%134 = getelementptr [2 x i8]* @S.687
-	%135 = bitcast [2 x i8]* %134 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %133, [0 x i8]* %135)
-	%136 = load %ast.AstNode** %node
-	%137 = getelementptr %ast.AstNode* %136, i32 0, i32 11
-	%138 = load i16* %i
-	%139 = zext i16 %138 to i32
-	%140 = getelementptr [0 x %ast.AstNode*]* %137, i32 0, i32 %139
-	%141 = load %ast.AstNode** %140
-	%142 = bitcast %ast.AstNode* %141 to %ast.AstNode*
-	call void @llvm_Constant(%ast.AstNode* %142)
-	%143 = load i16* %i
-	%144 = add i16 %143, 1
-	store i16 %144, i16* %i
-	%145 = load i16* %i
-	%146 = load %ast.AstNode** %node
-	%147 = getelementptr %ast.AstNode* %146, i32 0, i32 2
-	%148 = load i16* %147
-	%149 = icmp uge i16 %145, %148
-	br i1 %149, label %L.39, label %L.40
+	%125 = load %ast.AstNode** %node
+	%126 = getelementptr %ast.AstNode* %125, i32 0, i32 11
+	%127 = load i16* %i
+	%128 = zext i16 %127 to i32
+	%129 = getelementptr [0 x %ast.AstNode*]* %126, i32 0, i32 %128
+	%130 = load %ast.AstNode** %129
+	%131 = getelementptr %ast.AstNode* %130, i32 0, i32 8
+	%132 = load %type.TypeNode** %131
+	call void @llvm_PType(%type.TypeNode* %132)
+	%133 = load %bout.BufIO** @llvm_f
+	%134 = bitcast %bout.BufIO* %133 to %bout.BufIO*
+	%135 = getelementptr [2 x i8]* @S.699
+	%136 = bitcast [2 x i8]* %135 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %134, [0 x i8]* %136)
+	%137 = load %ast.AstNode** %node
+	%138 = getelementptr %ast.AstNode* %137, i32 0, i32 11
+	%139 = load i16* %i
+	%140 = zext i16 %139 to i32
+	%141 = getelementptr [0 x %ast.AstNode*]* %138, i32 0, i32 %140
+	%142 = load %ast.AstNode** %141
+	%143 = bitcast %ast.AstNode* %142 to %ast.AstNode*
+	call void @llvm_Constant(%ast.AstNode* %143)
+	%144 = load i16* %i
+	%145 = add i16 %144, 1
+	store i16 %145, i16* %i
+	%146 = load i16* %i
+	%147 = load %ast.AstNode** %node
+	%148 = getelementptr %ast.AstNode* %147, i32 0, i32 2
+	%149 = load i16* %148
+	%150 = icmp uge i16 %146, %149
+	br i1 %150, label %L.39, label %L.40
 L.40:
-	%150 = load %bout.BufIO** @llvm_f
-	%151 = bitcast %bout.BufIO* %150 to %bout.BufIO*
-	%152 = getelementptr [3 x i8]* @S.688
-	%153 = bitcast [3 x i8]* %152 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %151, [0 x i8]* %153)
+	%151 = load %bout.BufIO** @llvm_f
+	%152 = bitcast %bout.BufIO* %151 to %bout.BufIO*
+	%153 = getelementptr [3 x i8]* @S.700
+	%154 = bitcast [3 x i8]* %153 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %152, [0 x i8]* %154)
 	br label %L.38
 L.39:
-	%154 = load %bout.BufIO** @llvm_f
-	%155 = bitcast %bout.BufIO* %154 to %bout.BufIO*
-	%156 = getelementptr [3 x i8]* @S.689
-	%157 = bitcast [3 x i8]* %156 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %155, [0 x i8]* %157)
+	%155 = load %bout.BufIO** @llvm_f
+	%156 = bitcast %bout.BufIO* %155 to %bout.BufIO*
+	%157 = getelementptr [3 x i8]* @S.701
+	%158 = bitcast [3 x i8]* %157 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %156, [0 x i8]* %158)
 	br label %L.24
 L.23:
 	br label %L.24
 L.24:
 	br label %L.4
 L.9:
-	%158 = load %type.TypeNode** %t
-	%159 = getelementptr %type.TypeNode* %158, i32 0, i32 0
-	%160 = load %type.TypeNode** %159
-	%161 = getelementptr %type.TypeNode* %160, i32 0, i32 25
-	%162 = load i8* %161
-	%163 = icmp ne i8 %162, 0
-	br i1 %163, label %L.42, label %L.41
+	%159 = load %type.TypeNode** %t
+	%160 = getelementptr %type.TypeNode* %159, i32 0, i32 0
+	%161 = load %type.TypeNode** %160
+	%162 = getelementptr %type.TypeNode* %161, i32 0, i32 25
+	%163 = load i8* %162
+	%164 = icmp ne i8 %163, 0
+	br i1 %164, label %L.42, label %L.41
 L.42:
-	%164 = getelementptr [14 x i8]* @S.690
-	%165 = bitcast [14 x i8]* %164 to [0 x i8]*
-	%166 = load %ast.AstNode** %node
-	%167 = getelementptr %ast.AstNode* %166, i32 0, i32 11
-	%168 = getelementptr [0 x %ast.AstNode*]* %167, i32 0, i32 0
-	%169 = load %ast.AstNode** %168
-	%170 = bitcast %ast.AstNode* %169 to %ast.AstNode*
-	call void @llvm_Print([0 x i8]* %165, %ast.AstNode* %170)
+	%165 = getelementptr [14 x i8]* @S.702
+	%166 = bitcast [14 x i8]* %165 to [0 x i8]*
+	%167 = load %ast.AstNode** %node
+	%168 = getelementptr %ast.AstNode* %167, i32 0, i32 11
+	%169 = getelementptr [0 x %ast.AstNode*]* %168, i32 0, i32 0
+	%170 = load %ast.AstNode** %169
+	%171 = bitcast %ast.AstNode* %170 to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %166, %ast.AstNode* %171)
 	br label %L.41
 L.41:
-	%171 = getelementptr [25 x i8]* @S.691
-	%172 = bitcast [25 x i8]* %171 to [0 x i8]*
-	%173 = load %ast.AstNode** %node
-	%174 = getelementptr %ast.AstNode* %173, i32 0, i32 11
-	%175 = getelementptr [0 x %ast.AstNode*]* %174, i32 0, i32 0
-	%176 = load %ast.AstNode** %175
-	%177 = bitcast %ast.AstNode* %176 to %ast.AstNode*
-	call void @llvm_Print([0 x i8]* %172, %ast.AstNode* %177)
-	%178 = load %type.TypeNode** %t
-	%179 = getelementptr %type.TypeNode* %178, i32 0, i32 0
-	%180 = load %type.TypeNode** %179
-	%181 = getelementptr %type.TypeNode* %180, i32 0, i32 25
-	%182 = load i8* %181
-	%183 = icmp ne i8 %182, 0
-	br i1 %183, label %L.44, label %L.43
+	%172 = getelementptr [25 x i8]* @S.703
+	%173 = bitcast [25 x i8]* %172 to [0 x i8]*
+	%174 = load %ast.AstNode** %node
+	%175 = getelementptr %ast.AstNode* %174, i32 0, i32 11
+	%176 = getelementptr [0 x %ast.AstNode*]* %175, i32 0, i32 0
+	%177 = load %ast.AstNode** %176
+	%178 = bitcast %ast.AstNode* %177 to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %173, %ast.AstNode* %178)
+	%179 = load %type.TypeNode** %t
+	%180 = getelementptr %type.TypeNode* %179, i32 0, i32 0
+	%181 = load %type.TypeNode** %180
+	%182 = getelementptr %type.TypeNode* %181, i32 0, i32 25
+	%183 = load i8* %182
+	%184 = icmp ne i8 %183, 0
+	br i1 %184, label %L.44, label %L.43
 L.44:
-	%184 = getelementptr [9 x i8]* @S.692
-	%185 = bitcast [9 x i8]* %184 to [0 x i8]*
-	%186 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %185, %ast.AstNode* %186)
+	%185 = getelementptr [9 x i8]* @S.704
+	%186 = bitcast [9 x i8]* %185 to [0 x i8]*
+	%187 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %186, %ast.AstNode* %187)
 	br label %L.43
 L.43:
 	br label %L.4
 L.10:
-	%187 = load %type.TypeNode** %t
-	%188 = getelementptr %type.TypeNode* %187, i32 0, i32 0
-	%189 = load %type.TypeNode** %188
-	%190 = getelementptr %type.TypeNode* %189, i32 0, i32 25
-	%191 = load i8* %190
-	%192 = icmp ne i8 %191, 0
-	br i1 %192, label %L.46, label %L.45
+	%188 = load %type.TypeNode** %t
+	%189 = getelementptr %type.TypeNode* %188, i32 0, i32 0
+	%190 = load %type.TypeNode** %189
+	%191 = getelementptr %type.TypeNode* %190, i32 0, i32 25
+	%192 = load i8* %191
+	%193 = icmp ne i8 %192, 0
+	br i1 %193, label %L.46, label %L.45
 L.46:
-	%193 = getelementptr [13 x i8]* @S.693
-	%194 = bitcast [13 x i8]* %193 to [0 x i8]*
-	%195 = load %ast.AstNode** %node
-	%196 = getelementptr %ast.AstNode* %195, i32 0, i32 11
-	%197 = getelementptr [0 x %ast.AstNode*]* %196, i32 0, i32 0
-	%198 = load %ast.AstNode** %197
-	%199 = bitcast %ast.AstNode* %198 to %ast.AstNode*
-	call void @llvm_Print([0 x i8]* %194, %ast.AstNode* %199)
+	%194 = getelementptr [13 x i8]* @S.705
+	%195 = bitcast [13 x i8]* %194 to [0 x i8]*
+	%196 = load %ast.AstNode** %node
+	%197 = getelementptr %ast.AstNode* %196, i32 0, i32 11
+	%198 = getelementptr [0 x %ast.AstNode*]* %197, i32 0, i32 0
+	%199 = load %ast.AstNode** %198
+	%200 = bitcast %ast.AstNode* %199 to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %195, %ast.AstNode* %200)
 	br label %L.45
 L.45:
-	%200 = getelementptr [24 x i8]* @S.694
-	%201 = bitcast [24 x i8]* %200 to [0 x i8]*
-	%202 = load %ast.AstNode** %node
-	%203 = getelementptr %ast.AstNode* %202, i32 0, i32 11
-	%204 = getelementptr [0 x %ast.AstNode*]* %203, i32 0, i32 0
-	%205 = load %ast.AstNode** %204
-	%206 = bitcast %ast.AstNode* %205 to %ast.AstNode*
-	call void @llvm_Print([0 x i8]* %201, %ast.AstNode* %206)
-	%207 = load %type.TypeNode** %t
-	%208 = getelementptr %type.TypeNode* %207, i32 0, i32 0
-	%209 = load %type.TypeNode** %208
-	%210 = getelementptr %type.TypeNode* %209, i32 0, i32 25
-	%211 = load i8* %210
-	%212 = icmp ne i8 %211, 0
-	br i1 %212, label %L.48, label %L.47
+	%201 = getelementptr [24 x i8]* @S.706
+	%202 = bitcast [24 x i8]* %201 to [0 x i8]*
+	%203 = load %ast.AstNode** %node
+	%204 = getelementptr %ast.AstNode* %203, i32 0, i32 11
+	%205 = getelementptr [0 x %ast.AstNode*]* %204, i32 0, i32 0
+	%206 = load %ast.AstNode** %205
+	%207 = bitcast %ast.AstNode* %206 to %ast.AstNode*
+	call void @llvm_Print([0 x i8]* %202, %ast.AstNode* %207)
+	%208 = load %type.TypeNode** %t
+	%209 = getelementptr %type.TypeNode* %208, i32 0, i32 0
+	%210 = load %type.TypeNode** %209
+	%211 = getelementptr %type.TypeNode* %210, i32 0, i32 25
+	%212 = load i8* %211
+	%213 = icmp ne i8 %212, 0
+	br i1 %213, label %L.48, label %L.47
 L.48:
-	%213 = getelementptr [9 x i8]* @S.695
-	%214 = bitcast [9 x i8]* %213 to [0 x i8]*
-	%215 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %214, %ast.AstNode* %215)
+	%214 = getelementptr [9 x i8]* @S.707
+	%215 = bitcast [9 x i8]* %214 to [0 x i8]*
+	%216 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %215, %ast.AstNode* %216)
 	br label %L.47
 L.47:
 	br label %L.4
 L.11:
-	%216 = load %type.TypeNode** %t
-	%217 = getelementptr %type.TypeNode* %216, i32 0, i32 14
-	%218 = load i8* %217
-	%219 = icmp eq i8 %218, 8
-	br i1 %219, label %L.50, label %L.51
+	%217 = load %type.TypeNode** %t
+	%218 = getelementptr %type.TypeNode* %217, i32 0, i32 14
+	%219 = load i8* %218
+	%220 = icmp eq i8 %219, 8
+	br i1 %220, label %L.50, label %L.51
 L.50:
-	%220 = load %ast.AstNode** %node
-	%221 = getelementptr %ast.AstNode* %220, i32 0, i32 9
-	%222 = load %symb.SymbNode** %221
-	call void @llvm_PName(%symb.SymbNode* %222)
+	%221 = load %ast.AstNode** %node
+	%222 = getelementptr %ast.AstNode* %221, i32 0, i32 9
+	%223 = load %symb.SymbNode** %222
+	call void @llvm_PName(%symb.SymbNode* %223)
 	br label %L.49
 L.51:
-	%223 = load %type.TypeNode** %t
-	%224 = getelementptr %type.TypeNode* %223, i32 0, i32 0
-	%225 = load %type.TypeNode** %224
-	%226 = getelementptr %type.TypeNode* %225, i32 0, i32 25
-	%227 = load i8* %226
-	%228 = icmp ne i8 %227, 0
-	br i1 %228, label %L.53, label %L.52
+	%224 = load %type.TypeNode** %t
+	%225 = getelementptr %type.TypeNode* %224, i32 0, i32 0
+	%226 = load %type.TypeNode** %225
+	%227 = getelementptr %type.TypeNode* %226, i32 0, i32 25
+	%228 = load i8* %227
+	%229 = icmp ne i8 %228, 0
+	br i1 %229, label %L.53, label %L.52
 L.53:
-	%229 = getelementptr [13 x i8]* @S.696
-	%230 = bitcast [13 x i8]* %229 to [0 x i8]*
-	%231 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %230, %ast.AstNode* %231)
+	%230 = getelementptr [13 x i8]* @S.708
+	%231 = bitcast [13 x i8]* %230 to [0 x i8]*
+	%232 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %231, %ast.AstNode* %232)
 	br label %L.52
 L.52:
-	%232 = getelementptr [24 x i8]* @S.697
-	%233 = bitcast [24 x i8]* %232 to [0 x i8]*
-	%234 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %233, %ast.AstNode* %234)
-	%235 = load %type.TypeNode** %t
-	%236 = getelementptr %type.TypeNode* %235, i32 0, i32 0
-	%237 = load %type.TypeNode** %236
-	%238 = getelementptr %type.TypeNode* %237, i32 0, i32 25
-	%239 = load i8* %238
-	%240 = icmp ne i8 %239, 0
-	br i1 %240, label %L.55, label %L.54
+	%233 = getelementptr [24 x i8]* @S.709
+	%234 = bitcast [24 x i8]* %233 to [0 x i8]*
+	%235 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %234, %ast.AstNode* %235)
+	%236 = load %type.TypeNode** %t
+	%237 = getelementptr %type.TypeNode* %236, i32 0, i32 0
+	%238 = load %type.TypeNode** %237
+	%239 = getelementptr %type.TypeNode* %238, i32 0, i32 25
+	%240 = load i8* %239
+	%241 = icmp ne i8 %240, 0
+	br i1 %241, label %L.55, label %L.54
 L.55:
-	%241 = getelementptr [9 x i8]* @S.698
-	%242 = bitcast [9 x i8]* %241 to [0 x i8]*
-	%243 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %242, %ast.AstNode* %243)
+	%242 = getelementptr [9 x i8]* @S.710
+	%243 = bitcast [9 x i8]* %242 to [0 x i8]*
+	%244 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %243, %ast.AstNode* %244)
 	br label %L.54
 L.54:
 	br label %L.49
@@ -30467,51 +31998,14 @@ L.1:
 return:
 	ret void
 }
-@S.699 = internal constant [9 x i8] c", align \00"
-define internal void @llvm_Alignment(%type.TypeNode* %t$) nounwind {
-L.0:
-	%t = alloca %type.TypeNode*
-	store %type.TypeNode* %t$, %type.TypeNode** %t
-	%n = alloca i32
-	%0 = load %type.TypeNode** %t
-	%1 = getelementptr %type.TypeNode* %0, i32 0, i32 11
-	%2 = load i32* %1
-	store i32 %2, i32* %n
-	%3 = load i32* %n
-	%4 = load %target.ModelT** @target_Target
-	%5 = getelementptr %target.ModelT* %4, i32 0, i32 2
-	%6 = load i8* %5
-	%7 = zext i8 %6 to i32
-	%8 = icmp uge i32 %3, %7
-	br i1 %8, label %L.2, label %L.1
-L.2:
-	%9 = load %bout.BufIO** @llvm_f
-	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = getelementptr [9 x i8]* @S.699
-	%12 = bitcast [9 x i8]* %11 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
-	%13 = load %bout.BufIO** @llvm_f
-	%14 = bitcast %bout.BufIO* %13 to %bout.BufIO*
-	%15 = load i32* %n
-	%16 = load %target.ModelT** @target_Target
-	%17 = getelementptr %target.ModelT* %16, i32 0, i32 2
-	%18 = load i8* %17
-	%19 = zext i8 %18 to i32
-	%20 = udiv i32 %15, %19
-	call void @bout_BufIO_uint(%bout.BufIO* %14, i32 %20)
-	br label %L.1
-L.1:
-	br label %return
-return:
-	ret void
-}
-@S.700 = internal constant [16 x i8] c"\09%I = alloca %B\00"
-@S.701 = internal constant [7 x i8] c"store \00"
-@S.702 = internal constant [9 x i8] c", %B* %D\00"
-@S.703 = internal constant [29 x i8] c"initialized local composites\00"
-@S.704 = internal constant [25 x i8] c"%I = internal global %B \00"
-@S.705 = internal constant [16 x i8] c"%I = global %B \00"
-@S.706 = internal constant [24 x i8] c"%I = external global %B\00"
+@S.711 = internal constant [16 x i8] c"\09%I = alloca %K\00"
+@S.712 = internal constant [7 x i8] c"store \00"
+@S.713 = internal constant [9 x i8] c", %K* %D\00"
+@S.714 = internal constant [29 x i8] c"initialized local composites\00"
+@S.715 = internal constant [25 x i8] c"%I = internal global %K \00"
+@S.716 = internal constant [16 x i8] c"%I = global %K \00"
+@S.717 = internal constant [21 x i8] c"%I = weak global %K \00"
+@S.718 = internal constant [24 x i8] c"%I = external global %K\00"
 define internal void @llvm_DclVar(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -30537,7 +32031,7 @@ L.2:
 	%12 = load %type.TypeNode** %11
 	call void @llvm_DclType(%type.TypeNode* %12)
 	%13 = load %symb.SymbNode** %s
-	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 13
+	%14 = getelementptr %symb.SymbNode* %13, i32 0, i32 14
 	%15 = load i8* %14
 	%16 = zext i8 %15 to i32
 	switch i32 %16, label %L.3 [
@@ -30545,24 +32039,25 @@ L.2:
 		i32 2, label %L.6
 		i32 3, label %L.7
 		i32 4, label %L.8
+		i32 5, label %L.9
 	]
 L.5:
-	%17 = getelementptr [16 x i8]* @S.700
+	%17 = getelementptr [16 x i8]* @S.711
 	%18 = bitcast [16 x i8]* %17 to [0 x i8]*
 	%19 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %18, %ast.AstNode* %19)
 	%20 = load %ast.AstNode** %rhs
 	%21 = icmp ne %ast.AstNode* %20, null
-	br i1 %21, label %L.10, label %L.9
-L.10:
+	br i1 %21, label %L.11, label %L.10
+L.11:
 	%22 = load %ast.AstNode** %node
 	%23 = getelementptr %ast.AstNode* %22, i32 0, i32 8
 	%24 = load %type.TypeNode** %23
 	%25 = getelementptr %type.TypeNode* %24, i32 0, i32 14
 	%26 = load i8* %25
 	%27 = icmp ule i8 %26, 5
-	br i1 %27, label %L.12, label %L.13
-L.12:
+	br i1 %27, label %L.13, label %L.14
+L.13:
 	%28 = load %bout.BufIO** @llvm_f
 	%29 = bitcast %bout.BufIO* %28 to %bout.BufIO*
 	call void @bout_BufIO_nl(%bout.BufIO* %29)
@@ -30573,7 +32068,7 @@ L.12:
 	call void @bout_BufIO_chr(%bout.BufIO* %33, i8 9)
 	%34 = load %bout.BufIO** @llvm_f
 	%35 = bitcast %bout.BufIO* %34 to %bout.BufIO*
-	%36 = getelementptr [7 x i8]* @S.701
+	%36 = getelementptr [7 x i8]* @S.712
 	%37 = bitcast [7 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	%38 = load %ast.AstNode** %rhs
@@ -30583,102 +32078,141 @@ L.12:
 	call void @bout_BufIO_chr(%bout.BufIO* %40, i8 32)
 	%41 = load %ast.AstNode** %rhs
 	call void @llvm_NodeSrc(%ast.AstNode* %41)
-	%42 = getelementptr [9 x i8]* @S.702
+	%42 = getelementptr [9 x i8]* @S.713
 	%43 = bitcast [9 x i8]* %42 to [0 x i8]*
 	%44 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %43, %ast.AstNode* %44)
-	br label %L.11
-L.13:
-	%45 = getelementptr [29 x i8]* @S.703
+	br label %L.12
+L.14:
+	%45 = getelementptr [29 x i8]* @S.714
 	%46 = bitcast [29 x i8]* %45 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %46)
-	br label %L.11
-L.11:
-	br label %L.9
-L.9:
+	br label %L.12
+L.12:
+	br label %L.10
+L.10:
 	br label %L.4
 L.6:
-	%47 = getelementptr [25 x i8]* @S.704
+	%47 = getelementptr [25 x i8]* @S.715
 	%48 = bitcast [25 x i8]* %47 to [0 x i8]*
 	%49 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %48, %ast.AstNode* %49)
 	%50 = load %ast.AstNode** %rhs
 	%51 = icmp ne %ast.AstNode* %50, null
-	br i1 %51, label %L.15, label %L.16
-L.15:
+	br i1 %51, label %L.16, label %L.17
+L.16:
 	%52 = load %ast.AstNode** %rhs
 	call void @llvm_Constant(%ast.AstNode* %52)
-	br label %L.14
-L.16:
+	br label %L.15
+L.17:
 	%53 = load %ast.AstNode** %node
 	%54 = getelementptr %ast.AstNode* %53, i32 0, i32 8
 	%55 = load %type.TypeNode** %54
 	call void @llvm_DefaultInitializer(%type.TypeNode* %55)
-	br label %L.14
-L.14:
+	br label %L.15
+L.15:
 	%56 = load %symb.SymbNode** %s
 	%57 = getelementptr %symb.SymbNode* %56, i32 0, i32 1
 	%58 = load %type.TypeNode** %57
 	call void @llvm_Alignment(%type.TypeNode* %58)
+	%59 = load %symb.SymbNode** %s
+	%60 = getelementptr %symb.SymbNode* %59, i32 0, i32 7
+	%61 = load %symb.SymbNode** %60
+	%62 = bitcast %symb.SymbNode* %61 to %symb.SymbNode*
+	call void @llvm_Section(%symb.SymbNode* %62, i8 1)
 	br label %L.4
 L.7:
-	%59 = getelementptr [16 x i8]* @S.705
-	%60 = bitcast [16 x i8]* %59 to [0 x i8]*
-	%61 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %60, %ast.AstNode* %61)
-	%62 = load %ast.AstNode** %rhs
-	%63 = icmp ne %ast.AstNode* %62, null
-	br i1 %63, label %L.18, label %L.19
-L.18:
-	%64 = load %ast.AstNode** %rhs
-	call void @llvm_Constant(%ast.AstNode* %64)
-	br label %L.17
-L.19:
+	%63 = getelementptr [16 x i8]* @S.716
+	%64 = bitcast [16 x i8]* %63 to [0 x i8]*
 	%65 = load %ast.AstNode** %node
-	%66 = getelementptr %ast.AstNode* %65, i32 0, i32 8
-	%67 = load %type.TypeNode** %66
-	call void @llvm_DefaultInitializer(%type.TypeNode* %67)
-	br label %L.17
-L.17:
-	%68 = load %symb.SymbNode** %s
-	%69 = getelementptr %symb.SymbNode* %68, i32 0, i32 1
-	%70 = load %type.TypeNode** %69
-	call void @llvm_Alignment(%type.TypeNode* %70)
+	call void @llvm_Print([0 x i8]* %64, %ast.AstNode* %65)
+	%66 = load %ast.AstNode** %rhs
+	%67 = icmp ne %ast.AstNode* %66, null
+	br i1 %67, label %L.19, label %L.20
+L.19:
+	%68 = load %ast.AstNode** %rhs
+	call void @llvm_Constant(%ast.AstNode* %68)
+	br label %L.18
+L.20:
+	%69 = load %ast.AstNode** %node
+	%70 = getelementptr %ast.AstNode* %69, i32 0, i32 8
+	%71 = load %type.TypeNode** %70
+	call void @llvm_DefaultInitializer(%type.TypeNode* %71)
+	br label %L.18
+L.18:
+	%72 = load %symb.SymbNode** %s
+	%73 = getelementptr %symb.SymbNode* %72, i32 0, i32 1
+	%74 = load %type.TypeNode** %73
+	call void @llvm_Alignment(%type.TypeNode* %74)
+	%75 = load %symb.SymbNode** %s
+	%76 = getelementptr %symb.SymbNode* %75, i32 0, i32 7
+	%77 = load %symb.SymbNode** %76
+	%78 = bitcast %symb.SymbNode* %77 to %symb.SymbNode*
+	call void @llvm_Section(%symb.SymbNode* %78, i8 1)
 	br label %L.4
 L.8:
-	%71 = getelementptr [24 x i8]* @S.706
-	%72 = bitcast [24 x i8]* %71 to [0 x i8]*
-	%73 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %72, %ast.AstNode* %73)
+	%79 = getelementptr [21 x i8]* @S.717
+	%80 = bitcast [21 x i8]* %79 to [0 x i8]*
+	%81 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %80, %ast.AstNode* %81)
+	%82 = load %ast.AstNode** %rhs
+	%83 = icmp ne %ast.AstNode* %82, null
+	br i1 %83, label %L.22, label %L.23
+L.22:
+	%84 = load %ast.AstNode** %rhs
+	call void @llvm_Constant(%ast.AstNode* %84)
+	br label %L.21
+L.23:
+	%85 = load %ast.AstNode** %node
+	%86 = getelementptr %ast.AstNode* %85, i32 0, i32 8
+	%87 = load %type.TypeNode** %86
+	call void @llvm_DefaultInitializer(%type.TypeNode* %87)
+	br label %L.21
+L.21:
+	%88 = load %symb.SymbNode** %s
+	%89 = getelementptr %symb.SymbNode* %88, i32 0, i32 1
+	%90 = load %type.TypeNode** %89
+	call void @llvm_Alignment(%type.TypeNode* %90)
+	%91 = load %symb.SymbNode** %s
+	%92 = getelementptr %symb.SymbNode* %91, i32 0, i32 7
+	%93 = load %symb.SymbNode** %92
+	%94 = bitcast %symb.SymbNode* %93 to %symb.SymbNode*
+	call void @llvm_Section(%symb.SymbNode* %94, i8 1)
+	br label %L.4
+L.9:
+	%95 = getelementptr [24 x i8]* @S.718
+	%96 = bitcast [24 x i8]* %95 to [0 x i8]*
+	%97 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %96, %ast.AstNode* %97)
 	br label %L.4
 L.3:
 	br label %L.4
 L.4:
-	%74 = load %bout.BufIO** @llvm_f
-	%75 = bitcast %bout.BufIO* %74 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %75)
-	%76 = getelementptr %A.3* @feature, i32 0, i32 3
-	%77 = load i8* %76
-	%78 = icmp ne i8 %77, 0
-	br i1 %78, label %L.21, label %L.20
-L.21:
-	%79 = load %symb.SymbNode** %s
-	%80 = call i16 @llvmdb_DefVar(%symb.SymbNode* %79)
-	br label %L.20
-L.20:
+	%98 = load %bout.BufIO** @llvm_f
+	%99 = bitcast %bout.BufIO* %98 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %99)
+	%100 = getelementptr %A.3* @feature, i32 0, i32 3
+	%101 = load i8* %100
+	%102 = icmp ne i8 %101, 0
+	br i1 %102, label %L.25, label %L.24
+L.25:
+	%103 = load %symb.SymbNode** %s
+	%104 = call i16 @llvmdb_DefVar(%symb.SymbNode* %103)
+	br label %L.24
+L.24:
 	br label %L.1
 L.1:
 	br label %return
 return:
 	ret void
 }
-@S.707 = internal constant [27 x i8] c"%S = internal constant %B \00"
+@S.719 = internal constant [27 x i8] c"%S = internal constant %K \00"
 define internal void @llvm_DclString(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
 	store %ast.AstNode* %node$, %ast.AstNode** %node
 	%n = alloca i16
-	%0 = getelementptr [27 x i8]* @S.707
+	%0 = getelementptr [27 x i8]* @S.719
 	%1 = bitcast [27 x i8]* %0 to [0 x i8]*
 	%2 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %1, %ast.AstNode* %2)
@@ -30691,13 +32225,14 @@ L.0:
 	%8 = load %ast.AstNode** %node
 	%9 = getelementptr %ast.AstNode* %8, i32 0, i32 9
 	%10 = load %symb.SymbNode** %9
-	%11 = bitcast %symb.SymbNode* %10 to [0 x i8]*
-	%12 = bitcast [0 x i8]* %11 to [0 x i8]*
-	%13 = load i16* %n
-	call void @llvm_PString([0 x i8]* %12, i16 %13, i8 1)
-	%14 = load %bout.BufIO** @llvm_f
-	%15 = bitcast %bout.BufIO* %14 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %15)
+	%11 = getelementptr %symb.SymbNode* %10, i32 0, i32 22
+	%12 = getelementptr [0 x i8]* %11
+	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
+	%14 = load i16* %n
+	call void @llvm_PString([0 x i8]* %13, i16 %14, i8 1)
+	%15 = load %bout.BufIO** @llvm_f
+	%16 = bitcast %bout.BufIO* %15 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %16)
 	br label %return
 return:
 	ret void
@@ -30763,8 +32298,8 @@ L.3:
 return:
 	ret void
 }
-@S.708 = internal constant [27 x i8] c"%I = internal constant %B \00"
-@S.709 = internal constant [18 x i8] c"%I = constant %B \00"
+@S.720 = internal constant [27 x i8] c"%I = internal constant %K \00"
+@S.721 = internal constant [18 x i8] c"%I = constant %K \00"
 define internal void @llvm_DclCon(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -30785,7 +32320,7 @@ L.2:
 	%8 = load %ast.AstNode** %node
 	call void @llvm_ConstScan(%ast.AstNode* %8)
 	%9 = load %symb.SymbNode** %s
-	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 13
+	%10 = getelementptr %symb.SymbNode* %9, i32 0, i32 14
 	%11 = load i8* %10
 	%12 = zext i8 %11 to i32
 	switch i32 %12, label %L.3 [
@@ -30793,13 +32328,13 @@ L.2:
 		i32 3, label %L.6
 	]
 L.5:
-	%13 = getelementptr [27 x i8]* @S.708
+	%13 = getelementptr [27 x i8]* @S.720
 	%14 = bitcast [27 x i8]* %13 to [0 x i8]*
 	%15 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %14, %ast.AstNode* %15)
 	br label %L.4
 L.6:
-	%16 = getelementptr [18 x i8]* @S.709
+	%16 = getelementptr [18 x i8]* @S.721
 	%17 = bitcast [18 x i8]* %16 to [0 x i8]*
 	%18 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %17, %ast.AstNode* %18)
@@ -30817,23 +32352,28 @@ L.4:
 	%25 = getelementptr %symb.SymbNode* %24, i32 0, i32 1
 	%26 = load %type.TypeNode** %25
 	call void @llvm_Alignment(%type.TypeNode* %26)
+	%27 = load %symb.SymbNode** %s
+	%28 = getelementptr %symb.SymbNode* %27, i32 0, i32 7
+	%29 = load %symb.SymbNode** %28
+	%30 = bitcast %symb.SymbNode* %29 to %symb.SymbNode*
+	call void @llvm_Section(%symb.SymbNode* %30, i8 1)
 	br label %L.1
 L.1:
-	%27 = load %bout.BufIO** @llvm_f
-	%28 = bitcast %bout.BufIO* %27 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %28)
+	%31 = load %bout.BufIO** @llvm_f
+	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %32)
 	br label %return
 return:
 	ret void
 }
-@S.710 = internal constant [27 x i8] c"%S = internal constant %B \00"
+@S.722 = internal constant [27 x i8] c"%S = internal constant %K \00"
 define internal void @llvm_DclAggregate(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
 	store %ast.AstNode* %node$, %ast.AstNode** %node
 	%0 = load %ast.AstNode** %node
 	call void @llvm_ConstScan(%ast.AstNode* %0)
-	%1 = getelementptr [27 x i8]* @S.710
+	%1 = getelementptr [27 x i8]* @S.722
 	%2 = bitcast [27 x i8]* %1 to [0 x i8]*
 	%3 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %2, %ast.AstNode* %3)
@@ -30846,14 +32386,14 @@ L.0:
 return:
 	ret void
 }
-@S.711 = internal constant [3 x i8] c"L.\00"
+@S.723 = internal constant [3 x i8] c"L.\00"
 define internal void @llvm_PLabel(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [3 x i8]* @S.711
+	%2 = getelementptr [3 x i8]* @S.723
 	%3 = bitcast [3 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %bout.BufIO** @llvm_f
@@ -30865,7 +32405,7 @@ L.0:
 return:
 	ret void
 }
-@S.712 = internal constant [3 x i8] c":\0A\00"
+@S.724 = internal constant [3 x i8] c":\0A\00"
 define internal void @llvm_Label(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
@@ -30874,7 +32414,7 @@ L.0:
 	call void @llvm_PLabel(i16 %0)
 	%1 = load %bout.BufIO** @llvm_f
 	%2 = bitcast %bout.BufIO* %1 to %bout.BufIO*
-	%3 = getelementptr [3 x i8]* @S.712
+	%3 = getelementptr [3 x i8]* @S.724
 	%4 = bitcast [3 x i8]* %3 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %2, [0 x i8]* %4)
 	%5 = load i16* %n
@@ -30883,14 +32423,14 @@ L.0:
 return:
 	ret void
 }
-@S.713 = internal constant [8 x i8] c"label %\00"
+@S.725 = internal constant [8 x i8] c"label %\00"
 define internal void @llvm_RefLabel(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [8 x i8]* @S.713
+	%2 = getelementptr [8 x i8]* @S.725
 	%3 = bitcast [8 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load i16* %n
@@ -30899,14 +32439,14 @@ L.0:
 return:
 	ret void
 }
-@S.714 = internal constant [5 x i8] c"\09br \00"
+@S.726 = internal constant [5 x i8] c"\09br \00"
 define internal void @llvm_Branch(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8]* @S.714
+	%2 = getelementptr [5 x i8]* @S.726
 	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load i16* %n
@@ -30918,9 +32458,9 @@ L.0:
 return:
 	ret void
 }
-@S.715 = internal constant [8 x i8] c"\09br i1 \00"
-@S.716 = internal constant [3 x i8] c", \00"
-@S.717 = internal constant [3 x i8] c", \00"
+@S.727 = internal constant [8 x i8] c"\09br i1 \00"
+@S.728 = internal constant [3 x i8] c", \00"
+@S.729 = internal constant [3 x i8] c", \00"
 define internal void @llvm_BranchConditional(%ast.AstNode* %node$, i16 zeroext %ntrue$, i16 zeroext %nfalse$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -30931,21 +32471,21 @@ L.0:
 	store i16 %nfalse$, i16* %nfalse
 	%0 = load %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [8 x i8]* @S.715
+	%2 = getelementptr [8 x i8]* @S.727
 	%3 = bitcast [8 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %ast.AstNode** %node
 	call void @llvm_NodeSrc(%ast.AstNode* %4)
 	%5 = load %bout.BufIO** @llvm_f
 	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
-	%7 = getelementptr [3 x i8]* @S.716
+	%7 = getelementptr [3 x i8]* @S.728
 	%8 = bitcast [3 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	%9 = load i16* %ntrue
 	call void @llvm_RefLabel(i16 %9)
 	%10 = load %bout.BufIO** @llvm_f
 	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = getelementptr [3 x i8]* @S.717
+	%12 = getelementptr [3 x i8]* @S.729
 	%13 = bitcast [3 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	%14 = load i16* %nfalse
@@ -31060,11 +32600,11 @@ return:
 	%56 = load i8* %rv.0
 	ret i8 %56
 }
-@S.718 = internal constant [16 x i8] c"\09switch %T %N, \00"
-@S.719 = internal constant [4 x i8] c" [\0A\00"
-@S.720 = internal constant [7 x i8] c"\09\09%0T \00"
-@S.721 = internal constant [3 x i8] c", \00"
-@S.722 = internal constant [4 x i8] c"\09]\0A\00"
+@S.730 = internal constant [16 x i8] c"\09switch %T %N, \00"
+@S.731 = internal constant [4 x i8] c" [\0A\00"
+@S.732 = internal constant [7 x i8] c"\09\09%0T \00"
+@S.733 = internal constant [3 x i8] c", \00"
+@S.734 = internal constant [4 x i8] c"\09]\0A\00"
 define internal zeroext i8 @llvm_Select(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -31106,7 +32646,7 @@ L.0:
 	%21 = load i16* @llvm_Lseqno
 	%22 = add i16 %21, 1
 	store i16 %22, i16* @llvm_Lseqno
-	%23 = getelementptr [16 x i8]* @S.718
+	%23 = getelementptr [16 x i8]* @S.730
 	%24 = bitcast [16 x i8]* %23 to [0 x i8]*
 	%25 = load %ast.AstNode** %node
 	%26 = getelementptr %ast.AstNode* %25, i32 0, i32 11
@@ -31118,7 +32658,7 @@ L.0:
 	call void @llvm_RefLabel(i16 %30)
 	%31 = load %bout.BufIO** @llvm_f
 	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
-	%33 = getelementptr [4 x i8]* @S.719
+	%33 = getelementptr [4 x i8]* @S.731
 	%34 = bitcast [4 x i8]* %33 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %32, [0 x i8]* %34)
 	store i16 1, i16* %i
@@ -31144,7 +32684,7 @@ L.3:
 	%49 = load %ast.AstNode** %isnode
 	%50 = getelementptr %ast.AstNode* %49, i32 0, i32 0
 	%51 = load i8* %50
-	%52 = icmp eq i8 %51, 86
+	%52 = icmp eq i8 %51, 89
 	br i1 %52, label %L.5, label %L.4
 L.5:
 	%53 = load i16* @llvm_Lseqno
@@ -31242,7 +32782,7 @@ L.17:
 	%110 = xor i1 %109, true
 	br i1 %110, label %L.18, label %L.19
 L.19:
-	%111 = getelementptr [7 x i8]* @S.720
+	%111 = getelementptr [7 x i8]* @S.732
 	%112 = bitcast [7 x i8]* %111 to [0 x i8]*
 	%113 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %112, %ast.AstNode* %113)
@@ -31253,7 +32793,7 @@ L.19:
 	call void @bout_BufIO_uint32(%bout.BufIO* %115, i32 %117)
 	%118 = load %bout.BufIO** @llvm_f
 	%119 = bitcast %bout.BufIO* %118 to %bout.BufIO*
-	%120 = getelementptr [3 x i8]* @S.721
+	%120 = getelementptr [3 x i8]* @S.733
 	%121 = bitcast [3 x i8]* %120 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %119, [0 x i8]* %121)
 	%122 = load %ast.AstNode** %isnode
@@ -31282,7 +32822,7 @@ L.4:
 L.2:
 	%133 = load %bout.BufIO** @llvm_f
 	%134 = bitcast %bout.BufIO* %133 to %bout.BufIO*
-	%135 = getelementptr [4 x i8]* @S.722
+	%135 = getelementptr [4 x i8]* @S.734
 	%136 = bitcast [4 x i8]* %135 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %134, [0 x i8]* %136)
 	store i16 1, i16* %i
@@ -31480,13 +33020,13 @@ return:
 	%43 = load i8* %rv.0
 	ret i8 %43
 }
-@S.723 = internal constant [16 x i8] c"\09%N = phi i1 [ \00"
-@S.724 = internal constant [6 x i8] c"false\00"
-@S.725 = internal constant [5 x i8] c"true\00"
-@S.726 = internal constant [4 x i8] c", %\00"
-@S.727 = internal constant [7 x i8] c" ], [ \00"
-@S.728 = internal constant [4 x i8] c", %\00"
-@S.729 = internal constant [4 x i8] c" ]\0A\00"
+@S.735 = internal constant [16 x i8] c"\09%N = phi i1 [ \00"
+@S.736 = internal constant [6 x i8] c"false\00"
+@S.737 = internal constant [5 x i8] c"true\00"
+@S.738 = internal constant [4 x i8] c", %\00"
+@S.739 = internal constant [7 x i8] c" ], [ \00"
+@S.740 = internal constant [4 x i8] c", %\00"
+@S.741 = internal constant [4 x i8] c" ]\0A\00"
 define internal zeroext i8 @llvm_Conditional(%ast.AstNode* %node$, i8 zeroext %isand$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -31560,7 +33100,7 @@ L.1:
 	%42 = load i16* @llvm_Tseqno
 	%43 = add i16 %42, 1
 	store i16 %43, i16* @llvm_Tseqno
-	%44 = getelementptr [16 x i8]* @S.723
+	%44 = getelementptr [16 x i8]* @S.735
 	%45 = bitcast [16 x i8]* %44 to [0 x i8]*
 	%46 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %45, %ast.AstNode* %46)
@@ -31570,28 +33110,28 @@ L.1:
 L.5:
 	%49 = load %bout.BufIO** @llvm_f
 	%50 = bitcast %bout.BufIO* %49 to %bout.BufIO*
-	%51 = getelementptr [6 x i8]* @S.724
+	%51 = getelementptr [6 x i8]* @S.736
 	%52 = bitcast [6 x i8]* %51 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %50, [0 x i8]* %52)
 	br label %L.4
 L.6:
 	%53 = load %bout.BufIO** @llvm_f
 	%54 = bitcast %bout.BufIO* %53 to %bout.BufIO*
-	%55 = getelementptr [5 x i8]* @S.725
+	%55 = getelementptr [5 x i8]* @S.737
 	%56 = bitcast [5 x i8]* %55 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %54, [0 x i8]* %56)
 	br label %L.4
 L.4:
 	%57 = load %bout.BufIO** @llvm_f
 	%58 = bitcast %bout.BufIO* %57 to %bout.BufIO*
-	%59 = getelementptr [4 x i8]* @S.726
+	%59 = getelementptr [4 x i8]* @S.738
 	%60 = bitcast [4 x i8]* %59 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %58, [0 x i8]* %60)
 	%61 = load i16* %lablhs
 	call void @llvm_PLabel(i16 %61)
 	%62 = load %bout.BufIO** @llvm_f
 	%63 = bitcast %bout.BufIO* %62 to %bout.BufIO*
-	%64 = getelementptr [7 x i8]* @S.727
+	%64 = getelementptr [7 x i8]* @S.739
 	%65 = bitcast [7 x i8]* %64 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %63, [0 x i8]* %65)
 	%66 = load %ast.AstNode** %node
@@ -31603,14 +33143,14 @@ L.4:
 	call void @llvm_PTempName(i16 %71)
 	%72 = load %bout.BufIO** @llvm_f
 	%73 = bitcast %bout.BufIO* %72 to %bout.BufIO*
-	%74 = getelementptr [4 x i8]* @S.728
+	%74 = getelementptr [4 x i8]* @S.740
 	%75 = bitcast [4 x i8]* %74 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %73, [0 x i8]* %75)
 	%76 = load i16* %labrhs
 	call void @llvm_PLabel(i16 %76)
 	%77 = load %bout.BufIO** @llvm_f
 	%78 = bitcast %bout.BufIO* %77 to %bout.BufIO*
-	%79 = getelementptr [4 x i8]* @S.729
+	%79 = getelementptr [4 x i8]* @S.741
 	%80 = bitcast [4 x i8]* %79 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %78, [0 x i8]* %80)
 	store i8 0, i8* %rv.0
@@ -31619,7 +33159,7 @@ return:
 	%81 = load i8* %rv.0
 	ret i8 %81
 }
-@S.730 = internal constant [81 x i8] c"\09call void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
+@S.742 = internal constant [81 x i8] c"\09call void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
 define internal void @llvm_Copy(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -31678,16 +33218,16 @@ L.0:
 	%48 = load %ast.AstNode** %47
 	%49 = bitcast %ast.AstNode* %48 to %ast.AstNode*
 	%50 = call i8 @llvm_GenSub(%ast.AstNode* %49)
-	%51 = getelementptr [81 x i8]* @S.730
+	%51 = getelementptr [81 x i8]* @S.742
 	%52 = bitcast [81 x i8]* %51 to [0 x i8]*
 	%53 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %52, %ast.AstNode* %53)
-	call void @llvm_UseIntrinsic(i8 0, i32 8)
+	call void @llvm_UseIntrinsic(i8 0, i32 1, %type.TypeNode* null)
 	br label %return
 return:
 	ret void
 }
-@S.731 = internal constant [75 x i8] c"\09call void @llvm.memset.p0i8.%W(i8* %0N, %1T %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
+@S.743 = internal constant [75 x i8] c"\09call void @llvm.memset.p0i8.%W(i8* %0N, %1T %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
 define internal void @llvm_Set(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -31734,11 +33274,11 @@ L.0:
 	%37 = load %ast.AstNode** %36
 	%38 = bitcast %ast.AstNode* %37 to %ast.AstNode*
 	%39 = call i8 @llvm_GenSub(%ast.AstNode* %38)
-	%40 = getelementptr [75 x i8]* @S.731
+	%40 = getelementptr [75 x i8]* @S.743
 	%41 = bitcast [75 x i8]* %40 to [0 x i8]*
 	%42 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %41, %ast.AstNode* %42)
-	call void @llvm_UseIntrinsic(i8 2, i32 8)
+	call void @llvm_UseIntrinsic(i8 2, i32 1, %type.TypeNode* null)
 	br label %return
 return:
 	ret void
@@ -31772,7 +33312,7 @@ L.6:
 	%10 = getelementptr %target.ModelT* %9, i32 0, i32 7
 	%11 = load i8* %ia
 	%12 = zext i8 %11 to i32
-	%13 = getelementptr [8 x %target.SizeAlign]* %10, i32 0, i32 %12
+	%13 = getelementptr [6 x %target.SizeAlign]* %10, i32 0, i32 %12
 	%14 = getelementptr %target.SizeAlign* %13, i32 0, i32 1
 	%15 = load i8* %14
 	%16 = zext i8 %15 to i32
@@ -31817,7 +33357,7 @@ L.13:
 	%38 = getelementptr %target.ModelT* %37, i32 0, i32 7
 	%39 = load i8* %is
 	%40 = zext i8 %39 to i32
-	%41 = getelementptr [8 x %target.SizeAlign]* %38, i32 0, i32 %40
+	%41 = getelementptr [6 x %target.SizeAlign]* %38, i32 0, i32 %40
 	%42 = getelementptr %target.SizeAlign* %41, i32 0, i32 0
 	%43 = load i8* %42
 	%44 = zext i8 %43 to i32
@@ -31856,11 +33396,10 @@ return:
 	%60 = load i8* %rv.0
 	ret i8 %60
 }
-@S.732 = internal constant [28 x i8] c"\09%N = icmp eq %0T %0N, %1N\0A\00"
-@S.733 = internal constant [28 x i8] c"\09%N = icmp ne %0T %0N, %1N\0A\00"
-@S.734 = internal constant [22 x i8] c"\09%N = call i1 @memcmp\00"
-@S.735 = internal constant [29 x i8] c"(%0T %0N, %1T %1N, %2T %2N)\0A\00"
-@S.736 = internal constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
+@S.744 = internal constant [28 x i8] c"\09%N = icmp eq %0T %0N, %1N\0A\00"
+@S.745 = internal constant [28 x i8] c"\09%N = icmp ne %0T %0N, %1N\0A\00"
+@S.746 = internal constant [54 x i8] c"\09%N = call i1 @memcmp%0*B(%0T %0N, %1T %1N, %2T %2N)\0A\00"
+@S.747 = internal constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
 define internal zeroext i8 @llvm_ArrayCompare(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -31924,7 +33463,7 @@ L.1:
 	%43 = getelementptr %target.ModelT* %42, i32 0, i32 7
 	%44 = load i8* %i
 	%45 = zext i8 %44 to i32
-	%46 = getelementptr [8 x %target.SizeAlign]* %43, i32 0, i32 %45
+	%46 = getelementptr [6 x %target.SizeAlign]* %43, i32 0, i32 %45
 	%47 = getelementptr %target.SizeAlign* %46, i32 0, i32 0
 	%48 = load i8* %47
 	%49 = zext i8 %48 to i32
@@ -31938,7 +33477,7 @@ L.1:
 	%56 = getelementptr %target.ModelT* %55, i32 0, i32 7
 	%57 = load i8* %i
 	%58 = zext i8 %57 to i32
-	%59 = getelementptr [8 x %target.SizeAlign]* %56, i32 0, i32 %58
+	%59 = getelementptr [6 x %target.SizeAlign]* %56, i32 0, i32 %58
 	%60 = getelementptr %target.SizeAlign* %59, i32 0, i32 1
 	%61 = load i8* %60
 	%62 = zext i8 %61 to i32
@@ -31967,7 +33506,7 @@ L.6:
 	%78 = bitcast %ast.AstNode* %77 to %ast.AstNode*
 	%79 = load i8* %i
 	%80 = zext i8 %79 to i32
-	%81 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %80
+	%81 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %80
 	%82 = load %type.TypeNode** %81
 	%83 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %78, %type.TypeNode* %82)
 	%84 = bitcast %ast.AstNode* %83 to %ast.AstNode*
@@ -31977,7 +33516,7 @@ L.6:
 	store %ast.AstNode* %84, %ast.AstNode** %87
 	%88 = load i8* %i
 	%89 = zext i8 %88 to i32
-	%90 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %89
+	%90 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %89
 	%91 = load %type.TypeNode** %90
 	%92 = getelementptr %type.TypeNode* %91, i32 0, i32 0
 	%93 = load %type.TypeNode** %92
@@ -31991,7 +33530,7 @@ L.6:
 	store i32 %95, i32* %100
 	%101 = load i8* %i
 	%102 = zext i8 %101 to i32
-	%103 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %102
+	%103 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %102
 	%104 = load %type.TypeNode** %103
 	%105 = getelementptr %type.TypeNode* %104, i32 0, i32 0
 	%106 = load %type.TypeNode** %105
@@ -32014,7 +33553,7 @@ L.6:
 	%122 = bitcast %ast.AstNode* %121 to %ast.AstNode*
 	%123 = load i8* %i
 	%124 = zext i8 %123 to i32
-	%125 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %124
+	%125 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %124
 	%126 = load %type.TypeNode** %125
 	%127 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %122, %type.TypeNode* %126)
 	%128 = bitcast %ast.AstNode* %127 to %ast.AstNode*
@@ -32024,7 +33563,7 @@ L.6:
 	store %ast.AstNode* %128, %ast.AstNode** %131
 	%132 = load i8* %i
 	%133 = zext i8 %132 to i32
-	%134 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %133
+	%134 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %133
 	%135 = load %type.TypeNode** %134
 	%136 = getelementptr %type.TypeNode* %135, i32 0, i32 0
 	%137 = load %type.TypeNode** %136
@@ -32038,7 +33577,7 @@ L.6:
 	store i32 %139, i32* %144
 	%145 = load i8* %i
 	%146 = zext i8 %145 to i32
-	%147 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %146
+	%147 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %146
 	%148 = load %type.TypeNode** %147
 	%149 = getelementptr %type.TypeNode* %148, i32 0, i32 0
 	%150 = load %type.TypeNode** %149
@@ -32088,7 +33627,7 @@ L.12:
 L.10:
 	%183 = load i8* %i
 	%184 = zext i8 %183 to i32
-	%185 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %184
+	%185 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %184
 	%186 = load %type.TypeNode** %185
 	%187 = getelementptr %type.TypeNode* %186, i32 0, i32 0
 	%188 = load %type.TypeNode** %187
@@ -32103,7 +33642,7 @@ L.10:
 	%197 = getelementptr [0 x %ast.AstNode*]* %196, i32 0, i32 1
 	%198 = load %ast.AstNode** %197
 	%199 = bitcast %ast.AstNode* %198 to %ast.AstNode*
-	%200 = call %ast.AstNode* @ast_New2(i8 71, %type.TypeNode* %189, %ast.AstNode* %194, %ast.AstNode* %199)
+	%200 = call %ast.AstNode* @ast_New2(i8 74, %type.TypeNode* %189, %ast.AstNode* %194, %ast.AstNode* %199)
 	%201 = bitcast %ast.AstNode* %200 to %ast.AstNode*
 	%202 = load %ast.AstNode** %node
 	%203 = getelementptr %ast.AstNode* %202, i32 0, i32 11
@@ -32111,7 +33650,7 @@ L.10:
 	store %ast.AstNode* %201, %ast.AstNode** %204
 	%205 = load i8* %i
 	%206 = zext i8 %205 to i32
-	%207 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %206
+	%207 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %206
 	%208 = load %type.TypeNode** %207
 	%209 = getelementptr %type.TypeNode* %208, i32 0, i32 0
 	%210 = load %type.TypeNode** %209
@@ -32123,14 +33662,14 @@ L.10:
 	%216 = bitcast %ast.AstNode* %215 to %ast.AstNode*
 	%217 = load i8* %i
 	%218 = zext i8 %217 to i32
-	%219 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %218
+	%219 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %218
 	%220 = load %type.TypeNode** %219
 	%221 = getelementptr %type.TypeNode* %220, i32 0, i32 0
 	%222 = load %type.TypeNode** %221
 	%223 = bitcast %type.TypeNode* %222 to %type.TypeNode*
 	%224 = load i64* %mask
 	%225 = call %ast.AstNode* @ast_Const(%type.TypeNode* %223, i64 %224)
-	%226 = call %ast.AstNode* @ast_New2(i8 69, %type.TypeNode* %211, %ast.AstNode* %216, %ast.AstNode* %225)
+	%226 = call %ast.AstNode* @ast_New2(i8 72, %type.TypeNode* %211, %ast.AstNode* %216, %ast.AstNode* %225)
 	%227 = bitcast %ast.AstNode* %226 to %ast.AstNode*
 	%228 = load %ast.AstNode** %node
 	%229 = getelementptr %ast.AstNode* %228, i32 0, i32 11
@@ -32138,7 +33677,7 @@ L.10:
 	store %ast.AstNode* %227, %ast.AstNode** %230
 	%231 = load i8* %i
 	%232 = zext i8 %231 to i32
-	%233 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %232
+	%233 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %232
 	%234 = load %type.TypeNode** %233
 	%235 = getelementptr %type.TypeNode* %234, i32 0, i32 0
 	%236 = load %type.TypeNode** %235
@@ -32179,13 +33718,13 @@ L.8:
 	%265 = icmp eq i8 %264, 24
 	br i1 %265, label %L.14, label %L.15
 L.14:
-	%266 = getelementptr [28 x i8]* @S.732
+	%266 = getelementptr [28 x i8]* @S.744
 	%267 = bitcast [28 x i8]* %266 to [0 x i8]*
 	%268 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %267, %ast.AstNode* %268)
 	br label %L.13
 L.15:
-	%269 = getelementptr [28 x i8]* @S.733
+	%269 = getelementptr [28 x i8]* @S.745
 	%270 = bitcast [28 x i8]* %269 to [0 x i8]*
 	%271 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %270, %ast.AstNode* %271)
@@ -32201,7 +33740,7 @@ L.7:
 	%276 = bitcast %ast.AstNode* %275 to %ast.AstNode*
 	%277 = load i8* %i
 	%278 = zext i8 %277 to i32
-	%279 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %278
+	%279 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %278
 	%280 = load %type.TypeNode** %279
 	%281 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %276, %type.TypeNode* %280)
 	%282 = bitcast %ast.AstNode* %281 to %ast.AstNode*
@@ -32211,7 +33750,7 @@ L.7:
 	store %ast.AstNode* %282, %ast.AstNode** %285
 	%286 = load i8* %i
 	%287 = zext i8 %286 to i32
-	%288 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %287
+	%288 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %287
 	%289 = load %type.TypeNode** %288
 	%290 = getelementptr %type.TypeNode* %289, i32 0, i32 0
 	%291 = load %type.TypeNode** %290
@@ -32230,7 +33769,7 @@ L.7:
 	%303 = bitcast %ast.AstNode* %302 to %ast.AstNode*
 	%304 = load i8* %i
 	%305 = zext i8 %304 to i32
-	%306 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %305
+	%306 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %305
 	%307 = load %type.TypeNode** %306
 	%308 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %303, %type.TypeNode* %307)
 	%309 = bitcast %ast.AstNode* %308 to %ast.AstNode*
@@ -32240,7 +33779,7 @@ L.7:
 	store %ast.AstNode* %309, %ast.AstNode** %312
 	%313 = load i8* %i
 	%314 = zext i8 %313 to i32
-	%315 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %314
+	%315 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %314
 	%316 = load %type.TypeNode** %315
 	%317 = getelementptr %type.TypeNode* %316, i32 0, i32 0
 	%318 = load %type.TypeNode** %317
@@ -32278,7 +33817,7 @@ L.17:
 	%347 = load i32* %size
 	%348 = zext i32 %347 to i64
 	%349 = call %ast.AstNode* @ast_Const(%type.TypeNode* %346, i64 %348)
-	%350 = call %ast.AstNode* @ast_New2(i8 49, %type.TypeNode* %340, %ast.AstNode* %345, %ast.AstNode* %349)
+	%350 = call %ast.AstNode* @ast_New2(i8 52, %type.TypeNode* %340, %ast.AstNode* %345, %ast.AstNode* %349)
 	%351 = bitcast %ast.AstNode* %350 to %ast.AstNode*
 	%352 = load %ast.AstNode** %node
 	%353 = getelementptr %ast.AstNode* %352, i32 0, i32 11
@@ -32314,63 +33853,42 @@ L.16:
 	%377 = load %ast.AstNode** %node
 	%378 = getelementptr %ast.AstNode* %377, i32 0, i32 7
 	store i32 1, i32* %378
-	%379 = getelementptr [22 x i8]* @S.734
-	%380 = bitcast [22 x i8]* %379 to [0 x i8]*
+	%379 = getelementptr [54 x i8]* @S.746
+	%380 = bitcast [54 x i8]* %379 to [0 x i8]*
 	%381 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %380, %ast.AstNode* %381)
-	%382 = load %bout.BufIO** @llvm_f
-	%383 = bitcast %bout.BufIO* %382 to %bout.BufIO*
-	%384 = load i8* %i
-	%385 = zext i8 %384 to i32
-	%386 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %385
-	%387 = load %type.TypeNode** %386
-	%388 = getelementptr %type.TypeNode* %387, i32 0, i32 0
-	%389 = load %type.TypeNode** %388
-	%390 = getelementptr %type.TypeNode* %389, i32 0, i32 10
-	%391 = load i32* %390
-	%392 = load %target.ModelT** @target_Target
-	%393 = getelementptr %target.ModelT* %392, i32 0, i32 2
-	%394 = load i8* %393
-	%395 = zext i8 %394 to i32
-	%396 = udiv i32 %391, %395
-	call void @bout_BufIO_uint(%bout.BufIO* %383, i32 %396)
-	%397 = getelementptr [29 x i8]* @S.735
-	%398 = bitcast [29 x i8]* %397 to [0 x i8]*
-	%399 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %398, %ast.AstNode* %399)
-	%400 = load i32* %size
-	%401 = load %target.ModelT** @target_Target
-	%402 = getelementptr %target.ModelT* %401, i32 0, i32 2
-	%403 = load i8* %402
-	%404 = zext i8 %403 to i32
-	%405 = mul i32 %400, %404
-	call void @llvm_UseIntrinsic(i8 3, i32 %405)
-	%406 = load %ast.AstNode** %node
-	%407 = getelementptr %ast.AstNode* %406, i32 0, i32 0
-	%408 = load i8* %407
-	%409 = icmp eq i8 %408, 25
-	br i1 %409, label %L.19, label %L.18
+	%382 = load i32* %size
+	%383 = load i8* %i
+	%384 = zext i8 %383 to i32
+	%385 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %384
+	%386 = load %type.TypeNode** %385
+	call void @llvm_UseIntrinsic(i8 3, i32 %382, %type.TypeNode* %386)
+	%387 = load %ast.AstNode** %node
+	%388 = getelementptr %ast.AstNode* %387, i32 0, i32 0
+	%389 = load i8* %388
+	%390 = icmp eq i8 %389, 25
+	br i1 %390, label %L.19, label %L.18
 L.19:
-	%410 = load %ast.AstNode** %node
-	%411 = getelementptr %ast.AstNode* %410, i32 0, i32 6
-	%412 = load i16* %411
-	%413 = load %ast.AstNode** %node
-	%414 = getelementptr %ast.AstNode* %413, i32 0, i32 11
-	%415 = getelementptr [0 x %ast.AstNode*]* %414, i32 0, i32 0
-	%416 = load %ast.AstNode** %415
-	%417 = getelementptr %ast.AstNode* %416, i32 0, i32 6
-	store i16 %412, i16* %417
-	%418 = load i16* @llvm_Tseqno
-	%419 = load %ast.AstNode** %node
-	%420 = getelementptr %ast.AstNode* %419, i32 0, i32 6
-	store i16 %418, i16* %420
-	%421 = load i16* @llvm_Tseqno
-	%422 = add i16 %421, 1
-	store i16 %422, i16* @llvm_Tseqno
-	%423 = getelementptr [24 x i8]* @S.736
-	%424 = bitcast [24 x i8]* %423 to [0 x i8]*
-	%425 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %424, %ast.AstNode* %425)
+	%391 = load %ast.AstNode** %node
+	%392 = getelementptr %ast.AstNode* %391, i32 0, i32 6
+	%393 = load i16* %392
+	%394 = load %ast.AstNode** %node
+	%395 = getelementptr %ast.AstNode* %394, i32 0, i32 11
+	%396 = getelementptr [0 x %ast.AstNode*]* %395, i32 0, i32 0
+	%397 = load %ast.AstNode** %396
+	%398 = getelementptr %ast.AstNode* %397, i32 0, i32 6
+	store i16 %393, i16* %398
+	%399 = load i16* @llvm_Tseqno
+	%400 = load %ast.AstNode** %node
+	%401 = getelementptr %ast.AstNode* %400, i32 0, i32 6
+	store i16 %399, i16* %401
+	%402 = load i16* @llvm_Tseqno
+	%403 = add i16 %402, 1
+	store i16 %403, i16* @llvm_Tseqno
+	%404 = getelementptr [24 x i8]* @S.747
+	%405 = bitcast [24 x i8]* %404 to [0 x i8]*
+	%406 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %405, %ast.AstNode* %406)
 	br label %L.18
 L.18:
 	br label %L.5
@@ -32378,22 +33896,111 @@ L.5:
 	store i8 0, i8* %rv.0
 	br label %return
 return:
-	%426 = load i8* %rv.0
-	ret i8 %426
+	%407 = load i8* %rv.0
+	ret i8 %407
 }
-@S.737 = internal constant [22 x i8] c"\09%N = xor %0T %0N, -1\00"
-@S.738 = internal constant [21 x i8] c"\09%N = sub %0T 0, %0N\00"
-@S.739 = internal constant [24 x i8] c"\09%N = fsub %0T 0.0, %0N\00"
-@S.740 = internal constant [27 x i8] c"\09%N = uitofp %0T %0N to %T\00"
-@S.741 = internal constant [27 x i8] c"\09%N = sitofp %0T %0N to %T\00"
-@S.742 = internal constant [27 x i8] c"\09%N = fptoui %0T %0N to %T\00"
-@S.743 = internal constant [27 x i8] c"\09%N = fptosi %0T %0N to %T\00"
-@S.744 = internal constant [37 x i8] c"\09%N = call %T @llvm.bswap.%T(%T %0N)\00"
-@S.745 = internal constant [47 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)\00"
-@S.746 = internal constant [46 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 true)\00"
-@S.747 = internal constant [47 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 false)\00"
-@S.748 = internal constant [46 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 true)\00"
-@S.749 = internal constant [38 x i8] c"\09%N = call %T @llvm.ctpop.%T(%0T %0N)\00"
+@S.748 = internal constant [36 x i8] c"\09%N = call %T @memlen%0*A(%0T %0N)\0A\00"
+define internal void @llvm_ZLen(%ast.AstNode* %node$) nounwind {
+L.0:
+	%node = alloca %ast.AstNode*
+	store %ast.AstNode* %node$, %ast.AstNode** %node
+	%align = alloca i32
+	%t = alloca %type.TypeNode*
+	%at = alloca %type.TypeNode*
+	%bt = alloca %type.TypeNode*
+	%0 = load %ast.AstNode** %node
+	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 11
+	%2 = getelementptr [0 x %ast.AstNode*]* %1, i32 0, i32 0
+	%3 = load %ast.AstNode** %2
+	%4 = getelementptr %ast.AstNode* %3, i32 0, i32 8
+	%5 = load %type.TypeNode** %4
+	%6 = getelementptr %type.TypeNode* %5, i32 0, i32 0
+	%7 = load %type.TypeNode** %6
+	%8 = bitcast %type.TypeNode* %7 to %type.TypeNode*
+	store %type.TypeNode* %8, %type.TypeNode** %at
+	%9 = load %type.TypeNode** %at
+	%10 = getelementptr %type.TypeNode* %9, i32 0, i32 0
+	%11 = load %type.TypeNode** %10
+	%12 = bitcast %type.TypeNode* %11 to %type.TypeNode*
+	store %type.TypeNode* %12, %type.TypeNode** %bt
+	%13 = load %type.TypeNode** %bt
+	%14 = call %type.TypeNode* @type_Clone(%type.TypeNode* %13)
+	store %type.TypeNode* %14, %type.TypeNode** %t
+	%15 = load %type.TypeNode** %at
+	%16 = getelementptr %type.TypeNode* %15, i32 0, i32 11
+	%17 = load i32* %16
+	%18 = load %type.TypeNode** %t
+	%19 = getelementptr %type.TypeNode* %18, i32 0, i32 11
+	store i32 %17, i32* %19
+	%20 = load %type.TypeNode** %t
+	%21 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %20)
+	store %type.TypeNode* %21, %type.TypeNode** %t
+	%22 = load %ast.AstNode** %node
+	%23 = getelementptr %ast.AstNode* %22, i32 0, i32 11
+	%24 = getelementptr [0 x %ast.AstNode*]* %23, i32 0, i32 0
+	%25 = load %ast.AstNode** %24
+	%26 = bitcast %ast.AstNode* %25 to %ast.AstNode*
+	%27 = load %type.TypeNode** %t
+	%28 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %26, %type.TypeNode* %27)
+	%29 = bitcast %ast.AstNode* %28 to %ast.AstNode*
+	%30 = load %ast.AstNode** %node
+	%31 = getelementptr %ast.AstNode* %30, i32 0, i32 11
+	%32 = getelementptr [0 x %ast.AstNode*]* %31, i32 0, i32 0
+	store %ast.AstNode* %29, %ast.AstNode** %32
+	%33 = load %ast.AstNode** %node
+	%34 = getelementptr %ast.AstNode* %33, i32 0, i32 11
+	%35 = getelementptr [0 x %ast.AstNode*]* %34, i32 0, i32 0
+	%36 = load %ast.AstNode** %35
+	%37 = bitcast %ast.AstNode* %36 to %ast.AstNode*
+	%38 = call i8 @llvm_GenSub(%ast.AstNode* %37)
+	%39 = load %type.TypeNode** %t
+	%40 = load %ast.AstNode** %node
+	%41 = getelementptr %ast.AstNode* %40, i32 0, i32 11
+	%42 = getelementptr [0 x %ast.AstNode*]* %41, i32 0, i32 0
+	%43 = load %ast.AstNode** %42
+	%44 = getelementptr %ast.AstNode* %43, i32 0, i32 8
+	store %type.TypeNode* %39, %type.TypeNode** %44
+	%45 = load %ast.AstNode** %node
+	%46 = getelementptr %ast.AstNode* %45, i32 0, i32 11
+	%47 = getelementptr [0 x %ast.AstNode*]* %46, i32 0, i32 1
+	%48 = load %ast.AstNode** %47
+	%49 = getelementptr %ast.AstNode* %48, i32 0, i32 10
+	%50 = load i64* %49
+	%51 = trunc i64 %50 to i32
+	store i32 %51, i32* %align
+	%52 = load i16* @llvm_Tseqno
+	%53 = load %ast.AstNode** %node
+	%54 = getelementptr %ast.AstNode* %53, i32 0, i32 6
+	store i16 %52, i16* %54
+	%55 = load i16* @llvm_Tseqno
+	%56 = add i16 %55, 1
+	store i16 %56, i16* @llvm_Tseqno
+	%57 = getelementptr [36 x i8]* @S.748
+	%58 = bitcast [36 x i8]* %57 to [0 x i8]*
+	%59 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %58, %ast.AstNode* %59)
+	%60 = load i32* %align
+	%61 = load %type.TypeNode** %t
+	call void @llvm_UseIntrinsic(i8 4, i32 %60, %type.TypeNode* %61)
+	br label %return
+return:
+	ret void
+}
+@S.749 = internal constant [22 x i8] c"\09%N = xor %0T %0N, -1\00"
+@S.750 = internal constant [21 x i8] c"\09%N = sub %0T 0, %0N\00"
+@S.751 = internal constant [24 x i8] c"\09%N = fsub %0T 0.0, %0N\00"
+@S.752 = internal constant [26 x i8] c"\09%N = fpext %0T %0N to %T\00"
+@S.753 = internal constant [28 x i8] c"\09%N = fptrunc %0T %0N to %T\00"
+@S.754 = internal constant [27 x i8] c"\09%N = uitofp %0T %0N to %T\00"
+@S.755 = internal constant [27 x i8] c"\09%N = sitofp %0T %0N to %T\00"
+@S.756 = internal constant [27 x i8] c"\09%N = fptoui %0T %0N to %T\00"
+@S.757 = internal constant [27 x i8] c"\09%N = fptosi %0T %0N to %T\00"
+@S.758 = internal constant [37 x i8] c"\09%N = call %T @llvm.bswap.%T(%T %0N)\00"
+@S.759 = internal constant [47 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)\00"
+@S.760 = internal constant [46 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 true)\00"
+@S.761 = internal constant [47 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 false)\00"
+@S.762 = internal constant [46 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 true)\00"
+@S.763 = internal constant [38 x i8] c"\09%N = call %T @llvm.ctpop.%T(%0T %0N)\00"
 define internal zeroext i8 @llvm_UnaryOp(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -32424,132 +34031,193 @@ L.0:
 		i32 38, label %L.7
 		i32 39, label %L.8
 		i32 40, label %L.9
-		i32 32, label %L.10
-		i32 41, label %L.11
-		i32 42, label %L.12
+		i32 41, label %L.10
+		i32 42, label %L.11
+		i32 32, label %L.12
 		i32 43, label %L.13
 		i32 44, label %L.14
 		i32 45, label %L.15
+		i32 46, label %L.16
+		i32 47, label %L.17
 	]
 L.3:
-	%15 = getelementptr [22 x i8]* @S.737
+	%15 = getelementptr [22 x i8]* @S.749
 	%16 = bitcast [22 x i8]* %15 to [0 x i8]*
 	%17 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
 	br label %L.2
 L.4:
-	%18 = getelementptr [21 x i8]* @S.738
+	%18 = getelementptr [21 x i8]* @S.750
 	%19 = bitcast [21 x i8]* %18 to [0 x i8]*
 	%20 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %19, %ast.AstNode* %20)
 	br label %L.2
 L.5:
-	%21 = getelementptr [24 x i8]* @S.739
+	%21 = getelementptr [24 x i8]* @S.751
 	%22 = bitcast [24 x i8]* %21 to [0 x i8]*
 	%23 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %22, %ast.AstNode* %23)
 	br label %L.2
 L.6:
-	%24 = getelementptr [27 x i8]* @S.740
-	%25 = bitcast [27 x i8]* %24 to [0 x i8]*
+	%24 = getelementptr [26 x i8]* @S.752
+	%25 = bitcast [26 x i8]* %24 to [0 x i8]*
 	%26 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %25, %ast.AstNode* %26)
 	br label %L.2
 L.7:
-	%27 = getelementptr [27 x i8]* @S.741
-	%28 = bitcast [27 x i8]* %27 to [0 x i8]*
+	%27 = getelementptr [28 x i8]* @S.753
+	%28 = bitcast [28 x i8]* %27 to [0 x i8]*
 	%29 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %28, %ast.AstNode* %29)
 	br label %L.2
 L.8:
-	%30 = getelementptr [27 x i8]* @S.742
+	%30 = getelementptr [27 x i8]* @S.754
 	%31 = bitcast [27 x i8]* %30 to [0 x i8]*
 	%32 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %31, %ast.AstNode* %32)
 	br label %L.2
 L.9:
-	%33 = getelementptr [27 x i8]* @S.743
+	%33 = getelementptr [27 x i8]* @S.755
 	%34 = bitcast [27 x i8]* %33 to [0 x i8]*
 	%35 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %34, %ast.AstNode* %35)
 	br label %L.2
 L.10:
-	%36 = getelementptr [37 x i8]* @S.744
-	%37 = bitcast [37 x i8]* %36 to [0 x i8]*
+	%36 = getelementptr [27 x i8]* @S.756
+	%37 = bitcast [27 x i8]* %36 to [0 x i8]*
 	%38 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %37, %ast.AstNode* %38)
-	%39 = load %ast.AstNode** %node
-	%40 = getelementptr %ast.AstNode* %39, i32 0, i32 7
-	%41 = load i32* %40
-	call void @llvm_UseIntrinsic(i8 4, i32 %41)
 	br label %L.2
 L.11:
-	%42 = getelementptr [47 x i8]* @S.745
-	%43 = bitcast [47 x i8]* %42 to [0 x i8]*
+	%39 = getelementptr [27 x i8]* @S.757
+	%40 = bitcast [27 x i8]* %39 to [0 x i8]*
+	%41 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %40, %ast.AstNode* %41)
+	br label %L.2
+L.12:
+	%42 = getelementptr [37 x i8]* @S.758
+	%43 = bitcast [37 x i8]* %42 to [0 x i8]*
 	%44 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %43, %ast.AstNode* %44)
 	%45 = load %ast.AstNode** %node
 	%46 = getelementptr %ast.AstNode* %45, i32 0, i32 7
 	%47 = load i32* %46
-	call void @llvm_UseIntrinsic(i8 5, i32 %47)
-	br label %L.2
-L.12:
-	%48 = getelementptr [46 x i8]* @S.746
-	%49 = bitcast [46 x i8]* %48 to [0 x i8]*
-	%50 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %49, %ast.AstNode* %50)
-	%51 = load %ast.AstNode** %node
-	%52 = getelementptr %ast.AstNode* %51, i32 0, i32 7
-	%53 = load i32* %52
-	call void @llvm_UseIntrinsic(i8 5, i32 %53)
+	%48 = load %target.ModelT** @target_Target
+	%49 = getelementptr %target.ModelT* %48, i32 0, i32 2
+	%50 = load i8* %49
+	%51 = zext i8 %50 to i32
+	%52 = udiv i32 %47, %51
+	%53 = load %ast.AstNode** %node
+	%54 = getelementptr %ast.AstNode* %53, i32 0, i32 8
+	%55 = load %type.TypeNode** %54
+	call void @llvm_UseIntrinsic(i8 5, i32 %52, %type.TypeNode* %55)
 	br label %L.2
 L.13:
-	%54 = getelementptr [47 x i8]* @S.747
-	%55 = bitcast [47 x i8]* %54 to [0 x i8]*
-	%56 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %55, %ast.AstNode* %56)
-	%57 = load %ast.AstNode** %node
-	%58 = getelementptr %ast.AstNode* %57, i32 0, i32 7
-	%59 = load i32* %58
-	call void @llvm_UseIntrinsic(i8 6, i32 %59)
+	%56 = getelementptr [47 x i8]* @S.759
+	%57 = bitcast [47 x i8]* %56 to [0 x i8]*
+	%58 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %57, %ast.AstNode* %58)
+	%59 = load %ast.AstNode** %node
+	%60 = getelementptr %ast.AstNode* %59, i32 0, i32 7
+	%61 = load i32* %60
+	%62 = load %target.ModelT** @target_Target
+	%63 = getelementptr %target.ModelT* %62, i32 0, i32 2
+	%64 = load i8* %63
+	%65 = zext i8 %64 to i32
+	%66 = udiv i32 %61, %65
+	%67 = load %ast.AstNode** %node
+	%68 = getelementptr %ast.AstNode* %67, i32 0, i32 8
+	%69 = load %type.TypeNode** %68
+	call void @llvm_UseIntrinsic(i8 6, i32 %66, %type.TypeNode* %69)
 	br label %L.2
 L.14:
-	%60 = getelementptr [46 x i8]* @S.748
-	%61 = bitcast [46 x i8]* %60 to [0 x i8]*
-	%62 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %61, %ast.AstNode* %62)
-	%63 = load %ast.AstNode** %node
-	%64 = getelementptr %ast.AstNode* %63, i32 0, i32 7
-	%65 = load i32* %64
-	call void @llvm_UseIntrinsic(i8 6, i32 %65)
+	%70 = getelementptr [46 x i8]* @S.760
+	%71 = bitcast [46 x i8]* %70 to [0 x i8]*
+	%72 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %71, %ast.AstNode* %72)
+	%73 = load %ast.AstNode** %node
+	%74 = getelementptr %ast.AstNode* %73, i32 0, i32 7
+	%75 = load i32* %74
+	%76 = load %target.ModelT** @target_Target
+	%77 = getelementptr %target.ModelT* %76, i32 0, i32 2
+	%78 = load i8* %77
+	%79 = zext i8 %78 to i32
+	%80 = udiv i32 %75, %79
+	%81 = load %ast.AstNode** %node
+	%82 = getelementptr %ast.AstNode* %81, i32 0, i32 8
+	%83 = load %type.TypeNode** %82
+	call void @llvm_UseIntrinsic(i8 6, i32 %80, %type.TypeNode* %83)
 	br label %L.2
 L.15:
-	%66 = getelementptr [38 x i8]* @S.749
-	%67 = bitcast [38 x i8]* %66 to [0 x i8]*
-	%68 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %67, %ast.AstNode* %68)
-	%69 = load %ast.AstNode** %node
-	%70 = getelementptr %ast.AstNode* %69, i32 0, i32 7
-	%71 = load i32* %70
-	call void @llvm_UseIntrinsic(i8 7, i32 %71)
+	%84 = getelementptr [47 x i8]* @S.761
+	%85 = bitcast [47 x i8]* %84 to [0 x i8]*
+	%86 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %85, %ast.AstNode* %86)
+	%87 = load %ast.AstNode** %node
+	%88 = getelementptr %ast.AstNode* %87, i32 0, i32 7
+	%89 = load i32* %88
+	%90 = load %target.ModelT** @target_Target
+	%91 = getelementptr %target.ModelT* %90, i32 0, i32 2
+	%92 = load i8* %91
+	%93 = zext i8 %92 to i32
+	%94 = udiv i32 %89, %93
+	%95 = load %ast.AstNode** %node
+	%96 = getelementptr %ast.AstNode* %95, i32 0, i32 8
+	%97 = load %type.TypeNode** %96
+	call void @llvm_UseIntrinsic(i8 7, i32 %94, %type.TypeNode* %97)
+	br label %L.2
+L.16:
+	%98 = getelementptr [46 x i8]* @S.762
+	%99 = bitcast [46 x i8]* %98 to [0 x i8]*
+	%100 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %99, %ast.AstNode* %100)
+	%101 = load %ast.AstNode** %node
+	%102 = getelementptr %ast.AstNode* %101, i32 0, i32 7
+	%103 = load i32* %102
+	%104 = load %target.ModelT** @target_Target
+	%105 = getelementptr %target.ModelT* %104, i32 0, i32 2
+	%106 = load i8* %105
+	%107 = zext i8 %106 to i32
+	%108 = udiv i32 %103, %107
+	%109 = load %ast.AstNode** %node
+	%110 = getelementptr %ast.AstNode* %109, i32 0, i32 8
+	%111 = load %type.TypeNode** %110
+	call void @llvm_UseIntrinsic(i8 7, i32 %108, %type.TypeNode* %111)
+	br label %L.2
+L.17:
+	%112 = getelementptr [38 x i8]* @S.763
+	%113 = bitcast [38 x i8]* %112 to [0 x i8]*
+	%114 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %113, %ast.AstNode* %114)
+	%115 = load %ast.AstNode** %node
+	%116 = getelementptr %ast.AstNode* %115, i32 0, i32 7
+	%117 = load i32* %116
+	%118 = load %target.ModelT** @target_Target
+	%119 = getelementptr %target.ModelT* %118, i32 0, i32 2
+	%120 = load i8* %119
+	%121 = zext i8 %120 to i32
+	%122 = udiv i32 %117, %121
+	%123 = load %ast.AstNode** %node
+	%124 = getelementptr %ast.AstNode* %123, i32 0, i32 8
+	%125 = load %type.TypeNode** %124
+	call void @llvm_UseIntrinsic(i8 8, i32 %122, %type.TypeNode* %125)
 	br label %L.2
 L.1:
 	br label %L.2
 L.2:
-	%72 = load %ast.AstNode** %node
-	call void @llvm_PEndLine(%ast.AstNode* %72)
+	%126 = load %ast.AstNode** %node
+	call void @llvm_PEndLine(%ast.AstNode* %126)
 	store i8 0, i8* %rv.0
 	br label %return
 return:
-	%73 = load i8* %rv.0
-	ret i8 %73
+	%127 = load i8* %rv.0
+	ret i8 %127
 }
-@S.750 = internal constant [3 x i8] c"\22\22\00"
+@S.764 = internal constant [3 x i8] c"\22\22\00"
 define internal void @llvm_PStringCon(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
 	store %ast.AstNode* %node$, %ast.AstNode** %node
-	%p = alloca [0 x i8]*
 	%n = alloca i16
 	%0 = load %ast.AstNode** %node
 	%1 = icmp eq %ast.AstNode* %0, null
@@ -32557,7 +34225,7 @@ L.0:
 L.2:
 	%2 = load %bout.BufIO** @llvm_f
 	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
-	%4 = getelementptr [3 x i8]* @S.750
+	%4 = getelementptr [3 x i8]* @S.764
 	%5 = bitcast [3 x i8]* %4 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
 	br label %L.1
@@ -32565,25 +34233,28 @@ L.3:
 	%6 = load %ast.AstNode** %node
 	%7 = getelementptr %ast.AstNode* %6, i32 0, i32 9
 	%8 = load %symb.SymbNode** %7
-	%9 = bitcast %symb.SymbNode* %8 to [0 x i8]*
-	store [0 x i8]* %9, [0 x i8]** %p
-	%10 = load [0 x i8]** %p
+	%9 = getelementptr %symb.SymbNode* %8, i32 0, i32 22
+	%10 = getelementptr [0 x i8]* %9
 	%11 = bitcast [0 x i8]* %10 to [0 x i8]*
 	%12 = call i32 @zstr_len([0 x i8]* %11, i32 4095)
 	%13 = trunc i32 %12 to i16
 	store i16 %13, i16* %n
-	%14 = load [0 x i8]** %p
-	%15 = bitcast [0 x i8]* %14 to [0 x i8]*
-	%16 = load i16* %n
-	call void @llvm_PString([0 x i8]* %15, i16 %16, i8 0)
+	%14 = load %ast.AstNode** %node
+	%15 = getelementptr %ast.AstNode* %14, i32 0, i32 9
+	%16 = load %symb.SymbNode** %15
+	%17 = getelementptr %symb.SymbNode* %16, i32 0, i32 22
+	%18 = getelementptr [0 x i8]* %17
+	%19 = bitcast [0 x i8]* %18 to [0 x i8]*
+	%20 = load i16* %n
+	call void @llvm_PString([0 x i8]* %19, i16 %20, i8 0)
 	br label %L.1
 L.1:
 	br label %return
 return:
 	ret void
 }
-@S.751 = internal constant [20 x i8] c"\09%N = extractvalue \00"
-@S.752 = internal constant [7 x i8] c" %0N, \00"
+@S.765 = internal constant [20 x i8] c"\09%N = extractvalue \00"
+@S.766 = internal constant [7 x i8] c" %0N, \00"
 define internal void @llvm_GetRV(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -32611,7 +34282,7 @@ L.1:
 	%13 = load i16* @llvm_Tseqno
 	%14 = add i16 %13, 1
 	store i16 %14, i16* @llvm_Tseqno
-	%15 = getelementptr [20 x i8]* @S.751
+	%15 = getelementptr [20 x i8]* @S.765
 	%16 = bitcast [20 x i8]* %15 to [0 x i8]*
 	%17 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
@@ -32644,7 +34315,7 @@ L.5:
 L.3:
 	%36 = load %type.TypeListEntry** %tl
 	call void @llvm_PRetvType(%type.TypeListEntry* %36, i8 0)
-	%37 = getelementptr [7 x i8]* @S.752
+	%37 = getelementptr [7 x i8]* @S.766
 	%38 = bitcast [7 x i8]* %37 to [0 x i8]*
 	%39 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %38, %ast.AstNode* %39)
@@ -32662,14 +34333,14 @@ L.3:
 return:
 	ret void
 }
-@S.753 = internal constant [6 x i8] c"%N = \00"
-@S.754 = internal constant [5 x i8] c"call\00"
-@S.755 = internal constant [17 x i8] c" asm sideeffect \00"
-@S.756 = internal constant [3 x i8] c", \00"
-@S.757 = internal constant [3 x i8] c" (\00"
-@S.758 = internal constant [6 x i8] c"%T %N\00"
-@S.759 = internal constant [3 x i8] c", \00"
-@S.760 = internal constant [3 x i8] c")\0A\00"
+@S.767 = internal constant [6 x i8] c"%N = \00"
+@S.768 = internal constant [5 x i8] c"call\00"
+@S.769 = internal constant [17 x i8] c" asm sideeffect \00"
+@S.770 = internal constant [3 x i8] c", \00"
+@S.771 = internal constant [3 x i8] c" (\00"
+@S.772 = internal constant [6 x i8] c"%T %N\00"
+@S.773 = internal constant [3 x i8] c", \00"
+@S.774 = internal constant [3 x i8] c")\0A\00"
 define internal void @llvm_Asm(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -32715,7 +34386,7 @@ L.5:
 	%25 = load i16* @llvm_Tseqno
 	%26 = add i16 %25, 1
 	store i16 %26, i16* @llvm_Tseqno
-	%27 = getelementptr [6 x i8]* @S.753
+	%27 = getelementptr [6 x i8]* @S.767
 	%28 = bitcast [6 x i8]* %27 to [0 x i8]*
 	%29 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %28, %ast.AstNode* %29)
@@ -32723,7 +34394,7 @@ L.5:
 L.4:
 	%30 = load %bout.BufIO** @llvm_f
 	%31 = bitcast %bout.BufIO* %30 to %bout.BufIO*
-	%32 = getelementptr [5 x i8]* @S.754
+	%32 = getelementptr [5 x i8]* @S.768
 	%33 = bitcast [5 x i8]* %32 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %31, [0 x i8]* %33)
 	%34 = load %ast.AstNode** %node
@@ -32733,7 +34404,7 @@ L.4:
 	call void @llvm_PRetvType(%type.TypeListEntry* %37, i8 0)
 	%38 = load %bout.BufIO** @llvm_f
 	%39 = bitcast %bout.BufIO* %38 to %bout.BufIO*
-	%40 = getelementptr [17 x i8]* @S.755
+	%40 = getelementptr [17 x i8]* @S.769
 	%41 = bitcast [17 x i8]* %40 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %39, [0 x i8]* %41)
 	%42 = load %ast.AstNode** %node
@@ -32744,7 +34415,7 @@ L.4:
 	call void @llvm_PStringCon(%ast.AstNode* %46)
 	%47 = load %bout.BufIO** @llvm_f
 	%48 = bitcast %bout.BufIO* %47 to %bout.BufIO*
-	%49 = getelementptr [3 x i8]* @S.756
+	%49 = getelementptr [3 x i8]* @S.770
 	%50 = bitcast [3 x i8]* %49 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %48, [0 x i8]* %50)
 	%51 = load %ast.AstNode** %node
@@ -32755,7 +34426,7 @@ L.4:
 	call void @llvm_PStringCon(%ast.AstNode* %55)
 	%56 = load %bout.BufIO** @llvm_f
 	%57 = bitcast %bout.BufIO* %56 to %bout.BufIO*
-	%58 = getelementptr [3 x i8]* @S.757
+	%58 = getelementptr [3 x i8]* @S.771
 	%59 = bitcast [3 x i8]* %58 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %57, [0 x i8]* %59)
 	store i16 2, i16* %i
@@ -32768,7 +34439,7 @@ L.4:
 L.7:
 	br label %L.8
 L.8:
-	%65 = getelementptr [6 x i8]* @S.758
+	%65 = getelementptr [6 x i8]* @S.772
 	%66 = bitcast [6 x i8]* %65 to [0 x i8]*
 	%67 = load %ast.AstNode** %node
 	%68 = getelementptr %ast.AstNode* %67, i32 0, i32 11
@@ -32790,7 +34461,7 @@ L.8:
 L.10:
 	%81 = load %bout.BufIO** @llvm_f
 	%82 = bitcast %bout.BufIO* %81 to %bout.BufIO*
-	%83 = getelementptr [3 x i8]* @S.759
+	%83 = getelementptr [3 x i8]* @S.773
 	%84 = bitcast [3 x i8]* %83 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %82, [0 x i8]* %84)
 	br label %L.8
@@ -32799,7 +34470,7 @@ L.9:
 L.6:
 	%85 = load %bout.BufIO** @llvm_f
 	%86 = bitcast %bout.BufIO* %85 to %bout.BufIO*
-	%87 = getelementptr [3 x i8]* @S.760
+	%87 = getelementptr [3 x i8]* @S.774
 	%88 = bitcast [3 x i8]* %87 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %86, [0 x i8]* %88)
 	br label %return
@@ -32862,14 +34533,14 @@ L.5:
 return:
 	ret void
 }
-@S.761 = internal constant [6 x i8] c"%N = \00"
-@S.762 = internal constant [6 x i8] c"tail \00"
-@S.763 = internal constant [5 x i8] c"call\00"
-@S.764 = internal constant [6 x i8] c" %0N(\00"
-@S.765 = internal constant [5 x i8] c" %I(\00"
-@S.766 = internal constant [6 x i8] c"%T %N\00"
-@S.767 = internal constant [3 x i8] c", \00"
-@S.768 = internal constant [3 x i8] c")\0A\00"
+@S.775 = internal constant [6 x i8] c"%N = \00"
+@S.776 = internal constant [6 x i8] c"tail \00"
+@S.777 = internal constant [5 x i8] c"call\00"
+@S.778 = internal constant [6 x i8] c" %0N(\00"
+@S.779 = internal constant [5 x i8] c" %I(\00"
+@S.780 = internal constant [6 x i8] c"%T %N\00"
+@S.781 = internal constant [3 x i8] c", \00"
+@S.782 = internal constant [3 x i8] c")\0A\00"
 define internal void @llvm_Call(%ast.AstNode* %node$, i8 zeroext %indirect$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -32928,7 +34599,7 @@ L.7:
 	%32 = load i16* @llvm_Tseqno
 	%33 = add i16 %32, 1
 	store i16 %33, i16* @llvm_Tseqno
-	%34 = getelementptr [6 x i8]* @S.761
+	%34 = getelementptr [6 x i8]* @S.775
 	%35 = bitcast [6 x i8]* %34 to [0 x i8]*
 	%36 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %35, %ast.AstNode* %36)
@@ -32941,14 +34612,14 @@ L.6:
 L.9:
 	%40 = load %bout.BufIO** @llvm_f
 	%41 = bitcast %bout.BufIO* %40 to %bout.BufIO*
-	%42 = getelementptr [6 x i8]* @S.762
+	%42 = getelementptr [6 x i8]* @S.776
 	%43 = bitcast [6 x i8]* %42 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %41, [0 x i8]* %43)
 	br label %L.8
 L.8:
 	%44 = load %bout.BufIO** @llvm_f
 	%45 = bitcast %bout.BufIO* %44 to %bout.BufIO*
-	%46 = getelementptr [5 x i8]* @S.763
+	%46 = getelementptr [5 x i8]* @S.777
 	%47 = bitcast [5 x i8]* %46 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %45, [0 x i8]* %47)
 	%48 = load %ast.AstNode** %node
@@ -32961,14 +34632,14 @@ L.8:
 	%54 = icmp ne i8 %53, 0
 	br i1 %54, label %L.11, label %L.12
 L.11:
-	%55 = getelementptr [6 x i8]* @S.764
+	%55 = getelementptr [6 x i8]* @S.778
 	%56 = bitcast [6 x i8]* %55 to [0 x i8]*
 	%57 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %56, %ast.AstNode* %57)
 	store i16 1, i16* %i
 	br label %L.10
 L.12:
-	%58 = getelementptr [5 x i8]* @S.765
+	%58 = getelementptr [5 x i8]* @S.779
 	%59 = bitcast [5 x i8]* %58 to [0 x i8]*
 	%60 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %59, %ast.AstNode* %60)
@@ -32984,7 +34655,7 @@ L.10:
 L.14:
 	br label %L.15
 L.15:
-	%66 = getelementptr [6 x i8]* @S.766
+	%66 = getelementptr [6 x i8]* @S.780
 	%67 = bitcast [6 x i8]* %66 to [0 x i8]*
 	%68 = load %ast.AstNode** %node
 	%69 = getelementptr %ast.AstNode* %68, i32 0, i32 11
@@ -33006,7 +34677,7 @@ L.15:
 L.17:
 	%82 = load %bout.BufIO** @llvm_f
 	%83 = bitcast %bout.BufIO* %82 to %bout.BufIO*
-	%84 = getelementptr [3 x i8]* @S.767
+	%84 = getelementptr [3 x i8]* @S.781
 	%85 = bitcast [3 x i8]* %84 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %83, [0 x i8]* %85)
 	br label %L.15
@@ -33015,13 +34686,13 @@ L.16:
 L.13:
 	%86 = load %bout.BufIO** @llvm_f
 	%87 = bitcast %bout.BufIO* %86 to %bout.BufIO*
-	%88 = getelementptr [3 x i8]* @S.768
+	%88 = getelementptr [3 x i8]* @S.782
 	%89 = bitcast [3 x i8]* %88 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %87, [0 x i8]* %89)
 	%90 = load %ast.AstNode** %node
 	%91 = getelementptr %ast.AstNode* %90, i32 0, i32 9
 	%92 = load %symb.SymbNode** %91
-	%93 = getelementptr %symb.SymbNode* %92, i32 0, i32 14
+	%93 = getelementptr %symb.SymbNode* %92, i32 0, i32 15
 	%94 = load i8* %93
 	%95 = icmp ne i8 %94, 0
 	br i1 %95, label %L.19, label %L.18
@@ -33029,7 +34700,7 @@ L.19:
 	%96 = load %ast.AstNode** %node
 	%97 = getelementptr %ast.AstNode* %96, i32 0, i32 9
 	%98 = load %symb.SymbNode** %97
-	%99 = getelementptr %symb.SymbNode* %98, i32 0, i32 21
+	%99 = getelementptr %symb.SymbNode* %98, i32 0, i32 22
 	%100 = getelementptr [0 x i8]* %99
 	%101 = bitcast [0 x i8]* %100 to [0 x i8]*
 	call void @lex_ErrorI(i8 45, [0 x i8]* %101)
@@ -33063,10 +34734,10 @@ L.2:
 		i32 10, label %L.8
 		i32 18, label %L.9
 		i32 35, label %L.10
-		i32 61, label %L.11
-		i32 62, label %L.11
-		i32 63, label %L.11
 		i32 64, label %L.11
+		i32 65, label %L.11
+		i32 66, label %L.11
+		i32 67, label %L.11
 		i32 20, label %L.12
 	]
 L.5:
@@ -33079,7 +34750,7 @@ L.5:
 	%11 = load %type.TypeNode** %10
 	call void @llvm_DclType(%type.TypeNode* %11)
 	%12 = load %symb.SymbNode** %s
-	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 13
+	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 14
 	%14 = load i8* %13
 	%15 = icmp ne i8 %14, 1
 	br i1 %15, label %L.14, label %L.13
@@ -33102,7 +34773,7 @@ L.6:
 	br i1 %23, label %L.16, label %L.15
 L.16:
 	%24 = load %symb.SymbNode** %s
-	%25 = getelementptr %symb.SymbNode* %24, i32 0, i32 13
+	%25 = getelementptr %symb.SymbNode* %24, i32 0, i32 14
 	store i8 2, i8* %25
 	%26 = load %ast.AstNode** %node
 	call void @llvm_DclCon(%ast.AstNode* %26)
@@ -33127,13 +34798,13 @@ L.9:
 	%33 = load %symb.SymbNode** %32
 	store %symb.SymbNode* %33, %symb.SymbNode** %ps
 	%34 = load %symb.SymbNode** %ps
-	%35 = getelementptr %symb.SymbNode* %34, i32 0, i32 13
+	%35 = getelementptr %symb.SymbNode* %34, i32 0, i32 14
 	%36 = load i8* %35
-	%37 = icmp eq i8 %36, 4
+	%37 = icmp eq i8 %36, 5
 	br i1 %37, label %L.17, label %L.18
 L.17:
 	%38 = load %symb.SymbNode** %ps
-	%39 = getelementptr %symb.SymbNode* %38, i32 0, i32 20
+	%39 = getelementptr %symb.SymbNode* %38, i32 0, i32 21
 	%40 = load i8* %39
 	%41 = icmp ne i8 %40, 0
 	%42 = xor i1 %41, true
@@ -33150,7 +34821,7 @@ L.20:
 	%47 = bitcast %bout.BufIO* %46 to %bout.BufIO*
 	call void @bout_BufIO_chr(%bout.BufIO* %47, i8 10)
 	%48 = load %symb.SymbNode** %ps
-	%49 = getelementptr %symb.SymbNode* %48, i32 0, i32 20
+	%49 = getelementptr %symb.SymbNode* %48, i32 0, i32 21
 	store i8 1, i8* %49
 	br label %L.19
 L.19:
@@ -33174,7 +34845,7 @@ L.10:
 	%63 = getelementptr %ast.AstNode* %62, i32 0, i32 8
 	%64 = load %type.TypeNode** %63
 	%65 = call %ast.AstNode* @ast_Const(%type.TypeNode* %64, i64 0)
-	%66 = call %ast.AstNode* @ast_New2(i8 57, %type.TypeNode* %60, %ast.AstNode* %61, %ast.AstNode* %65)
+	%66 = call %ast.AstNode* @ast_New2(i8 60, %type.TypeNode* %60, %ast.AstNode* %61, %ast.AstNode* %65)
 	%67 = bitcast %ast.AstNode* %66 to %ast.AstNode*
 	%68 = load %ast.AstNode** %node
 	%69 = getelementptr %ast.AstNode* %68, i32 0, i32 11
@@ -33190,7 +34861,7 @@ L.10:
 	store %ast.AstNode* %76, %ast.AstNode** %node
 	%77 = load %ast.AstNode** %node
 	%78 = getelementptr %ast.AstNode* %77, i32 0, i32 0
-	store i8 80, i8* %78
+	store i8 83, i8* %78
 	br label %L.4
 L.11:
 	%79 = load %ast.AstNode** %node
@@ -33210,22 +34881,22 @@ L.11:
 	%91 = load i8* %90
 	%92 = zext i8 %91 to i32
 	switch i32 %92, label %L.21 [
-		i32 63, label %L.23
-		i32 64, label %L.24
-		i32 61, label %L.25
-		i32 62, label %L.26
+		i32 66, label %L.23
+		i32 67, label %L.24
+		i32 64, label %L.25
+		i32 65, label %L.26
 	]
 L.23:
-	store i8 57, i8* %op
+	store i8 60, i8* %op
 	br label %L.22
 L.24:
-	store i8 58, i8* %op
+	store i8 61, i8* %op
 	br label %L.22
 L.25:
-	store i8 53, i8* %op
+	store i8 56, i8* %op
 	br label %L.22
 L.26:
-	store i8 54, i8* %op
+	store i8 57, i8* %op
 	br label %L.22
 L.21:
 	br label %L.22
@@ -33252,7 +34923,7 @@ L.22:
 	store %ast.AstNode* %109, %ast.AstNode** %node
 	%110 = load %ast.AstNode** %node
 	%111 = getelementptr %ast.AstNode* %110, i32 0, i32 0
-	store i8 80, i8* %111
+	store i8 83, i8* %111
 	br label %L.4
 L.12:
 	br label %return
@@ -33289,31 +34960,32 @@ L.1:
 return:
 	ret void
 }
-@S.769 = internal constant [14 x i8] c" alwaysinline\00"
-@S.770 = internal constant [10 x i8] c" noinline\00"
-@S.771 = internal constant [9 x i8] c" minsize\00"
-@S.772 = internal constant [9 x i8] c" optsize\00"
-@S.773 = internal constant [13 x i8] c" nounwind {\0A\00"
-@S.774 = internal constant [11 x i8] c" = alloca \00"
-@S.775 = internal constant [3 x i8] c"\09%\00"
-@S.776 = internal constant [11 x i8] c" = alloca \00"
-@S.777 = internal constant [8 x i8] c"\09store \00"
-@S.778 = internal constant [3 x i8] c" %\00"
-@S.779 = internal constant [4 x i8] c"$, \00"
-@S.780 = internal constant [4 x i8] c"* %\00"
-@S.781 = internal constant [18 x i8] c"\09br label %return\00"
-@S.782 = internal constant [9 x i8] c"return:\0A\00"
-@S.783 = internal constant [9 x i8] c" = load \00"
-@S.784 = internal constant [3 x i8] c"* \00"
-@S.785 = internal constant [6 x i8] c"\09%mrv\00"
-@S.786 = internal constant [15 x i8] c" = insertvalue\00"
-@S.787 = internal constant [7 x i8] c" undef\00"
-@S.788 = internal constant [6 x i8] c" %mrv\00"
-@S.789 = internal constant [6 x i8] c"\09ret \00"
-@S.790 = internal constant [6 x i8] c" %mrv\00"
-@S.791 = internal constant [6 x i8] c"\09ret \00"
-@S.792 = internal constant [10 x i8] c"\09ret void\00"
-@S.793 = internal constant [4 x i8] c"\0A}\0A\00"
+@S.783 = internal constant [14 x i8] c" alwaysinline\00"
+@S.784 = internal constant [10 x i8] c" noinline\00"
+@S.785 = internal constant [9 x i8] c" minsize\00"
+@S.786 = internal constant [9 x i8] c" optsize\00"
+@S.787 = internal constant [10 x i8] c" nounwind\00"
+@S.788 = internal constant [4 x i8] c" {\0A\00"
+@S.789 = internal constant [11 x i8] c" = alloca \00"
+@S.790 = internal constant [3 x i8] c"\09%\00"
+@S.791 = internal constant [11 x i8] c" = alloca \00"
+@S.792 = internal constant [8 x i8] c"\09store \00"
+@S.793 = internal constant [3 x i8] c" %\00"
+@S.794 = internal constant [4 x i8] c"$, \00"
+@S.795 = internal constant [4 x i8] c"* %\00"
+@S.796 = internal constant [18 x i8] c"\09br label %return\00"
+@S.797 = internal constant [9 x i8] c"return:\0A\00"
+@S.798 = internal constant [9 x i8] c" = load \00"
+@S.799 = internal constant [3 x i8] c"* \00"
+@S.800 = internal constant [6 x i8] c"\09%mrv\00"
+@S.801 = internal constant [15 x i8] c" = insertvalue\00"
+@S.802 = internal constant [7 x i8] c" undef\00"
+@S.803 = internal constant [6 x i8] c" %mrv\00"
+@S.804 = internal constant [6 x i8] c"\09ret \00"
+@S.805 = internal constant [6 x i8] c" %mrv\00"
+@S.806 = internal constant [6 x i8] c"\09ret \00"
+@S.807 = internal constant [10 x i8] c"\09ret void\00"
+@S.808 = internal constant [4 x i8] c"\0A}\0A\00"
 define internal void @llvm_Procedure(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33341,24 +35013,24 @@ L.2:
 	%11 = load %ast.AstNode** %node
 	call void @llvm_DclProc(%ast.AstNode* %11, i8 1)
 	%12 = load %symb.SymbNode** %ps
-	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 13
+	%13 = getelementptr %symb.SymbNode* %12, i32 0, i32 14
 	%14 = load i8* %13
 	%15 = zext i8 %14 to i32
 	switch i32 %15, label %L.3 [
-		i32 6, label %L.5
-		i32 7, label %L.6
+		i32 7, label %L.5
+		i32 8, label %L.6
 	]
 L.5:
 	%16 = load %bout.BufIO** @llvm_f
 	%17 = bitcast %bout.BufIO* %16 to %bout.BufIO*
-	%18 = getelementptr [14 x i8]* @S.769
+	%18 = getelementptr [14 x i8]* @S.783
 	%19 = bitcast [14 x i8]* %18 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %17, [0 x i8]* %19)
 	br label %L.4
 L.6:
 	%20 = load %bout.BufIO** @llvm_f
 	%21 = bitcast %bout.BufIO* %20 to %bout.BufIO*
-	%22 = getelementptr [10 x i8]* @S.770
+	%22 = getelementptr [10 x i8]* @S.784
 	%23 = bitcast [10 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	br label %L.4
@@ -33377,428 +35049,438 @@ L.8:
 L.10:
 	%30 = load %bout.BufIO** @llvm_f
 	%31 = bitcast %bout.BufIO* %30 to %bout.BufIO*
-	%32 = getelementptr [9 x i8]* @S.771
+	%32 = getelementptr [9 x i8]* @S.785
 	%33 = bitcast [9 x i8]* %32 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %31, [0 x i8]* %33)
 	br label %L.9
 L.9:
 	%34 = load %bout.BufIO** @llvm_f
 	%35 = bitcast %bout.BufIO* %34 to %bout.BufIO*
-	%36 = getelementptr [9 x i8]* @S.772
+	%36 = getelementptr [9 x i8]* @S.786
 	%37 = bitcast [9 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	br label %L.7
 L.7:
 	%38 = load %bout.BufIO** @llvm_f
 	%39 = bitcast %bout.BufIO* %38 to %bout.BufIO*
-	%40 = getelementptr [13 x i8]* @S.773
-	%41 = bitcast [13 x i8]* %40 to [0 x i8]*
+	%40 = getelementptr [10 x i8]* @S.787
+	%41 = bitcast [10 x i8]* %40 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %39, [0 x i8]* %41)
-	%42 = load i16* @llvm_Pseqno
-	%43 = add i16 %42, 1
-	store i16 %43, i16* @llvm_Pseqno
+	%42 = load %symb.SymbNode** %ps
+	%43 = getelementptr %symb.SymbNode* %42, i32 0, i32 7
+	%44 = load %symb.SymbNode** %43
+	%45 = bitcast %symb.SymbNode* %44 to %symb.SymbNode*
+	call void @llvm_Section(%symb.SymbNode* %45, i8 0)
+	%46 = load %bout.BufIO** @llvm_f
+	%47 = bitcast %bout.BufIO* %46 to %bout.BufIO*
+	%48 = getelementptr [4 x i8]* @S.788
+	%49 = bitcast [4 x i8]* %48 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %47, [0 x i8]* %49)
+	%50 = load i16* @llvm_Pseqno
+	%51 = add i16 %50, 1
+	store i16 %51, i16* @llvm_Pseqno
 	store i16 1, i16* @llvm_Tseqno
 	store i16 0, i16* @llvm_Lseqno
-	%44 = load i16* @llvm_Lseqno
-	call void @llvm_Label(i16 %44)
-	%45 = load i16* @llvm_Lseqno
-	%46 = add i16 %45, 1
-	store i16 %46, i16* @llvm_Lseqno
-	%47 = load %symb.SymbNode** %ps
-	%48 = getelementptr %symb.SymbNode* %47, i32 0, i32 4
-	%49 = load %type.TypeListEntry** %48
-	store %type.TypeListEntry* %49, %type.TypeListEntry** %tl
+	%52 = load i16* @llvm_Lseqno
+	call void @llvm_Label(i16 %52)
+	%53 = load i16* @llvm_Lseqno
+	%54 = add i16 %53, 1
+	store i16 %54, i16* @llvm_Lseqno
+	%55 = load %symb.SymbNode** %ps
+	%56 = getelementptr %symb.SymbNode* %55, i32 0, i32 4
+	%57 = load %type.TypeListEntry** %56
+	store %type.TypeListEntry* %57, %type.TypeListEntry** %tl
 	store i16 0, i16* %i
 	br label %L.11
 L.11:
-	%50 = load %type.TypeListEntry** %tl
-	%51 = icmp ne %type.TypeListEntry* %50, null
-	%52 = xor i1 %51, true
-	br i1 %52, label %L.12, label %L.13
+	%58 = load %type.TypeListEntry** %tl
+	%59 = icmp ne %type.TypeListEntry* %58, null
+	%60 = xor i1 %59, true
+	br i1 %60, label %L.12, label %L.13
 L.13:
-	%53 = load %bout.BufIO** @llvm_f
-	%54 = bitcast %bout.BufIO* %53 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %54, i8 9)
-	%55 = load i16* %i
-	call void @llvm_PRetValName(i16 %55)
-	%56 = load %bout.BufIO** @llvm_f
-	%57 = bitcast %bout.BufIO* %56 to %bout.BufIO*
-	%58 = getelementptr [11 x i8]* @S.774
-	%59 = bitcast [11 x i8]* %58 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %57, [0 x i8]* %59)
-	%60 = load %type.TypeListEntry** %tl
-	%61 = getelementptr %type.TypeListEntry* %60, i32 0, i32 1
-	%62 = load %type.TypeNode** %61
-	%63 = bitcast %type.TypeNode* %62 to %type.TypeNode*
-	call void @llvm_PType(%type.TypeNode* %63)
+	%61 = load %bout.BufIO** @llvm_f
+	%62 = bitcast %bout.BufIO* %61 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %62, i8 9)
+	%63 = load i16* %i
+	call void @llvm_PRetValName(i16 %63)
 	%64 = load %bout.BufIO** @llvm_f
 	%65 = bitcast %bout.BufIO* %64 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %65)
-	%66 = load i16* %i
-	%67 = add i16 %66, 1
-	store i16 %67, i16* %i
+	%66 = getelementptr [11 x i8]* @S.789
+	%67 = bitcast [11 x i8]* %66 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %65, [0 x i8]* %67)
 	%68 = load %type.TypeListEntry** %tl
-	%69 = getelementptr %type.TypeListEntry* %68, i32 0, i32 0
-	%70 = load %type.TypeListEntry** %69
-	%71 = bitcast %type.TypeListEntry* %70 to %type.TypeListEntry*
-	store %type.TypeListEntry* %71, %type.TypeListEntry** %tl
+	%69 = getelementptr %type.TypeListEntry* %68, i32 0, i32 1
+	%70 = load %type.TypeNode** %69
+	%71 = bitcast %type.TypeNode* %70 to %type.TypeNode*
+	call void @llvm_PType(%type.TypeNode* %71)
+	%72 = load %bout.BufIO** @llvm_f
+	%73 = bitcast %bout.BufIO* %72 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %73)
+	%74 = load i16* %i
+	%75 = add i16 %74, 1
+	store i16 %75, i16* %i
+	%76 = load %type.TypeListEntry** %tl
+	%77 = getelementptr %type.TypeListEntry* %76, i32 0, i32 0
+	%78 = load %type.TypeListEntry** %77
+	%79 = bitcast %type.TypeListEntry* %78 to %type.TypeListEntry*
+	store %type.TypeListEntry* %79, %type.TypeListEntry** %tl
 	br label %L.11
 L.12:
-	%72 = load %symb.SymbNode** %ps
-	%73 = getelementptr %symb.SymbNode* %72, i32 0, i32 3
-	%74 = load %symb.SymbNode** %73
-	%75 = bitcast %symb.SymbNode* %74 to %symb.SymbNode*
-	store %symb.SymbNode* %75, %symb.SymbNode** %s
+	%80 = load %symb.SymbNode** %ps
+	%81 = getelementptr %symb.SymbNode* %80, i32 0, i32 3
+	%82 = load %symb.SymbNode** %81
+	%83 = bitcast %symb.SymbNode* %82 to %symb.SymbNode*
+	store %symb.SymbNode* %83, %symb.SymbNode** %s
 	br label %L.14
 L.14:
-	%76 = load %symb.SymbNode** %s
-	%77 = icmp ne %symb.SymbNode* %76, null
-	%78 = xor i1 %77, true
-	br i1 %78, label %L.15, label %L.16
+	%84 = load %symb.SymbNode** %s
+	%85 = icmp ne %symb.SymbNode* %84, null
+	%86 = xor i1 %85, true
+	br i1 %86, label %L.15, label %L.16
 L.16:
-	%79 = load %bout.BufIO** @llvm_f
-	%80 = bitcast %bout.BufIO* %79 to %bout.BufIO*
-	%81 = getelementptr [3 x i8]* @S.775
-	%82 = bitcast [3 x i8]* %81 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %80, [0 x i8]* %82)
-	%83 = load %bout.BufIO** @llvm_f
-	%84 = bitcast %bout.BufIO* %83 to %bout.BufIO*
-	%85 = load %symb.SymbNode** %s
-	%86 = getelementptr %symb.SymbNode* %85, i32 0, i32 21
-	%87 = getelementptr [0 x i8]* %86
-	%88 = bitcast [0 x i8]* %87 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %84, [0 x i8]* %88)
-	%89 = load %bout.BufIO** @llvm_f
-	%90 = bitcast %bout.BufIO* %89 to %bout.BufIO*
-	%91 = getelementptr [11 x i8]* @S.776
-	%92 = bitcast [11 x i8]* %91 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %90, [0 x i8]* %92)
+	%87 = load %bout.BufIO** @llvm_f
+	%88 = bitcast %bout.BufIO* %87 to %bout.BufIO*
+	%89 = getelementptr [3 x i8]* @S.790
+	%90 = bitcast [3 x i8]* %89 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %88, [0 x i8]* %90)
+	%91 = load %bout.BufIO** @llvm_f
+	%92 = bitcast %bout.BufIO* %91 to %bout.BufIO*
 	%93 = load %symb.SymbNode** %s
-	%94 = getelementptr %symb.SymbNode* %93, i32 0, i32 1
-	%95 = load %type.TypeNode** %94
-	call void @llvm_PType(%type.TypeNode* %95)
-	%96 = load %bout.BufIO** @llvm_f
-	%97 = bitcast %bout.BufIO* %96 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %97)
-	%98 = load %symb.SymbNode** %s
-	%99 = getelementptr %symb.SymbNode* %98, i32 0, i32 0
-	%100 = load %symb.SymbNode** %99
-	%101 = bitcast %symb.SymbNode* %100 to %symb.SymbNode*
-	store %symb.SymbNode* %101, %symb.SymbNode** %s
+	%94 = getelementptr %symb.SymbNode* %93, i32 0, i32 22
+	%95 = getelementptr [0 x i8]* %94
+	%96 = bitcast [0 x i8]* %95 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %92, [0 x i8]* %96)
+	%97 = load %bout.BufIO** @llvm_f
+	%98 = bitcast %bout.BufIO* %97 to %bout.BufIO*
+	%99 = getelementptr [11 x i8]* @S.791
+	%100 = bitcast [11 x i8]* %99 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %98, [0 x i8]* %100)
+	%101 = load %symb.SymbNode** %s
+	%102 = getelementptr %symb.SymbNode* %101, i32 0, i32 1
+	%103 = load %type.TypeNode** %102
+	call void @llvm_PType(%type.TypeNode* %103)
+	%104 = load %bout.BufIO** @llvm_f
+	%105 = bitcast %bout.BufIO* %104 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %105)
+	%106 = load %symb.SymbNode** %s
+	%107 = getelementptr %symb.SymbNode* %106, i32 0, i32 0
+	%108 = load %symb.SymbNode** %107
+	%109 = bitcast %symb.SymbNode* %108 to %symb.SymbNode*
+	store %symb.SymbNode* %109, %symb.SymbNode** %s
 	br label %L.14
 L.15:
-	%102 = load %symb.SymbNode** %ps
-	%103 = getelementptr %symb.SymbNode* %102, i32 0, i32 3
-	%104 = load %symb.SymbNode** %103
-	%105 = bitcast %symb.SymbNode* %104 to %symb.SymbNode*
-	store %symb.SymbNode* %105, %symb.SymbNode** %s
+	%110 = load %symb.SymbNode** %ps
+	%111 = getelementptr %symb.SymbNode* %110, i32 0, i32 3
+	%112 = load %symb.SymbNode** %111
+	%113 = bitcast %symb.SymbNode* %112 to %symb.SymbNode*
+	store %symb.SymbNode* %113, %symb.SymbNode** %s
 	br label %L.17
 L.17:
-	%106 = load %symb.SymbNode** %s
-	%107 = icmp ne %symb.SymbNode* %106, null
-	%108 = xor i1 %107, true
-	br i1 %108, label %L.18, label %L.19
+	%114 = load %symb.SymbNode** %s
+	%115 = icmp ne %symb.SymbNode* %114, null
+	%116 = xor i1 %115, true
+	br i1 %116, label %L.18, label %L.19
 L.19:
-	%109 = load %bout.BufIO** @llvm_f
-	%110 = bitcast %bout.BufIO* %109 to %bout.BufIO*
-	%111 = getelementptr [8 x i8]* @S.777
-	%112 = bitcast [8 x i8]* %111 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %110, [0 x i8]* %112)
-	%113 = load %symb.SymbNode** %s
-	%114 = getelementptr %symb.SymbNode* %113, i32 0, i32 1
-	%115 = load %type.TypeNode** %114
-	call void @llvm_PType(%type.TypeNode* %115)
-	%116 = load %bout.BufIO** @llvm_f
-	%117 = bitcast %bout.BufIO* %116 to %bout.BufIO*
-	%118 = getelementptr [3 x i8]* @S.778
-	%119 = bitcast [3 x i8]* %118 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %117, [0 x i8]* %119)
-	%120 = load %bout.BufIO** @llvm_f
-	%121 = bitcast %bout.BufIO* %120 to %bout.BufIO*
-	%122 = load %symb.SymbNode** %s
-	%123 = getelementptr %symb.SymbNode* %122, i32 0, i32 21
-	%124 = getelementptr [0 x i8]* %123
-	%125 = bitcast [0 x i8]* %124 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %121, [0 x i8]* %125)
-	%126 = load %bout.BufIO** @llvm_f
-	%127 = bitcast %bout.BufIO* %126 to %bout.BufIO*
-	%128 = getelementptr [4 x i8]* @S.779
-	%129 = bitcast [4 x i8]* %128 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %127, [0 x i8]* %129)
+	%117 = load %bout.BufIO** @llvm_f
+	%118 = bitcast %bout.BufIO* %117 to %bout.BufIO*
+	%119 = getelementptr [8 x i8]* @S.792
+	%120 = bitcast [8 x i8]* %119 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %118, [0 x i8]* %120)
+	%121 = load %symb.SymbNode** %s
+	%122 = getelementptr %symb.SymbNode* %121, i32 0, i32 1
+	%123 = load %type.TypeNode** %122
+	call void @llvm_PType(%type.TypeNode* %123)
+	%124 = load %bout.BufIO** @llvm_f
+	%125 = bitcast %bout.BufIO* %124 to %bout.BufIO*
+	%126 = getelementptr [3 x i8]* @S.793
+	%127 = bitcast [3 x i8]* %126 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %125, [0 x i8]* %127)
+	%128 = load %bout.BufIO** @llvm_f
+	%129 = bitcast %bout.BufIO* %128 to %bout.BufIO*
 	%130 = load %symb.SymbNode** %s
-	%131 = getelementptr %symb.SymbNode* %130, i32 0, i32 1
-	%132 = load %type.TypeNode** %131
-	call void @llvm_PType(%type.TypeNode* %132)
-	%133 = load %bout.BufIO** @llvm_f
-	%134 = bitcast %bout.BufIO* %133 to %bout.BufIO*
-	%135 = getelementptr [4 x i8]* @S.780
-	%136 = bitcast [4 x i8]* %135 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %134, [0 x i8]* %136)
-	%137 = load %bout.BufIO** @llvm_f
-	%138 = bitcast %bout.BufIO* %137 to %bout.BufIO*
-	%139 = load %symb.SymbNode** %s
-	%140 = getelementptr %symb.SymbNode* %139, i32 0, i32 21
-	%141 = getelementptr [0 x i8]* %140
-	%142 = bitcast [0 x i8]* %141 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %138, [0 x i8]* %142)
-	%143 = load %bout.BufIO** @llvm_f
-	%144 = bitcast %bout.BufIO* %143 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %144)
-	%145 = getelementptr %A.3* @feature, i32 0, i32 3
-	%146 = load i8* %145
-	%147 = icmp ne i8 %146, 0
-	br i1 %147, label %L.21, label %L.20
+	%131 = getelementptr %symb.SymbNode* %130, i32 0, i32 22
+	%132 = getelementptr [0 x i8]* %131
+	%133 = bitcast [0 x i8]* %132 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %129, [0 x i8]* %133)
+	%134 = load %bout.BufIO** @llvm_f
+	%135 = bitcast %bout.BufIO* %134 to %bout.BufIO*
+	%136 = getelementptr [4 x i8]* @S.794
+	%137 = bitcast [4 x i8]* %136 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %135, [0 x i8]* %137)
+	%138 = load %symb.SymbNode** %s
+	%139 = getelementptr %symb.SymbNode* %138, i32 0, i32 1
+	%140 = load %type.TypeNode** %139
+	call void @llvm_PType(%type.TypeNode* %140)
+	%141 = load %bout.BufIO** @llvm_f
+	%142 = bitcast %bout.BufIO* %141 to %bout.BufIO*
+	%143 = getelementptr [4 x i8]* @S.795
+	%144 = bitcast [4 x i8]* %143 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %142, [0 x i8]* %144)
+	%145 = load %bout.BufIO** @llvm_f
+	%146 = bitcast %bout.BufIO* %145 to %bout.BufIO*
+	%147 = load %symb.SymbNode** %s
+	%148 = getelementptr %symb.SymbNode* %147, i32 0, i32 22
+	%149 = getelementptr [0 x i8]* %148
+	%150 = bitcast [0 x i8]* %149 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %146, [0 x i8]* %150)
+	%151 = load %bout.BufIO** @llvm_f
+	%152 = bitcast %bout.BufIO* %151 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %152)
+	%153 = getelementptr %A.3* @feature, i32 0, i32 3
+	%154 = load i8* %153
+	%155 = icmp ne i8 %154, 0
+	br i1 %155, label %L.21, label %L.20
 L.21:
-	%148 = load %symb.SymbNode** %s
-	%149 = call i16 @llvmdb_DefVar(%symb.SymbNode* %148)
+	%156 = load %symb.SymbNode** %s
+	%157 = call i16 @llvmdb_DefVar(%symb.SymbNode* %156)
 	br label %L.20
 L.20:
-	%150 = load %symb.SymbNode** %s
-	%151 = getelementptr %symb.SymbNode* %150, i32 0, i32 0
-	%152 = load %symb.SymbNode** %151
-	%153 = bitcast %symb.SymbNode* %152 to %symb.SymbNode*
-	store %symb.SymbNode* %153, %symb.SymbNode** %s
+	%158 = load %symb.SymbNode** %s
+	%159 = getelementptr %symb.SymbNode* %158, i32 0, i32 0
+	%160 = load %symb.SymbNode** %159
+	%161 = bitcast %symb.SymbNode* %160 to %symb.SymbNode*
+	store %symb.SymbNode* %161, %symb.SymbNode** %s
 	br label %L.17
 L.18:
-	%154 = load %ast.AstNode** %node
-	%155 = getelementptr %ast.AstNode* %154, i32 0, i32 11
-	%156 = getelementptr [0 x %ast.AstNode*]* %155, i32 0, i32 0
-	%157 = load %ast.AstNode** %156
-	%158 = bitcast %ast.AstNode* %157 to %ast.AstNode*
-	%159 = call i8 @llvm_GenSub(%ast.AstNode* %158)
-	%160 = icmp ne i8 %159, 0
-	%161 = xor i1 %160, true
-	br i1 %161, label %L.23, label %L.22
+	%162 = load %ast.AstNode** %node
+	%163 = getelementptr %ast.AstNode* %162, i32 0, i32 11
+	%164 = getelementptr [0 x %ast.AstNode*]* %163, i32 0, i32 0
+	%165 = load %ast.AstNode** %164
+	%166 = bitcast %ast.AstNode* %165 to %ast.AstNode*
+	%167 = call i8 @llvm_GenSub(%ast.AstNode* %166)
+	%168 = icmp ne i8 %167, 0
+	%169 = xor i1 %168, true
+	br i1 %169, label %L.23, label %L.22
 L.23:
-	%162 = load %bout.BufIO** @llvm_f
-	%163 = bitcast %bout.BufIO* %162 to %bout.BufIO*
-	%164 = getelementptr [18 x i8]* @S.781
-	%165 = bitcast [18 x i8]* %164 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %163, [0 x i8]* %165)
-	%166 = load %ast.AstNode** %node
-	call void @llvm_PEndLine(%ast.AstNode* %166)
+	%170 = load %bout.BufIO** @llvm_f
+	%171 = bitcast %bout.BufIO* %170 to %bout.BufIO*
+	%172 = getelementptr [18 x i8]* @S.796
+	%173 = bitcast [18 x i8]* %172 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %171, [0 x i8]* %173)
+	%174 = load %ast.AstNode** %node
+	call void @llvm_PEndLine(%ast.AstNode* %174)
 	br label %L.22
 L.22:
-	%167 = load %bout.BufIO** @llvm_f
-	%168 = bitcast %bout.BufIO* %167 to %bout.BufIO*
-	%169 = getelementptr [9 x i8]* @S.782
-	%170 = bitcast [9 x i8]* %169 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %168, [0 x i8]* %170)
-	%171 = load %symb.SymbNode** %ps
-	%172 = getelementptr %symb.SymbNode* %171, i32 0, i32 4
-	%173 = load %type.TypeListEntry** %172
-	store %type.TypeListEntry* %173, %type.TypeListEntry** %tl
-	%174 = load %type.TypeListEntry** %tl
-	%175 = icmp ne %type.TypeListEntry* %174, null
-	br i1 %175, label %L.25, label %L.26
+	%175 = load %bout.BufIO** @llvm_f
+	%176 = bitcast %bout.BufIO* %175 to %bout.BufIO*
+	%177 = getelementptr [9 x i8]* @S.797
+	%178 = bitcast [9 x i8]* %177 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %176, [0 x i8]* %178)
+	%179 = load %symb.SymbNode** %ps
+	%180 = getelementptr %symb.SymbNode* %179, i32 0, i32 4
+	%181 = load %type.TypeListEntry** %180
+	store %type.TypeListEntry* %181, %type.TypeListEntry** %tl
+	%182 = load %type.TypeListEntry** %tl
+	%183 = icmp ne %type.TypeListEntry* %182, null
+	br i1 %183, label %L.25, label %L.26
 L.25:
 	store i16 0, i16* %i
 	br label %L.27
 L.27:
-	%176 = load %type.TypeListEntry** %tl
-	%177 = icmp ne %type.TypeListEntry* %176, null
-	%178 = xor i1 %177, true
-	br i1 %178, label %L.28, label %L.29
+	%184 = load %type.TypeListEntry** %tl
+	%185 = icmp ne %type.TypeListEntry* %184, null
+	%186 = xor i1 %185, true
+	br i1 %186, label %L.28, label %L.29
 L.29:
-	%179 = load %bout.BufIO** @llvm_f
-	%180 = bitcast %bout.BufIO* %179 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %180, i8 9)
-	%181 = load i16* @llvm_Tseqno
-	%182 = load i16* %i
-	%183 = add i16 %181, %182
-	call void @llvm_PTempName(i16 %183)
-	%184 = load %bout.BufIO** @llvm_f
-	%185 = bitcast %bout.BufIO* %184 to %bout.BufIO*
-	%186 = getelementptr [9 x i8]* @S.783
-	%187 = bitcast [9 x i8]* %186 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %185, [0 x i8]* %187)
-	%188 = load %type.TypeListEntry** %tl
-	%189 = getelementptr %type.TypeListEntry* %188, i32 0, i32 1
-	%190 = load %type.TypeNode** %189
-	%191 = bitcast %type.TypeNode* %190 to %type.TypeNode*
-	call void @llvm_PType(%type.TypeNode* %191)
+	%187 = load %bout.BufIO** @llvm_f
+	%188 = bitcast %bout.BufIO* %187 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %188, i8 9)
+	%189 = load i16* @llvm_Tseqno
+	%190 = load i16* %i
+	%191 = add i16 %189, %190
+	call void @llvm_PTempName(i16 %191)
 	%192 = load %bout.BufIO** @llvm_f
 	%193 = bitcast %bout.BufIO* %192 to %bout.BufIO*
-	%194 = getelementptr [3 x i8]* @S.784
-	%195 = bitcast [3 x i8]* %194 to [0 x i8]*
+	%194 = getelementptr [9 x i8]* @S.798
+	%195 = bitcast [9 x i8]* %194 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %193, [0 x i8]* %195)
-	%196 = load i16* %i
-	call void @llvm_PRetValName(i16 %196)
-	%197 = load %bout.BufIO** @llvm_f
-	%198 = bitcast %bout.BufIO* %197 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %198)
-	%199 = load i16* %i
-	%200 = add i16 %199, 1
-	store i16 %200, i16* %i
-	%201 = load %type.TypeListEntry** %tl
-	%202 = getelementptr %type.TypeListEntry* %201, i32 0, i32 0
-	%203 = load %type.TypeListEntry** %202
-	%204 = bitcast %type.TypeListEntry* %203 to %type.TypeListEntry*
-	store %type.TypeListEntry* %204, %type.TypeListEntry** %tl
+	%196 = load %type.TypeListEntry** %tl
+	%197 = getelementptr %type.TypeListEntry* %196, i32 0, i32 1
+	%198 = load %type.TypeNode** %197
+	%199 = bitcast %type.TypeNode* %198 to %type.TypeNode*
+	call void @llvm_PType(%type.TypeNode* %199)
+	%200 = load %bout.BufIO** @llvm_f
+	%201 = bitcast %bout.BufIO* %200 to %bout.BufIO*
+	%202 = getelementptr [3 x i8]* @S.799
+	%203 = bitcast [3 x i8]* %202 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %201, [0 x i8]* %203)
+	%204 = load i16* %i
+	call void @llvm_PRetValName(i16 %204)
+	%205 = load %bout.BufIO** @llvm_f
+	%206 = bitcast %bout.BufIO* %205 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %206)
+	%207 = load i16* %i
+	%208 = add i16 %207, 1
+	store i16 %208, i16* %i
+	%209 = load %type.TypeListEntry** %tl
+	%210 = getelementptr %type.TypeListEntry* %209, i32 0, i32 0
+	%211 = load %type.TypeListEntry** %210
+	%212 = bitcast %type.TypeListEntry* %211 to %type.TypeListEntry*
+	store %type.TypeListEntry* %212, %type.TypeListEntry** %tl
 	br label %L.27
 L.28:
-	%205 = load %symb.SymbNode** %ps
-	%206 = getelementptr %symb.SymbNode* %205, i32 0, i32 4
-	%207 = load %type.TypeListEntry** %206
-	store %type.TypeListEntry* %207, %type.TypeListEntry** %tl
+	%213 = load %symb.SymbNode** %ps
+	%214 = getelementptr %symb.SymbNode* %213, i32 0, i32 4
+	%215 = load %type.TypeListEntry** %214
+	store %type.TypeListEntry* %215, %type.TypeListEntry** %tl
 	store i16 0, i16* %i
-	%208 = load %type.TypeListEntry** %tl
-	%209 = getelementptr %type.TypeListEntry* %208, i32 0, i32 0
-	%210 = load %type.TypeListEntry** %209
-	%211 = icmp ne %type.TypeListEntry* %210, null
-	br i1 %211, label %L.31, label %L.32
+	%216 = load %type.TypeListEntry** %tl
+	%217 = getelementptr %type.TypeListEntry* %216, i32 0, i32 0
+	%218 = load %type.TypeListEntry** %217
+	%219 = icmp ne %type.TypeListEntry* %218, null
+	br i1 %219, label %L.31, label %L.32
 L.31:
 	br label %L.33
 L.33:
-	%212 = load %bout.BufIO** @llvm_f
-	%213 = bitcast %bout.BufIO* %212 to %bout.BufIO*
-	%214 = getelementptr [6 x i8]* @S.785
-	%215 = bitcast [6 x i8]* %214 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %213, [0 x i8]* %215)
-	%216 = load %bout.BufIO** @llvm_f
-	%217 = bitcast %bout.BufIO* %216 to %bout.BufIO*
-	%218 = load i16* %i
-	%219 = zext i16 %218 to i32
-	call void @bout_BufIO_uint(%bout.BufIO* %217, i32 %219)
 	%220 = load %bout.BufIO** @llvm_f
 	%221 = bitcast %bout.BufIO* %220 to %bout.BufIO*
-	%222 = getelementptr [15 x i8]* @S.786
-	%223 = bitcast [15 x i8]* %222 to [0 x i8]*
+	%222 = getelementptr [6 x i8]* @S.800
+	%223 = bitcast [6 x i8]* %222 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %221, [0 x i8]* %223)
-	%224 = load %symb.SymbNode** %ps
-	%225 = getelementptr %symb.SymbNode* %224, i32 0, i32 4
-	%226 = load %type.TypeListEntry** %225
-	call void @llvm_PRetvType(%type.TypeListEntry* %226, i8 0)
-	%227 = load i16* %i
-	%228 = icmp eq i16 %227, 0
-	br i1 %228, label %L.36, label %L.37
+	%224 = load %bout.BufIO** @llvm_f
+	%225 = bitcast %bout.BufIO* %224 to %bout.BufIO*
+	%226 = load i16* %i
+	%227 = zext i16 %226 to i32
+	call void @bout_BufIO_uint(%bout.BufIO* %225, i32 %227)
+	%228 = load %bout.BufIO** @llvm_f
+	%229 = bitcast %bout.BufIO* %228 to %bout.BufIO*
+	%230 = getelementptr [15 x i8]* @S.801
+	%231 = bitcast [15 x i8]* %230 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %229, [0 x i8]* %231)
+	%232 = load %symb.SymbNode** %ps
+	%233 = getelementptr %symb.SymbNode* %232, i32 0, i32 4
+	%234 = load %type.TypeListEntry** %233
+	call void @llvm_PRetvType(%type.TypeListEntry* %234, i8 0)
+	%235 = load i16* %i
+	%236 = icmp eq i16 %235, 0
+	br i1 %236, label %L.36, label %L.37
 L.36:
-	%229 = load %bout.BufIO** @llvm_f
-	%230 = bitcast %bout.BufIO* %229 to %bout.BufIO*
-	%231 = getelementptr [7 x i8]* @S.787
-	%232 = bitcast [7 x i8]* %231 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %230, [0 x i8]* %232)
-	br label %L.35
-L.37:
-	%233 = load %bout.BufIO** @llvm_f
-	%234 = bitcast %bout.BufIO* %233 to %bout.BufIO*
-	%235 = getelementptr [6 x i8]* @S.788
-	%236 = bitcast [6 x i8]* %235 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %234, [0 x i8]* %236)
 	%237 = load %bout.BufIO** @llvm_f
 	%238 = bitcast %bout.BufIO* %237 to %bout.BufIO*
-	%239 = load i16* %i
-	%240 = zext i16 %239 to i32
-	%241 = sub i32 %240, 1
-	call void @bout_BufIO_uint(%bout.BufIO* %238, i32 %241)
+	%239 = getelementptr [7 x i8]* @S.802
+	%240 = bitcast [7 x i8]* %239 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %238, [0 x i8]* %240)
+	br label %L.35
+L.37:
+	%241 = load %bout.BufIO** @llvm_f
+	%242 = bitcast %bout.BufIO* %241 to %bout.BufIO*
+	%243 = getelementptr [6 x i8]* @S.803
+	%244 = bitcast [6 x i8]* %243 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %242, [0 x i8]* %244)
+	%245 = load %bout.BufIO** @llvm_f
+	%246 = bitcast %bout.BufIO* %245 to %bout.BufIO*
+	%247 = load i16* %i
+	%248 = zext i16 %247 to i32
+	%249 = sub i32 %248, 1
+	call void @bout_BufIO_uint(%bout.BufIO* %246, i32 %249)
 	br label %L.35
 L.35:
-	%242 = load %bout.BufIO** @llvm_f
-	%243 = bitcast %bout.BufIO* %242 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %243, i8 44)
-	%244 = load %type.TypeListEntry** %tl
-	%245 = getelementptr %type.TypeListEntry* %244, i32 0, i32 1
-	%246 = load %type.TypeNode** %245
-	%247 = bitcast %type.TypeNode* %246 to %type.TypeNode*
-	call void @llvm_PType(%type.TypeNode* %247)
-	%248 = load %bout.BufIO** @llvm_f
-	%249 = bitcast %bout.BufIO* %248 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %249, i8 32)
-	%250 = load i16* @llvm_Tseqno
-	%251 = load i16* %i
-	%252 = add i16 %250, %251
-	call void @llvm_PTempName(i16 %252)
-	%253 = load %bout.BufIO** @llvm_f
-	%254 = bitcast %bout.BufIO* %253 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %254, i8 44)
-	%255 = load %bout.BufIO** @llvm_f
-	%256 = bitcast %bout.BufIO* %255 to %bout.BufIO*
-	%257 = load i16* %i
-	%258 = zext i16 %257 to i32
-	call void @bout_BufIO_uint(%bout.BufIO* %256, i32 %258)
-	%259 = load %bout.BufIO** @llvm_f
-	%260 = bitcast %bout.BufIO* %259 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %260)
-	%261 = load i16* %i
-	%262 = add i16 %261, 1
-	store i16 %262, i16* %i
-	%263 = load %type.TypeListEntry** %tl
-	%264 = getelementptr %type.TypeListEntry* %263, i32 0, i32 0
-	%265 = load %type.TypeListEntry** %264
-	%266 = bitcast %type.TypeListEntry* %265 to %type.TypeListEntry*
-	store %type.TypeListEntry* %266, %type.TypeListEntry** %tl
-	%267 = load %type.TypeListEntry** %tl
-	%268 = icmp eq %type.TypeListEntry* %267, null
-	br i1 %268, label %L.34, label %L.38
+	%250 = load %bout.BufIO** @llvm_f
+	%251 = bitcast %bout.BufIO* %250 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %251, i8 44)
+	%252 = load %type.TypeListEntry** %tl
+	%253 = getelementptr %type.TypeListEntry* %252, i32 0, i32 1
+	%254 = load %type.TypeNode** %253
+	%255 = bitcast %type.TypeNode* %254 to %type.TypeNode*
+	call void @llvm_PType(%type.TypeNode* %255)
+	%256 = load %bout.BufIO** @llvm_f
+	%257 = bitcast %bout.BufIO* %256 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %257, i8 32)
+	%258 = load i16* @llvm_Tseqno
+	%259 = load i16* %i
+	%260 = add i16 %258, %259
+	call void @llvm_PTempName(i16 %260)
+	%261 = load %bout.BufIO** @llvm_f
+	%262 = bitcast %bout.BufIO* %261 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %262, i8 44)
+	%263 = load %bout.BufIO** @llvm_f
+	%264 = bitcast %bout.BufIO* %263 to %bout.BufIO*
+	%265 = load i16* %i
+	%266 = zext i16 %265 to i32
+	call void @bout_BufIO_uint(%bout.BufIO* %264, i32 %266)
+	%267 = load %bout.BufIO** @llvm_f
+	%268 = bitcast %bout.BufIO* %267 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %268)
+	%269 = load i16* %i
+	%270 = add i16 %269, 1
+	store i16 %270, i16* %i
+	%271 = load %type.TypeListEntry** %tl
+	%272 = getelementptr %type.TypeListEntry* %271, i32 0, i32 0
+	%273 = load %type.TypeListEntry** %272
+	%274 = bitcast %type.TypeListEntry* %273 to %type.TypeListEntry*
+	store %type.TypeListEntry* %274, %type.TypeListEntry** %tl
+	%275 = load %type.TypeListEntry** %tl
+	%276 = icmp eq %type.TypeListEntry* %275, null
+	br i1 %276, label %L.34, label %L.38
 L.38:
 	br label %L.33
 L.34:
-	%269 = load %bout.BufIO** @llvm_f
-	%270 = bitcast %bout.BufIO* %269 to %bout.BufIO*
-	%271 = getelementptr [6 x i8]* @S.789
-	%272 = bitcast [6 x i8]* %271 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %270, [0 x i8]* %272)
-	%273 = load %symb.SymbNode** %ps
-	%274 = getelementptr %symb.SymbNode* %273, i32 0, i32 4
-	%275 = load %type.TypeListEntry** %274
-	call void @llvm_PRetvType(%type.TypeListEntry* %275, i8 0)
-	%276 = load %bout.BufIO** @llvm_f
-	%277 = bitcast %bout.BufIO* %276 to %bout.BufIO*
-	%278 = getelementptr [6 x i8]* @S.790
-	%279 = bitcast [6 x i8]* %278 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %277, [0 x i8]* %279)
-	%280 = load %bout.BufIO** @llvm_f
-	%281 = bitcast %bout.BufIO* %280 to %bout.BufIO*
-	%282 = load i16* %i
-	%283 = zext i16 %282 to i32
-	%284 = sub i32 %283, 1
-	call void @bout_BufIO_uint(%bout.BufIO* %281, i32 %284)
-	%285 = load %bout.BufIO** @llvm_f
-	%286 = bitcast %bout.BufIO* %285 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %286)
+	%277 = load %bout.BufIO** @llvm_f
+	%278 = bitcast %bout.BufIO* %277 to %bout.BufIO*
+	%279 = getelementptr [6 x i8]* @S.804
+	%280 = bitcast [6 x i8]* %279 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %278, [0 x i8]* %280)
+	%281 = load %symb.SymbNode** %ps
+	%282 = getelementptr %symb.SymbNode* %281, i32 0, i32 4
+	%283 = load %type.TypeListEntry** %282
+	call void @llvm_PRetvType(%type.TypeListEntry* %283, i8 0)
+	%284 = load %bout.BufIO** @llvm_f
+	%285 = bitcast %bout.BufIO* %284 to %bout.BufIO*
+	%286 = getelementptr [6 x i8]* @S.805
+	%287 = bitcast [6 x i8]* %286 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %285, [0 x i8]* %287)
+	%288 = load %bout.BufIO** @llvm_f
+	%289 = bitcast %bout.BufIO* %288 to %bout.BufIO*
+	%290 = load i16* %i
+	%291 = zext i16 %290 to i32
+	%292 = sub i32 %291, 1
+	call void @bout_BufIO_uint(%bout.BufIO* %289, i32 %292)
+	%293 = load %bout.BufIO** @llvm_f
+	%294 = bitcast %bout.BufIO* %293 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %294)
 	br label %L.30
 L.32:
-	%287 = load %bout.BufIO** @llvm_f
-	%288 = bitcast %bout.BufIO* %287 to %bout.BufIO*
-	%289 = getelementptr [6 x i8]* @S.791
-	%290 = bitcast [6 x i8]* %289 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %288, [0 x i8]* %290)
-	%291 = load %type.TypeListEntry** %tl
-	%292 = getelementptr %type.TypeListEntry* %291, i32 0, i32 1
-	%293 = load %type.TypeNode** %292
-	%294 = bitcast %type.TypeNode* %293 to %type.TypeNode*
-	call void @llvm_PType(%type.TypeNode* %294)
 	%295 = load %bout.BufIO** @llvm_f
 	%296 = bitcast %bout.BufIO* %295 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %296, i8 32)
-	%297 = load i16* @llvm_Tseqno
-	%298 = load i16* %i
-	%299 = add i16 %297, %298
-	call void @llvm_PTempName(i16 %299)
+	%297 = getelementptr [6 x i8]* @S.806
+	%298 = bitcast [6 x i8]* %297 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %296, [0 x i8]* %298)
+	%299 = load %type.TypeListEntry** %tl
+	%300 = getelementptr %type.TypeListEntry* %299, i32 0, i32 1
+	%301 = load %type.TypeNode** %300
+	%302 = bitcast %type.TypeNode* %301 to %type.TypeNode*
+	call void @llvm_PType(%type.TypeNode* %302)
+	%303 = load %bout.BufIO** @llvm_f
+	%304 = bitcast %bout.BufIO* %303 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %304, i8 32)
+	%305 = load i16* @llvm_Tseqno
+	%306 = load i16* %i
+	%307 = add i16 %305, %306
+	call void @llvm_PTempName(i16 %307)
 	br label %L.30
 L.30:
 	br label %L.24
 L.26:
-	%300 = load %bout.BufIO** @llvm_f
-	%301 = bitcast %bout.BufIO* %300 to %bout.BufIO*
-	%302 = getelementptr [10 x i8]* @S.792
-	%303 = bitcast [10 x i8]* %302 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %301, [0 x i8]* %303)
+	%308 = load %bout.BufIO** @llvm_f
+	%309 = bitcast %bout.BufIO* %308 to %bout.BufIO*
+	%310 = getelementptr [10 x i8]* @S.807
+	%311 = bitcast [10 x i8]* %310 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %309, [0 x i8]* %311)
 	br label %L.24
 L.24:
-	%304 = load %bout.BufIO** @llvm_f
-	%305 = bitcast %bout.BufIO* %304 to %bout.BufIO*
-	%306 = getelementptr [4 x i8]* @S.793
-	%307 = bitcast [4 x i8]* %306 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %305, [0 x i8]* %307)
+	%312 = load %bout.BufIO** @llvm_f
+	%313 = bitcast %bout.BufIO* %312 to %bout.BufIO*
+	%314 = getelementptr [4 x i8]* @S.808
+	%315 = bitcast [4 x i8]* %314 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %313, [0 x i8]* %315)
 	br label %L.1
 L.1:
 	br label %return
 return:
 	ret void
 }
-@S.794 = internal constant [7 x i8] c"\09%N = \00"
-@S.795 = internal constant [13 x i8] c" %T %0N, %1N\00"
+@S.809 = internal constant [7 x i8] c"\09%N = \00"
+@S.810 = internal constant [13 x i8] c" %T %0N, %1N\00"
 define internal zeroext i8 @llvm_BinaryOp(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -33825,7 +35507,7 @@ L.0:
 	%15 = load i16* @llvm_Tseqno
 	%16 = add i16 %15, 1
 	store i16 %16, i16* @llvm_Tseqno
-	%17 = getelementptr [7 x i8]* @S.794
+	%17 = getelementptr [7 x i8]* @S.809
 	%18 = bitcast [7 x i8]* %17 to [0 x i8]*
 	%19 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %18, %ast.AstNode* %19)
@@ -33834,7 +35516,7 @@ L.0:
 	%22 = load [0 x i8]** %op
 	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
-	%24 = getelementptr [13 x i8]* @S.795
+	%24 = getelementptr [13 x i8]* @S.810
 	%25 = bitcast [13 x i8]* %24 to [0 x i8]*
 	%26 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %25, %ast.AstNode* %26)
@@ -33882,8 +35564,8 @@ return:
 	%14 = load i8* %rv.0
 	ret i8 %14
 }
-@S.796 = internal constant [7 x i8] c"\09%N = \00"
-@S.797 = internal constant [14 x i8] c" %0T %0N, %1N\00"
+@S.811 = internal constant [7 x i8] c"\09%N = \00"
+@S.812 = internal constant [14 x i8] c" %0T %0N, %1N\00"
 define internal zeroext i8 @llvm_CompareOp(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -33910,7 +35592,7 @@ L.0:
 	%15 = load i16* @llvm_Tseqno
 	%16 = add i16 %15, 1
 	store i16 %16, i16* @llvm_Tseqno
-	%17 = getelementptr [7 x i8]* @S.796
+	%17 = getelementptr [7 x i8]* @S.811
 	%18 = bitcast [7 x i8]* %17 to [0 x i8]*
 	%19 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %18, %ast.AstNode* %19)
@@ -33919,7 +35601,7 @@ L.0:
 	%22 = load [0 x i8]** %op
 	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
-	%24 = getelementptr [14 x i8]* @S.797
+	%24 = getelementptr [14 x i8]* @S.812
 	%25 = bitcast [14 x i8]* %24 to [0 x i8]*
 	%26 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %25, %ast.AstNode* %26)
@@ -33931,8 +35613,8 @@ return:
 	%28 = load i8* %rv.0
 	ret i8 %28
 }
-@S.798 = internal constant [7 x i8] c"\09%N = \00"
-@S.799 = internal constant [15 x i8] c" %0T %0N to %T\00"
+@S.813 = internal constant [7 x i8] c"\09%N = \00"
+@S.814 = internal constant [15 x i8] c" %0T %0N to %T\00"
 define internal void @llvm_ChangeSize(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33952,7 +35634,7 @@ L.0:
 	%9 = load i16* @llvm_Tseqno
 	%10 = add i16 %9, 1
 	store i16 %10, i16* @llvm_Tseqno
-	%11 = getelementptr [7 x i8]* @S.798
+	%11 = getelementptr [7 x i8]* @S.813
 	%12 = bitcast [7 x i8]* %11 to [0 x i8]*
 	%13 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %12, %ast.AstNode* %13)
@@ -33961,7 +35643,7 @@ L.0:
 	%16 = load [0 x i8]** %op
 	%17 = bitcast [0 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
-	%18 = getelementptr [15 x i8]* @S.799
+	%18 = getelementptr [15 x i8]* @S.814
 	%19 = bitcast [15 x i8]* %18 to [0 x i8]*
 	%20 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %19, %ast.AstNode* %20)
@@ -33977,33 +35659,35 @@ L.0:
 	%node = alloca %ast.AstNode*
 	store %ast.AstNode* %node$, %ast.AstNode** %node
 	%0 = load %ast.AstNode** %node
-	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 0
-	%2 = load i8* %1
-	%3 = icmp eq i8 %2, 7
-	br i1 %3, label %L.2, label %L.3
+	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 8
+	%2 = load %type.TypeNode** %1
+	%3 = getelementptr %type.TypeNode* %2, i32 0, i32 14
+	%4 = load i8* %3
+	%5 = icmp ne i8 %4, 5
+	br i1 %5, label %L.2, label %L.3
 L.2:
-	%4 = load %ast.AstNode** %node
-	%5 = getelementptr %ast.AstNode* %4, i32 0, i32 8
-	%6 = load %type.TypeNode** %5
-	%7 = getelementptr %type.TypeNode* %6, i32 0, i32 21
-	%8 = load i8* %7
-	store i8 %8, i8* %rv.0
+	%6 = load %ast.AstNode** %node
+	%7 = getelementptr %ast.AstNode* %6, i32 0, i32 8
+	%8 = load %type.TypeNode** %7
+	%9 = getelementptr %type.TypeNode* %8, i32 0, i32 21
+	%10 = load i8* %9
+	store i8 %10, i8* %rv.0
 	br label %return
 L.3:
-	%9 = load %ast.AstNode** %node
-	%10 = getelementptr %ast.AstNode* %9, i32 0, i32 8
-	%11 = load %type.TypeNode** %10
-	%12 = getelementptr %type.TypeNode* %11, i32 0, i32 0
+	%11 = load %ast.AstNode** %node
+	%12 = getelementptr %ast.AstNode* %11, i32 0, i32 8
 	%13 = load %type.TypeNode** %12
-	%14 = getelementptr %type.TypeNode* %13, i32 0, i32 21
-	%15 = load i8* %14
-	store i8 %15, i8* %rv.0
+	%14 = getelementptr %type.TypeNode* %13, i32 0, i32 0
+	%15 = load %type.TypeNode** %14
+	%16 = getelementptr %type.TypeNode* %15, i32 0, i32 21
+	%17 = load i8* %16
+	store i8 %17, i8* %rv.0
 	br label %return
 L.1:
 	br label %return
 return:
-	%16 = load i8* %rv.0
-	ret i8 %16
+	%18 = load i8* %rv.0
+	ret i8 %18
 }
 define internal i32 @llvm_BitfieldOffset(%ast.AstNode* %node$, i64 %fno$) nounwind {
 L.0:
@@ -34022,10 +35706,10 @@ L.0:
 	%1 = getelementptr %ast.AstNode* %0, i32 0, i32 8
 	%2 = load %type.TypeNode** %1
 	store %type.TypeNode* %2, %type.TypeNode** %t
-	%3 = load %ast.AstNode** %node
-	%4 = getelementptr %ast.AstNode* %3, i32 0, i32 0
+	%3 = load %type.TypeNode** %t
+	%4 = getelementptr %type.TypeNode* %3, i32 0, i32 14
 	%5 = load i8* %4
-	%6 = icmp ne i8 %5, 7
+	%6 = icmp eq i8 %5, 5
 	br i1 %6, label %L.2, label %L.1
 L.2:
 	%7 = load %type.TypeNode** %t
@@ -34142,7 +35826,7 @@ L.0:
 	%10 = load i32* %size
 	%11 = zext i32 %10 to i64
 	%12 = call %ast.AstNode* @ast_Const(%type.TypeNode* %9, i64 %11)
-	%13 = call %ast.AstNode* @ast_New2(i8 48, %type.TypeNode* %7, %ast.AstNode* %8, %ast.AstNode* %12)
+	%13 = call %ast.AstNode* @ast_New2(i8 51, %type.TypeNode* %7, %ast.AstNode* %8, %ast.AstNode* %12)
 	store %ast.AstNode* %13, %ast.AstNode** %indx
 	%14 = load %ast.AstNode** %tree
 	%15 = icmp ne %ast.AstNode* %14, null
@@ -34151,7 +35835,7 @@ L.2:
 	%16 = load %type.TypeNode** @type_wordtype
 	%17 = load %ast.AstNode** %tree
 	%18 = load %ast.AstNode** %indx
-	%19 = call %ast.AstNode* @ast_New2(i8 46, %type.TypeNode* %16, %ast.AstNode* %17, %ast.AstNode* %18)
+	%19 = call %ast.AstNode* @ast_New2(i8 49, %type.TypeNode* %16, %ast.AstNode* %17, %ast.AstNode* %18)
 	store %ast.AstNode* %19, %ast.AstNode** %tree
 	br label %L.1
 L.3:
@@ -34285,7 +35969,7 @@ L.16:
 	%66 = load %type.TypeNode** @type_wordtype
 	%67 = load %ast.AstNode** %varb
 	%68 = load %ast.AstNode** %tree
-	%69 = call %ast.AstNode* @ast_New2(i8 46, %type.TypeNode* %66, %ast.AstNode* %67, %ast.AstNode* %68)
+	%69 = call %ast.AstNode* @ast_New2(i8 49, %type.TypeNode* %66, %ast.AstNode* %67, %ast.AstNode* %68)
 	store %ast.AstNode* %69, %ast.AstNode** %varb
 	br label %L.15
 L.17:
@@ -34299,10 +35983,10 @@ L.13:
 	%72 = getelementptr %ast.AstNode* %71, i32 0, i32 8
 	%73 = load %type.TypeNode** %72
 	store %type.TypeNode* %73, %type.TypeNode** %t
-	%74 = load %ast.AstNode** %offs
-	%75 = getelementptr %ast.AstNode* %74, i32 0, i32 0
+	%74 = load %type.TypeNode** %t
+	%75 = getelementptr %type.TypeNode* %74, i32 0, i32 14
 	%76 = load i8* %75
-	%77 = icmp eq i8 %76, 7
+	%77 = icmp ne i8 %76, 5
 	br i1 %77, label %L.19, label %L.20
 L.19:
 	%78 = load %ast.AstNode** %offs
@@ -34327,7 +36011,7 @@ L.20:
 	%91 = load %type.TypeNode** %t
 	%92 = getelementptr %type.TypeNode* %91, i32 0, i32 10
 	%93 = load i32* %92
-	%94 = call %type.TypeNode* @type_TargetUintType(i32 %93)
+	%94 = call %type.TypeNode* @target_utype(i32 %93)
 	%95 = load %ast.AstNode** %offs
 	%96 = call %ast.AstNode* @ast_New1(i8 27, %type.TypeNode* %94, %ast.AstNode* %95)
 	store %ast.AstNode* %96, %ast.AstNode** %tree
@@ -34392,7 +36076,7 @@ return:
 	ret  { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } %mrv2
 
 }
-@S.800 = internal constant [31 x i8] c"BitfieldMask of variable SLICE\00"
+@S.815 = internal constant [31 x i8] c"BitfieldMask of variable SLICE\00"
 define internal %ast.AstNode* @llvm_BitfieldMask(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -34416,9 +36100,9 @@ L.2:
 	%10 = icmp ne i8 %9, 7
 	br i1 %10, label %L.5, label %L.6
 L.5:
-	%11 = getelementptr [31 x i8]* @S.800
+	%11 = getelementptr [31 x i8]* @S.815
 	%12 = bitcast [31 x i8]* %11 to [0 x i8]*
-	call void @lex_ErrorS(i8 78, [0 x i8]* %12)
+	call void @lex_ErrorS(i8 86, [0 x i8]* %12)
 	br label %L.4
 L.6:
 	%13 = load %ast.AstNode** %node
@@ -34496,14 +36180,14 @@ L.2:
 	%9 = load %type.TypeNode** @type_wordtype
 	%10 = load %ast.AstNode** %tree
 	%11 = load %ast.AstNode** %varb
-	%12 = call %ast.AstNode* @ast_New2(i8 66, %type.TypeNode* %9, %ast.AstNode* %10, %ast.AstNode* %11)
+	%12 = call %ast.AstNode* @ast_New2(i8 69, %type.TypeNode* %9, %ast.AstNode* %10, %ast.AstNode* %11)
 	store %ast.AstNode* %12, %ast.AstNode** %tree
 	br label %L.1
 L.1:
 	%13 = load %type.TypeNode** @type_wordtype
 	%14 = load %ast.AstNode** %tree
 	%15 = load %ast.AstNode** %mask
-	%16 = call %ast.AstNode* @ast_New2(i8 69, %type.TypeNode* %13, %ast.AstNode* %14, %ast.AstNode* %15)
+	%16 = call %ast.AstNode* @ast_New2(i8 72, %type.TypeNode* %13, %ast.AstNode* %14, %ast.AstNode* %15)
 	store %ast.AstNode* %16, %ast.AstNode** %tree
 	%17 = load %ast.AstNode** %tree
 	%18 = load %ast.AstNode** %load
@@ -34529,10 +36213,10 @@ L.1:
 return:
 	ret void
 }
-@S.801 = internal constant [12 x i8] c"\09%N = load \00"
-@S.802 = internal constant [10 x i8] c"volatile \00"
-@S.803 = internal constant [8 x i8] c"%T* %0N\00"
-@S.804 = internal constant [9 x i8] c", align \00"
+@S.816 = internal constant [12 x i8] c"\09%N = load \00"
+@S.817 = internal constant [10 x i8] c"volatile \00"
+@S.818 = internal constant [8 x i8] c"%T* %0N\00"
+@S.819 = internal constant [9 x i8] c", align \00"
 define internal void @llvm_Load(%ast.AstNode* %load$) nounwind {
 L.0:
 	%load = alloca %ast.AstNode*
@@ -34585,7 +36269,7 @@ L.7:
 	%29 = load i16* @llvm_Tseqno
 	%30 = add i16 %29, 1
 	store i16 %30, i16* @llvm_Tseqno
-	%31 = getelementptr [12 x i8]* @S.801
+	%31 = getelementptr [12 x i8]* @S.816
 	%32 = bitcast [12 x i8]* %31 to [0 x i8]*
 	%33 = load %ast.AstNode** %load
 	call void @llvm_Print([0 x i8]* %32, %ast.AstNode* %33)
@@ -34601,12 +36285,12 @@ L.7:
 L.9:
 	%42 = load %bout.BufIO** @llvm_f
 	%43 = bitcast %bout.BufIO* %42 to %bout.BufIO*
-	%44 = getelementptr [10 x i8]* @S.802
+	%44 = getelementptr [10 x i8]* @S.817
 	%45 = bitcast [10 x i8]* %44 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %43, [0 x i8]* %45)
 	br label %L.8
 L.8:
-	%46 = getelementptr [8 x i8]* @S.803
+	%46 = getelementptr [8 x i8]* @S.818
 	%47 = bitcast [8 x i8]* %46 to [0 x i8]*
 	%48 = load %ast.AstNode** %load
 	call void @llvm_Print([0 x i8]* %47, %ast.AstNode* %48)
@@ -34622,7 +36306,7 @@ L.8:
 L.11:
 	%57 = load %bout.BufIO** @llvm_f
 	%58 = bitcast %bout.BufIO* %57 to %bout.BufIO*
-	%59 = getelementptr [9 x i8]* @S.804
+	%59 = getelementptr [9 x i8]* @S.819
 	%60 = bitcast [9 x i8]* %59 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %58, [0 x i8]* %60)
 	%61 = load %bout.BufIO** @llvm_f
@@ -34651,10 +36335,10 @@ L.5:
 return:
 	ret void
 }
-@S.805 = internal constant [7 x i8] c"store \00"
-@S.806 = internal constant [10 x i8] c"volatile \00"
-@S.807 = internal constant [8 x i8] c", %B %D\00"
-@S.808 = internal constant [9 x i8] c", align \00"
+@S.820 = internal constant [7 x i8] c"store \00"
+@S.821 = internal constant [10 x i8] c"volatile \00"
+@S.822 = internal constant [8 x i8] c", %K %D\00"
+@S.823 = internal constant [9 x i8] c", align \00"
 define internal void @llvm_Store(%ast.AstNode* %store$) nounwind {
 L.0:
 	%store = alloca %ast.AstNode*
@@ -34724,255 +36408,251 @@ L.4:
 	%37 = getelementptr %ast.AstNode* %36, i32 0, i32 11
 	%38 = getelementptr [0 x %ast.AstNode*]* %37, i32 0, i32 0
 	%39 = load %ast.AstNode** %38
-	%40 = getelementptr %ast.AstNode* %39, i32 0, i32 8
-	%41 = load %type.TypeNode** %40
-	%42 = getelementptr %type.TypeNode* %41, i32 0, i32 0
-	%43 = load %type.TypeNode** %42
-	%44 = getelementptr %type.TypeNode* %43, i32 0, i32 21
-	%45 = load i8* %44
-	%46 = icmp ne i8 %45, 0
+	%40 = bitcast %ast.AstNode* %39 to %ast.AstNode*
+	%41 = call i8 @llvm_IsPacked(%ast.AstNode* %40)
+	%42 = icmp ne i8 %41, 0
 	br label %L.5
 L.5:
-	%47 = phi i1 [ false, %L.7 ], [ %46, %L.4 ]
-	br i1 %47, label %L.11, label %L.10
+	%43 = phi i1 [ false, %L.7 ], [ %42, %L.4 ]
+	br i1 %43, label %L.11, label %L.10
 L.11:
-	%48 = load %ast.AstNode** %lhs
-	%49 = call %ast.AstNode* @llvm_BitfieldMask(%ast.AstNode* %48)
-	store %ast.AstNode* %49, %ast.AstNode** %mask
-	%50 = load %ast.AstNode** %lhs
-	%51 = call { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } @llvm_BitfieldRewrite(%ast.AstNode* %50)
-	%52 = extractvalue  { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } %51, 0
-	%53 = extractvalue  { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } %51, 1
-	%54 = extractvalue  { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } %51, 2
-	store %ast.AstNode* %52, %ast.AstNode** %tree
-	store %ast.AstNode* %53, %ast.AstNode** %varb
-	store %ast.AstNode* %54, %ast.AstNode** %lhs
-	%55 = load %ast.AstNode** %varb
-	%56 = icmp ne %ast.AstNode* %55, null
-	br i1 %56, label %L.13, label %L.12
+	%44 = load %ast.AstNode** %lhs
+	%45 = call %ast.AstNode* @llvm_BitfieldMask(%ast.AstNode* %44)
+	store %ast.AstNode* %45, %ast.AstNode** %mask
+	%46 = load %ast.AstNode** %lhs
+	%47 = call { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } @llvm_BitfieldRewrite(%ast.AstNode* %46)
+	%48 = extractvalue  { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } %47, 0
+	%49 = extractvalue  { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } %47, 1
+	%50 = extractvalue  { %ast.AstNode*, %ast.AstNode*, %ast.AstNode* } %47, 2
+	store %ast.AstNode* %48, %ast.AstNode** %tree
+	store %ast.AstNode* %49, %ast.AstNode** %varb
+	store %ast.AstNode* %50, %ast.AstNode** %lhs
+	%51 = load %ast.AstNode** %varb
+	%52 = icmp ne %ast.AstNode* %51, null
+	br i1 %52, label %L.13, label %L.12
 L.13:
-	%57 = load %type.TypeNode** @type_wordtype
-	%58 = load %ast.AstNode** %mask
-	%59 = load %ast.AstNode** %varb
-	%60 = call %ast.AstNode* @ast_New2(i8 65, %type.TypeNode* %57, %ast.AstNode* %58, %ast.AstNode* %59)
-	store %ast.AstNode* %60, %ast.AstNode** %mask
+	%53 = load %type.TypeNode** @type_wordtype
+	%54 = load %ast.AstNode** %mask
+	%55 = load %ast.AstNode** %varb
+	%56 = call %ast.AstNode* @ast_New2(i8 68, %type.TypeNode* %53, %ast.AstNode* %54, %ast.AstNode* %55)
+	store %ast.AstNode* %56, %ast.AstNode** %mask
 	br label %L.12
 L.12:
-	%61 = load %type.TypeNode** @type_wordtype
+	%57 = load %type.TypeNode** @type_wordtype
+	%58 = load %ast.AstNode** %mask
+	%59 = call %ast.AstNode* @ast_New1(i8 34, %type.TypeNode* %57, %ast.AstNode* %58)
+	store %ast.AstNode* %59, %ast.AstNode** %mask
+	%60 = load %type.TypeNode** @type_wordtype
+	%61 = load %ast.AstNode** %tree
 	%62 = load %ast.AstNode** %mask
-	%63 = call %ast.AstNode* @ast_New1(i8 34, %type.TypeNode* %61, %ast.AstNode* %62)
-	store %ast.AstNode* %63, %ast.AstNode** %mask
-	%64 = load %type.TypeNode** @type_wordtype
-	%65 = load %ast.AstNode** %tree
-	%66 = load %ast.AstNode** %mask
-	%67 = call %ast.AstNode* @ast_New2(i8 69, %type.TypeNode* %64, %ast.AstNode* %65, %ast.AstNode* %66)
-	store %ast.AstNode* %67, %ast.AstNode** %tree
-	%68 = load %ast.AstNode** %rhs
-	%69 = load %type.TypeNode** @type_wordtype
-	%70 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %68, %type.TypeNode* %69)
-	store %ast.AstNode* %70, %ast.AstNode** %rhs
-	%71 = load %ast.AstNode** %varb
-	%72 = icmp ne %ast.AstNode* %71, null
-	br i1 %72, label %L.15, label %L.14
+	%63 = call %ast.AstNode* @ast_New2(i8 72, %type.TypeNode* %60, %ast.AstNode* %61, %ast.AstNode* %62)
+	store %ast.AstNode* %63, %ast.AstNode** %tree
+	%64 = load %ast.AstNode** %rhs
+	%65 = load %type.TypeNode** @type_wordtype
+	%66 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %64, %type.TypeNode* %65)
+	store %ast.AstNode* %66, %ast.AstNode** %rhs
+	%67 = load %ast.AstNode** %varb
+	%68 = icmp ne %ast.AstNode* %67, null
+	br i1 %68, label %L.15, label %L.14
 L.15:
-	%73 = load %type.TypeNode** @type_wordtype
-	%74 = load %ast.AstNode** %rhs
-	%75 = load %ast.AstNode** %varb
-	%76 = call %ast.AstNode* @ast_New2(i8 65, %type.TypeNode* %73, %ast.AstNode* %74, %ast.AstNode* %75)
-	store %ast.AstNode* %76, %ast.AstNode** %rhs
+	%69 = load %type.TypeNode** @type_wordtype
+	%70 = load %ast.AstNode** %rhs
+	%71 = load %ast.AstNode** %varb
+	%72 = call %ast.AstNode* @ast_New2(i8 68, %type.TypeNode* %69, %ast.AstNode* %70, %ast.AstNode* %71)
+	store %ast.AstNode* %72, %ast.AstNode** %rhs
 	br label %L.14
 L.14:
-	%77 = load %type.TypeNode** @type_wordtype
-	%78 = load %ast.AstNode** %tree
-	%79 = load %ast.AstNode** %rhs
-	%80 = call %ast.AstNode* @ast_New2(i8 70, %type.TypeNode* %77, %ast.AstNode* %78, %ast.AstNode* %79)
-	store %ast.AstNode* %80, %ast.AstNode** %rhs
-	%81 = load %ast.AstNode** %rhs
-	%82 = load %ast.AstNode** %lhs
-	%83 = getelementptr %ast.AstNode* %82, i32 0, i32 8
-	%84 = load %type.TypeNode** %83
-	%85 = getelementptr %type.TypeNode* %84, i32 0, i32 0
-	%86 = load %type.TypeNode** %85
-	%87 = getelementptr %type.TypeNode* %86, i32 0, i32 10
+	%73 = load %type.TypeNode** @type_wordtype
+	%74 = load %ast.AstNode** %tree
+	%75 = load %ast.AstNode** %rhs
+	%76 = call %ast.AstNode* @ast_New2(i8 73, %type.TypeNode* %73, %ast.AstNode* %74, %ast.AstNode* %75)
+	store %ast.AstNode* %76, %ast.AstNode** %rhs
+	%77 = load %ast.AstNode** %rhs
+	%78 = load %ast.AstNode** %lhs
+	%79 = getelementptr %ast.AstNode* %78, i32 0, i32 8
+	%80 = load %type.TypeNode** %79
+	%81 = getelementptr %type.TypeNode* %80, i32 0, i32 0
+	%82 = load %type.TypeNode** %81
+	%83 = getelementptr %type.TypeNode* %82, i32 0, i32 10
+	%84 = load i32* %83
+	%85 = call %ast.AstNode* @ast_Extend(%ast.AstNode* %77, i32 %84, i8 1)
+	store %ast.AstNode* %85, %ast.AstNode** %rhs
+	%86 = load %ast.AstNode** %lhs
+	%87 = getelementptr %ast.AstNode* %86, i32 0, i32 7
 	%88 = load i32* %87
-	%89 = call %ast.AstNode* @ast_Extend(%ast.AstNode* %81, i32 %88, i8 1)
-	store %ast.AstNode* %89, %ast.AstNode** %rhs
-	%90 = load %ast.AstNode** %lhs
-	%91 = getelementptr %ast.AstNode* %90, i32 0, i32 7
-	%92 = load i32* %91
-	%93 = load %target.ModelT** @target_Target
-	%94 = getelementptr %target.ModelT* %93, i32 0, i32 2
-	%95 = load i8* %94
-	%96 = zext i8 %95 to i32
-	%97 = icmp ugt i32 %92, %96
-	br i1 %97, label %L.16, label %L.17
+	%89 = load %target.ModelT** @target_Target
+	%90 = getelementptr %target.ModelT* %89, i32 0, i32 2
+	%91 = load i8* %90
+	%92 = zext i8 %91 to i32
+	%93 = icmp ugt i32 %88, %92
+	br i1 %93, label %L.16, label %L.17
 L.16:
-	%98 = load %ast.AstNode** %lhs
-	%99 = getelementptr %ast.AstNode* %98, i32 0, i32 8
-	%100 = load %type.TypeNode** %99
-	%101 = getelementptr %type.TypeNode* %100, i32 0, i32 16
-	%102 = load i8* %101
-	%103 = load %target.ModelT** @target_Target
-	%104 = getelementptr %target.ModelT* %103, i32 0, i32 0
-	%105 = load i8* %104
-	%106 = icmp ne i8 %102, %105
+	%94 = load %ast.AstNode** %lhs
+	%95 = getelementptr %ast.AstNode* %94, i32 0, i32 8
+	%96 = load %type.TypeNode** %95
+	%97 = getelementptr %type.TypeNode* %96, i32 0, i32 16
+	%98 = load i8* %97
+	%99 = load %target.ModelT** @target_Target
+	%100 = getelementptr %target.ModelT* %99, i32 0, i32 0
+	%101 = load i8* %100
+	%102 = icmp ne i8 %98, %101
 	br label %L.17
 L.17:
-	%107 = phi i1 [ false, %L.14 ], [ %106, %L.16 ]
-	br i1 %107, label %L.19, label %L.18
+	%103 = phi i1 [ false, %L.14 ], [ %102, %L.16 ]
+	br i1 %103, label %L.19, label %L.18
 L.19:
-	%108 = load %ast.AstNode** %rhs
-	%109 = getelementptr %ast.AstNode* %108, i32 0, i32 8
-	%110 = load %type.TypeNode** %109
-	%111 = load %ast.AstNode** %rhs
-	%112 = call %ast.AstNode* @ast_New1(i8 32, %type.TypeNode* %110, %ast.AstNode* %111)
-	store %ast.AstNode* %112, %ast.AstNode** %rhs
+	%104 = load %ast.AstNode** %rhs
+	%105 = getelementptr %ast.AstNode* %104, i32 0, i32 8
+	%106 = load %type.TypeNode** %105
+	%107 = load %ast.AstNode** %rhs
+	%108 = call %ast.AstNode* @ast_New1(i8 32, %type.TypeNode* %106, %ast.AstNode* %107)
+	store %ast.AstNode* %108, %ast.AstNode** %rhs
 	br label %L.18
 L.18:
-	%113 = load %ast.AstNode** %lhs
-	%114 = bitcast %ast.AstNode* %113 to %ast.AstNode*
-	%115 = load %ast.AstNode** %store
-	%116 = getelementptr %ast.AstNode* %115, i32 0, i32 11
-	%117 = load i16* %i
-	%118 = zext i16 %117 to i32
-	%119 = getelementptr [0 x %ast.AstNode*]* %116, i32 0, i32 %118
-	store %ast.AstNode* %114, %ast.AstNode** %119
-	%120 = load %ast.AstNode** %rhs
-	%121 = bitcast %ast.AstNode* %120 to %ast.AstNode*
-	%122 = load %ast.AstNode** %store
-	%123 = getelementptr %ast.AstNode* %122, i32 0, i32 11
-	%124 = load i16* %n
-	%125 = load i16* %i
-	%126 = add i16 %124, %125
-	%127 = zext i16 %126 to i32
-	%128 = getelementptr [0 x %ast.AstNode*]* %123, i32 0, i32 %127
-	store %ast.AstNode* %121, %ast.AstNode** %128
+	%109 = load %ast.AstNode** %lhs
+	%110 = bitcast %ast.AstNode* %109 to %ast.AstNode*
+	%111 = load %ast.AstNode** %store
+	%112 = getelementptr %ast.AstNode* %111, i32 0, i32 11
+	%113 = load i16* %i
+	%114 = zext i16 %113 to i32
+	%115 = getelementptr [0 x %ast.AstNode*]* %112, i32 0, i32 %114
+	store %ast.AstNode* %110, %ast.AstNode** %115
+	%116 = load %ast.AstNode** %rhs
+	%117 = bitcast %ast.AstNode* %116 to %ast.AstNode*
+	%118 = load %ast.AstNode** %store
+	%119 = getelementptr %ast.AstNode* %118, i32 0, i32 11
+	%120 = load i16* %n
+	%121 = load i16* %i
+	%122 = add i16 %120, %121
+	%123 = zext i16 %122 to i32
+	%124 = getelementptr [0 x %ast.AstNode*]* %119, i32 0, i32 %123
+	store %ast.AstNode* %117, %ast.AstNode** %124
 	br label %L.10
 L.10:
-	%129 = load %ast.AstNode** %rhs
-	%130 = call i8 @llvm_GenSub(%ast.AstNode* %129)
-	%131 = load i16* %i
-	%132 = add i16 %131, 1
-	store i16 %132, i16* %i
+	%125 = load %ast.AstNode** %rhs
+	%126 = call i8 @llvm_GenSub(%ast.AstNode* %125)
+	%127 = load i16* %i
+	%128 = add i16 %127, 1
+	store i16 %128, i16* %i
 	br label %L.1
 L.2:
 	store i16 0, i16* %i
 	br label %L.20
 L.20:
-	%133 = load i16* %i
-	%134 = load i16* %n
-	%135 = icmp ult i16 %133, %134
-	%136 = xor i1 %135, true
-	br i1 %136, label %L.21, label %L.22
+	%129 = load i16* %i
+	%130 = load i16* %n
+	%131 = icmp ult i16 %129, %130
+	%132 = xor i1 %131, true
+	br i1 %132, label %L.21, label %L.22
 L.22:
-	%137 = load %ast.AstNode** %store
-	%138 = getelementptr %ast.AstNode* %137, i32 0, i32 11
-	%139 = load i16* %i
-	%140 = zext i16 %139 to i32
-	%141 = getelementptr [0 x %ast.AstNode*]* %138, i32 0, i32 %140
-	%142 = load %ast.AstNode** %141
-	%143 = bitcast %ast.AstNode* %142 to %ast.AstNode*
-	store %ast.AstNode* %143, %ast.AstNode** %lhs
-	%144 = load %ast.AstNode** %store
-	%145 = getelementptr %ast.AstNode* %144, i32 0, i32 11
-	%146 = load i16* %n
-	%147 = load i16* %i
-	%148 = add i16 %146, %147
-	%149 = zext i16 %148 to i32
-	%150 = getelementptr [0 x %ast.AstNode*]* %145, i32 0, i32 %149
-	%151 = load %ast.AstNode** %150
-	%152 = bitcast %ast.AstNode* %151 to %ast.AstNode*
-	store %ast.AstNode* %152, %ast.AstNode** %rhs
-	%153 = load %ast.AstNode** %lhs
-	%154 = icmp ne %ast.AstNode* %153, null
-	br i1 %154, label %L.24, label %L.23
+	%133 = load %ast.AstNode** %store
+	%134 = getelementptr %ast.AstNode* %133, i32 0, i32 11
+	%135 = load i16* %i
+	%136 = zext i16 %135 to i32
+	%137 = getelementptr [0 x %ast.AstNode*]* %134, i32 0, i32 %136
+	%138 = load %ast.AstNode** %137
+	%139 = bitcast %ast.AstNode* %138 to %ast.AstNode*
+	store %ast.AstNode* %139, %ast.AstNode** %lhs
+	%140 = load %ast.AstNode** %store
+	%141 = getelementptr %ast.AstNode* %140, i32 0, i32 11
+	%142 = load i16* %n
+	%143 = load i16* %i
+	%144 = add i16 %142, %143
+	%145 = zext i16 %144 to i32
+	%146 = getelementptr [0 x %ast.AstNode*]* %141, i32 0, i32 %145
+	%147 = load %ast.AstNode** %146
+	%148 = bitcast %ast.AstNode* %147 to %ast.AstNode*
+	store %ast.AstNode* %148, %ast.AstNode** %rhs
+	%149 = load %ast.AstNode** %lhs
+	%150 = icmp ne %ast.AstNode* %149, null
+	br i1 %150, label %L.24, label %L.23
 L.24:
-	%155 = load %ast.AstNode** %lhs
-	%156 = call i8 @llvm_GenSub(%ast.AstNode* %155)
-	%157 = load %bout.BufIO** @llvm_f
-	%158 = bitcast %bout.BufIO* %157 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %158, i8 9)
-	%159 = load %bout.BufIO** @llvm_f
-	%160 = bitcast %bout.BufIO* %159 to %bout.BufIO*
-	%161 = getelementptr [7 x i8]* @S.805
-	%162 = bitcast [7 x i8]* %161 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %160, [0 x i8]* %162)
-	%163 = load %ast.AstNode** %lhs
-	%164 = getelementptr %ast.AstNode* %163, i32 0, i32 8
-	%165 = load %type.TypeNode** %164
-	%166 = getelementptr %type.TypeNode* %165, i32 0, i32 0
-	%167 = load %type.TypeNode** %166
-	%168 = getelementptr %type.TypeNode* %167, i32 0, i32 27
-	%169 = load i8* %168
-	%170 = icmp ne i8 %169, 0
-	br i1 %170, label %L.26, label %L.25
+	%151 = load %ast.AstNode** %lhs
+	%152 = call i8 @llvm_GenSub(%ast.AstNode* %151)
+	%153 = load %bout.BufIO** @llvm_f
+	%154 = bitcast %bout.BufIO* %153 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %154, i8 9)
+	%155 = load %bout.BufIO** @llvm_f
+	%156 = bitcast %bout.BufIO* %155 to %bout.BufIO*
+	%157 = getelementptr [7 x i8]* @S.820
+	%158 = bitcast [7 x i8]* %157 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %156, [0 x i8]* %158)
+	%159 = load %ast.AstNode** %lhs
+	%160 = getelementptr %ast.AstNode* %159, i32 0, i32 8
+	%161 = load %type.TypeNode** %160
+	%162 = getelementptr %type.TypeNode* %161, i32 0, i32 0
+	%163 = load %type.TypeNode** %162
+	%164 = getelementptr %type.TypeNode* %163, i32 0, i32 27
+	%165 = load i8* %164
+	%166 = icmp ne i8 %165, 0
+	br i1 %166, label %L.26, label %L.25
 L.26:
-	%171 = load %bout.BufIO** @llvm_f
-	%172 = bitcast %bout.BufIO* %171 to %bout.BufIO*
-	%173 = getelementptr [10 x i8]* @S.806
-	%174 = bitcast [10 x i8]* %173 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %172, [0 x i8]* %174)
+	%167 = load %bout.BufIO** @llvm_f
+	%168 = bitcast %bout.BufIO* %167 to %bout.BufIO*
+	%169 = getelementptr [10 x i8]* @S.821
+	%170 = bitcast [10 x i8]* %169 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %168, [0 x i8]* %170)
 	br label %L.25
 L.25:
-	%175 = load %ast.AstNode** %rhs
-	call void @llvm_NodeType(%ast.AstNode* %175)
-	%176 = load %bout.BufIO** @llvm_f
-	%177 = bitcast %bout.BufIO* %176 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %177, i8 32)
-	%178 = load %ast.AstNode** %rhs
-	call void @llvm_NodeSrc(%ast.AstNode* %178)
-	%179 = getelementptr [8 x i8]* @S.807
-	%180 = bitcast [8 x i8]* %179 to [0 x i8]*
-	%181 = load %ast.AstNode** %lhs
-	call void @llvm_Print([0 x i8]* %180, %ast.AstNode* %181)
-	%182 = load %ast.AstNode** %lhs
-	%183 = getelementptr %ast.AstNode* %182, i32 0, i32 8
-	%184 = load %type.TypeNode** %183
-	%185 = getelementptr %type.TypeNode* %184, i32 0, i32 0
-	%186 = load %type.TypeNode** %185
-	%187 = getelementptr %type.TypeNode* %186, i32 0, i32 22
-	%188 = load i8* %187
-	%189 = icmp ne i8 %188, 0
-	br i1 %189, label %L.28, label %L.27
+	%171 = load %ast.AstNode** %rhs
+	call void @llvm_NodeType(%ast.AstNode* %171)
+	%172 = load %bout.BufIO** @llvm_f
+	%173 = bitcast %bout.BufIO* %172 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %173, i8 32)
+	%174 = load %ast.AstNode** %rhs
+	call void @llvm_NodeSrc(%ast.AstNode* %174)
+	%175 = getelementptr [8 x i8]* @S.822
+	%176 = bitcast [8 x i8]* %175 to [0 x i8]*
+	%177 = load %ast.AstNode** %lhs
+	call void @llvm_Print([0 x i8]* %176, %ast.AstNode* %177)
+	%178 = load %ast.AstNode** %lhs
+	%179 = getelementptr %ast.AstNode* %178, i32 0, i32 8
+	%180 = load %type.TypeNode** %179
+	%181 = getelementptr %type.TypeNode* %180, i32 0, i32 0
+	%182 = load %type.TypeNode** %181
+	%183 = getelementptr %type.TypeNode* %182, i32 0, i32 22
+	%184 = load i8* %183
+	%185 = icmp ne i8 %184, 0
+	br i1 %185, label %L.28, label %L.27
 L.28:
+	%186 = load %bout.BufIO** @llvm_f
+	%187 = bitcast %bout.BufIO* %186 to %bout.BufIO*
+	%188 = getelementptr [9 x i8]* @S.823
+	%189 = bitcast [9 x i8]* %188 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %187, [0 x i8]* %189)
 	%190 = load %bout.BufIO** @llvm_f
 	%191 = bitcast %bout.BufIO* %190 to %bout.BufIO*
-	%192 = getelementptr [9 x i8]* @S.808
-	%193 = bitcast [9 x i8]* %192 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %191, [0 x i8]* %193)
-	%194 = load %bout.BufIO** @llvm_f
-	%195 = bitcast %bout.BufIO* %194 to %bout.BufIO*
-	%196 = load %ast.AstNode** %lhs
-	%197 = getelementptr %ast.AstNode* %196, i32 0, i32 8
-	%198 = load %type.TypeNode** %197
-	%199 = getelementptr %type.TypeNode* %198, i32 0, i32 0
-	%200 = load %type.TypeNode** %199
-	%201 = getelementptr %type.TypeNode* %200, i32 0, i32 11
-	%202 = load i32* %201
-	%203 = zext i32 %202 to i64
-	%204 = load %target.ModelT** @target_Target
-	%205 = getelementptr %target.ModelT* %204, i32 0, i32 2
-	%206 = load i8* %205
-	%207 = zext i8 %206 to i64
-	%208 = udiv i64 %203, %207
-	call void @bout_BufIO_uint64(%bout.BufIO* %195, i64 %208)
+	%192 = load %ast.AstNode** %lhs
+	%193 = getelementptr %ast.AstNode* %192, i32 0, i32 8
+	%194 = load %type.TypeNode** %193
+	%195 = getelementptr %type.TypeNode* %194, i32 0, i32 0
+	%196 = load %type.TypeNode** %195
+	%197 = getelementptr %type.TypeNode* %196, i32 0, i32 11
+	%198 = load i32* %197
+	%199 = zext i32 %198 to i64
+	%200 = load %target.ModelT** @target_Target
+	%201 = getelementptr %target.ModelT* %200, i32 0, i32 2
+	%202 = load i8* %201
+	%203 = zext i8 %202 to i64
+	%204 = udiv i64 %199, %203
+	call void @bout_BufIO_uint64(%bout.BufIO* %191, i64 %204)
 	br label %L.27
 L.27:
-	%209 = load %ast.AstNode** %store
-	call void @llvm_PEndLine(%ast.AstNode* %209)
+	%205 = load %ast.AstNode** %store
+	call void @llvm_PEndLine(%ast.AstNode* %205)
 	br label %L.23
 L.23:
-	%210 = load i16* %i
-	%211 = add i16 %210, 1
-	store i16 %211, i16* %i
+	%206 = load i16* %i
+	%207 = add i16 %206, 1
+	store i16 %207, i16* %i
 	br label %L.20
 L.21:
 	br label %return
 return:
 	ret void
 }
-@S.809 = internal constant [19 x i8] c"\09store %T %N, %T* \00"
-@S.810 = internal constant [18 x i8] c"\09br label %return\00"
+@S.824 = internal constant [19 x i8] c"\09store %T %N, %T* \00"
+@S.825 = internal constant [18 x i8] c"\09br label %return\00"
 define internal zeroext i8 @llvm_Return(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -35007,7 +36687,7 @@ L.5:
 	store %ast.AstNode* %16, %ast.AstNode** %rnode
 	%17 = load %ast.AstNode** %rnode
 	%18 = call i8 @llvm_GenSub(%ast.AstNode* %17)
-	%19 = getelementptr [19 x i8]* @S.809
+	%19 = getelementptr [19 x i8]* @S.824
 	%20 = bitcast [19 x i8]* %19 to [0 x i8]*
 	%21 = load %ast.AstNode** %rnode
 	call void @llvm_Print([0 x i8]* %20, %ast.AstNode* %21)
@@ -35033,7 +36713,7 @@ L.4:
 L.1:
 	%34 = load %bout.BufIO** @llvm_f
 	%35 = bitcast %bout.BufIO* %34 to %bout.BufIO*
-	%36 = getelementptr [18 x i8]* @S.810
+	%36 = getelementptr [18 x i8]* @S.825
 	%37 = bitcast [18 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	%38 = load %ast.AstNode** %node
@@ -35044,7 +36724,7 @@ return:
 	%39 = load i8* %rv.0
 	ret i8 %39
 }
-@S.811 = internal constant [38 x i8] c"\09%N = select i1 %0N, %1T %1N, %2T %2N\00"
+@S.826 = internal constant [38 x i8] c"\09%N = select i1 %0N, %1T %1N, %2T %2N\00"
 define internal void @llvm_IfExpr(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -35074,7 +36754,7 @@ L.0:
 	%21 = load i16* @llvm_Tseqno
 	%22 = add i16 %21, 1
 	store i16 %22, i16* @llvm_Tseqno
-	%23 = getelementptr [38 x i8]* @S.811
+	%23 = getelementptr [38 x i8]* @S.826
 	%24 = bitcast [38 x i8]* %23 to [0 x i8]*
 	%25 = load %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %24, %ast.AstNode* %25)
@@ -35084,47 +36764,47 @@ L.0:
 return:
 	ret void
 }
-@S.812 = internal constant [28 x i8] c"\09%N = getelementptr %B %0N\0A\00"
-@S.813 = internal constant [40 x i8] c"\09%N = getelementptr %0B %0N, %W 0, i32 \00"
-@S.814 = internal constant [44 x i8] c"\09%N = getelementptr %0B %0N, %W 0, %1T %1N\0A\00"
-@S.815 = internal constant [44 x i8] c"\09%N = getelementptr %0T %0N, %W 0, %1T %1N\0A\00"
-@S.816 = internal constant [25 x i8] c" = bitcast %C* %N to %T\0A\00"
-@S.817 = internal constant [29 x i8] c"\09%N = bitcast %0B %0N to %B\0A\00"
-@S.818 = internal constant [30 x i8] c"\09%N = inttoptr %0T %0N to %T\0A\00"
-@S.819 = internal constant [30 x i8] c"\09%N = ptrtoint %0T %0N to %T\0A\00"
-@S.820 = internal constant [29 x i8] c"\09%N = bitcast %0B %0N to %B\0A\00"
-@S.821 = internal constant [5 x i8] c"zext\00"
-@S.822 = internal constant [5 x i8] c"sext\00"
-@S.823 = internal constant [6 x i8] c"trunc\00"
-@S.824 = internal constant [4 x i8] c"add\00"
-@S.825 = internal constant [4 x i8] c"sub\00"
-@S.826 = internal constant [4 x i8] c"mul\00"
-@S.827 = internal constant [5 x i8] c"udiv\00"
-@S.828 = internal constant [5 x i8] c"sdiv\00"
-@S.829 = internal constant [5 x i8] c"urem\00"
-@S.830 = internal constant [5 x i8] c"srem\00"
-@S.831 = internal constant [4 x i8] c"shl\00"
-@S.832 = internal constant [5 x i8] c"lshr\00"
-@S.833 = internal constant [5 x i8] c"ashr\00"
-@S.834 = internal constant [5 x i8] c"fadd\00"
-@S.835 = internal constant [5 x i8] c"fsub\00"
-@S.836 = internal constant [5 x i8] c"fmul\00"
-@S.837 = internal constant [5 x i8] c"fdiv\00"
-@S.838 = internal constant [5 x i8] c"frem\00"
-@S.839 = internal constant [8 x i8] c"icmp eq\00"
-@S.840 = internal constant [8 x i8] c"icmp ne\00"
-@S.841 = internal constant [9 x i8] c"icmp ugt\00"
-@S.842 = internal constant [9 x i8] c"icmp ult\00"
-@S.843 = internal constant [9 x i8] c"icmp uge\00"
-@S.844 = internal constant [9 x i8] c"icmp ule\00"
-@S.845 = internal constant [9 x i8] c"icmp sgt\00"
-@S.846 = internal constant [9 x i8] c"icmp slt\00"
-@S.847 = internal constant [9 x i8] c"icmp sge\00"
-@S.848 = internal constant [9 x i8] c"icmp sle\00"
-@S.849 = internal constant [4 x i8] c"and\00"
-@S.850 = internal constant [3 x i8] c"or\00"
-@S.851 = internal constant [4 x i8] c"xor\00"
-@S.852 = internal constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
+@S.827 = internal constant [28 x i8] c"\09%N = getelementptr %K %0N\0A\00"
+@S.828 = internal constant [40 x i8] c"\09%N = getelementptr %0K %0N, %W 0, i32 \00"
+@S.829 = internal constant [44 x i8] c"\09%N = getelementptr %0K %0N, %W 0, %1T %1N\0A\00"
+@S.830 = internal constant [44 x i8] c"\09%N = getelementptr %0T %0N, %W 0, %1T %1N\0A\00"
+@S.831 = internal constant [27 x i8] c" = bitcast %**K* %N to %T\0A\00"
+@S.832 = internal constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
+@S.833 = internal constant [30 x i8] c"\09%N = inttoptr %0T %0N to %T\0A\00"
+@S.834 = internal constant [30 x i8] c"\09%N = ptrtoint %0T %0N to %T\0A\00"
+@S.835 = internal constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
+@S.836 = internal constant [5 x i8] c"zext\00"
+@S.837 = internal constant [5 x i8] c"sext\00"
+@S.838 = internal constant [6 x i8] c"trunc\00"
+@S.839 = internal constant [4 x i8] c"add\00"
+@S.840 = internal constant [4 x i8] c"sub\00"
+@S.841 = internal constant [4 x i8] c"mul\00"
+@S.842 = internal constant [5 x i8] c"udiv\00"
+@S.843 = internal constant [5 x i8] c"sdiv\00"
+@S.844 = internal constant [5 x i8] c"urem\00"
+@S.845 = internal constant [5 x i8] c"srem\00"
+@S.846 = internal constant [4 x i8] c"shl\00"
+@S.847 = internal constant [5 x i8] c"lshr\00"
+@S.848 = internal constant [5 x i8] c"ashr\00"
+@S.849 = internal constant [5 x i8] c"fadd\00"
+@S.850 = internal constant [5 x i8] c"fsub\00"
+@S.851 = internal constant [5 x i8] c"fmul\00"
+@S.852 = internal constant [5 x i8] c"fdiv\00"
+@S.853 = internal constant [5 x i8] c"frem\00"
+@S.854 = internal constant [8 x i8] c"icmp eq\00"
+@S.855 = internal constant [8 x i8] c"icmp ne\00"
+@S.856 = internal constant [9 x i8] c"icmp ugt\00"
+@S.857 = internal constant [9 x i8] c"icmp ult\00"
+@S.858 = internal constant [9 x i8] c"icmp uge\00"
+@S.859 = internal constant [9 x i8] c"icmp ule\00"
+@S.860 = internal constant [9 x i8] c"icmp sgt\00"
+@S.861 = internal constant [9 x i8] c"icmp slt\00"
+@S.862 = internal constant [9 x i8] c"icmp sge\00"
+@S.863 = internal constant [9 x i8] c"icmp sle\00"
+@S.864 = internal constant [4 x i8] c"and\00"
+@S.865 = internal constant [3 x i8] c"or\00"
+@S.866 = internal constant [4 x i8] c"xor\00"
+@S.867 = internal constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
 define internal zeroext i8 @llvm_GenSub(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -35158,7 +36838,7 @@ L.3:
 		i32 1, label %L.7
 		i32 3, label %L.8
 		i32 4, label %L.9
-		i32 88, label %L.10
+		i32 91, label %L.10
 		i32 5, label %L.11
 		i32 6, label %L.12
 		i32 12, label %L.13
@@ -35171,7 +36851,7 @@ L.3:
 		i32 25, label %L.15
 		i32 21, label %L.16
 		i32 22, label %L.17
-		i32 87, label %L.18
+		i32 90, label %L.18
 		i32 26, label %L.19
 		i32 28, label %L.20
 		i32 27, label %L.21
@@ -35191,50 +36871,53 @@ L.3:
 		i32 38, label %L.30
 		i32 39, label %L.30
 		i32 40, label %L.30
-		i32 41, label %L.31
-		i32 42, label %L.31
+		i32 41, label %L.30
+		i32 42, label %L.30
 		i32 43, label %L.31
 		i32 44, label %L.31
 		i32 45, label %L.31
-		i32 46, label %L.32
-		i32 47, label %L.33
-		i32 48, label %L.34
-		i32 49, label %L.35
-		i32 50, label %L.36
-		i32 65, label %L.37
-		i32 67, label %L.37
-		i32 66, label %L.38
-		i32 68, label %L.39
-		i32 75, label %L.40
-		i32 76, label %L.41
-		i32 77, label %L.42
-		i32 78, label %L.43
-		i32 79, label %L.44
-		i32 51, label %L.45
-		i32 52, label %L.46
-		i32 54, label %L.47
-		i32 53, label %L.48
+		i32 46, label %L.31
+		i32 47, label %L.31
+		i32 48, label %L.32
+		i32 49, label %L.33
+		i32 50, label %L.34
+		i32 51, label %L.35
+		i32 52, label %L.36
+		i32 53, label %L.37
+		i32 68, label %L.38
+		i32 70, label %L.38
+		i32 69, label %L.39
+		i32 71, label %L.40
+		i32 78, label %L.41
+		i32 79, label %L.42
+		i32 80, label %L.43
+		i32 81, label %L.44
+		i32 82, label %L.45
+		i32 54, label %L.46
+		i32 55, label %L.47
+		i32 57, label %L.48
 		i32 56, label %L.49
-		i32 55, label %L.50
+		i32 59, label %L.50
 		i32 58, label %L.51
-		i32 57, label %L.52
+		i32 61, label %L.52
 		i32 60, label %L.53
-		i32 59, label %L.54
-		i32 69, label %L.55
-		i32 70, label %L.56
-		i32 71, label %L.57
+		i32 63, label %L.54
+		i32 62, label %L.55
+		i32 72, label %L.56
+		i32 73, label %L.57
 		i32 74, label %L.58
-		i32 73, label %L.59
-		i32 72, label %L.60
-		i32 80, label %L.61
-		i32 18, label %L.62
-		i32 19, label %L.63
-		i32 20, label %L.64
-		i32 84, label %L.65
-		i32 85, label %L.66
-		i32 82, label %L.67
-		i32 83, label %L.68
-		i32 81, label %L.69
+		i32 77, label %L.59
+		i32 76, label %L.60
+		i32 75, label %L.61
+		i32 83, label %L.62
+		i32 18, label %L.63
+		i32 19, label %L.64
+		i32 20, label %L.65
+		i32 87, label %L.66
+		i32 88, label %L.67
+		i32 85, label %L.68
+		i32 86, label %L.69
+		i32 84, label %L.70
 	]
 L.7:
 	%12 = load %ast.AstNode** %node
@@ -35257,15 +36940,15 @@ L.8:
 	%26 = getelementptr %A.3* @feature, i32 0, i32 3
 	%27 = load i8* %26
 	%28 = icmp ne i8 %27, 0
-	br i1 %28, label %L.71, label %L.70
-L.71:
+	br i1 %28, label %L.72, label %L.71
+L.72:
 	%29 = load %ast.AstNode** %node
 	%30 = getelementptr %ast.AstNode* %29, i32 0, i32 9
 	%31 = load %symb.SymbNode** %30
 	%32 = getelementptr %symb.SymbNode* %31
 	call void @llvmdb_FileStart(%symb.SymbNode* %32)
-	br label %L.70
-L.70:
+	br label %L.71
+L.71:
 	%33 = load %ast.AstNode** %node
 	%34 = getelementptr %ast.AstNode* %33, i32 0, i32 11
 	%35 = getelementptr [0 x %ast.AstNode*]* %34, i32 0, i32 0
@@ -35275,31 +36958,31 @@ L.70:
 	%39 = getelementptr %A.3* @feature, i32 0, i32 3
 	%40 = load i8* %39
 	%41 = icmp ne i8 %40, 0
-	br i1 %41, label %L.73, label %L.72
-L.73:
+	br i1 %41, label %L.74, label %L.73
+L.74:
 	%42 = load %ast.AstNode** %node
 	%43 = getelementptr %ast.AstNode* %42, i32 0, i32 9
 	%44 = load %symb.SymbNode** %43
 	%45 = getelementptr %symb.SymbNode* %44
 	call void @llvmdb_FileFinish(%symb.SymbNode* %45)
-	br label %L.72
-L.72:
+	br label %L.73
+L.73:
 	br label %L.6
 L.9:
 	%46 = getelementptr %A.3* @feature, i32 0, i32 3
 	%47 = load i8* %46
 	%48 = icmp ne i8 %47, 0
-	br i1 %48, label %L.75, label %L.74
-L.75:
+	br i1 %48, label %L.76, label %L.75
+L.76:
 	%49 = load %ast.AstNode** %node
 	%50 = getelementptr %ast.AstNode* %49, i32 0, i32 9
 	%51 = load %symb.SymbNode** %50
-	%52 = getelementptr %symb.SymbNode* %51, i32 0, i32 21
+	%52 = getelementptr %symb.SymbNode* %51, i32 0, i32 22
 	%53 = getelementptr [0 x i8]* %52
 	%54 = bitcast [0 x i8]* %53 to [0 x i8]*
 	call void @llvmdb_PackageStart([0 x i8]* %54)
-	br label %L.74
-L.74:
+	br label %L.75
+L.75:
 	%55 = load %ast.AstNode** %node
 	%56 = getelementptr %ast.AstNode* %55, i32 0, i32 11
 	%57 = getelementptr [0 x %ast.AstNode*]* %56, i32 0, i32 0
@@ -35309,622 +36992,629 @@ L.74:
 	%61 = getelementptr %A.3* @feature, i32 0, i32 3
 	%62 = load i8* %61
 	%63 = icmp ne i8 %62, 0
-	br i1 %63, label %L.77, label %L.76
-L.77:
+	br i1 %63, label %L.78, label %L.77
+L.78:
 	call void @llvmdb_PackageEnd()
-	br label %L.76
-L.76:
+	br label %L.77
+L.77:
 	br label %L.6
 L.10:
 	%64 = getelementptr %A.3* @feature, i32 0, i32 3
 	%65 = load i8* %64
 	%66 = icmp ne i8 %65, 0
-	br i1 %66, label %L.79, label %L.78
-L.79:
+	br i1 %66, label %L.80, label %L.79
+L.80:
 	%67 = load %ast.AstNode** %node
 	%68 = getelementptr %ast.AstNode* %67, i32 0, i32 9
 	%69 = load %symb.SymbNode** %68
 	%70 = getelementptr %symb.SymbNode* %69
 	call void @llvmdb_ProcStart(%symb.SymbNode* %70)
-	br label %L.78
-L.78:
+	br label %L.79
+L.79:
 	%71 = load %ast.AstNode** %node
 	call void @llvm_Procedure(%ast.AstNode* %71)
 	%72 = getelementptr %A.3* @feature, i32 0, i32 3
 	%73 = load i8* %72
 	%74 = icmp ne i8 %73, 0
-	br i1 %74, label %L.81, label %L.80
-L.81:
+	br i1 %74, label %L.82, label %L.81
+L.82:
 	%75 = load %ast.AstNode** %node
 	%76 = getelementptr %ast.AstNode* %75, i32 0, i32 9
 	%77 = load %symb.SymbNode** %76
 	%78 = getelementptr %symb.SymbNode* %77
 	call void @llvmdb_ProcFinish(%symb.SymbNode* %78)
-	br label %L.80
-L.80:
+	br label %L.81
+L.81:
+	%79 = load %bout.BufIO** @llvm_f
+	%80 = bitcast %bout.BufIO* %79 to %bout.BufIO*
+	call void @bout_BufIO_flush(%bout.BufIO* %80)
 	br label %L.6
 L.11:
-	%79 = load %ast.AstNode** %node
-	call void @llvm_DclVar(%ast.AstNode* %79)
+	%81 = load %ast.AstNode** %node
+	call void @llvm_DclVar(%ast.AstNode* %81)
 	br label %L.6
 L.12:
-	%80 = load %ast.AstNode** %node
-	call void @llvm_DclCon(%ast.AstNode* %80)
+	%82 = load %ast.AstNode** %node
+	call void @llvm_DclCon(%ast.AstNode* %82)
 	br label %L.6
 L.13:
 	br label %L.6
 L.14:
-	%81 = load %ast.AstNode** %node
-	call void @llvm_Copy(%ast.AstNode* %81)
+	%83 = load %ast.AstNode** %node
+	call void @llvm_Copy(%ast.AstNode* %83)
 	br label %L.6
 L.15:
-	%82 = load %ast.AstNode** %node
-	%83 = call i8 @llvm_ArrayCompare(%ast.AstNode* %82)
-	store i8 %83, i8* %term
+	%84 = load %ast.AstNode** %node
+	%85 = call i8 @llvm_ArrayCompare(%ast.AstNode* %84)
+	store i8 %85, i8* %term
 	br label %L.6
 L.16:
-	%84 = load %ast.AstNode** %node
-	call void @llvm_Set(%ast.AstNode* %84)
+	%86 = load %ast.AstNode** %node
+	call void @llvm_Set(%ast.AstNode* %86)
 	br label %L.6
 L.17:
-	%85 = load %ast.AstNode** %node
-	call void @llvm_Copy(%ast.AstNode* %85)
+	%87 = load %ast.AstNode** %node
+	call void @llvm_Copy(%ast.AstNode* %87)
 	br label %L.6
 L.18:
-	%86 = load %ast.AstNode** %node
-	%87 = call i8 @llvm_Return(%ast.AstNode* %86)
-	store i8 %87, i8* %term
+	%88 = load %ast.AstNode** %node
+	%89 = call i8 @llvm_Return(%ast.AstNode* %88)
+	store i8 %89, i8* %term
 	br label %L.6
 L.19:
-	%88 = load %ast.AstNode** %node
-	call void @llvm_GetRV(%ast.AstNode* %88)
+	%90 = load %ast.AstNode** %node
+	call void @llvm_GetRV(%ast.AstNode* %90)
 	br label %L.6
 L.20:
-	%89 = load %ast.AstNode** %node
-	call void @llvm_Store(%ast.AstNode* %89)
+	%91 = load %ast.AstNode** %node
+	call void @llvm_Store(%ast.AstNode* %91)
 	br label %L.6
 L.21:
-	%90 = load %ast.AstNode** %node
-	call void @llvm_Load(%ast.AstNode* %90)
+	%92 = load %ast.AstNode** %node
+	call void @llvm_Load(%ast.AstNode* %92)
 	br label %L.6
 L.22:
-	%91 = load %ast.AstNode** %node
-	%92 = getelementptr %ast.AstNode* %91, i32 0, i32 11
-	%93 = getelementptr [0 x %ast.AstNode*]* %92, i32 0, i32 0
-	%94 = load %ast.AstNode** %93
-	%95 = bitcast %ast.AstNode* %94 to %ast.AstNode*
-	%96 = call i8 @llvm_GenSub(%ast.AstNode* %95)
-	%97 = load i16* @llvm_Tseqno
-	%98 = load %ast.AstNode** %node
-	%99 = getelementptr %ast.AstNode* %98, i32 0, i32 6
-	store i16 %97, i16* %99
-	%100 = load i16* @llvm_Tseqno
-	%101 = add i16 %100, 1
-	store i16 %101, i16* @llvm_Tseqno
-	%102 = getelementptr [28 x i8]* @S.812
-	%103 = bitcast [28 x i8]* %102 to [0 x i8]*
-	%104 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %103, %ast.AstNode* %104)
+	%93 = load %ast.AstNode** %node
+	%94 = getelementptr %ast.AstNode* %93, i32 0, i32 11
+	%95 = getelementptr [0 x %ast.AstNode*]* %94, i32 0, i32 0
+	%96 = load %ast.AstNode** %95
+	%97 = bitcast %ast.AstNode* %96 to %ast.AstNode*
+	%98 = call i8 @llvm_GenSub(%ast.AstNode* %97)
+	%99 = load i16* @llvm_Tseqno
+	%100 = load %ast.AstNode** %node
+	%101 = getelementptr %ast.AstNode* %100, i32 0, i32 6
+	store i16 %99, i16* %101
+	%102 = load i16* @llvm_Tseqno
+	%103 = add i16 %102, 1
+	store i16 %103, i16* @llvm_Tseqno
+	%104 = getelementptr [28 x i8]* @S.827
+	%105 = bitcast [28 x i8]* %104 to [0 x i8]*
+	%106 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %105, %ast.AstNode* %106)
 	br label %L.6
 L.23:
-	%105 = load %ast.AstNode** %node
-	%106 = getelementptr %ast.AstNode* %105, i32 0, i32 11
-	%107 = getelementptr [0 x %ast.AstNode*]* %106, i32 0, i32 0
-	%108 = load %ast.AstNode** %107
-	%109 = bitcast %ast.AstNode* %108 to %ast.AstNode*
-	%110 = call i8 @llvm_GenSub(%ast.AstNode* %109)
-	%111 = load i16* @llvm_Tseqno
-	%112 = load %ast.AstNode** %node
-	%113 = getelementptr %ast.AstNode* %112, i32 0, i32 6
-	store i16 %111, i16* %113
-	%114 = load i16* @llvm_Tseqno
-	%115 = add i16 %114, 1
-	store i16 %115, i16* @llvm_Tseqno
-	%116 = getelementptr [40 x i8]* @S.813
-	%117 = bitcast [40 x i8]* %116 to [0 x i8]*
-	%118 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %117, %ast.AstNode* %118)
-	%119 = load %bout.BufIO** @llvm_f
-	%120 = bitcast %bout.BufIO* %119 to %bout.BufIO*
-	%121 = load %ast.AstNode** %node
-	%122 = getelementptr %ast.AstNode* %121, i32 0, i32 10
-	%123 = load i64* %122
-	%124 = trunc i64 %123 to i32
-	call void @bout_BufIO_uint32(%bout.BufIO* %120, i32 %124)
-	%125 = load %bout.BufIO** @llvm_f
-	%126 = bitcast %bout.BufIO* %125 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %126)
+	%107 = load %ast.AstNode** %node
+	%108 = getelementptr %ast.AstNode* %107, i32 0, i32 11
+	%109 = getelementptr [0 x %ast.AstNode*]* %108, i32 0, i32 0
+	%110 = load %ast.AstNode** %109
+	%111 = bitcast %ast.AstNode* %110 to %ast.AstNode*
+	%112 = call i8 @llvm_GenSub(%ast.AstNode* %111)
+	%113 = load i16* @llvm_Tseqno
+	%114 = load %ast.AstNode** %node
+	%115 = getelementptr %ast.AstNode* %114, i32 0, i32 6
+	store i16 %113, i16* %115
+	%116 = load i16* @llvm_Tseqno
+	%117 = add i16 %116, 1
+	store i16 %117, i16* @llvm_Tseqno
+	%118 = getelementptr [40 x i8]* @S.828
+	%119 = bitcast [40 x i8]* %118 to [0 x i8]*
+	%120 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %119, %ast.AstNode* %120)
+	%121 = load %bout.BufIO** @llvm_f
+	%122 = bitcast %bout.BufIO* %121 to %bout.BufIO*
+	%123 = load %ast.AstNode** %node
+	%124 = getelementptr %ast.AstNode* %123, i32 0, i32 10
+	%125 = load i64* %124
+	%126 = trunc i64 %125 to i32
+	call void @bout_BufIO_uint32(%bout.BufIO* %122, i32 %126)
+	%127 = load %bout.BufIO** @llvm_f
+	%128 = bitcast %bout.BufIO* %127 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %128)
 	br label %L.6
 L.24:
-	%127 = load %ast.AstNode** %node
-	%128 = getelementptr %ast.AstNode* %127, i32 0, i32 11
-	%129 = getelementptr [0 x %ast.AstNode*]* %128, i32 0, i32 0
-	%130 = load %ast.AstNode** %129
-	%131 = bitcast %ast.AstNode* %130 to %ast.AstNode*
-	%132 = call i8 @llvm_GenSub(%ast.AstNode* %131)
-	%133 = load %ast.AstNode** %node
-	%134 = getelementptr %ast.AstNode* %133, i32 0, i32 11
-	%135 = getelementptr [0 x %ast.AstNode*]* %134, i32 0, i32 1
-	%136 = load %ast.AstNode** %135
-	%137 = bitcast %ast.AstNode* %136 to %ast.AstNode*
-	%138 = load %type.TypeNode** @type_wordtype
-	%139 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %137, %type.TypeNode* %138)
-	%140 = bitcast %ast.AstNode* %139 to %ast.AstNode*
-	%141 = load %ast.AstNode** %node
-	%142 = getelementptr %ast.AstNode* %141, i32 0, i32 11
-	%143 = getelementptr [0 x %ast.AstNode*]* %142, i32 0, i32 1
-	store %ast.AstNode* %140, %ast.AstNode** %143
-	%144 = load %ast.AstNode** %node
-	%145 = getelementptr %ast.AstNode* %144, i32 0, i32 11
-	%146 = getelementptr [0 x %ast.AstNode*]* %145, i32 0, i32 1
-	%147 = load %ast.AstNode** %146
-	%148 = bitcast %ast.AstNode* %147 to %ast.AstNode*
-	%149 = call i8 @llvm_GenSub(%ast.AstNode* %148)
-	%150 = load i16* @llvm_Tseqno
-	%151 = load %ast.AstNode** %node
-	%152 = getelementptr %ast.AstNode* %151, i32 0, i32 6
-	store i16 %150, i16* %152
-	%153 = load i16* @llvm_Tseqno
-	%154 = add i16 %153, 1
-	store i16 %154, i16* @llvm_Tseqno
-	%155 = getelementptr [44 x i8]* @S.814
-	%156 = bitcast [44 x i8]* %155 to [0 x i8]*
-	%157 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %156, %ast.AstNode* %157)
+	%129 = load %ast.AstNode** %node
+	%130 = getelementptr %ast.AstNode* %129, i32 0, i32 11
+	%131 = getelementptr [0 x %ast.AstNode*]* %130, i32 0, i32 0
+	%132 = load %ast.AstNode** %131
+	%133 = bitcast %ast.AstNode* %132 to %ast.AstNode*
+	%134 = call i8 @llvm_GenSub(%ast.AstNode* %133)
+	%135 = load %ast.AstNode** %node
+	%136 = getelementptr %ast.AstNode* %135, i32 0, i32 11
+	%137 = getelementptr [0 x %ast.AstNode*]* %136, i32 0, i32 1
+	%138 = load %ast.AstNode** %137
+	%139 = bitcast %ast.AstNode* %138 to %ast.AstNode*
+	%140 = load %type.TypeNode** @type_wordtype
+	%141 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %139, %type.TypeNode* %140)
+	%142 = bitcast %ast.AstNode* %141 to %ast.AstNode*
+	%143 = load %ast.AstNode** %node
+	%144 = getelementptr %ast.AstNode* %143, i32 0, i32 11
+	%145 = getelementptr [0 x %ast.AstNode*]* %144, i32 0, i32 1
+	store %ast.AstNode* %142, %ast.AstNode** %145
+	%146 = load %ast.AstNode** %node
+	%147 = getelementptr %ast.AstNode* %146, i32 0, i32 11
+	%148 = getelementptr [0 x %ast.AstNode*]* %147, i32 0, i32 1
+	%149 = load %ast.AstNode** %148
+	%150 = bitcast %ast.AstNode* %149 to %ast.AstNode*
+	%151 = call i8 @llvm_GenSub(%ast.AstNode* %150)
+	%152 = load i16* @llvm_Tseqno
+	%153 = load %ast.AstNode** %node
+	%154 = getelementptr %ast.AstNode* %153, i32 0, i32 6
+	store i16 %152, i16* %154
+	%155 = load i16* @llvm_Tseqno
+	%156 = add i16 %155, 1
+	store i16 %156, i16* @llvm_Tseqno
+	%157 = getelementptr [44 x i8]* @S.829
+	%158 = bitcast [44 x i8]* %157 to [0 x i8]*
+	%159 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %158, %ast.AstNode* %159)
 	br label %L.6
 L.25:
 	%nextseqno = alloca i16
-	%158 = load %ast.AstNode** %node
-	%159 = getelementptr %ast.AstNode* %158, i32 0, i32 11
-	%160 = getelementptr [0 x %ast.AstNode*]* %159, i32 0, i32 0
-	%161 = load %ast.AstNode** %160
-	%162 = bitcast %ast.AstNode* %161 to %ast.AstNode*
-	%163 = call i8 @llvm_GenSub(%ast.AstNode* %162)
-	%164 = load %ast.AstNode** %node
-	%165 = getelementptr %ast.AstNode* %164, i32 0, i32 11
-	%166 = getelementptr [0 x %ast.AstNode*]* %165, i32 0, i32 1
-	%167 = load %ast.AstNode** %166
-	%168 = bitcast %ast.AstNode* %167 to %ast.AstNode*
-	%169 = load %type.TypeNode** @type_wordtype
-	%170 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %168, %type.TypeNode* %169)
-	%171 = bitcast %ast.AstNode* %170 to %ast.AstNode*
-	%172 = load %ast.AstNode** %node
-	%173 = getelementptr %ast.AstNode* %172, i32 0, i32 11
-	%174 = getelementptr [0 x %ast.AstNode*]* %173, i32 0, i32 1
-	store %ast.AstNode* %171, %ast.AstNode** %174
-	%175 = load %ast.AstNode** %node
-	%176 = getelementptr %ast.AstNode* %175, i32 0, i32 11
-	%177 = getelementptr [0 x %ast.AstNode*]* %176, i32 0, i32 1
-	%178 = load %ast.AstNode** %177
-	%179 = bitcast %ast.AstNode* %178 to %ast.AstNode*
-	%180 = call i8 @llvm_GenSub(%ast.AstNode* %179)
-	%181 = load i16* @llvm_Tseqno
-	%182 = load %ast.AstNode** %node
-	%183 = getelementptr %ast.AstNode* %182, i32 0, i32 6
-	store i16 %181, i16* %183
-	%184 = load i16* @llvm_Tseqno
-	%185 = add i16 %184, 1
-	store i16 %185, i16* @llvm_Tseqno
+	%160 = load %ast.AstNode** %node
+	%161 = getelementptr %ast.AstNode* %160, i32 0, i32 11
+	%162 = getelementptr [0 x %ast.AstNode*]* %161, i32 0, i32 0
+	%163 = load %ast.AstNode** %162
+	%164 = bitcast %ast.AstNode* %163 to %ast.AstNode*
+	%165 = call i8 @llvm_GenSub(%ast.AstNode* %164)
+	%166 = load %ast.AstNode** %node
+	%167 = getelementptr %ast.AstNode* %166, i32 0, i32 11
+	%168 = getelementptr [0 x %ast.AstNode*]* %167, i32 0, i32 1
+	%169 = load %ast.AstNode** %168
+	%170 = bitcast %ast.AstNode* %169 to %ast.AstNode*
+	%171 = load %type.TypeNode** @type_wordtype
+	%172 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %170, %type.TypeNode* %171)
+	%173 = bitcast %ast.AstNode* %172 to %ast.AstNode*
+	%174 = load %ast.AstNode** %node
+	%175 = getelementptr %ast.AstNode* %174, i32 0, i32 11
+	%176 = getelementptr [0 x %ast.AstNode*]* %175, i32 0, i32 1
+	store %ast.AstNode* %173, %ast.AstNode** %176
+	%177 = load %ast.AstNode** %node
+	%178 = getelementptr %ast.AstNode* %177, i32 0, i32 11
+	%179 = getelementptr [0 x %ast.AstNode*]* %178, i32 0, i32 1
+	%180 = load %ast.AstNode** %179
+	%181 = bitcast %ast.AstNode* %180 to %ast.AstNode*
+	%182 = call i8 @llvm_GenSub(%ast.AstNode* %181)
+	%183 = load i16* @llvm_Tseqno
+	%184 = load %ast.AstNode** %node
+	%185 = getelementptr %ast.AstNode* %184, i32 0, i32 6
+	store i16 %183, i16* %185
 	%186 = load i16* @llvm_Tseqno
-	store i16 %186, i16* %nextseqno
-	%187 = load i16* @llvm_Tseqno
-	%188 = add i16 %187, 1
-	store i16 %188, i16* @llvm_Tseqno
-	%189 = getelementptr [44 x i8]* @S.815
-	%190 = bitcast [44 x i8]* %189 to [0 x i8]*
-	%191 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %190, %ast.AstNode* %191)
-	%192 = load %bout.BufIO** @llvm_f
-	%193 = bitcast %bout.BufIO* %192 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %193, i8 9)
-	%194 = load i16* %nextseqno
-	call void @llvm_PTempName(i16 %194)
-	%195 = getelementptr [25 x i8]* @S.816
-	%196 = bitcast [25 x i8]* %195 to [0 x i8]*
-	%197 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %196, %ast.AstNode* %197)
-	%198 = load i16* %nextseqno
+	%187 = add i16 %186, 1
+	store i16 %187, i16* @llvm_Tseqno
+	%188 = load i16* @llvm_Tseqno
+	store i16 %188, i16* %nextseqno
+	%189 = load i16* @llvm_Tseqno
+	%190 = add i16 %189, 1
+	store i16 %190, i16* @llvm_Tseqno
+	%191 = getelementptr [44 x i8]* @S.830
+	%192 = bitcast [44 x i8]* %191 to [0 x i8]*
+	%193 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %192, %ast.AstNode* %193)
+	%194 = load %bout.BufIO** @llvm_f
+	%195 = bitcast %bout.BufIO* %194 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %195, i8 9)
+	%196 = load i16* %nextseqno
+	call void @llvm_PTempName(i16 %196)
+	%197 = getelementptr [27 x i8]* @S.831
+	%198 = bitcast [27 x i8]* %197 to [0 x i8]*
 	%199 = load %ast.AstNode** %node
-	%200 = getelementptr %ast.AstNode* %199, i32 0, i32 6
-	store i16 %198, i16* %200
+	call void @llvm_Print([0 x i8]* %198, %ast.AstNode* %199)
+	%200 = load i16* %nextseqno
+	%201 = load %ast.AstNode** %node
+	%202 = getelementptr %ast.AstNode* %201, i32 0, i32 6
+	store i16 %200, i16* %202
 	br label %L.6
 L.26:
-	%201 = load %ast.AstNode** %node
-	%202 = getelementptr %ast.AstNode* %201, i32 0, i32 11
-	%203 = getelementptr [0 x %ast.AstNode*]* %202, i32 0, i32 0
-	%204 = load %ast.AstNode** %203
-	%205 = bitcast %ast.AstNode* %204 to %ast.AstNode*
-	%206 = call i8 @llvm_GenSub(%ast.AstNode* %205)
-	%207 = load i16* @llvm_Tseqno
-	%208 = load %ast.AstNode** %node
-	%209 = getelementptr %ast.AstNode* %208, i32 0, i32 6
-	store i16 %207, i16* %209
-	%210 = load i16* @llvm_Tseqno
-	%211 = add i16 %210, 1
-	store i16 %211, i16* @llvm_Tseqno
-	%212 = load %ast.AstNode** %node
-	%213 = getelementptr %ast.AstNode* %212, i32 0, i32 8
-	%214 = load %type.TypeNode** %213
-	%215 = getelementptr %type.TypeNode* %214, i32 0, i32 14
-	%216 = load i8* %215
-	%217 = icmp eq i8 %216, 5
-	br i1 %217, label %L.83, label %L.84
-L.83:
-	%218 = load %ast.AstNode** %node
-	%219 = getelementptr %ast.AstNode* %218, i32 0, i32 11
-	%220 = getelementptr [0 x %ast.AstNode*]* %219, i32 0, i32 0
-	%221 = load %ast.AstNode** %220
-	%222 = getelementptr %ast.AstNode* %221, i32 0, i32 8
-	%223 = load %type.TypeNode** %222
-	%224 = getelementptr %type.TypeNode* %223, i32 0, i32 14
-	%225 = load i8* %224
-	%226 = icmp eq i8 %225, 5
-	br i1 %226, label %L.86, label %L.87
-L.86:
-	%227 = getelementptr [29 x i8]* @S.817
-	%228 = bitcast [29 x i8]* %227 to [0 x i8]*
-	%229 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %228, %ast.AstNode* %229)
-	br label %L.85
-L.87:
-	%230 = getelementptr [30 x i8]* @S.818
-	%231 = bitcast [30 x i8]* %230 to [0 x i8]*
-	%232 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %231, %ast.AstNode* %232)
-	br label %L.85
-L.85:
-	br label %L.82
+	%203 = load %ast.AstNode** %node
+	%204 = getelementptr %ast.AstNode* %203, i32 0, i32 11
+	%205 = getelementptr [0 x %ast.AstNode*]* %204, i32 0, i32 0
+	%206 = load %ast.AstNode** %205
+	%207 = bitcast %ast.AstNode* %206 to %ast.AstNode*
+	%208 = call i8 @llvm_GenSub(%ast.AstNode* %207)
+	%209 = load i16* @llvm_Tseqno
+	%210 = load %ast.AstNode** %node
+	%211 = getelementptr %ast.AstNode* %210, i32 0, i32 6
+	store i16 %209, i16* %211
+	%212 = load i16* @llvm_Tseqno
+	%213 = add i16 %212, 1
+	store i16 %213, i16* @llvm_Tseqno
+	%214 = load %ast.AstNode** %node
+	%215 = getelementptr %ast.AstNode* %214, i32 0, i32 8
+	%216 = load %type.TypeNode** %215
+	%217 = getelementptr %type.TypeNode* %216, i32 0, i32 14
+	%218 = load i8* %217
+	%219 = icmp eq i8 %218, 5
+	br i1 %219, label %L.84, label %L.85
 L.84:
-	%233 = load %ast.AstNode** %node
-	%234 = getelementptr %ast.AstNode* %233, i32 0, i32 11
-	%235 = getelementptr [0 x %ast.AstNode*]* %234, i32 0, i32 0
-	%236 = load %ast.AstNode** %235
-	%237 = getelementptr %ast.AstNode* %236, i32 0, i32 8
-	%238 = load %type.TypeNode** %237
-	%239 = getelementptr %type.TypeNode* %238, i32 0, i32 14
-	%240 = load i8* %239
-	%241 = icmp eq i8 %240, 5
-	br i1 %241, label %L.89, label %L.90
-L.89:
-	%242 = getelementptr [30 x i8]* @S.819
-	%243 = bitcast [30 x i8]* %242 to [0 x i8]*
-	%244 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %243, %ast.AstNode* %244)
-	br label %L.88
-L.90:
-	%245 = getelementptr [29 x i8]* @S.820
-	%246 = bitcast [29 x i8]* %245 to [0 x i8]*
-	%247 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %246, %ast.AstNode* %247)
-	br label %L.88
+	%220 = load %ast.AstNode** %node
+	%221 = getelementptr %ast.AstNode* %220, i32 0, i32 11
+	%222 = getelementptr [0 x %ast.AstNode*]* %221, i32 0, i32 0
+	%223 = load %ast.AstNode** %222
+	%224 = getelementptr %ast.AstNode* %223, i32 0, i32 8
+	%225 = load %type.TypeNode** %224
+	%226 = getelementptr %type.TypeNode* %225, i32 0, i32 14
+	%227 = load i8* %226
+	%228 = icmp eq i8 %227, 5
+	br i1 %228, label %L.87, label %L.88
+L.87:
+	%229 = getelementptr [29 x i8]* @S.832
+	%230 = bitcast [29 x i8]* %229 to [0 x i8]*
+	%231 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %230, %ast.AstNode* %231)
+	br label %L.86
 L.88:
-	br label %L.82
-L.82:
+	%232 = getelementptr [30 x i8]* @S.833
+	%233 = bitcast [30 x i8]* %232 to [0 x i8]*
+	%234 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %233, %ast.AstNode* %234)
+	br label %L.86
+L.86:
+	br label %L.83
+L.85:
+	%235 = load %ast.AstNode** %node
+	%236 = getelementptr %ast.AstNode* %235, i32 0, i32 11
+	%237 = getelementptr [0 x %ast.AstNode*]* %236, i32 0, i32 0
+	%238 = load %ast.AstNode** %237
+	%239 = getelementptr %ast.AstNode* %238, i32 0, i32 8
+	%240 = load %type.TypeNode** %239
+	%241 = getelementptr %type.TypeNode* %240, i32 0, i32 14
+	%242 = load i8* %241
+	%243 = icmp eq i8 %242, 5
+	br i1 %243, label %L.90, label %L.91
+L.90:
+	%244 = getelementptr [30 x i8]* @S.834
+	%245 = bitcast [30 x i8]* %244 to [0 x i8]*
+	%246 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %245, %ast.AstNode* %246)
+	br label %L.89
+L.91:
+	%247 = getelementptr [29 x i8]* @S.835
+	%248 = bitcast [29 x i8]* %247 to [0 x i8]*
+	%249 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %248, %ast.AstNode* %249)
+	br label %L.89
+L.89:
+	br label %L.83
+L.83:
 	br label %L.6
 L.27:
-	%248 = load %ast.AstNode** %node
-	%249 = getelementptr [5 x i8]* @S.821
-	%250 = bitcast [5 x i8]* %249 to [0 x i8]*
-	call void @llvm_ChangeSize(%ast.AstNode* %248, [0 x i8]* %250)
+	%250 = load %ast.AstNode** %node
+	%251 = getelementptr [5 x i8]* @S.836
+	%252 = bitcast [5 x i8]* %251 to [0 x i8]*
+	call void @llvm_ChangeSize(%ast.AstNode* %250, [0 x i8]* %252)
 	br label %L.6
 L.28:
-	%251 = load %ast.AstNode** %node
-	%252 = getelementptr [5 x i8]* @S.822
-	%253 = bitcast [5 x i8]* %252 to [0 x i8]*
-	call void @llvm_ChangeSize(%ast.AstNode* %251, [0 x i8]* %253)
+	%253 = load %ast.AstNode** %node
+	%254 = getelementptr [5 x i8]* @S.837
+	%255 = bitcast [5 x i8]* %254 to [0 x i8]*
+	call void @llvm_ChangeSize(%ast.AstNode* %253, [0 x i8]* %255)
 	br label %L.6
 L.29:
-	%254 = load %ast.AstNode** %node
-	%255 = getelementptr [6 x i8]* @S.823
-	%256 = bitcast [6 x i8]* %255 to [0 x i8]*
-	call void @llvm_ChangeSize(%ast.AstNode* %254, [0 x i8]* %256)
+	%256 = load %ast.AstNode** %node
+	%257 = getelementptr [6 x i8]* @S.838
+	%258 = bitcast [6 x i8]* %257 to [0 x i8]*
+	call void @llvm_ChangeSize(%ast.AstNode* %256, [0 x i8]* %258)
 	br label %L.6
 L.30:
-	%257 = load %ast.AstNode** %node
-	%258 = call i8 @llvm_UnaryOp(%ast.AstNode* %257)
-	br label %L.6
-L.31:
 	%259 = load %ast.AstNode** %node
 	%260 = call i8 @llvm_UnaryOp(%ast.AstNode* %259)
 	br label %L.6
-L.32:
+L.31:
 	%261 = load %ast.AstNode** %node
-	%262 = getelementptr [4 x i8]* @S.824
-	%263 = bitcast [4 x i8]* %262 to [0 x i8]*
-	%264 = call i8 @llvm_BinaryOp(%ast.AstNode* %261, [0 x i8]* %263)
+	%262 = call i8 @llvm_UnaryOp(%ast.AstNode* %261)
+	br label %L.6
+L.32:
+	%263 = load %ast.AstNode** %node
+	call void @llvm_ZLen(%ast.AstNode* %263)
 	br label %L.6
 L.33:
-	%265 = load %ast.AstNode** %node
-	%266 = getelementptr [4 x i8]* @S.825
-	%267 = bitcast [4 x i8]* %266 to [0 x i8]*
-	%268 = call i8 @llvm_BinaryOp(%ast.AstNode* %265, [0 x i8]* %267)
+	%264 = load %ast.AstNode** %node
+	%265 = getelementptr [4 x i8]* @S.839
+	%266 = bitcast [4 x i8]* %265 to [0 x i8]*
+	%267 = call i8 @llvm_BinaryOp(%ast.AstNode* %264, [0 x i8]* %266)
 	br label %L.6
 L.34:
-	%269 = load %ast.AstNode** %node
-	%270 = getelementptr [4 x i8]* @S.826
-	%271 = bitcast [4 x i8]* %270 to [0 x i8]*
-	%272 = call i8 @llvm_BinaryOp(%ast.AstNode* %269, [0 x i8]* %271)
+	%268 = load %ast.AstNode** %node
+	%269 = getelementptr [4 x i8]* @S.840
+	%270 = bitcast [4 x i8]* %269 to [0 x i8]*
+	%271 = call i8 @llvm_BinaryOp(%ast.AstNode* %268, [0 x i8]* %270)
 	br label %L.6
 L.35:
-	%273 = load %ast.AstNode** %node
-	%274 = getelementptr [5 x i8]* @S.827
-	%275 = bitcast [5 x i8]* %274 to [0 x i8]*
-	%276 = getelementptr [5 x i8]* @S.828
-	%277 = bitcast [5 x i8]* %276 to [0 x i8]*
-	%278 = call i8 @llvm_SignedBinaryOp(%ast.AstNode* %273, [0 x i8]* %275, [0 x i8]* %277)
+	%272 = load %ast.AstNode** %node
+	%273 = getelementptr [4 x i8]* @S.841
+	%274 = bitcast [4 x i8]* %273 to [0 x i8]*
+	%275 = call i8 @llvm_BinaryOp(%ast.AstNode* %272, [0 x i8]* %274)
 	br label %L.6
 L.36:
-	%279 = load %ast.AstNode** %node
-	%280 = getelementptr [5 x i8]* @S.829
-	%281 = bitcast [5 x i8]* %280 to [0 x i8]*
-	%282 = getelementptr [5 x i8]* @S.830
-	%283 = bitcast [5 x i8]* %282 to [0 x i8]*
-	%284 = call i8 @llvm_SignedBinaryOp(%ast.AstNode* %279, [0 x i8]* %281, [0 x i8]* %283)
+	%276 = load %ast.AstNode** %node
+	%277 = getelementptr [5 x i8]* @S.842
+	%278 = bitcast [5 x i8]* %277 to [0 x i8]*
+	%279 = getelementptr [5 x i8]* @S.843
+	%280 = bitcast [5 x i8]* %279 to [0 x i8]*
+	%281 = call i8 @llvm_SignedBinaryOp(%ast.AstNode* %276, [0 x i8]* %278, [0 x i8]* %280)
 	br label %L.6
 L.37:
-	%285 = load %ast.AstNode** %node
-	%286 = getelementptr [4 x i8]* @S.831
-	%287 = bitcast [4 x i8]* %286 to [0 x i8]*
-	%288 = call i8 @llvm_BinaryOp(%ast.AstNode* %285, [0 x i8]* %287)
+	%282 = load %ast.AstNode** %node
+	%283 = getelementptr [5 x i8]* @S.844
+	%284 = bitcast [5 x i8]* %283 to [0 x i8]*
+	%285 = getelementptr [5 x i8]* @S.845
+	%286 = bitcast [5 x i8]* %285 to [0 x i8]*
+	%287 = call i8 @llvm_SignedBinaryOp(%ast.AstNode* %282, [0 x i8]* %284, [0 x i8]* %286)
 	br label %L.6
 L.38:
-	%289 = load %ast.AstNode** %node
-	%290 = getelementptr [5 x i8]* @S.832
-	%291 = bitcast [5 x i8]* %290 to [0 x i8]*
-	%292 = call i8 @llvm_BinaryOp(%ast.AstNode* %289, [0 x i8]* %291)
+	%288 = load %ast.AstNode** %node
+	%289 = getelementptr [4 x i8]* @S.846
+	%290 = bitcast [4 x i8]* %289 to [0 x i8]*
+	%291 = call i8 @llvm_BinaryOp(%ast.AstNode* %288, [0 x i8]* %290)
 	br label %L.6
 L.39:
-	%293 = load %ast.AstNode** %node
-	%294 = getelementptr [5 x i8]* @S.833
-	%295 = bitcast [5 x i8]* %294 to [0 x i8]*
-	%296 = call i8 @llvm_BinaryOp(%ast.AstNode* %293, [0 x i8]* %295)
+	%292 = load %ast.AstNode** %node
+	%293 = getelementptr [5 x i8]* @S.847
+	%294 = bitcast [5 x i8]* %293 to [0 x i8]*
+	%295 = call i8 @llvm_BinaryOp(%ast.AstNode* %292, [0 x i8]* %294)
 	br label %L.6
 L.40:
-	%297 = load %ast.AstNode** %node
-	%298 = getelementptr [5 x i8]* @S.834
-	%299 = bitcast [5 x i8]* %298 to [0 x i8]*
-	%300 = call i8 @llvm_BinaryOp(%ast.AstNode* %297, [0 x i8]* %299)
+	%296 = load %ast.AstNode** %node
+	%297 = getelementptr [5 x i8]* @S.848
+	%298 = bitcast [5 x i8]* %297 to [0 x i8]*
+	%299 = call i8 @llvm_BinaryOp(%ast.AstNode* %296, [0 x i8]* %298)
 	br label %L.6
 L.41:
-	%301 = load %ast.AstNode** %node
-	%302 = getelementptr [5 x i8]* @S.835
-	%303 = bitcast [5 x i8]* %302 to [0 x i8]*
-	%304 = call i8 @llvm_BinaryOp(%ast.AstNode* %301, [0 x i8]* %303)
+	%300 = load %ast.AstNode** %node
+	%301 = getelementptr [5 x i8]* @S.849
+	%302 = bitcast [5 x i8]* %301 to [0 x i8]*
+	%303 = call i8 @llvm_BinaryOp(%ast.AstNode* %300, [0 x i8]* %302)
 	br label %L.6
 L.42:
-	%305 = load %ast.AstNode** %node
-	%306 = getelementptr [5 x i8]* @S.836
-	%307 = bitcast [5 x i8]* %306 to [0 x i8]*
-	%308 = call i8 @llvm_BinaryOp(%ast.AstNode* %305, [0 x i8]* %307)
+	%304 = load %ast.AstNode** %node
+	%305 = getelementptr [5 x i8]* @S.850
+	%306 = bitcast [5 x i8]* %305 to [0 x i8]*
+	%307 = call i8 @llvm_BinaryOp(%ast.AstNode* %304, [0 x i8]* %306)
 	br label %L.6
 L.43:
-	%309 = load %ast.AstNode** %node
-	%310 = getelementptr [5 x i8]* @S.837
-	%311 = bitcast [5 x i8]* %310 to [0 x i8]*
-	%312 = call i8 @llvm_BinaryOp(%ast.AstNode* %309, [0 x i8]* %311)
+	%308 = load %ast.AstNode** %node
+	%309 = getelementptr [5 x i8]* @S.851
+	%310 = bitcast [5 x i8]* %309 to [0 x i8]*
+	%311 = call i8 @llvm_BinaryOp(%ast.AstNode* %308, [0 x i8]* %310)
 	br label %L.6
 L.44:
-	%313 = load %ast.AstNode** %node
-	%314 = getelementptr [5 x i8]* @S.838
-	%315 = bitcast [5 x i8]* %314 to [0 x i8]*
-	%316 = call i8 @llvm_BinaryOp(%ast.AstNode* %313, [0 x i8]* %315)
+	%312 = load %ast.AstNode** %node
+	%313 = getelementptr [5 x i8]* @S.852
+	%314 = bitcast [5 x i8]* %313 to [0 x i8]*
+	%315 = call i8 @llvm_BinaryOp(%ast.AstNode* %312, [0 x i8]* %314)
 	br label %L.6
 L.45:
-	%317 = load %ast.AstNode** %node
-	%318 = getelementptr [8 x i8]* @S.839
-	%319 = bitcast [8 x i8]* %318 to [0 x i8]*
-	%320 = call i8 @llvm_CompareOp(%ast.AstNode* %317, [0 x i8]* %319)
-	store i8 %320, i8* %term
+	%316 = load %ast.AstNode** %node
+	%317 = getelementptr [5 x i8]* @S.853
+	%318 = bitcast [5 x i8]* %317 to [0 x i8]*
+	%319 = call i8 @llvm_BinaryOp(%ast.AstNode* %316, [0 x i8]* %318)
 	br label %L.6
 L.46:
-	%321 = load %ast.AstNode** %node
-	%322 = getelementptr [8 x i8]* @S.840
-	%323 = bitcast [8 x i8]* %322 to [0 x i8]*
-	%324 = call i8 @llvm_CompareOp(%ast.AstNode* %321, [0 x i8]* %323)
-	store i8 %324, i8* %term
+	%320 = load %ast.AstNode** %node
+	%321 = getelementptr [8 x i8]* @S.854
+	%322 = bitcast [8 x i8]* %321 to [0 x i8]*
+	%323 = call i8 @llvm_CompareOp(%ast.AstNode* %320, [0 x i8]* %322)
+	store i8 %323, i8* %term
 	br label %L.6
 L.47:
-	%325 = load %ast.AstNode** %node
-	%326 = getelementptr [9 x i8]* @S.841
-	%327 = bitcast [9 x i8]* %326 to [0 x i8]*
-	%328 = call i8 @llvm_CompareOp(%ast.AstNode* %325, [0 x i8]* %327)
-	store i8 %328, i8* %term
+	%324 = load %ast.AstNode** %node
+	%325 = getelementptr [8 x i8]* @S.855
+	%326 = bitcast [8 x i8]* %325 to [0 x i8]*
+	%327 = call i8 @llvm_CompareOp(%ast.AstNode* %324, [0 x i8]* %326)
+	store i8 %327, i8* %term
 	br label %L.6
 L.48:
-	%329 = load %ast.AstNode** %node
-	%330 = getelementptr [9 x i8]* @S.842
-	%331 = bitcast [9 x i8]* %330 to [0 x i8]*
-	%332 = call i8 @llvm_CompareOp(%ast.AstNode* %329, [0 x i8]* %331)
-	store i8 %332, i8* %term
+	%328 = load %ast.AstNode** %node
+	%329 = getelementptr [9 x i8]* @S.856
+	%330 = bitcast [9 x i8]* %329 to [0 x i8]*
+	%331 = call i8 @llvm_CompareOp(%ast.AstNode* %328, [0 x i8]* %330)
+	store i8 %331, i8* %term
 	br label %L.6
 L.49:
-	%333 = load %ast.AstNode** %node
-	%334 = getelementptr [9 x i8]* @S.843
-	%335 = bitcast [9 x i8]* %334 to [0 x i8]*
-	%336 = call i8 @llvm_CompareOp(%ast.AstNode* %333, [0 x i8]* %335)
-	store i8 %336, i8* %term
+	%332 = load %ast.AstNode** %node
+	%333 = getelementptr [9 x i8]* @S.857
+	%334 = bitcast [9 x i8]* %333 to [0 x i8]*
+	%335 = call i8 @llvm_CompareOp(%ast.AstNode* %332, [0 x i8]* %334)
+	store i8 %335, i8* %term
 	br label %L.6
 L.50:
-	%337 = load %ast.AstNode** %node
-	%338 = getelementptr [9 x i8]* @S.844
-	%339 = bitcast [9 x i8]* %338 to [0 x i8]*
-	%340 = call i8 @llvm_CompareOp(%ast.AstNode* %337, [0 x i8]* %339)
-	store i8 %340, i8* %term
+	%336 = load %ast.AstNode** %node
+	%337 = getelementptr [9 x i8]* @S.858
+	%338 = bitcast [9 x i8]* %337 to [0 x i8]*
+	%339 = call i8 @llvm_CompareOp(%ast.AstNode* %336, [0 x i8]* %338)
+	store i8 %339, i8* %term
 	br label %L.6
 L.51:
-	%341 = load %ast.AstNode** %node
-	%342 = getelementptr [9 x i8]* @S.845
-	%343 = bitcast [9 x i8]* %342 to [0 x i8]*
-	%344 = call i8 @llvm_CompareOp(%ast.AstNode* %341, [0 x i8]* %343)
-	store i8 %344, i8* %term
+	%340 = load %ast.AstNode** %node
+	%341 = getelementptr [9 x i8]* @S.859
+	%342 = bitcast [9 x i8]* %341 to [0 x i8]*
+	%343 = call i8 @llvm_CompareOp(%ast.AstNode* %340, [0 x i8]* %342)
+	store i8 %343, i8* %term
 	br label %L.6
 L.52:
-	%345 = load %ast.AstNode** %node
-	%346 = getelementptr [9 x i8]* @S.846
-	%347 = bitcast [9 x i8]* %346 to [0 x i8]*
-	%348 = call i8 @llvm_CompareOp(%ast.AstNode* %345, [0 x i8]* %347)
-	store i8 %348, i8* %term
+	%344 = load %ast.AstNode** %node
+	%345 = getelementptr [9 x i8]* @S.860
+	%346 = bitcast [9 x i8]* %345 to [0 x i8]*
+	%347 = call i8 @llvm_CompareOp(%ast.AstNode* %344, [0 x i8]* %346)
+	store i8 %347, i8* %term
 	br label %L.6
 L.53:
-	%349 = load %ast.AstNode** %node
-	%350 = getelementptr [9 x i8]* @S.847
-	%351 = bitcast [9 x i8]* %350 to [0 x i8]*
-	%352 = call i8 @llvm_CompareOp(%ast.AstNode* %349, [0 x i8]* %351)
-	store i8 %352, i8* %term
+	%348 = load %ast.AstNode** %node
+	%349 = getelementptr [9 x i8]* @S.861
+	%350 = bitcast [9 x i8]* %349 to [0 x i8]*
+	%351 = call i8 @llvm_CompareOp(%ast.AstNode* %348, [0 x i8]* %350)
+	store i8 %351, i8* %term
 	br label %L.6
 L.54:
-	%353 = load %ast.AstNode** %node
-	%354 = getelementptr [9 x i8]* @S.848
-	%355 = bitcast [9 x i8]* %354 to [0 x i8]*
-	%356 = call i8 @llvm_CompareOp(%ast.AstNode* %353, [0 x i8]* %355)
-	store i8 %356, i8* %term
+	%352 = load %ast.AstNode** %node
+	%353 = getelementptr [9 x i8]* @S.862
+	%354 = bitcast [9 x i8]* %353 to [0 x i8]*
+	%355 = call i8 @llvm_CompareOp(%ast.AstNode* %352, [0 x i8]* %354)
+	store i8 %355, i8* %term
 	br label %L.6
 L.55:
-	%357 = load %ast.AstNode** %node
-	%358 = getelementptr [4 x i8]* @S.849
-	%359 = bitcast [4 x i8]* %358 to [0 x i8]*
-	%360 = call i8 @llvm_BinaryOp(%ast.AstNode* %357, [0 x i8]* %359)
+	%356 = load %ast.AstNode** %node
+	%357 = getelementptr [9 x i8]* @S.863
+	%358 = bitcast [9 x i8]* %357 to [0 x i8]*
+	%359 = call i8 @llvm_CompareOp(%ast.AstNode* %356, [0 x i8]* %358)
+	store i8 %359, i8* %term
 	br label %L.6
 L.56:
-	%361 = load %ast.AstNode** %node
-	%362 = getelementptr [3 x i8]* @S.850
-	%363 = bitcast [3 x i8]* %362 to [0 x i8]*
-	%364 = call i8 @llvm_BinaryOp(%ast.AstNode* %361, [0 x i8]* %363)
+	%360 = load %ast.AstNode** %node
+	%361 = getelementptr [4 x i8]* @S.864
+	%362 = bitcast [4 x i8]* %361 to [0 x i8]*
+	%363 = call i8 @llvm_BinaryOp(%ast.AstNode* %360, [0 x i8]* %362)
 	br label %L.6
 L.57:
-	%365 = load %ast.AstNode** %node
-	%366 = getelementptr [4 x i8]* @S.851
-	%367 = bitcast [4 x i8]* %366 to [0 x i8]*
-	%368 = call i8 @llvm_BinaryOp(%ast.AstNode* %365, [0 x i8]* %367)
+	%364 = load %ast.AstNode** %node
+	%365 = getelementptr [3 x i8]* @S.865
+	%366 = bitcast [3 x i8]* %365 to [0 x i8]*
+	%367 = call i8 @llvm_BinaryOp(%ast.AstNode* %364, [0 x i8]* %366)
 	br label %L.6
 L.58:
-	%369 = load %ast.AstNode** %node
-	%370 = getelementptr %ast.AstNode* %369, i32 0, i32 11
-	%371 = getelementptr [0 x %ast.AstNode*]* %370, i32 0, i32 0
-	%372 = load %ast.AstNode** %371
-	%373 = bitcast %ast.AstNode* %372 to %ast.AstNode*
-	%374 = call i8 @llvm_GenSub(%ast.AstNode* %373)
-	%375 = load i16* @llvm_Tseqno
-	%376 = load %ast.AstNode** %node
-	%377 = getelementptr %ast.AstNode* %376, i32 0, i32 6
-	store i16 %375, i16* %377
-	%378 = load i16* @llvm_Tseqno
-	%379 = add i16 %378, 1
-	store i16 %379, i16* @llvm_Tseqno
-	%380 = getelementptr [24 x i8]* @S.852
-	%381 = bitcast [24 x i8]* %380 to [0 x i8]*
-	%382 = load %ast.AstNode** %node
-	call void @llvm_Print([0 x i8]* %381, %ast.AstNode* %382)
+	%368 = load %ast.AstNode** %node
+	%369 = getelementptr [4 x i8]* @S.866
+	%370 = bitcast [4 x i8]* %369 to [0 x i8]*
+	%371 = call i8 @llvm_BinaryOp(%ast.AstNode* %368, [0 x i8]* %370)
 	br label %L.6
 L.59:
-	%383 = load %ast.AstNode** %node
-	%384 = call i8 @llvm_Conditional(%ast.AstNode* %383, i8 0)
-	store i8 %384, i8* %term
+	%372 = load %ast.AstNode** %node
+	%373 = getelementptr %ast.AstNode* %372, i32 0, i32 11
+	%374 = getelementptr [0 x %ast.AstNode*]* %373, i32 0, i32 0
+	%375 = load %ast.AstNode** %374
+	%376 = bitcast %ast.AstNode* %375 to %ast.AstNode*
+	%377 = call i8 @llvm_GenSub(%ast.AstNode* %376)
+	%378 = load i16* @llvm_Tseqno
+	%379 = load %ast.AstNode** %node
+	%380 = getelementptr %ast.AstNode* %379, i32 0, i32 6
+	store i16 %378, i16* %380
+	%381 = load i16* @llvm_Tseqno
+	%382 = add i16 %381, 1
+	store i16 %382, i16* @llvm_Tseqno
+	%383 = getelementptr [24 x i8]* @S.867
+	%384 = bitcast [24 x i8]* %383 to [0 x i8]*
+	%385 = load %ast.AstNode** %node
+	call void @llvm_Print([0 x i8]* %384, %ast.AstNode* %385)
 	br label %L.6
 L.60:
-	%385 = load %ast.AstNode** %node
-	%386 = call i8 @llvm_Conditional(%ast.AstNode* %385, i8 1)
-	store i8 %386, i8* %term
+	%386 = load %ast.AstNode** %node
+	%387 = call i8 @llvm_Conditional(%ast.AstNode* %386, i8 0)
+	store i8 %387, i8* %term
 	br label %L.6
 L.61:
-	%387 = load %ast.AstNode** %node
-	call void @llvm_IfExpr(%ast.AstNode* %387)
+	%388 = load %ast.AstNode** %node
+	%389 = call i8 @llvm_Conditional(%ast.AstNode* %388, i8 1)
+	store i8 %389, i8* %term
 	br label %L.6
 L.62:
-	%388 = load %ast.AstNode** %node
-	call void @llvm_Call(%ast.AstNode* %388, i8 0)
+	%390 = load %ast.AstNode** %node
+	call void @llvm_IfExpr(%ast.AstNode* %390)
 	br label %L.6
 L.63:
-	%389 = load %ast.AstNode** %node
-	call void @llvm_Call(%ast.AstNode* %389, i8 1)
+	%391 = load %ast.AstNode** %node
+	call void @llvm_Call(%ast.AstNode* %391, i8 0)
 	br label %L.6
 L.64:
-	%390 = load %ast.AstNode** %node
-	call void @llvm_Asm(%ast.AstNode* %390)
+	%392 = load %ast.AstNode** %node
+	call void @llvm_Call(%ast.AstNode* %392, i8 1)
 	br label %L.6
 L.65:
-	%391 = load %ast.AstNode** %node
-	%392 = call i8 @llvm_If(%ast.AstNode* %391)
-	store i8 %392, i8* %term
+	%393 = load %ast.AstNode** %node
+	call void @llvm_Asm(%ast.AstNode* %393)
 	br label %L.6
 L.66:
-	%393 = load %ast.AstNode** %node
-	%394 = call i8 @llvm_Select(%ast.AstNode* %393)
-	store i8 %394, i8* %term
+	%394 = load %ast.AstNode** %node
+	%395 = call i8 @llvm_If(%ast.AstNode* %394)
+	store i8 %395, i8* %term
 	br label %L.6
 L.67:
-	%395 = load %ast.AstNode** %node
-	%396 = call i8 @llvm_Loop(%ast.AstNode* %395)
-	store i8 %396, i8* %term
+	%396 = load %ast.AstNode** %node
+	%397 = call i8 @llvm_Select(%ast.AstNode* %396)
+	store i8 %397, i8* %term
 	br label %L.6
 L.68:
-	%397 = load %ast.AstNode** %node
-	%398 = call i8 @llvm_Exit(%ast.AstNode* %397)
-	store i8 %398, i8* %term
+	%398 = load %ast.AstNode** %node
+	%399 = call i8 @llvm_Loop(%ast.AstNode* %398)
+	store i8 %399, i8* %term
 	br label %L.6
 L.69:
+	%400 = load %ast.AstNode** %node
+	%401 = call i8 @llvm_Exit(%ast.AstNode* %400)
+	store i8 %401, i8* %term
+	br label %L.6
+L.70:
 	%i = alloca i16
 	store i16 0, i16* %i
-	br label %L.91
-L.91:
-	%399 = load i16* %i
-	%400 = load %ast.AstNode** %node
-	%401 = getelementptr %ast.AstNode* %400, i32 0, i32 2
-	%402 = load i16* %401
-	%403 = icmp ult i16 %399, %402
-	%404 = xor i1 %403, true
-	br i1 %404, label %L.92, label %L.93
-L.93:
-	%405 = load i8* %term
-	%406 = icmp ne i8 %405, 0
-	br i1 %406, label %L.95, label %L.94
-L.95:
-	%407 = load i16* @llvm_Lseqno
-	call void @llvm_Label(i16 %407)
-	%408 = load i16* @llvm_Lseqno
-	%409 = add i16 %408, 1
-	store i16 %409, i16* @llvm_Lseqno
-	store i8 0, i8* %term
-	br label %L.94
-L.94:
-	%410 = load %ast.AstNode** %node
-	%411 = getelementptr %ast.AstNode* %410, i32 0, i32 11
-	%412 = load i16* %i
-	%413 = zext i16 %412 to i32
-	%414 = getelementptr [0 x %ast.AstNode*]* %411, i32 0, i32 %413
-	%415 = load %ast.AstNode** %414
-	%416 = bitcast %ast.AstNode* %415 to %ast.AstNode*
-	%417 = call i8 @llvm_GenSub(%ast.AstNode* %416)
-	store i8 %417, i8* %term
-	%418 = load i16* %i
-	%419 = add i16 %418, 1
-	store i16 %419, i16* %i
-	br label %L.91
+	br label %L.92
 L.92:
+	%402 = load i16* %i
+	%403 = load %ast.AstNode** %node
+	%404 = getelementptr %ast.AstNode* %403, i32 0, i32 2
+	%405 = load i16* %404
+	%406 = icmp ult i16 %402, %405
+	%407 = xor i1 %406, true
+	br i1 %407, label %L.93, label %L.94
+L.94:
+	%408 = load i8* %term
+	%409 = icmp ne i8 %408, 0
+	br i1 %409, label %L.96, label %L.95
+L.96:
+	%410 = load i16* @llvm_Lseqno
+	call void @llvm_Label(i16 %410)
+	%411 = load i16* @llvm_Lseqno
+	%412 = add i16 %411, 1
+	store i16 %412, i16* @llvm_Lseqno
+	store i8 0, i8* %term
+	br label %L.95
+L.95:
+	%413 = load %ast.AstNode** %node
+	%414 = getelementptr %ast.AstNode* %413, i32 0, i32 11
+	%415 = load i16* %i
+	%416 = zext i16 %415 to i32
+	%417 = getelementptr [0 x %ast.AstNode*]* %414, i32 0, i32 %416
+	%418 = load %ast.AstNode** %417
+	%419 = bitcast %ast.AstNode* %418 to %ast.AstNode*
+	%420 = call i8 @llvm_GenSub(%ast.AstNode* %419)
+	store i8 %420, i8* %term
+	%421 = load i16* %i
+	%422 = add i16 %421, 1
+	store i16 %422, i16* %i
+	br label %L.92
+L.93:
 	br label %L.6
 L.5:
 	br label %L.6
 L.6:
-	%420 = load i8* %term
-	store i8 %420, i8* %rv.0
+	%423 = load i8* %term
+	store i8 %423, i8* %rv.0
 	br label %return
 return:
-	%421 = load i8* %rv.0
-	ret i8 %421
+	%424 = load i8* %rv.0
+	ret i8 %424
 }
-@S.853 = internal constant [22 x i8] c"target datalayout = \22\00"
-@S.854 = internal constant [2 x i8] c"E\00"
-@S.855 = internal constant [2 x i8] c"e\00"
-@S.856 = internal constant [4 x i8] c"-p:\00"
-@S.857 = internal constant [2 x i8] c":\00"
-@S.858 = internal constant [2 x i8] c":\00"
-@S.859 = internal constant [5 x i8] c"-i1:\00"
-@S.860 = internal constant [2 x i8] c":\00"
-@S.861 = internal constant [3 x i8] c"-i\00"
-@S.862 = internal constant [2 x i8] c":\00"
-@S.863 = internal constant [2 x i8] c":\00"
-@S.864 = internal constant [20 x i8] c"\22\0Atarget triple = \22\00"
-@S.865 = internal constant [3 x i8] c"\22\0A\00"
+@S.868 = internal constant [22 x i8] c"target datalayout = \22\00"
+@S.869 = internal constant [2 x i8] c"E\00"
+@S.870 = internal constant [2 x i8] c"e\00"
+@S.871 = internal constant [4 x i8] c"-p:\00"
+@S.872 = internal constant [2 x i8] c":\00"
+@S.873 = internal constant [2 x i8] c":\00"
+@S.874 = internal constant [5 x i8] c"-i1:\00"
+@S.875 = internal constant [2 x i8] c":\00"
+@S.876 = internal constant [3 x i8] c"-i\00"
+@S.877 = internal constant [2 x i8] c":\00"
+@S.878 = internal constant [2 x i8] c":\00"
+@S.879 = internal constant [20 x i8] c"\22\0Atarget triple = \22\00"
+@S.880 = internal constant [3 x i8] c"\22\0A\00"
 define internal void @llvm_Gen(i32 %fd$, %ast.AstNode* %tree$) nounwind {
 L.0:
 	%fd = alloca i32
@@ -35952,12 +37642,12 @@ L.1:
 L.3:
 	%11 = load i8* %i
 	%12 = zext i8 %11 to i32
-	%13 = getelementptr [4 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 %12
+	%13 = getelementptr [6 x %type.TypeNode*]* @type_uinttypes, i32 0, i32 %12
 	%14 = load %type.TypeNode** %13
 	%15 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %14)
 	%16 = load i8* %i
 	%17 = zext i8 %16 to i32
-	%18 = getelementptr [8 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %17
+	%18 = getelementptr [6 x %type.TypeNode*]* @llvm_puinttype, i32 0, i32 %17
 	store %type.TypeNode* %15, %type.TypeNode** %18
 	%19 = load i8* %i
 	%20 = add i8 %19, 1
@@ -35966,7 +37656,7 @@ L.3:
 L.2:
 	%21 = load %bout.BufIO** @llvm_f
 	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
-	%23 = getelementptr [22 x i8]* @S.853
+	%23 = getelementptr [22 x i8]* @S.868
 	%24 = bitcast [22 x i8]* %23 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
 	%25 = load %target.ModelT** @target_Target
@@ -35977,21 +37667,21 @@ L.2:
 L.5:
 	%29 = load %bout.BufIO** @llvm_f
 	%30 = bitcast %bout.BufIO* %29 to %bout.BufIO*
-	%31 = getelementptr [2 x i8]* @S.854
+	%31 = getelementptr [2 x i8]* @S.869
 	%32 = bitcast [2 x i8]* %31 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %30, [0 x i8]* %32)
 	br label %L.4
 L.6:
 	%33 = load %bout.BufIO** @llvm_f
 	%34 = bitcast %bout.BufIO* %33 to %bout.BufIO*
-	%35 = getelementptr [2 x i8]* @S.855
+	%35 = getelementptr [2 x i8]* @S.870
 	%36 = bitcast [2 x i8]* %35 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %34, [0 x i8]* %36)
 	br label %L.4
 L.4:
 	%37 = load %bout.BufIO** @llvm_f
 	%38 = bitcast %bout.BufIO* %37 to %bout.BufIO*
-	%39 = getelementptr [4 x i8]* @S.856
+	%39 = getelementptr [4 x i8]* @S.871
 	%40 = bitcast [4 x i8]* %39 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %38, [0 x i8]* %40)
 	%41 = load %bout.BufIO** @llvm_f
@@ -36004,7 +37694,7 @@ L.4:
 	call void @bout_BufIO_uint(%bout.BufIO* %42, i32 %47)
 	%48 = load %bout.BufIO** @llvm_f
 	%49 = bitcast %bout.BufIO* %48 to %bout.BufIO*
-	%50 = getelementptr [2 x i8]* @S.857
+	%50 = getelementptr [2 x i8]* @S.872
 	%51 = bitcast [2 x i8]* %50 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %49, [0 x i8]* %51)
 	%52 = load %bout.BufIO** @llvm_f
@@ -36017,7 +37707,7 @@ L.4:
 	call void @bout_BufIO_uint(%bout.BufIO* %53, i32 %58)
 	%59 = load %bout.BufIO** @llvm_f
 	%60 = bitcast %bout.BufIO* %59 to %bout.BufIO*
-	%61 = getelementptr [2 x i8]* @S.858
+	%61 = getelementptr [2 x i8]* @S.873
 	%62 = bitcast [2 x i8]* %61 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %60, [0 x i8]* %62)
 	%63 = load %bout.BufIO** @llvm_f
@@ -36030,28 +37720,28 @@ L.4:
 	call void @bout_BufIO_uint(%bout.BufIO* %64, i32 %69)
 	%70 = load %bout.BufIO** @llvm_f
 	%71 = bitcast %bout.BufIO* %70 to %bout.BufIO*
-	%72 = getelementptr [5 x i8]* @S.859
+	%72 = getelementptr [5 x i8]* @S.874
 	%73 = bitcast [5 x i8]* %72 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %71, [0 x i8]* %73)
 	%74 = load %bout.BufIO** @llvm_f
 	%75 = bitcast %bout.BufIO* %74 to %bout.BufIO*
 	%76 = load %target.ModelT** @target_Target
 	%77 = getelementptr %target.ModelT* %76, i32 0, i32 7
-	%78 = getelementptr [8 x %target.SizeAlign]* %77, i32 0, i32 0
+	%78 = getelementptr [6 x %target.SizeAlign]* %77, i32 0, i32 0
 	%79 = getelementptr %target.SizeAlign* %78, i32 0, i32 1
 	%80 = load i8* %79
 	%81 = zext i8 %80 to i32
 	call void @bout_BufIO_uint(%bout.BufIO* %75, i32 %81)
 	%82 = load %bout.BufIO** @llvm_f
 	%83 = bitcast %bout.BufIO* %82 to %bout.BufIO*
-	%84 = getelementptr [2 x i8]* @S.860
+	%84 = getelementptr [2 x i8]* @S.875
 	%85 = bitcast [2 x i8]* %84 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %83, [0 x i8]* %85)
 	%86 = load %bout.BufIO** @llvm_f
 	%87 = bitcast %bout.BufIO* %86 to %bout.BufIO*
 	%88 = load %target.ModelT** @target_Target
 	%89 = getelementptr %target.ModelT* %88, i32 0, i32 7
-	%90 = getelementptr [8 x %target.SizeAlign]* %89, i32 0, i32 0
+	%90 = getelementptr [6 x %target.SizeAlign]* %89, i32 0, i32 0
 	%91 = getelementptr %target.SizeAlign* %90, i32 0, i32 1
 	%92 = load i8* %91
 	%93 = zext i8 %92 to i32
@@ -36069,7 +37759,7 @@ L.7:
 L.9:
 	%100 = load %bout.BufIO** @llvm_f
 	%101 = bitcast %bout.BufIO* %100 to %bout.BufIO*
-	%102 = getelementptr [3 x i8]* @S.861
+	%102 = getelementptr [3 x i8]* @S.876
 	%103 = bitcast [3 x i8]* %102 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %101, [0 x i8]* %103)
 	%104 = load %bout.BufIO** @llvm_f
@@ -36078,14 +37768,14 @@ L.9:
 	%107 = getelementptr %target.ModelT* %106, i32 0, i32 7
 	%108 = load i8* %i
 	%109 = zext i8 %108 to i32
-	%110 = getelementptr [8 x %target.SizeAlign]* %107, i32 0, i32 %109
+	%110 = getelementptr [6 x %target.SizeAlign]* %107, i32 0, i32 %109
 	%111 = getelementptr %target.SizeAlign* %110, i32 0, i32 0
 	%112 = load i8* %111
 	%113 = zext i8 %112 to i32
 	call void @bout_BufIO_uint(%bout.BufIO* %105, i32 %113)
 	%114 = load %bout.BufIO** @llvm_f
 	%115 = bitcast %bout.BufIO* %114 to %bout.BufIO*
-	%116 = getelementptr [2 x i8]* @S.862
+	%116 = getelementptr [2 x i8]* @S.877
 	%117 = bitcast [2 x i8]* %116 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %115, [0 x i8]* %117)
 	%118 = load %bout.BufIO** @llvm_f
@@ -36094,14 +37784,14 @@ L.9:
 	%121 = getelementptr %target.ModelT* %120, i32 0, i32 7
 	%122 = load i8* %i
 	%123 = zext i8 %122 to i32
-	%124 = getelementptr [8 x %target.SizeAlign]* %121, i32 0, i32 %123
+	%124 = getelementptr [6 x %target.SizeAlign]* %121, i32 0, i32 %123
 	%125 = getelementptr %target.SizeAlign* %124, i32 0, i32 1
 	%126 = load i8* %125
 	%127 = zext i8 %126 to i32
 	call void @bout_BufIO_uint(%bout.BufIO* %119, i32 %127)
 	%128 = load %bout.BufIO** @llvm_f
 	%129 = bitcast %bout.BufIO* %128 to %bout.BufIO*
-	%130 = getelementptr [2 x i8]* @S.863
+	%130 = getelementptr [2 x i8]* @S.878
 	%131 = bitcast [2 x i8]* %130 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %129, [0 x i8]* %131)
 	%132 = load %bout.BufIO** @llvm_f
@@ -36110,7 +37800,7 @@ L.9:
 	%135 = getelementptr %target.ModelT* %134, i32 0, i32 7
 	%136 = load i8* %i
 	%137 = zext i8 %136 to i32
-	%138 = getelementptr [8 x %target.SizeAlign]* %135, i32 0, i32 %137
+	%138 = getelementptr [6 x %target.SizeAlign]* %135, i32 0, i32 %137
 	%139 = getelementptr %target.SizeAlign* %138, i32 0, i32 1
 	%140 = load i8* %139
 	%141 = zext i8 %140 to i32
@@ -36122,7 +37812,7 @@ L.9:
 L.8:
 	%144 = load %bout.BufIO** @llvm_f
 	%145 = bitcast %bout.BufIO* %144 to %bout.BufIO*
-	%146 = getelementptr [20 x i8]* @S.864
+	%146 = getelementptr [20 x i8]* @S.879
 	%147 = bitcast [20 x i8]* %146 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %145, [0 x i8]* %147)
 	%148 = load %bout.BufIO** @llvm_f
@@ -36132,7 +37822,7 @@ L.8:
 	call void @bout_BufIO_str(%bout.BufIO* %149, [0 x i8]* %151)
 	%152 = load %bout.BufIO** @llvm_f
 	%153 = bitcast %bout.BufIO* %152 to %bout.BufIO*
-	%154 = getelementptr [3 x i8]* @S.865
+	%154 = getelementptr [3 x i8]* @S.880
 	%155 = bitcast [3 x i8]* %154 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %153, [0 x i8]* %155)
 	%156 = getelementptr %A.3* @feature, i32 0, i32 3
@@ -36165,11 +37855,11 @@ L.12:
 return:
 	ret void
 }
-@S.866 = internal constant [5 x i8] c".esl\00"
-@S.867 = internal constant [5 x i8] c".o: \00"
-@S.868 = internal constant [21 x i8] c"Unsupported target: \00"
-@S.869 = internal constant [28 x i8] c"Unable to open input file: \00"
-@S.870 = internal constant [31 x i8] c"Unable to create output file: \00"
+@S.881 = internal constant [5 x i8] c".esl\00"
+@S.882 = internal constant [5 x i8] c".o: \00"
+@S.883 = internal constant [21 x i8] c"Unsupported target: \00"
+@S.884 = internal constant [28 x i8] c"Unable to open input file: \00"
+@S.885 = internal constant [31 x i8] c"Unable to create output file: \00"
 define i32 @main(i32 %argc$, [0 x [0 x i8]*]* %argv$) nounwind {
 L.0:
 	%rv.0 = alloca i32
@@ -36482,7 +38172,7 @@ L.45:
 	%158 = bitcast i8* %157 to [4 x i8]*
 	%159 = getelementptr [4 x i8]* %158
 	%160 = bitcast [4 x i8]* %159 to [0 x i8]*
-	%161 = getelementptr [5 x i8]* @S.866
+	%161 = getelementptr [5 x i8]* @S.881
 	%162 = bitcast [5 x i8]* %161 to [0 x i8]*
 	%163 = call i8 @zstr_eq([0 x i8]* %160, [0 x i8]* %162, i32 1024)
 	%164 = icmp ne i8 %163, 0
@@ -36503,7 +38193,7 @@ L.47:
 	%176 = getelementptr [0 x i8]* %175
 	%177 = bitcast [0 x i8]* %176 to [0 x i8]*
 	call void @sys_fildes_str(i32 1, [0 x i8]* %177)
-	%178 = getelementptr [5 x i8]* @S.867
+	%178 = getelementptr [5 x i8]* @S.882
 	%179 = bitcast [5 x i8]* %178 to [0 x i8]*
 	call void @sys_fildes_str(i32 1, [0 x i8]* %179)
 	%180 = load [0 x [0 x i8]*]** %argv
@@ -36525,7 +38215,7 @@ L.44:
 	%191 = xor i1 %190, true
 	br i1 %191, label %L.49, label %L.48
 L.49:
-	%192 = getelementptr [21 x i8]* @S.868
+	%192 = getelementptr [21 x i8]* @S.883
 	%193 = bitcast [21 x i8]* %192 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %193)
 	%194 = load [0 x i8]** %targetarch
@@ -36565,7 +38255,7 @@ L.53:
 	%210 = xor i1 %209, true
 	br i1 %210, label %L.56, label %L.55
 L.56:
-	%211 = getelementptr [28 x i8]* @S.869
+	%211 = getelementptr [28 x i8]* @S.884
 	%212 = bitcast [28 x i8]* %211 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %212)
 	%213 = load [0 x [0 x i8]*]** %argv
@@ -36591,7 +38281,7 @@ L.58:
 	%225 = icmp slt i32 %224, 0
 	br i1 %225, label %L.60, label %L.59
 L.60:
-	%226 = getelementptr [31 x i8]* @S.870
+	%226 = getelementptr [31 x i8]* @S.885
 	%227 = bitcast [31 x i8]* %226 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %227)
 	%228 = load [0 x i8]** %outfile
@@ -36677,5 +38367,6 @@ return:
 	ret i32 %261
 }
 declare void @llvm.memcpy.p0i8.p0i8.i32(i8*, i8*, i32, i32, i1) nounwind
+declare void @llvm.memset.p0i8.i32(i8*, i8, i32, i32, i1) nounwind
 declare i64 @llvm.ctlz.i64(i64, i1)
 declare i64 @llvm.cttz.i64(i64, i1)
