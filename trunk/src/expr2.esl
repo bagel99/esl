@@ -1068,6 +1068,25 @@ ast.Dump(tree);
 	return tree;
     }
 
+    proc Rotate(right: boolean): Ast
+    {   var tok: TokenT;
+        var tree, shft: Ast;
+        var op: ast.Op;
+
+	tree = Bool(0);
+	if tree@.type@.kind != UINT then
+	    lex.Error(OPTYPE);
+	if Token == COMMA then
+	{   tok = Next();
+	    shft = Bool(0);
+	}
+	else
+	    lex.ErrorT(EXPECT, COMMA);
+	if right then op = ROR; else op = ROL; 
+	tree = ast.New2(op, tree@.type, tree, shft);  
+	return tree;
+    }
+
     proc Convert(): Ast
     {   var tok: TokenT;
         var tree: Ast;
@@ -1173,6 +1192,8 @@ ast.Dump(tree);
 	    is CTZ   then tree = IntrinsicUnary(CTZ);
 	    is CTZNZ then tree = IntrinsicUnary(CTZNZ);
 	    is POP   then tree = IntrinsicUnary(POP);
+	    is ROL   then tree = Rotate(false);
+	    is ROR   then tree = Rotate(true);
 	    is CVT   then tree = Convert();
 	    is ZERO  then tree = Zero();
 	    is NEW   then tree = New();

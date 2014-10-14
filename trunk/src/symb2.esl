@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// Copyright (c) 2009-2014, Brian G. Lucas.  See LICENSE file.
 // $Id$
 
 package symb
@@ -123,6 +123,8 @@ package symb
 	NewIntrinsic("_delete", DEL);
 	NewIntrinsic("_zero", ZERO);
 	NewIntrinsic("_zlen", ZLEN);
+	NewIntrinsic("_rol", ROL);
+	NewIntrinsic("_ror", ROR);
 
 	// library routines
 	libnew = NewLibrary("memalloc", taddr);

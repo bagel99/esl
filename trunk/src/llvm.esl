@@ -1143,6 +1143,67 @@ package llvm
 	return false;
     }
 
+    proc Abs(node: Ast)
+    {   var rhs, lhs: Ast;
+
+	rhs = node@.child[0];
+	lhs = ast.New1(NEG, rhs@.type, rhs);
+	node@.child[0] = ast.New2(SLT, type.booltype, rhs,
+				       ast.Const(rhs@.type, 0));
+	node = ast.Child(node, lhs);    // must return same node
+	node = ast.Child(node, rhs);    // must return same node
+	node@.op = IFEXPR;
+	GenSub(node);
+    }
+
+    proc MinMax(node: Ast)
+    {   var rhs, lhs: Ast;
+	var op: ast.Op;
+
+	lhs = node@.child[0];
+	rhs = node@.child[1];
+	if node@.op
+	is SMIN then op = SLT;
+	is SMAX then op = SGT;
+	is UMIN then op = ULT;
+	is UMAX then op = UGT;
+	node@.child[0] = ast.New2(op, type.booltype, lhs, rhs);
+	node@.child[1] = lhs;
+	node = ast.Child(node, rhs);    // must return same node
+	node@.op = IFEXPR;
+	GenSub(node);
+    }
+
+    /*
+     * Replace rotate operations by idioms that the LLVM backend recognizes:
+     * (x << n) | (x >> (32 - n))
+     * (x >> n) | (x << (32 - n))
+     * n == 0 gives undefined behavior, but the idiom generates good code.
+     */
+    proc Rotate(node: Ast)
+    {   var new, lhs, rhs, nlhs, nrhs: Ast;
+	var lop, rop: ast.Op;
+	var t: Type;
+
+	if node@.op == ROL then { lop = LSL; rop = LSR; }
+	                   else { lop = LSR; rop = LSL; }
+	lhs = node@.child[0];
+	rhs = node@.child[1];
+	// Get the type of thing to be rotated (lhs).  LLVM wants the
+	// shift count (rhs) to be the same type.
+	t = lhs@.type;
+	rhs = ast.ExtendT(rhs, t);
+	nlhs = ast.New2(lop, t, lhs, rhs);
+	nrhs = ast.New2(rop, t, lhs,
+	    ast.New2(SUB, t,
+	                  ast.Const(t, lhs@.type@.size), rhs));   
+	node@.op = OR;
+	node@.child[0] = nlhs;
+	node@.child[1] = nrhs;
+//err.str("new:\n"); ast.Dump(node);
+	GenSub(node);
+    }
+
     proc ZLen(node: Ast)
     {   var align: _uint;
 	var t, at, bt: Type;
@@ -1386,28 +1447,6 @@ package llvm
 		    f.chr('\n');
 		    ps@.declared = true;
 		}
-	    }
-	    is ABS then			    // must convert
-	    {   rhs = node@.child[0];
-		lhs = ast.New1(NEG, rhs@.type, rhs);
-		node@.child[0] = ast.New2(SLT, type.booltype, rhs,
-				ast.Const(rhs@.type, 0));
-		node = ast.Child(node, lhs);    // must return same node
-		node = ast.Child(node, rhs);    // must return same node
-		node@.op = IFEXPR;
-	    }
-	    is UMIN, UMAX, SMIN, SMAX then  // must convert
-	    {   lhs = node@.child[0];
-		rhs = node@.child[1];
-		if node@.op
-		is SMIN then op = SLT;
-		is SMAX then op = SGT;
-		is UMIN then op = ULT;
-		is UMAX then op = UGT;
-		node@.child[0] = ast.New2(op, type.booltype, lhs, rhs);
-		node@.child[1] = lhs;
-		node = ast.Child(node, rhs);    // must return same node
-		node@.op = IFEXPR;
 	    }
 	    is ASM then return;     // ignore SCONs under an ASM
 	    i = 0;
@@ -1785,9 +1824,10 @@ package llvm
 		// adjust width of final result
 		rhs = ast.Extend(rhs, lhs@.type@.base@.width, true);
 		// make sure the endian is correct
-		if lhs@.width > Target.membits && 
-		   lhs@.type@.memorder != Target.memorder then
+		if lhs@.type@.base@.memorder != Target.memorder then
 		    rhs = ast.New1(REVB, rhs@.type, rhs);
+//err.str("lhs\n"); ast.Dump(lhs);
+//err.str("rhs\n"); ast.Dump(rhs);
 		store@.child[i] = lhs;
 		store@.child[n+i] = rhs;
 	    }
@@ -1940,6 +1980,9 @@ f.flush();
 	is REVB, NOT, NEG, FNEG, FCVTL, FCVTS, CVTUF, CVTIF, CVTFU, CVTFI then
 	    UnaryOp(node);
 	is CLZ, CLZNZ, CTZ, CTZNZ, POP then UnaryOp(node);
+	is ABS then Abs(node);
+	is UMIN, UMAX, SMIN, SMAX then MinMax(node);
+	is ROL, ROR then Rotate(node);
 	is ZLEN then ZLen(node);
 	is ADD then BinaryOp(node, "add");
 	is SUB then BinaryOp(node, "sub");

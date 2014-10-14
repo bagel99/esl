@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// Copyright (c) 2009-2014, Brian G. Lucas.  See LICENSE file.
 // $Id$
 
 package symb
@@ -8,7 +8,9 @@ package symb
     type OffsT: 0..0xFFFF;
     type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
 	CLZ, CLZNZ, CTZ, CTZNZ, POP,
-	CVT, NEW, DEL, ZERO, ZLEN );
+	CVT, NEW, DEL, ZERO, ZLEN,
+	ROL, ROR
+    );
     type SymbNode:
     {
 	next:	  @SymbNode;	// for lists
