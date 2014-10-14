@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// Copyright (c) 2009-2014, Brian G. Lucas.  See LICENSE file.
 // $Id$
 
 package ast
@@ -27,6 +27,7 @@ package ast
 	FNEG,   FCVTL,  FCVTS,
 	CVTUF,	CVTIF,  CVTFU,	CVTFI,
 	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,	ZLEN,
+	ROL,    ROR,
 	ADD,    SUB,
 	MUL,    DIV,    MOD,
 	EQ,     NE,
@@ -69,6 +70,7 @@ package ast
 	[CVTUF]=  1,	[CVTIF]=  1,	[CVTFU]=  1,	[CVTFI]=  1,
 	[CLZ]=    1,	[CLZNZ]=  1,	[CTZ]=    1,	[CTZNZ]=  1,
 	[POP]=    1,    [ZLEN]=   2,
+	[ROL]=    2,    [ROR]=    2,
 	[ADD]=	  2,	[SUB]=    2,
 	[MUL]=	  2,    [DIV]=	  2,    [MOD]=	  2,
 	[EQ]=	  2,    [NE]=     2,
@@ -389,11 +391,11 @@ package ast
 		lex.Error(BADCAST);
 	}
 	is RECORD, ARRAY then
-	{   if to@.packed &&
-	       tree@.type@.kind == UINT && tree@.width == to@.size then
-	    {					// UINT -> PACKED
-		tree@.type = to;
-	    }
+	{   if to@.packed && tree@.width == to@.size &&
+		    (tree@.type@.kind == UINT || 
+		    ((tree@.type@.kind == RECORD || tree@.type@.kind == ARRAY) &&
+		      tree@.type.packed)) then
+		tree@.type = to;		// UINT or PACKED -> PACKED
 	    else
 		lex.Error(BADCAST);
 	}
@@ -714,6 +716,7 @@ package ast
 	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",		
 	[CTZ]=   "CTZ",		[CTZNZ]= "CTZNZ",
 	[POP]=   "POP",		[ZLEN]=  "ZLEN",
+	[ROL]=   "ROL",		[ROR]=   "ROR",
 	[ADD]=   "ADD",		[SUB]=   "SUB",
 	[MUL]=   "MUL",		[DIV]=   "DIV",		[MOD]=   "MOD",
 	[EQ]=    "EQ",		[NE]=    "NE",
