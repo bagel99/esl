@@ -60,6 +60,8 @@ package symb
 	s = New(TYPE, "_boolean", VISIBLE);
 	s@.type = t;
 	t@.name = s;
+	t@.lo = 0;
+	t@.hi = 1;
 	type.booltype = t;	// internal use by compiler
 	s = Clone(s, "boolean");	// user convenience 
 	// now expose the constants false and true
@@ -166,6 +168,19 @@ package symb
 	err.chr(')');
     }
 
+    proc DumpReturns(tl: type.TypeList)
+    {
+	if tl != 0 then
+	{   err.chr(':');
+	    loop
+	    {   type.DumpT(tl@.type, false);
+		tl = tl@.next;
+	      exit tl == 0;
+		err.chr(',');
+	    }
+	}
+    }
+    
     proc DumpLinkage(s: Symb)
     {
 	if s@.linkage
@@ -207,16 +222,7 @@ package symb
 	    {   err.str("proc ");
 		err.str(s@.ident);
 		DumpFormals(s@.parmlist);
-		tl = s@.retvlist;
-		if tl != 0 then
-		{   err.chr(':');
-		    loop
-		    {   type.DumpT(tl@.type, false);
-			tl = tl@.next;
-		      exit tl == 0;
-			err.chr(',');
-		    }
-		}
+		DumpReturns(s@.retvlist);
 	    }
 	    else
 	    {   err.str("intrinsic ");

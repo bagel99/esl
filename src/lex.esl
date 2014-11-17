@@ -22,6 +22,7 @@ package lex
 	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
+	BADLEN,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -113,6 +114,7 @@ package lex
 	[NEEDSIZE] =    "Must specify size for variable sized object",
 	[BADSIZE] =     "Specified size smaller that actual object size",
 	[BADAT] =       "Illegal field offset specified",
+	[BADLEN] =      "Not an array or array with flexible length",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };

@@ -342,6 +342,7 @@ package stmt
 	tok = Token;
 	if tok == ID then
 	{   s = symb.New(CONSTANT, lex.Ident, VISIBLE);
+	    s@.const = ast.Null;	// in case a legal value is not parsed
 	    tok = Next();
 	    t = 0;
 	    if tok == COLON then	// optional type
@@ -480,7 +481,7 @@ package stmt
 		    {   if tok == COMMA then
 			{   tok = Next();
 			    if constraints[na] == OUT then
-			    {   outputs[no] = expr.GetLHS();
+			    {   outputs[no] = expr.GetLHS(0);
 				no += 1;
 			    }
 			    else				// IN
@@ -583,24 +584,28 @@ package stmt
     }
 
     proc AssignArray(lhs:Ast): Ast
-    {   var tree, lsize, rsize, align: Ast;
+    {   var rhs, tree, lsize, rsize, align: Ast;
 	var lalign, ralign, width: _uint;
-	var t:Type;
+	var tl, tr:Type;
 
-	t = lhs@.type@.base;
-	tree = expr.Term(t);
-	if tree == 0 then return 0;
-	if tree@.type == 0 || tree@.type@.kind != ARRAY then
+	tl = lhs@.type@.base;
+	rhs = expr.Term(tl);
+//err.str("AssignArray:\nlhs=\n");  ast.Dump(lhs);
+//err.str("rhs=\n");  ast.Dump(rhs);
+	if rhs == 0 then return 0;
+	if rhs@.type == 0 || rhs@.type@.kind != ARRAY then
 	{   lex.Error(NOTARRAY);
 	    return 0;
 	}
-	if t@.packed then	// FIXME: not possible?
-	{   if lhs@.op == SLICE then
+	if tl@.packed then	// FIXME: not possible?
+	{
+err.str("Assign to packed array\n");
+	    if lhs@.op == SLICE then
 	    {   lex.ErrorS(NOTIMPL, "packed array slices");
-//		return 0;
+		return 0;
 	    }
-	    tree = CheckSwap(lhs, tree);
-	    tree = ast.New2(STORE, 0, lhs, tree);
+	    rhs = CheckSwap(lhs, rhs);
+	    tree = ast.New2(STORE, 0, lhs, rhs);
 	}
 	else
 	{
@@ -613,21 +618,23 @@ package stmt
 	    {   lsize = ast.Const(type.wordtype, lhs@.type@.base@.Span());
 		width = lhs@.type@.base@.base@.width;
 	    }
-	    if tree@.op == LOAD && tree@.type@.kind == ARRAY then // undo the load
-		tree = tree@.child[0];
-	    else if tree@.op == SCON || tree@.op == CLIST then
-		tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
-	    ralign = expr.GetAlignment(tree);
-//err.str("ArrayCopy lalign="); err.uint(lalign);
-//err.str(" ralign="); err.uint(ralign); err.nl();
+	    if rhs@.op
+	    is LOAD then
+		rhs = expr.UnLoad(rhs);
+	    is SCON, CLIST then
+		rhs = ast.New1(BYREF, type.MakeRef(rhs@.type), rhs);
+//err.str("adjusted rhs=\n");  ast.Dump(rhs);
+//err.str("\tlalign="); err.uint(lalign);
+//err.str(" lsize=\n"); ast.Dump(lsize);
+	    ralign = expr.GetAlignment(rhs);
+//err.str("\tralign="); err.uint(ralign);
 	    if ralign < lalign then
 		lalign = ralign;
-	    if tree@.op == SLICE then
-		rsize = tree@.child[2];
+	    if rhs@.op == SLICE then
+		rsize = rhs@.child[2];
 	    else
-		rsize = ast.Const(type.wordtype, tree@.type@.base@.Span());
-//err.str("ArrayCopy lsize=\n"); ast.Dump(lsize);
-//err.str("rsize=\n"); ast.Dump(rsize);
+		rsize = ast.Const(type.wordtype, rhs@.type@.base@.Span());
+//err.str(" rsize=\n"); ast.Dump(rsize);
 	    if lsize@.op == CONST && lsize@.valu == 0 then
 	    {   if rsize@.op == CONST && rsize@.valu == 0 then
 		    lex.Error(ARRAYCOPY);
@@ -641,8 +648,8 @@ package stmt
 	    lsize = ast.New2(MUL, lsize@.type, lsize,
 			     ast.Const(type.wordtype, width/Target.membits));
 	    lhs = ArrayFix(lhs);
-	    tree = ArrayFix(tree);
-	    tree = ast.New2(COPY, lhs@.type, lhs, tree);
+	    rhs = ArrayFix(rhs);
+	    tree = ast.New2(COPY, lhs@.type, lhs, rhs);
 	    tree = ast.Child(tree, lsize);
 	    align = ast.Const(type.wordtype, lalign);
 	    tree = ast.Child(tree, align);
@@ -669,7 +676,7 @@ package stmt
 		lhs = 0;
 	    }
 	    else
-		lhs = expr.GetLHS();
+		lhs = expr.GetLHS(0);
 	    tree = ast.Child(tree, lhs);
 	    nl += 1;
 	}
@@ -682,11 +689,16 @@ package stmt
 	    loop
 	    {   lhs = tree@.child[nr];
 		t = 0;
+//err.str("Assign: lhs=\n");  ast.Dump(lhs);
 		if lhs != 0 then
-		{   if lhs@.type@.kind != REF then
-			lex.ErrorS(COMPILER, "Assign LHS not REF");
-		    else
+		{   if lhs@.op == FIELD then
+			t = lhs@.type;
+		    else if lhs@.type@.kind == REF then
 			t = lhs@.type@.base;
+		    else
+		    {   lex.ErrorS(COMPILER, "Assign LHS not REF");
+			ast.Dump(lhs);
+		    }
 		}
 		if t != 0 && t@.kind == RECORD && !t@.packed then
 		{   if optok == ASGN && nl == 1 then
@@ -715,10 +727,15 @@ package stmt
 			    {   lrhs = ast.New1(GETRV, tl@.type, rhs);
 				lrhs@.width = tl@.type@.width;
 				lrhs@.valu = i;
+				if lhs != 0 && lhs@.op != FIELD then
+				{   lrhs = expr.Adjust(lrhs, lhs@.type@.base);
+				    lrhs = CheckSwap(lhs, lrhs);
+				}
 				tree = ast.Child(tree, lrhs);
 				i += 1;
 				tl = tl@.next;
 			      exit tl == 0;
+				lhs = tree@.child[nr+i];
 			    }
 			    nr += i;
 			}
@@ -730,8 +747,10 @@ package stmt
 				    rhs = ast.OpBinary(op, lrhs, rhs, 0);
 				}
 				if lhs != 0 then
-				{   rhs = expr.Adjust(rhs, lhs@.type@.base);
-				    rhs = CheckSwap(lhs, rhs);
+				{   if lhs@.op != FIELD then
+				    {   rhs = expr.Adjust(rhs, lhs@.type@.base);
+				        rhs = CheckSwap(lhs, rhs);
+				    }
 				}
 			    }
 			    else lex.Error(RHSASSIGN);
@@ -763,14 +782,10 @@ package stmt
 	    tok = Next();
 	}
 	if s != 0 then
-	{   tree = expr.Primary(s, 0);
+	{   tree = expr.GetLHS(s);
 	    if tree != 0 then
 	    {   if tree@.op
 		is CALL, CALLI, ASM, SET then {}     // no further action
-		is TYPE then
-		{   lex.ErrorI(BADTYPE, tree@.symb@.ident);
-		    tok = lex.Skip(skiplist);
-		}
 		else tree = Assign(tree);
 	    }
 	}

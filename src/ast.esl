@@ -7,12 +7,12 @@ package ast
     (
 	NULL,
 	NOP,
-	TYPE,		// temporary placeholder
 	FILE,		// source file boundary
 	PACKAGE,	// package boundary
 	DCLVAR,		// variable declaration
 	DCLCON,		// constant declaration (for aggregates)
 	CONST,	FCON,	SCON,	CLIST,	CRANGE,
+	FIELD,
 	VAR,
 	OFFSET,	INDEX,	SLICE,	BYREF,
 	CAST,
@@ -51,12 +51,12 @@ package ast
     const NumChildDefault: [Op]0..255 =
     {   [NULL]=	  0,
 	[NOP]=	  1,
-	[TYPE]=   1,	[FILE]=   1,	[PACKAGE]=1,
+	[FILE]=   1,	[PACKAGE]=1,
 	[DCLVAR]= 1,
 	[DCLCON]= 1,
 	[CONST]=  0,	[FCON]=   0,	[SCON]=   0,
 	[CLIST]=  8,	[CRANGE]= 2,
-	[VAR]=    0,
+	[FIELD]=  2,    [VAR]=    0,
 	[OFFSET]= 1,	[INDEX]=  2,	[SLICE]=  3,	[BYREF]=  1,
 	[CAST]=   1,
 	[CALL]=   4,	[CALLI]=  5,	[ASM]=    5,
@@ -678,7 +678,6 @@ package ast
     const OpName: [Op]@[]Char =
     {   [NULL]=  "NULL",
 	[NOP]=   "NOP",
-	[TYPE]=  "TYPE",
 	[FILE]=  "FILE",
 	[PACKAGE]="PACKAGE",
 	[DCLVAR]="DCLVAR",
@@ -686,6 +685,7 @@ package ast
 	[CONST]= "CONST",
 	[FCON]=  "FCONST",
 	[SCON]=  "STRCON",
+	[FIELD]= "FIELD",
 	[VAR]=   "VAR",
 	[CALL]=  "CALL",
 	[CALLI]= "CALLI",
@@ -758,7 +758,7 @@ package ast
 	err.uint(node@.num);
 	if node@.op
 	is CONST, OFFSET, COPY, GETRV, CLZ, CTZ then
-	{   err.str(" value ");
+	{   err.str(" value=");
 	    if node@.op == CONST && node@.type@.kind == SINT then
 		err.int64(_int64(node@.valu));
 	    else
@@ -767,18 +767,22 @@ package ast
 	is SCON then
 	{   err.str(" id ");
 	    err.uint32(_uint32(node@.valu));
-	    err.str(" value \"");
+	    err.str(" value=\"");
 	    err.strn(node@.symb@.ident, node@.type.Span()-1);
 	    err.chr('"');
 	}
 	is DCLVAR, VAR, PROC, CALL, FILE, PACKAGE then
 	{
-	    err.str(" name ");
+	    err.str(" name=");
 	    s = node@.symb;
 	    if s != 0 then
 		err.str(s@.ident);
 	    else
 		err.str("*NULL*");
+	}
+	is FIELD then
+	{   err.str(" bits=");
+	    err.uint64(node@.valu);
 	}
 	err.chr(')');
 	if t != 0 then

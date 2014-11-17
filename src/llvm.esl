@@ -1629,142 +1629,67 @@ package llvm
 	PEndLine(node);
     }
 
-    proc IsPacked(node: Ast): boolean
-    {
-	if node@.type@.kind != REF then
-	    return node@.type@.packed;
-	else
-	    return node@.type@.base@.packed;
-    }
+    proc FieldExtract(node: Ast)
+    {   var tree, mask, shft: Ast;
 
-    proc BitfieldOffset(node: Ast, fno: type.Valu): type.BitSize
-    {   var foffs, rsize, fsize: type.BitSize;
-	var s: Symb;
-	var i: ast.NSubNodes;
-	var t: Type;
-
-        t = node@.type;
-        if t@.kind == REF then t = t@.base;
-	// assert t@.kind == RECORD
-	rsize = t@.width;
-	if t@.bitorder == MSB then foffs = rsize; else foffs = 0;
-	s = t@.list;
-	i = 0;
-	while s != 0 do
-	{   fsize = s@.type@.size;
-	    if t@.bitorder == MSB then foffs -= fsize;
-	  exit i == fno;
-	    if t@.bitorder != MSB then foffs += fsize;
-	    s = s@.next;
-	    i += 1;
-	}
-	return foffs;
-    }
-
-    proc BitfieldIndex(node: Ast, size: type.BitSize, tree: Ast): Ast
-    {   var indx: Ast;
-
-	// FIXME: what about bitorder?
-	indx = ast.ExtendT(node@.child[1], type.wordtype);
-	indx = ast.New2(MUL, type.wordtype, indx,
-                        ast.Const(type.wordtype, size));
-	if tree != 0 then
-	    tree = ast.New2(ADD, type.wordtype, tree, indx);
-	else
-	    tree = indx;
-	return tree;
-    }
-
-    proc BitfieldRewrite(offs: Ast): Ast, Ast, Ast
-    {   var varb, tree: Ast;
-	var shft: type.BitSize;
-	var t: Type;
-
+	mask = ast.Const(type.wordtype, (1<<_uint(node.valu))-1);
 	shft = 0;
-	varb = 0;
-	loop
-	{   if offs@.op
-	    is OFFSET then
-		shft += BitfieldOffset(offs@.child[0], offs@.valu);
-	    is INDEX then
-		varb = BitfieldIndex(offs, offs@.type@.base@.size, varb);
-	    is SLICE then
-		varb = BitfieldIndex(offs, offs@.type@.base@.size, varb);
-	    offs = offs@.child[0];
-	  exit (offs@.op < OFFSET || offs@.op > SLICE) ||
-	    !IsPacked(offs@.child[0]);
-	}
-	if shft != 0 then
-	{   tree = ast.Const(type.wordtype, shft);
-	    if varb != 0 then
-		varb = ast.New2(ADD, type.wordtype, varb, tree);
+	tree = node;
+	while tree@.op == FIELD do
+	{   if shft == 0 then
+		shft = tree@.child[1];
 	    else
-		varb = tree;
+		shft = ast.New2(ADD, type.wordtype, shft, tree@.child[1]);
+	    tree = tree@.child[0];
 	}
-	t = offs@.type;
-	if t@.kind != REF then
-	{   // assert offs@.op == CONST
-	    tree = offs;
-	    tree@.type = type.wordtype;
-	    tree@.width = type.wordtype@.width;
-	}
-	else
-	{   t = t@.base;
-	    // load the container of the bitfield as a UINT
-	    tree = ast.New1(LOAD, target.utype(t@.width), offs);
-	    tree@.width = tree@.type@.width;
-	    // make sure the endian is correct
-	    if tree@.width > Target.membits && 
-	       t@.memorder != Target.memorder then
-		tree = ast.New1(REVB, tree@.type, tree);
-	}
-	// make register sized, this simplifies things
+	// extract works at wordtype, force it
 	tree = ast.ExtendT(tree, type.wordtype);
-	return tree,    // return the loaded container,
-	       varb,    // the shift computation,
-	       offs;    // and the base address 
+	if shft@.op != CONST || shft@.valu != 0 then    // FIXME - necessary?
+	    tree = ast.New2(LSR, type.wordtype, tree, shft);
+	tree = ast.New2(AND, type.wordtype, tree, mask);
+	// now narrow to extracted type size
+	tree = ast.Extend(tree, node@.type@.width, true);
+	GenSub(tree);
+	node@.child[0] = tree;
+	node@.seqno = tree@.seqno;
     }
 
-    proc BitfieldMask(node: Ast): Ast
-    {   var mask: Ast;
-	var bits: type.Valu;
-	var size: type.BitSize;
+    proc FieldInsert(lhs: Ast, rhs: Ast): Ast, Ast
+    {   var temp, mask, shft: Ast;
 
-	if node@.op == SLICE then
-	{   if node@.child[2]@.op != CONST then
-	    {
-		lex.ErrorS(COMPILER, "BitfieldMask of variable SLICE");
-	    }
+	mask = ast.Const(type.wordtype, (1<<_uint(lhs.valu))-1);
+	shft = 0;
+	while lhs@.op == FIELD do
+	{   if shft == 0 then
+		shft = lhs@.child[1];
 	    else
-	    {   size = node@.type@.base@.size;
-		size = size * type.BitSize(node@.child[2]@.valu);
-	    }
+		shft = ast.New2(ADD, type.wordtype, shft, lhs@.child[1]);
+	    lhs = lhs@.child[0];
+	}
+	// insert works at wordtype, force it
+	temp = ast.ExtendT(lhs, type.wordtype);
+	temp = ast.New2(AND, type.wordtype, temp,
+		    ast.New1(NOT, type.wordtype,
+			ast.New2(LSL, type.wordtype, mask, shft)));
+	// extract works at wordtype, force it
+	rhs = ast.ExtendT(rhs, type.wordtype);
+	// make sure its not wider than the target field
+	// FIXME - uncomment for safer code
+//	rhs = ast.New2(AND, type.wordtype, rhs, mask);
+	rhs = ast.New2(LSL, type.wordtype, rhs, shft);
+	rhs = ast.New2(OR, type.wordtype, temp, rhs);
+	// now narrow to target type size
+	rhs = ast.Extend(rhs, lhs@.width, true);
+	// undo the load  FIXME - same as UnLoad()?
+	if lhs@.op == LOAD then
+	    lhs = lhs@.child[0];      // undo the lhs LOAD
+	else if lhs@.op == REVB && lhs@.child[0]@.op == LOAD then
+	{   lhs = lhs@.child[0]@.child[0];
+	    rhs = ast.New1(REVB, rhs@.type, rhs);
 	}
 	else
-	    size = node@.type@.base.size;
-	bits = (1<<size)-1;
-	mask = ast.Const(type.wordtype, bits);
-	return mask;
-    }
-
-    proc LoadPacked(load: Ast, offs: Ast)
-    {   var tree, varb, mask: Ast;
-
-	{   // We are dealing with a packed record or array (aka bitfield).
-	    mask = BitfieldMask(offs);
-	    // Rewrite the AST to extract item.
-	    tree, varb, offs = BitfieldRewrite(offs);
-	    // shift item rightward, if necessary
-	    if varb != 0 then
-		tree = ast.New2(LSR, type.wordtype, tree, varb);
-	    // mask off the parts we don't want
-	    tree = ast.New2(AND, type.wordtype, tree, mask);
-	    // possibly narrow the size
-	    tree = ast.Extend(tree, load@.width, true);
-	    GenSub(tree);
-	    load@.child[0] = tree;      // load@.op == LOAD, we're done with it
-	    load@.seqno = tree@.seqno;  // copy up seqno of node below
-	}
+	    lex.ErrorS(COMPILER, "FieldInsert LOAD not found");
+	return lhs, rhs;
     }
 	
     proc Load(load: Ast)
@@ -1773,10 +1698,6 @@ package llvm
 	// LLVM doesn't handle bitfields (packed records or arrays)
 	// so we expand bitfield extract
 	offs = load@.child[0];
-	if (offs@.op >= OFFSET && offs@.op <= SLICE) &&
-	    IsPacked(offs@.child[0]) then
-		LoadPacked(load, offs);
-	else    // normal load
 	{   GenSub(offs);
 	    load@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = load ", load);
@@ -1800,34 +1721,11 @@ package llvm
 	while i < n do
 	{   lhs = store@.child[i];
 	    rhs = store@.child[n+i];
-	    // LLVM doesn't handle bitfields (packed records or arrays)
-	    // so we expand bitfield insert
-	    if (lhs != 0 && lhs@.op >= OFFSET && lhs@.op <= SLICE) &&
-		IsPacked(lhs@.child[0]) then
+	    if (lhs != 0 && lhs@.op == FIELD) then
 	    {   // We are dealing with a packed record or array (aka bitfield).
-		mask = BitfieldMask(lhs);
-		// Rewrite the AST to extract item.
-		tree, varb, lhs = BitfieldRewrite(lhs);
-		// shift the mask leftward, if necessary
-		if varb != 0 then
-		    mask = ast.New2(LSL, type.wordtype, mask, varb);
-		mask = ast.New1(NOT, type.wordtype, mask);
-		// mask out the field in the target
-		tree = ast.New2(AND, type.wordtype, tree, mask);
-		// make the value word size
-		rhs = ast.ExtendT(rhs, type.wordtype);
-		// shift the value leftward, if necessary
-		if varb != 0 then
-		    rhs  = ast.New2(LSL, type.wordtype, rhs, varb);
-		// or in the new value
-		rhs  = ast.New2(OR, type.wordtype, tree, rhs);
-		// adjust width of final result
-		rhs = ast.Extend(rhs, lhs@.type@.base@.width, true);
-		// make sure the endian is correct
-		if lhs@.type@.base@.memorder != Target.memorder then
-		    rhs = ast.New1(REVB, rhs@.type, rhs);
-//err.str("lhs\n"); ast.Dump(lhs);
-//err.str("rhs\n"); ast.Dump(rhs);
+		// LLVM doesn't handle bitfields (packed records or arrays),
+		// so we expand bitfield insert
+		lhs, rhs = FieldInsert(lhs, rhs);
 		store@.child[i] = lhs;
 		store@.child[n+i] = rhs;
 	    }
@@ -1923,6 +1821,7 @@ f.flush();
 	is GETRV then GetRV(node);
 	is STORE then Store(node);
 	is LOAD  then Load(node);
+	is FIELD then FieldExtract(node);
 	is BYREF then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;

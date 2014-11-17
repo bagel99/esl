@@ -2,12 +2,12 @@
 #
 # Run a .ll file through the LLVM backend
 #
-LLVM=$HOME/work/llvm-3.3/build/Release+Asserts/bin		# !!!FIX THIS!!!
+LLVM=$HOME/work/llvm-3.5.0/build/Release+Asserts/bin		# !!!FIX THIS!!!
 #LLVM=/usr/bin
 DEBUG=
 ARCH=
 INLINE=
-OPT="-asm-verbose=0"
+OPT=
 TRIPLE=
 while getopts "Im:O:" flags
 do
@@ -37,5 +37,5 @@ file=$1
 j=`basename $file .ll`
 $LLVM/llvm-as -o - $file | \
 $LLVM/opt -std-compile-opts ${INLINE} -o -| \
-$LLVM/llc ${DEBUG} -march=${ARCH} ${TRIPLE} ${CPU} ${ATTR} ${OPT}  -o ${j}.s
+$LLVM/llc ${DEBUG} -march=${ARCH} ${TRIPLE} ${CPU} ${ATTR} ${OPT} -asm-verbose=0 -o ${j}.s
 

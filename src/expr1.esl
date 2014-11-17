@@ -6,7 +6,8 @@ package expr
     proc Bool(t:Type): Ast;		// forward
     proc Const(t:Type): Ast;		// forward
     proc ConstValue(t:Type): Valu;	// forward
-    proc GetLHS(): Ast;			// forward
+    proc GetLHS(s:Symb): Ast;		// forward
     proc EnumConst(t:Type): Ast;	// forward
+    var savedsym: Symb = 0;
 }
 
