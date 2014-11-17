@@ -65,9 +65,13 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	is 'D' then 
 	{   if argv[i]@[2]
 	    is 'a' then debug.ast = true;
-	    is 's' then 
-	    {   // FIXME: allow individual selection
-		debug.symb.univ = true;
+	    is 's' then     // symbols except outermost
+	    {   debug.symb.prog = true;
+		debug.symb.pack = true;
+		debug.symb.proc = true;
+	    }
+	    is 'S' then     // all symbols
+	    {   debug.symb.univ = true;
 		debug.symb.prog = true;
 		debug.symb.pack = true;
 		debug.symb.proc = true;

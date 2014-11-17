@@ -879,33 +879,53 @@ err.nl();
     {   var tok: TokenT;
 	var t, bt: Type;
 	var tree: Ast;
+	var s, ts: Symb;
+	var istype: boolean;
 
 	tok = Next();
 	t = type.New(ARRAY);
 	if tok != AEND then
-	{   tree = expr.Bool(0);
-	    if tree != 0 then
-	    {   if tree@.op
-		is CONST then
-		{   if Token == RANGE then
-		    {   t@.index = Range(tree);
-			t@.lo = t@.index@.lo;
-			t@.hi = t@.index@.hi;
-		    }
-		    else
-		    {   t@.lo = 0;
-			t@.hi = tree@.valu - 1;
-			t@.index = type.wordtype;
-		    }
+	{   istype = false;
+	    ts = 0;
+	    if tok == ID then
+	    {   s = symb.Find(lex.Ident);
+		if s != 0 && s@.kind == TYPE then
+		{   t@.lo = s@.type@.lo;
+		    t@.hi = s@.type@.hi;
+		    t@.index = s@.type;
+		    tok = Next();
+		    istype = true;
 		}
-		is TYPE then
-		{   if tree@.type@.kind
-		    is ENUM, UINT then
-		    {   t@.lo = tree@.type@.lo;
-		        t@.hi = tree@.type@.hi;
-			t@.index = tree@.type;
+		else
+		{   // FIXME
+		    // at this point all the package prefixes have been stripped
+		    // if they have there is no context to find the name again
+		    // possible fixes
+		    // 1. change all expr stuff to take an extra argument:
+		    //    Bool(s, 0);  expr.Term checks before calling Find.
+		    // 2. create global 'savedsym' which expr.Term checks
+		    //    before call Find.
+		    // 3. create an alias for current identifier to the
+		    //    symbol we found.  Perhaps remove it when we are done
+		    expr.savedsym = s;
+		}
+	    }
+	    if !istype then
+	    {   tree = expr.Bool(0);
+		if tree != 0 then
+		{   if tree@.op
+		    is CONST then
+		    {   if Token == RANGE then
+			{   t@.index = Range(tree);
+			    t@.lo = t@.index@.lo;
+			    t@.hi = t@.index@.hi;
+			}
+			else
+			{   t@.lo = 0;
+			    t@.hi = tree@.valu - 1;
+			    t@.index = type.wordtype;
+			}
 		    }
-		    else lex.Error(BADINDEX);
 		}
 		else lex.Error(BADINDEX);
 	    }
@@ -1090,7 +1110,7 @@ if debug.tests[2] then {
 	is QUEST then
 	{   var tree: Ast;
 	    tok = Next();
-	    tree = expr.GetLHS();
+	    tree = expr.GetLHS(0);
 	    if tree != 0 then
 	    {   // assert tree@.kind == REF
 		t = tree@.type@.base;
@@ -1216,6 +1236,7 @@ if debug.tests[2] then {
 		is REFPROC then 
 		{   err.str("@_");
 		    symb.DumpFormals(t@.list@.parmlist);
+		    symb.DumpReturns(t@.list@.retvlist);
 		}
 		else
 		    err.str("*UNKNOWN*");
