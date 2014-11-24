@@ -1112,8 +1112,10 @@ if debug.tests[2] then {
 	    tok = Next();
 	    tree = expr.GetLHS(0);
 	    if tree != 0 then
-	    {   // assert tree@.kind == REF
-		t = tree@.type@.base;
+	    {   if tree@.op == FIELD then
+		    t = tree@.type;
+		else    // assert tree@.kind == REF
+		    t = tree@.type@.base;
 	    }
 	}
 	else
