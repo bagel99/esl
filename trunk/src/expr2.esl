@@ -1360,7 +1360,6 @@ else
 			    }
 			    if t@.kind == RECORD then
 			    {   s = symb.FindLocal(t@.list, lex.Ident);
-				tok = Next();
 				if s != 0 then
 				{
 				    if t@.packed then
@@ -1380,6 +1379,9 @@ else
 					tree = Load(tree);
 				    }
 				}
+				else
+				    lex.ErrorS(UNDEFFIELD, lex.Ident);
+				tok = Next();
 			    }
 			    else
 {
