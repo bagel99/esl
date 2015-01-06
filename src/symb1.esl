@@ -149,14 +149,25 @@ package symb
 	return New(FILE, full, PRIVATE);
     }
 
-    proc NewString(string: @[]_byte): Symb
+    proc NewString(str: @[]_byte, len: _uint): Symb
     {   var s: Symb;
-	var len: _uint;
 
-	len = zstr.len(string, lex.StringMax);
 	s = Symb(sys.malloc(SymbNode?size + len + 1));
 	_zero(s);
-	zstr.copy(s@.ident, string, lex.StringMax);
+	s@.ident[0:len] = str@;
+	s@.kind = STRING;
+	s@.lineno = lex.Lineno();
+	return s;
+    }
+	
+    proc NewString2(str1: @[]_byte, len1: _uint,
+		   str2: @[]_byte, len2: _uint): Symb
+    {   var s: Symb;
+
+	s = Symb(sys.malloc(SymbNode?size + len1 + len2 + 1));
+	_zero(s);
+	s@.ident[0:len1] = str1@;
+	s@.ident[len1:len2] = str2@;
 	s@.kind = STRING;
 	s@.lineno = lex.Lineno();
 	return s;
