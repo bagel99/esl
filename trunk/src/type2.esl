@@ -201,7 +201,7 @@ package type
 	if tok == PBEG then
 	{   tok = Next();
 	    if tok == STR then
-	    {   s@.altsymb = symb.NewString(lex.StringBuf);
+	    {   s@.altsymb = symb.NewString(lex.StringBuf, lex.StringLen);
 		tok = Next();
 	    }
 	    else if constok then
@@ -219,7 +219,7 @@ package type
 	if tok == PBEG then
 	{   tok = Next();
 	    if tok == STR then
-	    {   s@.section = symb.NewString(lex.StringBuf);
+	    {   s@.section = symb.NewString(lex.StringBuf, lex.StringLen);
 	    	tok = Next();
 	    	lex.Expect(PEND);
 	    	return;

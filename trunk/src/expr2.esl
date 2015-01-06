@@ -52,7 +52,7 @@ package expr
 	t@.memorder = Target.memorder;
 	tree = ast.New(SCON, t);
 //err.str("NewString \"");  err.str(lex.StringBuf); err.str("\"\n");
-	tree@.symb = symb.NewString(lex.StringBuf);
+	tree@.symb = symb.NewString(lex.StringBuf, lex.StringLen);
 //symb.DumpS(tree@.symb);
 	strid += 1;
 	tree@.valu = strid;
@@ -60,29 +60,15 @@ package expr
     }
 
     proc StringCat(tree: Ast): Ast
-    {   var sr: _address;
-	var t: Type;
-	var nl, nr, i: _uint;
+    {   var t: Type;
+	var nl, nr: _uint;
 
 	// modify the ARRAY type
 	t = tree@.type;     // assert t@.kind == ARRAY
-	nl = t@.hi - 1;	    // LHS string length without nul termination
+	nl = t@.hi;	    // LHS string length without nul termination
 	nr = lex.StringLen; // RHS string length with nul termination
-	t@.hi = nl+nr;
-	// move RHS down in StringBuf, include nul termination
-	// potential overlap, must do a reverse copy
-	i = nr;
-	loop
-	{   lex.StringBuf[i+nl] = lex.StringBuf[i];
-	  exit i == 0;
-	    i -= 1;
-	}
-	// copy in LHS, symbol is string
-	sr = tree@.symb@.ident;
-	lex.StringBuf[0:nl] = sr[0:nl];
-	// create a new string long enough
-//err.str("NewString \"");  err.str(lex.StringBuf); err.str("\"\n");
-	tree@.symb = symb.NewString(lex.StringBuf);
+	t@.hi = nl+nr-1;
+	tree@.symb = symb.NewString2(tree@.symb@.ident, nl, lex.StringBuf, nr);
 //symb.DumpS(tree@.symb);
 	return tree;   
     }
