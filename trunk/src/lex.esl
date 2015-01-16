@@ -443,7 +443,7 @@ package lex
 	var i: _uint;
 	var pathbuf: [PathMax]Char;
 
-	if f != 0 then		// this is an included file, name missing ".esl"
+	if f != 0 then
 	{   // search SearchPath trying to open file
 	    pp = pathhead;
 	    while pp != 0 do
@@ -452,13 +452,12 @@ package lex
 		zstr.cat(pathbuf, "/", PathMax);
 		i = zstr.len(pathbuf, PathMax);
 		zstr.cat(pathbuf, filename, PathMax);
-		zstr.cat(pathbuf, ".esl", PathMax);
 		fd = sys.open(pathbuf, sys.O_RDONLY, 0);
 	      exit fd >= 0;
 		pp = pp@.next;
 	    }
 	}
-	else			// this is the outer file, name has ".esl"
+	else
 	{   zstr.copy(pathbuf, filename, PathMax);
 	    fd = sys.open(pathbuf, sys.O_RDONLY, 0);
 	    i = zstr.rfind(pathbuf, '/', PathMax);
@@ -474,14 +473,10 @@ package lex
 	}
 	if fd < 0 then
 	    return false;
-	fp = FileListAdd(filename);
+	fp = FileListAdd(pathbuf[i:]);
 	if debug.files then
 	{   err.str("Open  file \"");
-	    if pp != 0 then
-	    {   err.str(pp@.path);
-		err.chr('/');
-	    }
-	    err.str(pathbuf[i:]);
+	    err.str(pathbuf);
 	    err.str("\"\n");
 	}
 	if feature.mflag then
@@ -508,15 +503,18 @@ package lex
     // Search to see if we have not imported this yet, if not, open it
     proc FileCheck(filename: @[]Char): boolean
     {   var fp: FileList;
+	var fullname: [256]Char;
 
+	zstr.copy(fullname, filename, 256);
+	zstr.cat(fullname, ".esl", 256);
 	fp = filehead;
 	while fp != 0 do
 	{
-	    if zstr.eq(fp@.name, filename, NameMax) then
+	    if zstr.eq(fp@.name, fullname, NameMax) then
 		return false;	// already imported
 	    fp = fp@.next;
 	}
-	if FileOpen(filename) then return true;
+	if FileOpen(fullname) then return true;
 	ErrorI(BADIMPORT, filename);
 	return false;
     }

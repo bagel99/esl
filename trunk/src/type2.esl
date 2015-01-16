@@ -880,21 +880,28 @@ err.nl();
 	var t, bt: Type;
 	var tree: Ast;
 	var s, ts: Symb;
-	var istype: boolean;
+	var form: (EXPR, PROP, TYPE);
 
 	tok = Next();
 	t = type.New(ARRAY);
 	if tok != AEND then
-	{   istype = false;
+	{   form = EXPR;    // assume until proven otherwise
 	    ts = 0;
 	    if tok == ID then
 	    {   s = symb.Find(lex.Ident);
 		if s != 0 && s@.kind == TYPE then
-		{   t@.lo = s@.type@.lo;
-		    t@.hi = s@.type@.hi;
-		    t@.index = s@.type;
-		    tok = Next();
-		    istype = true;
+		{   tok = Next();
+		    if tok == QUEST then	    // [ <type>?size ]
+		    {   tok = Next();
+			tree = expr.TypeProperty(t);
+			form = PROP;
+		    }
+		    else			    // [ <type> ]
+		    {   t@.lo = s@.type@.lo;
+			t@.hi = s@.type@.hi;
+			t@.index = s@.type;
+			form = TYPE;
+		    }
 		}
 		else
 		{   // FIXME
@@ -910,8 +917,9 @@ err.nl();
 		    expr.savedsym = s;
 		}
 	    }
-	    if !istype then
-	    {   tree = expr.Bool(0);
+	    if form != TYPE then
+	    {   if form == EXPR then
+		    tree = expr.Bool(0);
 		if tree != 0 then
 		{   if tree@.op
 		    is CONST then

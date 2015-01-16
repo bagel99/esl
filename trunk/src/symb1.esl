@@ -9,6 +9,7 @@ package symb
     type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
 	CLZ, CLZNZ, CTZ, CTZNZ, POP,
 	CVT, NEW, DEL, ZERO, ZLEN,
+	PACKLE, PACKBE, UNPKLE, UNPKBE,
 	ROL, ROR
     );
     type SymbNode:
