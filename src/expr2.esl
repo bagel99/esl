@@ -937,6 +937,18 @@ err.nl();
 	return size, space;
     }
 
+    proc UnLoad(tree:Ast): Ast
+    {
+	if tree@.op == LOAD then
+	    tree = tree@.child[0];
+	// FIXME - REVB-LOAD
+else
+{   lex.ErrorS(COMPILER, "UnLoad error");
+    ast.Dump(tree);
+}
+	return tree;
+    }
+
     proc New(): Ast
     {   var tree, size: Ast;
 	var s: Symb;
@@ -1068,6 +1080,187 @@ err.nl();
 	return tree;
     }
 
+    proc GetArrayArg(): Ast,    // 0 if error
+			Type,   // type of scalar just wide enought
+			_uint,  // size in bytes
+			boolean // is sufficiently aligned
+    {   var arg: Ast;
+	var nb, na: _uint;
+        var ts: Type;
+	var aligned: boolean;
+	var t: Type;
+
+        arg = Bool(0);     // FIXME - something less general?
+        if arg == 0 then return 0, 0, false;
+        arg = UnLoad(arg);
+        t = arg@.type;
+        if !type.Compat(t, type.addrtype) then
+        {
+	    err.str("Arg for _packXX/_unpkXX must be array/slice of bytes\n");
+	    return 0, 0, 0, false;
+	}
+	t = t@.base;
+	nb = 0;      // this indicates illegal
+	if arg@.op == SLICE then
+	{   if arg@.child[2]@.op == CONST then
+		nb = arg@.child[2]@.valu;
+	}
+	else    // assert array
+	{   if !t@.flex then
+	    nb = t.Span();
+	}
+	if nb == 0 then
+	{
+	    err.str("Array for _packXX/_unpkXX must have fixed size\n");
+	    return 0, 0, 0, false;
+	}
+	ts = target.utype(nb*Target.membits);
+	if ts == 0 then
+	{
+	    err.str("Array for _packXX/_unpkXX too large for target machine\n");
+	    return 0, 0, 0, false;
+	}
+	if nb*Target.membits < ts@.width then
+	    aligned = false;    // not a uint width
+	elif !Target.mustalign then
+	    aligned = true;     // width good and target accepts unaligned
+	else
+	{   na = GetAlignment(arg);
+//err.str("na="); err.uint(na*Target.membits);
+//err.str(" ta="); err.uint(ts@.align); err.nl();
+	    aligned = na*Target.membits >= ts@.align;
+	}    
+        return arg, ts, nb, aligned;
+    }
+
+
+    proc Pack(endian: type.MemOrderT): Ast
+    {   var arg, lhs, tree: Ast;
+        var ta, ts: Type;
+        var n: _uint;
+        var aligned: boolean;
+        var tok: TokenT;
+
+	arg, ta, n, aligned = GetArrayArg();
+	if tok != COMMA then
+	{   lex.ErrorT(EXPECT, COMMA);
+	    return 0;
+	}
+	tok = Next();
+	lhs = Bool(0);      // FIXME - we know the size/type of the uint?
+	if arg == 0 || lhs == 0 then
+	    return 0;
+	ts = lhs@.type;
+	if ts@.kind != UINT then
+	{
+	    err.str("Pack scalar must be unsigned int\n");
+	    return 0;
+	}
+	if aligned then
+	{
+	    if endian != Target.memorder then
+		lhs = ast.New1(REVB, lhs@.type, lhs);
+	    arg = ast.Cast(arg, type.MakeRef(ts));
+	    tree = ast.New2(STORE, ts, arg, lhs);
+	}
+	else
+	{   var i: _uint;
+	    var rhs: Ast;
+	    arg@.type = type.MakeRef(arg@.type);
+	    lhs = UnLoad(lhs);
+	    tree = ast.New(SEQ, 0);
+	    if endian == BE then
+	    {   i = n;
+		loop
+		{   i -= 1;
+		    rhs = ast.New2(STORE, type.bytetype,
+			     ast.New2(INDEX, type.MakeRef(type.bytetype), arg,
+			       ast.Const(type.wordtype, i)),
+			     ast.ExtendT(ast.New1(LOAD, ts, lhs), type.bytetype));
+		    tree = ast.Child(tree, rhs);
+		  exit i == 0;
+		    rhs = ast.New2(STORE, ts, lhs,
+			    ast.New2(LSR, ts, ast.New1(LOAD, ts, lhs),
+			      ast.Const(type.wordtype, 8)));
+		    tree = ast.Child(tree, rhs);
+		}
+	    }
+	    else	// assert LE
+	    {   i = 0;
+		loop
+		{
+		    rhs = ast.New2(STORE, type.bytetype,
+			     ast.New2(INDEX, type.MakeRef(type.bytetype), arg,
+			       ast.Const(type.wordtype, i)),
+			     ast.ExtendT(ast.New1(LOAD, ts, lhs), type.bytetype));
+		    tree = ast.Child(tree, rhs);
+		    i += 1;
+		  exit i == n;
+		    rhs = ast.New2(STORE, ts, lhs,
+			    ast.New2(LSR, ts, ast.New1(LOAD, ts, lhs),
+			      ast.Const(type.wordtype, 8)));
+		    tree = ast.Child(tree, rhs);
+		}
+	    }
+	}
+	tree = ast.New1(NOP, 0, tree);  // force no assignment
+	return tree;
+    }
+
+    proc UnpkSub(tree: Ast, arg: Ast, ts: Type, i: _uint): Ast
+    {   var rhs: Ast;
+
+	rhs = ast.New1(LOAD, type.bytetype,
+		ast.New2(INDEX, type.MakeRef(type.bytetype), arg,
+		  ast.Const(type.wordtype, i)));
+	rhs@.width = type.bytetype@.size;
+	rhs = ast.ExtendT(rhs, ts);
+	if tree == 0 then
+	    tree = rhs;
+	else
+	    tree = ast.New2(OR, ts, 
+		     ast.New2(LSL, ts, tree, ast.Const(type.wordtype, 8)), rhs);
+	return tree;
+    }
+
+    proc Unpk(endian: type.MemOrderT): Ast
+    {   var arg, tree: Ast;
+        var ts: Type;
+        var n: _uint;
+        var aligned: boolean;
+
+	arg, ts, n, aligned = GetArrayArg();
+	if arg == 0 then
+	    return 0;
+	if aligned then
+	{
+	    tree = ast.Cast(arg, type.MakeRef(ts));
+	    tree = Load(tree);
+	    if endian != Target.memorder then
+		tree = ast.New1(REVB, tree@.type, tree);
+	}
+	else
+	{   var i: _uint;
+	    arg@.type = type.MakeRef(arg@.type);
+	    tree = 0;
+	    if endian == BE then
+	    {   i = 0;
+		do
+		{   tree = UnpkSub(tree, arg, ts, i);
+		    i += 1;
+		} while i < n;
+	    }
+	    else	// assert LE
+	    {   i = n;
+		while i > 0 do
+		{   i -= 1;
+		    tree = UnpkSub(tree, arg, ts, i);
+		}
+	    }
+	}
+	return tree;
+    }
+
     proc Convert(): Ast
     {   var tok: TokenT;
         var tree: Ast;
@@ -1168,17 +1361,21 @@ err.nl();
 				ast.Const(type.wordtype, align));
 		tree@.width = type.wordtype@.width;
 	    }
-	    is CLZ   then tree = IntrinsicUnary(CLZ);
-	    is CLZNZ then tree = IntrinsicUnary(CLZNZ);
-	    is CTZ   then tree = IntrinsicUnary(CTZ);
-	    is CTZNZ then tree = IntrinsicUnary(CTZNZ);
-	    is POP   then tree = IntrinsicUnary(POP);
-	    is ROL   then tree = Rotate(false);
-	    is ROR   then tree = Rotate(true);
-	    is CVT   then tree = Convert();
-	    is ZERO  then tree = Zero();
-	    is NEW   then tree = New();
-	    is DEL   then tree = Delete();
+	    is CLZ    then tree = IntrinsicUnary(CLZ);
+	    is CLZNZ  then tree = IntrinsicUnary(CLZNZ);
+	    is CTZ    then tree = IntrinsicUnary(CTZ);
+	    is CTZNZ  then tree = IntrinsicUnary(CTZNZ);
+	    is POP    then tree = IntrinsicUnary(POP);
+	    is ROL    then tree = Rotate(false);
+	    is ROR    then tree = Rotate(true);
+	    is PACKLE then tree = Pack(LE);
+	    is PACKBE then tree = Pack(BE);
+	    is UNPKLE then tree = Unpk(LE);
+	    is UNPKBE then tree = Unpk(BE);
+	    is CVT    then tree = Convert();
+	    is ZERO   then tree = Zero();
+	    is NEW    then tree = New();
+	    is DEL    then tree = Delete();
 	    else
 		lex.ErrorS(COMPILER, "Intrinsic unknown");
 	    tok = lex.Expect(PEND);
@@ -1270,18 +1467,6 @@ err.nl();
 	    i += 1;
 	}
 	return foffs;
-    }
-
-    proc UnLoad(tree:Ast): Ast
-    {
-	if tree@.op == LOAD then
-	    tree = tree@.child[0];
-	// FIXME - REVB-LOAD
-else
-{   lex.ErrorS(COMPILER, "UnLoad error");
-    ast.Dump(tree);
-}
-	return tree;
     }
 
     proc Suffix(tree: Ast, et: Type): Ast
@@ -1500,11 +1685,13 @@ type.DumpT(t, false); err.nl();
 	    }
 	}
 	tree = Primary(s, 0);
-	// undo the load  FIXME - same as UnLoad()?
-	if tree@.op == LOAD then
-	    tree = tree@.child[0];
-	else if tree@.op == REVB && tree@.child[0]@.op == LOAD then
-	    tree = tree@.child[0]@.child[0];
+	if tree != 0 then
+	{   // undo the load  FIXME - same as UnLoad()?
+	    if tree@.op == LOAD then
+		tree = tree@.child[0];
+	    else if tree@.op == REVB && tree@.child[0]@.op == LOAD then
+		tree = tree@.child[0]@.child[0];
+	}
 	return tree;
     }
 

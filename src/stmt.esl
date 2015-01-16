@@ -785,7 +785,7 @@ err.str("Assign to packed array\n");
 	{   tree = expr.GetLHS(s);
 	    if tree != 0 then
 	    {   if tree@.op
-		is CALL, CALLI, ASM, SET then {}     // no further action
+		is CALL, CALLI, ASM, SET, NOP then {}     // no further action
 		else tree = Assign(tree);
 	    }
 	}

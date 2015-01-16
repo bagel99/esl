@@ -8,6 +8,7 @@ package expr
     proc ConstValue(t:Type): Valu;	// forward
     proc GetLHS(s:Symb): Ast;		// forward
     proc EnumConst(t:Type): Ast;	// forward
+    proc TypeProperty(t: Type): Ast;	// forward
     var savedsym: Symb = 0;
 }
 

@@ -778,7 +778,7 @@ package llvm
     proc DclString(node: Ast)
     {   var n: StringRange;
 
-	Print("%S = internal constant %K ", node);
+	Print("%S = private unnamed_addr constant %K ", node);
 	n = StringRange(node@.type.Span());
 	PString(node@.symb@.ident, n, true);
 	f.nl();
@@ -1570,7 +1570,6 @@ package llvm
 		    f.str("\tret ");
 		    PRetvType(ps@.retvlist, false);
 		    f.str(" %mrv"); f.uint(i-1);
-		    f.nl();
 		}
 		else		    // only one returned value
 		{   f.str("\tret ");
@@ -1581,7 +1580,8 @@ package llvm
 	    }
 	    else
 		f.str("\tret void");
-	    f.str("\n}\n");
+	    PEndLine(node);
+	    f.str("}\n");
 	}
     }
 

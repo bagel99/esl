@@ -125,6 +125,10 @@ package symb
 	NewIntrinsic("_delete", DEL);
 	NewIntrinsic("_zero", ZERO);
 	NewIntrinsic("_zlen", ZLEN);
+	NewIntrinsic("_packle", PACKLE);
+	NewIntrinsic("_packbe", PACKBE);
+	NewIntrinsic("_unpkle", UNPKLE);
+	NewIntrinsic("_unpkbe", UNPKBE);
 	NewIntrinsic("_rol", ROL);
 	NewIntrinsic("_ror", ROR);
 
