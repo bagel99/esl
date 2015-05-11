@@ -1,23 +1,28 @@
-These files comprise the ESL compiler front-end.  The back end is LLVM.
+ESL is a new programming language designed to be used for efficient programming
+of embedded and other "small" systems.  ESL an acronym for Embedded Systems
+Language (it can be pronounced “essel”).
 
-To bootstrap a ESL front-end on an x86 or x86-64 Linux system:
+ESL is a typed compiled language with features that allow the programmer to
+dictate the concrete representation of data values.  This distinguishes it from
+languages which implement only “abstract” types or types whose representation
+is architecture-dependent.  The programmer can dictate the details of data
+representation, including such things as “endian-ness” and the exact placement
+and packing of bits. These are necessary in dealing with external
+representations of data layout, e.g., communication protocols or device
+registers. Procedures can return multiple values.
 
-1. Install LLVM, let the directory in which the executables llc, opt, and llvm-as
-   reside be DIR.
+The ESL compiler is a front-end for the LLVM (http://llvm.org) compiler.
+The compiler is self-hosting, i.e., it is written in ESL.  The compiler
+currently runs only on Linux on x86, x86_64, S/390/z990, and on MacOSX on x86_64
+(but building on S/390 or OSX is left as an exercise to the reader).  The
+compiler back-end is LLVM.  Versions 3.1/3.2/3.3/3.4 of LLVM are supported.
 
-2. The gcc development system must also be installed, only the assembler,
-   linker, and, lowlevel libraries are used.
+The compiler, in its current state, implements most of the language features.
+Documentation is incomplete.
 
-3. cd src/
+The file esl-examples.tgz contains sample code that blinks LEDs on two embedded
+development platforms for ARM Cortex-M3 chips.  For many more examples,
+download the code at <https://github.com/bagel99/blocks-os/>.
 
-4. Edit the shell file "llvm" to reflect where the LLVM programs reside
-   (i.e., DIR).
-   Edit the Makefile to indicate which architecture to target.
-
-5. Type "make boot"
-   If successful, identical copies of a the compiler are left in
-   "eslc2" and "eslc3"
-
-6. A 32-bit compiler can be built by typing "make".
-   A 64-bit x86 compiler can built by typing "make eslc-x86-64"
-
+ESL, and its compiler, is being developed by Brian G. Lucas (bagel99@gmail.com
+(initials "bgl" pronounced "bagel")).
