@@ -15,14 +15,14 @@ package lex
 	NOIDTYPE,   NOTTYPE,    NOTYPE,     NOTENUM,    BADTYPE,    OPTYPE,
 	BADTYPDEF,  BADATTR,    UNDEFSTMT,  BADSTMTI,   BADSTMTT,   BADCOMPARE,
 	BADASSIGN,  ILLASSIGN,  LHSASSIGN,  RHSASSIGN,  TYPEASSIGN, RHSLESS,
-	RHSMORE,    BADRETURN,  FORWPROC,   FORWPARM,   FORWRETV,   WANTBOOL,
+	RHSMORE,    FORWPROC,   FORWPARM,   FORWRETV,   WANTBOOL,
 	WANTUINT,   BADCAST,    UNDFCOMPV,  BADCOMPV,   PROPID,     BADIF,
 	BADIS,      NOPROC,     NOLOOP,     NOPACK,     NOTREF,     NOTARRAY,
 	ARRAYCOPY,  BADINXEXP,  NOTRECORD,  BADRECORD,  BASERECORD, BASEENUM,
 	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
-	BADLEN,
+	RETTOOFEW,  RETTOOMANY, BADLEN,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -73,7 +73,6 @@ package lex
 	[TYPEASSIGN] =	"Type mismatch in assignment",
 	[RHSLESS] =	"Not enough rhs values in assignment",
 	[RHSMORE] =	"Too many rhs values in assignment",
-	[BADRETURN] =	"Return with no value in procedure that expects one",
 	[FORWPROC] =	"Call of undefined forward procedure: ",
 	[FORWPARM] =	"Parameter types changed from forward declaration: ",
 	[FORWRETV] =	"Return value types changed from forward declaration: ",
@@ -114,6 +113,8 @@ package lex
 	[NEEDSIZE] =    "Must specify size for variable sized object",
 	[BADSIZE] =     "Specified size smaller that actual object size",
 	[BADAT] =       "Illegal field offset specified",
+	[RETTOOFEW] =   "Too few return values",
+	[RETTOOMANY] =  "Too many return values",
 	[BADLEN] =      "Not an array or array with flexible length",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "

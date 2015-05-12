@@ -13,10 +13,10 @@
 #
 pkgs="-I."
 eslcomp="$HOME/src/compiler/src/eslc2"
-llvmdir3_2="$HOME/work/llvm-3.2/build/Release+Asserts/bin"
-llvmdir3_3="$HOME/work/llvm-3.3/build/Release+Asserts/bin"
 llvmdir3_4="$HOME/work/llvm-3.4/build/Release+Asserts/bin"
-llvmdirT="$HOME/work/llvm/Release+Asserts/bin"
+llvmdir3_5="$HOME/work/llvm-3.5.0/build/Release+Asserts/bin"
+llvmdir3_6="$HOME/work/llvm-3.6.0/build/Release+Asserts/bin"
+llvmdirT="$HOME/work/llvm/build/Release+Asserts/bin"
 
 #
 # Initialize variables
@@ -27,11 +27,11 @@ mflag=0
 no_assem=0
 print_cmds=0
 debug=
-optimize=
+optimize=-O3    # default, unless command line changes it
 feature=
 loopthresh=10
 outfile="a.out"
-llvmdir=$llvmdir3_4
+llvmdir=$llvmdir3_6
 
 #
 # Clean up temporary files
@@ -85,12 +85,12 @@ do
     u) loopthresh=$OPTARG ;;
     v) print_cmds=1 ;;
     I) pkgs="$pkgs -I$OPTARG" ;;
-    O) optimize=$OPTARG ;;
+    O) optimize=-O$OPTARG ;;
     V) version; exit 0 ;;
     D) debug="$debug -D$OPTARG" ;;
     F) feature="$feature -F$OPTARG" ;;
     M) feature="$feature -M"; mflag=1 ;;
-    P) llvmdir=$llvmdir3_2 ;;
+    P) llvmdir=$llvmdir3_5 ;;
     T) llvmdir=$llvmdirT ;;
     *) echo "Unknown option: $flag" ; exit 1 ;;
     esac
@@ -117,6 +117,8 @@ case "$tarch" in
     cortex-m4)          march=thumb; mcpu="-mcpu=cortex-m4"
 		        mattr="-mattr=+vfp3" ;;
     cortex-a8)		march=thumb; mcpu="-mcpu=cortex-a8" ;;
+    cortex-a53)		tarch=aarch64; march=aarch64; mcpu="-mcpu=cortex-a53" ;;
+    cortex-a57)		tarch=aarch64; march=aarch64; mcpu="-mcpu=cortex-a57" ;;
     arm920t)		march=thumb; mcpu="-mcpu=arm920t" ;;
     *)			march=$tarch ;;
 esac
@@ -135,16 +137,11 @@ trap cleanup 0
 #
 # Run the ESL compiler
 #
-case "$optimize" in
-   s) feature="$feature -Os" ;;
-   z) feature="$feature -Oz" ;;
-   0 | 1 | 2 | 3) ;;
-esac
 if test $print_cmds -ne 0
 then
-    echo "eslcomp -m $tarch $gflag $feature $debug $pkgs $src_filename >  $lla_tmpfile"
+    echo "eslcomp -m $tarch $gflag $optimize $feature $debug $pkgs $src_filename >  $lla_tmpfile"
 fi
-$eslcomp -m $tarch $gflag $feature $debug $pkgs $src_filename > $lla_tmpfile
+$eslcomp -m $tarch $gflag $optimize $feature $debug $pkgs $src_filename > $lla_tmpfile
 if test $? -ne 0
 then
     exit $?     # compile error
@@ -164,13 +161,11 @@ fi
 asm_filename=`basename $src_filename .esl`.s
 if test $print_cmds -ne 0
 then
-    echo "llvm-as -o - $lla_tmpfile |"  
-    echo "opt -std-compile-opts $opt_opt -unroll-threshold=$loopthresh -o - |"
-    echo "llc -march=$march $mcpu -asm-verbose=0 -o $asm_filename"
+    echo "opt $optimize $opt_opt -unroll-threshold=$loopthresh -o - $lla_tmpfile |"
+    echo "llc -march=$march $mcpu $mattr -asm-verbose=0 -o $asm_filename"
 fi
-$llvmdir/llvm-as -o - $lla_tmpfile | \
-$llvmdir/opt -std-compile-opts $opt_opt -unroll-threshold=$loopthresh -o - | \
-$llvmdir/llc -march=$march $mcpu $mattr -asm-verbose=0 -o $asm_filename
+$llvmdir/opt $optimize $opt_opt -unroll-threshold=$loopthresh -o - $lla_tmpfile | \
+$llvmdir/llc -march=$march $mcpu $mattr -asm-verbose=0 $optimize -o $asm_filename
 
 ## vim: ts=8 sw=4 noet nowrap
 

@@ -547,7 +547,7 @@ package expr
 	    else
 		alignment = 0;
 	}
-	is REVB, BYREF then
+	is BSWAP, BYREF then
 	    alignment = GetAlignment(tree@.child[0]);
 	is OFFSET then 		// fixed offset
 	{   alignment = GetAlignment(tree@.child[0]);
@@ -706,7 +706,7 @@ package expr
 	    {   tree = ast.New1(LOAD, t, tree);
 		tree@.width = t@.width;
 		if type.NeedSwap(tree@.type, Target.memorder) then
-		{   tree = ast.New1(REVB, tree@.type, tree);
+		{   tree = ast.New1(BSWAP, tree@.type, tree);
 		    tree@.type = type.ChangeOrder(tree@.type, Target.memorder);
 		}
 	    }
@@ -723,7 +723,7 @@ ast.Dump(tree);
     {
 	if tree@.op == LOAD then
 	    tree = tree@.child[0];		// undo the load
-	else if tree@.op == REVB && tree@.child[0]@.op == LOAD then
+	else if tree@.op == BSWAP && tree@.child[0]@.op == LOAD then
 	    tree = tree@.child[0]@.child[0];
 	// FIXME: this is very likely wrong
 	if tree@.op
@@ -833,8 +833,8 @@ ast.Dump(tree);
 	if !ok then
 {
 	    lex.Error(TYPEASSIGN);
-err.str("fm=\n"); ast.Dump(tree);
-err.str("\nto=\n"); type.DumpT(to, false);
+err.str("fm="); type.DumpT(fm, false);
+err.str("\nto="); type.DumpT(to, false);
 err.nl();
 }
 //	tree = CheckSwap(lhs, tree);    // FIXME - do for parms and retv?
@@ -941,7 +941,7 @@ err.nl();
     {
 	if tree@.op == LOAD then
 	    tree = tree@.child[0];
-	// FIXME - REVB-LOAD
+	// FIXME - BSWAP-LOAD
 else
 {   lex.ErrorS(COMPILER, "UnLoad error");
     ast.Dump(tree);
@@ -1091,7 +1091,7 @@ else
 	var t: Type;
 
         arg = Bool(0);     // FIXME - something less general?
-        if arg == 0 then return 0, 0, false;
+        if arg == 0 then return 0, 0, 0, false;
         arg = UnLoad(arg);
         t = arg@.type;
         if !type.Compat(t, type.addrtype) then
@@ -1159,7 +1159,7 @@ else
 	if aligned then
 	{
 	    if endian != Target.memorder then
-		lhs = ast.New1(REVB, lhs@.type, lhs);
+		lhs = ast.New1(BSWAP, lhs@.type, lhs);
 	    arg = ast.Cast(arg, type.MakeRef(ts));
 	    tree = ast.New2(STORE, ts, arg, lhs);
 	}
@@ -1237,7 +1237,7 @@ else
 	    tree = ast.Cast(arg, type.MakeRef(ts));
 	    tree = Load(tree);
 	    if endian != Target.memorder then
-		tree = ast.New1(REVB, tree@.type, tree);
+		tree = ast.New1(BSWAP, tree@.type, tree);
 	}
 	else
 	{   var i: _uint;
@@ -1368,6 +1368,7 @@ else
 	    is POP    then tree = IntrinsicUnary(POP);
 	    is ROL    then tree = Rotate(false);
 	    is ROR    then tree = Rotate(true);
+	    is BSWAP  then tree = IntrinsicUnary(BSWAP);
 	    is PACKLE then tree = Pack(LE);
 	    is PACKBE then tree = Pack(BE);
 	    is UNPKLE then tree = Unpk(LE);
@@ -1689,7 +1690,7 @@ type.DumpT(t, false); err.nl();
 	{   // undo the load  FIXME - same as UnLoad()?
 	    if tree@.op == LOAD then
 		tree = tree@.child[0];
-	    else if tree@.op == REVB && tree@.child[0]@.op == LOAD then
+	    else if tree@.op == BSWAP && tree@.child[0]@.op == LOAD then
 		tree = tree@.child[0]@.child[0];
 	}
 	return tree;
@@ -1762,6 +1763,8 @@ type.DumpT(t, false); err.nl();
 		    }
 		    is GBEG then		// composite
 			tree = CompositeValue(t);
+		    else
+			lex.ErrorI(BADTYPE, s@.ident);
 		}
 		else
 		{

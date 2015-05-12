@@ -2,32 +2,31 @@
 #
 # Run a .ll file through the LLVM backend
 #
-LLVM=$HOME/work/llvm-3.5.0/build/Release+Asserts/bin		# !!!FIX THIS!!!
+LLVM=$HOME/work/llvm-3.6.0/build/Release+Asserts/bin		# !!!FIX THIS!!!
 #LLVM=/usr/bin
 DEBUG=
 ARCH=
 INLINE=
-OPT=
+OPT=-O3		#default
 TRIPLE=
 while getopts "Im:O:" flags
 do
   case $flags in
     I) INLINE="-disable-inlining" ;; 	# disable inlining
     m) ARCH=$OPTARG ;;
-    O) OPT="$OPT -O$OPTARG" ;;
+    O) OPT="-O$OPTARG" ;;
     *) echo "bad flag"; exit 1 ;;
   esac
 done
 if [ "$ARCH" == "" ]
 then	# target same as host
   ARCH=`uname -m`
+  case $ARCH in
+    i686)   ARCH=x86;;
+    x86_64) ARCH=x86-64;;
+    s390x)  ARCH=systemz;;
+  esac
 fi
-# map ARCH into something LLVM knows about
-case $ARCH in
-  i686)   ARCH=x86;;
-  x86_64) ARCH=x86-64;;
-  s390x)  ARCH=systemz;;
-esac
 case `uname -s` in
   Darwin)
     TRIPLE="-mtriple=x86_64-apple-darwin" ;;
@@ -35,7 +34,6 @@ esac
 shift $(($OPTIND-1))
 file=$1
 j=`basename $file .ll`
-$LLVM/llvm-as -o - $file | \
-$LLVM/opt -std-compile-opts ${INLINE} -o -| \
+$LLVM/opt ${OPT} ${INLINE} -o - $file | \
 $LLVM/llc ${DEBUG} -march=${ARCH} ${TRIPLE} ${CPU} ${ATTR} ${OPT} -asm-verbose=0 -o ${j}.s
 

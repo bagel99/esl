@@ -1250,7 +1250,7 @@ package llvm
 	    Print("\t%N = fptoui %0T %0N to %T", node);
 	is CVTFI then
 	    Print("\t%N = fptosi %0T %0N to %T", node);
-	is REVB then
+	is BSWAP then
 	{   Print("\t%N = call %T @llvm.bswap.%T(%T %0N)", node);
 	    UseIntrinsic(BSWAP, node@.width/Target@.membits, node@.type);
 	}
@@ -1683,9 +1683,9 @@ package llvm
 	// undo the load  FIXME - same as UnLoad()?
 	if lhs@.op == LOAD then
 	    lhs = lhs@.child[0];      // undo the lhs LOAD
-	else if lhs@.op == REVB && lhs@.child[0]@.op == LOAD then
+	else if lhs@.op == BSWAP && lhs@.child[0]@.op == LOAD then
 	{   lhs = lhs@.child[0]@.child[0];
-	    rhs = ast.New1(REVB, rhs@.type, rhs);
+	    rhs = ast.New1(BSWAP, rhs@.type, rhs);
 	}
 	else
 	    lex.ErrorS(COMPILER, "FieldInsert LOAD not found");
@@ -1876,7 +1876,7 @@ f.flush();
 	is ZEXT then  ChangeSize(node, "zext");
 	is SEXT then  ChangeSize(node, "sext");
 	is TRUNC then ChangeSize(node, "trunc");
-	is REVB, NOT, NEG, FNEG, FCVTL, FCVTS, CVTUF, CVTIF, CVTFU, CVTFI then
+	is BSWAP, NOT, NEG, FNEG, FCVTL, FCVTS, CVTUF, CVTIF, CVTFU, CVTFI then
 	    UnaryOp(node);
 	is CLZ, CLZNZ, CTZ, CTZNZ, POP then UnaryOp(node);
 	is ABS then Abs(node);

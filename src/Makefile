@@ -83,9 +83,15 @@ main3.s: main3.ll
 eslc3:	main3.s
 	$(GCC) $(CFLAGS) -o eslc3 main3.s
 
-tarball:
-	tar -czhf eslc.tgz \
-	$(SRC) main-start-x86.ll main-start-x86-64.ll llvm Makefile
+main-start-x86-64.ll: main.esl
+	./eslc3 -m x86-64 main.esl >main-start-x86-64.ll
+
+main-start-x86.ll: main.esl
+	./eslc3 -m x86 main.esl >main-start-x86.ll
+
+main-start-s390x.ll: main.esl
+	./eslc3 -m s390x main.esl >main-start-s390x.ll
+
 
 clean:
 	rm -f main-start.s eslc0

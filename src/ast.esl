@@ -22,7 +22,7 @@ package ast
 	GETRV,
 	LOAD,
 	STORE,		// assignment
-	ZEXT,   SEXT,   TRUNC,	REVB,
+	ZEXT,   SEXT,   TRUNC,	BSWAP,
 	NEG,	NOT,	ABS,
 	FNEG,   FCVTL,  FCVTS,
 	CVTUF,	CVTIF,  CVTFU,	CVTFI,
@@ -63,7 +63,8 @@ package ast
 	[SET]=    4,
 	[COPY]=   4,	[ACOPY]=  4,	[AEQ]=    4,	[ANE]=    4,
 	[GETRV]=  1,	[LOAD]=   1,	[STORE]=  2,
-	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,	[REVB]=   1,
+	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,
+	[BSWAP]=  1,
 	[NEG]=    1,	[NOT]=    1,
 	[ABS]=	  3,	// will convert into IFEXPR
 	[FNEG]=   1,    [FCVTL]=  1,    [FCVTS]=  1,
@@ -336,10 +337,8 @@ package ast
 		tree@.width = to@.size;	// FIXME: width?
 	    }
 	    is RECORD, ARRAY then		// PACKED -> UINT
-	    {
-		if tree@.type@.packed && tree@.width == to@.size then
-		{   tree@.type = to;
-		}
+	    {   if tree@.type@.packed && tree@.width == to@.size then
+		    tree@.type = to;
 		else
 		    lex.Error(BADCAST);
 	    }
@@ -391,11 +390,8 @@ package ast
 		lex.Error(BADCAST);
 	}
 	is RECORD, ARRAY then
-	{   if to@.packed && tree@.width == to@.size &&
-		    (tree@.type@.kind == UINT || 
-		    ((tree@.type@.kind == RECORD || tree@.type@.kind == ARRAY) &&
-		      tree@.type.packed)) then
-		tree@.type = to;		// UINT or PACKED -> PACKED
+	{   if to@.packed && tree@.type@.kind == UINT then
+		tree = ExtendCast(tree, to);
 	    else
 		lex.Error(BADCAST);
 	}
@@ -708,7 +704,7 @@ package ast
 	[ZEXT]=  "ZEXT",
 	[SEXT]=  "SEXT",
 	[TRUNC]= "TRUNC",
-	[REVB]=  "REVB",
+	[BSWAP]= "BSWAP",
 	[NEG]=   "NEG",		[NOT]=   "NOT",		[ABS]=   "ABS",
 	[FNEG]=  "FNEG",	[FCVTL]= "FCVTL",       [FCVTS]= "FCVTS",
 	[CVTUF]= "CVTUF",	[CVTIF]= "CVTIF",

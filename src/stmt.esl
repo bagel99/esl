@@ -547,7 +547,7 @@ package stmt
     proc CheckSwap(lhs: Ast, rhs: Ast): Ast
     {
 	if type.NeedSwap(lhs@.type@.base, Target.memorder) then
-	    rhs = ast.New1(REVB, rhs@.type, rhs);
+	    rhs = ast.New1(BSWAP, rhs@.type, rhs);
 	return rhs;
     }
 
@@ -817,29 +817,32 @@ err.str("Assign to packed array\n");
 	    if tl != 0 then
 		t = tl@.type;
 	    else
-	    {   lex.Error(BADRETURN);
 		t = 0;
-	    }
 	    rval = expr.Bool(t);
 	    if rval != 0 then
-	    {   if t != 0 then
-		{   rval = expr.Adjust(rval, t);
-		    tree = ast.Child(tree, rval);
-		    if t@.kind == REF then
-		    {   tree@.type = t@.base;
-			tree@.width = Target.ptr.size;
+	    {   if tl != 0 then
+		{   if t != 0 then
+		    {   rval = expr.Adjust(rval, t);
+			tree = ast.Child(tree, rval);
+			if t@.kind == REF then
+			{   tree@.type = t@.base;
+			    tree@.width = Target.ptr.size;
+			}
+			else
+			    tree@.width = t@.width;
 		    }
-		    else
-			tree@.width = t@.width;
 		}
-		else
-		    lex.Error(BADRETURN);
+		else	    // no RVs left
+		    lex.Error(RETTOOMANY);
 	    }
 	    if tl != 0 then tl = tl@.next;
 	    tok = Token;
+
 	  exit tok != COMMA;
 	    tok = Next();
 	}
+	if tl != 0 then     // more RVs left
+	    lex.Error(RETTOOFEW);
 	if tree@.num != 0 then	// FIXME: fix in llvm?
 	{   tree@.type = tree@.child[0]@.type;	// first returned value
 	    tree@.width = tree@.child[0]@.width;
