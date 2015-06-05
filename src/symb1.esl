@@ -22,8 +22,8 @@ package symb
 	symblist: @SymbNode;	// for packages, procedures, aliases
 	altsymb:  @SymbNode;	// alternate name, e.g. external name
 	section:  @SymbNode;    // linker section
-	const:    @AstNode;	// for constants, initializer, default value
 	xaddr:    Valu;		// externally fixed address
+	const:    @AstNode;	// for constants, initializer, default value
 	addr:	  OffsT;	// e.g. field offset or intrinsic #
 	lineno:   _uint16;	// line number where declared
 	dbtag:    _uint16;	// tag for debug information

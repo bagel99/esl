@@ -792,16 +792,13 @@ ast.Dump(tree);
 	}
 	is ENUM then
 	{   ok = type.Compat(fm, to);
-	    if !ok && fm.kind == UINT then ok = true;
 	    if to@.width != tree@.width then
 		tree = ast.ExtendT(tree, to);
 	}
 	is UINT then
 	{   ok = type.Compat(fm, to);
 	    if !ok then
-	    {   if fm.kind
-		is ENUM then ok = true;
-		is SINT then
+	    {   if fm.kind == SINT then
 		{   if feature.trunc then lex.Error(TOUNSIGN);
 		    ok = true;
 		}
@@ -1790,14 +1787,15 @@ type.DumpT(t, false); err.nl();
 	    if et == 0 then
 		tree@.type = type.wordtype;	// FIXME: ?
 	    else
-	    {   if et@.kind == REF then		    // want pointer constant
-		{   tree@.type = et;
-		    tree@.width = Target.ptr.size;
-		}
-		else
+	    {   if et@.kind
+		is UINT, SINT then
 		{   if et@.size > tree@.width then   // widen
 			tree@.width = et@.size;
 		}
+		is REF, REFPROC then    // want pointer constant
+		    tree@.width = Target.ptr.size;
+		else
+		    tree@.type = type.wordtype; // wrong type for numeric const
 	    }
 	    tok = Next();
 	}

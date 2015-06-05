@@ -12,7 +12,7 @@
 # of ESL packages.
 #
 pkgs="-I."
-eslcomp="$HOME/src/compiler/src/eslc2"
+eslcomp="$HOME/src/compiler/src/eslc2"		# !!! Change this if necessary
 llvmdir3_4="$HOME/work/llvm-3.4/build/Release+Asserts/bin"
 llvmdir3_5="$HOME/work/llvm-3.5.0/build/Release+Asserts/bin"
 llvmdir3_6="$HOME/work/llvm-3.6.0/build/Release+Asserts/bin"
@@ -31,7 +31,7 @@ optimize=-O3    # default, unless command line changes it
 feature=
 loopthresh=10
 outfile="a.out"
-llvmdir=$llvmdir3_6
+llvmdir=/usr/bin				# !!! Change this if necessary
 
 #
 # Clean up temporary files
@@ -113,6 +113,8 @@ case "$tarch" in
     x86| i386 | i486 | i586 | i686) tarch=x86; march=x86 ;;
     x86_64 | x86-64)    tarch=x86-64; march=x86-64 ;;
     s390x | systemz)    march=systemz ;;
+    armv7l)		march=arm; mcpu="-mcpu=cortex-a7"
+			mattr="-mattr=-neon,-vfp4,+vfp3,+d16";;
     cortex-m3)		march=thumb; mcpu="-mcpu=cortex-m3" ;;
     cortex-m4)          march=thumb; mcpu="-mcpu=cortex-m4"
 		        mattr="-mattr=+vfp3" ;;

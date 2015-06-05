@@ -2,7 +2,7 @@
 #
 # Run a .ll file through the LLVM backend
 #
-LLVM=$HOME/work/llvm-3.6.0/build/Release+Asserts/bin		# !!!FIX THIS!!!
+LLVM=/usr/bin		# !!!FIX THIS!!!
 #LLVM=/usr/bin
 DEBUG=
 ARCH=
@@ -21,12 +21,14 @@ done
 if [ "$ARCH" == "" ]
 then	# target same as host
   ARCH=`uname -m`
-  case $ARCH in
+fi
+case $ARCH in
     i686)   ARCH=x86;;
     x86_64) ARCH=x86-64;;
     s390x)  ARCH=systemz;;
-  esac
-fi
+    armv7l) ARCH=arm; CPU="-mcpu=cortex-a7"
+	    ATTR="-mattr=-neon,-vfp4,+vfp3,+d16";;
+esac
 case `uname -s` in
   Darwin)
     TRIPLE="-mtriple=x86_64-apple-darwin" ;;
