@@ -20,7 +20,11 @@ var feature:
 	trunc: boolean;
 	tcall: boolean;
 	ambig: boolean;
+	debug: _uint8;		// debug version 1 or 2
+	syntax37: boolean;      // use new load, getelementprt IR syntax in 3.7
     };
+
+const default_llvmversion = "3.6.0";
 
 import sys;
 import zstr;
@@ -55,9 +59,11 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
     var outfd: sys.fildes;
     var outfile: @[]_byte;
     var targetarch: @[]_byte;
+    var llvmversion: @[]_byte;
 
     outfile = 0;
     targetarch = 0;
+    llvmversion = 0;
     outfd = 1;
     i = 1;
     while i < argc && argv[i]@[0] == '-' do
@@ -113,6 +119,14 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	}
 	is 'M' then feature.mflag = true;
 	is 'g' then feature.gflag = true;
+	is 'L' then
+	{   if argv[i]@[2] != 0 then
+		llvmversion = argv[i]@[2:];
+	    else
+	    {   i += 1;
+		llvmversion = argv[i];
+	    }
+	}
 	i += 1;
     }
     if i >= argc then
@@ -127,6 +141,25 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	    argv[i]@[n-4] = '.';	// remove nul terminate
 	}
     }
+    // Check for LLVM backend version
+    var goodversion: boolean = false;
+    if llvmversion == 0 then
+	llvmversion = default_llvmversion;
+    if llvmversion[0] == '3' && llvmversion[1] == '.' then
+    {   goodversion = true;
+	if llvmversion[2]
+	is '4', '5' then { feature.debug = 1; feature.syntax37 = false; }
+	is '6' then      { feature.debug = 2; feature.syntax37 = false; }
+	is '7' then      { feature.debug = 2; feature.syntax37 = true; }
+	else goodversion = false;
+    }
+    if !goodversion then
+    {   err.str("Unsupported LLVM backend version: ");
+        err.str(llvmversion);
+	err.nl();
+	return 2;
+    }
+
     if !target.set(targetarch) then
     {   err.str("Unsupported target: ");
 	if targetarch != 0 then

@@ -2,7 +2,7 @@ These files comprise the ESL compiler front-end.  The back end is LLVM.
 
 To bootstrap a ESL front-end on an x86 or x86-64 Linux system:
 
-1. Install LLVM, let the directory in which the executables llc, opt, and llvm-as
+1. Install LLVM, let the directory in which the executables "llc" and "opt"
    reside be DIR.
 
 2. The gcc development system must also be installed, only the assembler,
@@ -10,9 +10,16 @@ To bootstrap a ESL front-end on an x86 or x86-64 Linux system:
 
 3. cd src/
 
-4. Edit the shell file "llvm" to reflect where the LLVM programs reside
-   (i.e., DIR).
-   Edit the Makefile to indicate which architecture to target.
+4. In the shell file "llvm", edit the variable "LLVM" to reflect where the
+   LLVM programs installed in step 1 reside (i.e., DIR).
+
+   In the Makefile edit the variable "ESLCFLAGS" to indicate which release
+   of LLVM will be used.  This is necessary because the LLVM intermediate
+   representation (IR) changed in non-backward compatible way with
+   release 3.7.0.
+   The Makefile should be edited if you are not building on a supported
+   host architecture.  If you are targeting the compiler to run on a different
+   architecture than the host, then you are on your own.
 
 5. Type "make boot"
    If successful, identical copies of a the compiler are left in

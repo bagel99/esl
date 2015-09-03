@@ -15,7 +15,7 @@ The ESL compiler is a front-end for the LLVM (http://llvm.org) compiler.
 The compiler is self-hosting, i.e., it is written in ESL.  The compiler
 currently runs only on Linux on x86, x86_64, S/390/z990, and on MacOSX on x86_64
 (but building on S/390 or OSX is left as an exercise to the reader).  The
-compiler back-end is LLVM.  Versions 3.1/3.2/3.3/3.4 of LLVM are supported.
+compiler back-end is LLVM.  Versions 3.1 through 3.7.0 of LLVM are supported.
 
 The compiler, in its current state, implements most of the language features.
 Documentation is incomplete.

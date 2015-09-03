@@ -2,7 +2,7 @@
 #
 # Run a .ll file through the LLVM backend
 #
-LLVM=/usr/bin		# !!!FIX THIS!!!
+LLVM=$HOME/work/llvm-3.7.0/build/Release+Asserts/bin		# !!!FIX THIS!!!
 #LLVM=/usr/bin
 DEBUG=
 ARCH=
