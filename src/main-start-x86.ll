@@ -5,7 +5,7 @@ target triple = "i386-unknown-linux-gnu"
 @debug = global %A.2 zeroinitializer, align 1
 %A.3 = type {i8, i8, i8, i8, i8, i8, i8, i8, i8}
 @feature = global %A.3 zeroinitializer, align 1
-@default_llvmversion = constant [6 x i8] c"3.6.0\00", align 1
+@default_llvmversion = constant [6 x i8] c"3.7.0\00", align 1
 @sys_O_RDONLY = internal constant i32 0, align 4
 @sys_O_WRONLY = internal constant i32 1, align 4
 @sys_O_RDWR = internal constant i32 2, align 4
@@ -6025,6 +6025,30 @@ L.3:
 	br label %return
 return:
 	ret void
+}
+define internal %ast.AstNode* @ast_Trunc(%ast.AstNode* %tree$, %type.TypeNode* %t$) nounwind {
+L.0:
+	%rv.0 = alloca %ast.AstNode*
+	%tree = alloca %ast.AstNode*
+	%t = alloca %type.TypeNode*
+	store %ast.AstNode* %tree$, %ast.AstNode** %tree
+	store %type.TypeNode* %t$, %type.TypeNode** %t
+	%0 = load %type.TypeNode*, %type.TypeNode** %t
+	%1 = load %ast.AstNode*, %ast.AstNode** %tree
+	%2 = call %ast.AstNode* @ast_New1(i8 31, %type.TypeNode* %0, %ast.AstNode* %1)
+	store %ast.AstNode* %2, %ast.AstNode** %tree
+	%3 = load %type.TypeNode*, %type.TypeNode** %t
+	%4 = getelementptr %type.TypeNode, %type.TypeNode* %3, i32 0, i32 9
+	%5 = load i32, i32* %4
+	%6 = load %ast.AstNode*, %ast.AstNode** %tree
+	%7 = getelementptr %ast.AstNode, %ast.AstNode* %6, i32 0, i32 7
+	store i32 %5, i32* %7
+	%8 = load %ast.AstNode*, %ast.AstNode** %tree
+	store %ast.AstNode* %8, %ast.AstNode** %rv.0
+	br label %return
+return:
+	%9 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %9
 }
 define internal %ast.AstNode* @ast_Extend(%ast.AstNode* %tree$, i32 %size$, i8 zeroext %iscast$) nounwind {
 L.0:
@@ -18215,10 +18239,10 @@ L.0:
 	%rv.0 = alloca %ast.AstNode*
 	%endian = alloca i8
 	store i8 %endian$, i8* %endian
-	%arg = alloca %ast.AstNode*
-	%lhs = alloca %ast.AstNode*
 	%tree = alloca %ast.AstNode*
+	%arg = alloca %ast.AstNode*
 	%ta = alloca %type.TypeNode*
+	%rhs = alloca %ast.AstNode*
 	%ts = alloca %type.TypeNode*
 	%n = alloca i32
 	%aligned = alloca i8
@@ -18243,12 +18267,12 @@ L.1:
 	%7 = call i8 @lex_Next()
 	store i8 %7, i8* %tok
 	%8 = call %ast.AstNode* @expr_Bool(%type.TypeNode* null)
-	store %ast.AstNode* %8, %ast.AstNode** %lhs
+	store %ast.AstNode* %8, %ast.AstNode** %rhs
 	%9 = load %ast.AstNode*, %ast.AstNode** %arg
 	%10 = icmp eq %ast.AstNode* %9, null
 	br i1 %10, label %L.4, label %L.3
 L.3:
-	%11 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%11 = load %ast.AstNode*, %ast.AstNode** %rhs
 	%12 = icmp eq %ast.AstNode* %11, null
 	br label %L.4
 L.4:
@@ -18258,182 +18282,134 @@ L.6:
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.5:
-	%14 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%14 = load %ast.AstNode*, %ast.AstNode** %rhs
 	%15 = getelementptr %ast.AstNode, %ast.AstNode* %14, i32 0, i32 8
 	%16 = load %type.TypeNode*, %type.TypeNode** %15
-	store %type.TypeNode* %16, %type.TypeNode** %ts
-	%17 = load %type.TypeNode*, %type.TypeNode** %ts
-	%18 = getelementptr %type.TypeNode, %type.TypeNode* %17, i32 0, i32 14
-	%19 = load i8, i8* %18
-	%20 = icmp ne i8 %19, 2
-	br i1 %20, label %L.8, label %L.7
+	%17 = getelementptr %type.TypeNode, %type.TypeNode* %16, i32 0, i32 14
+	%18 = load i8, i8* %17
+	%19 = icmp ne i8 %18, 2
+	br i1 %19, label %L.8, label %L.7
 L.8:
-	%21 = getelementptr [34 x i8], [34 x i8]* @S.612
-	%22 = bitcast [34 x i8]* %21 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %22)
+	%20 = getelementptr [34 x i8], [34 x i8]* @S.612
+	%21 = bitcast [34 x i8]* %20 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %21)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.7:
-	%23 = load i8, i8* %aligned
-	%24 = icmp ne i8 %23, 0
-	br i1 %24, label %L.10, label %L.11
+	%22 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%23 = load %type.TypeNode*, %type.TypeNode** %ta
+	%24 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %22, %type.TypeNode* %23)
+	store %ast.AstNode* %24, %ast.AstNode** %rhs
+	%25 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%26 = getelementptr %ast.AstNode, %ast.AstNode* %25, i32 0, i32 8
+	%27 = load %type.TypeNode*, %type.TypeNode** %26
+	store %type.TypeNode* %27, %type.TypeNode** %ts
+	%28 = load i8, i8* %aligned
+	%29 = icmp ne i8 %28, 0
+	br i1 %29, label %L.10, label %L.11
 L.10:
-	%25 = load i8, i8* %endian
-	%26 = load %target.ModelT*, %target.ModelT** @target_Target
-	%27 = getelementptr %target.ModelT, %target.ModelT* %26, i32 0, i32 0
-	%28 = load i8, i8* %27
-	%29 = icmp ne i8 %25, %28
-	br i1 %29, label %L.13, label %L.12
+	%30 = load i8, i8* %endian
+	%31 = load %target.ModelT*, %target.ModelT** @target_Target
+	%32 = getelementptr %target.ModelT, %target.ModelT* %31, i32 0, i32 0
+	%33 = load i8, i8* %32
+	%34 = icmp ne i8 %30, %33
+	br i1 %34, label %L.13, label %L.12
 L.13:
-	%30 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%31 = getelementptr %ast.AstNode, %ast.AstNode* %30, i32 0, i32 8
-	%32 = load %type.TypeNode*, %type.TypeNode** %31
-	%33 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%34 = call %ast.AstNode* @ast_New1(i8 32, %type.TypeNode* %32, %ast.AstNode* %33)
-	store %ast.AstNode* %34, %ast.AstNode** %lhs
+	%35 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%36 = getelementptr %ast.AstNode, %ast.AstNode* %35, i32 0, i32 8
+	%37 = load %type.TypeNode*, %type.TypeNode** %36
+	%38 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%39 = call %ast.AstNode* @ast_New1(i8 32, %type.TypeNode* %37, %ast.AstNode* %38)
+	store %ast.AstNode* %39, %ast.AstNode** %rhs
 	br label %L.12
 L.12:
-	%35 = load %ast.AstNode*, %ast.AstNode** %arg
-	%36 = load %type.TypeNode*, %type.TypeNode** %ts
-	%37 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %36)
-	%38 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %35, %type.TypeNode* %37)
-	store %ast.AstNode* %38, %ast.AstNode** %arg
-	%39 = load %type.TypeNode*, %type.TypeNode** %ts
 	%40 = load %ast.AstNode*, %ast.AstNode** %arg
-	%41 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%42 = call %ast.AstNode* @ast_New2(i8 28, %type.TypeNode* %39, %ast.AstNode* %40, %ast.AstNode* %41)
-	store %ast.AstNode* %42, %ast.AstNode** %tree
+	%41 = load %type.TypeNode*, %type.TypeNode** %ta
+	%42 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %41)
+	%43 = call %ast.AstNode* @ast_Cast(%ast.AstNode* %40, %type.TypeNode* %42)
+	store %ast.AstNode* %43, %ast.AstNode** %arg
+	%44 = load %type.TypeNode*, %type.TypeNode** %ts
+	%45 = load %ast.AstNode*, %ast.AstNode** %arg
+	%46 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%47 = call %ast.AstNode* @ast_New2(i8 28, %type.TypeNode* %44, %ast.AstNode* %45, %ast.AstNode* %46)
+	store %ast.AstNode* %47, %ast.AstNode** %tree
 	br label %L.9
 L.11:
 	%i = alloca i32
-	%rhs = alloca %ast.AstNode*
-	%43 = load %ast.AstNode*, %ast.AstNode** %arg
-	%44 = getelementptr %ast.AstNode, %ast.AstNode* %43, i32 0, i32 8
-	%45 = load %type.TypeNode*, %type.TypeNode** %44
-	%46 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %45)
-	%47 = load %ast.AstNode*, %ast.AstNode** %arg
-	%48 = getelementptr %ast.AstNode, %ast.AstNode* %47, i32 0, i32 8
-	store %type.TypeNode* %46, %type.TypeNode** %48
-	%49 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%50 = call %ast.AstNode* @expr_UnLoad(%ast.AstNode* %49)
-	store %ast.AstNode* %50, %ast.AstNode** %lhs
-	%51 = call %ast.AstNode* @ast_New(i8 86, %type.TypeNode* null)
-	store %ast.AstNode* %51, %ast.AstNode** %tree
-	%52 = load i8, i8* %endian
-	%53 = icmp eq i8 %52, 1
-	br i1 %53, label %L.15, label %L.16
-L.15:
-	%54 = load i32, i32* %n
-	store i32 %54, i32* %i
-	br label %L.17
-L.17:
-	%55 = load i32, i32* %i
-	%56 = sub i32 %55, 1
-	store i32 %56, i32* %i
-	%57 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
-	%58 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
-	%59 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %58)
-	%60 = load %ast.AstNode*, %ast.AstNode** %arg
-	%61 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
-	%62 = load i32, i32* %i
-	%63 = zext i32 %62 to i64
-	%64 = call %ast.AstNode* @ast_Const(%type.TypeNode* %61, i64 %63)
-	%65 = call %ast.AstNode* @ast_New2(i8 14, %type.TypeNode* %59, %ast.AstNode* %60, %ast.AstNode* %64)
-	%66 = load %type.TypeNode*, %type.TypeNode** %ts
-	%67 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%68 = call %ast.AstNode* @ast_New1(i8 27, %type.TypeNode* %66, %ast.AstNode* %67)
-	%69 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
-	%70 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %68, %type.TypeNode* %69)
-	%71 = call %ast.AstNode* @ast_New2(i8 28, %type.TypeNode* %57, %ast.AstNode* %65, %ast.AstNode* %70)
-	store %ast.AstNode* %71, %ast.AstNode** %rhs
-	%72 = load %ast.AstNode*, %ast.AstNode** %tree
-	%73 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%74 = call %ast.AstNode* @ast_Child(%ast.AstNode* %72, %ast.AstNode* %73)
-	store %ast.AstNode* %74, %ast.AstNode** %tree
-	%75 = load i32, i32* %i
-	%76 = icmp eq i32 %75, 0
-	br i1 %76, label %L.18, label %L.19
-L.19:
-	%77 = load %type.TypeNode*, %type.TypeNode** %ts
-	%78 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%79 = load %type.TypeNode*, %type.TypeNode** %ts
-	%80 = load %type.TypeNode*, %type.TypeNode** %ts
-	%81 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%82 = call %ast.AstNode* @ast_New1(i8 27, %type.TypeNode* %80, %ast.AstNode* %81)
-	%83 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
-	%84 = call %ast.AstNode* @ast_Const(%type.TypeNode* %83, i64 8)
-	%85 = call %ast.AstNode* @ast_New2(i8 71, %type.TypeNode* %79, %ast.AstNode* %82, %ast.AstNode* %84)
-	%86 = call %ast.AstNode* @ast_New2(i8 28, %type.TypeNode* %77, %ast.AstNode* %78, %ast.AstNode* %85)
-	store %ast.AstNode* %86, %ast.AstNode** %rhs
-	%87 = load %ast.AstNode*, %ast.AstNode** %tree
-	%88 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%89 = call %ast.AstNode* @ast_Child(%ast.AstNode* %87, %ast.AstNode* %88)
-	store %ast.AstNode* %89, %ast.AstNode** %tree
-	br label %L.17
-L.18:
-	br label %L.14
-L.16:
+	%k = alloca i32
+	%tmp = alloca %ast.AstNode*
+	%48 = load %ast.AstNode*, %ast.AstNode** %arg
+	%49 = getelementptr %ast.AstNode, %ast.AstNode* %48, i32 0, i32 8
+	%50 = load %type.TypeNode*, %type.TypeNode** %49
+	%51 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %50)
+	%52 = load %ast.AstNode*, %ast.AstNode** %arg
+	%53 = getelementptr %ast.AstNode, %ast.AstNode* %52, i32 0, i32 8
+	store %type.TypeNode* %51, %type.TypeNode** %53
+	%54 = call %ast.AstNode* @ast_New(i8 86, %type.TypeNode* null)
+	store %ast.AstNode* %54, %ast.AstNode** %tree
 	store i32 0, i32* %i
-	br label %L.20
-L.20:
-	%90 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
-	%91 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
-	%92 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %91)
-	%93 = load %ast.AstNode*, %ast.AstNode** %arg
-	%94 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
-	%95 = load i32, i32* %i
-	%96 = zext i32 %95 to i64
-	%97 = call %ast.AstNode* @ast_Const(%type.TypeNode* %94, i64 %96)
-	%98 = call %ast.AstNode* @ast_New2(i8 14, %type.TypeNode* %92, %ast.AstNode* %93, %ast.AstNode* %97)
-	%99 = load %type.TypeNode*, %type.TypeNode** %ts
-	%100 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%101 = call %ast.AstNode* @ast_New1(i8 27, %type.TypeNode* %99, %ast.AstNode* %100)
-	%102 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
-	%103 = call %ast.AstNode* @ast_ExtendT(%ast.AstNode* %101, %type.TypeNode* %102)
-	%104 = call %ast.AstNode* @ast_New2(i8 28, %type.TypeNode* %90, %ast.AstNode* %98, %ast.AstNode* %103)
-	store %ast.AstNode* %104, %ast.AstNode** %rhs
-	%105 = load %ast.AstNode*, %ast.AstNode** %tree
-	%106 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%107 = call %ast.AstNode* @ast_Child(%ast.AstNode* %105, %ast.AstNode* %106)
-	store %ast.AstNode* %107, %ast.AstNode** %tree
-	%108 = load i32, i32* %i
-	%109 = add i32 %108, 1
-	store i32 %109, i32* %i
-	%110 = load i32, i32* %i
-	%111 = load i32, i32* %n
-	%112 = icmp eq i32 %110, %111
-	br i1 %112, label %L.21, label %L.22
-L.22:
-	%113 = load %type.TypeNode*, %type.TypeNode** %ts
-	%114 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%115 = load %type.TypeNode*, %type.TypeNode** %ts
-	%116 = load %type.TypeNode*, %type.TypeNode** %ts
-	%117 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%118 = call %ast.AstNode* @ast_New1(i8 27, %type.TypeNode* %116, %ast.AstNode* %117)
-	%119 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
-	%120 = call %ast.AstNode* @ast_Const(%type.TypeNode* %119, i64 8)
-	%121 = call %ast.AstNode* @ast_New2(i8 71, %type.TypeNode* %115, %ast.AstNode* %118, %ast.AstNode* %120)
-	%122 = call %ast.AstNode* @ast_New2(i8 28, %type.TypeNode* %113, %ast.AstNode* %114, %ast.AstNode* %121)
-	store %ast.AstNode* %122, %ast.AstNode** %rhs
-	%123 = load %ast.AstNode*, %ast.AstNode** %tree
-	%124 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%125 = call %ast.AstNode* @ast_Child(%ast.AstNode* %123, %ast.AstNode* %124)
-	store %ast.AstNode* %125, %ast.AstNode** %tree
-	br label %L.20
-L.21:
 	br label %L.14
 L.14:
+	%55 = load i8, i8* %endian
+	%56 = icmp eq i8 %55, 1
+	br i1 %56, label %L.17, label %L.18
+L.17:
+	%57 = load i32, i32* %n
+	%58 = load i32, i32* %i
+	%59 = sub i32 %57, %58
+	%60 = sub i32 %59, 1
+	store i32 %60, i32* %k
+	br label %L.16
+L.18:
+	%61 = load i32, i32* %i
+	store i32 %61, i32* %k
+	br label %L.16
+L.16:
+	%62 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
+	%63 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
+	%64 = call %type.TypeNode* @type_MakeRef(%type.TypeNode* %63)
+	%65 = load %ast.AstNode*, %ast.AstNode** %arg
+	%66 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
+	%67 = load i32, i32* %k
+	%68 = zext i32 %67 to i64
+	%69 = call %ast.AstNode* @ast_Const(%type.TypeNode* %66, i64 %68)
+	%70 = call %ast.AstNode* @ast_New2(i8 14, %type.TypeNode* %64, %ast.AstNode* %65, %ast.AstNode* %69)
+	%71 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%72 = load %type.TypeNode*, %type.TypeNode** @type_bytetype
+	%73 = call %ast.AstNode* @ast_Trunc(%ast.AstNode* %71, %type.TypeNode* %72)
+	%74 = call %ast.AstNode* @ast_New2(i8 28, %type.TypeNode* %62, %ast.AstNode* %70, %ast.AstNode* %73)
+	store %ast.AstNode* %74, %ast.AstNode** %tmp
+	%75 = load %ast.AstNode*, %ast.AstNode** %tree
+	%76 = load %ast.AstNode*, %ast.AstNode** %tmp
+	%77 = call %ast.AstNode* @ast_Child(%ast.AstNode* %75, %ast.AstNode* %76)
+	store %ast.AstNode* %77, %ast.AstNode** %tree
+	%78 = load i32, i32* %i
+	%79 = add i32 %78, 1
+	store i32 %79, i32* %i
+	%80 = load i32, i32* %i
+	%81 = load i32, i32* %n
+	%82 = icmp eq i32 %80, %81
+	br i1 %82, label %L.15, label %L.19
+L.19:
+	%83 = load %type.TypeNode*, %type.TypeNode** %ts
+	%84 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%85 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
+	%86 = call %ast.AstNode* @ast_Const(%type.TypeNode* %85, i64 8)
+	%87 = call %ast.AstNode* @ast_New2(i8 71, %type.TypeNode* %83, %ast.AstNode* %84, %ast.AstNode* %86)
+	store %ast.AstNode* %87, %ast.AstNode** %rhs
+	br label %L.14
+L.15:
 	br label %L.9
 L.9:
-	%126 = load %ast.AstNode*, %ast.AstNode** %tree
-	%127 = call %ast.AstNode* @ast_New1(i8 1, %type.TypeNode* null, %ast.AstNode* %126)
-	store %ast.AstNode* %127, %ast.AstNode** %tree
-	%128 = load %ast.AstNode*, %ast.AstNode** %tree
-	store %ast.AstNode* %128, %ast.AstNode** %rv.0
+	%88 = load %ast.AstNode*, %ast.AstNode** %tree
+	%89 = call %ast.AstNode* @ast_New1(i8 1, %type.TypeNode* null, %ast.AstNode* %88)
+	store %ast.AstNode* %89, %ast.AstNode** %tree
+	%90 = load %ast.AstNode*, %ast.AstNode** %tree
+	store %ast.AstNode* %90, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%129 = load %ast.AstNode*, %ast.AstNode** %rv.0
-	ret %ast.AstNode* %129
+	%91 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %91
 }
 define internal %ast.AstNode* @expr_UnpkSub(%ast.AstNode* %tree$, %ast.AstNode* %arg$, %type.TypeNode* %ts$, i32 %i$) nounwind {
 L.0:
@@ -21930,7 +21906,6 @@ return:
 @stmt_skiplist = internal constant [3 x i8] [ i8 37, i8 4, i8 0 ], align 1
 @stmt_LoopMax = internal constant i32 32, align 4
 @stmt_LoopLevel = internal global i8 0, align 1
-@stmt_CurFile = internal global %symb.SymbNode* zeroinitializer, align 4
 @stmt_skipgroup = internal constant [2 x i8] [ i8 37, i8 0 ], align 1
 @stmt_skipstmt = internal constant [2 x i8] [ i8 4, i8 0 ], align 1
 @stmt_iflist = internal constant [2 x i8] [ i8 53, i8 0 ], align 1
@@ -26821,54 +26796,47 @@ L.0:
 	%11 = bitcast [0 x i8]* %10 to [0 x i8]*
 	%12 = call %symb.SymbNode* @symb_NewFile([0 x i8]* %5, [0 x i8]* %11)
 	store %symb.SymbNode* %12, %symb.SymbNode** %s
-	%13 = load %symb.SymbNode*, %symb.SymbNode** @stmt_CurFile
-	%14 = bitcast %symb.SymbNode* %13 to %symb.SymbNode*
-	%15 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%16 = getelementptr %symb.SymbNode, %symb.SymbNode* %15, i32 0, i32 2
-	store %symb.SymbNode* %14, %symb.SymbNode** %16
-	%17 = load %symb.SymbNode*, %symb.SymbNode** %s
-	store %symb.SymbNode* %17, %symb.SymbNode** @stmt_CurFile
 	store %symb.SymbNode* null, %symb.SymbNode** @symb_curpack
-	%18 = call %ast.AstNode* @ast_New(i8 86, %type.TypeNode* null)
-	store %ast.AstNode* %18, %ast.AstNode** %tree
-	%19 = call i8 @lex_Next()
-	store i8 %19, i8* %tok
+	%13 = call %ast.AstNode* @ast_New(i8 86, %type.TypeNode* null)
+	store %ast.AstNode* %13, %ast.AstNode** %tree
+	%14 = call i8 @lex_Next()
+	store i8 %14, i8* %tok
 	br label %L.1
 L.1:
-	%20 = load i8, i8* %tok
-	%21 = icmp ne i8 %20, 1
-	%22 = xor i1 %21, true
-	br i1 %22, label %L.2, label %L.3
+	%15 = load i8, i8* %tok
+	%16 = icmp ne i8 %15, 1
+	%17 = xor i1 %16, true
+	br i1 %17, label %L.2, label %L.3
 L.3:
-	%23 = call %ast.AstNode* @stmt_ProgStmt()
-	store %ast.AstNode* %23, %ast.AstNode** %stree
-	%24 = load %ast.AstNode*, %ast.AstNode** %stree
-	%25 = icmp ne %ast.AstNode* %24, null
-	br i1 %25, label %L.5, label %L.4
+	%18 = call %ast.AstNode* @stmt_ProgStmt()
+	store %ast.AstNode* %18, %ast.AstNode** %stree
+	%19 = load %ast.AstNode*, %ast.AstNode** %stree
+	%20 = icmp ne %ast.AstNode* %19, null
+	br i1 %20, label %L.5, label %L.4
 L.5:
-	%26 = load %ast.AstNode*, %ast.AstNode** %tree
-	%27 = load %ast.AstNode*, %ast.AstNode** %stree
-	%28 = call %ast.AstNode* @ast_Child(%ast.AstNode* %26, %ast.AstNode* %27)
-	store %ast.AstNode* %28, %ast.AstNode** %tree
+	%21 = load %ast.AstNode*, %ast.AstNode** %tree
+	%22 = load %ast.AstNode*, %ast.AstNode** %stree
+	%23 = call %ast.AstNode* @ast_Child(%ast.AstNode* %21, %ast.AstNode* %22)
+	store %ast.AstNode* %23, %ast.AstNode** %tree
 	br label %L.4
 L.4:
-	%29 = load i8, i8* @lex_Token
-	store i8 %29, i8* %tok
+	%24 = load i8, i8* @lex_Token
+	store i8 %24, i8* %tok
 	br label %L.1
 L.2:
+	%25 = load %ast.AstNode*, %ast.AstNode** %tree
+	%26 = call %ast.AstNode* @ast_New1(i8 2, %type.TypeNode* null, %ast.AstNode* %25)
+	store %ast.AstNode* %26, %ast.AstNode** %tree
+	%27 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%28 = load %ast.AstNode*, %ast.AstNode** %tree
+	%29 = getelementptr %ast.AstNode, %ast.AstNode* %28, i32 0, i32 9
+	store %symb.SymbNode* %27, %symb.SymbNode** %29
 	%30 = load %ast.AstNode*, %ast.AstNode** %tree
-	%31 = call %ast.AstNode* @ast_New1(i8 2, %type.TypeNode* null, %ast.AstNode* %30)
-	store %ast.AstNode* %31, %ast.AstNode** %tree
-	%32 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%33 = load %ast.AstNode*, %ast.AstNode** %tree
-	%34 = getelementptr %ast.AstNode, %ast.AstNode* %33, i32 0, i32 9
-	store %symb.SymbNode* %32, %symb.SymbNode** %34
-	%35 = load %ast.AstNode*, %ast.AstNode** %tree
-	store %ast.AstNode* %35, %ast.AstNode** %rv.0
+	store %ast.AstNode* %30, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%36 = load %ast.AstNode*, %ast.AstNode** %rv.0
-	ret %ast.AstNode* %36
+	%31 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %31
 }
 @bout_MinBufSize = internal constant i32 32, align 4
 %bout.BufIO = type {[0 x i8]*, i16, i16, i32}
@@ -27662,6 +27630,9 @@ return:
 @llvmdb_retained = internal global i16 0, align 2
 @llvmdb_enums = internal global i16 0, align 2
 @llvmdb_imported = internal global i16 0, align 2
+@llvmdb_MAXFILENEST = internal constant i32 32, align 4
+@llvmdb_fileinx = internal global i32 0, align 4
+@llvmdb_filenest = internal global [32 x i16] zeroinitializer, align 2
 @llvmdb_gvhead = internal global %symb.SymbNode* zeroinitializer, align 4
 @llvmdb_gvtail = internal global %symb.SymbNode* zeroinitializer, align 4
 @llvmdb_lvhead = internal global %symb.SymbNode* zeroinitializer, align 4
@@ -27672,7 +27643,6 @@ return:
 @llvmdb_lnhead = internal global %llvmdb.LineT* zeroinitializer, align 4
 @llvmdb_lntail = internal global %llvmdb.LineT* zeroinitializer, align 4
 @llvmdb_lexblkno = internal global i32 0, align 4
-@llvmdb_curfile = internal global %symb.SymbNode* zeroinitializer, align 4
 define internal zeroext i16 @llvmdb_GetLineContext() nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -27741,84 +27711,52 @@ L.0:
 return:
 	ret void
 }
-@S.647 = private unnamed_addr constant [6 x i8] c" = !{\00"
-@S.648 = private unnamed_addr constant [15 x i8] c" = metadata !{\00"
+@S.647 = private unnamed_addr constant [5 x i8] c" = !\00"
 define internal void @llvmdb_PMetaSeq(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load i16, i16* %n
 	call void @llvmdb_PSeq(i16 %0)
-	%1 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%2 = load i8, i8* %1
-	%3 = icmp ugt i8 %2, 1
-	br i1 %3, label %L.2, label %L.3
-L.2:
-	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
-	%6 = getelementptr [6 x i8], [6 x i8]* @S.647
-	%7 = bitcast [6 x i8]* %6 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
-	br label %L.1
-L.3:
-	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%9 = bitcast %bout.BufIO* %8 to %bout.BufIO*
-	%10 = getelementptr [15 x i8], [15 x i8]* @S.648
-	%11 = bitcast [15 x i8]* %10 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %9, [0 x i8]* %11)
-	br label %L.1
-L.1:
+	%1 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%2 = bitcast %bout.BufIO* %1 to %bout.BufIO*
+	%3 = getelementptr [5 x i8], [5 x i8]* @S.647
+	%4 = bitcast [5 x i8]* %3 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %2, [0 x i8]* %4)
 	br label %return
 return:
 	ret void
 }
-@S.649 = private unnamed_addr constant [2 x i8] c"!\00"
-@S.650 = private unnamed_addr constant [11 x i8] c"metadata !\00"
-define internal void @llvmdb_PMetaRef(i16 zeroext %n$, i8 zeroext %term$) nounwind {
+define internal void @llvmdb_PStart(i16 zeroext %n$, [0 x i8]* %name$) nounwind {
 L.0:
 	%n = alloca i16
-	%term = alloca i8
+	%name = alloca [0 x i8]*
 	store i16 %n$, i16* %n
-	store i8 %term$, i8* %term
-	%0 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%1 = load i8, i8* %0
-	%2 = icmp ugt i8 %1, 1
-	br i1 %2, label %L.2, label %L.3
-L.2:
-	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%4 = bitcast %bout.BufIO* %3 to %bout.BufIO*
-	%5 = getelementptr [2 x i8], [2 x i8]* @S.649
-	%6 = bitcast [2 x i8]* %5 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %4, [0 x i8]* %6)
-	br label %L.1
-L.3:
-	%7 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%8 = bitcast %bout.BufIO* %7 to %bout.BufIO*
-	%9 = getelementptr [11 x i8], [11 x i8]* @S.650
-	%10 = bitcast [11 x i8]* %9 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %8, [0 x i8]* %10)
-	br label %L.1
-L.1:
-	%11 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%12 = bitcast %bout.BufIO* %11 to %bout.BufIO*
-	%13 = load i16, i16* %n
-	%14 = zext i16 %13 to i32
-	call void @bout_BufIO_uint(%bout.BufIO* %12, i32 %14)
-	%15 = load i8, i8* %term
-	call void @llvmdb_PTerminator(i8 %15)
+	store [0 x i8]* %name$, [0 x i8]** %name
+	%0 = load i16, i16* %n
+	call void @llvmdb_PMetaSeq(i16 %0)
+	%1 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%2 = bitcast %bout.BufIO* %1 to %bout.BufIO*
+	%3 = load [0 x i8]*, [0 x i8]** %name
+	%4 = bitcast [0 x i8]* %3 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %2, [0 x i8]* %4)
+	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %6, i8 40)
 	br label %return
 return:
 	ret void
 }
-@S.651 = private unnamed_addr constant [5 x i8] c"null\00"
-define internal void @llvmdb_PNull(i8 zeroext %term$) nounwind {
+define internal void @llvmdb_PString([0 x i8]* %s$, i8 zeroext %term$) nounwind {
 L.0:
+	%s = alloca [0 x i8]*
 	%term = alloca i8
+	store [0 x i8]* %s$, [0 x i8]** %s
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8], [5 x i8]* @S.651
-	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
+	%2 = load [0 x i8]*, [0 x i8]** %s
+	%3 = bitcast [0 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load i8, i8* %term
 	call void @llvmdb_PTerminator(i8 %4)
@@ -27826,153 +27764,30 @@ L.0:
 return:
 	ret void
 }
-@S.652 = private unnamed_addr constant [4 x i8] c"i1 \00"
-@S.653 = private unnamed_addr constant [5 x i8] c"true\00"
-@S.654 = private unnamed_addr constant [6 x i8] c"false\00"
-define internal void @llvmdb_PBoolean(i8 zeroext %b$, i8 zeroext %term$) nounwind {
-L.0:
-	%b = alloca i8
-	%term = alloca i8
-	store i8 %b$, i8* %b
-	store i8 %term$, i8* %term
-	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [4 x i8], [4 x i8]* @S.652
-	%3 = bitcast [4 x i8]* %2 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
-	%4 = load i8, i8* %b
-	%5 = icmp ne i8 %4, 0
-	br i1 %5, label %L.2, label %L.3
-L.2:
-	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [5 x i8], [5 x i8]* @S.653
-	%9 = bitcast [5 x i8]* %8 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
-	br label %L.1
-L.3:
-	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = getelementptr [6 x i8], [6 x i8]* @S.654
-	%13 = bitcast [6 x i8]* %12 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
-	br label %L.1
-L.1:
-	%14 = load i8, i8* %term
-	call void @llvmdb_PTerminator(i8 %14)
-	br label %return
-return:
-	ret void
-}
-@S.655 = private unnamed_addr constant [5 x i8] c"i32 \00"
-define internal void @llvmdb_P32(i32 %v$, i8 zeroext %term$) nounwind {
-L.0:
-	%v = alloca i32
-	%term = alloca i8
-	store i32 %v$, i32* %v
-	store i8 %term$, i8* %term
-	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8], [5 x i8]* @S.655
-	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
-	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
-	%6 = load i32, i32* %v
-	call void @bout_BufIO_uint32(%bout.BufIO* %5, i32 %6)
-	%7 = load i8, i8* %term
-	call void @llvmdb_PTerminator(i8 %7)
-	br label %return
-return:
-	ret void
-}
-@S.656 = private unnamed_addr constant [5 x i8] c"i64 \00"
-define internal void @llvmdb_P64(i64 %v$, i8 zeroext %term$) nounwind {
-L.0:
-	%v = alloca i64
-	%term = alloca i8
-	store i64 %v$, i64* %v
-	store i8 %term$, i8* %term
-	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8], [5 x i8]* @S.656
-	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
-	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
-	%6 = load i64, i64* %v
-	call void @bout_BufIO_uint64(%bout.BufIO* %5, i64 %6)
-	%7 = load i8, i8* %term
-	call void @llvmdb_PTerminator(i8 %7)
-	br label %return
-return:
-	ret void
-}
-define internal void @llvmdb_PHeader(i16 zeroext %tag$, i16 zeroext %dwat$) nounwind {
-L.0:
-	%tag = alloca i16
-	%dwat = alloca i16
-	store i16 %tag$, i16* %tag
-	store i16 %dwat$, i16* %dwat
-	%0 = load i16, i16* %tag
-	call void @llvmdb_PMetaSeq(i16 %0)
-	%1 = load i16, i16* %dwat
-	%2 = zext i16 %1 to i32
-	%3 = add i32 %2, 786432
-	call void @llvmdb_P32(i32 %3, i8 0)
-	br label %return
-return:
-	ret void
-}
-@S.657 = private unnamed_addr constant [3 x i8] c"!\22\00"
-@S.658 = private unnamed_addr constant [12 x i8] c"metadata !\22\00"
-define internal void @llvmdb_PString([0 x i8]* %s$, i8 zeroext %term$) nounwind {
+define internal void @llvmdb_PQString([0 x i8]* %s$, i8 zeroext %term$) nounwind {
 L.0:
 	%s = alloca [0 x i8]*
 	%term = alloca i8
 	store [0 x i8]* %s$, [0 x i8]** %s
 	store i8 %term$, i8* %term
-	%0 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%1 = load i8, i8* %0
-	%2 = icmp ugt i8 %1, 1
-	br i1 %2, label %L.2, label %L.3
-L.2:
-	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%4 = bitcast %bout.BufIO* %3 to %bout.BufIO*
-	%5 = getelementptr [3 x i8], [3 x i8]* @S.657
-	%6 = bitcast [3 x i8]* %5 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %4, [0 x i8]* %6)
-	br label %L.1
-L.3:
-	%7 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%8 = bitcast %bout.BufIO* %7 to %bout.BufIO*
-	%9 = getelementptr [12 x i8], [12 x i8]* @S.658
-	%10 = bitcast [12 x i8]* %9 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %8, [0 x i8]* %10)
-	br label %L.1
-L.1:
-	%11 = load [0 x i8]*, [0 x i8]** %s
-	%12 = icmp ne [0 x i8]* %11, null
-	br i1 %12, label %L.5, label %L.4
-L.5:
-	%13 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%14 = bitcast %bout.BufIO* %13 to %bout.BufIO*
-	%15 = load [0 x i8]*, [0 x i8]** %s
-	%16 = bitcast [0 x i8]* %15 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %14, [0 x i8]* %16)
-	br label %L.4
-L.4:
-	%17 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%18 = bitcast %bout.BufIO* %17 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %18, i8 34)
-	%19 = load i8, i8* %term
-	call void @llvmdb_PTerminator(i8 %19)
+	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %1, i8 34)
+	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
+	%4 = load [0 x i8]*, [0 x i8]** %s
+	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
+	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %7, i8 34)
+	%8 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %8)
 	br label %return
 return:
 	ret void
 }
-@S.659 = private unnamed_addr constant [12 x i8] c"metadata !\22\00"
-define internal void @llvmdb_PString2([0 x i8]* %s1$, [0 x i8]* %s2$, i8 zeroext %delim$, i8 zeroext %term$) nounwind {
+define internal void @llvmdb_PStringD([0 x i8]* %s1$, [0 x i8]* %s2$, i8 zeroext %delim$, i8 zeroext %term$) nounwind {
 L.0:
 	%s1 = alloca [0 x i8]*
 	%s2 = alloca [0 x i8]*
@@ -27984,40 +27799,38 @@ L.0:
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [12 x i8], [12 x i8]* @S.659
-	%3 = bitcast [12 x i8]* %2 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
-	%4 = load [0 x i8]*, [0 x i8]** %s1
-	%5 = icmp ne [0 x i8]* %4, null
-	br i1 %5, label %L.2, label %L.1
+	call void @bout_BufIO_chr(%bout.BufIO* %1, i8 34)
+	%2 = load [0 x i8]*, [0 x i8]** %s1
+	%3 = icmp ne [0 x i8]* %2, null
+	br i1 %3, label %L.2, label %L.1
 L.2:
-	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = load [0 x i8]*, [0 x i8]** %s1
-	%9 = bitcast [0 x i8]* %8 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
-	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = load i8, i8* %delim
-	call void @bout_BufIO_chr(%bout.BufIO* %11, i8 %12)
+	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
+	%6 = load [0 x i8]*, [0 x i8]** %s1
+	%7 = bitcast [0 x i8]* %6 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
+	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%9 = bitcast %bout.BufIO* %8 to %bout.BufIO*
+	%10 = load i8, i8* %delim
+	call void @bout_BufIO_chr(%bout.BufIO* %9, i8 %10)
 	br label %L.1
 L.1:
-	%13 = load [0 x i8]*, [0 x i8]** %s2
-	%14 = icmp ne [0 x i8]* %13, null
-	br i1 %14, label %L.4, label %L.3
+	%11 = load [0 x i8]*, [0 x i8]** %s2
+	%12 = icmp ne [0 x i8]* %11, null
+	br i1 %12, label %L.4, label %L.3
 L.4:
-	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = bitcast %bout.BufIO* %15 to %bout.BufIO*
-	%17 = load [0 x i8]*, [0 x i8]** %s2
-	%18 = bitcast [0 x i8]* %17 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %16, [0 x i8]* %18)
+	%13 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%14 = bitcast %bout.BufIO* %13 to %bout.BufIO*
+	%15 = load [0 x i8]*, [0 x i8]** %s2
+	%16 = bitcast [0 x i8]* %15 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %14, [0 x i8]* %16)
 	br label %L.3
 L.3:
-	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%20 = bitcast %bout.BufIO* %19 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %20, i8 34)
-	%21 = load i8, i8* %term
-	call void @llvmdb_PTerminator(i8 %21)
+	%17 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%18 = bitcast %bout.BufIO* %17 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %18, i8 34)
+	%19 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %19)
 	br label %return
 return:
 	ret void
@@ -28049,11 +27862,11 @@ L.4:
 	%12 = getelementptr [0 x i8], [0 x i8]* %11
 	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
 	%14 = load i8, i8* %term
-	call void @llvmdb_PString([0 x i8]* %13, i8 %14)
+	call void @llvmdb_PQString([0 x i8]* %13, i8 %14)
 	br label %L.3
 L.5:
 	%15 = load i8, i8* %term
-	call void @llvmdb_PString([0 x i8]* null, i8 %15)
+	call void @llvmdb_PQString([0 x i8]* null, i8 %15)
 	br label %L.3
 L.3:
 	br label %return
@@ -28099,7 +27912,7 @@ L.7:
 	%22 = getelementptr [0 x i8], [0 x i8]* %21
 	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
 	%24 = load i8, i8* %term
-	call void @llvmdb_PString2([0 x i8]* %19, [0 x i8]* %23, i8 46, i8 %24)
+	call void @llvmdb_PStringD([0 x i8]* %19, [0 x i8]* %23, i8 95, i8 %24)
 	br label %L.6
 L.8:
 	%25 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -28107,94 +27920,187 @@ L.8:
 	%27 = getelementptr [0 x i8], [0 x i8]* %26
 	%28 = bitcast [0 x i8]* %27 to [0 x i8]*
 	%29 = load i8, i8* %term
-	call void @llvmdb_PString([0 x i8]* %28, i8 %29)
+	call void @llvmdb_PQString([0 x i8]* %28, i8 %29)
 	br label %L.6
 L.6:
 	br label %L.3
 L.5:
 	%30 = load i8, i8* %term
-	call void @llvmdb_PString([0 x i8]* null, i8 %30)
+	call void @llvmdb_PQString([0 x i8]* null, i8 %30)
 	br label %L.3
 L.3:
 	br label %return
 return:
 	ret void
 }
-define internal void @llvmdb_PLinkName(%symb.SymbNode* %s$, i8 zeroext %term$) nounwind {
+define internal void @llvmdb_PUint(i32 %n$, i8 zeroext %term$) nounwind {
 L.0:
-	%s = alloca %symb.SymbNode*
+	%n = alloca i32
 	%term = alloca i8
-	store %symb.SymbNode* %s$, %symb.SymbNode** %s
+	store i32 %n$, i32* %n
 	store i8 %term$, i8* %term
-	%0 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%1 = icmp ne %symb.SymbNode* %0, null
-	br i1 %1, label %L.1, label %L.2
-L.1:
-	%2 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%3 = getelementptr %symb.SymbNode, %symb.SymbNode* %2, i32 0, i32 22
-	%4 = getelementptr [0 x i8], [0 x i8]* %3
-	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
-	%6 = call i8 @symb_IsAnon([0 x i8]* %5)
-	%7 = icmp ne i8 %6, 0
-	%8 = xor i1 %7, true
-	br label %L.2
+	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
+	%2 = load i32, i32* %n
+	call void @bout_BufIO_uint(%bout.BufIO* %1, i32 %2)
+	%3 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %3)
+	br label %return
+return:
+	ret void
+}
+define internal void @llvmdb_PMetaString([0 x i8]* %s$, i8 zeroext %term$) nounwind {
+L.0:
+	%s = alloca [0 x i8]*
+	%term = alloca i8
+	store [0 x i8]* %s$, [0 x i8]** %s
+	store i8 %term$, i8* %term
+	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %1, i8 33)
+	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %3, i8 34)
+	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
+	%6 = load [0 x i8]*, [0 x i8]** %s
+	%7 = bitcast [0 x i8]* %6 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
+	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%9 = bitcast %bout.BufIO* %8 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %9, i8 34)
+	%10 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %10)
+	br label %return
+return:
+	ret void
+}
+define internal void @llvmdb_PMetaRef(i16 zeroext %n$, i8 zeroext %term$) nounwind {
+L.0:
+	%n = alloca i16
+	%term = alloca i8
+	store i16 %n$, i16* %n
+	store i8 %term$, i8* %term
+	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %1, i8 33)
+	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
+	%4 = load i16, i16* %n
+	%5 = zext i16 %4 to i32
+	call void @bout_BufIO_uint(%bout.BufIO* %3, i32 %5)
+	%6 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %6)
+	br label %return
+return:
+	ret void
+}
+define internal void @llvmdb_PListStart(i16 zeroext %n$) nounwind {
+L.0:
+	%n = alloca i16
+	store i16 %n$, i16* %n
+	%0 = load i16, i16* %n
+	call void @llvmdb_PMetaSeq(i16 %0)
+	%1 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%2 = bitcast %bout.BufIO* %1 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %2, i8 123)
+	br label %return
+return:
+	ret void
+}
+@S.648 = private unnamed_addr constant [5 x i8] c"null\00"
+define internal void @llvmdb_PNull(i8 zeroext %term$) nounwind {
+L.0:
+	%term = alloca i8
+	store i8 %term$, i8* %term
+	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
+	%2 = getelementptr [5 x i8], [5 x i8]* @S.648
+	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
+	%4 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %4)
+	br label %return
+return:
+	ret void
+}
+@S.649 = private unnamed_addr constant [5 x i8] c"true\00"
+@S.650 = private unnamed_addr constant [6 x i8] c"false\00"
+define internal void @llvmdb_PBoolean(i8 zeroext %b$, i8 zeroext %term$) nounwind {
+L.0:
+	%b = alloca i8
+	%term = alloca i8
+	store i8 %b$, i8* %b
+	store i8 %term$, i8* %term
+	%0 = load i8, i8* %b
+	%1 = icmp ne i8 %0, 0
+	br i1 %1, label %L.2, label %L.3
 L.2:
-	%9 = phi i1 [ false, %L.0 ], [ %8, %L.1 ]
-	br i1 %9, label %L.4, label %L.5
-L.4:
-	%10 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode, %symb.SymbNode* %10, i32 0, i32 2
-	%12 = load %symb.SymbNode*, %symb.SymbNode** %11
-	%13 = icmp ne %symb.SymbNode* %12, null
-	br i1 %13, label %L.7, label %L.8
-L.7:
-	%14 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%15 = getelementptr %symb.SymbNode, %symb.SymbNode* %14, i32 0, i32 2
-	%16 = load %symb.SymbNode*, %symb.SymbNode** %15
-	%17 = getelementptr %symb.SymbNode, %symb.SymbNode* %16, i32 0, i32 22
-	%18 = getelementptr [0 x i8], [0 x i8]* %17
-	%19 = bitcast [0 x i8]* %18 to [0 x i8]*
-	%20 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%21 = getelementptr %symb.SymbNode, %symb.SymbNode* %20, i32 0, i32 22
-	%22 = getelementptr [0 x i8], [0 x i8]* %21
-	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
-	%24 = load i8, i8* %term
-	call void @llvmdb_PString2([0 x i8]* %19, [0 x i8]* %23, i8 95, i8 %24)
-	br label %L.6
-L.8:
-	%25 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%26 = getelementptr %symb.SymbNode, %symb.SymbNode* %25, i32 0, i32 22
-	%27 = getelementptr [0 x i8], [0 x i8]* %26
-	%28 = bitcast [0 x i8]* %27 to [0 x i8]*
-	%29 = load i8, i8* %term
-	call void @llvmdb_PString([0 x i8]* %28, i8 %29)
-	br label %L.6
-L.6:
-	br label %L.3
-L.5:
-	%30 = load i8, i8* %term
-	call void @llvmdb_PString([0 x i8]* null, i8 %30)
-	br label %L.3
+	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
+	%4 = getelementptr [5 x i8], [5 x i8]* @S.649
+	%5 = bitcast [5 x i8]* %4 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
+	br label %L.1
 L.3:
+	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
+	%8 = getelementptr [6 x i8], [6 x i8]* @S.650
+	%9 = bitcast [6 x i8]* %8 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
+	br label %L.1
+L.1:
+	%10 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %10)
 	br label %return
 return:
 	ret void
 }
-define internal void @llvmdb_PContext(i8 zeroext %term$) nounwind {
+@S.651 = private unnamed_addr constant [5 x i8] c"i32 \00"
+define internal void @llvmdb_P32(i32 %v$, i8 zeroext %term$) nounwind {
 L.0:
+	%v = alloca i32
 	%term = alloca i8
+	store i32 %v$, i32* %v
 	store i8 %term$, i8* %term
-	%tag = alloca i16
-	%0 = load i16, i16* @llvmdb_file
-	store i16 %0, i16* %tag
-	%1 = load i16, i16* %tag
-	%2 = load i8, i8* %term
-	call void @llvmdb_PMetaRef(i16 %1, i8 %2)
+	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
+	%2 = getelementptr [5 x i8], [5 x i8]* @S.651
+	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
+	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
+	%6 = load i32, i32* %v
+	call void @bout_BufIO_uint32(%bout.BufIO* %5, i32 %6)
+	%7 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %7)
 	br label %return
 return:
 	ret void
 }
-define internal zeroext i16 @llvmdb_PListStart() nounwind {
+@S.652 = private unnamed_addr constant [5 x i8] c"i64 \00"
+define internal void @llvmdb_P64(i64 %v$, i8 zeroext %term$) nounwind {
+L.0:
+	%v = alloca i64
+	%term = alloca i8
+	store i64 %v$, i64* %v
+	store i8 %term$, i8* %term
+	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
+	%2 = getelementptr [5 x i8], [5 x i8]* @S.652
+	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
+	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
+	%6 = load i64, i64* %v
+	call void @bout_BufIO_uint64(%bout.BufIO* %5, i64 %6)
+	%7 = load i8, i8* %term
+	call void @llvmdb_PTerminator(i8 %7)
+	br label %return
+return:
+	ret void
+}
+define internal zeroext i16 @llvmdb_PNewListStart() nounwind {
 L.0:
 	%rv.0 = alloca i16
 	%tag = alloca i16
@@ -28204,7 +28110,7 @@ L.0:
 	%2 = load i16, i16* @llvmdb_seqno
 	store i16 %2, i16* %tag
 	%3 = load i16, i16* %tag
-	call void @llvmdb_PMetaSeq(i16 %3)
+	call void @llvmdb_PListStart(i16 %3)
 	%4 = load i16, i16* %tag
 	store i16 %4, i16* %rv.0
 	br label %return
@@ -28216,7 +28122,7 @@ define internal zeroext i16 @llvmdb_PEmptyList() nounwind {
 L.0:
 	%rv.0 = alloca i16
 	%tag = alloca i16
-	%0 = call i16 @llvmdb_PListStart()
+	%0 = call i16 @llvmdb_PNewListStart()
 	store i16 %0, i16* %tag
 	call void @llvmdb_P32(i32 0, i8 1)
 	%1 = load i16, i16* %tag
@@ -28225,351 +28131,6 @@ L.0:
 return:
 	%2 = load i16, i16* %rv.0
 	ret i16 %2
-}
-@llvmdb_DNul = internal constant [4 x i8] c"\5C00\00", align 1
-@S.661 = private unnamed_addr constant [5 x i8] c"!\220x\00"
-define internal void @llvmdb_PDBeg(i16 zeroext %n$, i16 zeroext %tag$, i8 zeroext %noterm$) nounwind {
-L.0:
-	%n = alloca i16
-	%tag = alloca i16
-	%noterm = alloca i8
-	store i16 %n$, i16* %n
-	store i16 %tag$, i16* %tag
-	store i8 %noterm$, i8* %noterm
-	%tmp = alloca i32
-	%0 = load i16, i16* %tag
-	%1 = zext i16 %0 to i32
-	store i32 %1, i32* %tmp
-	%2 = load i16, i16* %n
-	call void @llvmdb_PMetaSeq(i16 %2)
-	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%4 = bitcast %bout.BufIO* %3 to %bout.BufIO*
-	%5 = getelementptr [5 x i8], [5 x i8]* @S.661
-	%6 = bitcast [5 x i8]* %5 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %4, [0 x i8]* %6)
-	%7 = load i32, i32* %tmp
-	%8 = icmp ugt i32 %7, 255
-	br i1 %8, label %L.2, label %L.1
-L.2:
-	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %10, i8 49)
-	br label %L.1
-L.1:
-	%11 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%12 = bitcast %bout.BufIO* %11 to %bout.BufIO*
-	%13 = load i32, i32* %tmp
-	%14 = trunc i32 %13 to i8
-	call void @bout_BufIO_hex8(%bout.BufIO* %12, i8 %14)
-	%15 = load i8, i8* %noterm
-	%16 = icmp ne i8 %15, 0
-	%17 = xor i1 %16, true
-	br i1 %17, label %L.4, label %L.3
-L.4:
-	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%19 = bitcast %bout.BufIO* %18 to %bout.BufIO*
-	%20 = bitcast [4 x i8]* @llvmdb_DNul to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %20)
-	br label %L.3
-L.3:
-	br label %return
-return:
-	ret void
-}
-define internal void @llvmdb_PDEnd(i8 zeroext %term$) nounwind {
-L.0:
-	%term = alloca i8
-	store i8 %term$, i8* %term
-	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %1, i8 34)
-	%2 = load i8, i8* %term
-	call void @llvmdb_PTerminator(i8 %2)
-	br label %return
-return:
-	ret void
-}
-@S.662 = private unnamed_addr constant [3 x i8] c"0x\00"
-define internal void @llvmdb_PDHex(i32 %x$, i8 zeroext %noterm$) nounwind {
-L.0:
-	%x = alloca i32
-	%noterm = alloca i8
-	store i32 %x$, i32* %x
-	store i8 %noterm$, i8* %noterm
-	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [3 x i8], [3 x i8]* @S.662
-	%3 = bitcast [3 x i8]* %2 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
-	%4 = load i32, i32* %x
-	%5 = icmp ugt i32 %4, 255
-	br i1 %5, label %L.2, label %L.1
-L.2:
-	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %7, i8 49)
-	br label %L.1
-L.1:
-	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%9 = bitcast %bout.BufIO* %8 to %bout.BufIO*
-	%10 = load i32, i32* %x
-	%11 = trunc i32 %10 to i8
-	call void @bout_BufIO_hex8(%bout.BufIO* %9, i8 %11)
-	%12 = load i8, i8* %noterm
-	%13 = icmp ne i8 %12, 0
-	%14 = xor i1 %13, true
-	br i1 %14, label %L.4, label %L.3
-L.4:
-	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = bitcast %bout.BufIO* %15 to %bout.BufIO*
-	%17 = bitcast [4 x i8]* @llvmdb_DNul to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %16, [0 x i8]* %17)
-	br label %L.3
-L.3:
-	br label %return
-return:
-	ret void
-}
-define internal void @llvmdb_PDUint(i32 %x$, i8 zeroext %noterm$) nounwind {
-L.0:
-	%x = alloca i32
-	%noterm = alloca i8
-	store i32 %x$, i32* %x
-	store i8 %noterm$, i8* %noterm
-	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = load i32, i32* %x
-	call void @bout_BufIO_uint(%bout.BufIO* %1, i32 %2)
-	%3 = load i8, i8* %noterm
-	%4 = icmp ne i8 %3, 0
-	%5 = xor i1 %4, true
-	br i1 %5, label %L.2, label %L.1
-L.2:
-	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = bitcast [4 x i8]* @llvmdb_DNul to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %8)
-	br label %L.1
-L.1:
-	br label %return
-return:
-	ret void
-}
-define internal void @llvmdb_PDBoolean(i8 zeroext %x$, i8 zeroext %noterm$) nounwind {
-L.0:
-	%x = alloca i8
-	%noterm = alloca i8
-	store i8 %x$, i8* %x
-	store i8 %noterm$, i8* %noterm
-	%0 = load i8, i8* %x
-	%1 = icmp ne i8 %0, 0
-	br i1 %1, label %L.2, label %L.3
-L.2:
-	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %3, i8 49)
-	br label %L.1
-L.3:
-	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %5, i8 48)
-	br label %L.1
-L.1:
-	%6 = load i8, i8* %noterm
-	%7 = icmp ne i8 %6, 0
-	%8 = xor i1 %7, true
-	br i1 %8, label %L.5, label %L.4
-L.5:
-	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = bitcast [4 x i8]* @llvmdb_DNul to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %11)
-	br label %L.4
-L.4:
-	br label %return
-return:
-	ret void
-}
-define internal void @llvmdb_PDString([0 x i8]* %s$, i8 zeroext %noterm$) nounwind {
-L.0:
-	%s = alloca [0 x i8]*
-	%noterm = alloca i8
-	store [0 x i8]* %s$, [0 x i8]** %s
-	store i8 %noterm$, i8* %noterm
-	%0 = load [0 x i8]*, [0 x i8]** %s
-	%1 = icmp ne [0 x i8]* %0, null
-	br i1 %1, label %L.2, label %L.1
-L.2:
-	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
-	%4 = load [0 x i8]*, [0 x i8]** %s
-	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
-	br label %L.1
-L.1:
-	%6 = load i8, i8* %noterm
-	%7 = icmp ne i8 %6, 0
-	%8 = xor i1 %7, true
-	br i1 %8, label %L.4, label %L.3
-L.4:
-	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = bitcast [4 x i8]* @llvmdb_DNul to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %11)
-	br label %L.3
-L.3:
-	br label %return
-return:
-	ret void
-}
-define internal void @llvmdb_PDString2([0 x i8]* %s1$, [0 x i8]* %s2$, i8 zeroext %delim$, i8 zeroext %noterm$) nounwind {
-L.0:
-	%s1 = alloca [0 x i8]*
-	%s2 = alloca [0 x i8]*
-	%delim = alloca i8
-	%noterm = alloca i8
-	store [0 x i8]* %s1$, [0 x i8]** %s1
-	store [0 x i8]* %s2$, [0 x i8]** %s2
-	store i8 %delim$, i8* %delim
-	store i8 %noterm$, i8* %noterm
-	%0 = load [0 x i8]*, [0 x i8]** %s1
-	%1 = icmp ne [0 x i8]* %0, null
-	br i1 %1, label %L.2, label %L.1
-L.2:
-	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
-	%4 = load [0 x i8]*, [0 x i8]** %s1
-	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
-	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = load i8, i8* %delim
-	call void @bout_BufIO_chr(%bout.BufIO* %7, i8 %8)
-	br label %L.1
-L.1:
-	%9 = load [0 x i8]*, [0 x i8]** %s2
-	%10 = icmp ne [0 x i8]* %9, null
-	br i1 %10, label %L.4, label %L.3
-L.4:
-	%11 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%12 = bitcast %bout.BufIO* %11 to %bout.BufIO*
-	%13 = load [0 x i8]*, [0 x i8]** %s2
-	%14 = bitcast [0 x i8]* %13 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %14)
-	br label %L.3
-L.3:
-	%15 = load i8, i8* %noterm
-	%16 = icmp ne i8 %15, 0
-	%17 = xor i1 %16, true
-	br i1 %17, label %L.6, label %L.5
-L.6:
-	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%19 = bitcast %bout.BufIO* %18 to %bout.BufIO*
-	%20 = bitcast [4 x i8]* @llvmdb_DNul to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %20)
-	br label %L.5
-L.5:
-	br label %return
-return:
-	ret void
-}
-define internal void @llvmdb_PDName(%symb.SymbNode* %s$, i8 zeroext %noterm$) nounwind {
-L.0:
-	%s = alloca %symb.SymbNode*
-	%noterm = alloca i8
-	store %symb.SymbNode* %s$, %symb.SymbNode** %s
-	store i8 %noterm$, i8* %noterm
-	%0 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%1 = icmp ne %symb.SymbNode* %0, null
-	br i1 %1, label %L.1, label %L.2
-L.1:
-	%2 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%3 = getelementptr %symb.SymbNode, %symb.SymbNode* %2, i32 0, i32 22
-	%4 = getelementptr [0 x i8], [0 x i8]* %3
-	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
-	%6 = call i8 @symb_IsAnon([0 x i8]* %5)
-	%7 = icmp ne i8 %6, 0
-	%8 = xor i1 %7, true
-	br label %L.2
-L.2:
-	%9 = phi i1 [ false, %L.0 ], [ %8, %L.1 ]
-	br i1 %9, label %L.4, label %L.5
-L.4:
-	%10 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode, %symb.SymbNode* %10, i32 0, i32 22
-	%12 = getelementptr [0 x i8], [0 x i8]* %11
-	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
-	%14 = load i8, i8* %noterm
-	call void @llvmdb_PDString([0 x i8]* %13, i8 %14)
-	br label %L.3
-L.5:
-	%15 = load i8, i8* %noterm
-	call void @llvmdb_PDString([0 x i8]* null, i8 %15)
-	br label %L.3
-L.3:
-	br label %return
-return:
-	ret void
-}
-define internal void @llvmdb_PDFullName(%symb.SymbNode* %s$, i8 zeroext %noterm$) nounwind {
-L.0:
-	%s = alloca %symb.SymbNode*
-	%noterm = alloca i8
-	store %symb.SymbNode* %s$, %symb.SymbNode** %s
-	store i8 %noterm$, i8* %noterm
-	%0 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%1 = icmp ne %symb.SymbNode* %0, null
-	br i1 %1, label %L.1, label %L.2
-L.1:
-	%2 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%3 = getelementptr %symb.SymbNode, %symb.SymbNode* %2, i32 0, i32 22
-	%4 = getelementptr [0 x i8], [0 x i8]* %3
-	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
-	%6 = call i8 @symb_IsAnon([0 x i8]* %5)
-	%7 = icmp ne i8 %6, 0
-	%8 = xor i1 %7, true
-	br label %L.2
-L.2:
-	%9 = phi i1 [ false, %L.0 ], [ %8, %L.1 ]
-	br i1 %9, label %L.4, label %L.5
-L.4:
-	%10 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%11 = getelementptr %symb.SymbNode, %symb.SymbNode* %10, i32 0, i32 2
-	%12 = load %symb.SymbNode*, %symb.SymbNode** %11
-	%13 = icmp ne %symb.SymbNode* %12, null
-	br i1 %13, label %L.7, label %L.8
-L.7:
-	%14 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%15 = getelementptr %symb.SymbNode, %symb.SymbNode* %14, i32 0, i32 2
-	%16 = load %symb.SymbNode*, %symb.SymbNode** %15
-	%17 = getelementptr %symb.SymbNode, %symb.SymbNode* %16, i32 0, i32 22
-	%18 = getelementptr [0 x i8], [0 x i8]* %17
-	%19 = bitcast [0 x i8]* %18 to [0 x i8]*
-	%20 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%21 = getelementptr %symb.SymbNode, %symb.SymbNode* %20, i32 0, i32 22
-	%22 = getelementptr [0 x i8], [0 x i8]* %21
-	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
-	%24 = load i8, i8* %noterm
-	call void @llvmdb_PDString2([0 x i8]* %19, [0 x i8]* %23, i8 46, i8 %24)
-	br label %L.6
-L.8:
-	%25 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%26 = getelementptr %symb.SymbNode, %symb.SymbNode* %25, i32 0, i32 22
-	%27 = getelementptr [0 x i8], [0 x i8]* %26
-	%28 = bitcast [0 x i8]* %27 to [0 x i8]*
-	%29 = load i8, i8* %noterm
-	call void @llvmdb_PDString([0 x i8]* %28, i8 %29)
-	br label %L.6
-L.6:
-	br label %L.3
-L.5:
-	%30 = load i8, i8* %noterm
-	call void @llvmdb_PDString([0 x i8]* null, i8 %30)
-	br label %L.3
-L.3:
-	br label %return
-return:
-	ret void
 }
 define internal i32 @llvmdb_DefFormals(%symb.SymbNode* %ps$) nounwind {
 L.0:
@@ -28612,33 +28173,28 @@ return:
 	%18 = load i32, i32* %rv.0
 	ret i32 %18
 }
-define internal zeroext i16 @llvmdb_DefRetvs(%symb.SymbNode* %ps$) nounwind {
+define internal i32 @llvmdb_DefRetvs(%symb.SymbNode* %ps$) nounwind {
 L.0:
-	%rv.0 = alloca i16
+	%rv.0 = alloca i32
 	%ps = alloca %symb.SymbNode*
 	store %symb.SymbNode* %ps$, %symb.SymbNode** %ps
-	%retvs = alloca i16
-	%tag = alloca i16
 	%tl = alloca %type.TypeListEntry*
-	%term = alloca i8
+	%n = alloca i32
+	store i32 0, i32* %n
 	%0 = load %symb.SymbNode*, %symb.SymbNode** %ps
 	%1 = getelementptr %symb.SymbNode, %symb.SymbNode* %0, i32 0, i32 4
 	%2 = load %type.TypeListEntry*, %type.TypeListEntry** %1
 	store %type.TypeListEntry* %2, %type.TypeListEntry** %tl
-	%3 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
-	%4 = icmp eq %type.TypeListEntry* %3, null
-	br i1 %4, label %L.2, label %L.1
-L.2:
-	store i16 0, i16* %rv.0
-	br label %return
+	br label %L.1
 L.1:
-	br label %L.3
+	%3 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
+	%4 = icmp ne %type.TypeListEntry* %3, null
+	%5 = xor i1 %4, true
+	br i1 %5, label %L.2, label %L.3
 L.3:
-	%5 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
-	%6 = icmp ne %type.TypeListEntry* %5, null
-	%7 = xor i1 %6, true
-	br i1 %7, label %L.4, label %L.5
-L.5:
+	%6 = load i32, i32* %n
+	%7 = add i32 %6, 1
+	store i32 %7, i32* %n
 	%8 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
 	%9 = getelementptr %type.TypeListEntry, %type.TypeListEntry* %8, i32 0, i32 1
 	%10 = load %type.TypeNode*, %type.TypeNode** %9
@@ -28649,73 +28205,28 @@ L.5:
 	%15 = load %type.TypeListEntry*, %type.TypeListEntry** %14
 	%16 = bitcast %type.TypeListEntry* %15 to %type.TypeListEntry*
 	store %type.TypeListEntry* %16, %type.TypeListEntry** %tl
-	br label %L.3
-L.4:
-	%17 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%18 = getelementptr %symb.SymbNode, %symb.SymbNode* %17, i32 0, i32 4
-	%19 = load %type.TypeListEntry*, %type.TypeListEntry** %18
-	store %type.TypeListEntry* %19, %type.TypeListEntry** %tl
-	%20 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
-	%21 = getelementptr %type.TypeListEntry, %type.TypeListEntry* %20, i32 0, i32 0
-	%22 = load %type.TypeListEntry*, %type.TypeListEntry** %21
-	%23 = icmp eq %type.TypeListEntry* %22, null
-	br i1 %23, label %L.7, label %L.8
-L.7:
-	%24 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
-	%25 = getelementptr %type.TypeListEntry, %type.TypeListEntry* %24, i32 0, i32 1
-	%26 = load %type.TypeNode*, %type.TypeNode** %25
-	%27 = getelementptr %type.TypeNode, %type.TypeNode* %26, i32 0, i32 12
-	%28 = load i16, i16* %27
-	store i16 %28, i16* %retvs
-	br label %L.6
-L.8:
-	%29 = load i16, i16* @llvmdb_seqno
-	%30 = add i16 %29, 1
-	store i16 %30, i16* @llvmdb_seqno
-	%31 = load i16, i16* @llvmdb_seqno
-	store i16 %31, i16* %retvs
-	%32 = load i16, i16* %retvs
-	call void @llvmdb_PMetaSeq(i16 %32)
-	store i8 0, i8* %term
-	br label %L.9
-L.9:
-	%33 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
-	%34 = icmp ne %type.TypeListEntry* %33, null
-	%35 = xor i1 %34, true
-	br i1 %35, label %L.10, label %L.11
-L.11:
-	%36 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
-	%37 = getelementptr %type.TypeListEntry, %type.TypeListEntry* %36, i32 0, i32 1
-	%38 = load %type.TypeNode*, %type.TypeNode** %37
-	%39 = getelementptr %type.TypeNode, %type.TypeNode* %38, i32 0, i32 12
-	%40 = load i16, i16* %39
-	store i16 %40, i16* %tag
-	%41 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
-	%42 = getelementptr %type.TypeListEntry, %type.TypeListEntry* %41, i32 0, i32 0
-	%43 = load %type.TypeListEntry*, %type.TypeListEntry** %42
-	%44 = bitcast %type.TypeListEntry* %43 to %type.TypeListEntry*
-	store %type.TypeListEntry* %44, %type.TypeListEntry** %tl
-	%45 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
-	%46 = icmp eq %type.TypeListEntry* %45, null
-	br i1 %46, label %L.13, label %L.12
-L.13:
-	store i8 1, i8* %term
-	br label %L.12
-L.12:
-	%47 = load i16, i16* %tag
-	%48 = load i8, i8* %term
-	call void @llvmdb_PMetaRef(i16 %47, i8 %48)
-	br label %L.9
-L.10:
-	br label %L.6
-L.6:
-	%49 = load i16, i16* %retvs
-	store i16 %49, i16* %rv.0
+	br label %L.1
+L.2:
+	%17 = load i32, i32* %n
+	store i32 %17, i32* %rv.0
 	br label %return
 return:
-	%50 = load i16, i16* %rv.0
-	ret i16 %50
+	%18 = load i32, i32* %rv.0
+	ret i32 %18
 }
+@S.653 = private unnamed_addr constant [12 x i8] c"DIBasicType\00"
+@S.654 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.655 = private unnamed_addr constant [7 x i8] c"size: \00"
+@S.656 = private unnamed_addr constant [8 x i8] c"align: \00"
+@S.657 = private unnamed_addr constant [18 x i8] c"encoding: DW_ATE_\00"
+@S.658 = private unnamed_addr constant [8 x i8] c"boolean\00"
+@S.659 = private unnamed_addr constant [14 x i8] c"unsigned_char\00"
+@S.660 = private unnamed_addr constant [9 x i8] c"unsigned\00"
+@S.661 = private unnamed_addr constant [12 x i8] c"signed_char\00"
+@S.662 = private unnamed_addr constant [7 x i8] c"signed\00"
+@S.663 = private unnamed_addr constant [8 x i8] c"address\00"
+@S.664 = private unnamed_addr constant [6 x i8] c"float\00"
+@S.665 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal zeroext i16 @llvmdb_DefBasicType(i8 zeroext %dwtype$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -28729,266 +28240,341 @@ L.0:
 	store i16 %1, i16* @llvmdb_seqno
 	%2 = load i16, i16* @llvmdb_seqno
 	store i16 %2, i16* %tagt
-	%3 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%4 = load i8, i8* %3
-	%5 = icmp ugt i8 %4, 1
-	br i1 %5, label %L.2, label %L.3
+	%3 = load i16, i16* %tagt
+	%4 = getelementptr [12 x i8], [12 x i8]* @S.653
+	%5 = bitcast [12 x i8]* %4 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %3, [0 x i8]* %5)
+	%6 = load %type.TypeNode*, %type.TypeNode** %t
+	%7 = getelementptr %type.TypeNode, %type.TypeNode* %6, i32 0, i32 3
+	%8 = load %symb.SymbNode*, %symb.SymbNode** %7
+	%9 = icmp ne %symb.SymbNode* %8, null
+	br i1 %9, label %L.2, label %L.1
 L.2:
-	%6 = load i16, i16* %tagt
-	call void @llvmdb_PDBeg(i16 %6, i16 36, i8 0)
-	%7 = load %type.TypeNode*, %type.TypeNode** %t
-	%8 = getelementptr %type.TypeNode, %type.TypeNode* %7, i32 0, i32 3
-	%9 = load %symb.SymbNode*, %symb.SymbNode** %8
-	%10 = bitcast %symb.SymbNode* %9 to %symb.SymbNode*
-	call void @llvmdb_PDName(%symb.SymbNode* %10, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	%11 = load %type.TypeNode*, %type.TypeNode** %t
-	%12 = getelementptr %type.TypeNode, %type.TypeNode* %11, i32 0, i32 10
-	%13 = load i32, i32* %12
-	call void @llvmdb_PDUint(i32 %13, i8 0)
+	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
+	%12 = getelementptr [7 x i8], [7 x i8]* @S.654
+	%13 = bitcast [7 x i8]* %12 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	%14 = load %type.TypeNode*, %type.TypeNode** %t
-	%15 = getelementptr %type.TypeNode, %type.TypeNode* %14, i32 0, i32 11
-	%16 = load i32, i32* %15
-	call void @llvmdb_PDUint(i32 %16, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	%17 = load i8, i8* %dwtype
-	%18 = zext i8 %17 to i32
-	call void @llvmdb_PDUint(i32 %18, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 1)
+	%15 = getelementptr %type.TypeNode, %type.TypeNode* %14, i32 0, i32 3
+	%16 = load %symb.SymbNode*, %symb.SymbNode** %15
+	%17 = getelementptr %symb.SymbNode, %symb.SymbNode* %16, i32 0, i32 22
+	%18 = getelementptr [0 x i8], [0 x i8]* %17
+	%19 = bitcast [0 x i8]* %18 to [0 x i8]*
+	call void @llvmdb_PQString([0 x i8]* %19, i8 0)
 	br label %L.1
-L.3:
-	%19 = load i16, i16* %tagt
-	call void @llvmdb_PHeader(i16 %19, i16 36)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	%20 = load %type.TypeNode*, %type.TypeNode** %t
-	%21 = getelementptr %type.TypeNode, %type.TypeNode* %20, i32 0, i32 3
-	%22 = load %symb.SymbNode*, %symb.SymbNode** %21
-	%23 = bitcast %symb.SymbNode* %22 to %symb.SymbNode*
-	call void @llvmdb_PName(%symb.SymbNode* %23, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
+L.1:
+	%20 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%21 = bitcast %bout.BufIO* %20 to %bout.BufIO*
+	%22 = getelementptr [7 x i8], [7 x i8]* @S.655
+	%23 = bitcast [7 x i8]* %22 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	%24 = load %type.TypeNode*, %type.TypeNode** %t
 	%25 = getelementptr %type.TypeNode, %type.TypeNode* %24, i32 0, i32 10
 	%26 = load i32, i32* %25
-	%27 = zext i32 %26 to i64
-	call void @llvmdb_P64(i64 %27, i8 0)
-	%28 = load %type.TypeNode*, %type.TypeNode** %t
-	%29 = getelementptr %type.TypeNode, %type.TypeNode* %28, i32 0, i32 11
-	%30 = load i32, i32* %29
-	%31 = zext i32 %30 to i64
-	call void @llvmdb_P64(i64 %31, i8 0)
-	call void @llvmdb_P64(i64 0, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	%32 = load i8, i8* %dwtype
-	%33 = zext i8 %32 to i32
-	call void @llvmdb_P32(i32 %33, i8 1)
-	br label %L.1
-L.1:
-	%34 = load i16, i16* %tagt
-	store i16 %34, i16* %rv.0
-	br label %return
-return:
-	%35 = load i16, i16* %rv.0
-	ret i16 %35
-}
-@S.663 = private unnamed_addr constant [20 x i8] c"llvmdb PTypeHeader\0A\00"
-define internal void @llvmdb_PTypeHeader(i16 zeroext %tag$, i16 zeroext %dwat$, %type.TypeNode* %t$) nounwind {
-L.0:
-	%tag = alloca i16
-	%dwat = alloca i16
-	%t = alloca %type.TypeNode*
-	store i16 %tag$, i16* %tag
-	store i16 %dwat$, i16* %dwat
-	store %type.TypeNode* %t$, %type.TypeNode** %t
-	%0 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%1 = load i8, i8* %0
-	%2 = icmp ugt i8 %1, 1
-	br i1 %2, label %L.2, label %L.3
-L.2:
-	%3 = getelementptr [20 x i8], [20 x i8]* @S.663
-	%4 = bitcast [20 x i8]* %3 to [0 x i8]*
-	call void @lex_ErrorS(i8 88, [0 x i8]* %4)
-	br label %L.1
-L.3:
-	%5 = load i16, i16* %tag
-	%6 = load i16, i16* %dwat
-	call void @llvmdb_PHeader(i16 %5, i16 %6)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PString([0 x i8]* null, i8 0)
-	%7 = load %type.TypeNode*, %type.TypeNode** %t
-	%8 = getelementptr %type.TypeNode, %type.TypeNode* %7, i32 0, i32 3
-	%9 = load %symb.SymbNode*, %symb.SymbNode** %8
-	%10 = icmp ne %symb.SymbNode* %9, null
-	br i1 %10, label %L.5, label %L.6
+	call void @llvmdb_PUint(i32 %26, i8 0)
+	%27 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%28 = bitcast %bout.BufIO* %27 to %bout.BufIO*
+	%29 = getelementptr [8 x i8], [8 x i8]* @S.656
+	%30 = bitcast [8 x i8]* %29 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %28, [0 x i8]* %30)
+	%31 = load %type.TypeNode*, %type.TypeNode** %t
+	%32 = getelementptr %type.TypeNode, %type.TypeNode* %31, i32 0, i32 11
+	%33 = load i32, i32* %32
+	call void @llvmdb_PUint(i32 %33, i8 0)
+	%34 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%35 = bitcast %bout.BufIO* %34 to %bout.BufIO*
+	%36 = getelementptr [18 x i8], [18 x i8]* @S.657
+	%37 = bitcast [18 x i8]* %36 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
+	%38 = load %type.TypeNode*, %type.TypeNode** %t
+	%39 = getelementptr %type.TypeNode, %type.TypeNode* %38, i32 0, i32 14
+	%40 = load i8, i8* %39
+	%41 = zext i8 %40 to i32
+	switch i32 %41, label %L.3 [
+		i32 1, label %L.5
+		i32 2, label %L.5
+		i32 3, label %L.6
+		i32 5, label %L.7
+		i32 4, label %L.8
+	]
 L.5:
-	%11 = load %type.TypeNode*, %type.TypeNode** %t
-	%12 = getelementptr %type.TypeNode, %type.TypeNode* %11, i32 0, i32 3
-	%13 = load %symb.SymbNode*, %symb.SymbNode** %12
-	%14 = getelementptr %symb.SymbNode, %symb.SymbNode* %13, i32 0, i32 11
-	%15 = load i16, i16* %14
-	%16 = zext i16 %15 to i32
-	call void @llvmdb_P32(i32 %16, i8 0)
+	%42 = load %type.TypeNode*, %type.TypeNode** %t
+	%43 = load %type.TypeNode*, %type.TypeNode** @type_booltype
+	%44 = icmp eq %type.TypeNode* %42, %43
+	br i1 %44, label %L.10, label %L.11
+L.10:
+	%45 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%46 = bitcast %bout.BufIO* %45 to %bout.BufIO*
+	%47 = getelementptr [8 x i8], [8 x i8]* @S.658
+	%48 = bitcast [8 x i8]* %47 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %46, [0 x i8]* %48)
+	br label %L.9
+L.11:
+	%49 = load %type.TypeNode*, %type.TypeNode** %t
+	%50 = getelementptr %type.TypeNode, %type.TypeNode* %49, i32 0, i32 10
+	%51 = load i32, i32* %50
+	%52 = icmp ule i32 %51, 8
+	br i1 %52, label %L.13, label %L.14
+L.13:
+	%53 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%54 = bitcast %bout.BufIO* %53 to %bout.BufIO*
+	%55 = getelementptr [14 x i8], [14 x i8]* @S.659
+	%56 = bitcast [14 x i8]* %55 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %54, [0 x i8]* %56)
+	br label %L.12
+L.14:
+	%57 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%58 = bitcast %bout.BufIO* %57 to %bout.BufIO*
+	%59 = getelementptr [9 x i8], [9 x i8]* @S.660
+	%60 = bitcast [9 x i8]* %59 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %58, [0 x i8]* %60)
+	br label %L.12
+L.12:
+	br label %L.9
+L.9:
 	br label %L.4
 L.6:
-	call void @llvmdb_P32(i32 0, i8 0)
+	%61 = load %type.TypeNode*, %type.TypeNode** %t
+	%62 = getelementptr %type.TypeNode, %type.TypeNode* %61, i32 0, i32 10
+	%63 = load i32, i32* %62
+	%64 = icmp ule i32 %63, 8
+	br i1 %64, label %L.16, label %L.17
+L.16:
+	%65 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%66 = bitcast %bout.BufIO* %65 to %bout.BufIO*
+	%67 = getelementptr [12 x i8], [12 x i8]* @S.661
+	%68 = bitcast [12 x i8]* %67 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %66, [0 x i8]* %68)
+	br label %L.15
+L.17:
+	%69 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%70 = bitcast %bout.BufIO* %69 to %bout.BufIO*
+	%71 = getelementptr [7 x i8], [7 x i8]* @S.662
+	%72 = bitcast [7 x i8]* %71 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %70, [0 x i8]* %72)
+	br label %L.15
+L.15:
+	br label %L.4
+L.7:
+	%73 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%74 = bitcast %bout.BufIO* %73 to %bout.BufIO*
+	%75 = getelementptr [8 x i8], [8 x i8]* @S.663
+	%76 = bitcast [8 x i8]* %75 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %74, [0 x i8]* %76)
+	br label %L.4
+L.8:
+	%77 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%78 = bitcast %bout.BufIO* %77 to %bout.BufIO*
+	%79 = getelementptr [6 x i8], [6 x i8]* @S.664
+	%80 = bitcast [6 x i8]* %79 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %78, [0 x i8]* %80)
+	br label %L.4
+L.3:
 	br label %L.4
 L.4:
-	%17 = load %type.TypeNode*, %type.TypeNode** %t
-	%18 = getelementptr %type.TypeNode, %type.TypeNode* %17, i32 0, i32 10
-	%19 = load i32, i32* %18
-	%20 = zext i32 %19 to i64
-	call void @llvmdb_P64(i64 %20, i8 0)
-	%21 = load %type.TypeNode*, %type.TypeNode** %t
-	%22 = getelementptr %type.TypeNode, %type.TypeNode* %21, i32 0, i32 11
-	%23 = load i32, i32* %22
-	%24 = zext i32 %23 to i64
-	call void @llvmdb_P64(i64 %24, i8 0)
-	call void @llvmdb_P64(i64 0, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	br label %L.1
-L.1:
+	%81 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%82 = bitcast %bout.BufIO* %81 to %bout.BufIO*
+	%83 = getelementptr [3 x i8], [3 x i8]* @S.665
+	%84 = bitcast [3 x i8]* %83 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %82, [0 x i8]* %84)
+	%85 = load i16, i16* %tagt
+	store i16 %85, i16* %rv.0
 	br label %return
 return:
-	ret void
+	%86 = load i16, i16* %rv.0
+	ret i16 %86
 }
-define internal void @llvmdb_PCompositeType(i16 zeroext %tag$, i16 zeroext %from$, i16 zeroext %members$, i16 zeroext %dwat$, %type.TypeNode* %t$) nounwind {
+@S.666 = private unnamed_addr constant [16 x i8] c"DICompositeType\00"
+@S.667 = private unnamed_addr constant [13 x i8] c"tag: DW_TAG_\00"
+@S.668 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.669 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.670 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.671 = private unnamed_addr constant [7 x i8] c"size: \00"
+@S.672 = private unnamed_addr constant [8 x i8] c"align: \00"
+@S.673 = private unnamed_addr constant [13 x i8] c", baseType: \00"
+@S.674 = private unnamed_addr constant [13 x i8] c", elements: \00"
+@S.675 = private unnamed_addr constant [3 x i8] c")\0A\00"
+define internal void @llvmdb_PCompositeType(i16 zeroext %tag$, i16 zeroext %from$, i16 zeroext %members$, [0 x i8]* %dwat$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%tag = alloca i16
 	%from = alloca i16
 	%members = alloca i16
-	%dwat = alloca i16
+	%dwat = alloca [0 x i8]*
 	%t = alloca %type.TypeNode*
 	store i16 %tag$, i16* %tag
 	store i16 %from$, i16* %from
 	store i16 %members$, i16* %members
-	store i16 %dwat$, i16* %dwat
+	store [0 x i8]* %dwat$, [0 x i8]** %dwat
 	store %type.TypeNode* %t$, %type.TypeNode** %t
 	%0 = load i16, i16* %tag
-	%1 = load i16, i16* %dwat
-	call void @llvmdb_PDBeg(i16 %0, i16 %1, i8 0)
-	%2 = load %type.TypeNode*, %type.TypeNode** %t
-	%3 = getelementptr %type.TypeNode, %type.TypeNode* %2, i32 0, i32 3
-	%4 = load %symb.SymbNode*, %symb.SymbNode** %3
-	%5 = bitcast %symb.SymbNode* %4 to %symb.SymbNode*
-	call void @llvmdb_PDName(%symb.SymbNode* %5, i8 0)
-	%6 = load %type.TypeNode*, %type.TypeNode** %t
-	%7 = getelementptr %type.TypeNode, %type.TypeNode* %6, i32 0, i32 3
-	%8 = load %symb.SymbNode*, %symb.SymbNode** %7
-	%9 = icmp ne %symb.SymbNode* %8, null
-	br i1 %9, label %L.2, label %L.3
+	%1 = getelementptr [16 x i8], [16 x i8]* @S.666
+	%2 = bitcast [16 x i8]* %1 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %0, [0 x i8]* %2)
+	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%4 = bitcast %bout.BufIO* %3 to %bout.BufIO*
+	%5 = getelementptr [13 x i8], [13 x i8]* @S.667
+	%6 = bitcast [13 x i8]* %5 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %4, [0 x i8]* %6)
+	%7 = load [0 x i8]*, [0 x i8]** %dwat
+	%8 = bitcast [0 x i8]* %7 to [0 x i8]*
+	call void @llvmdb_PString([0 x i8]* %8, i8 0)
+	%9 = load %type.TypeNode*, %type.TypeNode** %t
+	%10 = getelementptr %type.TypeNode, %type.TypeNode* %9, i32 0, i32 3
+	%11 = load %symb.SymbNode*, %symb.SymbNode** %10
+	%12 = icmp ne %symb.SymbNode* %11, null
+	br i1 %12, label %L.2, label %L.1
 L.2:
-	%10 = load %type.TypeNode*, %type.TypeNode** %t
-	%11 = getelementptr %type.TypeNode, %type.TypeNode* %10, i32 0, i32 3
-	%12 = load %symb.SymbNode*, %symb.SymbNode** %11
-	%13 = getelementptr %symb.SymbNode, %symb.SymbNode* %12, i32 0, i32 11
-	%14 = load i16, i16* %13
-	%15 = zext i16 %14 to i32
-	call void @llvmdb_PDUint(i32 %15, i8 0)
-	br label %L.1
-L.3:
-	call void @llvmdb_PDUint(i32 0, i8 0)
+	%13 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%14 = bitcast %bout.BufIO* %13 to %bout.BufIO*
+	%15 = getelementptr [7 x i8], [7 x i8]* @S.668
+	%16 = bitcast [7 x i8]* %15 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %14, [0 x i8]* %16)
+	%17 = load %type.TypeNode*, %type.TypeNode** %t
+	%18 = getelementptr %type.TypeNode, %type.TypeNode* %17, i32 0, i32 3
+	%19 = load %symb.SymbNode*, %symb.SymbNode** %18
+	%20 = bitcast %symb.SymbNode* %19 to %symb.SymbNode*
+	call void @llvmdb_PName(%symb.SymbNode* %20, i8 0)
 	br label %L.1
 L.1:
-	%16 = load %type.TypeNode*, %type.TypeNode** %t
-	%17 = getelementptr %type.TypeNode, %type.TypeNode* %16, i32 0, i32 10
-	%18 = load i32, i32* %17
-	call void @llvmdb_PDUint(i32 %18, i8 0)
-	%19 = load %type.TypeNode*, %type.TypeNode** %t
-	%20 = getelementptr %type.TypeNode, %type.TypeNode* %19, i32 0, i32 11
-	%21 = load i32, i32* %20
-	call void @llvmdb_PDUint(i32 %21, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	%22 = load i16, i16* @llvmdb_filenamedir
-	call void @llvmdb_PMetaRef(i16 %22, i8 0)
-	call void @llvmdb_PContext(i8 0)
-	%23 = load i16, i16* %from
-	%24 = icmp eq i16 %23, 0
-	br i1 %24, label %L.5, label %L.6
-L.5:
-	call void @llvmdb_PNull(i8 0)
-	br label %L.4
-L.6:
-	%25 = load i16, i16* %from
+	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
+	%23 = getelementptr [7 x i8], [7 x i8]* @S.669
+	%24 = bitcast [7 x i8]* %23 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
+	%25 = load i16, i16* @llvmdb_filenamedir
 	call void @llvmdb_PMetaRef(i16 %25, i8 0)
-	br label %L.4
+	%26 = load %type.TypeNode*, %type.TypeNode** %t
+	%27 = getelementptr %type.TypeNode, %type.TypeNode* %26, i32 0, i32 3
+	%28 = load %symb.SymbNode*, %symb.SymbNode** %27
+	%29 = icmp ne %symb.SymbNode* %28, null
+	br i1 %29, label %L.4, label %L.3
 L.4:
-	%26 = load i16, i16* %members
-	%27 = icmp eq i16 %26, 0
-	br i1 %27, label %L.8, label %L.9
+	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%31 = bitcast %bout.BufIO* %30 to %bout.BufIO*
+	%32 = getelementptr [7 x i8], [7 x i8]* @S.670
+	%33 = bitcast [7 x i8]* %32 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %31, [0 x i8]* %33)
+	%34 = load %type.TypeNode*, %type.TypeNode** %t
+	%35 = getelementptr %type.TypeNode, %type.TypeNode* %34, i32 0, i32 3
+	%36 = load %symb.SymbNode*, %symb.SymbNode** %35
+	%37 = getelementptr %symb.SymbNode, %symb.SymbNode* %36, i32 0, i32 11
+	%38 = load i16, i16* %37
+	%39 = zext i16 %38 to i32
+	call void @llvmdb_PUint(i32 %39, i8 0)
+	br label %L.3
+L.3:
+	%40 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%41 = bitcast %bout.BufIO* %40 to %bout.BufIO*
+	%42 = getelementptr [7 x i8], [7 x i8]* @S.671
+	%43 = bitcast [7 x i8]* %42 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %41, [0 x i8]* %43)
+	%44 = load %type.TypeNode*, %type.TypeNode** %t
+	%45 = getelementptr %type.TypeNode, %type.TypeNode* %44, i32 0, i32 10
+	%46 = load i32, i32* %45
+	call void @llvmdb_PUint(i32 %46, i8 0)
+	%47 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%48 = bitcast %bout.BufIO* %47 to %bout.BufIO*
+	%49 = getelementptr [8 x i8], [8 x i8]* @S.672
+	%50 = bitcast [8 x i8]* %49 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %48, [0 x i8]* %50)
+	%51 = load %type.TypeNode*, %type.TypeNode** %t
+	%52 = getelementptr %type.TypeNode, %type.TypeNode* %51, i32 0, i32 11
+	%53 = load i32, i32* %52
+	call void @llvmdb_PUint(i32 %53, i8 3)
+	%54 = load i16, i16* %from
+	%55 = icmp ne i16 %54, 0
+	br i1 %55, label %L.6, label %L.5
+L.6:
+	%56 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%57 = bitcast %bout.BufIO* %56 to %bout.BufIO*
+	%58 = getelementptr [13 x i8], [13 x i8]* @S.673
+	%59 = bitcast [13 x i8]* %58 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %57, [0 x i8]* %59)
+	%60 = load i16, i16* %from
+	call void @llvmdb_PMetaRef(i16 %60, i8 3)
+	br label %L.5
+L.5:
+	%61 = load i16, i16* %members
+	%62 = icmp ne i16 %61, 0
+	br i1 %62, label %L.8, label %L.7
 L.8:
-	call void @llvmdb_PNull(i8 0)
-	br label %L.7
-L.9:
-	%28 = load i16, i16* %members
-	call void @llvmdb_PMetaRef(i16 %28, i8 0)
+	%63 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%64 = bitcast %bout.BufIO* %63 to %bout.BufIO*
+	%65 = getelementptr [13 x i8], [13 x i8]* @S.674
+	%66 = bitcast [13 x i8]* %65 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %64, [0 x i8]* %66)
+	%67 = load i16, i16* %members
+	call void @llvmdb_PMetaRef(i16 %67, i8 3)
 	br label %L.7
 L.7:
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 1)
+	%68 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%69 = bitcast %bout.BufIO* %68 to %bout.BufIO*
+	%70 = getelementptr [3 x i8], [3 x i8]* @S.675
+	%71 = bitcast [3 x i8]* %70 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
 	br label %return
 return:
 	ret void
 }
-define internal void @llvmdb_PDerivedType(i16 zeroext %tag$, i16 zeroext %from$, i16 zeroext %dwat$, %type.TypeNode* %t$) nounwind {
+@S.676 = private unnamed_addr constant [14 x i8] c"DIDerivedType\00"
+@S.677 = private unnamed_addr constant [13 x i8] c"tag: DW_TAG_\00"
+@S.678 = private unnamed_addr constant [11 x i8] c"baseType: \00"
+@S.679 = private unnamed_addr constant [7 x i8] c"size: \00"
+@S.680 = private unnamed_addr constant [8 x i8] c"align: \00"
+@S.681 = private unnamed_addr constant [3 x i8] c")\0A\00"
+define internal void @llvmdb_PDerivedType(i16 zeroext %tag$, i16 zeroext %from$, [0 x i8]* %dwat$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%tag = alloca i16
 	%from = alloca i16
-	%dwat = alloca i16
+	%dwat = alloca [0 x i8]*
 	%t = alloca %type.TypeNode*
 	store i16 %tag$, i16* %tag
 	store i16 %from$, i16* %from
-	store i16 %dwat$, i16* %dwat
+	store [0 x i8]* %dwat$, [0 x i8]** %dwat
 	store %type.TypeNode* %t$, %type.TypeNode** %t
 	%0 = load i16, i16* %tag
-	%1 = load i16, i16* %dwat
-	call void @llvmdb_PDBeg(i16 %0, i16 %1, i8 0)
-	%2 = load %type.TypeNode*, %type.TypeNode** %t
-	%3 = getelementptr %type.TypeNode, %type.TypeNode* %2, i32 0, i32 3
-	%4 = load %symb.SymbNode*, %symb.SymbNode** %3
-	%5 = bitcast %symb.SymbNode* %4 to %symb.SymbNode*
-	call void @llvmdb_PDName(%symb.SymbNode* %5, i8 0)
-	%6 = load %type.TypeNode*, %type.TypeNode** %t
-	%7 = getelementptr %type.TypeNode, %type.TypeNode* %6, i32 0, i32 3
-	%8 = load %symb.SymbNode*, %symb.SymbNode** %7
-	%9 = icmp ne %symb.SymbNode* %8, null
-	br i1 %9, label %L.2, label %L.3
-L.2:
-	%10 = load %type.TypeNode*, %type.TypeNode** %t
-	%11 = getelementptr %type.TypeNode, %type.TypeNode* %10, i32 0, i32 3
-	%12 = load %symb.SymbNode*, %symb.SymbNode** %11
-	%13 = getelementptr %symb.SymbNode, %symb.SymbNode* %12, i32 0, i32 11
-	%14 = load i16, i16* %13
-	%15 = zext i16 %14 to i32
-	call void @llvmdb_PDUint(i32 %15, i8 0)
-	br label %L.1
-L.3:
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	br label %L.1
-L.1:
-	%16 = load %type.TypeNode*, %type.TypeNode** %t
-	%17 = getelementptr %type.TypeNode, %type.TypeNode* %16, i32 0, i32 10
-	%18 = load i32, i32* %17
-	call void @llvmdb_PDUint(i32 %18, i8 0)
-	%19 = load %type.TypeNode*, %type.TypeNode** %t
-	%20 = getelementptr %type.TypeNode, %type.TypeNode* %19, i32 0, i32 11
-	%21 = load i32, i32* %20
-	call void @llvmdb_PDUint(i32 %21, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	%22 = load i16, i16* @llvmdb_filenamedir
-	call void @llvmdb_PMetaRef(i16 %22, i8 0)
-	call void @llvmdb_PContext(i8 0)
-	%23 = load i16, i16* %from
-	call void @llvmdb_PMetaRef(i16 %23, i8 1)
+	%1 = getelementptr [14 x i8], [14 x i8]* @S.676
+	%2 = bitcast [14 x i8]* %1 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %0, [0 x i8]* %2)
+	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%4 = bitcast %bout.BufIO* %3 to %bout.BufIO*
+	%5 = getelementptr [13 x i8], [13 x i8]* @S.677
+	%6 = bitcast [13 x i8]* %5 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %4, [0 x i8]* %6)
+	%7 = load [0 x i8]*, [0 x i8]** %dwat
+	%8 = bitcast [0 x i8]* %7 to [0 x i8]*
+	call void @llvmdb_PString([0 x i8]* %8, i8 0)
+	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
+	%11 = getelementptr [11 x i8], [11 x i8]* @S.678
+	%12 = bitcast [11 x i8]* %11 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
+	%13 = load i16, i16* %from
+	call void @llvmdb_PMetaRef(i16 %13, i8 0)
+	%14 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%15 = bitcast %bout.BufIO* %14 to %bout.BufIO*
+	%16 = getelementptr [7 x i8], [7 x i8]* @S.679
+	%17 = bitcast [7 x i8]* %16 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
+	%18 = load %type.TypeNode*, %type.TypeNode** %t
+	%19 = getelementptr %type.TypeNode, %type.TypeNode* %18, i32 0, i32 10
+	%20 = load i32, i32* %19
+	call void @llvmdb_PUint(i32 %20, i8 0)
+	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
+	%23 = getelementptr [8 x i8], [8 x i8]* @S.680
+	%24 = bitcast [8 x i8]* %23 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
+	%25 = load %type.TypeNode*, %type.TypeNode** %t
+	%26 = getelementptr %type.TypeNode, %type.TypeNode* %25, i32 0, i32 11
+	%27 = load i32, i32* %26
+	call void @llvmdb_PUint(i32 %27, i8 3)
+	%28 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%29 = bitcast %bout.BufIO* %28 to %bout.BufIO*
+	%30 = getelementptr [3 x i8], [3 x i8]* @S.681
+	%31 = bitcast [3 x i8]* %30 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %29, [0 x i8]* %31)
 	br label %return
 return:
 	ret void
@@ -29019,6 +28605,7 @@ return:
 	%6 = load i16, i16* %rv.0
 	ret i16 %6
 }
+@S.682 = private unnamed_addr constant [13 x i8] c"pointer_type\00"
 define internal zeroext i16 @llvmdb_DefRefType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -29058,31 +28645,23 @@ L.1:
 	store i16 %18, i16* @llvmdb_seqno
 	%19 = load i16, i16* @llvmdb_seqno
 	store i16 %19, i16* %tagr
-	%20 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%21 = load i8, i8* %20
-	%22 = icmp ugt i8 %21, 1
-	br i1 %22, label %L.5, label %L.6
-L.5:
-	%23 = load i16, i16* %tagr
-	%24 = load i16, i16* %tagb
-	%25 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @llvmdb_PDerivedType(i16 %23, i16 %24, i16 15, %type.TypeNode* %25)
-	br label %L.4
-L.6:
-	%26 = load i16, i16* %tagr
-	%27 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @llvmdb_PTypeHeader(i16 %26, i16 15, %type.TypeNode* %27)
-	%28 = load i16, i16* %tagb
-	call void @llvmdb_PMetaRef(i16 %28, i8 1)
-	br label %L.4
-L.4:
-	%29 = load i16, i16* %tagr
-	store i16 %29, i16* %rv.0
+	%20 = load i16, i16* %tagr
+	%21 = load i16, i16* %tagb
+	%22 = getelementptr [13 x i8], [13 x i8]* @S.682
+	%23 = bitcast [13 x i8]* %22 to [0 x i8]*
+	%24 = load %type.TypeNode*, %type.TypeNode** %t
+	call void @llvmdb_PDerivedType(i16 %20, i16 %21, [0 x i8]* %23, %type.TypeNode* %24)
+	%25 = load i16, i16* %tagr
+	store i16 %25, i16* %rv.0
 	br label %return
 return:
-	%30 = load i16, i16* %rv.0
-	ret i16 %30
+	%26 = load i16, i16* %rv.0
+	ret i16 %26
 }
+@S.683 = private unnamed_addr constant [11 x i8] c"DISubrange\00"
+@S.684 = private unnamed_addr constant [8 x i8] c"count: \00"
+@S.685 = private unnamed_addr constant [15 x i8] c", lowerBound: \00"
+@S.686 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal zeroext i16 @llvmdb_DefRange(i64 %lo$, i64 %hi$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -29096,37 +28675,51 @@ L.0:
 	store i16 %1, i16* @llvmdb_seqno
 	%2 = load i16, i16* @llvmdb_seqno
 	store i16 %2, i16* %tagr
-	%3 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%4 = load i8, i8* %3
-	%5 = icmp ugt i8 %4, 1
-	br i1 %5, label %L.2, label %L.3
+	%3 = load i16, i16* %tagr
+	%4 = getelementptr [11 x i8], [11 x i8]* @S.683
+	%5 = bitcast [11 x i8]* %4 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %3, [0 x i8]* %5)
+	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
+	%8 = getelementptr [8 x i8], [8 x i8]* @S.684
+	%9 = bitcast [8 x i8]* %8 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
+	%10 = load i64, i64* %hi
+	%11 = load i64, i64* %lo
+	%12 = sub i64 %10, %11
+	%13 = add i64 %12, 1
+	%14 = trunc i64 %13 to i32
+	call void @llvmdb_PUint(i32 %14, i8 3)
+	%15 = load i64, i64* %lo
+	%16 = icmp ne i64 %15, 0
+	br i1 %16, label %L.2, label %L.1
 L.2:
-	%6 = load i16, i16* %tagr
-	call void @llvmdb_PDBeg(i16 %6, i16 33, i8 0)
-	%7 = load i64, i64* %lo
-	%8 = trunc i64 %7 to i32
-	call void @llvmdb_PDUint(i32 %8, i8 0)
-	%9 = load i64, i64* %hi
-	%10 = trunc i64 %9 to i32
-	call void @llvmdb_PDUint(i32 %10, i8 1)
-	call void @llvmdb_PDEnd(i8 1)
-	br label %L.1
-L.3:
-	%11 = load i16, i16* %tagr
-	call void @llvmdb_PHeader(i16 %11, i16 33)
-	%12 = load i64, i64* %lo
-	call void @llvmdb_P64(i64 %12, i8 0)
-	%13 = load i64, i64* %hi
-	call void @llvmdb_P64(i64 %13, i8 1)
+	%17 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%18 = bitcast %bout.BufIO* %17 to %bout.BufIO*
+	%19 = getelementptr [15 x i8], [15 x i8]* @S.685
+	%20 = bitcast [15 x i8]* %19 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
+	%21 = load i64, i64* %lo
+	%22 = trunc i64 %21 to i32
+	call void @llvmdb_PUint(i32 %22, i8 3)
 	br label %L.1
 L.1:
-	%14 = load i16, i16* %tagr
-	store i16 %14, i16* %rv.0
+	%23 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%24 = bitcast %bout.BufIO* %23 to %bout.BufIO*
+	%25 = getelementptr [3 x i8], [3 x i8]* @S.686
+	%26 = bitcast [3 x i8]* %25 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %24, [0 x i8]* %26)
+	%27 = load i16, i16* %tagr
+	store i16 %27, i16* %rv.0
 	br label %return
 return:
-	%15 = load i16, i16* %rv.0
-	ret i16 %15
+	%28 = load i16, i16* %rv.0
+	ret i16 %28
 }
+@S.687 = private unnamed_addr constant [13 x i8] c"DIEnumerator\00"
+@S.688 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.689 = private unnamed_addr constant [8 x i8] c"value: \00"
+@S.690 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal zeroext i16 @llvmdb_DefEnumConst(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -29138,44 +28731,45 @@ L.0:
 	store i16 %1, i16* @llvmdb_seqno
 	%2 = load i16, i16* @llvmdb_seqno
 	store i16 %2, i16* %tagc
-	%3 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%4 = load i8, i8* %3
-	%5 = icmp ugt i8 %4, 1
-	br i1 %5, label %L.2, label %L.3
-L.2:
-	%6 = load i16, i16* %tagc
-	call void @llvmdb_PDBeg(i16 %6, i16 40, i8 0)
-	%7 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PDName(%symb.SymbNode* %7, i8 0)
-	%8 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%9 = getelementptr %symb.SymbNode, %symb.SymbNode* %8, i32 0, i32 9
-	%10 = load %ast.AstNode*, %ast.AstNode** %9
-	%11 = getelementptr %ast.AstNode, %ast.AstNode* %10, i32 0, i32 10
-	%12 = load i64, i64* %11
-	%13 = trunc i64 %12 to i32
-	call void @llvmdb_PDUint(i32 %13, i8 1)
-	call void @llvmdb_PDEnd(i8 1)
-	br label %L.1
-L.3:
-	%14 = load i16, i16* %tagc
-	call void @llvmdb_PHeader(i16 %14, i16 40)
-	%15 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PName(%symb.SymbNode* %15, i8 0)
-	%16 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%17 = getelementptr %symb.SymbNode, %symb.SymbNode* %16, i32 0, i32 9
-	%18 = load %ast.AstNode*, %ast.AstNode** %17
-	%19 = getelementptr %ast.AstNode, %ast.AstNode* %18, i32 0, i32 10
-	%20 = load i64, i64* %19
-	call void @llvmdb_P64(i64 %20, i8 1)
-	br label %L.1
-L.1:
-	%21 = load i16, i16* %tagc
-	store i16 %21, i16* %rv.0
+	%3 = load i16, i16* %tagc
+	%4 = getelementptr [13 x i8], [13 x i8]* @S.687
+	%5 = bitcast [13 x i8]* %4 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %3, [0 x i8]* %5)
+	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
+	%8 = getelementptr [7 x i8], [7 x i8]* @S.688
+	%9 = bitcast [7 x i8]* %8 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
+	%10 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%11 = getelementptr %symb.SymbNode, %symb.SymbNode* %10, i32 0, i32 22
+	%12 = getelementptr [0 x i8], [0 x i8]* %11
+	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
+	call void @llvmdb_PQString([0 x i8]* %13, i8 0)
+	%14 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%15 = bitcast %bout.BufIO* %14 to %bout.BufIO*
+	%16 = getelementptr [8 x i8], [8 x i8]* @S.689
+	%17 = bitcast [8 x i8]* %16 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
+	%18 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%19 = getelementptr %symb.SymbNode, %symb.SymbNode* %18, i32 0, i32 9
+	%20 = load %ast.AstNode*, %ast.AstNode** %19
+	%21 = getelementptr %ast.AstNode, %ast.AstNode* %20, i32 0, i32 10
+	%22 = load i64, i64* %21
+	%23 = trunc i64 %22 to i32
+	call void @llvmdb_PUint(i32 %23, i8 3)
+	%24 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%25 = bitcast %bout.BufIO* %24 to %bout.BufIO*
+	%26 = getelementptr [3 x i8], [3 x i8]* @S.690
+	%27 = bitcast [3 x i8]* %26 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %25, [0 x i8]* %27)
+	%28 = load i16, i16* %tagc
+	store i16 %28, i16* %rv.0
 	br label %return
 return:
-	%22 = load i16, i16* %rv.0
-	ret i16 %22
+	%29 = load i16, i16* %rv.0
+	ret i16 %29
 }
+@S.691 = private unnamed_addr constant [17 x i8] c"enumeration_type\00"
 define internal zeroext i16 @llvmdb_DefEnumerationType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -29218,7 +28812,7 @@ L.4:
 	store %symb.SymbNode* %18, %symb.SymbNode** %s
 	br label %L.1
 L.2:
-	%19 = call i16 @llvmdb_PListStart()
+	%19 = call i16 @llvmdb_PNewListStart()
 	store i16 %19, i16* %list
 	store i8 0, i8* %term
 	%20 = load %type.TypeNode*, %type.TypeNode** %t
@@ -29259,34 +28853,20 @@ L.7:
 	store i16 %39, i16* @llvmdb_seqno
 	%40 = load i16, i16* @llvmdb_seqno
 	store i16 %40, i16* %tage
-	%41 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%42 = load i8, i8* %41
-	%43 = icmp ugt i8 %42, 1
-	br i1 %43, label %L.12, label %L.13
-L.12:
-	%44 = load i16, i16* %tage
-	%45 = load i16, i16* %list
-	%46 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @llvmdb_PCompositeType(i16 %44, i16 0, i16 %45, i16 4, %type.TypeNode* %46)
-	br label %L.11
-L.13:
-	%47 = load i16, i16* %tage
-	%48 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @llvmdb_PTypeHeader(i16 %47, i16 4, %type.TypeNode* %48)
-	call void @llvmdb_PNull(i8 0)
-	%49 = load i16, i16* %list
-	call void @llvmdb_PMetaRef(i16 %49, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PNull(i8 1)
-	br label %L.11
-L.11:
-	%50 = load i16, i16* %tage
-	store i16 %50, i16* %rv.0
+	%41 = load i16, i16* %tage
+	%42 = load i16, i16* %list
+	%43 = getelementptr [17 x i8], [17 x i8]* @S.691
+	%44 = bitcast [17 x i8]* %43 to [0 x i8]*
+	%45 = load %type.TypeNode*, %type.TypeNode** %t
+	call void @llvmdb_PCompositeType(i16 %41, i16 0, i16 %42, [0 x i8]* %44, %type.TypeNode* %45)
+	%46 = load i16, i16* %tage
+	store i16 %46, i16* %rv.0
 	br label %return
 return:
-	%51 = load i16, i16* %rv.0
-	ret i16 %51
+	%47 = load i16, i16* %rv.0
+	ret i16 %47
 }
+@S.692 = private unnamed_addr constant [11 x i8] c"array_type\00"
 define internal zeroext i16 @llvmdb_DefArrayType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -29325,7 +28905,7 @@ L.1:
 	%18 = icmp ne i16 %17, 0
 	br i1 %18, label %L.4, label %L.3
 L.4:
-	%19 = call i16 @llvmdb_PListStart()
+	%19 = call i16 @llvmdb_PNewListStart()
 	store i16 %19, i16* %tagl
 	%20 = load i16, i16* %tagi
 	call void @llvmdb_PMetaRef(i16 %20, i8 1)
@@ -29336,47 +28916,21 @@ L.3:
 	store i16 %22, i16* @llvmdb_seqno
 	%23 = load i16, i16* @llvmdb_seqno
 	store i16 %23, i16* %taga
-	%24 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%25 = load i8, i8* %24
-	%26 = icmp ugt i8 %25, 1
-	br i1 %26, label %L.6, label %L.7
-L.6:
-	%27 = load i16, i16* %taga
-	%28 = load i16, i16* %tagb
-	%29 = load i16, i16* %tagl
-	%30 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @llvmdb_PCompositeType(i16 %27, i16 %28, i16 %29, i16 1, %type.TypeNode* %30)
-	br label %L.5
-L.7:
-	%31 = load i16, i16* %taga
-	%32 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @llvmdb_PTypeHeader(i16 %31, i16 1, %type.TypeNode* %32)
-	%33 = load i16, i16* %tagb
-	call void @llvmdb_PMetaRef(i16 %33, i8 0)
-	%34 = load i16, i16* %tagi
-	%35 = icmp eq i16 %34, 0
-	br i1 %35, label %L.9, label %L.10
-L.9:
-	call void @llvmdb_PNull(i8 0)
-	br label %L.8
-L.10:
-	%36 = load i16, i16* %tagl
-	call void @llvmdb_PMetaRef(i16 %36, i8 0)
-	br label %L.8
-L.8:
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 1)
-	br label %L.5
-L.5:
-	%37 = load i16, i16* %taga
-	store i16 %37, i16* %rv.0
+	%24 = load i16, i16* %taga
+	%25 = load i16, i16* %tagb
+	%26 = load i16, i16* %tagl
+	%27 = getelementptr [11 x i8], [11 x i8]* @S.692
+	%28 = bitcast [11 x i8]* %27 to [0 x i8]*
+	%29 = load %type.TypeNode*, %type.TypeNode** %t
+	call void @llvmdb_PCompositeType(i16 %24, i16 %25, i16 %26, [0 x i8]* %28, %type.TypeNode* %29)
+	%30 = load i16, i16* %taga
+	store i16 %30, i16* %rv.0
 	br label %return
 return:
-	%38 = load i16, i16* %rv.0
-	ret i16 %38
+	%31 = load i16, i16* %rv.0
+	ret i16 %31
 }
+@S.693 = private unnamed_addr constant [7 x i8] c"member\00"
 define internal zeroext i16 @llvmdb_DefField(%symb.SymbNode* %s$, i16 zeroext %rec$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -29399,79 +28953,20 @@ L.0:
 	store i16 %6, i16* @llvmdb_seqno
 	%7 = load i16, i16* @llvmdb_seqno
 	store i16 %7, i16* %tagf
-	%8 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%9 = load i8, i8* %8
-	%10 = icmp ugt i8 %9, 1
-	br i1 %10, label %L.2, label %L.3
-L.2:
-	%11 = load i16, i16* %tagf
-	call void @llvmdb_PDBeg(i16 %11, i16 13, i8 0)
-	%12 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PDName(%symb.SymbNode* %12, i8 0)
-	%13 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%14 = getelementptr %symb.SymbNode, %symb.SymbNode* %13, i32 0, i32 11
-	%15 = load i16, i16* %14
-	%16 = zext i16 %15 to i32
-	call void @llvmdb_PDUint(i32 %16, i8 0)
-	%17 = load %type.TypeNode*, %type.TypeNode** %t
-	%18 = getelementptr %type.TypeNode, %type.TypeNode* %17, i32 0, i32 10
-	%19 = load i32, i32* %18
-	call void @llvmdb_PDUint(i32 %19, i8 0)
-	%20 = load %type.TypeNode*, %type.TypeNode** %t
-	%21 = getelementptr %type.TypeNode, %type.TypeNode* %20, i32 0, i32 11
-	%22 = load i32, i32* %21
-	call void @llvmdb_PDUint(i32 %22, i8 0)
-	%23 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%24 = getelementptr %symb.SymbNode, %symb.SymbNode* %23, i32 0, i32 10
-	%25 = load i16, i16* %24
-	%26 = zext i16 %25 to i32
-	call void @llvmdb_PDUint(i32 %26, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	%27 = load i16, i16* @llvmdb_filenamedir
-	call void @llvmdb_PMetaRef(i16 %27, i8 0)
-	%28 = load i16, i16* %rec
-	call void @llvmdb_PMetaRef(i16 %28, i8 0)
-	%29 = load i16, i16* %tagt
-	call void @llvmdb_PMetaRef(i16 %29, i8 1)
-	br label %L.1
-L.3:
-	%30 = load i16, i16* %tagf
-	call void @llvmdb_PHeader(i16 %30, i16 13)
-	%31 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PMetaRef(i16 %31, i8 0)
-	%32 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PName(%symb.SymbNode* %32, i8 0)
-	%33 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PMetaRef(i16 %33, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	%34 = load %type.TypeNode*, %type.TypeNode** %t
-	%35 = getelementptr %type.TypeNode, %type.TypeNode* %34, i32 0, i32 10
-	%36 = load i32, i32* %35
-	%37 = zext i32 %36 to i64
-	call void @llvmdb_P64(i64 %37, i8 0)
-	%38 = load %type.TypeNode*, %type.TypeNode** %t
-	%39 = getelementptr %type.TypeNode, %type.TypeNode* %38, i32 0, i32 11
-	%40 = load i32, i32* %39
-	%41 = zext i32 %40 to i64
-	call void @llvmdb_P64(i64 %41, i8 0)
-	%42 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%43 = getelementptr %symb.SymbNode, %symb.SymbNode* %42, i32 0, i32 10
-	%44 = load i16, i16* %43
-	%45 = zext i16 %44 to i64
-	call void @llvmdb_P64(i64 %45, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	%46 = load i16, i16* %tagt
-	call void @llvmdb_PMetaRef(i16 %46, i8 1)
-	br label %L.1
-L.1:
-	%47 = load i16, i16* %tagf
-	store i16 %47, i16* %rv.0
+	%8 = load i16, i16* %tagf
+	%9 = load i16, i16* %tagt
+	%10 = getelementptr [7 x i8], [7 x i8]* @S.693
+	%11 = bitcast [7 x i8]* %10 to [0 x i8]*
+	%12 = load %type.TypeNode*, %type.TypeNode** %t
+	call void @llvmdb_PDerivedType(i16 %8, i16 %9, [0 x i8]* %11, %type.TypeNode* %12)
+	%13 = load i16, i16* %tagf
+	store i16 %13, i16* %rv.0
 	br label %return
 return:
-	%48 = load i16, i16* %rv.0
-	ret i16 %48
+	%14 = load i16, i16* %rv.0
+	ret i16 %14
 }
+@S.694 = private unnamed_addr constant [15 x i8] c"structure_type\00"
 define internal zeroext i16 @llvmdb_DefRecordType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -29496,102 +28991,87 @@ L.0:
 	store i16 %7, i16* @llvmdb_seqno
 	%8 = load i16, i16* @llvmdb_seqno
 	store i16 %8, i16* %list
-	%9 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%10 = load i8, i8* %9
-	%11 = icmp ugt i8 %10, 1
-	br i1 %11, label %L.2, label %L.3
-L.2:
-	%12 = load i16, i16* %rec
-	%13 = load i16, i16* %list
+	%9 = load i16, i16* %rec
+	%10 = load i16, i16* %list
+	%11 = getelementptr [15 x i8], [15 x i8]* @S.694
+	%12 = bitcast [15 x i8]* %11 to [0 x i8]*
+	%13 = load %type.TypeNode*, %type.TypeNode** %t
+	call void @llvmdb_PCompositeType(i16 %9, i16 0, i16 %10, [0 x i8]* %12, %type.TypeNode* %13)
 	%14 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @llvmdb_PCompositeType(i16 %12, i16 0, i16 %13, i16 19, %type.TypeNode* %14)
-	br label %L.1
-L.3:
-	%15 = load i16, i16* %rec
-	%16 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @llvmdb_PTypeHeader(i16 %15, i16 19, %type.TypeNode* %16)
-	call void @llvmdb_PNull(i8 0)
-	%17 = load i16, i16* %list
-	call void @llvmdb_PMetaRef(i16 %17, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PNull(i8 1)
+	%15 = getelementptr %type.TypeNode, %type.TypeNode* %14, i32 0, i32 4
+	%16 = load %symb.SymbNode*, %symb.SymbNode** %15
+	%17 = bitcast %symb.SymbNode* %16 to %symb.SymbNode*
+	store %symb.SymbNode* %17, %symb.SymbNode** %s
 	br label %L.1
 L.1:
-	%18 = load %type.TypeNode*, %type.TypeNode** %t
-	%19 = getelementptr %type.TypeNode, %type.TypeNode* %18, i32 0, i32 4
-	%20 = load %symb.SymbNode*, %symb.SymbNode** %19
-	%21 = bitcast %symb.SymbNode* %20 to %symb.SymbNode*
-	store %symb.SymbNode* %21, %symb.SymbNode** %s
+	%18 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%19 = icmp ne %symb.SymbNode* %18, null
+	%20 = xor i1 %19, true
+	br i1 %20, label %L.2, label %L.3
+L.3:
+	%21 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%22 = getelementptr %symb.SymbNode, %symb.SymbNode* %21, i32 0, i32 12
+	%23 = load i16, i16* %22
+	%24 = icmp eq i16 %23, 0
+	br i1 %24, label %L.5, label %L.4
+L.5:
+	%25 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%26 = load i16, i16* %rec
+	%27 = call i16 @llvmdb_DefField(%symb.SymbNode* %25, i16 %26)
+	%28 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%29 = getelementptr %symb.SymbNode, %symb.SymbNode* %28, i32 0, i32 12
+	store i16 %27, i16* %29
 	br label %L.4
 L.4:
-	%22 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%23 = icmp ne %symb.SymbNode* %22, null
-	%24 = xor i1 %23, true
-	br i1 %24, label %L.5, label %L.6
-L.6:
-	%25 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%26 = getelementptr %symb.SymbNode, %symb.SymbNode* %25, i32 0, i32 12
-	%27 = load i16, i16* %26
-	%28 = icmp eq i16 %27, 0
-	br i1 %28, label %L.8, label %L.7
-L.8:
-	%29 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%30 = load i16, i16* %rec
-	%31 = call i16 @llvmdb_DefField(%symb.SymbNode* %29, i16 %30)
-	%32 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%33 = getelementptr %symb.SymbNode, %symb.SymbNode* %32, i32 0, i32 12
-	store i16 %31, i16* %33
-	br label %L.7
-L.7:
-	%34 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%35 = getelementptr %symb.SymbNode, %symb.SymbNode* %34, i32 0, i32 0
-	%36 = load %symb.SymbNode*, %symb.SymbNode** %35
-	%37 = bitcast %symb.SymbNode* %36 to %symb.SymbNode*
-	store %symb.SymbNode* %37, %symb.SymbNode** %s
-	br label %L.4
-L.5:
-	%38 = load i16, i16* %list
-	call void @llvmdb_PMetaSeq(i16 %38)
+	%30 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%31 = getelementptr %symb.SymbNode, %symb.SymbNode* %30, i32 0, i32 0
+	%32 = load %symb.SymbNode*, %symb.SymbNode** %31
+	%33 = bitcast %symb.SymbNode* %32 to %symb.SymbNode*
+	store %symb.SymbNode* %33, %symb.SymbNode** %s
+	br label %L.1
+L.2:
+	%34 = load i16, i16* %list
+	call void @llvmdb_PListStart(i16 %34)
 	store i8 0, i8* %term
-	%39 = load %type.TypeNode*, %type.TypeNode** %t
-	%40 = getelementptr %type.TypeNode, %type.TypeNode* %39, i32 0, i32 4
-	%41 = load %symb.SymbNode*, %symb.SymbNode** %40
-	%42 = bitcast %symb.SymbNode* %41 to %symb.SymbNode*
-	store %symb.SymbNode* %42, %symb.SymbNode** %s
+	%35 = load %type.TypeNode*, %type.TypeNode** %t
+	%36 = getelementptr %type.TypeNode, %type.TypeNode* %35, i32 0, i32 4
+	%37 = load %symb.SymbNode*, %symb.SymbNode** %36
+	%38 = bitcast %symb.SymbNode* %37 to %symb.SymbNode*
+	store %symb.SymbNode* %38, %symb.SymbNode** %s
+	br label %L.6
+L.6:
+	%39 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%40 = icmp ne %symb.SymbNode* %39, null
+	%41 = xor i1 %40, true
+	br i1 %41, label %L.7, label %L.8
+L.8:
+	%42 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%43 = getelementptr %symb.SymbNode, %symb.SymbNode* %42, i32 0, i32 12
+	%44 = load i16, i16* %43
+	store i16 %44, i16* %tag
+	%45 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%46 = getelementptr %symb.SymbNode, %symb.SymbNode* %45, i32 0, i32 0
+	%47 = load %symb.SymbNode*, %symb.SymbNode** %46
+	%48 = bitcast %symb.SymbNode* %47 to %symb.SymbNode*
+	store %symb.SymbNode* %48, %symb.SymbNode** %s
+	%49 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%50 = icmp eq %symb.SymbNode* %49, null
+	br i1 %50, label %L.10, label %L.9
+L.10:
+	store i8 1, i8* %term
 	br label %L.9
 L.9:
-	%43 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%44 = icmp ne %symb.SymbNode* %43, null
-	%45 = xor i1 %44, true
-	br i1 %45, label %L.10, label %L.11
-L.11:
-	%46 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%47 = getelementptr %symb.SymbNode, %symb.SymbNode* %46, i32 0, i32 12
-	%48 = load i16, i16* %47
-	store i16 %48, i16* %tag
-	%49 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%50 = getelementptr %symb.SymbNode, %symb.SymbNode* %49, i32 0, i32 0
-	%51 = load %symb.SymbNode*, %symb.SymbNode** %50
-	%52 = bitcast %symb.SymbNode* %51 to %symb.SymbNode*
-	store %symb.SymbNode* %52, %symb.SymbNode** %s
-	%53 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%54 = icmp eq %symb.SymbNode* %53, null
-	br i1 %54, label %L.13, label %L.12
-L.13:
-	store i8 1, i8* %term
-	br label %L.12
-L.12:
-	%55 = load i16, i16* %tag
-	%56 = load i8, i8* %term
-	call void @llvmdb_PMetaRef(i16 %55, i8 %56)
-	br label %L.9
-L.10:
-	%57 = load i16, i16* %rec
-	store i16 %57, i16* %rv.0
+	%51 = load i16, i16* %tag
+	%52 = load i8, i8* %term
+	call void @llvmdb_PMetaRef(i16 %51, i8 %52)
+	br label %L.6
+L.7:
+	%53 = load i16, i16* %rec
+	store i16 %53, i16* %rv.0
 	br label %return
 return:
-	%58 = load i16, i16* %rv.0
-	ret i16 %58
+	%54 = load i16, i16* %rv.0
+	ret i16 %54
 }
 define internal zeroext i16 @llvmdb_DefType(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -29799,9 +29279,11 @@ return:
 	%89 = load i16, i16* %rv.0
 	ret i16 %89
 }
-@S.664 = private unnamed_addr constant [22 x i8] c" = !MDLocation(line: \00"
-@S.665 = private unnamed_addr constant [21 x i8] c", column: 0, scope: \00"
-@S.666 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.695 = private unnamed_addr constant [11 x i8] c"DILocation\00"
+@S.696 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.697 = private unnamed_addr constant [9 x i8] c"column: \00"
+@S.698 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.699 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_DefLines() nounwind {
 L.0:
 	%ln = alloca %llvmdb.LineT*
@@ -29814,65 +29296,47 @@ L.1:
 	%3 = xor i1 %2, true
 	br i1 %3, label %L.2, label %L.3
 L.3:
-	%4 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%5 = load i8, i8* %4
-	%6 = icmp ugt i8 %5, 1
-	br i1 %6, label %L.5, label %L.6
-L.5:
-	%7 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
-	%8 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %7, i32 0, i32 1
-	%9 = load i16, i16* %8
-	call void @llvmdb_PSeq(i16 %9)
-	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = getelementptr [22 x i8], [22 x i8]* @S.664
-	%13 = bitcast [22 x i8]* %12 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
-	%14 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%15 = bitcast %bout.BufIO* %14 to %bout.BufIO*
-	%16 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
-	%17 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %16, i32 0, i32 2
-	%18 = load i16, i16* %17
-	%19 = zext i16 %18 to i32
-	call void @bout_BufIO_uint(%bout.BufIO* %15, i32 %19)
-	%20 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%21 = bitcast %bout.BufIO* %20 to %bout.BufIO*
-	%22 = getelementptr [21 x i8], [21 x i8]* @S.665
-	%23 = bitcast [21 x i8]* %22 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
-	%24 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
-	%25 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %24, i32 0, i32 3
-	%26 = load i16, i16* %25
-	call void @llvmdb_PSeq(i16 %26)
-	%27 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%28 = bitcast %bout.BufIO* %27 to %bout.BufIO*
-	%29 = getelementptr [3 x i8], [3 x i8]* @S.666
-	%30 = bitcast [3 x i8]* %29 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %28, [0 x i8]* %30)
-	br label %L.4
-L.6:
-	%31 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
-	%32 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %31, i32 0, i32 1
-	%33 = load i16, i16* %32
-	call void @llvmdb_PMetaSeq(i16 %33)
-	%34 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
-	%35 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %34, i32 0, i32 2
-	%36 = load i16, i16* %35
-	%37 = zext i16 %36 to i32
-	call void @llvmdb_P32(i32 %37, i8 0)
-	call void @llvmdb_P32(i32 1, i8 0)
-	%38 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
-	%39 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %38, i32 0, i32 3
-	%40 = load i16, i16* %39
-	call void @llvmdb_PMetaRef(i16 %40, i8 0)
-	call void @llvmdb_PNull(i8 1)
-	br label %L.4
-L.4:
-	%41 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
-	%42 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %41, i32 0, i32 0
-	%43 = load %llvmdb.LineT*, %llvmdb.LineT** %42
-	%44 = bitcast %llvmdb.LineT* %43 to %llvmdb.LineT*
-	store %llvmdb.LineT* %44, %llvmdb.LineT** %ln
+	%4 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
+	%5 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %4, i32 0, i32 1
+	%6 = load i16, i16* %5
+	%7 = getelementptr [11 x i8], [11 x i8]* @S.695
+	%8 = bitcast [11 x i8]* %7 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %6, [0 x i8]* %8)
+	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
+	%11 = getelementptr [7 x i8], [7 x i8]* @S.696
+	%12 = bitcast [7 x i8]* %11 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
+	%13 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
+	%14 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %13, i32 0, i32 2
+	%15 = load i16, i16* %14
+	%16 = zext i16 %15 to i32
+	call void @llvmdb_PUint(i32 %16, i8 0)
+	%17 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%18 = bitcast %bout.BufIO* %17 to %bout.BufIO*
+	%19 = getelementptr [9 x i8], [9 x i8]* @S.697
+	%20 = bitcast [9 x i8]* %19 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
+	call void @llvmdb_PUint(i32 0, i8 0)
+	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
+	%23 = getelementptr [8 x i8], [8 x i8]* @S.698
+	%24 = bitcast [8 x i8]* %23 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
+	%25 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
+	%26 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %25, i32 0, i32 3
+	%27 = load i16, i16* %26
+	call void @llvmdb_PMetaRef(i16 %27, i8 3)
+	%28 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%29 = bitcast %bout.BufIO* %28 to %bout.BufIO*
+	%30 = getelementptr [3 x i8], [3 x i8]* @S.699
+	%31 = bitcast [3 x i8]* %30 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %29, [0 x i8]* %31)
+	%32 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
+	%33 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %32, i32 0, i32 0
+	%34 = load %llvmdb.LineT*, %llvmdb.LineT** %33
+	%35 = bitcast %llvmdb.LineT* %34 to %llvmdb.LineT*
+	store %llvmdb.LineT* %35, %llvmdb.LineT** %ln
 	br label %L.1
 L.2:
 	store %llvmdb.LineT* null, %llvmdb.LineT** @llvmdb_lnhead
@@ -29881,7 +29345,7 @@ L.2:
 return:
 	ret void
 }
-@S.667 = private unnamed_addr constant [8 x i8] c", !dbg \00"
+@S.700 = private unnamed_addr constant [8 x i8] c", !dbg \00"
 define internal void @llvmdb_PLine(i16 zeroext %lineno$) nounwind {
 L.0:
 	%lineno = alloca i16
@@ -29949,7 +29413,7 @@ L.6:
 L.3:
 	%33 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%34 = bitcast %bout.BufIO* %33 to %bout.BufIO*
-	%35 = getelementptr [8 x i8], [8 x i8]* @S.667
+	%35 = getelementptr [8 x i8], [8 x i8]* @S.700
 	%36 = bitcast [8 x i8]* %35 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %34, [0 x i8]* %36)
 	%37 = load i16, i16* %tag
@@ -29958,13 +29422,21 @@ L.3:
 return:
 	ret void
 }
-@S.668 = private unnamed_addr constant [39 x i8] c"\09call void @llvm.dbg.declare(metadata \00"
-@S.669 = private unnamed_addr constant [41 x i8] c"\09call void @llvm.dbg.declare(metadata !{\00"
-@S.670 = private unnamed_addr constant [3 x i8] c"* \00"
-@S.671 = private unnamed_addr constant [13 x i8] c", metadata !\00"
-@S.672 = private unnamed_addr constant [13 x i8] c", metadata !\00"
-@S.673 = private unnamed_addr constant [3 x i8] c"* \00"
-@S.674 = private unnamed_addr constant [3 x i8] c"* \00"
+@S.701 = private unnamed_addr constant [39 x i8] c"\09call void @llvm.dbg.declare(metadata \00"
+@S.702 = private unnamed_addr constant [3 x i8] c"* \00"
+@S.703 = private unnamed_addr constant [13 x i8] c", metadata !\00"
+@S.704 = private unnamed_addr constant [13 x i8] c", metadata !\00"
+@S.705 = private unnamed_addr constant [17 x i8] c"DIGlobalVariable\00"
+@S.706 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.707 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.708 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.709 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.710 = private unnamed_addr constant [7 x i8] c"type: \00"
+@S.711 = private unnamed_addr constant [10 x i8] c"isLocal: \00"
+@S.712 = private unnamed_addr constant [15 x i8] c"isDefinition: \00"
+@S.713 = private unnamed_addr constant [11 x i8] c"variable: \00"
+@S.714 = private unnamed_addr constant [3 x i8] c"* \00"
+@S.715 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal zeroext i16 @llvmdb_DefVar(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -29987,248 +29459,224 @@ L.0:
 		i32 0, label %L.3
 	]
 L.3:
-	%9 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%10 = load i8, i8* %9
-	%11 = icmp ugt i8 %10, 1
-	br i1 %11, label %L.5, label %L.6
-L.5:
-	%12 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%13 = bitcast %bout.BufIO* %12 to %bout.BufIO*
-	%14 = getelementptr [39 x i8], [39 x i8]* @S.668
-	%15 = bitcast [39 x i8]* %14 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %13, [0 x i8]* %15)
-	br label %L.4
-L.6:
+	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
+	%11 = getelementptr [39 x i8], [39 x i8]* @S.701
+	%12 = bitcast [39 x i8]* %11 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
+	%13 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%14 = getelementptr %symb.SymbNode, %symb.SymbNode* %13, i32 0, i32 1
+	%15 = load %type.TypeNode*, %type.TypeNode** %14
+	call void @llvm_PType(%type.TypeNode* %15)
 	%16 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%17 = bitcast %bout.BufIO* %16 to %bout.BufIO*
-	%18 = getelementptr [41 x i8], [41 x i8]* @S.669
-	%19 = bitcast [41 x i8]* %18 to [0 x i8]*
+	%18 = getelementptr [3 x i8], [3 x i8]* @S.702
+	%19 = bitcast [3 x i8]* %18 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %17, [0 x i8]* %19)
+	%20 = load %symb.SymbNode*, %symb.SymbNode** %s
+	call void @llvm_PName(%symb.SymbNode* %20)
+	%21 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
+	%22 = load i8, i8* %21
+	%23 = icmp ule i8 %22, 1
+	br i1 %23, label %L.5, label %L.4
+L.5:
+	%24 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%25 = bitcast %bout.BufIO* %24 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %25, i8 125)
 	br label %L.4
 L.4:
-	%20 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%21 = getelementptr %symb.SymbNode, %symb.SymbNode* %20, i32 0, i32 1
-	%22 = load %type.TypeNode*, %type.TypeNode** %21
-	call void @llvm_PType(%type.TypeNode* %22)
-	%23 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%24 = bitcast %bout.BufIO* %23 to %bout.BufIO*
-	%25 = getelementptr [3 x i8], [3 x i8]* @S.670
-	%26 = bitcast [3 x i8]* %25 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %24, [0 x i8]* %26)
-	%27 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvm_PName(%symb.SymbNode* %27)
-	%28 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%29 = load i8, i8* %28
-	%30 = icmp ule i8 %29, 1
-	br i1 %30, label %L.8, label %L.7
-L.8:
-	%31 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %32, i8 125)
-	br label %L.7
+	%26 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%27 = bitcast %bout.BufIO* %26 to %bout.BufIO*
+	%28 = getelementptr [13 x i8], [13 x i8]* @S.703
+	%29 = bitcast [13 x i8]* %28 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %27, [0 x i8]* %29)
+	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%31 = bitcast %bout.BufIO* %30 to %bout.BufIO*
+	%32 = load i16, i16* @llvmdb_seqno
+	%33 = zext i16 %32 to i32
+	call void @bout_BufIO_uint(%bout.BufIO* %31, i32 %33)
+	%34 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
+	%35 = load i8, i8* %34
+	%36 = icmp ugt i8 %35, 1
+	br i1 %36, label %L.7, label %L.6
 L.7:
-	%33 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%34 = bitcast %bout.BufIO* %33 to %bout.BufIO*
-	%35 = getelementptr [13 x i8], [13 x i8]* @S.671
-	%36 = bitcast [13 x i8]* %35 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %34, [0 x i8]* %36)
 	%37 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%38 = bitcast %bout.BufIO* %37 to %bout.BufIO*
-	%39 = load i16, i16* @llvmdb_seqno
-	%40 = zext i16 %39 to i32
-	call void @bout_BufIO_uint(%bout.BufIO* %38, i32 %40)
-	%41 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%42 = load i8, i8* %41
-	%43 = icmp ugt i8 %42, 1
-	br i1 %43, label %L.10, label %L.9
-L.10:
-	%44 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%45 = bitcast %bout.BufIO* %44 to %bout.BufIO*
-	%46 = getelementptr [13 x i8], [13 x i8]* @S.672
-	%47 = bitcast [13 x i8]* %46 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %45, [0 x i8]* %47)
-	%48 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%49 = bitcast %bout.BufIO* %48 to %bout.BufIO*
-	%50 = load i16, i16* @llvmdb_expr
-	%51 = zext i16 %50 to i32
-	call void @bout_BufIO_uint(%bout.BufIO* %49, i32 %51)
-	br label %L.9
+	%39 = getelementptr [13 x i8], [13 x i8]* @S.704
+	%40 = bitcast [13 x i8]* %39 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %38, [0 x i8]* %40)
+	%41 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%42 = bitcast %bout.BufIO* %41 to %bout.BufIO*
+	%43 = load i16, i16* @llvmdb_expr
+	%44 = zext i16 %43 to i32
+	call void @bout_BufIO_uint(%bout.BufIO* %42, i32 %44)
+	br label %L.6
+L.6:
+	%45 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%46 = bitcast %bout.BufIO* %45 to %bout.BufIO*
+	call void @bout_BufIO_chr(%bout.BufIO* %46, i8 41)
+	%47 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%48 = getelementptr %symb.SymbNode, %symb.SymbNode* %47, i32 0, i32 11
+	%49 = load i16, i16* %48
+	call void @llvmdb_PLine(i16 %49)
+	%50 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%51 = bitcast %bout.BufIO* %50 to %bout.BufIO*
+	call void @bout_BufIO_nl(%bout.BufIO* %51)
+	%52 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%53 = getelementptr %symb.SymbNode, %symb.SymbNode* %52, i32 0, i32 14
+	%54 = load i8, i8* %53
+	%55 = icmp ne i8 %54, 0
+	br i1 %55, label %L.9, label %L.8
 L.9:
-	%52 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%53 = bitcast %bout.BufIO* %52 to %bout.BufIO*
-	call void @bout_BufIO_chr(%bout.BufIO* %53, i8 41)
-	%54 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%55 = getelementptr %symb.SymbNode, %symb.SymbNode* %54, i32 0, i32 11
-	%56 = load i16, i16* %55
-	call void @llvmdb_PLine(i16 %56)
-	%57 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%58 = bitcast %bout.BufIO* %57 to %bout.BufIO*
-	call void @bout_BufIO_nl(%bout.BufIO* %58)
-	%59 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%60 = getelementptr %symb.SymbNode, %symb.SymbNode* %59, i32 0, i32 14
-	%61 = load i8, i8* %60
-	%62 = icmp ne i8 %61, 0
-	br i1 %62, label %L.12, label %L.11
-L.12:
-	%63 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%64 = getelementptr %symb.SymbNode, %symb.SymbNode* %63, i32 0, i32 0
-	store %symb.SymbNode* null, %symb.SymbNode** %64
-	%65 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_lvtail
-	%66 = icmp eq %symb.SymbNode* %65, null
-	br i1 %66, label %L.14, label %L.15
-L.14:
-	%67 = load %symb.SymbNode*, %symb.SymbNode** %s
-	store %symb.SymbNode* %67, %symb.SymbNode** @llvmdb_lvhead
-	br label %L.13
-L.15:
-	%68 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%69 = bitcast %symb.SymbNode* %68 to %symb.SymbNode*
-	%70 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_lvtail
-	%71 = getelementptr %symb.SymbNode, %symb.SymbNode* %70, i32 0, i32 0
-	store %symb.SymbNode* %69, %symb.SymbNode** %71
-	br label %L.13
-L.13:
-	%72 = load %symb.SymbNode*, %symb.SymbNode** %s
-	store %symb.SymbNode* %72, %symb.SymbNode** @llvmdb_lvtail
-	br label %L.11
+	%56 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%57 = getelementptr %symb.SymbNode, %symb.SymbNode* %56, i32 0, i32 0
+	store %symb.SymbNode* null, %symb.SymbNode** %57
+	%58 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_lvtail
+	%59 = icmp eq %symb.SymbNode* %58, null
+	br i1 %59, label %L.11, label %L.12
 L.11:
+	%60 = load %symb.SymbNode*, %symb.SymbNode** %s
+	store %symb.SymbNode* %60, %symb.SymbNode** @llvmdb_lvhead
+	br label %L.10
+L.12:
+	%61 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%62 = bitcast %symb.SymbNode* %61 to %symb.SymbNode*
+	%63 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_lvtail
+	%64 = getelementptr %symb.SymbNode, %symb.SymbNode* %63, i32 0, i32 0
+	store %symb.SymbNode* %62, %symb.SymbNode** %64
+	br label %L.10
+L.10:
+	%65 = load %symb.SymbNode*, %symb.SymbNode** %s
+	store %symb.SymbNode* %65, %symb.SymbNode** @llvmdb_lvtail
+	br label %L.8
+L.8:
 	br label %L.2
 L.1:
-	%73 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%74 = getelementptr %symb.SymbNode, %symb.SymbNode* %73, i32 0, i32 1
-	%75 = load %type.TypeNode*, %type.TypeNode** %74
-	%76 = call i16 @llvmdb_DefType(%type.TypeNode* %75)
-	store i16 %76, i16* %tag
-	%77 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%78 = load i8, i8* %77
-	%79 = icmp ugt i8 %78, 1
-	br i1 %79, label %L.17, label %L.18
-L.17:
-	%80 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%81 = getelementptr %symb.SymbNode, %symb.SymbNode* %80, i32 0, i32 12
-	%82 = load i16, i16* %81
-	call void @llvmdb_PDBeg(i16 %82, i16 52, i8 0)
-	%83 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PDFullName(%symb.SymbNode* %83, i8 0)
-	%84 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PDFullName(%symb.SymbNode* %84, i8 0)
-	call void @llvmdb_PDString([0 x i8]* null, i8 0)
-	%85 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%86 = getelementptr %symb.SymbNode, %symb.SymbNode* %85, i32 0, i32 11
-	%87 = load i16, i16* %86
-	%88 = zext i16 %87 to i32
-	call void @llvmdb_PDUint(i32 %88, i8 0)
-	%89 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%90 = getelementptr %symb.SymbNode, %symb.SymbNode* %89, i32 0, i32 14
-	%91 = load i8, i8* %90
-	%92 = icmp eq i8 %91, 2
-	%93 = zext i1 %92 to i8
-	call void @llvmdb_PDBoolean(i8 %93, i8 0)
-	%94 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%95 = getelementptr %symb.SymbNode, %symb.SymbNode* %94, i32 0, i32 14
-	%96 = load i8, i8* %95
-	%97 = icmp ne i8 %96, 5
-	%98 = zext i1 %97 to i8
-	call void @llvmdb_PDBoolean(i8 %98, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	%99 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PMetaRef(i16 %99, i8 0)
-	%100 = load i16, i16* %tag
-	call void @llvmdb_PMetaRef(i16 %100, i8 0)
-	%101 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%102 = getelementptr %symb.SymbNode, %symb.SymbNode* %101, i32 0, i32 1
-	%103 = load %type.TypeNode*, %type.TypeNode** %102
-	call void @llvm_PType(%type.TypeNode* %103)
-	%104 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%105 = bitcast %bout.BufIO* %104 to %bout.BufIO*
-	%106 = getelementptr [3 x i8], [3 x i8]* @S.673
-	%107 = bitcast [3 x i8]* %106 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %105, [0 x i8]* %107)
-	%108 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvm_PName(%symb.SymbNode* %108)
-	call void @llvmdb_PTerminator(i8 0)
-	call void @llvmdb_PNull(i8 1)
-	br label %L.16
-L.18:
-	%109 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%110 = getelementptr %symb.SymbNode, %symb.SymbNode* %109, i32 0, i32 12
-	%111 = load i16, i16* %110
-	call void @llvmdb_PHeader(i16 %111, i16 52)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PNull(i8 0)
-	%112 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PFullName(%symb.SymbNode* %112, i8 0)
-	%113 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PFullName(%symb.SymbNode* %113, i8 0)
-	call void @llvmdb_PString([0 x i8]* null, i8 0)
-	%114 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PMetaRef(i16 %114, i8 0)
+	%66 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%67 = getelementptr %symb.SymbNode, %symb.SymbNode* %66, i32 0, i32 1
+	%68 = load %type.TypeNode*, %type.TypeNode** %67
+	%69 = call i16 @llvmdb_DefType(%type.TypeNode* %68)
+	store i16 %69, i16* %tag
+	%70 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%71 = getelementptr %symb.SymbNode, %symb.SymbNode* %70, i32 0, i32 12
+	%72 = load i16, i16* %71
+	%73 = getelementptr [17 x i8], [17 x i8]* @S.705
+	%74 = bitcast [17 x i8]* %73 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %72, [0 x i8]* %74)
+	%75 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%76 = bitcast %bout.BufIO* %75 to %bout.BufIO*
+	%77 = getelementptr [7 x i8], [7 x i8]* @S.706
+	%78 = bitcast [7 x i8]* %77 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %76, [0 x i8]* %78)
+	%79 = load %symb.SymbNode*, %symb.SymbNode** %s
+	call void @llvmdb_PFullName(%symb.SymbNode* %79, i8 0)
+	%80 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%81 = bitcast %bout.BufIO* %80 to %bout.BufIO*
+	%82 = getelementptr [8 x i8], [8 x i8]* @S.707
+	%83 = bitcast [8 x i8]* %82 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %81, [0 x i8]* %83)
+	call void @llvmdb_PMetaRef(i16 0, i8 0)
+	%84 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%85 = bitcast %bout.BufIO* %84 to %bout.BufIO*
+	%86 = getelementptr [7 x i8], [7 x i8]* @S.708
+	%87 = bitcast [7 x i8]* %86 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %85, [0 x i8]* %87)
+	%88 = load i16, i16* @llvmdb_filenamedir
+	call void @llvmdb_PMetaRef(i16 %88, i8 0)
+	%89 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%90 = bitcast %bout.BufIO* %89 to %bout.BufIO*
+	%91 = getelementptr [7 x i8], [7 x i8]* @S.709
+	%92 = bitcast [7 x i8]* %91 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %90, [0 x i8]* %92)
+	%93 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%94 = getelementptr %symb.SymbNode, %symb.SymbNode* %93, i32 0, i32 11
+	%95 = load i16, i16* %94
+	%96 = zext i16 %95 to i32
+	call void @llvmdb_PUint(i32 %96, i8 0)
+	%97 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%98 = bitcast %bout.BufIO* %97 to %bout.BufIO*
+	%99 = getelementptr [7 x i8], [7 x i8]* @S.710
+	%100 = bitcast [7 x i8]* %99 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %98, [0 x i8]* %100)
+	%101 = load i16, i16* %tag
+	call void @llvmdb_PMetaRef(i16 %101, i8 0)
+	%102 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%103 = bitcast %bout.BufIO* %102 to %bout.BufIO*
+	%104 = getelementptr [10 x i8], [10 x i8]* @S.711
+	%105 = bitcast [10 x i8]* %104 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %103, [0 x i8]* %105)
+	%106 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%107 = getelementptr %symb.SymbNode, %symb.SymbNode* %106, i32 0, i32 14
+	%108 = load i8, i8* %107
+	%109 = icmp eq i8 %108, 2
+	%110 = zext i1 %109 to i8
+	call void @llvmdb_PBoolean(i8 %110, i8 0)
+	%111 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%112 = bitcast %bout.BufIO* %111 to %bout.BufIO*
+	%113 = getelementptr [15 x i8], [15 x i8]* @S.712
+	%114 = bitcast [15 x i8]* %113 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %112, [0 x i8]* %114)
 	%115 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%116 = getelementptr %symb.SymbNode, %symb.SymbNode* %115, i32 0, i32 11
-	%117 = load i16, i16* %116
-	%118 = zext i16 %117 to i32
-	call void @llvmdb_P32(i32 %118, i8 0)
-	%119 = load i16, i16* %tag
-	call void @llvmdb_PMetaRef(i16 %119, i8 0)
-	%120 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%121 = getelementptr %symb.SymbNode, %symb.SymbNode* %120, i32 0, i32 14
-	%122 = load i8, i8* %121
-	%123 = icmp eq i8 %122, 2
-	%124 = zext i1 %123 to i32
-	call void @llvmdb_P32(i32 %124, i8 0)
-	%125 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%126 = getelementptr %symb.SymbNode, %symb.SymbNode* %125, i32 0, i32 14
-	%127 = load i8, i8* %126
-	%128 = icmp ne i8 %127, 5
-	%129 = zext i1 %128 to i32
-	call void @llvmdb_P32(i32 %129, i8 0)
-	%130 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%131 = getelementptr %symb.SymbNode, %symb.SymbNode* %130, i32 0, i32 1
-	%132 = load %type.TypeNode*, %type.TypeNode** %131
-	call void @llvm_PType(%type.TypeNode* %132)
-	%133 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%134 = bitcast %bout.BufIO* %133 to %bout.BufIO*
-	%135 = getelementptr [3 x i8], [3 x i8]* @S.674
-	%136 = bitcast [3 x i8]* %135 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %134, [0 x i8]* %136)
-	%137 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvm_PName(%symb.SymbNode* %137)
-	call void @llvmdb_PTerminator(i8 0)
-	call void @llvmdb_PNull(i8 1)
-	br label %L.16
-L.16:
-	%138 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%139 = getelementptr %symb.SymbNode, %symb.SymbNode* %138, i32 0, i32 0
-	store %symb.SymbNode* null, %symb.SymbNode** %139
-	%140 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_gvtail
-	%141 = icmp eq %symb.SymbNode* %140, null
-	br i1 %141, label %L.20, label %L.21
-L.20:
+	%116 = getelementptr %symb.SymbNode, %symb.SymbNode* %115, i32 0, i32 14
+	%117 = load i8, i8* %116
+	%118 = icmp ne i8 %117, 5
+	%119 = zext i1 %118 to i8
+	call void @llvmdb_PBoolean(i8 %119, i8 0)
+	%120 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%121 = bitcast %bout.BufIO* %120 to %bout.BufIO*
+	%122 = getelementptr [11 x i8], [11 x i8]* @S.713
+	%123 = bitcast [11 x i8]* %122 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %121, [0 x i8]* %123)
+	%124 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%125 = getelementptr %symb.SymbNode, %symb.SymbNode* %124, i32 0, i32 1
+	%126 = load %type.TypeNode*, %type.TypeNode** %125
+	call void @llvm_PType(%type.TypeNode* %126)
+	%127 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%128 = bitcast %bout.BufIO* %127 to %bout.BufIO*
+	%129 = getelementptr [3 x i8], [3 x i8]* @S.714
+	%130 = bitcast [3 x i8]* %129 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %128, [0 x i8]* %130)
+	%131 = load %symb.SymbNode*, %symb.SymbNode** %s
+	call void @llvm_PName(%symb.SymbNode* %131)
+	%132 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%133 = bitcast %bout.BufIO* %132 to %bout.BufIO*
+	%134 = getelementptr [3 x i8], [3 x i8]* @S.715
+	%135 = bitcast [3 x i8]* %134 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %133, [0 x i8]* %135)
+	%136 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%137 = getelementptr %symb.SymbNode, %symb.SymbNode* %136, i32 0, i32 0
+	store %symb.SymbNode* null, %symb.SymbNode** %137
+	%138 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_gvtail
+	%139 = icmp eq %symb.SymbNode* %138, null
+	br i1 %139, label %L.14, label %L.15
+L.14:
+	%140 = load %symb.SymbNode*, %symb.SymbNode** %s
+	store %symb.SymbNode* %140, %symb.SymbNode** @llvmdb_gvhead
+	%141 = load %symb.SymbNode*, %symb.SymbNode** %s
+	store %symb.SymbNode* %141, %symb.SymbNode** @llvmdb_gvtail
+	br label %L.13
+L.15:
 	%142 = load %symb.SymbNode*, %symb.SymbNode** %s
-	store %symb.SymbNode* %142, %symb.SymbNode** @llvmdb_gvhead
-	%143 = load %symb.SymbNode*, %symb.SymbNode** %s
-	store %symb.SymbNode* %143, %symb.SymbNode** @llvmdb_gvtail
-	br label %L.19
-L.21:
-	%144 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%145 = bitcast %symb.SymbNode* %144 to %symb.SymbNode*
-	%146 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_gvtail
-	%147 = getelementptr %symb.SymbNode, %symb.SymbNode* %146, i32 0, i32 0
-	store %symb.SymbNode* %145, %symb.SymbNode** %147
-	%148 = load %symb.SymbNode*, %symb.SymbNode** %s
-	store %symb.SymbNode* %148, %symb.SymbNode** @llvmdb_gvtail
-	br label %L.19
-L.19:
+	%143 = bitcast %symb.SymbNode* %142 to %symb.SymbNode*
+	%144 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_gvtail
+	%145 = getelementptr %symb.SymbNode, %symb.SymbNode* %144, i32 0, i32 0
+	store %symb.SymbNode* %143, %symb.SymbNode** %145
+	%146 = load %symb.SymbNode*, %symb.SymbNode** %s
+	store %symb.SymbNode* %146, %symb.SymbNode** @llvmdb_gvtail
+	br label %L.13
+L.13:
 	br label %L.2
 L.2:
-	%149 = load i16, i16* @llvmdb_seqno
-	store i16 %149, i16* %rv.0
+	%147 = load i16, i16* @llvmdb_seqno
+	store i16 %147, i16* %rv.0
 	br label %return
 return:
-	%150 = load i16, i16* %rv.0
-	ret i16 %150
+	%148 = load i16, i16* %rv.0
+	ret i16 %148
 }
+@S.716 = private unnamed_addr constant [17 x i8] c"DISubroutineType\00"
+@S.717 = private unnamed_addr constant [8 x i8] c"types: \00"
+@S.718 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_DefSubroutine(i16 zeroext %stag$, %symb.SymbNode* %ps$) nounwind {
 L.0:
 	%stag = alloca i16
@@ -30286,7 +29734,7 @@ L.6:
 	store %symb.SymbNode* %29, %symb.SymbNode** %s
 	br label %L.4
 L.5:
-	%30 = call i16 @llvmdb_PListStart()
+	%30 = call i16 @llvmdb_PNewListStart()
 	store i16 %30, i16* %list
 	%31 = load %symb.SymbNode*, %symb.SymbNode** %ps
 	%32 = getelementptr %symb.SymbNode, %symb.SymbNode* %31, i32 0, i32 4
@@ -30383,50 +29831,22 @@ L.22:
 	call void @llvmdb_PMetaRef(i16 %76, i8 %77)
 	br label %L.19
 L.20:
-	%78 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%79 = load i8, i8* %78
-	%80 = icmp ugt i8 %79, 1
-	br i1 %80, label %L.25, label %L.26
-L.25:
-	%81 = load i16, i16* %stag
-	call void @llvmdb_PDBeg(i16 %81, i16 21, i8 0)
-	call void @llvmdb_PDString([0 x i8]* null, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	%82 = load i16, i16* %list
-	call void @llvmdb_PMetaRef(i16 %82, i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 1)
-	br label %L.24
-L.26:
-	%83 = load i16, i16* %stag
-	call void @llvmdb_PHeader(i16 %83, i16 21)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PString([0 x i8]* null, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_P64(i64 0, i8 0)
-	call void @llvmdb_P64(i64 0, i8 0)
-	call void @llvmdb_P64(i64 0, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PNull(i8 0)
-	%84 = load i16, i16* %list
-	call void @llvmdb_PMetaRef(i16 %84, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 1)
-	br label %L.24
-L.24:
+	%78 = load i16, i16* %stag
+	%79 = getelementptr [17 x i8], [17 x i8]* @S.716
+	%80 = bitcast [17 x i8]* %79 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %78, [0 x i8]* %80)
+	%81 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%82 = bitcast %bout.BufIO* %81 to %bout.BufIO*
+	%83 = getelementptr [8 x i8], [8 x i8]* @S.717
+	%84 = bitcast [8 x i8]* %83 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %82, [0 x i8]* %84)
+	%85 = load i16, i16* %list
+	call void @llvmdb_PMetaRef(i16 %85, i8 3)
+	%86 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%87 = bitcast %bout.BufIO* %86 to %bout.BufIO*
+	%88 = getelementptr [3 x i8], [3 x i8]* @S.718
+	%89 = bitcast [3 x i8]* %88 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %87, [0 x i8]* %89)
 	br label %return
 return:
 	ret void
@@ -30444,12 +29864,43 @@ L.0:
 return:
 	ret void
 }
-@S.675 = private unnamed_addr constant [3 x i8] c" (\00"
-@S.676 = private unnamed_addr constant [3 x i8] c", \00"
-@S.677 = private unnamed_addr constant [4 x i8] c")* \00"
-@S.678 = private unnamed_addr constant [3 x i8] c" (\00"
-@S.679 = private unnamed_addr constant [3 x i8] c", \00"
-@S.680 = private unnamed_addr constant [4 x i8] c")* \00"
+@S.719 = private unnamed_addr constant [13 x i8] c"DISubprogram\00"
+@S.720 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.721 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.722 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.723 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.724 = private unnamed_addr constant [7 x i8] c"type: \00"
+@S.725 = private unnamed_addr constant [10 x i8] c"isLocal: \00"
+@S.726 = private unnamed_addr constant [15 x i8] c"isDefinition: \00"
+@S.727 = private unnamed_addr constant [12 x i8] c"scopeLine: \00"
+@S.728 = private unnamed_addr constant [8 x i8] c"flags: \00"
+@S.729 = private unnamed_addr constant [17 x i8] c"DIFlagPrototyped\00"
+@S.730 = private unnamed_addr constant [14 x i8] c"isOptimized: \00"
+@S.731 = private unnamed_addr constant [11 x i8] c"function: \00"
+@S.732 = private unnamed_addr constant [3 x i8] c" (\00"
+@S.733 = private unnamed_addr constant [3 x i8] c", \00"
+@S.734 = private unnamed_addr constant [4 x i8] c")* \00"
+@S.735 = private unnamed_addr constant [12 x i8] c"variables: \00"
+@S.736 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.737 = private unnamed_addr constant [16 x i8] c"DILocalVariable\00"
+@S.738 = private unnamed_addr constant [6 x i8] c"tag: \00"
+@S.739 = private unnamed_addr constant [20 x i8] c"DW_TAG_arg_variable\00"
+@S.740 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.741 = private unnamed_addr constant [6 x i8] c"arg: \00"
+@S.742 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.743 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.744 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.745 = private unnamed_addr constant [7 x i8] c"type: \00"
+@S.746 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.747 = private unnamed_addr constant [16 x i8] c"DILocalVariable\00"
+@S.748 = private unnamed_addr constant [6 x i8] c"tag: \00"
+@S.749 = private unnamed_addr constant [21 x i8] c"DW_TAG_auto_variable\00"
+@S.750 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.751 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.752 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.753 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.754 = private unnamed_addr constant [7 x i8] c"type: \00"
+@S.755 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_ProcFinish(%symb.SymbNode* %ps$) nounwind {
 L.0:
 	%ps = alloca %symb.SymbNode*
@@ -30466,391 +29917,387 @@ L.0:
 	store i16 %1, i16* @llvmdb_seqno
 	%2 = load i16, i16* @llvmdb_seqno
 	store i16 %2, i16* %stype
-	%3 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%4 = load i8, i8* %3
-	%5 = icmp ugt i8 %4, 1
-	br i1 %5, label %L.2, label %L.3
-L.2:
-	%6 = load i16, i16* @llvmdb_subr
-	call void @llvmdb_PDBeg(i16 %6, i16 46, i8 0)
-	%7 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	call void @llvmdb_PDFullName(%symb.SymbNode* %7, i8 0)
-	%8 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	call void @llvmdb_PDFullName(%symb.SymbNode* %8, i8 0)
-	call void @llvmdb_PDString([0 x i8]* null, i8 0)
-	%9 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%10 = getelementptr %symb.SymbNode, %symb.SymbNode* %9, i32 0, i32 11
-	%11 = load i16, i16* %10
-	%12 = zext i16 %11 to i32
-	call void @llvmdb_PDUint(i32 %12, i8 0)
-	call void @llvmdb_PDBoolean(i8 0, i8 0)
-	%13 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%14 = getelementptr %symb.SymbNode, %symb.SymbNode* %13, i32 0, i32 14
-	%15 = load i8, i8* %14
-	%16 = icmp ne i8 %15, 5
-	%17 = zext i1 %16 to i8
-	call void @llvmdb_PDBoolean(i8 %17, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDBoolean(i8 0, i8 0)
-	%18 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%19 = getelementptr %symb.SymbNode, %symb.SymbNode* %18, i32 0, i32 11
-	%20 = load i16, i16* %19
-	%21 = zext i16 %20 to i32
-	%22 = add i32 %21, 1
-	call void @llvmdb_PDUint(i32 %22, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	%23 = load i16, i16* @llvmdb_filenamedir
-	call void @llvmdb_PMetaRef(i16 %23, i8 0)
-	call void @llvmdb_PContext(i8 0)
-	%24 = load i16, i16* %stype
-	call void @llvmdb_PMetaRef(i16 %24, i8 0)
-	call void @llvmdb_PNull(i8 0)
+	%3 = load i16, i16* @llvmdb_subr
+	%4 = getelementptr [13 x i8], [13 x i8]* @S.719
+	%5 = bitcast [13 x i8]* %4 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %3, [0 x i8]* %5)
+	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
+	%8 = getelementptr [7 x i8], [7 x i8]* @S.720
+	%9 = bitcast [7 x i8]* %8 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
+	%10 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	call void @llvmdb_PFullName(%symb.SymbNode* %10, i8 0)
+	%11 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%12 = bitcast %bout.BufIO* %11 to %bout.BufIO*
+	%13 = getelementptr [8 x i8], [8 x i8]* @S.721
+	%14 = bitcast [8 x i8]* %13 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %14)
+	%15 = load i16, i16* @llvmdb_filenamedir
+	call void @llvmdb_PMetaRef(i16 %15, i8 0)
+	%16 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%17 = bitcast %bout.BufIO* %16 to %bout.BufIO*
+	%18 = getelementptr [7 x i8], [7 x i8]* @S.722
+	%19 = bitcast [7 x i8]* %18 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %17, [0 x i8]* %19)
+	%20 = load i16, i16* @llvmdb_filenamedir
+	call void @llvmdb_PMetaRef(i16 %20, i8 0)
+	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
+	%23 = getelementptr [7 x i8], [7 x i8]* @S.723
+	%24 = bitcast [7 x i8]* %23 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
 	%25 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%26 = getelementptr %symb.SymbNode, %symb.SymbNode* %25, i32 0, i32 4
-	%27 = load %type.TypeListEntry*, %type.TypeListEntry** %26
-	call void @llvm_PRetvType(%type.TypeListEntry* %27, i8 0)
-	%28 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%29 = bitcast %bout.BufIO* %28 to %bout.BufIO*
-	%30 = getelementptr [3 x i8], [3 x i8]* @S.675
-	%31 = bitcast [3 x i8]* %30 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %29, [0 x i8]* %31)
-	%32 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%33 = getelementptr %symb.SymbNode, %symb.SymbNode* %32, i32 0, i32 3
-	%34 = load %symb.SymbNode*, %symb.SymbNode** %33
-	%35 = bitcast %symb.SymbNode* %34 to %symb.SymbNode*
-	store %symb.SymbNode* %35, %symb.SymbNode** %s
-	br label %L.4
-L.4:
-	%36 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%37 = icmp ne %symb.SymbNode* %36, null
-	%38 = xor i1 %37, true
-	br i1 %38, label %L.5, label %L.6
-L.6:
-	%39 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%40 = getelementptr %symb.SymbNode, %symb.SymbNode* %39, i32 0, i32 1
-	%41 = load %type.TypeNode*, %type.TypeNode** %40
-	call void @llvm_PType(%type.TypeNode* %41)
-	%42 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%43 = getelementptr %symb.SymbNode, %symb.SymbNode* %42, i32 0, i32 0
-	%44 = load %symb.SymbNode*, %symb.SymbNode** %43
-	%45 = bitcast %symb.SymbNode* %44 to %symb.SymbNode*
-	store %symb.SymbNode* %45, %symb.SymbNode** %s
-	%46 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%47 = icmp ne %symb.SymbNode* %46, null
-	br i1 %47, label %L.8, label %L.7
-L.8:
-	%48 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%49 = bitcast %bout.BufIO* %48 to %bout.BufIO*
-	%50 = getelementptr [3 x i8], [3 x i8]* @S.676
-	%51 = bitcast [3 x i8]* %50 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %49, [0 x i8]* %51)
-	br label %L.7
-L.7:
-	br label %L.4
-L.5:
+	%26 = getelementptr %symb.SymbNode, %symb.SymbNode* %25, i32 0, i32 11
+	%27 = load i16, i16* %26
+	%28 = zext i16 %27 to i32
+	call void @llvmdb_PUint(i32 %28, i8 0)
+	%29 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%30 = bitcast %bout.BufIO* %29 to %bout.BufIO*
+	%31 = getelementptr [7 x i8], [7 x i8]* @S.724
+	%32 = bitcast [7 x i8]* %31 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %30, [0 x i8]* %32)
+	%33 = load i16, i16* %stype
+	call void @llvmdb_PMetaRef(i16 %33, i8 0)
+	%34 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%35 = bitcast %bout.BufIO* %34 to %bout.BufIO*
+	%36 = getelementptr [10 x i8], [10 x i8]* @S.725
+	%37 = bitcast [10 x i8]* %36 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
+	%38 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%39 = getelementptr %symb.SymbNode, %symb.SymbNode* %38, i32 0, i32 14
+	%40 = load i8, i8* %39
+	%41 = icmp ne i8 %40, 3
+	%42 = zext i1 %41 to i8
+	call void @llvmdb_PBoolean(i8 %42, i8 0)
+	%43 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%44 = bitcast %bout.BufIO* %43 to %bout.BufIO*
+	%45 = getelementptr [15 x i8], [15 x i8]* @S.726
+	%46 = bitcast [15 x i8]* %45 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %44, [0 x i8]* %46)
+	%47 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%48 = getelementptr %symb.SymbNode, %symb.SymbNode* %47, i32 0, i32 14
+	%49 = load i8, i8* %48
+	%50 = icmp ne i8 %49, 5
+	%51 = zext i1 %50 to i8
+	call void @llvmdb_PBoolean(i8 %51, i8 0)
 	%52 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%53 = bitcast %bout.BufIO* %52 to %bout.BufIO*
-	%54 = getelementptr [4 x i8], [4 x i8]* @S.677
-	%55 = bitcast [4 x i8]* %54 to [0 x i8]*
+	%54 = getelementptr [12 x i8], [12 x i8]* @S.727
+	%55 = bitcast [12 x i8]* %54 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %53, [0 x i8]* %55)
 	%56 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	call void @llvm_PName(%symb.SymbNode* %56)
-	call void @llvmdb_PTerminator(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	%57 = load i16, i16* @llvmdb_nullmeta
-	store i16 %57, i16* %fvars
-	%58 = load i16, i16* %fvars
-	call void @llvmdb_PMetaRef(i16 %58, i8 1)
-	br label %L.1
-L.3:
-	%59 = load i16, i16* @llvmdb_subr
-	call void @llvmdb_PHeader(i16 %59, i16 46)
-	%60 = load i16, i16* @llvmdb_filenamedir
-	call void @llvmdb_PMetaRef(i16 %60, i8 0)
-	call void @llvmdb_PContext(i8 0)
+	%57 = getelementptr %symb.SymbNode, %symb.SymbNode* %56, i32 0, i32 11
+	%58 = load i16, i16* %57
+	%59 = zext i16 %58 to i32
+	%60 = add i32 %59, 1
+	call void @llvmdb_PUint(i32 %60, i8 0)
 	%61 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	call void @llvmdb_PFullName(%symb.SymbNode* %61, i8 0)
-	%62 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	call void @llvmdb_PFullName(%symb.SymbNode* %62, i8 0)
-	call void @llvmdb_PString([0 x i8]* null, i8 0)
-	%63 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%64 = getelementptr %symb.SymbNode, %symb.SymbNode* %63, i32 0, i32 11
-	%65 = load i16, i16* %64
-	%66 = zext i16 %65 to i32
-	call void @llvmdb_P32(i32 %66, i8 0)
-	%67 = load i16, i16* %stype
-	call void @llvmdb_PMetaRef(i16 %67, i8 0)
-	call void @llvmdb_PBoolean(i8 0, i8 0)
-	%68 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%69 = getelementptr %symb.SymbNode, %symb.SymbNode* %68, i32 0, i32 14
-	%70 = load i8, i8* %69
-	%71 = icmp ne i8 %70, 5
-	%72 = zext i1 %71 to i8
-	call void @llvmdb_PBoolean(i8 %72, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_PBoolean(i8 0, i8 0)
-	%73 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%74 = getelementptr %symb.SymbNode, %symb.SymbNode* %73, i32 0, i32 4
-	%75 = load %type.TypeListEntry*, %type.TypeListEntry** %74
-	call void @llvm_PRetvType(%type.TypeListEntry* %75, i8 0)
-	%76 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%77 = bitcast %bout.BufIO* %76 to %bout.BufIO*
-	%78 = getelementptr [3 x i8], [3 x i8]* @S.678
-	%79 = bitcast [3 x i8]* %78 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %77, [0 x i8]* %79)
-	%80 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%81 = getelementptr %symb.SymbNode, %symb.SymbNode* %80, i32 0, i32 3
-	%82 = load %symb.SymbNode*, %symb.SymbNode** %81
-	%83 = bitcast %symb.SymbNode* %82 to %symb.SymbNode*
-	store %symb.SymbNode* %83, %symb.SymbNode** %s
-	br label %L.9
-L.9:
-	%84 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%85 = icmp ne %symb.SymbNode* %84, null
-	%86 = xor i1 %85, true
-	br i1 %86, label %L.10, label %L.11
-L.11:
-	%87 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%88 = getelementptr %symb.SymbNode, %symb.SymbNode* %87, i32 0, i32 1
-	%89 = load %type.TypeNode*, %type.TypeNode** %88
-	call void @llvm_PType(%type.TypeNode* %89)
-	%90 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%91 = getelementptr %symb.SymbNode, %symb.SymbNode* %90, i32 0, i32 0
-	%92 = load %symb.SymbNode*, %symb.SymbNode** %91
-	%93 = bitcast %symb.SymbNode* %92 to %symb.SymbNode*
-	store %symb.SymbNode* %93, %symb.SymbNode** %s
-	%94 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%95 = icmp ne %symb.SymbNode* %94, null
-	br i1 %95, label %L.13, label %L.12
-L.13:
-	%96 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%97 = bitcast %bout.BufIO* %96 to %bout.BufIO*
-	%98 = getelementptr [3 x i8], [3 x i8]* @S.679
-	%99 = bitcast [3 x i8]* %98 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %97, [0 x i8]* %99)
-	br label %L.12
-L.12:
-	br label %L.9
-L.10:
-	%100 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%101 = bitcast %bout.BufIO* %100 to %bout.BufIO*
-	%102 = getelementptr [4 x i8], [4 x i8]* @S.680
-	%103 = bitcast [4 x i8]* %102 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %101, [0 x i8]* %103)
-	%104 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	call void @llvm_PName(%symb.SymbNode* %104)
-	call void @llvmdb_PTerminator(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	call void @llvmdb_PNull(i8 0)
-	%105 = load i16, i16* @llvmdb_nullmeta
-	store i16 %105, i16* %fvars
-	%106 = load i16, i16* %fvars
-	call void @llvmdb_PMetaRef(i16 %106, i8 0)
-	%107 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%108 = getelementptr %symb.SymbNode, %symb.SymbNode* %107, i32 0, i32 11
-	%109 = load i16, i16* %108
-	%110 = zext i16 %109 to i32
-	%111 = add i32 %110, 1
-	call void @llvmdb_P32(i32 %111, i8 1)
+	%62 = getelementptr %symb.SymbNode, %symb.SymbNode* %61, i32 0, i32 3
+	%63 = load %symb.SymbNode*, %symb.SymbNode** %62
+	%64 = icmp ne %symb.SymbNode* %63, null
+	br i1 %64, label %L.2, label %L.1
+L.2:
+	%65 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%66 = bitcast %bout.BufIO* %65 to %bout.BufIO*
+	%67 = getelementptr [8 x i8], [8 x i8]* @S.728
+	%68 = bitcast [8 x i8]* %67 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %66, [0 x i8]* %68)
+	%69 = getelementptr [17 x i8], [17 x i8]* @S.729
+	%70 = bitcast [17 x i8]* %69 to [0 x i8]*
+	call void @llvmdb_PString([0 x i8]* %70, i8 0)
 	br label %L.1
 L.1:
-	%112 = load i16, i16* @llvmdb_subr
-	%113 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%114 = getelementptr %symb.SymbNode, %symb.SymbNode* %113, i32 0, i32 12
-	store i16 %112, i16* %114
-	%115 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%116 = getelementptr %symb.SymbNode, %symb.SymbNode* %115, i32 0, i32 0
-	store %symb.SymbNode* null, %symb.SymbNode** %116
-	%117 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_sptail
-	%118 = icmp eq %symb.SymbNode* %117, null
-	br i1 %118, label %L.15, label %L.16
+	%71 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%72 = bitcast %bout.BufIO* %71 to %bout.BufIO*
+	%73 = getelementptr [14 x i8], [14 x i8]* @S.730
+	%74 = bitcast [14 x i8]* %73 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %72, [0 x i8]* %74)
+	call void @llvmdb_PBoolean(i8 0, i8 0)
+	%75 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%76 = bitcast %bout.BufIO* %75 to %bout.BufIO*
+	%77 = getelementptr [11 x i8], [11 x i8]* @S.731
+	%78 = bitcast [11 x i8]* %77 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %76, [0 x i8]* %78)
+	%79 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%80 = getelementptr %symb.SymbNode, %symb.SymbNode* %79, i32 0, i32 4
+	%81 = load %type.TypeListEntry*, %type.TypeListEntry** %80
+	call void @llvm_PRetvType(%type.TypeListEntry* %81, i8 0)
+	%82 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%83 = bitcast %bout.BufIO* %82 to %bout.BufIO*
+	%84 = getelementptr [3 x i8], [3 x i8]* @S.732
+	%85 = bitcast [3 x i8]* %84 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %83, [0 x i8]* %85)
+	%86 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%87 = getelementptr %symb.SymbNode, %symb.SymbNode* %86, i32 0, i32 3
+	%88 = load %symb.SymbNode*, %symb.SymbNode** %87
+	%89 = bitcast %symb.SymbNode* %88 to %symb.SymbNode*
+	store %symb.SymbNode* %89, %symb.SymbNode** %s
+	br label %L.3
+L.3:
+	%90 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%91 = icmp ne %symb.SymbNode* %90, null
+	%92 = xor i1 %91, true
+	br i1 %92, label %L.4, label %L.5
+L.5:
+	%93 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%94 = getelementptr %symb.SymbNode, %symb.SymbNode* %93, i32 0, i32 1
+	%95 = load %type.TypeNode*, %type.TypeNode** %94
+	call void @llvm_PType(%type.TypeNode* %95)
+	%96 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%97 = getelementptr %symb.SymbNode, %symb.SymbNode* %96, i32 0, i32 0
+	%98 = load %symb.SymbNode*, %symb.SymbNode** %97
+	%99 = bitcast %symb.SymbNode* %98 to %symb.SymbNode*
+	store %symb.SymbNode* %99, %symb.SymbNode** %s
+	%100 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%101 = icmp ne %symb.SymbNode* %100, null
+	br i1 %101, label %L.7, label %L.6
+L.7:
+	%102 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%103 = bitcast %bout.BufIO* %102 to %bout.BufIO*
+	%104 = getelementptr [3 x i8], [3 x i8]* @S.733
+	%105 = bitcast [3 x i8]* %104 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %103, [0 x i8]* %105)
+	br label %L.6
+L.6:
+	br label %L.3
+L.4:
+	%106 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%107 = bitcast %bout.BufIO* %106 to %bout.BufIO*
+	%108 = getelementptr [4 x i8], [4 x i8]* @S.734
+	%109 = bitcast [4 x i8]* %108 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %107, [0 x i8]* %109)
+	%110 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	call void @llvm_PName(%symb.SymbNode* %110)
+	call void @llvmdb_PTerminator(i8 0)
+	%111 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%112 = bitcast %bout.BufIO* %111 to %bout.BufIO*
+	%113 = getelementptr [12 x i8], [12 x i8]* @S.735
+	%114 = bitcast [12 x i8]* %113 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %112, [0 x i8]* %114)
+	%115 = load i16, i16* @llvmdb_nullmeta
+	call void @llvmdb_PMetaRef(i16 %115, i8 3)
+	%116 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%117 = bitcast %bout.BufIO* %116 to %bout.BufIO*
+	%118 = getelementptr [3 x i8], [3 x i8]* @S.736
+	%119 = bitcast [3 x i8]* %118 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %117, [0 x i8]* %119)
+	%120 = load i16, i16* @llvmdb_subr
+	%121 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%122 = getelementptr %symb.SymbNode, %symb.SymbNode* %121, i32 0, i32 12
+	store i16 %120, i16* %122
+	%123 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%124 = getelementptr %symb.SymbNode, %symb.SymbNode* %123, i32 0, i32 0
+	store %symb.SymbNode* null, %symb.SymbNode** %124
+	%125 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_sptail
+	%126 = icmp eq %symb.SymbNode* %125, null
+	br i1 %126, label %L.9, label %L.10
+L.9:
+	%127 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	store %symb.SymbNode* %127, %symb.SymbNode** @llvmdb_sphead
+	br label %L.8
+L.10:
+	%128 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%129 = bitcast %symb.SymbNode* %128 to %symb.SymbNode*
+	%130 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_sptail
+	%131 = getelementptr %symb.SymbNode, %symb.SymbNode* %130, i32 0, i32 0
+	store %symb.SymbNode* %129, %symb.SymbNode** %131
+	br label %L.8
+L.8:
+	%132 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	store %symb.SymbNode* %132, %symb.SymbNode** @llvmdb_sptail
+	%133 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%134 = call i32 @llvmdb_DefFormals(%symb.SymbNode* %133)
+	%135 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%136 = call i32 @llvmdb_DefRetvs(%symb.SymbNode* %135)
+	%137 = load i16, i16* %stype
+	%138 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	call void @llvmdb_DefSubroutine(i16 %137, %symb.SymbNode* %138)
+	store i32 0, i32* %argno
+	%139 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%140 = getelementptr %symb.SymbNode, %symb.SymbNode* %139, i32 0, i32 3
+	%141 = load %symb.SymbNode*, %symb.SymbNode** %140
+	%142 = bitcast %symb.SymbNode* %141 to %symb.SymbNode*
+	store %symb.SymbNode* %142, %symb.SymbNode** %s
+	br label %L.11
+L.11:
+	%143 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%144 = icmp ne %symb.SymbNode* %143, null
+	%145 = xor i1 %144, true
+	br i1 %145, label %L.12, label %L.13
+L.13:
+	%146 = load i32, i32* %argno
+	%147 = add i32 %146, 1
+	store i32 %147, i32* %argno
+	%148 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%149 = getelementptr %symb.SymbNode, %symb.SymbNode* %148, i32 0, i32 1
+	%150 = load %type.TypeNode*, %type.TypeNode** %149
+	%151 = call i16 @llvmdb_DefType(%type.TypeNode* %150)
+	store i16 %151, i16* %ttag
+	%152 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%153 = getelementptr %symb.SymbNode, %symb.SymbNode* %152, i32 0, i32 12
+	%154 = load i16, i16* %153
+	store i16 %154, i16* %stag
+	%155 = load i16, i16* %stag
+	%156 = icmp eq i16 %155, 0
+	br i1 %156, label %L.15, label %L.14
 L.15:
-	%119 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	store %symb.SymbNode* %119, %symb.SymbNode** @llvmdb_sphead
-	br label %L.14
-L.16:
-	%120 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%121 = bitcast %symb.SymbNode* %120 to %symb.SymbNode*
-	%122 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_sptail
-	%123 = getelementptr %symb.SymbNode, %symb.SymbNode* %122, i32 0, i32 0
-	store %symb.SymbNode* %121, %symb.SymbNode** %123
+	%157 = load i16, i16* @llvmdb_seqno
+	%158 = add i16 %157, 1
+	store i16 %158, i16* @llvmdb_seqno
+	%159 = load i16, i16* @llvmdb_seqno
+	store i16 %159, i16* %stag
 	br label %L.14
 L.14:
-	%124 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	store %symb.SymbNode* %124, %symb.SymbNode** @llvmdb_sptail
-	%125 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%126 = call i32 @llvmdb_DefFormals(%symb.SymbNode* %125)
-	%127 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%128 = call i16 @llvmdb_DefRetvs(%symb.SymbNode* %127)
-	%129 = load i16, i16* %stype
-	%130 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	call void @llvmdb_DefSubroutine(i16 %129, %symb.SymbNode* %130)
-	store i32 0, i32* %argno
-	%131 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%132 = getelementptr %symb.SymbNode, %symb.SymbNode* %131, i32 0, i32 3
-	%133 = load %symb.SymbNode*, %symb.SymbNode** %132
-	%134 = bitcast %symb.SymbNode* %133 to %symb.SymbNode*
-	store %symb.SymbNode* %134, %symb.SymbNode** %s
-	br label %L.17
-L.17:
-	%135 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%136 = icmp ne %symb.SymbNode* %135, null
-	%137 = xor i1 %136, true
-	br i1 %137, label %L.18, label %L.19
-L.19:
-	%138 = load i32, i32* %argno
-	%139 = add i32 %138, 1
-	store i32 %139, i32* %argno
-	%140 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%141 = getelementptr %symb.SymbNode, %symb.SymbNode* %140, i32 0, i32 1
-	%142 = load %type.TypeNode*, %type.TypeNode** %141
-	%143 = call i16 @llvmdb_DefType(%type.TypeNode* %142)
-	store i16 %143, i16* %ttag
-	%144 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%145 = getelementptr %symb.SymbNode, %symb.SymbNode* %144, i32 0, i32 12
-	%146 = load i16, i16* %145
-	store i16 %146, i16* %stag
-	%147 = load i16, i16* %stag
-	%148 = icmp eq i16 %147, 0
-	br i1 %148, label %L.21, label %L.20
-L.21:
-	%149 = load i16, i16* @llvmdb_seqno
-	%150 = add i16 %149, 1
-	store i16 %150, i16* @llvmdb_seqno
-	%151 = load i16, i16* @llvmdb_seqno
-	store i16 %151, i16* %stag
-	br label %L.20
-L.20:
-	%152 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%153 = load i8, i8* %152
-	%154 = icmp ugt i8 %153, 1
-	br i1 %154, label %L.23, label %L.24
-L.23:
-	%155 = load i16, i16* %stag
-	call void @llvmdb_PDBeg(i16 %155, i16 257, i8 0)
-	%156 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PDName(%symb.SymbNode* %156, i8 0)
-	%157 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%158 = getelementptr %symb.SymbNode, %symb.SymbNode* %157, i32 0, i32 11
-	%159 = load i16, i16* %158
-	%160 = zext i16 %159 to i32
-	%161 = load i32, i32* %argno
-	%162 = shl i32 %161, 24
-	%163 = or i32 %160, %162
-	call void @llvmdb_PDUint(i32 %163, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	%164 = load i16, i16* @llvmdb_subr
-	call void @llvmdb_PMetaRef(i16 %164, i8 0)
-	%165 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PMetaRef(i16 %165, i8 0)
-	%166 = load i16, i16* %ttag
-	call void @llvmdb_PMetaRef(i16 %166, i8 1)
-	br label %L.22
-L.24:
-	%167 = load i16, i16* %stag
-	call void @llvmdb_PHeader(i16 %167, i16 257)
-	%168 = load i16, i16* @llvmdb_subr
-	call void @llvmdb_PMetaRef(i16 %168, i8 0)
-	%169 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PName(%symb.SymbNode* %169, i8 0)
-	%170 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PMetaRef(i16 %170, i8 0)
-	%171 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%172 = getelementptr %symb.SymbNode, %symb.SymbNode* %171, i32 0, i32 11
-	%173 = load i16, i16* %172
-	%174 = zext i16 %173 to i32
-	%175 = load i32, i32* %argno
-	%176 = shl i32 %175, 24
-	%177 = or i32 %174, %176
-	call void @llvmdb_P32(i32 %177, i8 0)
-	%178 = load i16, i16* %ttag
-	call void @llvmdb_PMetaRef(i16 %178, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_P32(i32 0, i8 1)
-	br label %L.22
-L.22:
-	%179 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%180 = getelementptr %symb.SymbNode, %symb.SymbNode* %179, i32 0, i32 0
-	%181 = load %symb.SymbNode*, %symb.SymbNode** %180
-	%182 = bitcast %symb.SymbNode* %181 to %symb.SymbNode*
-	store %symb.SymbNode* %182, %symb.SymbNode** %s
-	br label %L.17
+	%160 = load i16, i16* %stag
+	%161 = getelementptr [16 x i8], [16 x i8]* @S.737
+	%162 = bitcast [16 x i8]* %161 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %160, [0 x i8]* %162)
+	%163 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%164 = bitcast %bout.BufIO* %163 to %bout.BufIO*
+	%165 = getelementptr [6 x i8], [6 x i8]* @S.738
+	%166 = bitcast [6 x i8]* %165 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %164, [0 x i8]* %166)
+	%167 = getelementptr [20 x i8], [20 x i8]* @S.739
+	%168 = bitcast [20 x i8]* %167 to [0 x i8]*
+	call void @llvmdb_PString([0 x i8]* %168, i8 0)
+	%169 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%170 = bitcast %bout.BufIO* %169 to %bout.BufIO*
+	%171 = getelementptr [7 x i8], [7 x i8]* @S.740
+	%172 = bitcast [7 x i8]* %171 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %170, [0 x i8]* %172)
+	%173 = load %symb.SymbNode*, %symb.SymbNode** %s
+	call void @llvmdb_PName(%symb.SymbNode* %173, i8 0)
+	%174 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%175 = bitcast %bout.BufIO* %174 to %bout.BufIO*
+	%176 = getelementptr [6 x i8], [6 x i8]* @S.741
+	%177 = bitcast [6 x i8]* %176 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %175, [0 x i8]* %177)
+	%178 = load i32, i32* %argno
+	call void @llvmdb_PUint(i32 %178, i8 0)
+	%179 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%180 = bitcast %bout.BufIO* %179 to %bout.BufIO*
+	%181 = getelementptr [8 x i8], [8 x i8]* @S.742
+	%182 = bitcast [8 x i8]* %181 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %180, [0 x i8]* %182)
+	%183 = load i16, i16* @llvmdb_subr
+	call void @llvmdb_PMetaRef(i16 %183, i8 0)
+	%184 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%185 = bitcast %bout.BufIO* %184 to %bout.BufIO*
+	%186 = getelementptr [7 x i8], [7 x i8]* @S.743
+	%187 = bitcast [7 x i8]* %186 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %185, [0 x i8]* %187)
+	%188 = load i16, i16* @llvmdb_filenamedir
+	call void @llvmdb_PMetaRef(i16 %188, i8 0)
+	%189 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%190 = bitcast %bout.BufIO* %189 to %bout.BufIO*
+	%191 = getelementptr [7 x i8], [7 x i8]* @S.744
+	%192 = bitcast [7 x i8]* %191 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %190, [0 x i8]* %192)
+	%193 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%194 = getelementptr %symb.SymbNode, %symb.SymbNode* %193, i32 0, i32 11
+	%195 = load i16, i16* %194
+	%196 = zext i16 %195 to i32
+	call void @llvmdb_PUint(i32 %196, i8 0)
+	%197 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%198 = bitcast %bout.BufIO* %197 to %bout.BufIO*
+	%199 = getelementptr [7 x i8], [7 x i8]* @S.745
+	%200 = bitcast [7 x i8]* %199 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %198, [0 x i8]* %200)
+	%201 = load i16, i16* %ttag
+	call void @llvmdb_PMetaRef(i16 %201, i8 3)
+	%202 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%203 = bitcast %bout.BufIO* %202 to %bout.BufIO*
+	%204 = getelementptr [3 x i8], [3 x i8]* @S.746
+	%205 = bitcast [3 x i8]* %204 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %203, [0 x i8]* %205)
+	%206 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%207 = getelementptr %symb.SymbNode, %symb.SymbNode* %206, i32 0, i32 0
+	%208 = load %symb.SymbNode*, %symb.SymbNode** %207
+	%209 = bitcast %symb.SymbNode* %208 to %symb.SymbNode*
+	store %symb.SymbNode* %209, %symb.SymbNode** %s
+	br label %L.11
+L.12:
+	%210 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_lvhead
+	store %symb.SymbNode* %210, %symb.SymbNode** %s
+	br label %L.16
+L.16:
+	%211 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%212 = icmp ne %symb.SymbNode* %211, null
+	%213 = xor i1 %212, true
+	br i1 %213, label %L.17, label %L.18
 L.18:
-	%183 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_lvhead
-	store %symb.SymbNode* %183, %symb.SymbNode** %s
-	br label %L.25
-L.25:
-	%184 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%185 = icmp ne %symb.SymbNode* %184, null
-	%186 = xor i1 %185, true
-	br i1 %186, label %L.26, label %L.27
-L.27:
-	%187 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%188 = getelementptr %symb.SymbNode, %symb.SymbNode* %187, i32 0, i32 1
-	%189 = load %type.TypeNode*, %type.TypeNode** %188
-	%190 = call i16 @llvmdb_DefType(%type.TypeNode* %189)
-	store i16 %190, i16* %ttag
-	%191 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%192 = getelementptr %symb.SymbNode, %symb.SymbNode* %191, i32 0, i32 12
-	%193 = load i16, i16* %192
-	store i16 %193, i16* %stag
-	%194 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%195 = load i8, i8* %194
-	%196 = icmp ugt i8 %195, 1
-	br i1 %196, label %L.29, label %L.30
-L.29:
-	%197 = load i16, i16* %stag
-	call void @llvmdb_PDBeg(i16 %197, i16 256, i8 0)
-	%198 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PDName(%symb.SymbNode* %198, i8 0)
-	%199 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%200 = getelementptr %symb.SymbNode, %symb.SymbNode* %199, i32 0, i32 11
-	%201 = load i16, i16* %200
-	%202 = zext i16 %201 to i32
-	call void @llvmdb_PDUint(i32 %202, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	%203 = load i16, i16* @llvmdb_subr
-	call void @llvmdb_PMetaRef(i16 %203, i8 0)
-	%204 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PMetaRef(i16 %204, i8 0)
-	%205 = load i16, i16* %ttag
-	call void @llvmdb_PMetaRef(i16 %205, i8 1)
-	br label %L.28
-L.30:
-	%206 = load i16, i16* %stag
-	call void @llvmdb_PHeader(i16 %206, i16 256)
-	%207 = load i16, i16* @llvmdb_blok
-	call void @llvmdb_PMetaRef(i16 %207, i8 0)
-	%208 = load %symb.SymbNode*, %symb.SymbNode** %s
-	call void @llvmdb_PName(%symb.SymbNode* %208, i8 0)
-	%209 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PMetaRef(i16 %209, i8 0)
-	%210 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%211 = getelementptr %symb.SymbNode, %symb.SymbNode* %210, i32 0, i32 11
-	%212 = load i16, i16* %211
-	%213 = zext i16 %212 to i32
-	call void @llvmdb_P32(i32 %213, i8 0)
-	%214 = load i16, i16* %ttag
-	call void @llvmdb_PMetaRef(i16 %214, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	call void @llvmdb_P32(i32 0, i8 1)
-	br label %L.28
-L.28:
-	%215 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%216 = getelementptr %symb.SymbNode, %symb.SymbNode* %215, i32 0, i32 0
-	%217 = load %symb.SymbNode*, %symb.SymbNode** %216
-	%218 = bitcast %symb.SymbNode* %217 to %symb.SymbNode*
-	store %symb.SymbNode* %218, %symb.SymbNode** %s
-	br label %L.25
-L.26:
+	%214 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%215 = getelementptr %symb.SymbNode, %symb.SymbNode* %214, i32 0, i32 1
+	%216 = load %type.TypeNode*, %type.TypeNode** %215
+	%217 = call i16 @llvmdb_DefType(%type.TypeNode* %216)
+	store i16 %217, i16* %ttag
+	%218 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%219 = getelementptr %symb.SymbNode, %symb.SymbNode* %218, i32 0, i32 12
+	%220 = load i16, i16* %219
+	store i16 %220, i16* %stag
+	%221 = load i16, i16* %stag
+	%222 = getelementptr [16 x i8], [16 x i8]* @S.747
+	%223 = bitcast [16 x i8]* %222 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %221, [0 x i8]* %223)
+	%224 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%225 = bitcast %bout.BufIO* %224 to %bout.BufIO*
+	%226 = getelementptr [6 x i8], [6 x i8]* @S.748
+	%227 = bitcast [6 x i8]* %226 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %225, [0 x i8]* %227)
+	%228 = getelementptr [21 x i8], [21 x i8]* @S.749
+	%229 = bitcast [21 x i8]* %228 to [0 x i8]*
+	call void @llvmdb_PString([0 x i8]* %229, i8 0)
+	%230 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%231 = bitcast %bout.BufIO* %230 to %bout.BufIO*
+	%232 = getelementptr [7 x i8], [7 x i8]* @S.750
+	%233 = bitcast [7 x i8]* %232 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %231, [0 x i8]* %233)
+	%234 = load %symb.SymbNode*, %symb.SymbNode** %s
+	call void @llvmdb_PName(%symb.SymbNode* %234, i8 0)
+	%235 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%236 = bitcast %bout.BufIO* %235 to %bout.BufIO*
+	%237 = getelementptr [8 x i8], [8 x i8]* @S.751
+	%238 = bitcast [8 x i8]* %237 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %236, [0 x i8]* %238)
+	%239 = load i16, i16* @llvmdb_subr
+	call void @llvmdb_PMetaRef(i16 %239, i8 0)
+	%240 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%241 = bitcast %bout.BufIO* %240 to %bout.BufIO*
+	%242 = getelementptr [7 x i8], [7 x i8]* @S.752
+	%243 = bitcast [7 x i8]* %242 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %241, [0 x i8]* %243)
+	%244 = load i16, i16* @llvmdb_filenamedir
+	call void @llvmdb_PMetaRef(i16 %244, i8 0)
+	%245 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%246 = bitcast %bout.BufIO* %245 to %bout.BufIO*
+	%247 = getelementptr [7 x i8], [7 x i8]* @S.753
+	%248 = bitcast [7 x i8]* %247 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %246, [0 x i8]* %248)
+	%249 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%250 = getelementptr %symb.SymbNode, %symb.SymbNode* %249, i32 0, i32 11
+	%251 = load i16, i16* %250
+	%252 = zext i16 %251 to i32
+	call void @llvmdb_PUint(i32 %252, i8 0)
+	%253 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%254 = bitcast %bout.BufIO* %253 to %bout.BufIO*
+	%255 = getelementptr [7 x i8], [7 x i8]* @S.754
+	%256 = bitcast [7 x i8]* %255 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %254, [0 x i8]* %256)
+	%257 = load i16, i16* %ttag
+	call void @llvmdb_PMetaRef(i16 %257, i8 3)
+	%258 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%259 = bitcast %bout.BufIO* %258 to %bout.BufIO*
+	%260 = getelementptr [3 x i8], [3 x i8]* @S.755
+	%261 = bitcast [3 x i8]* %260 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %259, [0 x i8]* %261)
+	%262 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%263 = getelementptr %symb.SymbNode, %symb.SymbNode* %262, i32 0, i32 0
+	%264 = load %symb.SymbNode*, %symb.SymbNode** %263
+	%265 = bitcast %symb.SymbNode* %264 to %symb.SymbNode*
+	store %symb.SymbNode* %265, %symb.SymbNode** %s
+	br label %L.16
+L.17:
 	call void @llvmdb_DefLines()
 	store %symb.SymbNode* null, %symb.SymbNode** @llvmdb_lvhead
 	store %symb.SymbNode* null, %symb.SymbNode** @llvmdb_lvtail
@@ -30874,7 +30321,11 @@ L.0:
 return:
 	ret void
 }
-@S.681 = private unnamed_addr constant [1 x i8] c"\00"
+@S.756 = private unnamed_addr constant [1 x i8] c"\00"
+@S.757 = private unnamed_addr constant [7 x i8] c"DIFile\00"
+@S.758 = private unnamed_addr constant [11 x i8] c"filename: \00"
+@S.759 = private unnamed_addr constant [12 x i8] c"directory: \00"
+@S.760 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_PFileDir(i16 zeroext %seqno$, %symb.SymbNode* %fs$) nounwind {
 L.0:
 	%seqno = alloca i16
@@ -30882,47 +30333,77 @@ L.0:
 	store i16 %seqno$, i16* %seqno
 	store %symb.SymbNode* %fs$, %symb.SymbNode** %fs
 	%i = alloca i32
-	%name = alloca [0 x i8]*
+	%file = alloca [0 x i8]*
+	%dir = alloca [0 x i8]*
 	%0 = load %symb.SymbNode*, %symb.SymbNode** %fs
 	%1 = getelementptr %symb.SymbNode, %symb.SymbNode* %0, i32 0, i32 22
 	%2 = getelementptr [0 x i8], [0 x i8]* %1
 	%3 = bitcast [0 x i8]* %2 to [0 x i8]*
-	store [0 x i8]* %3, [0 x i8]** %name
-	%4 = load [0 x i8]*, [0 x i8]** %name
+	store [0 x i8]* %3, [0 x i8]** %dir
+	%4 = load [0 x i8]*, [0 x i8]** %dir
 	%5 = bitcast [0 x i8]* %4 to [0 x i8]*
 	%6 = call i32 @zstr_rfind([0 x i8]* %5, i8 47, i32 1024)
 	store i32 %6, i32* %i
-	%7 = load i16, i16* %seqno
-	call void @llvmdb_PMetaSeq(i16 %7)
-	%8 = load i32, i32* %i
-	%9 = icmp eq i32 %8, 1024
-	br i1 %9, label %L.2, label %L.3
+	%7 = load i32, i32* %i
+	%8 = icmp eq i32 %7, 1024
+	br i1 %8, label %L.2, label %L.3
 L.2:
-	%10 = load [0 x i8]*, [0 x i8]** %name
-	%11 = bitcast [0 x i8]* %10 to [0 x i8]*
-	call void @llvmdb_PString([0 x i8]* %11, i8 0)
-	%12 = getelementptr [1 x i8], [1 x i8]* @S.681
-	%13 = bitcast [1 x i8]* %12 to [0 x i8]*
-	call void @llvmdb_PString([0 x i8]* %13, i8 1)
+	%9 = load [0 x i8]*, [0 x i8]** %dir
+	store [0 x i8]* %9, [0 x i8]** %file
+	%10 = getelementptr [1 x i8], [1 x i8]* @S.756
+	%11 = bitcast [1 x i8]* %10 to [0 x i8]*
+	store [0 x i8]* %11, [0 x i8]** %dir
 	br label %L.1
 L.3:
-	%14 = load [0 x i8]*, [0 x i8]** %name
-	%15 = load i32, i32* %i
-	%16 = getelementptr [0 x i8], [0 x i8]* %14, i32 0, i32 %15
-	store i8 0, i8* %16
-	%17 = load [0 x i8]*, [0 x i8]** %name
-	%18 = load i32, i32* %i
-	%19 = add i32 %18, 1
-	%20 = getelementptr [0 x i8], [0 x i8]* %17, i32 0, i32 %19
-	%21 = bitcast i8* %20 to [0 x i8]*
-	%22 = getelementptr [0 x i8], [0 x i8]* %21
-	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
-	call void @llvmdb_PString([0 x i8]* %23, i8 0)
-	%24 = load [0 x i8]*, [0 x i8]** %name
-	%25 = bitcast [0 x i8]* %24 to [0 x i8]*
-	call void @llvmdb_PString([0 x i8]* %25, i8 1)
+	%12 = load [0 x i8]*, [0 x i8]** %dir
+	%13 = load i32, i32* %i
+	%14 = add i32 %13, 1
+	%15 = getelementptr [0 x i8], [0 x i8]* %12, i32 0, i32 %14
+	%16 = bitcast i8* %15 to [0 x i8]*
+	%17 = getelementptr [0 x i8], [0 x i8]* %16
+	%18 = bitcast [0 x i8]* %17 to [0 x i8]*
+	store [0 x i8]* %18, [0 x i8]** %file
+	%19 = load [0 x i8]*, [0 x i8]** %dir
+	%20 = load i32, i32* %i
+	%21 = getelementptr [0 x i8], [0 x i8]* %19, i32 0, i32 %20
+	store i8 0, i8* %21
 	br label %L.1
 L.1:
+	%22 = load i16, i16* %seqno
+	%23 = getelementptr [7 x i8], [7 x i8]* @S.757
+	%24 = bitcast [7 x i8]* %23 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %22, [0 x i8]* %24)
+	%25 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%26 = bitcast %bout.BufIO* %25 to %bout.BufIO*
+	%27 = getelementptr [11 x i8], [11 x i8]* @S.758
+	%28 = bitcast [11 x i8]* %27 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
+	%29 = load [0 x i8]*, [0 x i8]** %file
+	%30 = bitcast [0 x i8]* %29 to [0 x i8]*
+	call void @llvmdb_PQString([0 x i8]* %30, i8 0)
+	%31 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
+	%33 = getelementptr [12 x i8], [12 x i8]* @S.759
+	%34 = bitcast [12 x i8]* %33 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %32, [0 x i8]* %34)
+	%35 = load [0 x i8]*, [0 x i8]** %dir
+	%36 = bitcast [0 x i8]* %35 to [0 x i8]*
+	call void @llvmdb_PQString([0 x i8]* %36, i8 3)
+	%37 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%38 = bitcast %bout.BufIO* %37 to %bout.BufIO*
+	%39 = getelementptr [3 x i8], [3 x i8]* @S.760
+	%40 = bitcast [3 x i8]* %39 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %38, [0 x i8]* %40)
+	%41 = load i32, i32* %i
+	%42 = icmp ult i32 %41, 1024
+	br i1 %42, label %L.5, label %L.4
+L.5:
+	%43 = load [0 x i8]*, [0 x i8]** %dir
+	%44 = load i32, i32* %i
+	%45 = getelementptr [0 x i8], [0 x i8]* %43, i32 0, i32 %44
+	store i8 47, i8* %45
+	br label %L.4
+L.4:
 	br label %return
 return:
 	ret void
@@ -30931,48 +30412,40 @@ define internal void @llvmdb_FileStart(%symb.SymbNode* %fs$) nounwind {
 L.0:
 	%fs = alloca %symb.SymbNode*
 	store %symb.SymbNode* %fs$, %symb.SymbNode** %fs
-	%0 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_curfile
-	%1 = load %symb.SymbNode*, %symb.SymbNode** %fs
-	%2 = icmp ne %symb.SymbNode* %0, %1
-	br i1 %2, label %L.2, label %L.1
+	%tag = alloca i16
+	%0 = load %symb.SymbNode*, %symb.SymbNode** %fs
+	%1 = getelementptr %symb.SymbNode, %symb.SymbNode* %0, i32 0, i32 12
+	%2 = load i16, i16* %1
+	store i16 %2, i16* %tag
+	%3 = load %symb.SymbNode*, %symb.SymbNode** %fs
+	%4 = getelementptr %symb.SymbNode, %symb.SymbNode* %3, i32 0, i32 12
+	%5 = load i16, i16* %4
+	%6 = icmp eq i16 %5, 0
+	br i1 %6, label %L.2, label %L.1
 L.2:
-	%3 = load i16, i16* @llvmdb_seqno
-	%4 = add i16 %3, 1
-	store i16 %4, i16* @llvmdb_seqno
-	%5 = load i16, i16* @llvmdb_seqno
-	store i16 %5, i16* @llvmdb_filenamedir
-	%6 = load i16, i16* @llvmdb_filenamedir
-	%7 = load %symb.SymbNode*, %symb.SymbNode** %fs
-	call void @llvmdb_PFileDir(i16 %6, %symb.SymbNode* %7)
-	%8 = load i16, i16* @llvmdb_file
-	%9 = load %symb.SymbNode*, %symb.SymbNode** %fs
-	%10 = getelementptr %symb.SymbNode, %symb.SymbNode* %9, i32 0, i32 12
-	store i16 %8, i16* %10
+	%7 = load i16, i16* @llvmdb_seqno
+	%8 = add i16 %7, 1
+	store i16 %8, i16* @llvmdb_seqno
+	%9 = load i16, i16* @llvmdb_seqno
+	store i16 %9, i16* %tag
+	%10 = load i16, i16* %tag
 	%11 = load %symb.SymbNode*, %symb.SymbNode** %fs
-	store %symb.SymbNode* %11, %symb.SymbNode** @llvmdb_curfile
+	%12 = getelementptr %symb.SymbNode, %symb.SymbNode* %11, i32 0, i32 12
+	store i16 %10, i16* %12
 	br label %L.1
 L.1:
-	%12 = load i16, i16* @llvmdb_seqno
-	%13 = add i16 %12, 1
-	store i16 %13, i16* @llvmdb_seqno
-	%14 = load i16, i16* @llvmdb_seqno
-	store i16 %14, i16* @llvmdb_file
-	%15 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%16 = load i8, i8* %15
-	%17 = icmp ugt i8 %16, 1
-	br i1 %17, label %L.4, label %L.5
-L.4:
-	%18 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PDBeg(i16 %18, i16 41, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	br label %L.3
-L.5:
-	%19 = load i16, i16* @llvmdb_file
-	call void @llvmdb_PHeader(i16 %19, i16 41)
-	br label %L.3
-L.3:
-	%20 = load i16, i16* @llvmdb_filenamedir
-	call void @llvmdb_PMetaRef(i16 %20, i8 1)
+	%13 = load i16, i16* %tag
+	store i16 %13, i16* @llvmdb_filenamedir
+	%14 = load i16, i16* %tag
+	%15 = load %symb.SymbNode*, %symb.SymbNode** %fs
+	call void @llvmdb_PFileDir(i16 %14, %symb.SymbNode* %15)
+	%16 = load i16, i16* %tag
+	%17 = load i32, i32* @llvmdb_fileinx
+	%18 = getelementptr [32 x i16], [32 x i16]* @llvmdb_filenest, i32 0, i32 %17
+	store i16 %16, i16* %18
+	%19 = load i32, i32* @llvmdb_fileinx
+	%20 = add i32 %19, 1
+	store i32 %20, i32* @llvmdb_fileinx
 	br label %return
 return:
 	ret void
@@ -30981,41 +30454,44 @@ define internal void @llvmdb_FileFinish(%symb.SymbNode* %fs$) nounwind {
 L.0:
 	%fs = alloca %symb.SymbNode*
 	store %symb.SymbNode* %fs$, %symb.SymbNode** %fs
-	%ps = alloca %symb.SymbNode*
-	%0 = load %symb.SymbNode*, %symb.SymbNode** %fs
-	%1 = getelementptr %symb.SymbNode, %symb.SymbNode* %0, i32 0, i32 2
-	%2 = load %symb.SymbNode*, %symb.SymbNode** %1
-	%3 = bitcast %symb.SymbNode* %2 to %symb.SymbNode*
-	store %symb.SymbNode* %3, %symb.SymbNode** %ps
-	%4 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%5 = icmp ne %symb.SymbNode* %4, null
-	br i1 %5, label %L.2, label %L.3
+	%0 = load i32, i32* @llvmdb_fileinx
+	%1 = icmp ugt i32 %0, 0
+	br i1 %1, label %L.2, label %L.1
 L.2:
-	%6 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%7 = getelementptr %symb.SymbNode, %symb.SymbNode* %6, i32 0, i32 12
-	%8 = load i16, i16* %7
-	store i16 %8, i16* @llvmdb_file
-	br label %L.1
-L.3:
-	store i16 0, i16* @llvmdb_file
+	%2 = load i32, i32* @llvmdb_fileinx
+	%3 = sub i32 %2, 1
+	store i32 %3, i32* @llvmdb_fileinx
+	%4 = load i32, i32* @llvmdb_fileinx
+	%5 = sub i32 %4, 1
+	%6 = getelementptr [32 x i16], [32 x i16]* @llvmdb_filenest, i32 0, i32 %5
+	%7 = load i16, i16* %6
+	store i16 %7, i16* @llvmdb_filenamedir
 	br label %L.1
 L.1:
 	br label %return
 return:
 	ret void
 }
-@S.682 = private unnamed_addr constant [50 x i8] c"declare void @llvm.dbg.declare(metadata, metadata\00"
-@S.683 = private unnamed_addr constant [11 x i8] c", metadata\00"
-@S.684 = private unnamed_addr constant [21 x i8] c") nounwind readnone\0A\00"
-@S.685 = private unnamed_addr constant [19 x i8] c"!llvm.dbg.cu = !{!\00"
-@S.686 = private unnamed_addr constant [3 x i8] c"}\0A\00"
-@S.687 = private unnamed_addr constant [32 x i8] c"!llvm.module.flags = !{!1, !2}\0A\00"
-@S.688 = private unnamed_addr constant [40 x i8] c"!1 = !{i32 2, !\22Dwarf Version\22, i32 4}\0A\00"
-@S.689 = private unnamed_addr constant [38 x i8] c"!2 = !{i32 2, !\22Debug Info Version\22, \00"
-@S.690 = private unnamed_addr constant [58 x i8] c"!1 = metadata !{i32 2, metadata !\22Dwarf Version\22, i32 4}\0A\00"
-@S.691 = private unnamed_addr constant [56 x i8] c"!2 = metadata !{i32 2, metadata !\22Debug Info Version\22, \00"
-@S.692 = private unnamed_addr constant [13 x i8] c"ESL Compiler\00"
-@S.693 = private unnamed_addr constant [13 x i8] c"ESL compiler\00"
+@S.761 = private unnamed_addr constant [19 x i8] c"!llvm.dbg.cu = !{!\00"
+@S.762 = private unnamed_addr constant [3 x i8] c"}\0A\00"
+@S.763 = private unnamed_addr constant [32 x i8] c"!llvm.module.flags = !{!1, !2}\0A\00"
+@S.764 = private unnamed_addr constant [40 x i8] c"!1 = !{i32 2, !\22Dwarf Version\22, i32 4}\0A\00"
+@S.765 = private unnamed_addr constant [38 x i8] c"!2 = !{i32 2, !\22Debug Info Version\22, \00"
+@S.766 = private unnamed_addr constant [14 x i8] c"DICompileUnit\00"
+@S.767 = private unnamed_addr constant [11 x i8] c"language: \00"
+@S.768 = private unnamed_addr constant [12 x i8] c"DW_LANG_C99\00"
+@S.769 = private unnamed_addr constant [9 x i8] c", file: \00"
+@S.770 = private unnamed_addr constant [11 x i8] c"producer: \00"
+@S.771 = private unnamed_addr constant [13 x i8] c"ESL Compiler\00"
+@S.772 = private unnamed_addr constant [14 x i8] c"isOptimized: \00"
+@S.773 = private unnamed_addr constant [17 x i8] c"runtimeVersion: \00"
+@S.774 = private unnamed_addr constant [15 x i8] c"emissionKind: \00"
+@S.775 = private unnamed_addr constant [14 x i8] c"subprograms: \00"
+@S.776 = private unnamed_addr constant [10 x i8] c"globals: \00"
+@S.777 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.778 = private unnamed_addr constant [4 x i8] c"{}\0A\00"
+@S.779 = private unnamed_addr constant [13 x i8] c"DIExpression\00"
+@S.780 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_ProgStart(%symb.SymbNode* %fs$, i8 zeroext %opt$) nounwind {
 L.0:
 	%fs = alloca %symb.SymbNode*
@@ -31044,178 +30520,144 @@ L.0:
 	store i16 %10, i16* @llvmdb_seqno
 	%11 = load i16, i16* @llvmdb_seqno
 	store i16 %11, i16* @llvmdb_globals
-	%12 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%13 = bitcast %bout.BufIO* %12 to %bout.BufIO*
-	%14 = getelementptr [50 x i8], [50 x i8]* @S.682
-	%15 = bitcast [50 x i8]* %14 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %13, [0 x i8]* %15)
-	%16 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%17 = load i8, i8* %16
-	%18 = icmp ugt i8 %17, 1
-	br i1 %18, label %L.2, label %L.1
-L.2:
+	%12 = load i16, i16* @llvmdb_seqno
+	%13 = add i16 %12, 1
+	store i16 %13, i16* @llvmdb_seqno
+	%14 = load i16, i16* @llvmdb_seqno
+	store i16 %14, i16* @llvmdb_expr
+	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%16 = bitcast %bout.BufIO* %15 to %bout.BufIO*
+	%17 = getelementptr [19 x i8], [19 x i8]* @S.761
+	%18 = bitcast [19 x i8]* %17 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %16, [0 x i8]* %18)
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%20 = bitcast %bout.BufIO* %19 to %bout.BufIO*
-	%21 = getelementptr [11 x i8], [11 x i8]* @S.683
-	%22 = bitcast [11 x i8]* %21 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
-	br label %L.1
-L.1:
+	%21 = load i16, i16* @llvmdb_unit
+	%22 = zext i16 %21 to i32
+	call void @bout_BufIO_uint(%bout.BufIO* %20, i32 %22)
 	%23 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%24 = bitcast %bout.BufIO* %23 to %bout.BufIO*
-	%25 = getelementptr [21 x i8], [21 x i8]* @S.684
-	%26 = bitcast [21 x i8]* %25 to [0 x i8]*
+	%25 = getelementptr [3 x i8], [3 x i8]* @S.762
+	%26 = bitcast [3 x i8]* %25 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %24, [0 x i8]* %26)
 	%27 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%28 = bitcast %bout.BufIO* %27 to %bout.BufIO*
-	%29 = getelementptr [19 x i8], [19 x i8]* @S.685
-	%30 = bitcast [19 x i8]* %29 to [0 x i8]*
+	%29 = getelementptr [32 x i8], [32 x i8]* @S.763
+	%30 = bitcast [32 x i8]* %29 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %28, [0 x i8]* %30)
 	%31 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
-	%33 = load i16, i16* @llvmdb_unit
-	%34 = zext i16 %33 to i32
-	call void @bout_BufIO_uint(%bout.BufIO* %32, i32 %34)
+	%33 = getelementptr [40 x i8], [40 x i8]* @S.764
+	%34 = bitcast [40 x i8]* %33 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %32, [0 x i8]* %34)
 	%35 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%36 = bitcast %bout.BufIO* %35 to %bout.BufIO*
-	%37 = getelementptr [3 x i8], [3 x i8]* @S.686
-	%38 = bitcast [3 x i8]* %37 to [0 x i8]*
+	%37 = getelementptr [38 x i8], [38 x i8]* @S.765
+	%38 = bitcast [38 x i8]* %37 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %36, [0 x i8]* %38)
-	%39 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%40 = bitcast %bout.BufIO* %39 to %bout.BufIO*
-	%41 = getelementptr [32 x i8], [32 x i8]* @S.687
-	%42 = bitcast [32 x i8]* %41 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %40, [0 x i8]* %42)
-	%43 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%44 = load i8, i8* %43
-	%45 = icmp ugt i8 %44, 1
-	br i1 %45, label %L.4, label %L.5
-L.4:
-	%46 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%47 = bitcast %bout.BufIO* %46 to %bout.BufIO*
-	%48 = getelementptr [40 x i8], [40 x i8]* @S.688
-	%49 = bitcast [40 x i8]* %48 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %47, [0 x i8]* %49)
-	%50 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%51 = bitcast %bout.BufIO* %50 to %bout.BufIO*
-	%52 = getelementptr [38 x i8], [38 x i8]* @S.689
-	%53 = bitcast [38 x i8]* %52 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %51, [0 x i8]* %53)
-	%54 = load i16, i16* @llvmdb_seqno
-	%55 = add i16 %54, 1
-	store i16 %55, i16* @llvmdb_seqno
-	%56 = load i16, i16* @llvmdb_seqno
-	store i16 %56, i16* @llvmdb_expr
-	br label %L.3
-L.5:
-	%57 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%58 = bitcast %bout.BufIO* %57 to %bout.BufIO*
-	%59 = getelementptr [58 x i8], [58 x i8]* @S.690
-	%60 = bitcast [58 x i8]* %59 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %58, [0 x i8]* %60)
-	%61 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%62 = bitcast %bout.BufIO* %61 to %bout.BufIO*
-	%63 = getelementptr [56 x i8], [56 x i8]* @S.691
-	%64 = bitcast [56 x i8]* %63 to [0 x i8]*
-	call void @bout_BufIO_str(%bout.BufIO* %62, [0 x i8]* %64)
-	br label %L.3
-L.3:
-	%65 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%66 = load i8, i8* %65
-	%67 = zext i8 %66 to i32
-	call void @llvmdb_P32(i32 %67, i8 1)
-	%68 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%69 = load i8, i8* %68
-	%70 = icmp ugt i8 %69, 1
-	br i1 %70, label %L.7, label %L.8
-L.7:
-	%71 = load i16, i16* @llvmdb_unit
-	call void @llvmdb_PDBeg(i16 %71, i16 17, i8 0)
-	call void @llvmdb_PDUint(i32 12, i8 0)
-	%72 = getelementptr [13 x i8], [13 x i8]* @S.692
-	%73 = bitcast [13 x i8]* %72 to [0 x i8]*
-	call void @llvmdb_PDString([0 x i8]* %73, i8 0)
-	call void @llvmdb_PDBoolean(i8 0, i8 0)
-	call void @llvmdb_PDString([0 x i8]* null, i8 0)
-	call void @llvmdb_PDUint(i32 0, i8 0)
-	call void @llvmdb_PDString([0 x i8]* null, i8 0)
-	call void @llvmdb_PDUint(i32 1, i8 1)
-	call void @llvmdb_PDEnd(i8 0)
-	%74 = load i16, i16* @llvmdb_filenamedir
-	call void @llvmdb_PMetaRef(i16 %74, i8 0)
-	%75 = load i16, i16* @llvmdb_nullmeta
-	call void @llvmdb_PMetaRef(i16 %75, i8 0)
-	%76 = load i16, i16* @llvmdb_nullmeta
-	call void @llvmdb_PMetaRef(i16 %76, i8 0)
-	%77 = load i16, i16* @llvmdb_subprogs
-	call void @llvmdb_PMetaRef(i16 %77, i8 0)
-	%78 = load i16, i16* @llvmdb_globals
-	call void @llvmdb_PMetaRef(i16 %78, i8 0)
-	%79 = load i16, i16* @llvmdb_nullmeta
-	call void @llvmdb_PMetaRef(i16 %79, i8 1)
-	br label %L.6
-L.8:
-	%80 = load i16, i16* @llvmdb_unit
-	call void @llvmdb_PHeader(i16 %80, i16 17)
-	%81 = load i16, i16* @llvmdb_filenamedir
-	call void @llvmdb_PMetaRef(i16 %81, i8 0)
-	call void @llvmdb_P32(i32 12, i8 0)
-	%82 = getelementptr [13 x i8], [13 x i8]* @S.693
-	%83 = bitcast [13 x i8]* %82 to [0 x i8]*
-	call void @llvmdb_PString([0 x i8]* %83, i8 0)
-	%84 = load i8, i8* %opt
-	call void @llvmdb_PBoolean(i8 %84, i8 0)
-	call void @llvmdb_PString([0 x i8]* null, i8 0)
-	call void @llvmdb_P32(i32 0, i8 0)
-	%85 = load i16, i16* @llvmdb_nullmeta
-	call void @llvmdb_PMetaRef(i16 %85, i8 0)
-	%86 = load i16, i16* @llvmdb_nullmeta
-	call void @llvmdb_PMetaRef(i16 %86, i8 0)
-	%87 = load i16, i16* @llvmdb_subprogs
-	call void @llvmdb_PMetaRef(i16 %87, i8 0)
-	%88 = load i16, i16* @llvmdb_globals
-	call void @llvmdb_PMetaRef(i16 %88, i8 0)
-	%89 = load i16, i16* @llvmdb_nullmeta
-	call void @llvmdb_PMetaRef(i16 %89, i8 0)
-	call void @llvmdb_PString([0 x i8]* null, i8 0)
-	call void @llvmdb_P32(i32 1, i8 1)
-	br label %L.6
-L.6:
+	%39 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
+	%40 = load i8, i8* %39
+	%41 = zext i8 %40 to i32
+	call void @llvmdb_P32(i32 %41, i8 1)
+	%42 = load i16, i16* @llvmdb_unit
+	%43 = getelementptr [14 x i8], [14 x i8]* @S.766
+	%44 = bitcast [14 x i8]* %43 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %42, [0 x i8]* %44)
+	%45 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%46 = bitcast %bout.BufIO* %45 to %bout.BufIO*
+	%47 = getelementptr [11 x i8], [11 x i8]* @S.767
+	%48 = bitcast [11 x i8]* %47 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %46, [0 x i8]* %48)
+	%49 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%50 = bitcast %bout.BufIO* %49 to %bout.BufIO*
+	%51 = getelementptr [12 x i8], [12 x i8]* @S.768
+	%52 = bitcast [12 x i8]* %51 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %50, [0 x i8]* %52)
+	%53 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%54 = bitcast %bout.BufIO* %53 to %bout.BufIO*
+	%55 = getelementptr [9 x i8], [9 x i8]* @S.769
+	%56 = bitcast [9 x i8]* %55 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %54, [0 x i8]* %56)
+	%57 = load i16, i16* @llvmdb_filenamedir
+	call void @llvmdb_PMetaRef(i16 %57, i8 0)
+	%58 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%59 = bitcast %bout.BufIO* %58 to %bout.BufIO*
+	%60 = getelementptr [11 x i8], [11 x i8]* @S.770
+	%61 = bitcast [11 x i8]* %60 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %59, [0 x i8]* %61)
+	%62 = getelementptr [13 x i8], [13 x i8]* @S.771
+	%63 = bitcast [13 x i8]* %62 to [0 x i8]*
+	call void @llvmdb_PQString([0 x i8]* %63, i8 0)
+	%64 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%65 = bitcast %bout.BufIO* %64 to %bout.BufIO*
+	%66 = getelementptr [14 x i8], [14 x i8]* @S.772
+	%67 = bitcast [14 x i8]* %66 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %65, [0 x i8]* %67)
+	call void @llvmdb_PBoolean(i8 0, i8 0)
+	%68 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%69 = bitcast %bout.BufIO* %68 to %bout.BufIO*
+	%70 = getelementptr [17 x i8], [17 x i8]* @S.773
+	%71 = bitcast [17 x i8]* %70 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
+	call void @llvmdb_PUint(i32 0, i8 0)
+	%72 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%73 = bitcast %bout.BufIO* %72 to %bout.BufIO*
+	%74 = getelementptr [15 x i8], [15 x i8]* @S.774
+	%75 = bitcast [15 x i8]* %74 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %73, [0 x i8]* %75)
+	call void @llvmdb_PUint(i32 1, i8 0)
+	%76 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%77 = bitcast %bout.BufIO* %76 to %bout.BufIO*
+	%78 = getelementptr [14 x i8], [14 x i8]* @S.775
+	%79 = bitcast [14 x i8]* %78 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %77, [0 x i8]* %79)
+	%80 = load i16, i16* @llvmdb_subprogs
+	call void @llvmdb_PMetaRef(i16 %80, i8 0)
+	%81 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%82 = bitcast %bout.BufIO* %81 to %bout.BufIO*
+	%83 = getelementptr [10 x i8], [10 x i8]* @S.776
+	%84 = bitcast [10 x i8]* %83 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %82, [0 x i8]* %84)
+	%85 = load i16, i16* @llvmdb_globals
+	call void @llvmdb_PMetaRef(i16 %85, i8 3)
+	%86 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%87 = bitcast %bout.BufIO* %86 to %bout.BufIO*
+	%88 = getelementptr [3 x i8], [3 x i8]* @S.777
+	%89 = bitcast [3 x i8]* %88 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %87, [0 x i8]* %89)
 	%90 = load i16, i16* @llvmdb_filenamedir
 	%91 = load %symb.SymbNode*, %symb.SymbNode** %fs
-	call void @llvmdb_PFileDir(i16 %90, %symb.SymbNode* %91)
-	%92 = load %symb.SymbNode*, %symb.SymbNode** %fs
-	store %symb.SymbNode* %92, %symb.SymbNode** @llvmdb_curfile
-	%93 = load i16, i16* @llvmdb_file
-	%94 = load %symb.SymbNode*, %symb.SymbNode** %fs
-	%95 = getelementptr %symb.SymbNode, %symb.SymbNode* %94, i32 0, i32 12
-	store i16 %93, i16* %95
-	%96 = load i16, i16* @llvmdb_nullmeta
-	call void @llvmdb_PMetaSeq(i16 %96)
-	call void @llvmdb_PTerminator(i8 1)
-	%97 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	%98 = load i8, i8* %97
-	%99 = icmp ugt i8 %98, 1
-	br i1 %99, label %L.10, label %L.9
-L.10:
-	%100 = load i16, i16* @llvmdb_expr
-	call void @llvmdb_PDBeg(i16 %100, i16 258, i8 1)
-	call void @llvmdb_PDEnd(i8 1)
-	br label %L.9
-L.9:
+	%92 = getelementptr %symb.SymbNode, %symb.SymbNode* %91, i32 0, i32 12
+	store i16 %90, i16* %92
+	%93 = load i16, i16* @llvmdb_nullmeta
+	call void @llvmdb_PMetaSeq(i16 %93)
+	%94 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%95 = bitcast %bout.BufIO* %94 to %bout.BufIO*
+	%96 = getelementptr [4 x i8], [4 x i8]* @S.778
+	%97 = bitcast [4 x i8]* %96 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %95, [0 x i8]* %97)
+	%98 = load i16, i16* @llvmdb_expr
+	%99 = getelementptr [13 x i8], [13 x i8]* @S.779
+	%100 = bitcast [13 x i8]* %99 to [0 x i8]*
+	call void @llvmdb_PStart(i16 %98, [0 x i8]* %100)
+	%101 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%102 = bitcast %bout.BufIO* %101 to %bout.BufIO*
+	%103 = getelementptr [3 x i8], [3 x i8]* @S.780
+	%104 = bitcast [3 x i8]* %103 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %102, [0 x i8]* %104)
 	br label %return
 return:
 	ret void
 }
+@S.781 = private unnamed_addr constant [80 x i8] c"declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone\0A\00"
 define internal void @llvmdb_ProgFinish() nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
 	%tag = alloca i16
-	%empty = alloca i16
 	%list = alloca i16
 	%term = alloca i8
 	%0 = load i16, i16* @llvmdb_subprogs
-	call void @llvmdb_PMetaSeq(i16 %0)
+	call void @llvmdb_PListStart(i16 %0)
 	%1 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_sphead
 	store %symb.SymbNode* %1, %symb.SymbNode** %s
 	%2 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31257,7 +30699,7 @@ L.3:
 	br label %L.1
 L.1:
 	%18 = load i16, i16* @llvmdb_globals
-	call void @llvmdb_PMetaSeq(i16 %18)
+	call void @llvmdb_PListStart(i16 %18)
 	%19 = load %symb.SymbNode*, %symb.SymbNode** @llvmdb_gvhead
 	store %symb.SymbNode* %19, %symb.SymbNode** %s
 	%20 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31298,6 +30740,11 @@ L.11:
 	call void @llvmdb_PTerminator(i8 1)
 	br label %L.9
 L.9:
+	%36 = load %bout.BufIO*, %bout.BufIO** @llvm_f
+	%37 = bitcast %bout.BufIO* %36 to %bout.BufIO*
+	%38 = getelementptr [80 x i8], [80 x i8]* @S.781
+	%39 = bitcast [80 x i8]* %38 to [0 x i8]*
+	call void @bout_BufIO_str(%bout.BufIO* %37, [0 x i8]* %39)
 	br label %return
 return:
 	ret void
@@ -31391,14 +30838,14 @@ L.8:
 return:
 	ret void
 }
-@S.694 = private unnamed_addr constant [72 x i8] c"declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\0A\00"
-@S.695 = private unnamed_addr constant [66 x i8] c"declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\0A\00"
-@S.696 = private unnamed_addr constant [31 x i8] c"declare %K @llvm.bswap.%K(%K)\0A\00"
-@S.697 = private unnamed_addr constant [34 x i8] c"declare %K @llvm.ctlz.%K(%K, i1)\0A\00"
-@S.698 = private unnamed_addr constant [34 x i8] c"declare %K @llvm.cttz.%K(%K, i1)\0A\00"
-@S.699 = private unnamed_addr constant [31 x i8] c"declare %K @llvm.ctpop.%K(%K)\0A\00"
-@S.700 = private unnamed_addr constant [35 x i8] c"declare i1 @memcmp%*B(%K, %K, %W)\0A\00"
-@S.701 = private unnamed_addr constant [27 x i8] c"declare %W @memlen%*A(%K)\0A\00"
+@S.782 = private unnamed_addr constant [72 x i8] c"declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\0A\00"
+@S.783 = private unnamed_addr constant [66 x i8] c"declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\0A\00"
+@S.784 = private unnamed_addr constant [31 x i8] c"declare %K @llvm.bswap.%K(%K)\0A\00"
+@S.785 = private unnamed_addr constant [34 x i8] c"declare %K @llvm.ctlz.%K(%K, i1)\0A\00"
+@S.786 = private unnamed_addr constant [34 x i8] c"declare %K @llvm.cttz.%K(%K, i1)\0A\00"
+@S.787 = private unnamed_addr constant [31 x i8] c"declare %K @llvm.ctpop.%K(%K)\0A\00"
+@S.788 = private unnamed_addr constant [35 x i8] c"declare i1 @memcmp%*B(%K, %K, %W)\0A\00"
+@S.789 = private unnamed_addr constant [27 x i8] c"declare %W @memlen%*A(%K)\0A\00"
 define internal void @llvm_DeclareIntrinsics() nounwind {
 L.0:
 	%i = alloca i8
@@ -31439,13 +30886,13 @@ L.5:
 		i32 4, label %L.15
 	]
 L.8:
-	%15 = getelementptr [72 x i8], [72 x i8]* @S.694
+	%15 = getelementptr [72 x i8], [72 x i8]* @S.782
 	%16 = bitcast [72 x i8]* %15 to [0 x i8]*
 	%17 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
 	br label %L.7
 L.9:
-	%18 = getelementptr [66 x i8], [66 x i8]* @S.695
+	%18 = getelementptr [66 x i8], [66 x i8]* @S.783
 	%19 = bitcast [66 x i8]* %18 to [0 x i8]*
 	%20 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %19, %ast.AstNode* %20)
@@ -31458,7 +30905,7 @@ L.16:
 	%23 = load %type.TypeNode*, %type.TypeNode** %22
 	%24 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i32 0, i32 8
 	store %type.TypeNode* %23, %type.TypeNode** %24
-	%25 = getelementptr [31 x i8], [31 x i8]* @S.696
+	%25 = getelementptr [31 x i8], [31 x i8]* @S.784
 	%26 = bitcast [31 x i8]* %25 to [0 x i8]*
 	%27 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %26, %ast.AstNode* %27)
@@ -31483,7 +30930,7 @@ L.19:
 	%37 = load %type.TypeNode*, %type.TypeNode** %36
 	%38 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i32 0, i32 8
 	store %type.TypeNode* %37, %type.TypeNode** %38
-	%39 = getelementptr [34 x i8], [34 x i8]* @S.697
+	%39 = getelementptr [34 x i8], [34 x i8]* @S.785
 	%40 = bitcast [34 x i8]* %39 to [0 x i8]*
 	%41 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %40, %ast.AstNode* %41)
@@ -31508,7 +30955,7 @@ L.22:
 	%51 = load %type.TypeNode*, %type.TypeNode** %50
 	%52 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i32 0, i32 8
 	store %type.TypeNode* %51, %type.TypeNode** %52
-	%53 = getelementptr [34 x i8], [34 x i8]* @S.698
+	%53 = getelementptr [34 x i8], [34 x i8]* @S.786
 	%54 = bitcast [34 x i8]* %53 to [0 x i8]*
 	%55 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %54, %ast.AstNode* %55)
@@ -31533,7 +30980,7 @@ L.25:
 	%65 = load %type.TypeNode*, %type.TypeNode** %64
 	%66 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i32 0, i32 8
 	store %type.TypeNode* %65, %type.TypeNode** %66
-	%67 = getelementptr [31 x i8], [31 x i8]* @S.699
+	%67 = getelementptr [31 x i8], [31 x i8]* @S.787
 	%68 = bitcast [31 x i8]* %67 to [0 x i8]*
 	%69 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %68, %ast.AstNode* %69)
@@ -31558,7 +31005,7 @@ L.28:
 	%79 = load %type.TypeNode*, %type.TypeNode** %78
 	%80 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i32 0, i32 8
 	store %type.TypeNode* %79, %type.TypeNode** %80
-	%81 = getelementptr [35 x i8], [35 x i8]* @S.700
+	%81 = getelementptr [35 x i8], [35 x i8]* @S.788
 	%82 = bitcast [35 x i8]* %81 to [0 x i8]*
 	%83 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %82, %ast.AstNode* %83)
@@ -31583,7 +31030,7 @@ L.31:
 	%93 = load %type.TypeNode*, %type.TypeNode** %92
 	%94 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i32 0, i32 8
 	store %type.TypeNode* %93, %type.TypeNode** %94
-	%95 = getelementptr [27 x i8], [27 x i8]* @S.701
+	%95 = getelementptr [27 x i8], [27 x i8]* @S.789
 	%96 = bitcast [27 x i8]* %95 to [0 x i8]*
 	%97 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %96, %ast.AstNode* %97)
@@ -31636,8 +31083,8 @@ L.1:
 return:
 	ret void
 }
-@S.702 = private unnamed_addr constant [2 x i8] c"%\00"
-@S.703 = private unnamed_addr constant [2 x i8] c".\00"
+@S.790 = private unnamed_addr constant [2 x i8] c"%\00"
+@S.791 = private unnamed_addr constant [2 x i8] c".\00"
 define internal void @llvm_PTypeName(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -31645,7 +31092,7 @@ L.0:
 	%s = alloca %symb.SymbNode*
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [2 x i8], [2 x i8]* @S.702
+	%2 = getelementptr [2 x i8], [2 x i8]* @S.790
 	%3 = bitcast [2 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %type.TypeNode*, %type.TypeNode** %t
@@ -31674,7 +31121,7 @@ L.5:
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %21)
 	%22 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%23 = bitcast %bout.BufIO* %22 to %bout.BufIO*
-	%24 = getelementptr [2 x i8], [2 x i8]* @S.703
+	%24 = getelementptr [2 x i8], [2 x i8]* @S.791
 	%25 = bitcast [2 x i8]* %24 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %23, [0 x i8]* %25)
 	br label %L.4
@@ -31719,9 +31166,9 @@ L.1:
 return:
 	ret void
 }
-@S.704 = private unnamed_addr constant [2 x i8] c"{\00"
-@S.705 = private unnamed_addr constant [3 x i8] c", \00"
-@S.706 = private unnamed_addr constant [2 x i8] c"}\00"
+@S.792 = private unnamed_addr constant [2 x i8] c"{\00"
+@S.793 = private unnamed_addr constant [3 x i8] c", \00"
+@S.794 = private unnamed_addr constant [2 x i8] c"}\00"
 define internal void @llvm_PRecordType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -31749,7 +31196,7 @@ L.4:
 L.3:
 	%11 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%12 = bitcast %bout.BufIO* %11 to %bout.BufIO*
-	%13 = getelementptr [2 x i8], [2 x i8]* @S.704
+	%13 = getelementptr [2 x i8], [2 x i8]* @S.792
 	%14 = bitcast [2 x i8]* %13 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %14)
 	%15 = load %type.TypeNode*, %type.TypeNode** %t
@@ -31779,14 +31226,14 @@ L.7:
 L.8:
 	%31 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
-	%33 = getelementptr [3 x i8], [3 x i8]* @S.705
+	%33 = getelementptr [3 x i8], [3 x i8]* @S.793
 	%34 = bitcast [3 x i8]* %33 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %32, [0 x i8]* %34)
 	br label %L.5
 L.6:
 	%35 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%36 = bitcast %bout.BufIO* %35 to %bout.BufIO*
-	%37 = getelementptr [2 x i8], [2 x i8]* @S.706
+	%37 = getelementptr [2 x i8], [2 x i8]* @S.794
 	%38 = bitcast [2 x i8]* %37 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %36, [0 x i8]* %38)
 	%39 = load %type.TypeNode*, %type.TypeNode** %t
@@ -31863,9 +31310,9 @@ L.1:
 return:
 	ret void
 }
-@S.707 = private unnamed_addr constant [6 x i8] c"float\00"
-@S.708 = private unnamed_addr constant [7 x i8] c"double\00"
-@S.709 = private unnamed_addr constant [4 x i8] c" x \00"
+@S.795 = private unnamed_addr constant [6 x i8] c"float\00"
+@S.796 = private unnamed_addr constant [7 x i8] c"double\00"
+@S.797 = private unnamed_addr constant [4 x i8] c" x \00"
 define internal void @llvm_PType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -31914,14 +31361,14 @@ L.6:
 L.13:
 	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%19 = bitcast %bout.BufIO* %18 to %bout.BufIO*
-	%20 = getelementptr [6 x i8], [6 x i8]* @S.707
+	%20 = getelementptr [6 x i8], [6 x i8]* @S.795
 	%21 = bitcast [6 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	br label %L.12
 L.14:
 	%22 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%23 = bitcast %bout.BufIO* %22 to %bout.BufIO*
-	%24 = getelementptr [7 x i8], [7 x i8]* @S.708
+	%24 = getelementptr [7 x i8], [7 x i8]* @S.796
 	%25 = bitcast [7 x i8]* %24 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %23, [0 x i8]* %25)
 	br label %L.12
@@ -32008,7 +31455,7 @@ L.23:
 	call void @bout_BufIO_uint32(%bout.BufIO* %67, i32 %69)
 	%70 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%71 = bitcast %bout.BufIO* %70 to %bout.BufIO*
-	%72 = getelementptr [4 x i8], [4 x i8]* @S.709
+	%72 = getelementptr [4 x i8], [4 x i8]* @S.797
 	%73 = bitcast [4 x i8]* %72 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %71, [0 x i8]* %73)
 	%74 = load %type.TypeNode*, %type.TypeNode** %t
@@ -32052,7 +31499,7 @@ L.1:
 return:
 	ret void
 }
-@S.710 = private unnamed_addr constant [19 x i8] c"Illegal PDerefType\00"
+@S.798 = private unnamed_addr constant [19 x i8] c"Illegal PDerefType\00"
 define internal void @llvm_PDerefType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -32076,7 +31523,7 @@ L.5:
 	call void @llvm_PType(%type.TypeNode* %9)
 	br label %L.4
 L.3:
-	%10 = getelementptr [19 x i8], [19 x i8]* @S.710
+	%10 = getelementptr [19 x i8], [19 x i8]* @S.798
 	%11 = bitcast [19 x i8]* %10 to [0 x i8]*
 	call void @lex_ErrorS(i8 88, [0 x i8]* %11)
 	br label %L.4
@@ -32087,8 +31534,8 @@ L.1:
 return:
 	ret void
 }
-@S.711 = private unnamed_addr constant [9 x i8] c" signext\00"
-@S.712 = private unnamed_addr constant [9 x i8] c" zeroext\00"
+@S.799 = private unnamed_addr constant [9 x i8] c" signext\00"
+@S.800 = private unnamed_addr constant [9 x i8] c" zeroext\00"
 define internal void @llvm_PExtend(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -32128,14 +31575,14 @@ L.7:
 L.9:
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%20 = bitcast %bout.BufIO* %19 to %bout.BufIO*
-	%21 = getelementptr [9 x i8], [9 x i8]* @S.711
+	%21 = getelementptr [9 x i8], [9 x i8]* @S.799
 	%22 = bitcast [9 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	br label %L.8
 L.10:
 	%23 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%24 = bitcast %bout.BufIO* %23 to %bout.BufIO*
-	%25 = getelementptr [9 x i8], [9 x i8]* @S.712
+	%25 = getelementptr [9 x i8], [9 x i8]* @S.800
 	%26 = bitcast [9 x i8]* %25 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %24, [0 x i8]* %26)
 	br label %L.8
@@ -32152,10 +31599,10 @@ L.1:
 return:
 	ret void
 }
-@S.713 = private unnamed_addr constant [4 x i8] c" { \00"
-@S.714 = private unnamed_addr constant [3 x i8] c", \00"
-@S.715 = private unnamed_addr constant [3 x i8] c" }\00"
-@S.716 = private unnamed_addr constant [6 x i8] c" void\00"
+@S.801 = private unnamed_addr constant [4 x i8] c" { \00"
+@S.802 = private unnamed_addr constant [3 x i8] c", \00"
+@S.803 = private unnamed_addr constant [3 x i8] c" }\00"
+@S.804 = private unnamed_addr constant [6 x i8] c" void\00"
 define internal void @llvm_PRetvType(%type.TypeListEntry* %tl$, i8 zeroext %extend$) nounwind {
 L.0:
 	%tl = alloca %type.TypeListEntry*
@@ -32175,7 +31622,7 @@ L.2:
 L.5:
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [4 x i8], [4 x i8]* @S.713
+	%8 = getelementptr [4 x i8], [4 x i8]* @S.801
 	%9 = bitcast [4 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.7
@@ -32196,14 +31643,14 @@ L.7:
 L.9:
 	%20 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%21 = bitcast %bout.BufIO* %20 to %bout.BufIO*
-	%22 = getelementptr [3 x i8], [3 x i8]* @S.714
+	%22 = getelementptr [3 x i8], [3 x i8]* @S.802
 	%23 = bitcast [3 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	br label %L.7
 L.8:
 	%24 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%25 = bitcast %bout.BufIO* %24 to %bout.BufIO*
-	%26 = getelementptr [3 x i8], [3 x i8]* @S.715
+	%26 = getelementptr [3 x i8], [3 x i8]* @S.803
 	%27 = bitcast [3 x i8]* %26 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %25, [0 x i8]* %27)
 	br label %L.4
@@ -32232,7 +31679,7 @@ L.4:
 L.3:
 	%38 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%39 = bitcast %bout.BufIO* %38 to %bout.BufIO*
-	%40 = getelementptr [6 x i8], [6 x i8]* @S.716
+	%40 = getelementptr [6 x i8], [6 x i8]* @S.804
 	%41 = bitcast [6 x i8]* %40 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %39, [0 x i8]* %41)
 	br label %L.1
@@ -32241,7 +31688,7 @@ L.1:
 return:
 	ret void
 }
-@S.717 = private unnamed_addr constant [3 x i8] c", \00"
+@S.805 = private unnamed_addr constant [3 x i8] c", \00"
 define internal void @llvm_PParmTypes(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -32271,7 +31718,7 @@ L.3:
 L.4:
 	%14 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%15 = bitcast %bout.BufIO* %14 to %bout.BufIO*
-	%16 = getelementptr [3 x i8], [3 x i8]* @S.717
+	%16 = getelementptr [3 x i8], [3 x i8]* @S.805
 	%17 = bitcast [3 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	br label %L.1
@@ -32283,9 +31730,9 @@ L.2:
 return:
 	ret void
 }
-@S.718 = private unnamed_addr constant [5 x i8] c"null\00"
-@S.719 = private unnamed_addr constant [10 x i8] c"inttoptr(\00"
-@S.720 = private unnamed_addr constant [5 x i8] c" to \00"
+@S.806 = private unnamed_addr constant [5 x i8] c"null\00"
+@S.807 = private unnamed_addr constant [10 x i8] c"inttoptr(\00"
+@S.808 = private unnamed_addr constant [5 x i8] c" to \00"
 define internal void @llvm_ConstantRef(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -32301,14 +31748,14 @@ L.0:
 L.2:
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
-	%7 = getelementptr [5 x i8], [5 x i8]* @S.718
+	%7 = getelementptr [5 x i8], [5 x i8]* @S.806
 	%8 = bitcast [5 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	br label %L.1
 L.3:
 	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = getelementptr [10 x i8], [10 x i8]* @S.719
+	%11 = getelementptr [10 x i8], [10 x i8]* @S.807
 	%12 = bitcast [10 x i8]* %11 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
 	%13 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
@@ -32322,7 +31769,7 @@ L.3:
 	call void @bout_BufIO_uint64(%bout.BufIO* %17, i64 %18)
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%20 = bitcast %bout.BufIO* %19 to %bout.BufIO*
-	%21 = getelementptr [5 x i8], [5 x i8]* @S.720
+	%21 = getelementptr [5 x i8], [5 x i8]* @S.808
 	%22 = bitcast [5 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	%23 = load %ast.AstNode*, %ast.AstNode** %node
@@ -32338,8 +31785,8 @@ L.1:
 return:
 	ret void
 }
-@S.721 = private unnamed_addr constant [5 x i8] c"void\00"
-@S.722 = private unnamed_addr constant [2 x i8] c"i\00"
+@S.809 = private unnamed_addr constant [5 x i8] c"void\00"
+@S.810 = private unnamed_addr constant [2 x i8] c"i\00"
 define internal void @llvm_NodeType(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -32361,7 +31808,7 @@ L.0:
 L.3:
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [5 x i8], [5 x i8]* @S.721
+	%8 = getelementptr [5 x i8], [5 x i8]* @S.809
 	%9 = bitcast [5 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.2
@@ -32386,7 +31833,7 @@ L.6:
 L.1:
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%20 = bitcast %bout.BufIO* %19 to %bout.BufIO*
-	%21 = getelementptr [2 x i8], [2 x i8]* @S.722
+	%21 = getelementptr [2 x i8], [2 x i8]* @S.810
 	%22 = bitcast [2 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	%23 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -32489,9 +31936,9 @@ L.3:
 return:
 	ret void
 }
-@S.723 = private unnamed_addr constant [10 x i8] c"inttoptr(\00"
-@S.724 = private unnamed_addr constant [5 x i8] c" to \00"
-@S.725 = private unnamed_addr constant [3 x i8] c"*)\00"
+@S.811 = private unnamed_addr constant [10 x i8] c"inttoptr(\00"
+@S.812 = private unnamed_addr constant [5 x i8] c" to \00"
+@S.813 = private unnamed_addr constant [3 x i8] c"*)\00"
 define internal void @llvm_PName(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -32621,7 +32068,7 @@ L.18:
 L.6:
 	%68 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%69 = bitcast %bout.BufIO* %68 to %bout.BufIO*
-	%70 = getelementptr [10 x i8], [10 x i8]* @S.723
+	%70 = getelementptr [10 x i8], [10 x i8]* @S.811
 	%71 = bitcast [10 x i8]* %70 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
 	%72 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
@@ -32637,7 +32084,7 @@ L.6:
 	call void @bout_BufIO_uint64(%bout.BufIO* %76, i64 %79)
 	%80 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%81 = bitcast %bout.BufIO* %80 to %bout.BufIO*
-	%82 = getelementptr [5 x i8], [5 x i8]* @S.724
+	%82 = getelementptr [5 x i8], [5 x i8]* @S.812
 	%83 = bitcast [5 x i8]* %82 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %81, [0 x i8]* %83)
 	%84 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -32665,7 +32112,7 @@ L.23:
 L.21:
 	%98 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%99 = bitcast %bout.BufIO* %98 to %bout.BufIO*
-	%100 = getelementptr [3 x i8], [3 x i8]* @S.725
+	%100 = getelementptr [3 x i8], [3 x i8]* @S.813
 	%101 = bitcast [3 x i8]* %100 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %99, [0 x i8]* %101)
 	br label %L.2
@@ -32693,7 +32140,7 @@ L.0:
 return:
 	ret void
 }
-@S.726 = private unnamed_addr constant [11 x i8] c"__NoName__\00"
+@S.814 = private unnamed_addr constant [11 x i8] c"__NoName__\00"
 define internal void @llvm_NodeName(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -32713,7 +32160,7 @@ L.2:
 L.3:
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [11 x i8], [11 x i8]* @S.726
+	%8 = getelementptr [11 x i8], [11 x i8]* @S.814
 	%9 = bitcast [11 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.1
@@ -32722,7 +32169,7 @@ L.1:
 return:
 	ret void
 }
-@S.727 = private unnamed_addr constant [4 x i8] c".0e\00"
+@S.815 = private unnamed_addr constant [4 x i8] c".0e\00"
 define internal void @llvm_PFloat(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -32735,7 +32182,7 @@ L.0:
 	call void @bout_BufIO_uint64(%bout.BufIO* %1, i64 %4)
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
-	%7 = getelementptr [4 x i8], [4 x i8]* @S.727
+	%7 = getelementptr [4 x i8], [4 x i8]* @S.815
 	%8 = bitcast [4 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -32749,7 +32196,7 @@ L.0:
 return:
 	ret void
 }
-@S.728 = private unnamed_addr constant [23 x i8] c"Assignment to constant\00"
+@S.816 = private unnamed_addr constant [23 x i8] c"Assignment to constant\00"
 define internal void @llvm_NodeDst(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -32772,7 +32219,7 @@ L.3:
 	%9 = icmp ne i8 %8, 5
 	br i1 %9, label %L.6, label %L.5
 L.6:
-	%10 = getelementptr [23 x i8], [23 x i8]* @S.728
+	%10 = getelementptr [23 x i8], [23 x i8]* @S.816
 	%11 = bitcast [23 x i8]* %10 to [0 x i8]*
 	call void @lex_ErrorS(i8 88, [0 x i8]* %11)
 	br label %L.5
@@ -33113,14 +32560,14 @@ L.2:
 return:
 	ret void
 }
-@S.729 = private unnamed_addr constant [5 x i8] c"%rv.\00"
+@S.817 = private unnamed_addr constant [5 x i8] c"%rv.\00"
 define internal void @llvm_PRetValName(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8], [5 x i8]* @S.729
+	%2 = getelementptr [5 x i8], [5 x i8]* @S.817
 	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -33132,7 +32579,7 @@ L.0:
 return:
 	ret void
 }
-@S.730 = private unnamed_addr constant [9 x i8] c", align \00"
+@S.818 = private unnamed_addr constant [9 x i8] c", align \00"
 define internal void @llvm_Alignment(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -33152,7 +32599,7 @@ L.0:
 L.2:
 	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = getelementptr [9 x i8], [9 x i8]* @S.730
+	%11 = getelementptr [9 x i8], [9 x i8]* @S.818
 	%12 = bitcast [9 x i8]* %11 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
 	%13 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -33170,9 +32617,9 @@ L.1:
 return:
 	ret void
 }
-@S.731 = private unnamed_addr constant [2 x i8] c",\00"
-@S.732 = private unnamed_addr constant [11 x i8] c" section \22\00"
-@S.733 = private unnamed_addr constant [2 x i8] c"\22\00"
+@S.819 = private unnamed_addr constant [2 x i8] c",\00"
+@S.820 = private unnamed_addr constant [11 x i8] c" section \22\00"
+@S.821 = private unnamed_addr constant [2 x i8] c"\22\00"
 define internal void @llvm_Section(%symb.SymbNode* %s$, i8 zeroext %comma$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -33189,14 +32636,14 @@ L.2:
 L.4:
 	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%5 = bitcast %bout.BufIO* %4 to %bout.BufIO*
-	%6 = getelementptr [2 x i8], [2 x i8]* @S.731
+	%6 = getelementptr [2 x i8], [2 x i8]* @S.819
 	%7 = bitcast [2 x i8]* %6 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
 	br label %L.3
 L.3:
 	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%9 = bitcast %bout.BufIO* %8 to %bout.BufIO*
-	%10 = getelementptr [11 x i8], [11 x i8]* @S.732
+	%10 = getelementptr [11 x i8], [11 x i8]* @S.820
 	%11 = bitcast [11 x i8]* %10 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %9, [0 x i8]* %11)
 	%12 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -33208,7 +32655,7 @@ L.3:
 	call void @bout_BufIO_str(%bout.BufIO* %13, [0 x i8]* %17)
 	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%19 = bitcast %bout.BufIO* %18 to %bout.BufIO*
-	%20 = getelementptr [2 x i8], [2 x i8]* @S.733
+	%20 = getelementptr [2 x i8], [2 x i8]* @S.821
 	%21 = bitcast [2 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	br label %L.1
@@ -33217,8 +32664,8 @@ L.1:
 return:
 	ret void
 }
-@S.734 = private unnamed_addr constant [9 x i8] c" = type \00"
-@S.735 = private unnamed_addr constant [2 x i8] c"i\00"
+@S.822 = private unnamed_addr constant [9 x i8] c" = type \00"
+@S.823 = private unnamed_addr constant [2 x i8] c"i\00"
 define internal void @llvm_DclType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -33314,7 +32761,7 @@ L.14:
 	call void @llvm_PTypeName(%type.TypeNode* %48)
 	%49 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%50 = bitcast %bout.BufIO* %49 to %bout.BufIO*
-	%51 = getelementptr [9 x i8], [9 x i8]* @S.734
+	%51 = getelementptr [9 x i8], [9 x i8]* @S.822
 	%52 = bitcast [9 x i8]* %51 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %50, [0 x i8]* %52)
 	%53 = load %type.TypeNode*, %type.TypeNode** %t
@@ -33330,7 +32777,7 @@ L.17:
 	store i32 %60, i32* %size
 	%61 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%62 = bitcast %bout.BufIO* %61 to %bout.BufIO*
-	%63 = getelementptr [2 x i8], [2 x i8]* @S.735
+	%63 = getelementptr [2 x i8], [2 x i8]* @S.823
 	%64 = bitcast [2 x i8]* %63 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %62, [0 x i8]* %64)
 	%65 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -33356,15 +32803,15 @@ L.3:
 return:
 	ret void
 }
-@S.736 = private unnamed_addr constant [7 x i8] c"define\00"
-@S.737 = private unnamed_addr constant [8 x i8] c"declare\00"
-@S.738 = private unnamed_addr constant [10 x i8] c" internal\00"
-@S.739 = private unnamed_addr constant [6 x i8] c" weak\00"
-@S.740 = private unnamed_addr constant [10 x i8] c" external\00"
-@S.741 = private unnamed_addr constant [5 x i8] c" %I(\00"
-@S.742 = private unnamed_addr constant [3 x i8] c" %\00"
-@S.743 = private unnamed_addr constant [3 x i8] c", \00"
-@S.744 = private unnamed_addr constant [2 x i8] c")\00"
+@S.824 = private unnamed_addr constant [7 x i8] c"define\00"
+@S.825 = private unnamed_addr constant [8 x i8] c"declare\00"
+@S.826 = private unnamed_addr constant [10 x i8] c" internal\00"
+@S.827 = private unnamed_addr constant [6 x i8] c" weak\00"
+@S.828 = private unnamed_addr constant [10 x i8] c" external\00"
+@S.829 = private unnamed_addr constant [5 x i8] c" %I(\00"
+@S.830 = private unnamed_addr constant [3 x i8] c" %\00"
+@S.831 = private unnamed_addr constant [3 x i8] c", \00"
+@S.832 = private unnamed_addr constant [2 x i8] c")\00"
 define internal void @llvm_DclProc(%ast.AstNode* %node$, i8 zeroext %isdefine$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33383,14 +32830,14 @@ L.0:
 L.2:
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
-	%7 = getelementptr [7 x i8], [7 x i8]* @S.736
+	%7 = getelementptr [7 x i8], [7 x i8]* @S.824
 	%8 = bitcast [7 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	br label %L.1
 L.3:
 	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%10 = bitcast %bout.BufIO* %9 to %bout.BufIO*
-	%11 = getelementptr [8 x i8], [8 x i8]* @S.737
+	%11 = getelementptr [8 x i8], [8 x i8]* @S.825
 	%12 = bitcast [8 x i8]* %11 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
 	br label %L.1
@@ -33408,21 +32855,21 @@ L.1:
 L.6:
 	%17 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%18 = bitcast %bout.BufIO* %17 to %bout.BufIO*
-	%19 = getelementptr [10 x i8], [10 x i8]* @S.738
+	%19 = getelementptr [10 x i8], [10 x i8]* @S.826
 	%20 = bitcast [10 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
 	br label %L.5
 L.7:
 	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
-	%23 = getelementptr [6 x i8], [6 x i8]* @S.739
+	%23 = getelementptr [6 x i8], [6 x i8]* @S.827
 	%24 = bitcast [6 x i8]* %23 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
 	br label %L.5
 L.8:
 	%25 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%26 = bitcast %bout.BufIO* %25 to %bout.BufIO*
-	%27 = getelementptr [10 x i8], [10 x i8]* @S.740
+	%27 = getelementptr [10 x i8], [10 x i8]* @S.828
 	%28 = bitcast [10 x i8]* %27 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
 	br label %L.5
@@ -33433,7 +32880,7 @@ L.5:
 	%30 = getelementptr %symb.SymbNode, %symb.SymbNode* %29, i32 0, i32 4
 	%31 = load %type.TypeListEntry*, %type.TypeListEntry** %30
 	call void @llvm_PRetvType(%type.TypeListEntry* %31, i8 1)
-	%32 = getelementptr [5 x i8], [5 x i8]* @S.741
+	%32 = getelementptr [5 x i8], [5 x i8]* @S.829
 	%33 = bitcast [5 x i8]* %32 to [0 x i8]*
 	%34 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %33, %ast.AstNode* %34)
@@ -33463,7 +32910,7 @@ L.11:
 L.13:
 	%50 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%51 = bitcast %bout.BufIO* %50 to %bout.BufIO*
-	%52 = getelementptr [3 x i8], [3 x i8]* @S.742
+	%52 = getelementptr [3 x i8], [3 x i8]* @S.830
 	%53 = bitcast [3 x i8]* %52 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %51, [0 x i8]* %53)
 	%54 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -33489,14 +32936,14 @@ L.12:
 L.14:
 	%68 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%69 = bitcast %bout.BufIO* %68 to %bout.BufIO*
-	%70 = getelementptr [3 x i8], [3 x i8]* @S.743
+	%70 = getelementptr [3 x i8], [3 x i8]* @S.831
 	%71 = bitcast [3 x i8]* %70 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
 	br label %L.9
 L.10:
 	%72 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%73 = bitcast %bout.BufIO* %72 to %bout.BufIO*
-	%74 = getelementptr [2 x i8], [2 x i8]* @S.744
+	%74 = getelementptr [2 x i8], [2 x i8]* @S.832
 	%75 = bitcast [2 x i8]* %74 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %73, [0 x i8]* %75)
 	br label %return
@@ -33592,10 +33039,10 @@ L.4:
 return:
 	ret void
 }
-@S.745 = private unnamed_addr constant [4 x i8] c"0.0\00"
-@S.746 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
-@S.747 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
-@S.748 = private unnamed_addr constant [5 x i8] c"null\00"
+@S.833 = private unnamed_addr constant [4 x i8] c"0.0\00"
+@S.834 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
+@S.835 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
+@S.836 = private unnamed_addr constant [5 x i8] c"null\00"
 define internal void @llvm_DefaultInitializer(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -33622,28 +33069,28 @@ L.3:
 L.4:
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%7 = bitcast %bout.BufIO* %6 to %bout.BufIO*
-	%8 = getelementptr [4 x i8], [4 x i8]* @S.745
+	%8 = getelementptr [4 x i8], [4 x i8]* @S.833
 	%9 = bitcast [4 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	br label %L.2
 L.5:
 	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = getelementptr [16 x i8], [16 x i8]* @S.746
+	%12 = getelementptr [16 x i8], [16 x i8]* @S.834
 	%13 = bitcast [16 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	br label %L.2
 L.6:
 	%14 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%15 = bitcast %bout.BufIO* %14 to %bout.BufIO*
-	%16 = getelementptr [16 x i8], [16 x i8]* @S.747
+	%16 = getelementptr [16 x i8], [16 x i8]* @S.835
 	%17 = bitcast [16 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	br label %L.2
 L.7:
 	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%19 = bitcast %bout.BufIO* %18 to %bout.BufIO*
-	%20 = getelementptr [5 x i8], [5 x i8]* @S.748
+	%20 = getelementptr [5 x i8], [5 x i8]* @S.836
 	%21 = bitcast [5 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	br label %L.2
@@ -33654,27 +33101,27 @@ L.2:
 return:
 	ret void
 }
-@S.749 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
-@S.750 = private unnamed_addr constant [3 x i8] c"{ \00"
-@S.751 = private unnamed_addr constant [2 x i8] c" \00"
-@S.752 = private unnamed_addr constant [3 x i8] c", \00"
-@S.753 = private unnamed_addr constant [3 x i8] c" }\00"
-@S.754 = private unnamed_addr constant [3 x i8] c"[ \00"
-@S.755 = private unnamed_addr constant [2 x i8] c" \00"
-@S.756 = private unnamed_addr constant [3 x i8] c", \00"
-@S.757 = private unnamed_addr constant [3 x i8] c" ]\00"
-@S.758 = private unnamed_addr constant [14 x i8] c"bitcast( %T* \00"
-@S.759 = private unnamed_addr constant [29 x i8] c"getelementptr( %T, %T* %N ) \00"
-@S.760 = private unnamed_addr constant [25 x i8] c"getelementptr( %T* %N ) \00"
-@S.761 = private unnamed_addr constant [9 x i8] c" to %T )\00"
-@S.762 = private unnamed_addr constant [13 x i8] c"bitcast( %T \00"
-@S.763 = private unnamed_addr constant [28 x i8] c"getelementptr( %R, %T %N ) \00"
-@S.764 = private unnamed_addr constant [24 x i8] c"getelementptr( %T %N ) \00"
-@S.765 = private unnamed_addr constant [9 x i8] c" to %T )\00"
-@S.766 = private unnamed_addr constant [13 x i8] c"bitcast( %T \00"
-@S.767 = private unnamed_addr constant [28 x i8] c"getelementptr( %R, %T %N ) \00"
-@S.768 = private unnamed_addr constant [24 x i8] c"getelementptr( %T %N ) \00"
-@S.769 = private unnamed_addr constant [9 x i8] c" to %T )\00"
+@S.837 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
+@S.838 = private unnamed_addr constant [3 x i8] c"{ \00"
+@S.839 = private unnamed_addr constant [2 x i8] c" \00"
+@S.840 = private unnamed_addr constant [3 x i8] c", \00"
+@S.841 = private unnamed_addr constant [3 x i8] c" }\00"
+@S.842 = private unnamed_addr constant [3 x i8] c"[ \00"
+@S.843 = private unnamed_addr constant [2 x i8] c" \00"
+@S.844 = private unnamed_addr constant [3 x i8] c", \00"
+@S.845 = private unnamed_addr constant [3 x i8] c" ]\00"
+@S.846 = private unnamed_addr constant [14 x i8] c"bitcast( %T* \00"
+@S.847 = private unnamed_addr constant [29 x i8] c"getelementptr( %T, %T* %N ) \00"
+@S.848 = private unnamed_addr constant [25 x i8] c"getelementptr( %T* %N ) \00"
+@S.849 = private unnamed_addr constant [9 x i8] c" to %T )\00"
+@S.850 = private unnamed_addr constant [13 x i8] c"bitcast( %T \00"
+@S.851 = private unnamed_addr constant [28 x i8] c"getelementptr( %R, %T %N ) \00"
+@S.852 = private unnamed_addr constant [24 x i8] c"getelementptr( %T %N ) \00"
+@S.853 = private unnamed_addr constant [9 x i8] c" to %T )\00"
+@S.854 = private unnamed_addr constant [13 x i8] c"bitcast( %T \00"
+@S.855 = private unnamed_addr constant [28 x i8] c"getelementptr( %R, %T %N ) \00"
+@S.856 = private unnamed_addr constant [24 x i8] c"getelementptr( %T %N ) \00"
+@S.857 = private unnamed_addr constant [9 x i8] c" to %T )\00"
 define internal void @llvm_Constant(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33743,7 +33190,7 @@ L.18:
 L.19:
 	%28 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%29 = bitcast %bout.BufIO* %28 to %bout.BufIO*
-	%30 = getelementptr [16 x i8], [16 x i8]* @S.749
+	%30 = getelementptr [16 x i8], [16 x i8]* @S.837
 	%31 = bitcast [16 x i8]* %30 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %29, [0 x i8]* %31)
 	br label %L.17
@@ -33825,7 +33272,7 @@ L.30:
 L.29:
 	%72 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%73 = bitcast %bout.BufIO* %72 to %bout.BufIO*
-	%74 = getelementptr [3 x i8], [3 x i8]* @S.750
+	%74 = getelementptr [3 x i8], [3 x i8]* @S.838
 	%75 = bitcast [3 x i8]* %74 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %73, [0 x i8]* %75)
 	store i16 0, i16* %i
@@ -33842,7 +33289,7 @@ L.31:
 	call void @llvm_PType(%type.TypeNode* %83)
 	%84 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%85 = bitcast %bout.BufIO* %84 to %bout.BufIO*
-	%86 = getelementptr [2 x i8], [2 x i8]* @S.751
+	%86 = getelementptr [2 x i8], [2 x i8]* @S.839
 	%87 = bitcast [2 x i8]* %86 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %85, [0 x i8]* %87)
 	%88 = load %ast.AstNode*, %ast.AstNode** %node
@@ -33865,14 +33312,14 @@ L.31:
 L.33:
 	%102 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%103 = bitcast %bout.BufIO* %102 to %bout.BufIO*
-	%104 = getelementptr [3 x i8], [3 x i8]* @S.752
+	%104 = getelementptr [3 x i8], [3 x i8]* @S.840
 	%105 = bitcast [3 x i8]* %104 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %103, [0 x i8]* %105)
 	br label %L.31
 L.32:
 	%106 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%107 = bitcast %bout.BufIO* %106 to %bout.BufIO*
-	%108 = getelementptr [3 x i8], [3 x i8]* @S.753
+	%108 = getelementptr [3 x i8], [3 x i8]* @S.841
 	%109 = bitcast [3 x i8]* %108 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %107, [0 x i8]* %109)
 	%110 = load %type.TypeNode*, %type.TypeNode** %t
@@ -33899,7 +33346,7 @@ L.36:
 L.26:
 	%121 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%122 = bitcast %bout.BufIO* %121 to %bout.BufIO*
-	%123 = getelementptr [3 x i8], [3 x i8]* @S.754
+	%123 = getelementptr [3 x i8], [3 x i8]* @S.842
 	%124 = bitcast [3 x i8]* %123 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %122, [0 x i8]* %124)
 	store i16 0, i16* %i
@@ -33916,7 +33363,7 @@ L.38:
 	call void @llvm_PType(%type.TypeNode* %132)
 	%133 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%134 = bitcast %bout.BufIO* %133 to %bout.BufIO*
-	%135 = getelementptr [2 x i8], [2 x i8]* @S.755
+	%135 = getelementptr [2 x i8], [2 x i8]* @S.843
 	%136 = bitcast [2 x i8]* %135 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %134, [0 x i8]* %136)
 	%137 = load %ast.AstNode*, %ast.AstNode** %node
@@ -33939,14 +33386,14 @@ L.38:
 L.40:
 	%151 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%152 = bitcast %bout.BufIO* %151 to %bout.BufIO*
-	%153 = getelementptr [3 x i8], [3 x i8]* @S.756
+	%153 = getelementptr [3 x i8], [3 x i8]* @S.844
 	%154 = bitcast [3 x i8]* %153 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %152, [0 x i8]* %154)
 	br label %L.38
 L.39:
 	%155 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%156 = bitcast %bout.BufIO* %155 to %bout.BufIO*
-	%157 = getelementptr [3 x i8], [3 x i8]* @S.757
+	%157 = getelementptr [3 x i8], [3 x i8]* @S.845
 	%158 = bitcast [3 x i8]* %157 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %156, [0 x i8]* %158)
 	br label %L.24
@@ -33963,7 +33410,7 @@ L.9:
 	%164 = icmp ne i8 %163, 0
 	br i1 %164, label %L.42, label %L.41
 L.42:
-	%165 = getelementptr [14 x i8], [14 x i8]* @S.758
+	%165 = getelementptr [14 x i8], [14 x i8]* @S.846
 	%166 = bitcast [14 x i8]* %165 to [0 x i8]*
 	%167 = load %ast.AstNode*, %ast.AstNode** %node
 	%168 = getelementptr %ast.AstNode, %ast.AstNode* %167, i32 0, i32 11
@@ -33978,7 +33425,7 @@ L.41:
 	%174 = icmp ne i8 %173, 0
 	br i1 %174, label %L.44, label %L.45
 L.44:
-	%175 = getelementptr [29 x i8], [29 x i8]* @S.759
+	%175 = getelementptr [29 x i8], [29 x i8]* @S.847
 	%176 = bitcast [29 x i8]* %175 to [0 x i8]*
 	%177 = load %ast.AstNode*, %ast.AstNode** %node
 	%178 = getelementptr %ast.AstNode, %ast.AstNode* %177, i32 0, i32 11
@@ -33988,7 +33435,7 @@ L.44:
 	call void @llvm_Print([0 x i8]* %176, %ast.AstNode* %181)
 	br label %L.43
 L.45:
-	%182 = getelementptr [25 x i8], [25 x i8]* @S.760
+	%182 = getelementptr [25 x i8], [25 x i8]* @S.848
 	%183 = bitcast [25 x i8]* %182 to [0 x i8]*
 	%184 = load %ast.AstNode*, %ast.AstNode** %node
 	%185 = getelementptr %ast.AstNode, %ast.AstNode* %184, i32 0, i32 11
@@ -34006,7 +33453,7 @@ L.43:
 	%194 = icmp ne i8 %193, 0
 	br i1 %194, label %L.47, label %L.46
 L.47:
-	%195 = getelementptr [9 x i8], [9 x i8]* @S.761
+	%195 = getelementptr [9 x i8], [9 x i8]* @S.849
 	%196 = bitcast [9 x i8]* %195 to [0 x i8]*
 	%197 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %196, %ast.AstNode* %197)
@@ -34022,7 +33469,7 @@ L.10:
 	%203 = icmp ne i8 %202, 0
 	br i1 %203, label %L.49, label %L.48
 L.49:
-	%204 = getelementptr [13 x i8], [13 x i8]* @S.762
+	%204 = getelementptr [13 x i8], [13 x i8]* @S.850
 	%205 = bitcast [13 x i8]* %204 to [0 x i8]*
 	%206 = load %ast.AstNode*, %ast.AstNode** %node
 	%207 = getelementptr %ast.AstNode, %ast.AstNode* %206, i32 0, i32 11
@@ -34037,7 +33484,7 @@ L.48:
 	%213 = icmp ne i8 %212, 0
 	br i1 %213, label %L.51, label %L.52
 L.51:
-	%214 = getelementptr [28 x i8], [28 x i8]* @S.763
+	%214 = getelementptr [28 x i8], [28 x i8]* @S.851
 	%215 = bitcast [28 x i8]* %214 to [0 x i8]*
 	%216 = load %ast.AstNode*, %ast.AstNode** %node
 	%217 = getelementptr %ast.AstNode, %ast.AstNode* %216, i32 0, i32 11
@@ -34047,7 +33494,7 @@ L.51:
 	call void @llvm_Print([0 x i8]* %215, %ast.AstNode* %220)
 	br label %L.50
 L.52:
-	%221 = getelementptr [24 x i8], [24 x i8]* @S.764
+	%221 = getelementptr [24 x i8], [24 x i8]* @S.852
 	%222 = bitcast [24 x i8]* %221 to [0 x i8]*
 	%223 = load %ast.AstNode*, %ast.AstNode** %node
 	%224 = getelementptr %ast.AstNode, %ast.AstNode* %223, i32 0, i32 11
@@ -34065,7 +33512,7 @@ L.50:
 	%233 = icmp ne i8 %232, 0
 	br i1 %233, label %L.54, label %L.53
 L.54:
-	%234 = getelementptr [9 x i8], [9 x i8]* @S.765
+	%234 = getelementptr [9 x i8], [9 x i8]* @S.853
 	%235 = bitcast [9 x i8]* %234 to [0 x i8]*
 	%236 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %235, %ast.AstNode* %236)
@@ -34093,7 +33540,7 @@ L.57:
 	%249 = icmp ne i8 %248, 0
 	br i1 %249, label %L.59, label %L.58
 L.59:
-	%250 = getelementptr [13 x i8], [13 x i8]* @S.766
+	%250 = getelementptr [13 x i8], [13 x i8]* @S.854
 	%251 = bitcast [13 x i8]* %250 to [0 x i8]*
 	%252 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %251, %ast.AstNode* %252)
@@ -34104,13 +33551,13 @@ L.58:
 	%255 = icmp ne i8 %254, 0
 	br i1 %255, label %L.61, label %L.62
 L.61:
-	%256 = getelementptr [28 x i8], [28 x i8]* @S.767
+	%256 = getelementptr [28 x i8], [28 x i8]* @S.855
 	%257 = bitcast [28 x i8]* %256 to [0 x i8]*
 	%258 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %257, %ast.AstNode* %258)
 	br label %L.60
 L.62:
-	%259 = getelementptr [24 x i8], [24 x i8]* @S.768
+	%259 = getelementptr [24 x i8], [24 x i8]* @S.856
 	%260 = bitcast [24 x i8]* %259 to [0 x i8]*
 	%261 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %260, %ast.AstNode* %261)
@@ -34124,7 +33571,7 @@ L.60:
 	%267 = icmp ne i8 %266, 0
 	br i1 %267, label %L.64, label %L.63
 L.64:
-	%268 = getelementptr [9 x i8], [9 x i8]* @S.769
+	%268 = getelementptr [9 x i8], [9 x i8]* @S.857
 	%269 = bitcast [9 x i8]* %268 to [0 x i8]*
 	%270 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %269, %ast.AstNode* %270)
@@ -34142,14 +33589,14 @@ L.1:
 return:
 	ret void
 }
-@S.770 = private unnamed_addr constant [16 x i8] c"\09%I = alloca %K\00"
-@S.771 = private unnamed_addr constant [7 x i8] c"store \00"
-@S.772 = private unnamed_addr constant [9 x i8] c", %K* %D\00"
-@S.773 = private unnamed_addr constant [29 x i8] c"initialized local composites\00"
-@S.774 = private unnamed_addr constant [25 x i8] c"%I = internal global %K \00"
-@S.775 = private unnamed_addr constant [16 x i8] c"%I = global %K \00"
-@S.776 = private unnamed_addr constant [21 x i8] c"%I = weak global %K \00"
-@S.777 = private unnamed_addr constant [24 x i8] c"%I = external global %K\00"
+@S.858 = private unnamed_addr constant [16 x i8] c"\09%I = alloca %K\00"
+@S.859 = private unnamed_addr constant [7 x i8] c"store \00"
+@S.860 = private unnamed_addr constant [9 x i8] c", %K* %D\00"
+@S.861 = private unnamed_addr constant [29 x i8] c"initialized local composites\00"
+@S.862 = private unnamed_addr constant [25 x i8] c"%I = internal global %K \00"
+@S.863 = private unnamed_addr constant [16 x i8] c"%I = global %K \00"
+@S.864 = private unnamed_addr constant [21 x i8] c"%I = weak global %K \00"
+@S.865 = private unnamed_addr constant [24 x i8] c"%I = external global %K\00"
 define internal void @llvm_DclVar(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -34186,7 +33633,7 @@ L.2:
 		i32 5, label %L.9
 	]
 L.5:
-	%17 = getelementptr [16 x i8], [16 x i8]* @S.770
+	%17 = getelementptr [16 x i8], [16 x i8]* @S.858
 	%18 = bitcast [16 x i8]* %17 to [0 x i8]*
 	%19 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %18, %ast.AstNode* %19)
@@ -34212,7 +33659,7 @@ L.13:
 	call void @bout_BufIO_chr(%bout.BufIO* %33, i8 9)
 	%34 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%35 = bitcast %bout.BufIO* %34 to %bout.BufIO*
-	%36 = getelementptr [7 x i8], [7 x i8]* @S.771
+	%36 = getelementptr [7 x i8], [7 x i8]* @S.859
 	%37 = bitcast [7 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	%38 = load %ast.AstNode*, %ast.AstNode** %rhs
@@ -34222,13 +33669,13 @@ L.13:
 	call void @bout_BufIO_chr(%bout.BufIO* %40, i8 32)
 	%41 = load %ast.AstNode*, %ast.AstNode** %rhs
 	call void @llvm_NodeSrc(%ast.AstNode* %41)
-	%42 = getelementptr [9 x i8], [9 x i8]* @S.772
+	%42 = getelementptr [9 x i8], [9 x i8]* @S.860
 	%43 = bitcast [9 x i8]* %42 to [0 x i8]*
 	%44 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %43, %ast.AstNode* %44)
 	br label %L.12
 L.14:
-	%45 = getelementptr [29 x i8], [29 x i8]* @S.773
+	%45 = getelementptr [29 x i8], [29 x i8]* @S.861
 	%46 = bitcast [29 x i8]* %45 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %46)
 	br label %L.12
@@ -34237,7 +33684,7 @@ L.12:
 L.10:
 	br label %L.4
 L.6:
-	%47 = getelementptr [25 x i8], [25 x i8]* @S.774
+	%47 = getelementptr [25 x i8], [25 x i8]* @S.862
 	%48 = bitcast [25 x i8]* %47 to [0 x i8]*
 	%49 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %48, %ast.AstNode* %49)
@@ -34266,7 +33713,7 @@ L.15:
 	call void @llvm_Section(%symb.SymbNode* %62, i8 1)
 	br label %L.4
 L.7:
-	%63 = getelementptr [16 x i8], [16 x i8]* @S.775
+	%63 = getelementptr [16 x i8], [16 x i8]* @S.863
 	%64 = bitcast [16 x i8]* %63 to [0 x i8]*
 	%65 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %64, %ast.AstNode* %65)
@@ -34295,7 +33742,7 @@ L.18:
 	call void @llvm_Section(%symb.SymbNode* %78, i8 1)
 	br label %L.4
 L.8:
-	%79 = getelementptr [21 x i8], [21 x i8]* @S.776
+	%79 = getelementptr [21 x i8], [21 x i8]* @S.864
 	%80 = bitcast [21 x i8]* %79 to [0 x i8]*
 	%81 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %80, %ast.AstNode* %81)
@@ -34324,7 +33771,7 @@ L.21:
 	call void @llvm_Section(%symb.SymbNode* %94, i8 1)
 	br label %L.4
 L.9:
-	%95 = getelementptr [24 x i8], [24 x i8]* @S.777
+	%95 = getelementptr [24 x i8], [24 x i8]* @S.865
 	%96 = bitcast [24 x i8]* %95 to [0 x i8]*
 	%97 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %96, %ast.AstNode* %97)
@@ -34350,13 +33797,13 @@ L.1:
 return:
 	ret void
 }
-@S.778 = private unnamed_addr constant [39 x i8] c"%S = private unnamed_addr constant %K \00"
+@S.866 = private unnamed_addr constant [39 x i8] c"%S = private unnamed_addr constant %K \00"
 define internal void @llvm_DclString(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
 	store %ast.AstNode* %node$, %ast.AstNode** %node
 	%n = alloca i16
-	%0 = getelementptr [39 x i8], [39 x i8]* @S.778
+	%0 = getelementptr [39 x i8], [39 x i8]* @S.866
 	%1 = bitcast [39 x i8]* %0 to [0 x i8]*
 	%2 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %1, %ast.AstNode* %2)
@@ -34442,8 +33889,8 @@ L.3:
 return:
 	ret void
 }
-@S.779 = private unnamed_addr constant [27 x i8] c"%I = internal constant %K \00"
-@S.780 = private unnamed_addr constant [18 x i8] c"%I = constant %K \00"
+@S.867 = private unnamed_addr constant [27 x i8] c"%I = internal constant %K \00"
+@S.868 = private unnamed_addr constant [18 x i8] c"%I = constant %K \00"
 define internal void @llvm_DclCon(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -34472,13 +33919,13 @@ L.2:
 		i32 3, label %L.6
 	]
 L.5:
-	%13 = getelementptr [27 x i8], [27 x i8]* @S.779
+	%13 = getelementptr [27 x i8], [27 x i8]* @S.867
 	%14 = bitcast [27 x i8]* %13 to [0 x i8]*
 	%15 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %14, %ast.AstNode* %15)
 	br label %L.4
 L.6:
-	%16 = getelementptr [18 x i8], [18 x i8]* @S.780
+	%16 = getelementptr [18 x i8], [18 x i8]* @S.868
 	%17 = bitcast [18 x i8]* %16 to [0 x i8]*
 	%18 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %17, %ast.AstNode* %18)
@@ -34510,14 +33957,14 @@ L.1:
 return:
 	ret void
 }
-@S.781 = private unnamed_addr constant [27 x i8] c"%S = internal constant %K \00"
+@S.869 = private unnamed_addr constant [27 x i8] c"%S = internal constant %K \00"
 define internal void @llvm_DclAggregate(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
 	store %ast.AstNode* %node$, %ast.AstNode** %node
 	%0 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_ConstScan(%ast.AstNode* %0)
-	%1 = getelementptr [27 x i8], [27 x i8]* @S.781
+	%1 = getelementptr [27 x i8], [27 x i8]* @S.869
 	%2 = bitcast [27 x i8]* %1 to [0 x i8]*
 	%3 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %2, %ast.AstNode* %3)
@@ -34530,14 +33977,14 @@ L.0:
 return:
 	ret void
 }
-@S.782 = private unnamed_addr constant [3 x i8] c"L.\00"
+@S.870 = private unnamed_addr constant [3 x i8] c"L.\00"
 define internal void @llvm_PLabel(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [3 x i8], [3 x i8]* @S.782
+	%2 = getelementptr [3 x i8], [3 x i8]* @S.870
 	%3 = bitcast [3 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -34549,7 +33996,7 @@ L.0:
 return:
 	ret void
 }
-@S.783 = private unnamed_addr constant [3 x i8] c":\0A\00"
+@S.871 = private unnamed_addr constant [3 x i8] c":\0A\00"
 define internal void @llvm_Label(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
@@ -34558,7 +34005,7 @@ L.0:
 	call void @llvm_PLabel(i16 %0)
 	%1 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%2 = bitcast %bout.BufIO* %1 to %bout.BufIO*
-	%3 = getelementptr [3 x i8], [3 x i8]* @S.783
+	%3 = getelementptr [3 x i8], [3 x i8]* @S.871
 	%4 = bitcast [3 x i8]* %3 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %2, [0 x i8]* %4)
 	%5 = load i16, i16* %n
@@ -34567,14 +34014,14 @@ L.0:
 return:
 	ret void
 }
-@S.784 = private unnamed_addr constant [8 x i8] c"label %\00"
+@S.872 = private unnamed_addr constant [8 x i8] c"label %\00"
 define internal void @llvm_RefLabel(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [8 x i8], [8 x i8]* @S.784
+	%2 = getelementptr [8 x i8], [8 x i8]* @S.872
 	%3 = bitcast [8 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load i16, i16* %n
@@ -34583,14 +34030,14 @@ L.0:
 return:
 	ret void
 }
-@S.785 = private unnamed_addr constant [5 x i8] c"\09br \00"
+@S.873 = private unnamed_addr constant [5 x i8] c"\09br \00"
 define internal void @llvm_Branch(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [5 x i8], [5 x i8]* @S.785
+	%2 = getelementptr [5 x i8], [5 x i8]* @S.873
 	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load i16, i16* %n
@@ -34602,9 +34049,9 @@ L.0:
 return:
 	ret void
 }
-@S.786 = private unnamed_addr constant [8 x i8] c"\09br i1 \00"
-@S.787 = private unnamed_addr constant [3 x i8] c", \00"
-@S.788 = private unnamed_addr constant [3 x i8] c", \00"
+@S.874 = private unnamed_addr constant [8 x i8] c"\09br i1 \00"
+@S.875 = private unnamed_addr constant [3 x i8] c", \00"
+@S.876 = private unnamed_addr constant [3 x i8] c", \00"
 define internal void @llvm_BranchConditional(%ast.AstNode* %node$, i16 zeroext %ntrue$, i16 zeroext %nfalse$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -34615,21 +34062,21 @@ L.0:
 	store i16 %nfalse$, i16* %nfalse
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%1 = bitcast %bout.BufIO* %0 to %bout.BufIO*
-	%2 = getelementptr [8 x i8], [8 x i8]* @S.786
+	%2 = getelementptr [8 x i8], [8 x i8]* @S.874
 	%3 = bitcast [8 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_NodeSrc(%ast.AstNode* %4)
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%6 = bitcast %bout.BufIO* %5 to %bout.BufIO*
-	%7 = getelementptr [3 x i8], [3 x i8]* @S.787
+	%7 = getelementptr [3 x i8], [3 x i8]* @S.875
 	%8 = bitcast [3 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	%9 = load i16, i16* %ntrue
 	call void @llvm_RefLabel(i16 %9)
 	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%11 = bitcast %bout.BufIO* %10 to %bout.BufIO*
-	%12 = getelementptr [3 x i8], [3 x i8]* @S.788
+	%12 = getelementptr [3 x i8], [3 x i8]* @S.876
 	%13 = bitcast [3 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	%14 = load i16, i16* %nfalse
@@ -34744,11 +34191,11 @@ return:
 	%56 = load i8, i8* %rv.0
 	ret i8 %56
 }
-@S.789 = private unnamed_addr constant [16 x i8] c"\09switch %T %N, \00"
-@S.790 = private unnamed_addr constant [4 x i8] c" [\0A\00"
-@S.791 = private unnamed_addr constant [7 x i8] c"\09\09%0T \00"
-@S.792 = private unnamed_addr constant [3 x i8] c", \00"
-@S.793 = private unnamed_addr constant [4 x i8] c"\09]\0A\00"
+@S.877 = private unnamed_addr constant [16 x i8] c"\09switch %T %N, \00"
+@S.878 = private unnamed_addr constant [4 x i8] c" [\0A\00"
+@S.879 = private unnamed_addr constant [7 x i8] c"\09\09%0T \00"
+@S.880 = private unnamed_addr constant [3 x i8] c", \00"
+@S.881 = private unnamed_addr constant [4 x i8] c"\09]\0A\00"
 define internal zeroext i8 @llvm_Select(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -34790,7 +34237,7 @@ L.0:
 	%21 = load i16, i16* @llvm_Lseqno
 	%22 = add i16 %21, 1
 	store i16 %22, i16* @llvm_Lseqno
-	%23 = getelementptr [16 x i8], [16 x i8]* @S.789
+	%23 = getelementptr [16 x i8], [16 x i8]* @S.877
 	%24 = bitcast [16 x i8]* %23 to [0 x i8]*
 	%25 = load %ast.AstNode*, %ast.AstNode** %node
 	%26 = getelementptr %ast.AstNode, %ast.AstNode* %25, i32 0, i32 11
@@ -34802,7 +34249,7 @@ L.0:
 	call void @llvm_RefLabel(i16 %30)
 	%31 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%32 = bitcast %bout.BufIO* %31 to %bout.BufIO*
-	%33 = getelementptr [4 x i8], [4 x i8]* @S.790
+	%33 = getelementptr [4 x i8], [4 x i8]* @S.878
 	%34 = bitcast [4 x i8]* %33 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %32, [0 x i8]* %34)
 	store i16 1, i16* %i
@@ -34926,7 +34373,7 @@ L.17:
 	%110 = xor i1 %109, true
 	br i1 %110, label %L.18, label %L.19
 L.19:
-	%111 = getelementptr [7 x i8], [7 x i8]* @S.791
+	%111 = getelementptr [7 x i8], [7 x i8]* @S.879
 	%112 = bitcast [7 x i8]* %111 to [0 x i8]*
 	%113 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %112, %ast.AstNode* %113)
@@ -34937,7 +34384,7 @@ L.19:
 	call void @bout_BufIO_uint32(%bout.BufIO* %115, i32 %117)
 	%118 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%119 = bitcast %bout.BufIO* %118 to %bout.BufIO*
-	%120 = getelementptr [3 x i8], [3 x i8]* @S.792
+	%120 = getelementptr [3 x i8], [3 x i8]* @S.880
 	%121 = bitcast [3 x i8]* %120 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %119, [0 x i8]* %121)
 	%122 = load %ast.AstNode*, %ast.AstNode** %isnode
@@ -34966,7 +34413,7 @@ L.4:
 L.2:
 	%133 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%134 = bitcast %bout.BufIO* %133 to %bout.BufIO*
-	%135 = getelementptr [4 x i8], [4 x i8]* @S.793
+	%135 = getelementptr [4 x i8], [4 x i8]* @S.881
 	%136 = bitcast [4 x i8]* %135 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %134, [0 x i8]* %136)
 	store i16 1, i16* %i
@@ -35164,13 +34611,13 @@ return:
 	%43 = load i8, i8* %rv.0
 	ret i8 %43
 }
-@S.794 = private unnamed_addr constant [16 x i8] c"\09%N = phi i1 [ \00"
-@S.795 = private unnamed_addr constant [6 x i8] c"false\00"
-@S.796 = private unnamed_addr constant [5 x i8] c"true\00"
-@S.797 = private unnamed_addr constant [4 x i8] c", %\00"
-@S.798 = private unnamed_addr constant [7 x i8] c" ], [ \00"
-@S.799 = private unnamed_addr constant [4 x i8] c", %\00"
-@S.800 = private unnamed_addr constant [4 x i8] c" ]\0A\00"
+@S.882 = private unnamed_addr constant [16 x i8] c"\09%N = phi i1 [ \00"
+@S.883 = private unnamed_addr constant [6 x i8] c"false\00"
+@S.884 = private unnamed_addr constant [5 x i8] c"true\00"
+@S.885 = private unnamed_addr constant [4 x i8] c", %\00"
+@S.886 = private unnamed_addr constant [7 x i8] c" ], [ \00"
+@S.887 = private unnamed_addr constant [4 x i8] c", %\00"
+@S.888 = private unnamed_addr constant [4 x i8] c" ]\0A\00"
 define internal zeroext i8 @llvm_Conditional(%ast.AstNode* %node$, i8 zeroext %isand$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -35244,7 +34691,7 @@ L.1:
 	%42 = load i16, i16* @llvm_Tseqno
 	%43 = add i16 %42, 1
 	store i16 %43, i16* @llvm_Tseqno
-	%44 = getelementptr [16 x i8], [16 x i8]* @S.794
+	%44 = getelementptr [16 x i8], [16 x i8]* @S.882
 	%45 = bitcast [16 x i8]* %44 to [0 x i8]*
 	%46 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %45, %ast.AstNode* %46)
@@ -35254,28 +34701,28 @@ L.1:
 L.5:
 	%49 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%50 = bitcast %bout.BufIO* %49 to %bout.BufIO*
-	%51 = getelementptr [6 x i8], [6 x i8]* @S.795
+	%51 = getelementptr [6 x i8], [6 x i8]* @S.883
 	%52 = bitcast [6 x i8]* %51 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %50, [0 x i8]* %52)
 	br label %L.4
 L.6:
 	%53 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%54 = bitcast %bout.BufIO* %53 to %bout.BufIO*
-	%55 = getelementptr [5 x i8], [5 x i8]* @S.796
+	%55 = getelementptr [5 x i8], [5 x i8]* @S.884
 	%56 = bitcast [5 x i8]* %55 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %54, [0 x i8]* %56)
 	br label %L.4
 L.4:
 	%57 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%58 = bitcast %bout.BufIO* %57 to %bout.BufIO*
-	%59 = getelementptr [4 x i8], [4 x i8]* @S.797
+	%59 = getelementptr [4 x i8], [4 x i8]* @S.885
 	%60 = bitcast [4 x i8]* %59 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %58, [0 x i8]* %60)
 	%61 = load i16, i16* %lablhs
 	call void @llvm_PLabel(i16 %61)
 	%62 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%63 = bitcast %bout.BufIO* %62 to %bout.BufIO*
-	%64 = getelementptr [7 x i8], [7 x i8]* @S.798
+	%64 = getelementptr [7 x i8], [7 x i8]* @S.886
 	%65 = bitcast [7 x i8]* %64 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %63, [0 x i8]* %65)
 	%66 = load %ast.AstNode*, %ast.AstNode** %node
@@ -35287,14 +34734,14 @@ L.4:
 	call void @llvm_PTempName(i16 %71)
 	%72 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%73 = bitcast %bout.BufIO* %72 to %bout.BufIO*
-	%74 = getelementptr [4 x i8], [4 x i8]* @S.799
+	%74 = getelementptr [4 x i8], [4 x i8]* @S.887
 	%75 = bitcast [4 x i8]* %74 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %73, [0 x i8]* %75)
 	%76 = load i16, i16* %labrhs
 	call void @llvm_PLabel(i16 %76)
 	%77 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%78 = bitcast %bout.BufIO* %77 to %bout.BufIO*
-	%79 = getelementptr [4 x i8], [4 x i8]* @S.800
+	%79 = getelementptr [4 x i8], [4 x i8]* @S.888
 	%80 = bitcast [4 x i8]* %79 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %78, [0 x i8]* %80)
 	store i8 0, i8* %rv.0
@@ -35303,7 +34750,7 @@ return:
 	%81 = load i8, i8* %rv.0
 	ret i8 %81
 }
-@S.801 = private unnamed_addr constant [81 x i8] c"\09call void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
+@S.889 = private unnamed_addr constant [81 x i8] c"\09call void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
 define internal void @llvm_Copy(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -35362,7 +34809,7 @@ L.0:
 	%48 = load %ast.AstNode*, %ast.AstNode** %47
 	%49 = bitcast %ast.AstNode* %48 to %ast.AstNode*
 	%50 = call i8 @llvm_GenSub(%ast.AstNode* %49)
-	%51 = getelementptr [81 x i8], [81 x i8]* @S.801
+	%51 = getelementptr [81 x i8], [81 x i8]* @S.889
 	%52 = bitcast [81 x i8]* %51 to [0 x i8]*
 	%53 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %52, %ast.AstNode* %53)
@@ -35371,7 +34818,7 @@ L.0:
 return:
 	ret void
 }
-@S.802 = private unnamed_addr constant [75 x i8] c"\09call void @llvm.memset.p0i8.%W(i8* %0N, %1T %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
+@S.890 = private unnamed_addr constant [75 x i8] c"\09call void @llvm.memset.p0i8.%W(i8* %0N, %1T %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
 define internal void @llvm_Set(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -35418,7 +34865,7 @@ L.0:
 	%37 = load %ast.AstNode*, %ast.AstNode** %36
 	%38 = bitcast %ast.AstNode* %37 to %ast.AstNode*
 	%39 = call i8 @llvm_GenSub(%ast.AstNode* %38)
-	%40 = getelementptr [75 x i8], [75 x i8]* @S.802
+	%40 = getelementptr [75 x i8], [75 x i8]* @S.890
 	%41 = bitcast [75 x i8]* %40 to [0 x i8]*
 	%42 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %41, %ast.AstNode* %42)
@@ -35540,10 +34987,10 @@ return:
 	%60 = load i8, i8* %rv.0
 	ret i8 %60
 }
-@S.803 = private unnamed_addr constant [28 x i8] c"\09%N = icmp eq %0T %0N, %1N\0A\00"
-@S.804 = private unnamed_addr constant [28 x i8] c"\09%N = icmp ne %0T %0N, %1N\0A\00"
-@S.805 = private unnamed_addr constant [54 x i8] c"\09%N = call i1 @memcmp%0*B(%0T %0N, %1T %1N, %2T %2N)\0A\00"
-@S.806 = private unnamed_addr constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
+@S.891 = private unnamed_addr constant [28 x i8] c"\09%N = icmp eq %0T %0N, %1N\0A\00"
+@S.892 = private unnamed_addr constant [28 x i8] c"\09%N = icmp ne %0T %0N, %1N\0A\00"
+@S.893 = private unnamed_addr constant [54 x i8] c"\09%N = call i1 @memcmp%0*B(%0T %0N, %1T %1N, %2T %2N)\0A\00"
+@S.894 = private unnamed_addr constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
 define internal zeroext i8 @llvm_ArrayCompare(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -35862,13 +35309,13 @@ L.8:
 	%265 = icmp eq i8 %264, 24
 	br i1 %265, label %L.14, label %L.15
 L.14:
-	%266 = getelementptr [28 x i8], [28 x i8]* @S.803
+	%266 = getelementptr [28 x i8], [28 x i8]* @S.891
 	%267 = bitcast [28 x i8]* %266 to [0 x i8]*
 	%268 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %267, %ast.AstNode* %268)
 	br label %L.13
 L.15:
-	%269 = getelementptr [28 x i8], [28 x i8]* @S.804
+	%269 = getelementptr [28 x i8], [28 x i8]* @S.892
 	%270 = bitcast [28 x i8]* %269 to [0 x i8]*
 	%271 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %270, %ast.AstNode* %271)
@@ -35997,7 +35444,7 @@ L.16:
 	%377 = load %ast.AstNode*, %ast.AstNode** %node
 	%378 = getelementptr %ast.AstNode, %ast.AstNode* %377, i32 0, i32 7
 	store i32 1, i32* %378
-	%379 = getelementptr [54 x i8], [54 x i8]* @S.805
+	%379 = getelementptr [54 x i8], [54 x i8]* @S.893
 	%380 = bitcast [54 x i8]* %379 to [0 x i8]*
 	%381 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %380, %ast.AstNode* %381)
@@ -36029,7 +35476,7 @@ L.19:
 	%402 = load i16, i16* @llvm_Tseqno
 	%403 = add i16 %402, 1
 	store i16 %403, i16* @llvm_Tseqno
-	%404 = getelementptr [24 x i8], [24 x i8]* @S.806
+	%404 = getelementptr [24 x i8], [24 x i8]* @S.894
 	%405 = bitcast [24 x i8]* %404 to [0 x i8]*
 	%406 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %405, %ast.AstNode* %406)
@@ -36252,7 +35699,7 @@ L.1:
 return:
 	ret void
 }
-@S.807 = private unnamed_addr constant [36 x i8] c"\09%N = call %T @memlen%0*A(%0T %0N)\0A\00"
+@S.895 = private unnamed_addr constant [36 x i8] c"\09%N = call %T @memlen%0*A(%0T %0N)\0A\00"
 define internal void @llvm_ZLen(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -36328,7 +35775,7 @@ L.0:
 	%55 = load i16, i16* @llvm_Tseqno
 	%56 = add i16 %55, 1
 	store i16 %56, i16* @llvm_Tseqno
-	%57 = getelementptr [36 x i8], [36 x i8]* @S.807
+	%57 = getelementptr [36 x i8], [36 x i8]* @S.895
 	%58 = bitcast [36 x i8]* %57 to [0 x i8]*
 	%59 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %58, %ast.AstNode* %59)
@@ -36339,21 +35786,21 @@ L.0:
 return:
 	ret void
 }
-@S.808 = private unnamed_addr constant [22 x i8] c"\09%N = xor %0T %0N, -1\00"
-@S.809 = private unnamed_addr constant [21 x i8] c"\09%N = sub %0T 0, %0N\00"
-@S.810 = private unnamed_addr constant [24 x i8] c"\09%N = fsub %0T 0.0, %0N\00"
-@S.811 = private unnamed_addr constant [26 x i8] c"\09%N = fpext %0T %0N to %T\00"
-@S.812 = private unnamed_addr constant [28 x i8] c"\09%N = fptrunc %0T %0N to %T\00"
-@S.813 = private unnamed_addr constant [27 x i8] c"\09%N = uitofp %0T %0N to %T\00"
-@S.814 = private unnamed_addr constant [27 x i8] c"\09%N = sitofp %0T %0N to %T\00"
-@S.815 = private unnamed_addr constant [27 x i8] c"\09%N = fptoui %0T %0N to %T\00"
-@S.816 = private unnamed_addr constant [27 x i8] c"\09%N = fptosi %0T %0N to %T\00"
-@S.817 = private unnamed_addr constant [37 x i8] c"\09%N = call %T @llvm.bswap.%T(%T %0N)\00"
-@S.818 = private unnamed_addr constant [47 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)\00"
-@S.819 = private unnamed_addr constant [46 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 true)\00"
-@S.820 = private unnamed_addr constant [47 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 false)\00"
-@S.821 = private unnamed_addr constant [46 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 true)\00"
-@S.822 = private unnamed_addr constant [38 x i8] c"\09%N = call %T @llvm.ctpop.%T(%0T %0N)\00"
+@S.896 = private unnamed_addr constant [22 x i8] c"\09%N = xor %0T %0N, -1\00"
+@S.897 = private unnamed_addr constant [21 x i8] c"\09%N = sub %0T 0, %0N\00"
+@S.898 = private unnamed_addr constant [24 x i8] c"\09%N = fsub %0T 0.0, %0N\00"
+@S.899 = private unnamed_addr constant [26 x i8] c"\09%N = fpext %0T %0N to %T\00"
+@S.900 = private unnamed_addr constant [28 x i8] c"\09%N = fptrunc %0T %0N to %T\00"
+@S.901 = private unnamed_addr constant [27 x i8] c"\09%N = uitofp %0T %0N to %T\00"
+@S.902 = private unnamed_addr constant [27 x i8] c"\09%N = sitofp %0T %0N to %T\00"
+@S.903 = private unnamed_addr constant [27 x i8] c"\09%N = fptoui %0T %0N to %T\00"
+@S.904 = private unnamed_addr constant [27 x i8] c"\09%N = fptosi %0T %0N to %T\00"
+@S.905 = private unnamed_addr constant [37 x i8] c"\09%N = call %T @llvm.bswap.%T(%T %0N)\00"
+@S.906 = private unnamed_addr constant [47 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)\00"
+@S.907 = private unnamed_addr constant [46 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 true)\00"
+@S.908 = private unnamed_addr constant [47 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 false)\00"
+@S.909 = private unnamed_addr constant [46 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 true)\00"
+@S.910 = private unnamed_addr constant [38 x i8] c"\09%N = call %T @llvm.ctpop.%T(%0T %0N)\00"
 define internal zeroext i8 @llvm_UnaryOp(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -36394,61 +35841,61 @@ L.0:
 		i32 47, label %L.17
 	]
 L.3:
-	%15 = getelementptr [22 x i8], [22 x i8]* @S.808
+	%15 = getelementptr [22 x i8], [22 x i8]* @S.896
 	%16 = bitcast [22 x i8]* %15 to [0 x i8]*
 	%17 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
 	br label %L.2
 L.4:
-	%18 = getelementptr [21 x i8], [21 x i8]* @S.809
+	%18 = getelementptr [21 x i8], [21 x i8]* @S.897
 	%19 = bitcast [21 x i8]* %18 to [0 x i8]*
 	%20 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %19, %ast.AstNode* %20)
 	br label %L.2
 L.5:
-	%21 = getelementptr [24 x i8], [24 x i8]* @S.810
+	%21 = getelementptr [24 x i8], [24 x i8]* @S.898
 	%22 = bitcast [24 x i8]* %21 to [0 x i8]*
 	%23 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %22, %ast.AstNode* %23)
 	br label %L.2
 L.6:
-	%24 = getelementptr [26 x i8], [26 x i8]* @S.811
+	%24 = getelementptr [26 x i8], [26 x i8]* @S.899
 	%25 = bitcast [26 x i8]* %24 to [0 x i8]*
 	%26 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %25, %ast.AstNode* %26)
 	br label %L.2
 L.7:
-	%27 = getelementptr [28 x i8], [28 x i8]* @S.812
+	%27 = getelementptr [28 x i8], [28 x i8]* @S.900
 	%28 = bitcast [28 x i8]* %27 to [0 x i8]*
 	%29 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %28, %ast.AstNode* %29)
 	br label %L.2
 L.8:
-	%30 = getelementptr [27 x i8], [27 x i8]* @S.813
+	%30 = getelementptr [27 x i8], [27 x i8]* @S.901
 	%31 = bitcast [27 x i8]* %30 to [0 x i8]*
 	%32 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %31, %ast.AstNode* %32)
 	br label %L.2
 L.9:
-	%33 = getelementptr [27 x i8], [27 x i8]* @S.814
+	%33 = getelementptr [27 x i8], [27 x i8]* @S.902
 	%34 = bitcast [27 x i8]* %33 to [0 x i8]*
 	%35 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %34, %ast.AstNode* %35)
 	br label %L.2
 L.10:
-	%36 = getelementptr [27 x i8], [27 x i8]* @S.815
+	%36 = getelementptr [27 x i8], [27 x i8]* @S.903
 	%37 = bitcast [27 x i8]* %36 to [0 x i8]*
 	%38 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %37, %ast.AstNode* %38)
 	br label %L.2
 L.11:
-	%39 = getelementptr [27 x i8], [27 x i8]* @S.816
+	%39 = getelementptr [27 x i8], [27 x i8]* @S.904
 	%40 = bitcast [27 x i8]* %39 to [0 x i8]*
 	%41 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %40, %ast.AstNode* %41)
 	br label %L.2
 L.12:
-	%42 = getelementptr [37 x i8], [37 x i8]* @S.817
+	%42 = getelementptr [37 x i8], [37 x i8]* @S.905
 	%43 = bitcast [37 x i8]* %42 to [0 x i8]*
 	%44 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %43, %ast.AstNode* %44)
@@ -36466,7 +35913,7 @@ L.12:
 	call void @llvm_UseIntrinsic(i8 5, i32 %52, %type.TypeNode* %55)
 	br label %L.2
 L.13:
-	%56 = getelementptr [47 x i8], [47 x i8]* @S.818
+	%56 = getelementptr [47 x i8], [47 x i8]* @S.906
 	%57 = bitcast [47 x i8]* %56 to [0 x i8]*
 	%58 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %57, %ast.AstNode* %58)
@@ -36484,7 +35931,7 @@ L.13:
 	call void @llvm_UseIntrinsic(i8 6, i32 %66, %type.TypeNode* %69)
 	br label %L.2
 L.14:
-	%70 = getelementptr [46 x i8], [46 x i8]* @S.819
+	%70 = getelementptr [46 x i8], [46 x i8]* @S.907
 	%71 = bitcast [46 x i8]* %70 to [0 x i8]*
 	%72 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %71, %ast.AstNode* %72)
@@ -36502,7 +35949,7 @@ L.14:
 	call void @llvm_UseIntrinsic(i8 6, i32 %80, %type.TypeNode* %83)
 	br label %L.2
 L.15:
-	%84 = getelementptr [47 x i8], [47 x i8]* @S.820
+	%84 = getelementptr [47 x i8], [47 x i8]* @S.908
 	%85 = bitcast [47 x i8]* %84 to [0 x i8]*
 	%86 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %85, %ast.AstNode* %86)
@@ -36520,7 +35967,7 @@ L.15:
 	call void @llvm_UseIntrinsic(i8 7, i32 %94, %type.TypeNode* %97)
 	br label %L.2
 L.16:
-	%98 = getelementptr [46 x i8], [46 x i8]* @S.821
+	%98 = getelementptr [46 x i8], [46 x i8]* @S.909
 	%99 = bitcast [46 x i8]* %98 to [0 x i8]*
 	%100 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %99, %ast.AstNode* %100)
@@ -36538,7 +35985,7 @@ L.16:
 	call void @llvm_UseIntrinsic(i8 7, i32 %108, %type.TypeNode* %111)
 	br label %L.2
 L.17:
-	%112 = getelementptr [38 x i8], [38 x i8]* @S.822
+	%112 = getelementptr [38 x i8], [38 x i8]* @S.910
 	%113 = bitcast [38 x i8]* %112 to [0 x i8]*
 	%114 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %113, %ast.AstNode* %114)
@@ -36566,7 +36013,7 @@ return:
 	%127 = load i8, i8* %rv.0
 	ret i8 %127
 }
-@S.823 = private unnamed_addr constant [3 x i8] c"\22\22\00"
+@S.911 = private unnamed_addr constant [3 x i8] c"\22\22\00"
 define internal void @llvm_PStringCon(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -36578,7 +36025,7 @@ L.0:
 L.2:
 	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%3 = bitcast %bout.BufIO* %2 to %bout.BufIO*
-	%4 = getelementptr [3 x i8], [3 x i8]* @S.823
+	%4 = getelementptr [3 x i8], [3 x i8]* @S.911
 	%5 = bitcast [3 x i8]* %4 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
 	br label %L.1
@@ -36606,8 +36053,8 @@ L.1:
 return:
 	ret void
 }
-@S.824 = private unnamed_addr constant [20 x i8] c"\09%N = extractvalue \00"
-@S.825 = private unnamed_addr constant [7 x i8] c" %0N, \00"
+@S.912 = private unnamed_addr constant [20 x i8] c"\09%N = extractvalue \00"
+@S.913 = private unnamed_addr constant [7 x i8] c" %0N, \00"
 define internal void @llvm_GetRV(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -36635,7 +36082,7 @@ L.1:
 	%13 = load i16, i16* @llvm_Tseqno
 	%14 = add i16 %13, 1
 	store i16 %14, i16* @llvm_Tseqno
-	%15 = getelementptr [20 x i8], [20 x i8]* @S.824
+	%15 = getelementptr [20 x i8], [20 x i8]* @S.912
 	%16 = bitcast [20 x i8]* %15 to [0 x i8]*
 	%17 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
@@ -36668,7 +36115,7 @@ L.5:
 L.3:
 	%36 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
 	call void @llvm_PRetvType(%type.TypeListEntry* %36, i8 0)
-	%37 = getelementptr [7 x i8], [7 x i8]* @S.825
+	%37 = getelementptr [7 x i8], [7 x i8]* @S.913
 	%38 = bitcast [7 x i8]* %37 to [0 x i8]*
 	%39 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %38, %ast.AstNode* %39)
@@ -36686,14 +36133,14 @@ L.3:
 return:
 	ret void
 }
-@S.826 = private unnamed_addr constant [6 x i8] c"%N = \00"
-@S.827 = private unnamed_addr constant [5 x i8] c"call\00"
-@S.828 = private unnamed_addr constant [17 x i8] c" asm sideeffect \00"
-@S.829 = private unnamed_addr constant [3 x i8] c", \00"
-@S.830 = private unnamed_addr constant [3 x i8] c" (\00"
-@S.831 = private unnamed_addr constant [6 x i8] c"%T %N\00"
-@S.832 = private unnamed_addr constant [3 x i8] c", \00"
-@S.833 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.914 = private unnamed_addr constant [6 x i8] c"%N = \00"
+@S.915 = private unnamed_addr constant [5 x i8] c"call\00"
+@S.916 = private unnamed_addr constant [17 x i8] c" asm sideeffect \00"
+@S.917 = private unnamed_addr constant [3 x i8] c", \00"
+@S.918 = private unnamed_addr constant [3 x i8] c" (\00"
+@S.919 = private unnamed_addr constant [6 x i8] c"%T %N\00"
+@S.920 = private unnamed_addr constant [3 x i8] c", \00"
+@S.921 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvm_Asm(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -36739,7 +36186,7 @@ L.5:
 	%25 = load i16, i16* @llvm_Tseqno
 	%26 = add i16 %25, 1
 	store i16 %26, i16* @llvm_Tseqno
-	%27 = getelementptr [6 x i8], [6 x i8]* @S.826
+	%27 = getelementptr [6 x i8], [6 x i8]* @S.914
 	%28 = bitcast [6 x i8]* %27 to [0 x i8]*
 	%29 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %28, %ast.AstNode* %29)
@@ -36747,7 +36194,7 @@ L.5:
 L.4:
 	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%31 = bitcast %bout.BufIO* %30 to %bout.BufIO*
-	%32 = getelementptr [5 x i8], [5 x i8]* @S.827
+	%32 = getelementptr [5 x i8], [5 x i8]* @S.915
 	%33 = bitcast [5 x i8]* %32 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %31, [0 x i8]* %33)
 	%34 = load %ast.AstNode*, %ast.AstNode** %node
@@ -36757,7 +36204,7 @@ L.4:
 	call void @llvm_PRetvType(%type.TypeListEntry* %37, i8 0)
 	%38 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%39 = bitcast %bout.BufIO* %38 to %bout.BufIO*
-	%40 = getelementptr [17 x i8], [17 x i8]* @S.828
+	%40 = getelementptr [17 x i8], [17 x i8]* @S.916
 	%41 = bitcast [17 x i8]* %40 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %39, [0 x i8]* %41)
 	%42 = load %ast.AstNode*, %ast.AstNode** %node
@@ -36768,7 +36215,7 @@ L.4:
 	call void @llvm_PStringCon(%ast.AstNode* %46)
 	%47 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%48 = bitcast %bout.BufIO* %47 to %bout.BufIO*
-	%49 = getelementptr [3 x i8], [3 x i8]* @S.829
+	%49 = getelementptr [3 x i8], [3 x i8]* @S.917
 	%50 = bitcast [3 x i8]* %49 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %48, [0 x i8]* %50)
 	%51 = load %ast.AstNode*, %ast.AstNode** %node
@@ -36779,7 +36226,7 @@ L.4:
 	call void @llvm_PStringCon(%ast.AstNode* %55)
 	%56 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%57 = bitcast %bout.BufIO* %56 to %bout.BufIO*
-	%58 = getelementptr [3 x i8], [3 x i8]* @S.830
+	%58 = getelementptr [3 x i8], [3 x i8]* @S.918
 	%59 = bitcast [3 x i8]* %58 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %57, [0 x i8]* %59)
 	store i16 2, i16* %i
@@ -36792,7 +36239,7 @@ L.4:
 L.7:
 	br label %L.8
 L.8:
-	%65 = getelementptr [6 x i8], [6 x i8]* @S.831
+	%65 = getelementptr [6 x i8], [6 x i8]* @S.919
 	%66 = bitcast [6 x i8]* %65 to [0 x i8]*
 	%67 = load %ast.AstNode*, %ast.AstNode** %node
 	%68 = getelementptr %ast.AstNode, %ast.AstNode* %67, i32 0, i32 11
@@ -36814,7 +36261,7 @@ L.8:
 L.10:
 	%81 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%82 = bitcast %bout.BufIO* %81 to %bout.BufIO*
-	%83 = getelementptr [3 x i8], [3 x i8]* @S.832
+	%83 = getelementptr [3 x i8], [3 x i8]* @S.920
 	%84 = bitcast [3 x i8]* %83 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %82, [0 x i8]* %84)
 	br label %L.8
@@ -36823,7 +36270,7 @@ L.9:
 L.6:
 	%85 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%86 = bitcast %bout.BufIO* %85 to %bout.BufIO*
-	%87 = getelementptr [3 x i8], [3 x i8]* @S.833
+	%87 = getelementptr [3 x i8], [3 x i8]* @S.921
 	%88 = bitcast [3 x i8]* %87 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %86, [0 x i8]* %88)
 	br label %return
@@ -36886,14 +36333,14 @@ L.5:
 return:
 	ret void
 }
-@S.834 = private unnamed_addr constant [6 x i8] c"%N = \00"
-@S.835 = private unnamed_addr constant [6 x i8] c"tail \00"
-@S.836 = private unnamed_addr constant [5 x i8] c"call\00"
-@S.837 = private unnamed_addr constant [6 x i8] c" %0N(\00"
-@S.838 = private unnamed_addr constant [5 x i8] c" %I(\00"
-@S.839 = private unnamed_addr constant [6 x i8] c"%T %N\00"
-@S.840 = private unnamed_addr constant [3 x i8] c", \00"
-@S.841 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.922 = private unnamed_addr constant [6 x i8] c"%N = \00"
+@S.923 = private unnamed_addr constant [6 x i8] c"tail \00"
+@S.924 = private unnamed_addr constant [5 x i8] c"call\00"
+@S.925 = private unnamed_addr constant [6 x i8] c" %0N(\00"
+@S.926 = private unnamed_addr constant [5 x i8] c" %I(\00"
+@S.927 = private unnamed_addr constant [6 x i8] c"%T %N\00"
+@S.928 = private unnamed_addr constant [3 x i8] c", \00"
+@S.929 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvm_Call(%ast.AstNode* %node$, i8 zeroext %indirect$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -36952,7 +36399,7 @@ L.7:
 	%32 = load i16, i16* @llvm_Tseqno
 	%33 = add i16 %32, 1
 	store i16 %33, i16* @llvm_Tseqno
-	%34 = getelementptr [6 x i8], [6 x i8]* @S.834
+	%34 = getelementptr [6 x i8], [6 x i8]* @S.922
 	%35 = bitcast [6 x i8]* %34 to [0 x i8]*
 	%36 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %35, %ast.AstNode* %36)
@@ -36965,14 +36412,14 @@ L.6:
 L.9:
 	%40 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%41 = bitcast %bout.BufIO* %40 to %bout.BufIO*
-	%42 = getelementptr [6 x i8], [6 x i8]* @S.835
+	%42 = getelementptr [6 x i8], [6 x i8]* @S.923
 	%43 = bitcast [6 x i8]* %42 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %41, [0 x i8]* %43)
 	br label %L.8
 L.8:
 	%44 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%45 = bitcast %bout.BufIO* %44 to %bout.BufIO*
-	%46 = getelementptr [5 x i8], [5 x i8]* @S.836
+	%46 = getelementptr [5 x i8], [5 x i8]* @S.924
 	%47 = bitcast [5 x i8]* %46 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %45, [0 x i8]* %47)
 	%48 = load %ast.AstNode*, %ast.AstNode** %node
@@ -36985,14 +36432,14 @@ L.8:
 	%54 = icmp ne i8 %53, 0
 	br i1 %54, label %L.11, label %L.12
 L.11:
-	%55 = getelementptr [6 x i8], [6 x i8]* @S.837
+	%55 = getelementptr [6 x i8], [6 x i8]* @S.925
 	%56 = bitcast [6 x i8]* %55 to [0 x i8]*
 	%57 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %56, %ast.AstNode* %57)
 	store i16 1, i16* %i
 	br label %L.10
 L.12:
-	%58 = getelementptr [5 x i8], [5 x i8]* @S.838
+	%58 = getelementptr [5 x i8], [5 x i8]* @S.926
 	%59 = bitcast [5 x i8]* %58 to [0 x i8]*
 	%60 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %59, %ast.AstNode* %60)
@@ -37008,7 +36455,7 @@ L.10:
 L.14:
 	br label %L.15
 L.15:
-	%66 = getelementptr [6 x i8], [6 x i8]* @S.839
+	%66 = getelementptr [6 x i8], [6 x i8]* @S.927
 	%67 = bitcast [6 x i8]* %66 to [0 x i8]*
 	%68 = load %ast.AstNode*, %ast.AstNode** %node
 	%69 = getelementptr %ast.AstNode, %ast.AstNode* %68, i32 0, i32 11
@@ -37030,7 +36477,7 @@ L.15:
 L.17:
 	%82 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%83 = bitcast %bout.BufIO* %82 to %bout.BufIO*
-	%84 = getelementptr [3 x i8], [3 x i8]* @S.840
+	%84 = getelementptr [3 x i8], [3 x i8]* @S.928
 	%85 = bitcast [3 x i8]* %84 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %83, [0 x i8]* %85)
 	br label %L.15
@@ -37039,7 +36486,7 @@ L.16:
 L.13:
 	%86 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%87 = bitcast %bout.BufIO* %86 to %bout.BufIO*
-	%88 = getelementptr [3 x i8], [3 x i8]* @S.841
+	%88 = getelementptr [3 x i8], [3 x i8]* @S.929
 	%89 = bitcast [3 x i8]* %88 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %87, [0 x i8]* %89)
 	%90 = load %ast.AstNode*, %ast.AstNode** %node
@@ -37209,33 +36656,33 @@ L.1:
 return:
 	ret void
 }
-@S.842 = private unnamed_addr constant [14 x i8] c" alwaysinline\00"
-@S.843 = private unnamed_addr constant [10 x i8] c" noinline\00"
-@S.844 = private unnamed_addr constant [9 x i8] c" minsize\00"
-@S.845 = private unnamed_addr constant [9 x i8] c" optsize\00"
-@S.846 = private unnamed_addr constant [10 x i8] c" nounwind\00"
-@S.847 = private unnamed_addr constant [4 x i8] c" {\0A\00"
-@S.848 = private unnamed_addr constant [11 x i8] c" = alloca \00"
-@S.849 = private unnamed_addr constant [3 x i8] c"\09%\00"
-@S.850 = private unnamed_addr constant [11 x i8] c" = alloca \00"
-@S.851 = private unnamed_addr constant [8 x i8] c"\09store \00"
-@S.852 = private unnamed_addr constant [3 x i8] c" %\00"
-@S.853 = private unnamed_addr constant [4 x i8] c"$, \00"
-@S.854 = private unnamed_addr constant [4 x i8] c"* %\00"
-@S.855 = private unnamed_addr constant [18 x i8] c"\09br label %return\00"
-@S.856 = private unnamed_addr constant [9 x i8] c"return:\0A\00"
-@S.857 = private unnamed_addr constant [9 x i8] c" = load \00"
-@S.858 = private unnamed_addr constant [3 x i8] c", \00"
-@S.859 = private unnamed_addr constant [3 x i8] c"* \00"
-@S.860 = private unnamed_addr constant [6 x i8] c"\09%mrv\00"
-@S.861 = private unnamed_addr constant [15 x i8] c" = insertvalue\00"
-@S.862 = private unnamed_addr constant [7 x i8] c" undef\00"
-@S.863 = private unnamed_addr constant [6 x i8] c" %mrv\00"
-@S.864 = private unnamed_addr constant [6 x i8] c"\09ret \00"
-@S.865 = private unnamed_addr constant [6 x i8] c" %mrv\00"
-@S.866 = private unnamed_addr constant [6 x i8] c"\09ret \00"
-@S.867 = private unnamed_addr constant [10 x i8] c"\09ret void\00"
-@S.868 = private unnamed_addr constant [3 x i8] c"}\0A\00"
+@S.930 = private unnamed_addr constant [14 x i8] c" alwaysinline\00"
+@S.931 = private unnamed_addr constant [10 x i8] c" noinline\00"
+@S.932 = private unnamed_addr constant [9 x i8] c" minsize\00"
+@S.933 = private unnamed_addr constant [9 x i8] c" optsize\00"
+@S.934 = private unnamed_addr constant [10 x i8] c" nounwind\00"
+@S.935 = private unnamed_addr constant [4 x i8] c" {\0A\00"
+@S.936 = private unnamed_addr constant [11 x i8] c" = alloca \00"
+@S.937 = private unnamed_addr constant [3 x i8] c"\09%\00"
+@S.938 = private unnamed_addr constant [11 x i8] c" = alloca \00"
+@S.939 = private unnamed_addr constant [8 x i8] c"\09store \00"
+@S.940 = private unnamed_addr constant [3 x i8] c" %\00"
+@S.941 = private unnamed_addr constant [4 x i8] c"$, \00"
+@S.942 = private unnamed_addr constant [4 x i8] c"* %\00"
+@S.943 = private unnamed_addr constant [18 x i8] c"\09br label %return\00"
+@S.944 = private unnamed_addr constant [9 x i8] c"return:\0A\00"
+@S.945 = private unnamed_addr constant [9 x i8] c" = load \00"
+@S.946 = private unnamed_addr constant [3 x i8] c", \00"
+@S.947 = private unnamed_addr constant [3 x i8] c"* \00"
+@S.948 = private unnamed_addr constant [6 x i8] c"\09%mrv\00"
+@S.949 = private unnamed_addr constant [15 x i8] c" = insertvalue\00"
+@S.950 = private unnamed_addr constant [7 x i8] c" undef\00"
+@S.951 = private unnamed_addr constant [6 x i8] c" %mrv\00"
+@S.952 = private unnamed_addr constant [6 x i8] c"\09ret \00"
+@S.953 = private unnamed_addr constant [6 x i8] c" %mrv\00"
+@S.954 = private unnamed_addr constant [6 x i8] c"\09ret \00"
+@S.955 = private unnamed_addr constant [10 x i8] c"\09ret void\00"
+@S.956 = private unnamed_addr constant [3 x i8] c"}\0A\00"
 define internal void @llvm_Procedure(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -37273,14 +36720,14 @@ L.2:
 L.5:
 	%16 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%17 = bitcast %bout.BufIO* %16 to %bout.BufIO*
-	%18 = getelementptr [14 x i8], [14 x i8]* @S.842
+	%18 = getelementptr [14 x i8], [14 x i8]* @S.930
 	%19 = bitcast [14 x i8]* %18 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %17, [0 x i8]* %19)
 	br label %L.4
 L.6:
 	%20 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%21 = bitcast %bout.BufIO* %20 to %bout.BufIO*
-	%22 = getelementptr [10 x i8], [10 x i8]* @S.843
+	%22 = getelementptr [10 x i8], [10 x i8]* @S.931
 	%23 = bitcast [10 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	br label %L.4
@@ -37299,21 +36746,21 @@ L.8:
 L.10:
 	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%31 = bitcast %bout.BufIO* %30 to %bout.BufIO*
-	%32 = getelementptr [9 x i8], [9 x i8]* @S.844
+	%32 = getelementptr [9 x i8], [9 x i8]* @S.932
 	%33 = bitcast [9 x i8]* %32 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %31, [0 x i8]* %33)
 	br label %L.9
 L.9:
 	%34 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%35 = bitcast %bout.BufIO* %34 to %bout.BufIO*
-	%36 = getelementptr [9 x i8], [9 x i8]* @S.845
+	%36 = getelementptr [9 x i8], [9 x i8]* @S.933
 	%37 = bitcast [9 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	br label %L.7
 L.7:
 	%38 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%39 = bitcast %bout.BufIO* %38 to %bout.BufIO*
-	%40 = getelementptr [10 x i8], [10 x i8]* @S.846
+	%40 = getelementptr [10 x i8], [10 x i8]* @S.934
 	%41 = bitcast [10 x i8]* %40 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %39, [0 x i8]* %41)
 	%42 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -37323,7 +36770,7 @@ L.7:
 	call void @llvm_Section(%symb.SymbNode* %45, i8 0)
 	%46 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%47 = bitcast %bout.BufIO* %46 to %bout.BufIO*
-	%48 = getelementptr [4 x i8], [4 x i8]* @S.847
+	%48 = getelementptr [4 x i8], [4 x i8]* @S.935
 	%49 = bitcast [4 x i8]* %48 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %47, [0 x i8]* %49)
 	%50 = load i16, i16* @llvm_Pseqno
@@ -37355,7 +36802,7 @@ L.13:
 	call void @llvm_PRetValName(i16 %63)
 	%64 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%65 = bitcast %bout.BufIO* %64 to %bout.BufIO*
-	%66 = getelementptr [11 x i8], [11 x i8]* @S.848
+	%66 = getelementptr [11 x i8], [11 x i8]* @S.936
 	%67 = bitcast [11 x i8]* %66 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %65, [0 x i8]* %67)
 	%68 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
@@ -37390,7 +36837,7 @@ L.14:
 L.16:
 	%87 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%88 = bitcast %bout.BufIO* %87 to %bout.BufIO*
-	%89 = getelementptr [3 x i8], [3 x i8]* @S.849
+	%89 = getelementptr [3 x i8], [3 x i8]* @S.937
 	%90 = bitcast [3 x i8]* %89 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %88, [0 x i8]* %90)
 	%91 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -37402,7 +36849,7 @@ L.16:
 	call void @bout_BufIO_str(%bout.BufIO* %92, [0 x i8]* %96)
 	%97 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%98 = bitcast %bout.BufIO* %97 to %bout.BufIO*
-	%99 = getelementptr [11 x i8], [11 x i8]* @S.850
+	%99 = getelementptr [11 x i8], [11 x i8]* @S.938
 	%100 = bitcast [11 x i8]* %99 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %98, [0 x i8]* %100)
 	%101 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -37433,7 +36880,7 @@ L.17:
 L.19:
 	%117 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%118 = bitcast %bout.BufIO* %117 to %bout.BufIO*
-	%119 = getelementptr [8 x i8], [8 x i8]* @S.851
+	%119 = getelementptr [8 x i8], [8 x i8]* @S.939
 	%120 = bitcast [8 x i8]* %119 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %118, [0 x i8]* %120)
 	%121 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -37442,7 +36889,7 @@ L.19:
 	call void @llvm_PType(%type.TypeNode* %123)
 	%124 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%125 = bitcast %bout.BufIO* %124 to %bout.BufIO*
-	%126 = getelementptr [3 x i8], [3 x i8]* @S.852
+	%126 = getelementptr [3 x i8], [3 x i8]* @S.940
 	%127 = bitcast [3 x i8]* %126 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %125, [0 x i8]* %127)
 	%128 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -37454,7 +36901,7 @@ L.19:
 	call void @bout_BufIO_str(%bout.BufIO* %129, [0 x i8]* %133)
 	%134 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%135 = bitcast %bout.BufIO* %134 to %bout.BufIO*
-	%136 = getelementptr [4 x i8], [4 x i8]* @S.853
+	%136 = getelementptr [4 x i8], [4 x i8]* @S.941
 	%137 = bitcast [4 x i8]* %136 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %135, [0 x i8]* %137)
 	%138 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -37463,7 +36910,7 @@ L.19:
 	call void @llvm_PType(%type.TypeNode* %140)
 	%141 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%142 = bitcast %bout.BufIO* %141 to %bout.BufIO*
-	%143 = getelementptr [4 x i8], [4 x i8]* @S.854
+	%143 = getelementptr [4 x i8], [4 x i8]* @S.942
 	%144 = bitcast [4 x i8]* %143 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %142, [0 x i8]* %144)
 	%145 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -37504,7 +36951,7 @@ L.18:
 L.23:
 	%170 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%171 = bitcast %bout.BufIO* %170 to %bout.BufIO*
-	%172 = getelementptr [18 x i8], [18 x i8]* @S.855
+	%172 = getelementptr [18 x i8], [18 x i8]* @S.943
 	%173 = bitcast [18 x i8]* %172 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %171, [0 x i8]* %173)
 	%174 = load %ast.AstNode*, %ast.AstNode** %node
@@ -37513,7 +36960,7 @@ L.23:
 L.22:
 	%175 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%176 = bitcast %bout.BufIO* %175 to %bout.BufIO*
-	%177 = getelementptr [9 x i8], [9 x i8]* @S.856
+	%177 = getelementptr [9 x i8], [9 x i8]* @S.944
 	%178 = bitcast [9 x i8]* %177 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %176, [0 x i8]* %178)
 	%179 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -37541,7 +36988,7 @@ L.29:
 	call void @llvm_PTempName(i16 %191)
 	%192 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%193 = bitcast %bout.BufIO* %192 to %bout.BufIO*
-	%194 = getelementptr [9 x i8], [9 x i8]* @S.857
+	%194 = getelementptr [9 x i8], [9 x i8]* @S.945
 	%195 = bitcast [9 x i8]* %194 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %193, [0 x i8]* %195)
 	%196 = getelementptr %A.3, %A.3* @feature, i32 0, i32 8
@@ -37556,7 +37003,7 @@ L.31:
 	call void @llvm_PType(%type.TypeNode* %202)
 	%203 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%204 = bitcast %bout.BufIO* %203 to %bout.BufIO*
-	%205 = getelementptr [3 x i8], [3 x i8]* @S.858
+	%205 = getelementptr [3 x i8], [3 x i8]* @S.946
 	%206 = bitcast [3 x i8]* %205 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %204, [0 x i8]* %206)
 	br label %L.30
@@ -37568,7 +37015,7 @@ L.30:
 	call void @llvm_PType(%type.TypeNode* %210)
 	%211 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%212 = bitcast %bout.BufIO* %211 to %bout.BufIO*
-	%213 = getelementptr [3 x i8], [3 x i8]* @S.859
+	%213 = getelementptr [3 x i8], [3 x i8]* @S.947
 	%214 = bitcast [3 x i8]* %213 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %212, [0 x i8]* %214)
 	%215 = load i16, i16* %i
@@ -37601,7 +37048,7 @@ L.33:
 L.35:
 	%231 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%232 = bitcast %bout.BufIO* %231 to %bout.BufIO*
-	%233 = getelementptr [6 x i8], [6 x i8]* @S.860
+	%233 = getelementptr [6 x i8], [6 x i8]* @S.948
 	%234 = bitcast [6 x i8]* %233 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %232, [0 x i8]* %234)
 	%235 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -37611,7 +37058,7 @@ L.35:
 	call void @bout_BufIO_uint(%bout.BufIO* %236, i32 %238)
 	%239 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%240 = bitcast %bout.BufIO* %239 to %bout.BufIO*
-	%241 = getelementptr [15 x i8], [15 x i8]* @S.861
+	%241 = getelementptr [15 x i8], [15 x i8]* @S.949
 	%242 = bitcast [15 x i8]* %241 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %240, [0 x i8]* %242)
 	%243 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -37624,14 +37071,14 @@ L.35:
 L.38:
 	%248 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%249 = bitcast %bout.BufIO* %248 to %bout.BufIO*
-	%250 = getelementptr [7 x i8], [7 x i8]* @S.862
+	%250 = getelementptr [7 x i8], [7 x i8]* @S.950
 	%251 = bitcast [7 x i8]* %250 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %249, [0 x i8]* %251)
 	br label %L.37
 L.39:
 	%252 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%253 = bitcast %bout.BufIO* %252 to %bout.BufIO*
-	%254 = getelementptr [6 x i8], [6 x i8]* @S.863
+	%254 = getelementptr [6 x i8], [6 x i8]* @S.951
 	%255 = bitcast [6 x i8]* %254 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %253, [0 x i8]* %255)
 	%256 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -37684,7 +37131,7 @@ L.40:
 L.36:
 	%288 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%289 = bitcast %bout.BufIO* %288 to %bout.BufIO*
-	%290 = getelementptr [6 x i8], [6 x i8]* @S.864
+	%290 = getelementptr [6 x i8], [6 x i8]* @S.952
 	%291 = bitcast [6 x i8]* %290 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %289, [0 x i8]* %291)
 	%292 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -37693,7 +37140,7 @@ L.36:
 	call void @llvm_PRetvType(%type.TypeListEntry* %294, i8 0)
 	%295 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%296 = bitcast %bout.BufIO* %295 to %bout.BufIO*
-	%297 = getelementptr [6 x i8], [6 x i8]* @S.865
+	%297 = getelementptr [6 x i8], [6 x i8]* @S.953
 	%298 = bitcast [6 x i8]* %297 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %296, [0 x i8]* %298)
 	%299 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -37706,7 +37153,7 @@ L.36:
 L.34:
 	%304 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%305 = bitcast %bout.BufIO* %304 to %bout.BufIO*
-	%306 = getelementptr [6 x i8], [6 x i8]* @S.866
+	%306 = getelementptr [6 x i8], [6 x i8]* @S.954
 	%307 = bitcast [6 x i8]* %306 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %305, [0 x i8]* %307)
 	%308 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
@@ -37727,7 +37174,7 @@ L.32:
 L.26:
 	%317 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%318 = bitcast %bout.BufIO* %317 to %bout.BufIO*
-	%319 = getelementptr [10 x i8], [10 x i8]* @S.867
+	%319 = getelementptr [10 x i8], [10 x i8]* @S.955
 	%320 = bitcast [10 x i8]* %319 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %318, [0 x i8]* %320)
 	br label %L.24
@@ -37736,7 +37183,7 @@ L.24:
 	call void @llvm_PEndLine(%ast.AstNode* %321)
 	%322 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%323 = bitcast %bout.BufIO* %322 to %bout.BufIO*
-	%324 = getelementptr [3 x i8], [3 x i8]* @S.868
+	%324 = getelementptr [3 x i8], [3 x i8]* @S.956
 	%325 = bitcast [3 x i8]* %324 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %323, [0 x i8]* %325)
 	br label %L.1
@@ -37745,8 +37192,8 @@ L.1:
 return:
 	ret void
 }
-@S.869 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
-@S.870 = private unnamed_addr constant [13 x i8] c" %T %0N, %1N\00"
+@S.957 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
+@S.958 = private unnamed_addr constant [13 x i8] c" %T %0N, %1N\00"
 define internal zeroext i8 @llvm_BinaryOp(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -37773,7 +37220,7 @@ L.0:
 	%15 = load i16, i16* @llvm_Tseqno
 	%16 = add i16 %15, 1
 	store i16 %16, i16* @llvm_Tseqno
-	%17 = getelementptr [7 x i8], [7 x i8]* @S.869
+	%17 = getelementptr [7 x i8], [7 x i8]* @S.957
 	%18 = bitcast [7 x i8]* %17 to [0 x i8]*
 	%19 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %18, %ast.AstNode* %19)
@@ -37782,7 +37229,7 @@ L.0:
 	%22 = load [0 x i8]*, [0 x i8]** %op
 	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
-	%24 = getelementptr [13 x i8], [13 x i8]* @S.870
+	%24 = getelementptr [13 x i8], [13 x i8]* @S.958
 	%25 = bitcast [13 x i8]* %24 to [0 x i8]*
 	%26 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %25, %ast.AstNode* %26)
@@ -37830,8 +37277,8 @@ return:
 	%14 = load i8, i8* %rv.0
 	ret i8 %14
 }
-@S.871 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
-@S.872 = private unnamed_addr constant [14 x i8] c" %0T %0N, %1N\00"
+@S.959 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
+@S.960 = private unnamed_addr constant [14 x i8] c" %0T %0N, %1N\00"
 define internal zeroext i8 @llvm_CompareOp(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -37858,7 +37305,7 @@ L.0:
 	%15 = load i16, i16* @llvm_Tseqno
 	%16 = add i16 %15, 1
 	store i16 %16, i16* @llvm_Tseqno
-	%17 = getelementptr [7 x i8], [7 x i8]* @S.871
+	%17 = getelementptr [7 x i8], [7 x i8]* @S.959
 	%18 = bitcast [7 x i8]* %17 to [0 x i8]*
 	%19 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %18, %ast.AstNode* %19)
@@ -37867,7 +37314,7 @@ L.0:
 	%22 = load [0 x i8]*, [0 x i8]** %op
 	%23 = bitcast [0 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
-	%24 = getelementptr [14 x i8], [14 x i8]* @S.872
+	%24 = getelementptr [14 x i8], [14 x i8]* @S.960
 	%25 = bitcast [14 x i8]* %24 to [0 x i8]*
 	%26 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %25, %ast.AstNode* %26)
@@ -37879,8 +37326,8 @@ return:
 	%28 = load i8, i8* %rv.0
 	ret i8 %28
 }
-@S.873 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
-@S.874 = private unnamed_addr constant [15 x i8] c" %0T %0N to %T\00"
+@S.961 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
+@S.962 = private unnamed_addr constant [15 x i8] c" %0T %0N to %T\00"
 define internal void @llvm_ChangeSize(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -37900,7 +37347,7 @@ L.0:
 	%9 = load i16, i16* @llvm_Tseqno
 	%10 = add i16 %9, 1
 	store i16 %10, i16* @llvm_Tseqno
-	%11 = getelementptr [7 x i8], [7 x i8]* @S.873
+	%11 = getelementptr [7 x i8], [7 x i8]* @S.961
 	%12 = bitcast [7 x i8]* %11 to [0 x i8]*
 	%13 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %12, %ast.AstNode* %13)
@@ -37909,7 +37356,7 @@ L.0:
 	%16 = load [0 x i8]*, [0 x i8]** %op
 	%17 = bitcast [0 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
-	%18 = getelementptr [15 x i8], [15 x i8]* @S.874
+	%18 = getelementptr [15 x i8], [15 x i8]* @S.962
 	%19 = bitcast [15 x i8]* %18 to [0 x i8]*
 	%20 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %19, %ast.AstNode* %20)
@@ -38036,7 +37483,7 @@ L.9:
 return:
 	ret void
 }
-@S.875 = private unnamed_addr constant [27 x i8] c"FieldInsert LOAD not found\00"
+@S.963 = private unnamed_addr constant [27 x i8] c"FieldInsert LOAD not found\00"
 define internal { %ast.AstNode*, %ast.AstNode* } @llvm_FieldInsert(%ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -38182,7 +37629,7 @@ L.13:
 	store %ast.AstNode* %95, %ast.AstNode** %rhs
 	br label %L.12
 L.14:
-	%96 = getelementptr [27 x i8], [27 x i8]* @S.875
+	%96 = getelementptr [27 x i8], [27 x i8]* @S.963
 	%97 = bitcast [27 x i8]* %96 to [0 x i8]*
 	call void @lex_ErrorS(i8 88, [0 x i8]* %97)
 	br label %L.12
@@ -38201,11 +37648,11 @@ return:
 	%mrv1 = insertvalue { %ast.AstNode*, %ast.AstNode* } %mrv0,%ast.AstNode* %101,1
 	ret  { %ast.AstNode*, %ast.AstNode* } %mrv1
 }
-@S.876 = private unnamed_addr constant [12 x i8] c"\09%N = load \00"
-@S.877 = private unnamed_addr constant [10 x i8] c"volatile \00"
-@S.878 = private unnamed_addr constant [3 x i8] c", \00"
-@S.879 = private unnamed_addr constant [8 x i8] c"%T* %0N\00"
-@S.880 = private unnamed_addr constant [9 x i8] c", align \00"
+@S.964 = private unnamed_addr constant [12 x i8] c"\09%N = load \00"
+@S.965 = private unnamed_addr constant [10 x i8] c"volatile \00"
+@S.966 = private unnamed_addr constant [3 x i8] c", \00"
+@S.967 = private unnamed_addr constant [8 x i8] c"%T* %0N\00"
+@S.968 = private unnamed_addr constant [9 x i8] c", align \00"
 define internal void @llvm_Load(%ast.AstNode* %load$) nounwind {
 L.0:
 	%load = alloca %ast.AstNode*
@@ -38226,7 +37673,7 @@ L.0:
 	%10 = load i16, i16* @llvm_Tseqno
 	%11 = add i16 %10, 1
 	store i16 %11, i16* @llvm_Tseqno
-	%12 = getelementptr [12 x i8], [12 x i8]* @S.876
+	%12 = getelementptr [12 x i8], [12 x i8]* @S.964
 	%13 = bitcast [12 x i8]* %12 to [0 x i8]*
 	%14 = load %ast.AstNode*, %ast.AstNode** %load
 	call void @llvm_Print([0 x i8]* %13, %ast.AstNode* %14)
@@ -38242,7 +37689,7 @@ L.0:
 L.2:
 	%23 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%24 = bitcast %bout.BufIO* %23 to %bout.BufIO*
-	%25 = getelementptr [10 x i8], [10 x i8]* @S.877
+	%25 = getelementptr [10 x i8], [10 x i8]* @S.965
 	%26 = bitcast [10 x i8]* %25 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %24, [0 x i8]* %26)
 	br label %L.1
@@ -38258,12 +37705,12 @@ L.4:
 	call void @llvm_PType(%type.TypeNode* %32)
 	%33 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%34 = bitcast %bout.BufIO* %33 to %bout.BufIO*
-	%35 = getelementptr [3 x i8], [3 x i8]* @S.878
+	%35 = getelementptr [3 x i8], [3 x i8]* @S.966
 	%36 = bitcast [3 x i8]* %35 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %34, [0 x i8]* %36)
 	br label %L.3
 L.3:
-	%37 = getelementptr [8 x i8], [8 x i8]* @S.879
+	%37 = getelementptr [8 x i8], [8 x i8]* @S.967
 	%38 = bitcast [8 x i8]* %37 to [0 x i8]*
 	%39 = load %ast.AstNode*, %ast.AstNode** %load
 	call void @llvm_Print([0 x i8]* %38, %ast.AstNode* %39)
@@ -38279,7 +37726,7 @@ L.3:
 L.6:
 	%48 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%49 = bitcast %bout.BufIO* %48 to %bout.BufIO*
-	%50 = getelementptr [9 x i8], [9 x i8]* @S.880
+	%50 = getelementptr [9 x i8], [9 x i8]* @S.968
 	%51 = bitcast [9 x i8]* %50 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %49, [0 x i8]* %51)
 	%52 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -38306,10 +37753,10 @@ L.5:
 return:
 	ret void
 }
-@S.881 = private unnamed_addr constant [7 x i8] c"store \00"
-@S.882 = private unnamed_addr constant [10 x i8] c"volatile \00"
-@S.883 = private unnamed_addr constant [8 x i8] c", %K %D\00"
-@S.884 = private unnamed_addr constant [9 x i8] c", align \00"
+@S.969 = private unnamed_addr constant [7 x i8] c"store \00"
+@S.970 = private unnamed_addr constant [10 x i8] c"volatile \00"
+@S.971 = private unnamed_addr constant [8 x i8] c", %K %D\00"
+@S.972 = private unnamed_addr constant [9 x i8] c", align \00"
 define internal void @llvm_Store(%ast.AstNode* %store$) nounwind {
 L.0:
 	%store = alloca %ast.AstNode*
@@ -38438,7 +37885,7 @@ L.12:
 	call void @bout_BufIO_chr(%bout.BufIO* %81, i8 9)
 	%82 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%83 = bitcast %bout.BufIO* %82 to %bout.BufIO*
-	%84 = getelementptr [7 x i8], [7 x i8]* @S.881
+	%84 = getelementptr [7 x i8], [7 x i8]* @S.969
 	%85 = bitcast [7 x i8]* %84 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %83, [0 x i8]* %85)
 	%86 = load %ast.AstNode*, %ast.AstNode** %lhs
@@ -38453,7 +37900,7 @@ L.12:
 L.14:
 	%94 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%95 = bitcast %bout.BufIO* %94 to %bout.BufIO*
-	%96 = getelementptr [10 x i8], [10 x i8]* @S.882
+	%96 = getelementptr [10 x i8], [10 x i8]* @S.970
 	%97 = bitcast [10 x i8]* %96 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %95, [0 x i8]* %97)
 	br label %L.13
@@ -38465,7 +37912,7 @@ L.13:
 	call void @bout_BufIO_chr(%bout.BufIO* %100, i8 32)
 	%101 = load %ast.AstNode*, %ast.AstNode** %rhs
 	call void @llvm_NodeSrc(%ast.AstNode* %101)
-	%102 = getelementptr [8 x i8], [8 x i8]* @S.883
+	%102 = getelementptr [8 x i8], [8 x i8]* @S.971
 	%103 = bitcast [8 x i8]* %102 to [0 x i8]*
 	%104 = load %ast.AstNode*, %ast.AstNode** %lhs
 	call void @llvm_Print([0 x i8]* %103, %ast.AstNode* %104)
@@ -38481,7 +37928,7 @@ L.13:
 L.16:
 	%113 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%114 = bitcast %bout.BufIO* %113 to %bout.BufIO*
-	%115 = getelementptr [9 x i8], [9 x i8]* @S.884
+	%115 = getelementptr [9 x i8], [9 x i8]* @S.972
 	%116 = bitcast [9 x i8]* %115 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %114, [0 x i8]* %116)
 	%117 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -38515,8 +37962,8 @@ L.9:
 return:
 	ret void
 }
-@S.885 = private unnamed_addr constant [19 x i8] c"\09store %T %N, %T* \00"
-@S.886 = private unnamed_addr constant [18 x i8] c"\09br label %return\00"
+@S.973 = private unnamed_addr constant [19 x i8] c"\09store %T %N, %T* \00"
+@S.974 = private unnamed_addr constant [18 x i8] c"\09br label %return\00"
 define internal zeroext i8 @llvm_Return(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -38551,7 +37998,7 @@ L.5:
 	store %ast.AstNode* %16, %ast.AstNode** %rnode
 	%17 = load %ast.AstNode*, %ast.AstNode** %rnode
 	%18 = call i8 @llvm_GenSub(%ast.AstNode* %17)
-	%19 = getelementptr [19 x i8], [19 x i8]* @S.885
+	%19 = getelementptr [19 x i8], [19 x i8]* @S.973
 	%20 = bitcast [19 x i8]* %19 to [0 x i8]*
 	%21 = load %ast.AstNode*, %ast.AstNode** %rnode
 	call void @llvm_Print([0 x i8]* %20, %ast.AstNode* %21)
@@ -38577,7 +38024,7 @@ L.4:
 L.1:
 	%34 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%35 = bitcast %bout.BufIO* %34 to %bout.BufIO*
-	%36 = getelementptr [18 x i8], [18 x i8]* @S.886
+	%36 = getelementptr [18 x i8], [18 x i8]* @S.974
 	%37 = bitcast [18 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	%38 = load %ast.AstNode*, %ast.AstNode** %node
@@ -38588,7 +38035,7 @@ return:
 	%39 = load i8, i8* %rv.0
 	ret i8 %39
 }
-@S.887 = private unnamed_addr constant [38 x i8] c"\09%N = select i1 %0N, %1T %1N, %2T %2N\00"
+@S.975 = private unnamed_addr constant [38 x i8] c"\09%N = select i1 %0N, %1T %1N, %2T %2N\00"
 define internal void @llvm_IfExpr(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -38618,7 +38065,7 @@ L.0:
 	%21 = load i16, i16* @llvm_Tseqno
 	%22 = add i16 %21, 1
 	store i16 %22, i16* @llvm_Tseqno
-	%23 = getelementptr [38 x i8], [38 x i8]* @S.887
+	%23 = getelementptr [38 x i8], [38 x i8]* @S.975
 	%24 = bitcast [38 x i8]* %23 to [0 x i8]*
 	%25 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %24, %ast.AstNode* %25)
@@ -38628,51 +38075,51 @@ L.0:
 return:
 	ret void
 }
-@S.888 = private unnamed_addr constant [32 x i8] c"\09%N = getelementptr %R, %K %0N\0A\00"
-@S.889 = private unnamed_addr constant [28 x i8] c"\09%N = getelementptr %K %0N\0A\00"
-@S.890 = private unnamed_addr constant [45 x i8] c"\09%N = getelementptr %0R, %0K %0N, %W 0, i32 \00"
-@S.891 = private unnamed_addr constant [40 x i8] c"\09%N = getelementptr %0K %0N, %W 0, i32 \00"
-@S.892 = private unnamed_addr constant [49 x i8] c"\09%N = getelementptr %0R, %0K %0N, %W 0, %1T %1N\0A\00"
-@S.893 = private unnamed_addr constant [44 x i8] c"\09%N = getelementptr %0K %0N, %W 0, %1T %1N\0A\00"
-@S.894 = private unnamed_addr constant [49 x i8] c"\09%N = getelementptr %0R, %0T %0N, %W 0, %1T %1N\0A\00"
-@S.895 = private unnamed_addr constant [44 x i8] c"\09%N = getelementptr %0T %0N, %W 0, %1T %1N\0A\00"
-@S.896 = private unnamed_addr constant [27 x i8] c" = bitcast %**K* %N to %T\0A\00"
-@S.897 = private unnamed_addr constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
-@S.898 = private unnamed_addr constant [30 x i8] c"\09%N = inttoptr %0T %0N to %T\0A\00"
-@S.899 = private unnamed_addr constant [30 x i8] c"\09%N = ptrtoint %0T %0N to %T\0A\00"
-@S.900 = private unnamed_addr constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
-@S.901 = private unnamed_addr constant [5 x i8] c"zext\00"
-@S.902 = private unnamed_addr constant [5 x i8] c"sext\00"
-@S.903 = private unnamed_addr constant [6 x i8] c"trunc\00"
-@S.904 = private unnamed_addr constant [4 x i8] c"add\00"
-@S.905 = private unnamed_addr constant [4 x i8] c"sub\00"
-@S.906 = private unnamed_addr constant [4 x i8] c"mul\00"
-@S.907 = private unnamed_addr constant [5 x i8] c"udiv\00"
-@S.908 = private unnamed_addr constant [5 x i8] c"sdiv\00"
-@S.909 = private unnamed_addr constant [5 x i8] c"urem\00"
-@S.910 = private unnamed_addr constant [5 x i8] c"srem\00"
-@S.911 = private unnamed_addr constant [4 x i8] c"shl\00"
-@S.912 = private unnamed_addr constant [5 x i8] c"lshr\00"
-@S.913 = private unnamed_addr constant [5 x i8] c"ashr\00"
-@S.914 = private unnamed_addr constant [5 x i8] c"fadd\00"
-@S.915 = private unnamed_addr constant [5 x i8] c"fsub\00"
-@S.916 = private unnamed_addr constant [5 x i8] c"fmul\00"
-@S.917 = private unnamed_addr constant [5 x i8] c"fdiv\00"
-@S.918 = private unnamed_addr constant [5 x i8] c"frem\00"
-@S.919 = private unnamed_addr constant [8 x i8] c"icmp eq\00"
-@S.920 = private unnamed_addr constant [8 x i8] c"icmp ne\00"
-@S.921 = private unnamed_addr constant [9 x i8] c"icmp ugt\00"
-@S.922 = private unnamed_addr constant [9 x i8] c"icmp ult\00"
-@S.923 = private unnamed_addr constant [9 x i8] c"icmp uge\00"
-@S.924 = private unnamed_addr constant [9 x i8] c"icmp ule\00"
-@S.925 = private unnamed_addr constant [9 x i8] c"icmp sgt\00"
-@S.926 = private unnamed_addr constant [9 x i8] c"icmp slt\00"
-@S.927 = private unnamed_addr constant [9 x i8] c"icmp sge\00"
-@S.928 = private unnamed_addr constant [9 x i8] c"icmp sle\00"
-@S.929 = private unnamed_addr constant [4 x i8] c"and\00"
-@S.930 = private unnamed_addr constant [3 x i8] c"or\00"
-@S.931 = private unnamed_addr constant [4 x i8] c"xor\00"
-@S.932 = private unnamed_addr constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
+@S.976 = private unnamed_addr constant [32 x i8] c"\09%N = getelementptr %R, %K %0N\0A\00"
+@S.977 = private unnamed_addr constant [28 x i8] c"\09%N = getelementptr %K %0N\0A\00"
+@S.978 = private unnamed_addr constant [45 x i8] c"\09%N = getelementptr %0R, %0K %0N, %W 0, i32 \00"
+@S.979 = private unnamed_addr constant [40 x i8] c"\09%N = getelementptr %0K %0N, %W 0, i32 \00"
+@S.980 = private unnamed_addr constant [49 x i8] c"\09%N = getelementptr %0R, %0K %0N, %W 0, %1T %1N\0A\00"
+@S.981 = private unnamed_addr constant [44 x i8] c"\09%N = getelementptr %0K %0N, %W 0, %1T %1N\0A\00"
+@S.982 = private unnamed_addr constant [49 x i8] c"\09%N = getelementptr %0R, %0T %0N, %W 0, %1T %1N\0A\00"
+@S.983 = private unnamed_addr constant [44 x i8] c"\09%N = getelementptr %0T %0N, %W 0, %1T %1N\0A\00"
+@S.984 = private unnamed_addr constant [27 x i8] c" = bitcast %**K* %N to %T\0A\00"
+@S.985 = private unnamed_addr constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
+@S.986 = private unnamed_addr constant [30 x i8] c"\09%N = inttoptr %0T %0N to %T\0A\00"
+@S.987 = private unnamed_addr constant [30 x i8] c"\09%N = ptrtoint %0T %0N to %T\0A\00"
+@S.988 = private unnamed_addr constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
+@S.989 = private unnamed_addr constant [5 x i8] c"zext\00"
+@S.990 = private unnamed_addr constant [5 x i8] c"sext\00"
+@S.991 = private unnamed_addr constant [6 x i8] c"trunc\00"
+@S.992 = private unnamed_addr constant [4 x i8] c"add\00"
+@S.993 = private unnamed_addr constant [4 x i8] c"sub\00"
+@S.994 = private unnamed_addr constant [4 x i8] c"mul\00"
+@S.995 = private unnamed_addr constant [5 x i8] c"udiv\00"
+@S.996 = private unnamed_addr constant [5 x i8] c"sdiv\00"
+@S.997 = private unnamed_addr constant [5 x i8] c"urem\00"
+@S.998 = private unnamed_addr constant [5 x i8] c"srem\00"
+@S.999 = private unnamed_addr constant [4 x i8] c"shl\00"
+@S.1000 = private unnamed_addr constant [5 x i8] c"lshr\00"
+@S.1001 = private unnamed_addr constant [5 x i8] c"ashr\00"
+@S.1002 = private unnamed_addr constant [5 x i8] c"fadd\00"
+@S.1003 = private unnamed_addr constant [5 x i8] c"fsub\00"
+@S.1004 = private unnamed_addr constant [5 x i8] c"fmul\00"
+@S.1005 = private unnamed_addr constant [5 x i8] c"fdiv\00"
+@S.1006 = private unnamed_addr constant [5 x i8] c"frem\00"
+@S.1007 = private unnamed_addr constant [8 x i8] c"icmp eq\00"
+@S.1008 = private unnamed_addr constant [8 x i8] c"icmp ne\00"
+@S.1009 = private unnamed_addr constant [9 x i8] c"icmp ugt\00"
+@S.1010 = private unnamed_addr constant [9 x i8] c"icmp ult\00"
+@S.1011 = private unnamed_addr constant [9 x i8] c"icmp uge\00"
+@S.1012 = private unnamed_addr constant [9 x i8] c"icmp ule\00"
+@S.1013 = private unnamed_addr constant [9 x i8] c"icmp sgt\00"
+@S.1014 = private unnamed_addr constant [9 x i8] c"icmp slt\00"
+@S.1015 = private unnamed_addr constant [9 x i8] c"icmp sge\00"
+@S.1016 = private unnamed_addr constant [9 x i8] c"icmp sle\00"
+@S.1017 = private unnamed_addr constant [4 x i8] c"and\00"
+@S.1018 = private unnamed_addr constant [3 x i8] c"or\00"
+@S.1019 = private unnamed_addr constant [4 x i8] c"xor\00"
+@S.1020 = private unnamed_addr constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
 define internal zeroext i8 @llvm_GenSub(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -38972,13 +38419,13 @@ L.23:
 	%107 = icmp ne i8 %106, 0
 	br i1 %107, label %L.88, label %L.89
 L.88:
-	%108 = getelementptr [32 x i8], [32 x i8]* @S.888
+	%108 = getelementptr [32 x i8], [32 x i8]* @S.976
 	%109 = bitcast [32 x i8]* %108 to [0 x i8]*
 	%110 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %109, %ast.AstNode* %110)
 	br label %L.87
 L.89:
-	%111 = getelementptr [28 x i8], [28 x i8]* @S.889
+	%111 = getelementptr [28 x i8], [28 x i8]* @S.977
 	%112 = bitcast [28 x i8]* %111 to [0 x i8]*
 	%113 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %112, %ast.AstNode* %113)
@@ -39004,13 +38451,13 @@ L.24:
 	%127 = icmp ne i8 %126, 0
 	br i1 %127, label %L.91, label %L.92
 L.91:
-	%128 = getelementptr [45 x i8], [45 x i8]* @S.890
+	%128 = getelementptr [45 x i8], [45 x i8]* @S.978
 	%129 = bitcast [45 x i8]* %128 to [0 x i8]*
 	%130 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %129, %ast.AstNode* %130)
 	br label %L.90
 L.92:
-	%131 = getelementptr [40 x i8], [40 x i8]* @S.891
+	%131 = getelementptr [40 x i8], [40 x i8]* @S.979
 	%132 = bitcast [40 x i8]* %131 to [0 x i8]*
 	%133 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %132, %ast.AstNode* %133)
@@ -39064,13 +38511,13 @@ L.25:
 	%172 = icmp ne i8 %171, 0
 	br i1 %172, label %L.94, label %L.95
 L.94:
-	%173 = getelementptr [49 x i8], [49 x i8]* @S.892
+	%173 = getelementptr [49 x i8], [49 x i8]* @S.980
 	%174 = bitcast [49 x i8]* %173 to [0 x i8]*
 	%175 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %174, %ast.AstNode* %175)
 	br label %L.93
 L.95:
-	%176 = getelementptr [44 x i8], [44 x i8]* @S.893
+	%176 = getelementptr [44 x i8], [44 x i8]* @S.981
 	%177 = bitcast [44 x i8]* %176 to [0 x i8]*
 	%178 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %177, %ast.AstNode* %178)
@@ -39120,13 +38567,13 @@ L.26:
 	%212 = icmp ne i8 %211, 0
 	br i1 %212, label %L.97, label %L.98
 L.97:
-	%213 = getelementptr [49 x i8], [49 x i8]* @S.894
+	%213 = getelementptr [49 x i8], [49 x i8]* @S.982
 	%214 = bitcast [49 x i8]* %213 to [0 x i8]*
 	%215 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %214, %ast.AstNode* %215)
 	br label %L.96
 L.98:
-	%216 = getelementptr [44 x i8], [44 x i8]* @S.895
+	%216 = getelementptr [44 x i8], [44 x i8]* @S.983
 	%217 = bitcast [44 x i8]* %216 to [0 x i8]*
 	%218 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %217, %ast.AstNode* %218)
@@ -39137,7 +38584,7 @@ L.96:
 	call void @bout_BufIO_chr(%bout.BufIO* %220, i8 9)
 	%221 = load i16, i16* %nextseqno
 	call void @llvm_PTempName(i16 %221)
-	%222 = getelementptr [27 x i8], [27 x i8]* @S.896
+	%222 = getelementptr [27 x i8], [27 x i8]* @S.984
 	%223 = bitcast [27 x i8]* %222 to [0 x i8]*
 	%224 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %223, %ast.AstNode* %224)
@@ -39179,13 +38626,13 @@ L.100:
 	%253 = icmp eq i8 %252, 5
 	br i1 %253, label %L.103, label %L.104
 L.103:
-	%254 = getelementptr [29 x i8], [29 x i8]* @S.897
+	%254 = getelementptr [29 x i8], [29 x i8]* @S.985
 	%255 = bitcast [29 x i8]* %254 to [0 x i8]*
 	%256 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %255, %ast.AstNode* %256)
 	br label %L.102
 L.104:
-	%257 = getelementptr [30 x i8], [30 x i8]* @S.898
+	%257 = getelementptr [30 x i8], [30 x i8]* @S.986
 	%258 = bitcast [30 x i8]* %257 to [0 x i8]*
 	%259 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %258, %ast.AstNode* %259)
@@ -39204,13 +38651,13 @@ L.101:
 	%268 = icmp eq i8 %267, 5
 	br i1 %268, label %L.106, label %L.107
 L.106:
-	%269 = getelementptr [30 x i8], [30 x i8]* @S.899
+	%269 = getelementptr [30 x i8], [30 x i8]* @S.987
 	%270 = bitcast [30 x i8]* %269 to [0 x i8]*
 	%271 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %270, %ast.AstNode* %271)
 	br label %L.105
 L.107:
-	%272 = getelementptr [29 x i8], [29 x i8]* @S.900
+	%272 = getelementptr [29 x i8], [29 x i8]* @S.988
 	%273 = bitcast [29 x i8]* %272 to [0 x i8]*
 	%274 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %273, %ast.AstNode* %274)
@@ -39221,19 +38668,19 @@ L.99:
 	br label %L.6
 L.28:
 	%275 = load %ast.AstNode*, %ast.AstNode** %node
-	%276 = getelementptr [5 x i8], [5 x i8]* @S.901
+	%276 = getelementptr [5 x i8], [5 x i8]* @S.989
 	%277 = bitcast [5 x i8]* %276 to [0 x i8]*
 	call void @llvm_ChangeSize(%ast.AstNode* %275, [0 x i8]* %277)
 	br label %L.6
 L.29:
 	%278 = load %ast.AstNode*, %ast.AstNode** %node
-	%279 = getelementptr [5 x i8], [5 x i8]* @S.902
+	%279 = getelementptr [5 x i8], [5 x i8]* @S.990
 	%280 = bitcast [5 x i8]* %279 to [0 x i8]*
 	call void @llvm_ChangeSize(%ast.AstNode* %278, [0 x i8]* %280)
 	br label %L.6
 L.30:
 	%281 = load %ast.AstNode*, %ast.AstNode** %node
-	%282 = getelementptr [6 x i8], [6 x i8]* @S.903
+	%282 = getelementptr [6 x i8], [6 x i8]* @S.991
 	%283 = bitcast [6 x i8]* %282 to [0 x i8]*
 	call void @llvm_ChangeSize(%ast.AstNode* %281, [0 x i8]* %283)
 	br label %L.6
@@ -39263,171 +38710,171 @@ L.36:
 	br label %L.6
 L.37:
 	%292 = load %ast.AstNode*, %ast.AstNode** %node
-	%293 = getelementptr [4 x i8], [4 x i8]* @S.904
+	%293 = getelementptr [4 x i8], [4 x i8]* @S.992
 	%294 = bitcast [4 x i8]* %293 to [0 x i8]*
 	%295 = call i8 @llvm_BinaryOp(%ast.AstNode* %292, [0 x i8]* %294)
 	br label %L.6
 L.38:
 	%296 = load %ast.AstNode*, %ast.AstNode** %node
-	%297 = getelementptr [4 x i8], [4 x i8]* @S.905
+	%297 = getelementptr [4 x i8], [4 x i8]* @S.993
 	%298 = bitcast [4 x i8]* %297 to [0 x i8]*
 	%299 = call i8 @llvm_BinaryOp(%ast.AstNode* %296, [0 x i8]* %298)
 	br label %L.6
 L.39:
 	%300 = load %ast.AstNode*, %ast.AstNode** %node
-	%301 = getelementptr [4 x i8], [4 x i8]* @S.906
+	%301 = getelementptr [4 x i8], [4 x i8]* @S.994
 	%302 = bitcast [4 x i8]* %301 to [0 x i8]*
 	%303 = call i8 @llvm_BinaryOp(%ast.AstNode* %300, [0 x i8]* %302)
 	br label %L.6
 L.40:
 	%304 = load %ast.AstNode*, %ast.AstNode** %node
-	%305 = getelementptr [5 x i8], [5 x i8]* @S.907
+	%305 = getelementptr [5 x i8], [5 x i8]* @S.995
 	%306 = bitcast [5 x i8]* %305 to [0 x i8]*
-	%307 = getelementptr [5 x i8], [5 x i8]* @S.908
+	%307 = getelementptr [5 x i8], [5 x i8]* @S.996
 	%308 = bitcast [5 x i8]* %307 to [0 x i8]*
 	%309 = call i8 @llvm_SignedBinaryOp(%ast.AstNode* %304, [0 x i8]* %306, [0 x i8]* %308)
 	br label %L.6
 L.41:
 	%310 = load %ast.AstNode*, %ast.AstNode** %node
-	%311 = getelementptr [5 x i8], [5 x i8]* @S.909
+	%311 = getelementptr [5 x i8], [5 x i8]* @S.997
 	%312 = bitcast [5 x i8]* %311 to [0 x i8]*
-	%313 = getelementptr [5 x i8], [5 x i8]* @S.910
+	%313 = getelementptr [5 x i8], [5 x i8]* @S.998
 	%314 = bitcast [5 x i8]* %313 to [0 x i8]*
 	%315 = call i8 @llvm_SignedBinaryOp(%ast.AstNode* %310, [0 x i8]* %312, [0 x i8]* %314)
 	br label %L.6
 L.42:
 	%316 = load %ast.AstNode*, %ast.AstNode** %node
-	%317 = getelementptr [4 x i8], [4 x i8]* @S.911
+	%317 = getelementptr [4 x i8], [4 x i8]* @S.999
 	%318 = bitcast [4 x i8]* %317 to [0 x i8]*
 	%319 = call i8 @llvm_BinaryOp(%ast.AstNode* %316, [0 x i8]* %318)
 	br label %L.6
 L.43:
 	%320 = load %ast.AstNode*, %ast.AstNode** %node
-	%321 = getelementptr [5 x i8], [5 x i8]* @S.912
+	%321 = getelementptr [5 x i8], [5 x i8]* @S.1000
 	%322 = bitcast [5 x i8]* %321 to [0 x i8]*
 	%323 = call i8 @llvm_BinaryOp(%ast.AstNode* %320, [0 x i8]* %322)
 	br label %L.6
 L.44:
 	%324 = load %ast.AstNode*, %ast.AstNode** %node
-	%325 = getelementptr [5 x i8], [5 x i8]* @S.913
+	%325 = getelementptr [5 x i8], [5 x i8]* @S.1001
 	%326 = bitcast [5 x i8]* %325 to [0 x i8]*
 	%327 = call i8 @llvm_BinaryOp(%ast.AstNode* %324, [0 x i8]* %326)
 	br label %L.6
 L.45:
 	%328 = load %ast.AstNode*, %ast.AstNode** %node
-	%329 = getelementptr [5 x i8], [5 x i8]* @S.914
+	%329 = getelementptr [5 x i8], [5 x i8]* @S.1002
 	%330 = bitcast [5 x i8]* %329 to [0 x i8]*
 	%331 = call i8 @llvm_BinaryOp(%ast.AstNode* %328, [0 x i8]* %330)
 	br label %L.6
 L.46:
 	%332 = load %ast.AstNode*, %ast.AstNode** %node
-	%333 = getelementptr [5 x i8], [5 x i8]* @S.915
+	%333 = getelementptr [5 x i8], [5 x i8]* @S.1003
 	%334 = bitcast [5 x i8]* %333 to [0 x i8]*
 	%335 = call i8 @llvm_BinaryOp(%ast.AstNode* %332, [0 x i8]* %334)
 	br label %L.6
 L.47:
 	%336 = load %ast.AstNode*, %ast.AstNode** %node
-	%337 = getelementptr [5 x i8], [5 x i8]* @S.916
+	%337 = getelementptr [5 x i8], [5 x i8]* @S.1004
 	%338 = bitcast [5 x i8]* %337 to [0 x i8]*
 	%339 = call i8 @llvm_BinaryOp(%ast.AstNode* %336, [0 x i8]* %338)
 	br label %L.6
 L.48:
 	%340 = load %ast.AstNode*, %ast.AstNode** %node
-	%341 = getelementptr [5 x i8], [5 x i8]* @S.917
+	%341 = getelementptr [5 x i8], [5 x i8]* @S.1005
 	%342 = bitcast [5 x i8]* %341 to [0 x i8]*
 	%343 = call i8 @llvm_BinaryOp(%ast.AstNode* %340, [0 x i8]* %342)
 	br label %L.6
 L.49:
 	%344 = load %ast.AstNode*, %ast.AstNode** %node
-	%345 = getelementptr [5 x i8], [5 x i8]* @S.918
+	%345 = getelementptr [5 x i8], [5 x i8]* @S.1006
 	%346 = bitcast [5 x i8]* %345 to [0 x i8]*
 	%347 = call i8 @llvm_BinaryOp(%ast.AstNode* %344, [0 x i8]* %346)
 	br label %L.6
 L.50:
 	%348 = load %ast.AstNode*, %ast.AstNode** %node
-	%349 = getelementptr [8 x i8], [8 x i8]* @S.919
+	%349 = getelementptr [8 x i8], [8 x i8]* @S.1007
 	%350 = bitcast [8 x i8]* %349 to [0 x i8]*
 	%351 = call i8 @llvm_CompareOp(%ast.AstNode* %348, [0 x i8]* %350)
 	store i8 %351, i8* %term
 	br label %L.6
 L.51:
 	%352 = load %ast.AstNode*, %ast.AstNode** %node
-	%353 = getelementptr [8 x i8], [8 x i8]* @S.920
+	%353 = getelementptr [8 x i8], [8 x i8]* @S.1008
 	%354 = bitcast [8 x i8]* %353 to [0 x i8]*
 	%355 = call i8 @llvm_CompareOp(%ast.AstNode* %352, [0 x i8]* %354)
 	store i8 %355, i8* %term
 	br label %L.6
 L.52:
 	%356 = load %ast.AstNode*, %ast.AstNode** %node
-	%357 = getelementptr [9 x i8], [9 x i8]* @S.921
+	%357 = getelementptr [9 x i8], [9 x i8]* @S.1009
 	%358 = bitcast [9 x i8]* %357 to [0 x i8]*
 	%359 = call i8 @llvm_CompareOp(%ast.AstNode* %356, [0 x i8]* %358)
 	store i8 %359, i8* %term
 	br label %L.6
 L.53:
 	%360 = load %ast.AstNode*, %ast.AstNode** %node
-	%361 = getelementptr [9 x i8], [9 x i8]* @S.922
+	%361 = getelementptr [9 x i8], [9 x i8]* @S.1010
 	%362 = bitcast [9 x i8]* %361 to [0 x i8]*
 	%363 = call i8 @llvm_CompareOp(%ast.AstNode* %360, [0 x i8]* %362)
 	store i8 %363, i8* %term
 	br label %L.6
 L.54:
 	%364 = load %ast.AstNode*, %ast.AstNode** %node
-	%365 = getelementptr [9 x i8], [9 x i8]* @S.923
+	%365 = getelementptr [9 x i8], [9 x i8]* @S.1011
 	%366 = bitcast [9 x i8]* %365 to [0 x i8]*
 	%367 = call i8 @llvm_CompareOp(%ast.AstNode* %364, [0 x i8]* %366)
 	store i8 %367, i8* %term
 	br label %L.6
 L.55:
 	%368 = load %ast.AstNode*, %ast.AstNode** %node
-	%369 = getelementptr [9 x i8], [9 x i8]* @S.924
+	%369 = getelementptr [9 x i8], [9 x i8]* @S.1012
 	%370 = bitcast [9 x i8]* %369 to [0 x i8]*
 	%371 = call i8 @llvm_CompareOp(%ast.AstNode* %368, [0 x i8]* %370)
 	store i8 %371, i8* %term
 	br label %L.6
 L.56:
 	%372 = load %ast.AstNode*, %ast.AstNode** %node
-	%373 = getelementptr [9 x i8], [9 x i8]* @S.925
+	%373 = getelementptr [9 x i8], [9 x i8]* @S.1013
 	%374 = bitcast [9 x i8]* %373 to [0 x i8]*
 	%375 = call i8 @llvm_CompareOp(%ast.AstNode* %372, [0 x i8]* %374)
 	store i8 %375, i8* %term
 	br label %L.6
 L.57:
 	%376 = load %ast.AstNode*, %ast.AstNode** %node
-	%377 = getelementptr [9 x i8], [9 x i8]* @S.926
+	%377 = getelementptr [9 x i8], [9 x i8]* @S.1014
 	%378 = bitcast [9 x i8]* %377 to [0 x i8]*
 	%379 = call i8 @llvm_CompareOp(%ast.AstNode* %376, [0 x i8]* %378)
 	store i8 %379, i8* %term
 	br label %L.6
 L.58:
 	%380 = load %ast.AstNode*, %ast.AstNode** %node
-	%381 = getelementptr [9 x i8], [9 x i8]* @S.927
+	%381 = getelementptr [9 x i8], [9 x i8]* @S.1015
 	%382 = bitcast [9 x i8]* %381 to [0 x i8]*
 	%383 = call i8 @llvm_CompareOp(%ast.AstNode* %380, [0 x i8]* %382)
 	store i8 %383, i8* %term
 	br label %L.6
 L.59:
 	%384 = load %ast.AstNode*, %ast.AstNode** %node
-	%385 = getelementptr [9 x i8], [9 x i8]* @S.928
+	%385 = getelementptr [9 x i8], [9 x i8]* @S.1016
 	%386 = bitcast [9 x i8]* %385 to [0 x i8]*
 	%387 = call i8 @llvm_CompareOp(%ast.AstNode* %384, [0 x i8]* %386)
 	store i8 %387, i8* %term
 	br label %L.6
 L.60:
 	%388 = load %ast.AstNode*, %ast.AstNode** %node
-	%389 = getelementptr [4 x i8], [4 x i8]* @S.929
+	%389 = getelementptr [4 x i8], [4 x i8]* @S.1017
 	%390 = bitcast [4 x i8]* %389 to [0 x i8]*
 	%391 = call i8 @llvm_BinaryOp(%ast.AstNode* %388, [0 x i8]* %390)
 	br label %L.6
 L.61:
 	%392 = load %ast.AstNode*, %ast.AstNode** %node
-	%393 = getelementptr [3 x i8], [3 x i8]* @S.930
+	%393 = getelementptr [3 x i8], [3 x i8]* @S.1018
 	%394 = bitcast [3 x i8]* %393 to [0 x i8]*
 	%395 = call i8 @llvm_BinaryOp(%ast.AstNode* %392, [0 x i8]* %394)
 	br label %L.6
 L.62:
 	%396 = load %ast.AstNode*, %ast.AstNode** %node
-	%397 = getelementptr [4 x i8], [4 x i8]* @S.931
+	%397 = getelementptr [4 x i8], [4 x i8]* @S.1019
 	%398 = bitcast [4 x i8]* %397 to [0 x i8]*
 	%399 = call i8 @llvm_BinaryOp(%ast.AstNode* %396, [0 x i8]* %398)
 	br label %L.6
@@ -39445,7 +38892,7 @@ L.63:
 	%409 = load i16, i16* @llvm_Tseqno
 	%410 = add i16 %409, 1
 	store i16 %410, i16* @llvm_Tseqno
-	%411 = getelementptr [24 x i8], [24 x i8]* @S.932
+	%411 = getelementptr [24 x i8], [24 x i8]* @S.1020
 	%412 = bitcast [24 x i8]* %411 to [0 x i8]*
 	%413 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %412, %ast.AstNode* %413)
@@ -39546,19 +38993,19 @@ return:
 	%452 = load i8, i8* %rv.0
 	ret i8 %452
 }
-@S.933 = private unnamed_addr constant [22 x i8] c"target datalayout = \22\00"
-@S.934 = private unnamed_addr constant [2 x i8] c"E\00"
-@S.935 = private unnamed_addr constant [2 x i8] c"e\00"
-@S.936 = private unnamed_addr constant [4 x i8] c"-p:\00"
-@S.937 = private unnamed_addr constant [2 x i8] c":\00"
-@S.938 = private unnamed_addr constant [2 x i8] c":\00"
-@S.939 = private unnamed_addr constant [5 x i8] c"-i1:\00"
-@S.940 = private unnamed_addr constant [2 x i8] c":\00"
-@S.941 = private unnamed_addr constant [3 x i8] c"-i\00"
-@S.942 = private unnamed_addr constant [2 x i8] c":\00"
-@S.943 = private unnamed_addr constant [2 x i8] c":\00"
-@S.944 = private unnamed_addr constant [20 x i8] c"\22\0Atarget triple = \22\00"
-@S.945 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
+@S.1021 = private unnamed_addr constant [22 x i8] c"target datalayout = \22\00"
+@S.1022 = private unnamed_addr constant [2 x i8] c"E\00"
+@S.1023 = private unnamed_addr constant [2 x i8] c"e\00"
+@S.1024 = private unnamed_addr constant [4 x i8] c"-p:\00"
+@S.1025 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1026 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1027 = private unnamed_addr constant [5 x i8] c"-i1:\00"
+@S.1028 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1029 = private unnamed_addr constant [3 x i8] c"-i\00"
+@S.1030 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1031 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1032 = private unnamed_addr constant [20 x i8] c"\22\0Atarget triple = \22\00"
+@S.1033 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
 define internal void @llvm_Gen(i32 %fd$, %ast.AstNode* %tree$) nounwind {
 L.0:
 	%fd = alloca i32
@@ -39600,7 +39047,7 @@ L.3:
 L.2:
 	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%22 = bitcast %bout.BufIO* %21 to %bout.BufIO*
-	%23 = getelementptr [22 x i8], [22 x i8]* @S.933
+	%23 = getelementptr [22 x i8], [22 x i8]* @S.1021
 	%24 = bitcast [22 x i8]* %23 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
 	%25 = load %target.ModelT*, %target.ModelT** @target_Target
@@ -39611,21 +39058,21 @@ L.2:
 L.5:
 	%29 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%30 = bitcast %bout.BufIO* %29 to %bout.BufIO*
-	%31 = getelementptr [2 x i8], [2 x i8]* @S.934
+	%31 = getelementptr [2 x i8], [2 x i8]* @S.1022
 	%32 = bitcast [2 x i8]* %31 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %30, [0 x i8]* %32)
 	br label %L.4
 L.6:
 	%33 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%34 = bitcast %bout.BufIO* %33 to %bout.BufIO*
-	%35 = getelementptr [2 x i8], [2 x i8]* @S.935
+	%35 = getelementptr [2 x i8], [2 x i8]* @S.1023
 	%36 = bitcast [2 x i8]* %35 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %34, [0 x i8]* %36)
 	br label %L.4
 L.4:
 	%37 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%38 = bitcast %bout.BufIO* %37 to %bout.BufIO*
-	%39 = getelementptr [4 x i8], [4 x i8]* @S.936
+	%39 = getelementptr [4 x i8], [4 x i8]* @S.1024
 	%40 = bitcast [4 x i8]* %39 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %38, [0 x i8]* %40)
 	%41 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39638,7 +39085,7 @@ L.4:
 	call void @bout_BufIO_uint(%bout.BufIO* %42, i32 %47)
 	%48 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%49 = bitcast %bout.BufIO* %48 to %bout.BufIO*
-	%50 = getelementptr [2 x i8], [2 x i8]* @S.937
+	%50 = getelementptr [2 x i8], [2 x i8]* @S.1025
 	%51 = bitcast [2 x i8]* %50 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %49, [0 x i8]* %51)
 	%52 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39651,7 +39098,7 @@ L.4:
 	call void @bout_BufIO_uint(%bout.BufIO* %53, i32 %58)
 	%59 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%60 = bitcast %bout.BufIO* %59 to %bout.BufIO*
-	%61 = getelementptr [2 x i8], [2 x i8]* @S.938
+	%61 = getelementptr [2 x i8], [2 x i8]* @S.1026
 	%62 = bitcast [2 x i8]* %61 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %60, [0 x i8]* %62)
 	%63 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39664,7 +39111,7 @@ L.4:
 	call void @bout_BufIO_uint(%bout.BufIO* %64, i32 %69)
 	%70 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%71 = bitcast %bout.BufIO* %70 to %bout.BufIO*
-	%72 = getelementptr [5 x i8], [5 x i8]* @S.939
+	%72 = getelementptr [5 x i8], [5 x i8]* @S.1027
 	%73 = bitcast [5 x i8]* %72 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %71, [0 x i8]* %73)
 	%74 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39678,7 +39125,7 @@ L.4:
 	call void @bout_BufIO_uint(%bout.BufIO* %75, i32 %81)
 	%82 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%83 = bitcast %bout.BufIO* %82 to %bout.BufIO*
-	%84 = getelementptr [2 x i8], [2 x i8]* @S.940
+	%84 = getelementptr [2 x i8], [2 x i8]* @S.1028
 	%85 = bitcast [2 x i8]* %84 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %83, [0 x i8]* %85)
 	%86 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39703,7 +39150,7 @@ L.7:
 L.9:
 	%100 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%101 = bitcast %bout.BufIO* %100 to %bout.BufIO*
-	%102 = getelementptr [3 x i8], [3 x i8]* @S.941
+	%102 = getelementptr [3 x i8], [3 x i8]* @S.1029
 	%103 = bitcast [3 x i8]* %102 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %101, [0 x i8]* %103)
 	%104 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39719,7 +39166,7 @@ L.9:
 	call void @bout_BufIO_uint(%bout.BufIO* %105, i32 %113)
 	%114 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%115 = bitcast %bout.BufIO* %114 to %bout.BufIO*
-	%116 = getelementptr [2 x i8], [2 x i8]* @S.942
+	%116 = getelementptr [2 x i8], [2 x i8]* @S.1030
 	%117 = bitcast [2 x i8]* %116 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %115, [0 x i8]* %117)
 	%118 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39735,7 +39182,7 @@ L.9:
 	call void @bout_BufIO_uint(%bout.BufIO* %119, i32 %127)
 	%128 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%129 = bitcast %bout.BufIO* %128 to %bout.BufIO*
-	%130 = getelementptr [2 x i8], [2 x i8]* @S.943
+	%130 = getelementptr [2 x i8], [2 x i8]* @S.1031
 	%131 = bitcast [2 x i8]* %130 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %129, [0 x i8]* %131)
 	%132 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39756,7 +39203,7 @@ L.9:
 L.8:
 	%144 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%145 = bitcast %bout.BufIO* %144 to %bout.BufIO*
-	%146 = getelementptr [20 x i8], [20 x i8]* @S.944
+	%146 = getelementptr [20 x i8], [20 x i8]* @S.1032
 	%147 = bitcast [20 x i8]* %146 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %145, [0 x i8]* %147)
 	%148 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39766,7 +39213,7 @@ L.8:
 	call void @bout_BufIO_str(%bout.BufIO* %149, [0 x i8]* %151)
 	%152 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	%153 = bitcast %bout.BufIO* %152 to %bout.BufIO*
-	%154 = getelementptr [3 x i8], [3 x i8]* @S.945
+	%154 = getelementptr [3 x i8], [3 x i8]* @S.1033
 	%155 = bitcast [3 x i8]* %154 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %153, [0 x i8]* %155)
 	%156 = getelementptr %A.3, %A.3* @feature, i32 0, i32 3
@@ -39799,12 +39246,13 @@ L.12:
 return:
 	ret void
 }
-@S.946 = private unnamed_addr constant [5 x i8] c".esl\00"
-@S.947 = private unnamed_addr constant [5 x i8] c".o: \00"
-@S.948 = private unnamed_addr constant [35 x i8] c"Unsupported LLVM backend version: \00"
-@S.949 = private unnamed_addr constant [21 x i8] c"Unsupported target: \00"
-@S.950 = private unnamed_addr constant [28 x i8] c"Unable to open input file: \00"
-@S.951 = private unnamed_addr constant [31 x i8] c"Unable to create output file: \00"
+@S.1034 = private unnamed_addr constant [5 x i8] c".esl\00"
+@S.1035 = private unnamed_addr constant [5 x i8] c".o: \00"
+@S.1036 = private unnamed_addr constant [35 x i8] c"Unsupported LLVM backend version: \00"
+@S.1037 = private unnamed_addr constant [49 x i8] c"Debug information no support with LLVM version: \00"
+@S.1038 = private unnamed_addr constant [21 x i8] c"Unsupported target: \00"
+@S.1039 = private unnamed_addr constant [28 x i8] c"Unable to open input file: \00"
+@S.1040 = private unnamed_addr constant [31 x i8] c"Unable to create output file: \00"
 define i32 @main(i32 %argc$, [0 x [0 x i8]*]* %argv$) nounwind {
 L.0:
 	%rv.0 = alloca i32
@@ -40165,7 +39613,7 @@ L.50:
 	%186 = bitcast i8* %185 to [4 x i8]*
 	%187 = getelementptr [4 x i8], [4 x i8]* %186
 	%188 = bitcast [4 x i8]* %187 to [0 x i8]*
-	%189 = getelementptr [5 x i8], [5 x i8]* @S.946
+	%189 = getelementptr [5 x i8], [5 x i8]* @S.1034
 	%190 = bitcast [5 x i8]* %189 to [0 x i8]*
 	%191 = call i8 @zstr_eq([0 x i8]* %188, [0 x i8]* %190, i32 1024)
 	%192 = icmp ne i8 %191, 0
@@ -40186,7 +39634,7 @@ L.52:
 	%204 = getelementptr [0 x i8], [0 x i8]* %203
 	%205 = bitcast [0 x i8]* %204 to [0 x i8]*
 	call void @sys_fildes_str(i32 1, [0 x i8]* %205)
-	%206 = getelementptr [5 x i8], [5 x i8]* @S.947
+	%206 = getelementptr [5 x i8], [5 x i8]* @S.1035
 	%207 = bitcast [5 x i8]* %206 to [0 x i8]*
 	call void @sys_fildes_str(i32 1, [0 x i8]* %207)
 	%208 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
@@ -40251,7 +39699,7 @@ L.62:
 	br label %L.60
 L.63:
 	%235 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
-	store i8 2, i8* %235
+	store i8 3, i8* %235
 	%236 = getelementptr %A.3, %A.3* @feature, i32 0, i32 8
 	store i8 1, i8* %236
 	br label %L.60
@@ -40266,7 +39714,7 @@ L.57:
 	%239 = xor i1 %238, true
 	br i1 %239, label %L.65, label %L.64
 L.65:
-	%240 = getelementptr [35 x i8], [35 x i8]* @S.948
+	%240 = getelementptr [35 x i8], [35 x i8]* @S.1036
 	%241 = bitcast [35 x i8]* %240 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %241)
 	%242 = load [0 x i8]*, [0 x i8]** %llvmversion
@@ -40276,83 +39724,84 @@ L.65:
 	store i32 2, i32* %rv.0
 	br label %return
 L.64:
-	%244 = load [0 x i8]*, [0 x i8]** %targetarch
-	%245 = bitcast [0 x i8]* %244 to [0 x i8]*
-	%246 = call i8 @target_set([0 x i8]* %245)
-	%247 = icmp ne i8 %246, 0
-	%248 = xor i1 %247, true
-	br i1 %248, label %L.67, label %L.66
+	%244 = getelementptr %A.3, %A.3* @feature, i32 0, i32 3
+	%245 = load i8, i8* %244
+	%246 = icmp ne i8 %245, 0
+	br i1 %246, label %L.66, label %L.67
+L.66:
+	%247 = getelementptr %A.3, %A.3* @feature, i32 0, i32 7
+	%248 = load i8, i8* %247
+	%249 = icmp ne i8 %248, 3
+	br label %L.67
 L.67:
-	%249 = getelementptr [21 x i8], [21 x i8]* @S.949
-	%250 = bitcast [21 x i8]* %249 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %250)
-	%251 = load [0 x i8]*, [0 x i8]** %targetarch
-	%252 = icmp ne [0 x i8]* %251, null
-	br i1 %252, label %L.69, label %L.70
+	%250 = phi i1 [ false, %L.64 ], [ %249, %L.66 ]
+	br i1 %250, label %L.69, label %L.68
 L.69:
-	%253 = load [0 x i8]*, [0 x i8]** %targetarch
+	%251 = getelementptr [49 x i8], [49 x i8]* @S.1037
+	%252 = bitcast [49 x i8]* %251 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %252)
+	%253 = load [0 x i8]*, [0 x i8]** %llvmversion
 	%254 = bitcast [0 x i8]* %253 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %254)
-	br label %L.68
-L.70:
-	%255 = bitcast [4 x i8]* @target_DefaultTarget to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %255)
+	call void @sys_fildes_nl(i32 2)
+	%255 = getelementptr %A.3, %A.3* @feature, i32 0, i32 3
+	store i8 0, i8* %255
 	br label %L.68
 L.68:
+	%256 = load [0 x i8]*, [0 x i8]** %targetarch
+	%257 = bitcast [0 x i8]* %256 to [0 x i8]*
+	%258 = call i8 @target_set([0 x i8]* %257)
+	%259 = icmp ne i8 %258, 0
+	%260 = xor i1 %259, true
+	br i1 %260, label %L.71, label %L.70
+L.71:
+	%261 = getelementptr [21 x i8], [21 x i8]* @S.1038
+	%262 = bitcast [21 x i8]* %261 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %262)
+	%263 = load [0 x i8]*, [0 x i8]** %targetarch
+	%264 = icmp ne [0 x i8]* %263, null
+	br i1 %264, label %L.73, label %L.74
+L.73:
+	%265 = load [0 x i8]*, [0 x i8]** %targetarch
+	%266 = bitcast [0 x i8]* %265 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %266)
+	br label %L.72
+L.74:
+	%267 = bitcast [4 x i8]* @target_DefaultTarget to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %267)
+	br label %L.72
+L.72:
 	call void @sys_fildes_nl(i32 2)
 	call void @target_list()
 	store i32 2, i32* %rv.0
 	br label %return
-L.66:
-	%256 = getelementptr %A.2, %A.2* @debug, i32 0, i32 2
-	%257 = load i8, i8* %256
-	%258 = icmp ne i8 %257, 0
-	br i1 %258, label %L.72, label %L.71
-L.72:
-	call void @lex_SearchPathPrint()
-	br label %L.71
-L.71:
-	%259 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
-	%260 = load i32, i32* %i
-	%261 = getelementptr [0 x [0 x i8]*], [0 x [0 x i8]*]* %259, i32 0, i32 %260
-	%262 = load [0 x i8]*, [0 x i8]** %261
-	%263 = getelementptr [0 x i8], [0 x i8]* %262
-	%264 = bitcast [0 x i8]* %263 to [0 x i8]*
-	%265 = call i8 @lex_FileOpen([0 x i8]* %264)
-	%266 = icmp ne i8 %265, 0
-	%267 = xor i1 %266, true
-	br i1 %267, label %L.74, label %L.73
-L.74:
-	%268 = getelementptr [28 x i8], [28 x i8]* @S.950
-	%269 = bitcast [28 x i8]* %268 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %269)
-	%270 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
-	%271 = load i32, i32* %i
-	%272 = getelementptr [0 x [0 x i8]*], [0 x [0 x i8]*]* %270, i32 0, i32 %271
-	%273 = load [0 x i8]*, [0 x i8]** %272
-	%274 = getelementptr [0 x i8], [0 x i8]* %273
-	%275 = bitcast [0 x i8]* %274 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %275)
-	call void @sys_fildes_nl(i32 2)
-	store i32 2, i32* %rv.0
-	br label %return
-L.73:
-	%276 = load [0 x i8]*, [0 x i8]** %outfile
-	%277 = icmp ne [0 x i8]* %276, null
-	br i1 %277, label %L.76, label %L.75
+L.70:
+	%268 = getelementptr %A.2, %A.2* @debug, i32 0, i32 2
+	%269 = load i8, i8* %268
+	%270 = icmp ne i8 %269, 0
+	br i1 %270, label %L.76, label %L.75
 L.76:
-	%278 = load [0 x i8]*, [0 x i8]** %outfile
-	%279 = bitcast [0 x i8]* %278 to [0 x i8]*
-	%280 = call i32 @open([0 x i8]* %279, i32 577, i32 416)
-	store i32 %280, i32* %outfd
-	%281 = load i32, i32* %outfd
-	%282 = icmp slt i32 %281, 0
-	br i1 %282, label %L.78, label %L.77
+	call void @lex_SearchPathPrint()
+	br label %L.75
+L.75:
+	%271 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
+	%272 = load i32, i32* %i
+	%273 = getelementptr [0 x [0 x i8]*], [0 x [0 x i8]*]* %271, i32 0, i32 %272
+	%274 = load [0 x i8]*, [0 x i8]** %273
+	%275 = getelementptr [0 x i8], [0 x i8]* %274
+	%276 = bitcast [0 x i8]* %275 to [0 x i8]*
+	%277 = call i8 @lex_FileOpen([0 x i8]* %276)
+	%278 = icmp ne i8 %277, 0
+	%279 = xor i1 %278, true
+	br i1 %279, label %L.78, label %L.77
 L.78:
-	%283 = getelementptr [31 x i8], [31 x i8]* @S.951
-	%284 = bitcast [31 x i8]* %283 to [0 x i8]*
-	call void @sys_fildes_str(i32 2, [0 x i8]* %284)
-	%285 = load [0 x i8]*, [0 x i8]** %outfile
+	%280 = getelementptr [28 x i8], [28 x i8]* @S.1039
+	%281 = bitcast [28 x i8]* %280 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %281)
+	%282 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
+	%283 = load i32, i32* %i
+	%284 = getelementptr [0 x [0 x i8]*], [0 x [0 x i8]*]* %282, i32 0, i32 %283
+	%285 = load [0 x i8]*, [0 x i8]** %284
 	%286 = getelementptr [0 x i8], [0 x i8]* %285
 	%287 = bitcast [0 x i8]* %286 to [0 x i8]*
 	call void @sys_fildes_str(i32 2, [0 x i8]* %287)
@@ -40360,79 +39809,102 @@ L.78:
 	store i32 2, i32* %rv.0
 	br label %return
 L.77:
-	br label %L.75
-L.75:
-	call void @symb_Init()
-	call void @ast_Init()
-	%288 = call %symb.SymbNode* @symb_Push(%symb.SymbNode* null, %symb.SymbNode* null)
-	%289 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
-	%290 = load i32, i32* %i
-	%291 = getelementptr [0 x [0 x i8]*], [0 x [0 x i8]*]* %289, i32 0, i32 %290
-	%292 = load [0 x i8]*, [0 x i8]** %291
-	%293 = getelementptr [0 x i8], [0 x i8]* %292
-	%294 = bitcast [0 x i8]* %293 to [0 x i8]*
-	%295 = call %ast.AstNode* @stmt_Program([0 x i8]* %294)
-	store %ast.AstNode* %295, %ast.AstNode** %tree
-	%296 = getelementptr %A.2, %A.2* @debug, i32 0, i32 0
-	%297 = getelementptr %A.1, %A.1* %296, i32 0, i32 1
-	%298 = load i8, i8* %297
-	%299 = icmp ne i8 %298, 0
-	br i1 %299, label %L.80, label %L.79
+	%288 = load [0 x i8]*, [0 x i8]** %outfile
+	%289 = icmp ne [0 x i8]* %288, null
+	br i1 %289, label %L.80, label %L.79
 L.80:
-	call void @symb_Dump(i8 1)
+	%290 = load [0 x i8]*, [0 x i8]** %outfile
+	%291 = bitcast [0 x i8]* %290 to [0 x i8]*
+	%292 = call i32 @open([0 x i8]* %291, i32 577, i32 416)
+	store i32 %292, i32* %outfd
+	%293 = load i32, i32* %outfd
+	%294 = icmp slt i32 %293, 0
+	br i1 %294, label %L.82, label %L.81
+L.82:
+	%295 = getelementptr [31 x i8], [31 x i8]* @S.1040
+	%296 = bitcast [31 x i8]* %295 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %296)
+	%297 = load [0 x i8]*, [0 x i8]** %outfile
+	%298 = getelementptr [0 x i8], [0 x i8]* %297
+	%299 = bitcast [0 x i8]* %298 to [0 x i8]*
+	call void @sys_fildes_str(i32 2, [0 x i8]* %299)
+	call void @sys_fildes_nl(i32 2)
+	store i32 2, i32* %rv.0
+	br label %return
+L.81:
 	br label %L.79
 L.79:
-	call void @symb_Pop()
-	%300 = getelementptr %A.2, %A.2* @debug, i32 0, i32 0
-	%301 = getelementptr %A.1, %A.1* %300, i32 0, i32 0
-	%302 = load i8, i8* %301
-	%303 = icmp ne i8 %302, 0
-	br i1 %303, label %L.82, label %L.81
-L.82:
-	call void @symb_Dump(i8 1)
-	br label %L.81
-L.81:
-	%304 = getelementptr %A.2, %A.2* @debug, i32 0, i32 1
-	%305 = load i8, i8* %304
-	%306 = icmp ne i8 %305, 0
-	br i1 %306, label %L.84, label %L.83
+	call void @symb_Init()
+	call void @ast_Init()
+	%300 = call %symb.SymbNode* @symb_Push(%symb.SymbNode* null, %symb.SymbNode* null)
+	%301 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
+	%302 = load i32, i32* %i
+	%303 = getelementptr [0 x [0 x i8]*], [0 x [0 x i8]*]* %301, i32 0, i32 %302
+	%304 = load [0 x i8]*, [0 x i8]** %303
+	%305 = getelementptr [0 x i8], [0 x i8]* %304
+	%306 = bitcast [0 x i8]* %305 to [0 x i8]*
+	%307 = call %ast.AstNode* @stmt_Program([0 x i8]* %306)
+	store %ast.AstNode* %307, %ast.AstNode** %tree
+	%308 = getelementptr %A.2, %A.2* @debug, i32 0, i32 0
+	%309 = getelementptr %A.1, %A.1* %308, i32 0, i32 1
+	%310 = load i8, i8* %309
+	%311 = icmp ne i8 %310, 0
+	br i1 %311, label %L.84, label %L.83
 L.84:
-	%307 = load %ast.AstNode*, %ast.AstNode** %tree
-	call void @ast_Dump(%ast.AstNode* %307)
+	call void @symb_Dump(i8 1)
 	br label %L.83
 L.83:
-	%308 = call i8 @type_FwdCheck()
-	%309 = load i8, i8* @lex_ErrorCount
-	%310 = icmp eq i8 %309, 0
-	br i1 %310, label %L.86, label %L.85
+	call void @symb_Pop()
+	%312 = getelementptr %A.2, %A.2* @debug, i32 0, i32 0
+	%313 = getelementptr %A.1, %A.1* %312, i32 0, i32 0
+	%314 = load i8, i8* %313
+	%315 = icmp ne i8 %314, 0
+	br i1 %315, label %L.86, label %L.85
 L.86:
-	%311 = getelementptr %A.3, %A.3* @feature, i32 0, i32 2
-	%312 = load i8, i8* %311
-	%313 = icmp ne i8 %312, 0
-	br i1 %313, label %L.88, label %L.89
-L.88:
-	call void @sys_fildes_nl(i32 1)
-	br label %L.87
-L.89:
-	%314 = load i32, i32* %outfd
-	%315 = load %ast.AstNode*, %ast.AstNode** %tree
-	call void @llvm_Gen(i32 %314, %ast.AstNode* %315)
-	br label %L.87
-L.87:
+	call void @symb_Dump(i8 1)
 	br label %L.85
 L.85:
-	%316 = load i8, i8* @lex_ErrorCount
-	%317 = icmp ne i8 %316, 0
-	br i1 %317, label %L.91, label %L.90
+	%316 = getelementptr %A.2, %A.2* @debug, i32 0, i32 1
+	%317 = load i8, i8* %316
+	%318 = icmp ne i8 %317, 0
+	br i1 %318, label %L.88, label %L.87
+L.88:
+	%319 = load %ast.AstNode*, %ast.AstNode** %tree
+	call void @ast_Dump(%ast.AstNode* %319)
+	br label %L.87
+L.87:
+	%320 = call i8 @type_FwdCheck()
+	%321 = load i8, i8* @lex_ErrorCount
+	%322 = icmp eq i8 %321, 0
+	br i1 %322, label %L.90, label %L.89
+L.90:
+	%323 = getelementptr %A.3, %A.3* @feature, i32 0, i32 2
+	%324 = load i8, i8* %323
+	%325 = icmp ne i8 %324, 0
+	br i1 %325, label %L.92, label %L.93
+L.92:
+	call void @sys_fildes_nl(i32 1)
+	br label %L.91
+L.93:
+	%326 = load i32, i32* %outfd
+	%327 = load %ast.AstNode*, %ast.AstNode** %tree
+	call void @llvm_Gen(i32 %326, %ast.AstNode* %327)
+	br label %L.91
 L.91:
+	br label %L.89
+L.89:
+	%328 = load i8, i8* @lex_ErrorCount
+	%329 = icmp ne i8 %328, 0
+	br i1 %329, label %L.95, label %L.94
+L.95:
 	store i32 1, i32* %rv.0
 	br label %return
-L.90:
+L.94:
 	store i32 0, i32* %rv.0
 	br label %return
 return:
-	%318 = load i32, i32* %rv.0
-	ret i32 %318
+	%330 = load i32, i32* %rv.0
+	ret i32 %330
 }
 declare void @llvm.memcpy.p0i8.p0i8.i32(i8*, i8*, i32, i32, i1) nounwind
 declare void @llvm.memset.p0i8.i32(i8*, i8, i32, i32, i1) nounwind

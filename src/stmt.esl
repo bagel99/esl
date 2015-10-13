@@ -15,7 +15,6 @@ package stmt
     type NestType: (PROGRAM, PACKAGE, PROCEDURE);
     const LoopMax = 32;
     var   LoopLevel: 0..LoopMax-1;
-    var   CurFile: Symb;
 
     proc Program(file:@[]_byte): Ast;	// forward
     proc ProgStmt(): Ast;		// forward
@@ -1547,8 +1546,6 @@ symb.DumpS(ns);
 	var s: Symb;
 
 	s = symb.NewFile(lex.f@.filepath@.path, lex.f@.filename@.name);
-	s@.package = CurFile;
-	CurFile = s;
 	symb.curpack = 0;
 	tree = ast.New(SEQ, 0);
 	tok = Next();

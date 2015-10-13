@@ -13,9 +13,8 @@
 #
 pkgs="-I."
 eslcomp="$HOME/src/compiler/src/eslc2"		# !!! Change this if necessary
-llvmdir3_4="$HOME/work/llvm-3.4/build/Release+Asserts/bin"
-llvmdir3_5="$HOME/work/llvm-3.5.0/build/Release+Asserts/bin"
 llvmdir3_6="$HOME/work/llvm-3.6.0/build/Release+Asserts/bin"
+llvmdir3_7="$HOME/work/llvm-3.7.0/build/Release+Asserts/bin"
 llvmdirT="$HOME/work/llvm/build/Release+Asserts/bin"
 
 #
@@ -90,7 +89,7 @@ do
     D) debug="$debug -D$OPTARG" ;;
     F) feature="$feature -F$OPTARG" ;;
     M) feature="$feature -M"; mflag=1 ;;
-    P) llvmdir=$llvmdir3_5 ;;
+    P) llvmdir=$llvmdir3_6 ;;
     T) llvmdir=$llvmdirT ;;
     *) echo "Unknown option: $flag" ; exit 1 ;;
     esac

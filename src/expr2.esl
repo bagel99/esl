@@ -1132,10 +1132,13 @@ else
 
 
     proc Pack(endian: type.MemOrderT): Ast
-    {   var arg, lhs, tree: Ast;
-        var ta, ts: Type;
-        var n: _uint;
-        var aligned: boolean;
+    {   var tree: Ast;
+	var arg: Ast;		// array slice AST
+        var ta: Type;		// array slice type, next integral size
+        var rhs: Ast;		// scalar AST
+        var ts: Type;		// scalar type
+        var n: _uint;		// size of array slice in bytes
+        var aligned: boolean;   // aligment OK or not needed
         var tok: TokenT;
 
 	arg, ta, n, aligned = GetArrayArg();
@@ -1144,60 +1147,38 @@ else
 	    return 0;
 	}
 	tok = Next();
-	lhs = Bool(0);      // FIXME - we know the size/type of the uint?
-	if arg == 0 || lhs == 0 then
+	rhs = Bool(0);      // FIXME - we know the size/type of the uint?
+	if arg == 0 || rhs == 0 then
 	    return 0;
-	ts = lhs@.type;
-	if ts@.kind != UINT then
+	if rhs@.type@.kind != UINT then
 	{
 	    err.str("Pack scalar must be unsigned int\n");
 	    return 0;
 	}
+	rhs = ast.ExtendT(rhs, ta);
+	ts = rhs@.type;
 	if aligned then
-	{
-	    if endian != Target.memorder then
-		lhs = ast.New1(BSWAP, lhs@.type, lhs);
-	    arg = ast.Cast(arg, type.MakeRef(ts));
-	    tree = ast.New2(STORE, ts, arg, lhs);
+	{   if endian != Target.memorder then
+		rhs = ast.New1(BSWAP, rhs@.type, rhs);
+	    arg = ast.Cast(arg, type.MakeRef(ta));
+	    tree = ast.New2(STORE, ts, arg, rhs);
 	}
 	else
-	{   var i: _uint;
-	    var rhs: Ast;
+	{   var i, k: _uint;
+	    var tmp: Ast;
 	    arg@.type = type.MakeRef(arg@.type);
-	    lhs = UnLoad(lhs);
 	    tree = ast.New(SEQ, 0);
-	    if endian == BE then
-	    {   i = n;
-		loop
-		{   i -= 1;
-		    rhs = ast.New2(STORE, type.bytetype,
-			     ast.New2(INDEX, type.MakeRef(type.bytetype), arg,
-			       ast.Const(type.wordtype, i)),
-			     ast.ExtendT(ast.New1(LOAD, ts, lhs), type.bytetype));
-		    tree = ast.Child(tree, rhs);
-		  exit i == 0;
-		    rhs = ast.New2(STORE, ts, lhs,
-			    ast.New2(LSR, ts, ast.New1(LOAD, ts, lhs),
-			      ast.Const(type.wordtype, 8)));
-		    tree = ast.Child(tree, rhs);
-		}
-	    }
-	    else	// assert LE
-	    {   i = 0;
-		loop
-		{
-		    rhs = ast.New2(STORE, type.bytetype,
-			     ast.New2(INDEX, type.MakeRef(type.bytetype), arg,
-			       ast.Const(type.wordtype, i)),
-			     ast.ExtendT(ast.New1(LOAD, ts, lhs), type.bytetype));
-		    tree = ast.Child(tree, rhs);
-		    i += 1;
-		  exit i == n;
-		    rhs = ast.New2(STORE, ts, lhs,
-			    ast.New2(LSR, ts, ast.New1(LOAD, ts, lhs),
-			      ast.Const(type.wordtype, 8)));
-		    tree = ast.Child(tree, rhs);
-		}
+	    i = 0;
+	    loop
+	    {   if endian == BE then k = n-i-1; else k = i;
+		tmp = ast.New2(STORE, type.bytetype,
+			ast.New2(INDEX, type.MakeRef(type.bytetype), arg,
+			  ast.Const(type.wordtype, k)),
+			    ast.Trunc(rhs, type.bytetype));
+		tree = ast.Child(tree, tmp);
+		i += 1;
+	      exit i == n;
+		rhs = ast.New2(LSR, ts, rhs, ast.Const(type.wordtype, 8));
 	    }
 	}
 	tree = ast.New1(NOP, 0, tree);  // force no assignment

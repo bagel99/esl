@@ -273,7 +273,16 @@ package ast
 		lex.Error(TRUNC);
 	}
     }
-	
+
+    proc Trunc(tree: Ast, t: Type): Ast
+    {
+	tree = New1(TRUNC, t, tree);
+	tree@.width = t@.size;
+        return tree;
+    }
+
+    // Warning: if node is CONST and is referenced more than once in
+    // the DAG, bad things may happen.
     proc Extend(tree: Ast, size: type.BitSize, iscast: boolean): Ast
     {
 	if tree@.width < size then
