@@ -533,19 +533,16 @@ package expr
     {   var alignment: _uint;
 
 	if tree == 0 then return 0;
+	alignment = 0;
 //err.str("GetAlignment op="); err.str(ast.OpName[tree@.op]); err.nl();
 	if tree@.op
 	is VAR then 		// direct variable, use its alignment
 	{   if tree@.type != 0 then
 		alignment = tree@.type@.base@.align/Target.membits;
-	    else
-		alignment = 0;
 	}
 	is LOAD then 		// via a pointer
 	{   if tree@.type@.kind == REF && tree@.type != 0 then
 		alignment = tree@.type@.base@.align/Target.membits;
-	    else
-		alignment = 0;
 	}
 	is BSWAP, BYREF then
 	    alignment = GetAlignment(tree@.child[0]);
@@ -588,10 +585,18 @@ package expr
 	var tsize: type.BitSize;
 
 //err.str("GetSize\n"); ast.Dump(node);
+	size = 0;
 	if node@.op
 	is VAR then
 	{   size = ast.Const(type.wordtype,
 			     node@.type@.base@.width/Target.membits);
+	}
+	is LOAD then 		// via a pointer
+	{   if node@.type@.kind == REF then
+		size = ast.Const(type.wordtype,
+				 node@.type@.base@.width/Target.membits);
+	    else
+		lex.ErrorS(COMPILER, "Load via non-REF");
 	}
 	is INDEX, OFFSET then
 	{   size = ast.Const(type.wordtype,
@@ -602,6 +607,12 @@ package expr
 			     node@.type@.base@.base@.width/Target.membits);
 	    size = ast.New2(MUL, type.wordtype, node@.child[2], size);        
 	}
+	else
+	{   lex.ErrorS(NOTIMPL, "GetSize: unexpected node");
+	    ast.Dump(node);
+	}
+	if size == 0 then
+	    size = ast.Const(type.wordtype, 0);
 //err.str("returns\n"); ast.Dump(size);
 	return size;
     }
@@ -1563,15 +1574,32 @@ type.DumpT(t, false); err.nl();
 		    {   lex.Error(BADINXEXP);
 			index = ast.Null;
 		    }
+		    // check for index out of bounds
+		    if index@.op == CONST && !t@.flex &&
+			    (index@.valu > t@.hi || index@.valu < t@.lo) then
+		    {   lex.Error(BOUNDSERR);
+			index@.valu = t@.lo;    // avoid additional errors
+		    }
+		    // make index zero based
 		    if t@.lo != 0 then
-			index = ast.New2(SUB, t@.index, index,
+		    {   if index@.op == CONST then
+			    index@.valu -= t@.lo;
+			else
+			    index = ast.New2(SUB, t@.index, index,
 					 ast.Const(t@.index, t@.lo));
+		    }
 		    tok = Token;
 		    if tok == COLON then	// array slice
 		    {   var len: Ast;
 			tok = Next();
 			tree = UnLoad(tree);
 			len = Bool(t@.index);	// index type?
+			// check for slice out of bounds
+			// index is now zero based, so use hi-lo in check
+			if len != 0 && len@.op == CONST &&
+				index@.op == CONST  && !t@.flex &&
+				index@.valu + len@.valu - 1 > (t@.hi - t@.lo) then
+			    lex.Error(BOUNDSERR);
 			tree = Slice(tree, index, len);
 			tree = Load(tree);
 			done = true;
@@ -2050,7 +2078,16 @@ type.DumpT(t, false); err.nl();
 	  exit tok != BAND;
 	    tok = Next();
 	    rhs = Compare(tree@.type);
-	    tree = ast.OpBool(BAND, tree, rhs);
+	    if tree@.op == CONST then
+	    {   if tree@.valu != 0 then     // LHS is true
+		    tree = rhs;		    // use RHS otherwise LHS
+	    }
+	    elif rhs@.op == CONST then
+	    {   if rhs@.valu == 0 then      // RHS is false
+		    tree = rhs;		    // use RHS (false) otherwise LHS
+	    }
+	    else
+		tree = ast.OpBool(BAND, tree, rhs);
 	}
 	return tree;
     }
@@ -2065,7 +2102,16 @@ type.DumpT(t, false); err.nl();
 	  exit tok != BOR;
 	    tok = Next();
 	    rhs = BoolAnd(tree@.type);
-	    tree = ast.OpBool(BOR, tree, rhs);
+	    if tree@.op == CONST then
+	    {   if tree@.valu == 0 then     // LHS is false
+		    tree = rhs;		    // use RHS otherwise LHS
+	    }
+	    elif rhs@.op == CONST then
+	    {   if rhs@.valu != 0 then      // RHS is true
+		    tree = rhs;		    // use RHS (false) otherwise LHS
+	    }
+	    else
+		tree = ast.OpBool(BOR, tree, rhs);
 	}
 	return tree;
     }

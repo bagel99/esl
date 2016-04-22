@@ -22,7 +22,7 @@ package lex
 	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
-	RETTOOFEW,  RETTOOMANY, BADLEN,
+	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -116,6 +116,7 @@ package lex
 	[RETTOOFEW] =   "Too few return values",
 	[RETTOOMANY] =  "Too many return values",
 	[BADLEN] =      "Not an array or array with flexible length",
+	[BOUNDSERR] =   "Array bounds error",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
