@@ -6,16 +6,16 @@
 # Original Author: James M. Norris
 # Changes: Brian G. Lucas
 
+# Change the following to match you setup
+eslcomp="$HOME/src/compiler/src/eslc2"		# !!! Change this if necessary
+llvmdir=/usr/bin				# !!! Change this if necessary
+llvmver="-L3.7"			# !!! Change if LLVM version less than 3.7
 
 #
 # Set the default directory where to find the base set
 # of ESL packages.
 #
 pkgs="-I."
-eslcomp="$HOME/src/compiler/src/eslc2"		# !!! Change this if necessary
-llvmdir3_6="$HOME/work/llvm-3.6.0/build/Release+Asserts/bin"
-llvmdir3_7="$HOME/work/llvm-3.7.0/build/Release+Asserts/bin"
-llvmdirT="$HOME/work/llvm/build/Release+Asserts/bin"
 
 #
 # Initialize variables
@@ -26,11 +26,11 @@ mflag=0
 no_assem=0
 print_cmds=0
 debug=
-optimize=-O3    # default, unless command line changes it
+foptimize=-O3    # default, unless command line changes it
+boptimize=-O3    # default, unless command line changes it
 feature=
 loopthresh=10
 outfile="a.out"
-llvmdir=/usr/bin				# !!! Change this if necessary
 
 #
 # Clean up temporary files
@@ -56,8 +56,6 @@ usage()
     echo "  [-g]            include debug information"
     echo "  [-D<letter>]    debug subsystem"
     echo "  [-F<letter>]    enable feature"
-    echo "  [-P]            use previous released version of LLVM"
-    echo "  [-T]            use test version of LLVM"
     echo "  [-v]            print the commands run"
     echo "  [-V]            print versions and exit"
 }
@@ -72,7 +70,7 @@ version()
 tarch=`uname -m`
 
 # Parse the options
-while getopts "cghim:o:O:u:vI:VD:F:MPT" flags
+while getopts "cghim:o:O:u:vI:VD:F:M" flags
 do
     case $flags in
     c) cflag=1 ;;
@@ -84,13 +82,15 @@ do
     u) loopthresh=$OPTARG ;;
     v) print_cmds=1 ;;
     I) pkgs="$pkgs -I$OPTARG" ;;
-    O) optimize=-O$OPTARG ;;
+    O) case $OPTARG in
+       0|1|2|3) foptimize=-O$OPTARG ; boptimize=-O$OPTARG ;;
+       s|z)     foptimize=-O$OPTARG ;;
+       *)  echo "Unknown optimization: $OPTARG" ; exit 1 ;;
+       esac ;;
     V) version; exit 0 ;;
     D) debug="$debug -D$OPTARG" ;;
     F) feature="$feature -F$OPTARG" ;;
     M) feature="$feature -M"; mflag=1 ;;
-    P) llvmdir=$llvmdir3_6 ;;
-    T) llvmdir=$llvmdirT ;;
     *) echo "Unknown option: $flag" ; exit 1 ;;
     esac
 done
@@ -117,6 +117,8 @@ case "$tarch" in
     cortex-m3)		march=thumb; mcpu="-mcpu=cortex-m3" ;;
     cortex-m4)          march=thumb; mcpu="-mcpu=cortex-m4"
 		        mattr="-mattr=+vfp3" ;;
+    cortex-a7)          march=arm; mcpu="-mcpu=cortex-a7"
+			mattr="-mattr=-neon" ;;
     cortex-a8)		march=thumb; mcpu="-mcpu=cortex-a8" ;;
     cortex-a53)		tarch=aarch64; march=aarch64; mcpu="-mcpu=cortex-a53" ;;
     cortex-a57)		tarch=aarch64; march=aarch64; mcpu="-mcpu=cortex-a57" ;;
@@ -140,9 +142,9 @@ trap cleanup 0
 #
 if test $print_cmds -ne 0
 then
-    echo "eslcomp -m $tarch $gflag $optimize $feature $debug $pkgs $src_filename >  $lla_tmpfile"
+    echo "eslcomp -m $tarch $gflag $foptimize $feature $debug $pkgs $src_filename >  $lla_tmpfile"
 fi
-$eslcomp -m $tarch $gflag $optimize $feature $debug $pkgs $src_filename > $lla_tmpfile
+$eslcomp -m $tarch $llvmver $gflag $foptimize $feature $debug $pkgs $src_filename > $lla_tmpfile
 if test $? -ne 0
 then
     exit $?     # compile error
@@ -162,11 +164,9 @@ fi
 asm_filename=`basename $src_filename .esl`.s
 if test $print_cmds -ne 0
 then
-    echo "opt $optimize $opt_opt -unroll-threshold=$loopthresh -o - $lla_tmpfile |"
-    echo "llc -march=$march $mcpu $mattr -asm-verbose=0 -o $asm_filename"
+    echo "opt $boptimize $opt_opt -unroll-threshold=$loopthresh -o - $lla_tmpfile |"
+    echo "llc -march=$march $mcpu $mattr -asm-verbose=0 $boptimize -o $asm_filename"
 fi
-$llvmdir/opt $optimize $opt_opt -unroll-threshold=$loopthresh -o - $lla_tmpfile | \
-$llvmdir/llc -march=$march $mcpu $mattr -asm-verbose=0 $optimize -o $asm_filename
-
-## vim: ts=8 sw=4 noet nowrap
+$llvmdir/opt $boptimize $opt_opt -unroll-threshold=$loopthresh -o - $lla_tmpfile | \
+$llvmdir/llc -march=$march $mcpu $mattr -asm-verbose=0 $boptimize -o $asm_filename
 

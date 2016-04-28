@@ -1,9 +1,9 @@
 #!/bin/sh
 #
 # Run a .ll file through the LLVM backend
+# Assume llvm binaries (llc, etc.) are in /usr/bin
 #
-LLVM=$HOME/work/llvm-3.7.0/build/Release+Asserts/bin		# !!!FIX THIS!!!
-#LLVM=/usr/bin
+LLVM=/usr/bin
 DEBUG=
 ARCH=
 INLINE=
