@@ -796,6 +796,8 @@ package llvm
 	}
     }
 
+    proc ConstScan(node: Ast);		// forward
+
     proc DclString(node: Ast)
     {   var n: StringRange;
 
@@ -805,13 +807,36 @@ package llvm
 	f.nl();
     }
 
+    proc DclAggregate(node: Ast)
+    {
+	ConstScan(node);
+	Print("%S = internal constant %K ", node);
+	Constant(node);
+	// FIXME: Alignment(node@.type)?
+	f.nl();
+    }
+
+    proc ConstByRef(node: Ast): boolean
+    {
+	if node@.op
+	is SCON then
+	{   DclString(node);
+	    return true;
+	}
+	is CLIST then
+	{   DclAggregate(node);        
+	    return true;
+	}
+	return false;
+    }
+
     // Look at nodes under a constant to see if there are any
     // string constants by reference.  If so, declare the string.
     proc ConstScan(node: Ast)
     {   var i: ast.NSubNodes;
 
-	if node@.op == BYREF && node@.child[0].op == SCON then
-	    DclString(node@.child[0]);
+	if node@.op == BYREF && ConstByRef(node@.child[0]) then
+	    return;
 	else
 	{   i = 0;
 	    while i < node@.num do
@@ -835,15 +860,6 @@ package llvm
 	    Alignment(s@.type);
 	    Section(s@.section, true);
 	}
-	f.nl();
-    }
-
-    proc DclAggregate(node: Ast)
-    {
-	ConstScan(node);
-	Print("%S = internal constant %K ", node);
-	Constant(node);
-	// FIXME: Alignment(node@.type)?
 	f.nl();
     }
 

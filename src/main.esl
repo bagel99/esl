@@ -151,6 +151,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	is '4', '5' then { feature.debug = 1; feature.syntax37 = false; }
 	is '6' then      { feature.debug = 2; feature.syntax37 = false; }
 	is '7' then      { feature.debug = 3; feature.syntax37 = true; }
+	is '8' then      { feature.debug = 4; feature.syntax37 = true; }
 	else goodversion = false;
     }
     if !goodversion then
@@ -159,7 +160,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	err.nl();
 	return 2;
     }
-    if feature.gflag && feature.debug != 3 then
+    if feature.gflag && feature.debug < 3 then
     {   err.str("Debug information no support with LLVM version: ");
         err.str(llvmversion);
 	err.nl();

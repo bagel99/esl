@@ -967,20 +967,7 @@ err.str("Assign to packed array\n");
 	    if tok
 	    is KIN then
 	    {   tok = Next();
-		fm = 0;
-		if Token == ID then
-		{   s = symb.Find(lex.Ident);
-		    if s != 0 && s@.kind == TYPE then
-		    {   fm = ast.Const(s@.type, s@.type@.lo);
-			to = ast.Const(s@.type, s@.type@.hi);
-		    }
-		    tok = Next();
-		}
-		if fm == 0 then     // not a named type, parse a range
-		{   fm = expr.Bool(t);
-		    lex.Expect(RANGE);
-		    to = expr.Bool(t);
-		}
+		fm, to = expr.GetRange();
 		by = ast.Const(t, 1);
 		lex.Expect(KDO);
 	    }

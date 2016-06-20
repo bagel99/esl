@@ -879,64 +879,22 @@ err.nl();
     proc Array(): Type
     {   var tok: TokenT;
 	var t, bt: Type;
-	var tree: Ast;
-	var s, ts: Symb;
-	var form: (EXPR, PROP, TYPE);
+	var lo, hi: Ast;
 
 	tok = Next();
 	t = type.New(ARRAY);
 	if tok != AEND then
-	{   form = EXPR;    // assume until proven otherwise
-	    ts = 0;
-	    if tok == ID then
-	    {   s = symb.Find(lex.Ident);
-		if s != 0 && s@.kind == TYPE then
-		{   tok = Next();
-		    if tok == QUEST then	    // [ <type>?size ]
-		    {   tok = Next();
-			tree = expr.TypeProperty(t);
-			form = PROP;
-		    }
-		    else			    // [ <type> ]
-		    {   t@.lo = s@.type@.lo;
-			t@.hi = s@.type@.hi;
-			t@.index = s@.type;
-			form = TYPE;
-		    }
-		}
-		else
-		{   // FIXME
-		    // at this point all the package prefixes have been stripped
-		    // if they have there is no context to find the name again
-		    // possible fixes
-		    // 1. change all expr stuff to take an extra argument:
-		    //    Bool(s, 0);  expr.Term checks before calling Find.
-		    // 2. create global 'savedsym' which expr.Term checks
-		    //    before call Find.
-		    // 3. create an alias for current identifier to the
-		    //    symbol we found.  Perhaps remove it when we are done
-		    expr.savedsym = s;
-		}
+	{
+	    lo, hi = expr.GetRange();
+	    if lo@.op == CONST && hi@.op == CONST then
+	    {
+		t@.lo = lo@.valu;
+		t@.hi = hi@.valu;
+		t@.index = hi@.type;
 	    }
-	    if form != TYPE then
-	    {   if form == EXPR then
-		    tree = expr.Bool(0);
-		if tree != 0 then
-		{   if tree@.op
-		    is CONST then
-		    {   if Token == RANGE then
-			{   t@.index = Range(tree);
-			    t@.lo = t@.index@.lo;
-			    t@.hi = t@.index@.hi;
-			}
-			else
-			{   t@.lo = 0;
-			    t@.hi = tree@.valu - 1;
-			    t@.index = type.wordtype;
-			}
-		    }
-		}
-		else lex.Error(BADINDEX);
+	    else
+	    {
+		err.str("Array dimensions must be constants\n");
 	    }
 	}
 	else

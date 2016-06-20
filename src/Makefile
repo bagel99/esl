@@ -8,7 +8,7 @@ SRC =	main.esl lex.esl type1.esl type2.esl symb1.esl symb2.esl \
 LLVM=./llvm
 LLVMFLAGS= -I		# no inlining to ease debugging
 
-ESLCFLAGS= -L3.7.0	# uses release 3.7.0 IR syntax
+ESLCFLAGS= -L3.8.0	# uses release 3.7.0 IR syntax
 
 # C compiler is used only to run the assembler and linker
 GCC=	cc
@@ -85,18 +85,12 @@ main3.s: main3.ll
 eslc3:	main3.s
 	$(GCC) $(CFLAGS) -o eslc3 main3.s
 
-main-start-x86-64.ll: main.esl
-	./eslc3 $(ESLCFLAGS) -m x86-64 main.esl >main-start-x86-64.ll
-
-main-start-x86.ll: main.esl
+start:
 	./eslc3 $(ESLCFLAGS) -m x86 main.esl >main-start-x86.ll
-
-main-start-s390x.ll: main.esl
-	./eslc3 $(ESLCFLAGS) -m s390x main.esl >main-start-s390x.ll
-
-main-start-armv7l.ll: main.esl
+	./eslc3 $(ESLCFLAGS) -m x86-64 main.esl >main-start-x86-64.ll
 	./eslc3 $(ESLCFLAGS) -m armv7l main.esl >main-start-armv7l.ll
-
+	./eslc3 $(ESLCFLAGS) -m s390x main.esl >main-start-s390x.ll
+	./eslc3 $(ESLCFLAGS) -m aarch64 main.esl >main-start-aarch64.ll
 
 clean:
 	rm -f main-start.s eslc0

@@ -6,6 +6,7 @@ package expr
     proc Bool(t:Type): Ast;		// forward
     proc Const(t:Type): Ast;		// forward
     proc ConstValue(t:Type): Valu;	// forward
+    proc GetRange(): Ast, Ast;		// forward
     proc GetLHS(s:Symb): Ast;		// forward
     proc EnumConst(t:Type): Ast;	// forward
     proc TypeProperty(t: Type): Ast;	// forward

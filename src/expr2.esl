@@ -773,7 +773,7 @@ ast.Dump(tree);
 	is REF then
 	{   if to@.base != 0 then
 	    {   if fm@.kind == REF && (to@.base == type.memtype || type.Compat(to, fm)) then
-		{   if fm != to then
+		{   if fm@.base != to@.base then
 		    {   tree = ast.Cast(tree, to);
 			fm = tree@.type;
 		    }
@@ -1729,104 +1729,109 @@ type.DumpT(t, false); err.nl();
 
 	tree = 0;
 	tok = Token;
-	if tok
-	is ID then
-	{   if savedsym == 0 then
-		s = symb.Find(lex.Ident);
-	    else
-	    {   s = savedsym;
-		savedsym = 0;
+	s = savedsym;
+	savedsym = 0;
+	if s == 0 && tok == ID then    
+	{   s = symb.Find(lex.Ident);
+	    if s == 0 then
+	    {   
+		if et != 0 && et@.kind == ENUM then	// enum context
+		    tree = EnumConst(et);
+		else
+		    lex.ErrorI(UNDEFID, lex.Ident);
+		tok = Next();
+		return tree;
 	    }
-	    if s != 0 then
-	    {   tok = Next();
-		if s@.kind == TYPE then
-		{   t = s@.type;
-		    if tok
-		    is DOT then		// possible enum const
-		    {   tok = Next();
-			if t@.kind == ENUM then
-			{   tree = EnumConst(t);
-			    tok = Next();
-			}
-			else
-			    lex.ErrorI(BADTYPE, s@.ident);
+	    tok = Next();
+	}
+	if s != 0 then      // we have a symbol
+	{
+	    if s@.kind == TYPE then
+	    {   t = s@.type;
+		if tok
+		is DOT then		// possible enum const
+		{   tok = Next();
+		    if t@.kind == ENUM then
+		    {   tree = EnumConst(t);
+			tok = Next();
 		    }
-		    is QUEST then		// property
-		    {   tok = Next();
-			tree = TypeProperty(t);
-		    }
-		    is PBEG then		// cast
-		    {   tok = Next();
-			tree = Bool(0);	// FIXME: is this right?
-			tok = Token;
-			if tok == COMMA then
-			{   tok = Next();
-			    tree = Container(tree, t);
-			}
-			else    // simple cast
-			    tree = ast.Cast(tree, t);
-			tok = lex.Expect(PEND);
-		    }
-		    is GBEG then		// composite
-			tree = CompositeValue(t);
 		    else
 			lex.ErrorI(BADTYPE, s@.ident);
 		}
-		else
-		{
-		    tree = Primary(s, et);
+		is QUEST then		// property
+		{   tok = Next();
+		    tree = TypeProperty(t);
+		}
+		is PBEG then		// cast
+		{   tok = Next();
+		    tree = Bool(0);	// FIXME: is this right?
 		    tok = Token;
-		    if tok == QUEST then
+		    if tok == COMMA then
 		    {   tok = Next();
-			tree = TypeProperty(tree@.type);
+			tree = Container(tree, t);
 		    }
+		    else    // simple cast
+			tree = ast.Cast(tree, t);
+		    tok = lex.Expect(PEND);
+		}
+		is GBEG then		// composite
+		    tree = CompositeValue(t);
+		else
+		    lex.ErrorI(BADTYPE, s@.ident);
+	    }
+	    else
+	    {
+		tree = Primary(s, et);
+		tok = Token;
+		if tok == QUEST then
+		{   tok = Next();
+		    tree = TypeProperty(tree@.type);
 		}
 	    }
-	    else    // unknown symbol, perhaps an enum constant
-	    {   if et != 0 && et@.kind == ENUM then	// enum context
-		    tree = EnumConst(et);
-		else lex.ErrorI(UNDEFID, lex.Ident);
+	}
+	else	    // we don't have a symbol
+	{
+	    if tok
+	    is NUM then
+	    {   tree = ast.New(CONST, et);
+		tree@.valu = lex.Number;
+		tree@.width = type.bitsize(lex.Number);
+		if et == 0 then
+		    tree@.type = type.wordtype;	// FIXME: ?
+		else
+		{   if et@.kind
+		    is UINT, SINT then
+		    {   if et@.size > tree@.width then   // widen
+			    tree@.width = et@.size;
+		    }
+		    is REF, REFPROC then    // want pointer constant
+			tree@.width = Target.ptr.size;
+		    else
+			tree@.type = type.wordtype; // wrong type for numeric const
+		}
 		tok = Next();
 	    }
-	}
-	is NUM then
-	{   tree = ast.New(CONST, et);
-	    tree@.valu = lex.Number;
-	    tree@.width = type.bitsize(lex.Number);
-	    if et == 0 then
-		tree@.type = type.wordtype;	// FIXME: ?
-	    else
-	    {   if et@.kind
-		is UINT, SINT then
-		{   if et@.size > tree@.width then   // widen
-			tree@.width = et@.size;
-		}
-		is REF, REFPROC then    // want pointer constant
-		    tree@.width = Target.ptr.size;
-		else
-		    tree@.type = type.wordtype; // wrong type for numeric const
+	    is FNUM then
+	    {   tree = ast.New(FCON, et);
+		tree@.valu = lex.Number;
+		tree@.width = 64;			// FIXME: ?
+		tree@.scale = lex.Scale;
+		if et == 0 then
+		    tree@.type = type.floattype;
+		tok = Next();
 	    }
-	    tok = Next();
+	    is STR then
+		tree = String();
+	    is PBEG then
+	    {   tok = Next();
+		tree = Bool(et);
+		tok = Token;
+		lex.Expect(PEND);
+	    }
+	    is GBEG then
+		tree = CompositeValue(et);const TEST: boolean = true;
+
 	}
-	is FNUM then
-	{   tree = ast.New(FCON, et);
-	    tree@.valu = lex.Number;
-	    tree@.width = 64;			// FIXME: ?
-	    tree@.scale = lex.Scale;
-	    if et == 0 then
-		tree@.type = type.floattype;
-	    tok = Next();
-	}
-	is STR then
-	    tree = String();
-	is PBEG then
-	{   tok = Next();
-	    tree = Bool(et);
-	    tok = Token;
-	    lex.Expect(PEND);
-	}
-	is GBEG then
-	    tree = CompositeValue(et);
 	return tree;
     }
 
@@ -1835,10 +1840,13 @@ type.DumpT(t, false); err.nl();
 	var tl: Type;
 	var tok, savetok: TokenT;
 
-	tok = Token;
-	savetok = tok;
-	if tok
-	is MINUS, PLUS, INV, NOT then tok = Next();
+	savetok = NONE;
+	if savedsym == 0 then   // no symbol, OK to parse unary
+	{   tok = Token;
+	    savetok = tok;
+	    if tok
+	    is MINUS, PLUS, INV, NOT then tok = Next();
+	}
 	tree = Term(t);
 	if tree != 0 then
 	{   tl = tree@.type;
@@ -1863,8 +1871,8 @@ type.DumpT(t, false); err.nl();
 	return tree;
     }
 
-    const mulop: []ast.Op = { MUL, DIV, MOD, LSL, LSR, AND  };
-    const fmulop:[]ast.Op = { FMUL,FDIV,FREM,NULL,NULL,NULL };
+    const mulop: [TokenT.STAR .. TokenT.AND]ast.Op = { MUL, DIV, MOD, LSL, LSR, AND  };
+    const fmulop:[TokenT.STAR .. TokenT.AND]ast.Op = { FMUL,FDIV,FREM,NULL,NULL,NULL };
     proc Mul(t:Type): Ast
     {   var tree, rhs: Ast;
 	var op: ast.Op;
@@ -1880,9 +1888,9 @@ type.DumpT(t, false); err.nl();
 		rhs = Unary(tree@.type);
 	      exit rhs == 0;
 		if tree@.type@.kind == FLOAT then
-		    tree = ast.OpFloat(fmulop[stok - STAR], tree, rhs, t);
+		    tree = ast.OpFloat(fmulop[stok], tree, rhs, t);
 		else
-		{   op = mulop[stok - STAR];
+		{   op = mulop[stok];
 		    if op
 		    is AND then tree = ast.OpLogic(op, tree, rhs);
 		    is MUL then tree = ast.OpMul(op, tree, rhs, t);
@@ -1901,8 +1909,8 @@ type.DumpT(t, false); err.nl();
 	return tree;
     }
 
-    const addop: []ast.Op = { ADD, SUB, OR,  XOR  };
-    const faddop:[]ast.Op = { FADD,FSUB,NULL,NULL };
+    const addop: [TokenT.PLUS .. TokenT.XOR]ast.Op = { ADD, SUB, OR,  XOR  };
+    const faddop:[TokenT.PLUS .. TokenT.XOR]ast.Op = { FADD,FSUB,NULL,NULL };
     proc Add(t:Type): Ast
     {   var tree, rhs: Ast;
 	var op: ast.Op;
@@ -1918,9 +1926,9 @@ type.DumpT(t, false); err.nl();
 		rhs = Mul(tree@.type);
 	      exit rhs == 0;
 		if tree@.type@.kind == FLOAT then
-		    tree = ast.OpFloat(faddop[stok - PLUS], tree, rhs, t);
+		    tree = ast.OpFloat(faddop[stok], tree, rhs, t);
 		else
-		{   op = addop[stok - PLUS];
+		{   op = addop[stok];
 		    if op < OR then
 			tree = ast.OpAdd(op, tree, rhs, t);
 		    else
@@ -1932,8 +1940,6 @@ type.DumpT(t, false); err.nl();
     }
 
 
-    const ucmpop: []ast.Op = { EQ, NE, ULT, UGT, ULE, UGE };
-    const scmpop: []ast.Op = { EQ, NE, SLT, SGT, SLE, SGE };
     proc ArrayCompare(op: ast.Op, lhs: Ast, rhs: Ast): Ast
     {   var tree: Ast;
 	var lsize, rsize, align: Ast;
@@ -1995,6 +2001,8 @@ type.DumpT(t, false); err.nl();
 	return kind;
     }
 
+    const ucmpop: [TokenT.EQ .. TokenT.GE]ast.Op = { EQ, NE, ULT, UGT, ULE, UGE };
+    const scmpop: [TokenT.EQ .. TokenT.GE]ast.Op = { EQ, NE, SLT, SGT, SLE, SGE };
     proc Compare(t:Type): Ast
     {   var tree, rhs: Ast;
 	var tok, savetok: TokenT;
@@ -2013,9 +2021,9 @@ type.DumpT(t, false); err.nl();
 		    if NodeKind(tree)
 		    is ENUM, UINT, SINT then
 		    {   if IsSignedBinOp(tree, rhs) then
-			    op = scmpop[savetok - EQ];
+			    op = scmpop[savetok];
 			else
-			    op = ucmpop[savetok - EQ];
+			    op = ucmpop[savetok];
 			tree = ast.OpCompare(op, tree, rhs);
 		    }
 		    is REF, REFPROC then
@@ -2116,6 +2124,49 @@ type.DumpT(t, false); err.nl();
 	return tree;
     }
 
+    proc GetRange(): Ast, Ast		// return lo, hi
+    {   var lo, hi: Ast;
+    	var s: Symb;
+    	var t: Type;
+    	var tok: TokenT;
+
+	tok = Token;
+	if tok == ID then
+	{   s = symb.Find(lex.Ident);
+	    tok = Next();
+	    if s != 0 && s@.kind == TYPE then
+	    {
+		if tok == AEND || tok == ID then    // naked type
+		{   t = s@.type;
+		    hi = ast.Const(t, t@.hi);
+		    lo = ast.Const(t, t@.lo);
+		    return lo, hi;
+		}
+	    }
+	    /* FIXME.
+	     * At this point all the package prefixes have been stripped.
+	     * If there were, there is no context to find the name again.
+	     * Possible fixes:
+	     * 1. create global 'savedsym' which expr.Term checks before call Find.
+	     * 2. change all expr stuff to take an extra argument:
+	     *    Bool(s, 0);  expr.Term checks before calling Find.
+	     * 3. create an alias for current identifier to the symbol we found.
+	     *    Perhaps remove it when we are done
+	     * 4. Change expr routines to return naked AST "TYPE"
+	     */
+	    expr.savedsym = s;
+	}
+	lo = expr.Bool(0);
+	if Token == RANGE then
+	{   tok = Next();
+	    hi = expr.Bool(lo@.type);
+	}
+	else
+	{   hi = ast.OpAdd(SUB, lo, ast.Const(lo@.type, 1), lo@.type);
+	    lo = ast.Const(lo@.type, 0);
+	}
+	return lo, hi;
+    }
 
     proc Const(t: Type): Ast
     {   var tree: Ast;

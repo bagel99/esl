@@ -1,9 +1,22 @@
 #!/bin/sh
 #
 # Run a .ll file through the LLVM backend
-# Assume llvm binaries (llc, etc.) are in /usr/bin
 #
-LLVM=/usr/bin
+
+if [ -x /usr/bin/llc ]
+then
+  LLVM=/usr/bin
+elif [ -x /bin/llc ]
+then
+  LLVM=/bin
+elif [ -x /usr/local/bin/llc ]
+then
+  LLVM=/usr/local/bin
+else
+   echo "Can't find LLVM executable llc in /bin or /usr/bin or /usr/local/bin!"
+   echo "If it is somewhere else, fix the script 'llvm'."
+   exit 1
+fi
 DEBUG=
 ARCH=
 INLINE=

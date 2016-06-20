@@ -110,9 +110,22 @@ package llvmdb
 	f.str(" = !");
     }
 
+    proc PMetaSeqD(n: seqnoT)
+    {
+	PSeq(n);
+	f.str(" = distinct !");
+    }
+
     proc PStart(n: seqnoT, name: @[]_byte)
     {
         PMetaSeq(n);
+        f.str(name);
+        f.chr('(');
+    }
+
+    proc PStartDistinct(n: seqnoT, name: @[]_byte)
+    {
+        PMetaSeqD(n);
         f.str(name);
         f.chr('(');
     }
@@ -702,22 +715,28 @@ package llvmdb
     {   var s: Symb;
 	var stype, stag, ttag, fvars, empty: seqnoT;
 	var argno: _uint;
+	var isdef: boolean;
 
 	seqno += 1;  stype = seqno;
 	// emit SubProgram
-	PStart(subr, "DISubprogram");
+	isdef =  ps@.linkage != EXTERN;
+	if isdef then
+	    PStartDistinct(subr, "DISubprogram");
+	else
+	    PStart(subr, "DISubprogram");
 	f.str("name: ");  PFullName(ps, COMMA);
 	f.str("scope: ");  PMetaRef(filenamedir, COMMA);
 	f.str("file: ");  PMetaRef(filenamedir, COMMA);
 	f.str("line: ");  PUint(ps@.lineno, COMMA);
 	f.str("type: ");  PMetaRef(stype, COMMA);
 	f.str("isLocal: ");  PBoolean(ps@.linkage != GLOBAL, COMMA);
-	f.str("isDefinition: ");  PBoolean(ps@.linkage != EXTERN, COMMA);
+	f.str("isDefinition: ");  PBoolean(isdef, COMMA);
 	f.str("scopeLine: ");  PUint(ps@.lineno+1, COMMA);
 	if ps@.parmlist != 0 then
 	{   f.str("flags: ");  PString("DIFlagPrototyped", COMMA);
 	}
 	f.str("isOptimized: ");  PBoolean(false, COMMA);
+/*
 	f.str("function: ");
 	    llvm.PRetvType(ps@.retvlist, false);
 	    f.str(" (");
@@ -730,6 +749,7 @@ package llvmdb
 	    f.str(")* ");
 	    llvm.PName(ps);
 	PTerminator(COMMA);
+*/
 	f.str("variables: ");  PMetaRef(nullmeta, NONE);
 	f.str(")\n");
 	ps@.dbtag = subr;	// save tag
@@ -757,7 +777,8 @@ package llvmdb
 		stag = seqno;
 	    }
 	    PStart(stag, "DILocalVariable");
-	    f.str("tag: ");  PString("DW_TAG_arg_variable", COMMA);
+	    if feature.debug < 4 then
+	    {   f.str("tag: ");  PString("DW_TAG_arg_variable", COMMA); }
 	    f.str("name: ");  PName(s, COMMA);
 	    f.str("arg: ");  PUint(argno, COMMA);
 	    f.str("scope: ");  PMetaRef(subr, COMMA);
@@ -773,7 +794,8 @@ package llvmdb
 	{   ttag = DefType(s@.type);
 	    stag = s@.dbtag;
 	    PStart(stag, "DILocalVariable");
-	    f.str("tag: ");  PString("DW_TAG_auto_variable", COMMA);
+	    if feature.debug < 4 then
+	    {   f.str("tag: ");  PString("DW_TAG_auto_variable", COMMA); }
 	    f.str("name: ");  PName(s, COMMA);
 	    f.str("scope: ");  PMetaRef(subr, COMMA);
 	    f.str("file: ");  PMetaRef(filenamedir, COMMA);
@@ -844,7 +866,8 @@ package llvmdb
     }
 
     proc ProgStart(fs: Symb, opt: boolean)
-    {
+    {   var debugversion: _uint;
+
 	unit = 0;
 	seqno = 2;	// start after module flags below
 	seqno += 1;  filenamedir = seqno;
@@ -860,9 +883,11 @@ package llvmdb
 	f.str("!llvm.module.flags = !{!1, !2}\n");
 	f.str("!1 = !{i32 2, !\"Dwarf Version\", i32 4}\n");
 	f.str("!2 = !{i32 2, !\"Debug Info Version\", ");
-	P32(feature.debug, BRACE);
+	debugversion = 3;
+	if feature.debug < 3 then debugversion = feature.debug;
+	P32(debugversion, BRACE);
 	// emit Compile Unit
-	PStart(unit, "DICompileUnit");
+	PStartDistinct(unit, "DICompileUnit");
 	f.str("language: ");  f.str("DW_LANG_C99");     // FIXME
 	f.str(", file: ");  PMetaRef(filenamedir, COMMA);
 	f.str("producer: ");  PQString("ESL Compiler", COMMA);
