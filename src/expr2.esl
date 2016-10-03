@@ -2003,6 +2003,7 @@ type.DumpT(t, false); err.nl();
 
     const ucmpop: [TokenT.EQ .. TokenT.GE]ast.Op = { EQ, NE, ULT, UGT, ULE, UGE };
     const scmpop: [TokenT.EQ .. TokenT.GE]ast.Op = { EQ, NE, SLT, SGT, SLE, SGE };
+    const fcmpop: [TokenT.EQ .. TokenT.GE]ast.Op = { FEQ, FNE, FLT, FGT, FLE, FGE };
     proc Compare(t:Type): Ast
     {   var tree, rhs: Ast;
 	var tok, savetok: TokenT;
@@ -2025,6 +2026,12 @@ type.DumpT(t, false); err.nl();
 			else
 			    op = ucmpop[savetok];
 			tree = ast.OpCompare(op, tree, rhs);
+		    }
+		    is FLOAT then
+		    {   op = fcmpop[savetok];
+		        tree = ast.OpFloat(op, tree, rhs, 0);
+			tree@.type = type.booltype;
+			tree@.width = 1;
 		    }
 		    is REF, REFPROC then
 		    {   if savetok

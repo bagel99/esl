@@ -415,10 +415,32 @@ package llvm
     }
 
     proc PFloat(node: Ast)
-    {
-	f.uint64(node@.valu);
-	f.str(".0e");
-	f.int16(-node@.scale);
+    {   var tmp: _float64;
+	var scl: _int;
+	var hex: _uint64;
+
+	tmp = _cvt(_float64, _int64(node@.valu));
+	scl = node@.scale;
+	if scl > 0 then
+	{   do
+	    {   tmp = tmp / 10.0;   // FIXME - rounding?
+		scl -= 1;
+	    } while scl != 0;
+	}
+	elif scl < 0 then
+	{   do
+	    {   tmp = tmp * 10.0;
+		scl += 1;
+	    } while scl != 0;
+	}
+	hex = _uint64(tmp);
+	if node@.type@.size == 32 then
+	{   if hex & 0x1000_0000 != 0 then
+		hex += 0x2000_0000;
+	    hex = hex & 0xFFFF_FFFF_E000_0000;
+	}
+        f.str("0x");
+        f.hex64(hex);
     }
 
     proc NodeDst(node: Ast)
@@ -1963,6 +1985,12 @@ f.flush();
 	is SLT then term = CompareOp(node, "icmp slt");
 	is SGE then term = CompareOp(node, "icmp sge");
 	is SLE then term = CompareOp(node, "icmp sle");
+	is FEQ then term = CompareOp(node, "fcmp oeq");
+	is FNE then term = CompareOp(node, "fcmp one");
+	is FGT then term = CompareOp(node, "fcmp ogt");
+	is FLT then term = CompareOp(node, "fcmp olt");
+	is FGE then term = CompareOp(node, "fcmp oge");
+	is FLE then term = CompareOp(node, "fcmp ole");
 	is AND then BinaryOp(node, "and");
 	is OR then  BinaryOp(node, "or");
 	is XOR then BinaryOp(node, "xor");

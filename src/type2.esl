@@ -739,8 +739,14 @@ err.nl();
 	    if tok == ASGN then
 	    {   tok = Next();
 		vv = expr.Const(type.wordtype);
-		vv@.type = t;
-		v = _uint32(vv@.valu);
+		if vv != 0 then
+		{   vv@.type = t;
+		    v = _uint32(vv@.valu);
+		}
+		else
+		{   lex.Error(WANTUINT);
+		    vv = ast.Const(t, v);   // error, just use next value
+		}
 		tok = Token;
 	    }
 	    else

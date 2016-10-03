@@ -33,6 +33,7 @@ package ast
 	EQ,     NE,
 	ULT,    UGT,    ULE,    UGE,
 	SLT,    SGT,    SLE,    SGE,
+	FEQ,    FNE,    FLT,    FGT,    FLE,    FGE,
 	UMIN,	UMAX,	SMIN,	SMAX,	// temporary, get replaced by expansion
 	LSL,    LSR,	ASL,    ASR,
 	AND,    OR,     XOR,
@@ -77,6 +78,8 @@ package ast
 	[EQ]=	  2,    [NE]=     2,
 	[ULT]=	  2,    [UGT]=	  2,    [ULE]=	  2,    [UGE]=	  2,
 	[SLT]=	  2,	[SGT]=	  2,    [SLE]=	  2,    [SGE]=	  2,
+	[FEQ]=    2,    [FNE]=    2,
+	[FLT]=	  2,	[FGT]=	  2,    [FLE]=	  2,    [FGE]=	  2,
 	[UMIN]=   3,	[UMAX]=   3,	[SMIN]=   3,	[SMAX]=   3,  
 	[LSL]=	  2,    [LSR]=	  2,	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
@@ -258,7 +261,8 @@ package ast
     {
 	// assert node@.op == CONST
 	if size >= type.Valu?bits then return;
-	if node@.type@.kind == SINT then
+	if node@.type@.kind
+	is SINT then
 	{   if type.SValu(node@.valu) < 0 then
 	    {   if type.SValu(node@.valu) >> (size+1) != -1 then
 		    lex.Error(TRUNC);
@@ -268,6 +272,7 @@ package ast
 		    lex.Error(TRUNC);
 	    }
 	}
+	is FLOAT then {}    // just ignore for now
 	else
 	{   if node@.valu >> size != 0 then
 		lex.Error(TRUNC);
@@ -461,6 +466,10 @@ package ast
 		is POP  then rhs@.valu = popcnt(rhs@.valu);
 		else lex.ErrorS(COMPILER, "Unhandled unary operation");
 		tree = rhs;
+	    }
+	    elif rhs@.op == FCON && op == FNEG then
+	    {   rhs@.valu = type.Valu(-rhs@.valu);
+		tree =  rhs;
 	    }
 	    else
 		tree = New1(op, rhs@.type, rhs);
@@ -657,6 +666,11 @@ package ast
     {   var tree: Ast;
 	var sl, sr: type.BitSize;
 
+	// LHS known to be FLOAT, so must the RHS
+	if rhs@.type@.kind != FLOAT then
+	{   lex.Error(OPTYPE);
+	    return 0;
+	}
 	tree = 0;
 	// FIXME - constant folding
 	sl = lhs@.width;
@@ -729,6 +743,9 @@ package ast
 	[ULE]=   "ULE",		[UGE]=   "UGE",
 	[SLT]=   "SLT",		[SGT]=   "SGT",
 	[SLE]=   "SLE",		[SGE]=   "SGE",
+	[FEQ]=   "FEQ",		[FNE]=   "FNE",
+	[FLT]=   "FLT",		[FGT]=   "FGT",
+	[FLE]=   "FLE",		[FGE]=   "FGE",
 	[UMIN]=  "UMIN",	[UMAX]=  "UMAX",
 	[SMIN]=  "SMIN",	[SMAX]=  "SMAX",
 	[LSL]=   "LSL",		[LSR]=   "LSR",
