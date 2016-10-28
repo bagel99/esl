@@ -188,15 +188,33 @@ package llvm
 	    f.uint(t@.align/Target.membits);
     }
 
+    // FIXME - make a feature switch?
+    const usewidth = false;     // use type width otherwise type size
+    const usebitsize = false;   // use size as is
+    const usebytesize = true;   // use next larger byte size
+				// otherwise use next larger natural size
+    proc PScalarSize(t: Type)
+    {   var size: type.BitSize;
+
+	if usewidth then
+	    size = t@.width;
+	else
+	    size = t@.size;
+	if !usebitsize then
+	{   if usebytesize then
+		size = ((size+7)/8) * 8;
+	    else
+		size = target.isize(size);
+	}
+	f.chr('i'); f.uint(size);
+    }
+
     proc PType(t: Type)
     {   var size: type.BitSize;
 
 	if t != 0 then
 	{   if t@.kind
-	    is ENUM, UINT, SINT then
-	    {   size = target.isize(t@.size);
-		f.chr('i'); f.uint(size);
-	    }
+	    is ENUM, UINT, SINT then PScalarSize(t);
 	    is FLOAT then
 	    {
 		if t@.size
@@ -208,11 +226,8 @@ package llvm
 		f.chr('*');
 	    }
 	    is RECORD then
-	    {   if t@.packed then
-		{   // LLVM doesn't do bit pack records, handle as integers
-		    size = target.isize(t@.size);
-		    f.chr('i'); f.uint(size);
-		}
+	    {   // LLVM doesn't do bit pack records, handle as integers
+		if t@.packed then PScalarSize(t);
 		else
 		{   if t@.printed then
 			PTypeName(t);
@@ -221,12 +236,8 @@ package llvm
 		}
 	    }
 	    is ARRAY then
-	    {
-		if t@.packed then
-		{   // LLVM doesn't do bit pack arrays, handle as integers
-		    size = target.isize(t@.size);
-		    f.chr('i'); f.uint(size);
-		}
+	    {   // LLVM doesn't do bit pack arrays, handle as integers
+		if t@.packed then PScalarSize(t);
 		else
 		{   f.chr('[');
 		    f.uint32(t.Span());
@@ -330,11 +341,16 @@ package llvm
     proc NodeType(node: Ast)
     {
 	if node@.type@.kind
-	is UTYPE then	      { f.str("void"); }
-	is FLOAT then         { PType(node@.type); }
-	is REF then           { PType(node@.type); /* f.str("*"); */ }
-	is ARRAY, RECORD, REFPROC then { PType(node@.type); }
-	else                  { f.str("i"); f.uint(node@.width); }
+	is UTYPE then
+	    f.str("void");
+	is FLOAT, REF, ARRAY, RECORD, REFPROC then
+	    PType(node@.type);
+	else
+	{
+//if node@.width != node@.type.width then
+//{   err.str("Node width disagreement\n"); ast.Dump(node); }
+	    f.str("i"); f.uint(node@.width);
+	}
     }
 
     proc PPkgPfx(s: Symb)
@@ -669,7 +685,7 @@ package llvm
 	    {   if t@.kind
 		is REF, REFPROC then ConstantRef(node);
 		is SINT then f.int64(_int64(node@.valu));
-		is ARRAY then
+		is ARRAY, RECORD then
 		{   if t.packed then
 			f.uint64(node@.valu);
 		    else

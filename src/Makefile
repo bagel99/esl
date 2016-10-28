@@ -31,7 +31,13 @@ endif
 
 BOOT=main-start-$(ARCH).ll
 
-eslc:	eslc-x86
+boot:	eslc0 eslc1 eslc2 eslc3
+	@if cmp eslc3 eslc2; then \
+	   echo "Success"; \
+	   rm main-start.s main1.s main2.s main3.s; \
+	   rm main1.ll main2.ll main3.ll; \
+	else echo "Bootstrap failed"; \
+	fi
 
 eslc-x86-64:	$(SRC)
 	./eslc2 -m x86-64 main.esl >main.ll
@@ -42,14 +48,6 @@ eslc-x86:	$(SRC)
 	./eslc2 -m x86 main.esl >main.ll
 	$(LLVM) -m x86 $(LLVMFLAGS) main.ll
 	$(GCC) -m32 -o eslc-x86 main.s
-
-boot:	eslc0 eslc1 eslc2 eslc3
-	@if cmp eslc3 eslc2; then \
-	   echo "Success"; \
-	   rm main-start.s main1.s main2.s main3.s; \
-	   rm main1.ll main2.ll main3.ll; \
-	else echo "Bootstrap failed"; \
-	fi
 
 main-start.s: $(BOOT)
 	$(LLVM) -m $(ARCH) $(LLVMFLAGS) $(BOOT)

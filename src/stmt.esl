@@ -1383,15 +1383,36 @@ symb.DumpS(ns);
     }
 
     proc ImportSub(filename: @[]Char): Ast
-    {   var tree: Ast;
-	var tok: TokenT;
+    {   var tree, stree: Ast;
+	var tok, savetok: TokenT;
+	var fs: Symb;
 
 	tree = 0;
 	if lex.FileCheck(filename) then
-	{   tok = Token;
-	    tree = Program(filename);
+	{   savetok = Token;
+	    fs = symb.NewFile(lex.f@.filepath@.path, lex.f@.filename@.name);
+	    tok = Next();
+	    tree = ast.New(SEQ, 0);
+	    if symb.curpack != 0 then
+	    {   while tok != ENDF do
+		{   stree = PkgStmt();
+		    if stree != 0 then
+			tree = ast.Child(tree, stree);
+		    tok = Token;
+		}
+	    }
+	    else
+	    {   while tok != ENDF do
+		{   stree = ProgStmt();
+		    if stree != 0 then
+			tree = ast.Child(tree, stree);
+		    tok = Token;
+		}
+	    }
+	    tree = ast.New1(FILE, 0, tree);
+	    tree@.symb = fs;
 	    lex.FileClose();
-	    Token = tok;
+	    Token = savetok;
 	}
 	return tree;
     }
@@ -1405,17 +1426,16 @@ symb.DumpS(ns);
 	tree = 0;
 	if tok
 	is ID then
-	{
-	    tree = ImportSub(lex.Ident);
+	{   s = symb.New(STRING, lex.Ident, PRIVATE);
 	    tok = Next();       // flush ID
 	}
 	is PBEG then
 	{   tok = Next();
 	    s = expr.ConstString();
-	    if s != 0 then
-		tree = ImportSub(s@.ident);
 	    tok = lex.Expect(PEND);
 	}
+	if s != 0 then
+	    tree = ImportSub(s@.ident);
 	tok = lex.Expect(SEMI);
 	return tree;
     }
@@ -1436,7 +1456,7 @@ symb.DumpS(ns);
 	is KCONST then  { tok = Next();  tree = ConstDecl(); }
 	is KPROC then   { tok = Next();  tree = Procedure(); }
 	is KPACKAGE then  { tok = Next();  tree = Package(); }
-//	is KIMPORT then   { tok = Next(); tree = Import(); }
+	is KIMPORT then   { tok = Next(); tree = Import(); }
 	is KIF then     { tok = Next();  tree = CCIfStmt(PACKAGE); }
 	is KERROR then  { tok = Next();  tree = ErrorStmt(); }
 	else

@@ -1088,24 +1088,21 @@ else
 	return tree;
     }
 
-    proc GetArrayArg(): Ast,    // 0 if error
-			Type,   // type of scalar just wide enought
-			_uint,  // size in bytes
-			boolean // is sufficiently aligned
+     proc GetArrayArg(): Ast,    // 0 if error
+			Type,   // type of scalar just wide enough
+			Type    // type of normal scalar wide enough
     {   var arg: Ast;
 	var nb, na: _uint;
-        var ts: Type;
-	var aligned: boolean;
+        var ta, tn: Type;
 	var t: Type;
 
         arg = Bool(0);     // FIXME - something less general?
-        if arg == 0 then return 0, 0, 0, false;
+        if arg == 0 then return 0, 0, 0;
         arg = UnLoad(arg);
         t = arg@.type;
         if !type.Compat(t, type.addrtype) then
-        {
-	    err.str("Arg for _packXX/_unpkXX must be array/slice of bytes\n");
-	    return 0, 0, 0, false;
+        {   lex.Error(PACKARRAY);
+	    return 0, 0, 0;
 	}
 	t = t@.base;
 	nb = 0;      // this indicates illegal
@@ -1118,41 +1115,43 @@ else
 	    nb = t.Span();
 	}
 	if nb == 0 then
-	{
-	    err.str("Array for _packXX/_unpkXX must have fixed size\n");
-	    return 0, 0, 0, false;
+	{   lex.Error(PACKFIXED);
+	    return 0, 0, 0;
 	}
-	ts = target.utype(nb*Target.membits);
-	if ts == 0 then
-	{
-	    err.str("Array for _packXX/_unpkXX too large for target machine\n");
-	    return 0, 0, 0, false;
+	na = GetAlignment(arg);
+	tn = target.utype(nb*Target.membits);
+	if tn == 0 then
+	{   lex.Error(PACKSIZE);
+	    return 0, 0, 0;
 	}
-	if nb*Target.membits < ts@.width then
-	    aligned = false;    // not a uint width
-	elif !Target.mustalign then
-	    aligned = true;     // width good and target accepts unaligned
-	else
-	{   na = GetAlignment(arg);
-//err.str("na="); err.uint(na*Target.membits);
-//err.str(" ta="); err.uint(ts@.align); err.nl();
-	    aligned = na*Target.membits >= ts@.align;
-	}    
-        return arg, ts, nb, aligned;
+	ta = tn;	// assume normal size
+	if tn@.size  > nb*Target.membits ||     // unusual size
+	   tn@.align > na*Target.membits then   // or unaligned
+	{   ta = type.Clone(ta);
+	    ta@.size  = nb*Target.membits;
+	    ta@.width = nb*Target.membits;
+	    ta@.align = na*Target.membits;
+	    ta@.unalgn = true;
+	    ta@.reftype = 0;	// FIXME - move to Clone?
+	    ta@.final = true;
+	}
+//err.str("nb="); err.uint(nb);
+//err.str(" na="); err.uint(na);
+//err.str(" ta=\n"); type.DumpT(ta, true); err.nl();
+//err.str("tn=\n"); type.DumpT(tn, true); err.nl();
+        return arg, ta, tn;
     }
-
 
     proc Pack(endian: type.MemOrderT): Ast
     {   var tree: Ast;
+        var rhs: Ast;		// scalar AST
 	var arg: Ast;		// array slice AST
         var ta: Type;		// array slice type, next integral size
-        var rhs: Ast;		// scalar AST
-        var ts: Type;		// scalar type
-        var n: _uint;		// size of array slice in bytes
-        var aligned: boolean;   // aligment OK or not needed
+        var tn: Type;		// normal size covering array
+        var shf: _uint;		// shift amount, if any
         var tok: TokenT;
 
-	arg, ta, n, aligned = GetArrayArg();
+	arg, ta, tn = GetArrayArg();
 	if tok != COMMA then
 	{   lex.ErrorT(EXPECT, COMMA);
 	    return 0;
@@ -1162,90 +1161,46 @@ else
 	if arg == 0 || rhs == 0 then
 	    return 0;
 	if rhs@.type@.kind != UINT then
-	{
-	    err.str("Pack scalar must be unsigned int\n");
+	{   lex.Error(PACKUINT);
 	    return 0;
 	}
-	rhs = ast.ExtendT(rhs, ta);
-	ts = rhs@.type;
-	if aligned then
-	{   if endian != Target.memorder then
-		rhs = ast.New1(BSWAP, rhs@.type, rhs);
-	    arg = ast.Cast(arg, type.MakeRef(ta));
-	    tree = ast.New2(STORE, ts, arg, rhs);
+	shf = tn@.size - ta@.size;
+	if endian != Target.memorder then
+	{   rhs = ast.ExtendT(rhs, tn);     // extend to natural size
+	    rhs = ast.New1(BSWAP, rhs@.type, rhs);
+	    if shf != 0 then
+		rhs = ast.New2(LSR, rhs@.type, rhs,
+			       ast.Const(type.wordtype, shf));
 	}
-	else
-	{   var i, k: _uint;
-	    var tmp: Ast;
-	    arg@.type = type.MakeRef(arg@.type);
-	    tree = ast.New(SEQ, 0);
-	    i = 0;
-	    loop
-	    {   if endian == BE then k = n-i-1; else k = i;
-		tmp = ast.New2(STORE, type.bytetype,
-			ast.New2(INDEX, type.MakeRef(type.bytetype), arg,
-			  ast.Const(type.wordtype, k)),
-			    ast.Trunc(rhs, type.bytetype));
-		tree = ast.Child(tree, tmp);
-		i += 1;
-	      exit i == n;
-		rhs = ast.New2(LSR, ts, rhs, ast.Const(type.wordtype, 8));
-	    }
-	}
+	rhs = ast.ExtendT(rhs, ta);     // extend (trunc) to expected size
+	rhs@.width = ta@.width;
+	arg = ast.Cast(arg, type.MakeRef(ta));
+	arg@.width = ta@.width;
+	tree = ast.New2(STORE, ta, arg, rhs);
+	tree@.width = ta@.width;
 	tree = ast.New1(NOP, 0, tree);  // force no assignment
 	return tree;
     }
 
-    proc UnpkSub(tree: Ast, arg: Ast, ts: Type, i: _uint): Ast
-    {   var rhs: Ast;
-
-	rhs = ast.New1(LOAD, type.bytetype,
-		ast.New2(INDEX, type.MakeRef(type.bytetype), arg,
-		  ast.Const(type.wordtype, i)));
-	rhs@.width = type.bytetype@.size;
-	rhs = ast.ExtendT(rhs, ts);
-	if tree == 0 then
-	    tree = rhs;
-	else
-	    tree = ast.New2(OR, ts, 
-		     ast.New2(LSL, ts, tree, ast.Const(type.wordtype, 8)), rhs);
-	return tree;
-    }
-
     proc Unpk(endian: type.MemOrderT): Ast
-    {   var arg, tree: Ast;
-        var ts: Type;
-        var n: _uint;
-        var aligned: boolean;
+    {   var tree: Ast;
+	var arg: Ast;		// array slice AST
+        var ta: Type;		// array slice type, next integral size
+        var tn: Type;		// normal size covering array
+        var shf: _uint;		// shift amount, if any
 
-	arg, ts, n, aligned = GetArrayArg();
+	arg, ta, tn = GetArrayArg();
 	if arg == 0 then
 	    return 0;
-	if aligned then
-	{
-	    tree = ast.Cast(arg, type.MakeRef(ts));
-	    tree = Load(tree);
-	    if endian != Target.memorder then
-		tree = ast.New1(BSWAP, tree@.type, tree);
-	}
-	else
-	{   var i: _uint;
-	    arg@.type = type.MakeRef(arg@.type);
-	    tree = 0;
-	    if endian == BE then
-	    {   i = 0;
-		do
-		{   tree = UnpkSub(tree, arg, ts, i);
-		    i += 1;
-		} while i < n;
-	    }
-	    else	// assert LE
-	    {   i = n;
-		while i > 0 do
-		{   i -= 1;
-		    tree = UnpkSub(tree, arg, ts, i);
-		}
-	    }
+	shf = tn@.size - ta@.size;
+	tree = ast.Cast(arg, type.MakeRef(ta));
+	tree = Load(tree);
+	if endian != Target.memorder then
+	{   tree = ast.ExtendT(tree, tn);   // extend to natural size
+	    tree = ast.New1(BSWAP, tree@.type, tree);
+	    if shf != 0 then
+		tree = ast.New2(LSR, tree@.type, tree,
+			        ast.Const(type.wordtype, shf));
 	}
 	return tree;
     }
@@ -1829,7 +1784,7 @@ type.DumpT(t, false); err.nl();
 		lex.Expect(PEND);
 	    }
 	    is GBEG then
-		tree = CompositeValue(et);const TEST: boolean = true;
+		tree = CompositeValue(et);
 
 	}
 	return tree;
