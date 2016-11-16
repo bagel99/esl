@@ -567,7 +567,7 @@ package expr
 			_uint(tree@.child[1]@.valu)*size);
 		}
 		else
-		    alignment = 0;
+		    alignment = tree@.type@.base@.base@.align/Target.membits;
 	    }
 	}
 	is CLIST, SCON then	// constant aggregate

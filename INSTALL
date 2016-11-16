@@ -21,10 +21,7 @@ To bootstrap a ESL front-end on an x86 or x86-64 Linux system:
    host architecture.  If you are targeting the compiler to run on a different
    architecture than the host, then you are on your own.
 
-5. Type "make boot"
+5. Type "make"
    If successful, identical copies of a the compiler are left in
    "eslc2" and "eslc3"
-
-6. A 32-bit compiler can be built by typing "make".
-   A 64-bit x86 compiler can built by typing "make eslc-x86-64"
 

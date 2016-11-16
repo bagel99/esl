@@ -90,9 +90,6 @@ package type
 	return as == 0 && bs == 0;  // must both be at the end of the list
     }
 
-    const KindName: [TypeT]@[]Char =
-    {   "UKNOWN", "ENUM", "UINT", "SINT", "REF", "ARRAY", "RECORD", "REFPROC" };
-
     proc Compat(t1: Type, t2: Type): boolean
     {
 	if t1 == 0 || t2 == 0 then return true;	// what should this be?

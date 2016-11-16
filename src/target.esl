@@ -133,6 +133,17 @@ package target
 	return false;
     }
 
+    proc iindex(bytes: _uint): 0..IntSizesMax
+    {   var i: 0..IntSizesMax;
+	var bits: type.BitSize;
+
+	bits = bytes * Target.membits;
+	i = 0;
+	while i < Target.nisize-1 && Target.isizes[i].size < bits do
+	    i += 1;
+	return i;
+    }
+
     proc isize(bits: type.BitSize): type.BitSize
     {   var i: 0..IntSizesMax;
 

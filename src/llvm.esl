@@ -839,6 +839,8 @@ package llvm
     proc DclString(node: Ast)
     {   var n: StringRange;
 
+	if node@.seqno != 0 then return;   // already declared
+	node@.seqno = 1;    // mark declared
 	Print("%S = private unnamed_addr constant %K ", node);
 	n = StringRange(node@.type.Span());
 	PString(node@.symb@.ident, n, true);
@@ -1122,42 +1124,59 @@ package llvm
 	UseIntrinsic(MEMSET, 1, 0);     // FIXME - alignment
     }
 
-    proc GetChunkSize(size: _uint, align: _uint): 0..target.IntSizesMax
+    // Array compares can be done in "chunks".
+    // If the total size is known then
+    //   The total size must be evenly divided by the chunk size
+    // else
+    //   The chunk size must be evenly divided by the element size.
+    // If the alignment is known then
+    //   The chunk size must not be larger than the alignment.
+    proc GetChunkSize(totsize: _uint, elsize: _uint, align: _uint):
+		      0..target.IntSizesMax
     {   var is, ia: 0..target.IntSizesMax;
 
 	ia = 0;
 	if align > 0 then
-	{
-	    while ia < Target.nisize-1 &&
-		  align > Target.isizes[ia].align/Target.membits do
-		ia += 1;
+	    ia = target.iindex(align);
+	is = 0;
+	if totsize > 0 then
+	{   is = target.iindex(totsize);
+	    // make sure chunk size evenly divides total size
+	    while is > 0 &&
+		  totsize % (Target.isizes[is].size/Target.membits) != 0 do
+		is -= 1;
 	}
-	is = ia;
-	if size > 0 then
-	{   is = 0;
-	    while is < Target.nisize-1 &&
-		  size > Target.isizes[is].size/Target.membits do
-		is += 1;
+	else
+	{   is = target.iindex(elsize);
+	    // make sure element size evenly divides chunk size
+	    while is > 0 &&
+		  (Target.isizes[is].size/Target.membits) % elsize != 0 do
+		is -= 1;
 	}
-	if ia < is then is = ia;
-	return is;
+	return _min(ia, is);
     }
 
     // This horrible mess would be straighforward if only LLVM would support
     // an instrinsic llvm.memcmp().
     proc ArrayCompare(node: Ast): boolean
-    {   var length, align, size: _uint;
+    {   var length: _uint;      // number of elements, 0 => variable
+        var align: _uint;       // alignment in bytes
+        var elsize: _uint;      // size of element in bytes
+        var size: _uint;	//
 	var i: 0..target.IntSizesMax;
 
+	elsize = node@.child[0]@.type@.base@.base@.width/Target.membits;
+	align = _uint(node@.child[3]@.valu);
 	length = 0;	// 0 means variable
 	if node@.child[2]@.op == CONST then
-	    length = _uint(node@.child[2]@.valu) *
-		(node@.child[0]@.type@.base@.base@.width/Target.membits);
-	align = _uint(node@.child[3]@.valu);
+	    length = _uint(node@.child[2]@.valu) * elsize;
 	// find the largest target chunk we can use
-	i = GetChunkSize(length, align);
+	i = GetChunkSize(length, elsize, align);
+// err.str("elsize="); err.uint(elsize); err.str(" length="); err.uint(length);
+// err.str(" align="); err.uint(align); err.str(" chunk="); err.uint(i);
 	size = Target.isizes[i].size/Target.membits;
 	align = Target.isizes[i].align/Target.membits;
+//err.str(" size="); err.uint(size); err.str(" align="); err.uint(align); err.nl();
 	if length != 0 && length <= size then	// can do with one load
 	{
 	    node@.child[0] = ast.Cast(node@.child[0], puinttype[i]);
@@ -1198,15 +1217,17 @@ package llvm
 	    node@.child[1]@.width = puinttype[i]@.base@.width;
 	    GenSub(node@.child[0]);
 	    GenSub(node@.child[1]);
-	    if size > 1 then
-		node@.child[2] = ast.New2(DIV, type.wordtype,
-				 node@.child[2],
-				 ast.Const(type.wordtype, size));
+	    // calculate the number of chunks to be compared
+	    node@.child[2] = ast.New2(DIV, type.wordtype,
+			       ast.New2(MUL, type.wordtype, node@.child[2],
+				 ast.Const(type.wordtype, elsize)),
+			       ast.Const(type.wordtype, size));
 	    // LLVM wants count to be register width
 	    node@.child[2] = ast.ExtendT(node@.child[2], type.wordtype);
 	    GenSub(node@.child[2]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    node@.width = 1;
+//ast.Dump(node);
 	    Print("\t%N = call i1 @memcmp%0*B(%0T %0N, %1T %1N, %2T %2N)\n", node);
 	    UseIntrinsic(MEMCMP, size, puinttype[i]);
 	    if node@.op == ANE then     // ugly invert in place

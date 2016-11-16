@@ -18,13 +18,16 @@ It currently runs only on Linux on:
 * x86
 * x86_64
 * S/390/z990 (tested with Hercules)
-* armv7l (tested only on the Raspberry PI 2)
+* armv7l (tested on the Raspberry Pi 2)
+* aarch64 (tested on the Raspberry Pi 3 in 64-bit mode)
+
 The compiler has been build on MacOSX/x86_64 but the process
 is left as an exercise to the reader.
 
 The compiler back-end is LLVM.
 LLVM version 3.7.0 or 3.8.0 are the expected versions for the current front end.
 Previous versions of LLVM require the use of the -L flag.
+If LLVM is installed, then "cd src; make" should work.
 
 The compiler, in its current state, implements most of the language features.
 Documentation is incomplete.
