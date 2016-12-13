@@ -20,8 +20,8 @@ package expr
 		is KMIN then tree = ast.Const(t, t@.lo);
 		is KMAX then tree = ast.Const(t, t@.hi);
 		is KBITSZ then tree = ast.Const(type.wordtype, t@.size);
-		is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/Target.membits);
-		is KALIGN then tree = ast.Const(type.wordtype, t@.align/Target.membits);
+		is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/target.ByteSize);
+		is KALIGN then tree = ast.Const(type.wordtype, t@.align/target.ByteSize);
 		is KLEN then
 		{   if t@.kind == ARRAY && !t@.flex then
 			tree = ast.Const(type.wordtype, t.Span());
@@ -521,7 +521,7 @@ package expr
 	{   if record@.packed then
 		offs += s@.type@.size;
 	    else
-		offs += s@.type@.width / Target.membits;
+		offs += s@.type@.width / target.ByteSize;
 	    i += 1;
 	    s = s@.next;
 	}
@@ -538,11 +538,11 @@ package expr
 	if tree@.op
 	is VAR then 		// direct variable, use its alignment
 	{   if tree@.type != 0 then
-		alignment = tree@.type@.base@.align/Target.membits;
+		alignment = tree@.type@.base@.align/target.ByteSize;
 	}
 	is LOAD then 		// via a pointer
 	{   if tree@.type@.kind == REF && tree@.type != 0 then
-		alignment = tree@.type@.base@.align/Target.membits;
+		alignment = tree@.type@.base@.align/target.ByteSize;
 	}
 	is BSWAP, BYREF then
 	    alignment = GetAlignment(tree@.child[0]);
@@ -560,14 +560,14 @@ package expr
 	    {   if tree@.child[1]@.op == CONST then
 	        {
 		    var size: _uint;
-		    size = tree@.child[0]@.type@.base@.base@.width/Target.membits;
+		    size = tree@.child[0]@.type@.base@.base@.width/target.ByteSize;
 //err.str("\tsize="); err.uint(size); err.nl();
 //err.str("\tindex="); err.uint(_uint(tree@.child[1]@.valu)); err.nl();
 		    alignment = CalcAlign(alignment,
 			_uint(tree@.child[1]@.valu)*size);
 		}
 		else
-		    alignment = tree@.type@.base@.base@.align/Target.membits;
+		    alignment = tree@.type@.base@.base@.align/target.ByteSize;
 	    }
 	}
 	is CLIST, SCON then	// constant aggregate
@@ -589,22 +589,22 @@ package expr
 	if node@.op
 	is VAR then
 	{   size = ast.Const(type.wordtype,
-			     node@.type@.base@.width/Target.membits);
+			     node@.type@.base@.width/target.ByteSize);
 	}
 	is LOAD then 		// via a pointer
 	{   if node@.type@.kind == REF then
 		size = ast.Const(type.wordtype,
-				 node@.type@.base@.width/Target.membits);
+				 node@.type@.base@.width/target.ByteSize);
 	    else
 		lex.ErrorS(COMPILER, "Load via non-REF");
 	}
 	is INDEX, OFFSET then
 	{   size = ast.Const(type.wordtype,
-			     node@.type@.base@.width/Target.membits);
+			     node@.type@.base@.width/target.ByteSize);
 	}
 	is SLICE then
 	{   size = ast.Const(type.wordtype,
-			     node@.type@.base@.base@.width/Target.membits);
+			     node@.type@.base@.base@.width/target.ByteSize);
 	    size = ast.New2(MUL, type.wordtype, node@.child[2], size);        
 	}
 	else
@@ -631,7 +631,7 @@ package expr
 	    n = 0;
 	    f = node@.child[0]@.type@.base@.list;
 	    while f != 0 && n < node@.valu do
-	    {   offset += f@.type@.width / Target.membits;
+	    {   offset += f@.type@.width / target.ByteSize;
 		f = f@.next;
 		n += 1;
 	    }
@@ -642,7 +642,7 @@ package expr
 	    ctree = GetOffset(node@.child[0]);
 	    // assert node@.child[0]@.type@.base@.kind == ARRAY
 	    tree = ast.Const(type.wordtype,
-		node@.child[0]@.type@.base@.base@.width / Target.membits);
+		node@.child[0]@.type@.base@.base@.width / target.ByteSize);
 	    tree = ast.New2(MUL, type.wordtype,
 		ast.ExtendT(node@.child[1], type.wordtype), tree); 
 	}
@@ -691,9 +691,9 @@ package expr
 	if inx != 0 then
 	{   if inx@.op == CONST then
 	    {   var offs: _uint;
-		offs = _uint(inx@.valu) * (at@.base@.width/Target.membits);
-		st@.align = CalcAlign(at@.align/Target.membits, offs) *
-		    Target.membits;
+		offs = _uint(inx@.valu) * (at@.base@.width/target.ByteSize);
+		st@.align = CalcAlign(at@.align/target.ByteSize, offs) *
+		    target.ByteSize;
 	    }
 	    else    // Just take the alignment of the base type.
 		st@.align = at@.base@.align;
@@ -878,7 +878,7 @@ err.nl();
 		if bt != 0 then size = FindFlexSize(bt);
 	    }
 	    else
-		size = t@.width/Target.membits;
+		size = t@.width/target.ByteSize;
 	}
 	return size;
     }
@@ -888,7 +888,7 @@ err.nl();
 	var tok: TokenT;
 
         tok = Token;
-	size = ast.Const(type.wordtype, t@.width/Target.membits);
+	size = ast.Const(type.wordtype, t@.width/target.ByteSize);
 	if tok == PBEG then
 	{   tok = Next();
 	    if !t@.flex then
@@ -923,7 +923,7 @@ err.nl();
 	var tok: TokenT;
 
         tok = Token;
-	size = ast.Const(type.wordtype, t@.width/Target.membits);
+	size = ast.Const(type.wordtype, t@.width/target.ByteSize);
 	if tok == PBEG then
 	{   tok = Next();
 	    if !t@.flex then
@@ -979,7 +979,7 @@ else
 		tree@.width = Target.ptr.size;
 		tree = ast.Child(tree, size);
 		tree = ast.Child(tree,
-			   ast.Const(type.wordtype, t@.align/Target.membits));
+			   ast.Const(type.wordtype, t@.align/target.ByteSize));
 		tree = ast.Child(tree, GetSpaceSpec(t));
 		tree = ast.New1(CAST, type.MakeRef(s@.type), tree);
 	    }
@@ -1037,8 +1037,8 @@ else
 		{   lex.ErrorS(COMPILER, "expr.Zero: VAR not REF");
 		    return 0;
 		}
-		size = ast.Const(type.wordtype, t@.width/Target.membits);
-		align = t@.align/Target.membits;
+		size = ast.Const(type.wordtype, t@.width/target.ByteSize);
+		align = t@.align/target.ByteSize;
 		if tok == PBEG then
 		{   tok = Next();
 		    if !t@.flex then
@@ -1119,18 +1119,18 @@ else
 	    return 0, 0, 0;
 	}
 	na = GetAlignment(arg);
-	tn = target.utype(nb*Target.membits);
+	tn = target.utype(nb*target.ByteSize);
 	if tn == 0 then
 	{   lex.Error(PACKSIZE);
 	    return 0, 0, 0;
 	}
 	ta = tn;	// assume normal size
-	if tn@.size  > nb*Target.membits ||     // unusual size
-	   tn@.align > na*Target.membits then   // or unaligned
+	if tn@.size  > nb*target.ByteSize ||     // unusual size
+	   tn@.align > na*target.ByteSize then   // or unaligned
 	{   ta = type.Clone(ta);
-	    ta@.size  = nb*Target.membits;
-	    ta@.width = nb*Target.membits;
-	    ta@.align = na*Target.membits;
+	    ta@.size  = nb*target.ByteSize;
+	    ta@.width = nb*target.ByteSize;
+	    ta@.align = na*target.ByteSize;
 	    ta@.unalgn = true;
 	    ta@.reftype = 0;	// FIXME - move to Clone?
 	    ta@.final = true;
@@ -1298,7 +1298,7 @@ else
 		    lhs = lhs@.child[0];
 		if lhs@.type@.kind != REF || lhs@.type@.base@.kind != ARRAY ||
 		   lhs@.type@.base@.base@.kind != UINT ||
-		   lhs@.type@.base@.base@.width != Target.membits then
+		   lhs@.type@.base@.base@.width != target.ByteSize then
 		    lex.Error(OPTYPE);
 	        align = GetAlignment(lhs);
 	        tree = ast.New2(ZLEN, type.wordtype, lhs,

@@ -73,10 +73,10 @@ package symb
 	s@.const = ast.Const(t, 1);
 
 	// predefined _byte, _memory, _address
-	type.bytetype = type.NewBuiltin(UINT, "_byte", Target.membits);
+	type.bytetype = type.NewBuiltin(UINT, "_byte", target.ByteSize);
 	type.memtype = type.NewBuiltin(ARRAY, "_memory", 0);
 	type.memtype@.base = type.bytetype;
-	type.memtype@.align = Target.membits;	// Fixup alignment
+	type.memtype@.align = target.ByteSize;	// Fixup alignment
 	type.memtype@.flex = true;
 	taddr = type.NewBuiltin(REF, "_address", Target.ptr.size);
 	taddr@.base = type.memtype;
@@ -107,8 +107,8 @@ package symb
 
 	// the "unknown" type
 	type.unkntype = type.New(UTYPE);
-	type.unkntype@.size = Target.membits;	// give it non-zero size
-	type.unkntype@.align = Target.membits;	// and alignment	
+	type.unkntype@.size = target.ByteSize;	// give it non-zero size
+	type.unkntype@.align = target.ByteSize;	// and alignment	
 
 	// intrinsics
 	NewIntrinsic("_defined", DEF);

@@ -129,7 +129,7 @@ package lex
     type TokenT:
     (   NONE,	ENDF,
 	DOT,	COLON,	SEMI,	COMMA,	RANGE,	AT,	QUEST,
-	ASGN,	INCR,	DECR,				// **
+	ASGN,	INCR,	DECR,	LETOR,	LETXOR,	LETAND, // **
 	NOT,	INV,    PLUS,	MINUS,	OR,	XOR,	// must be contiguous
 	STAR,	DIV,	MOD,	SHL,	SHR,	AND,	// must be contiguous
 	EQ,	NE,	LT,	GT,	LE,	GE,	// must be contiguous
@@ -165,6 +165,9 @@ package lex
 	[ASGN] =	"=",
 	[INCR] =	"+=",
 	[DECR] =	"-=",
+	[LETOR] =       "|=",
+	[LETXOR] =      "^=",
+	[LETAND] =      "&=",
 	[NOT] =		"!",
 	[INV] =		"~",
 	[PLUS] =	"+",
@@ -309,6 +312,7 @@ package lex
 	NOT,	// seen "!"
 	AND,	// seen "&"
 	OR,	// seen "|"
+	XOR,    // seen "^"
 	ZERO,	// seen "0"
 	BIN,  OCT,  HEX,
 	DEC,  DECD, DECF, EXP1, EXP2,
@@ -675,7 +679,6 @@ package lex
 		is ',' then { tok = COMMA;  i += 1; }
 		is '@' then { tok = AT;     i += 1; }
 		is '~' then { tok = INV;    i += 1; }
-		is '^' then { tok = XOR;    i += 1; }
 		is '*' then { tok = STAR;   i += 1; }
 		is '%' then { tok = MOD;    i += 1; }
 		is '(' then { tok = PBEG;   i += 1; }
@@ -695,6 +698,7 @@ package lex
 		is '-' then state = MINUS;
 		is '&' then state = AND;
 		is '|' then state = OR;
+		is '^' then state = XOR;
 		is '0' then      { n = 0;     state = ZERO; }
 		is '1'..'9' then { n = c-'0'; j = 1; state = DEC; }
 		is '\'' then state = CHR;
@@ -775,11 +779,17 @@ package lex
 	    is AND then
 		if c
 		is '&' then { tok = BAND; i += 1; }
+		is '=' then { tok = LETAND; i += 1; }
 		else    tok = AND;
 	    is OR then
 		if c
 		is '|' then { tok = BOR; i += 1; }
+		is '=' then { tok = LETOR; i += 1; }
 		else    tok = OR;
+	    is XOR then
+		if c
+		is '=' then { tok = LETXOR; i += 1; }
+		else    tok = XOR;
 	    is ZERO then
 	    {   if c
 		is 'b' then state = BIN;

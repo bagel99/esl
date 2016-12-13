@@ -645,7 +645,7 @@ err.str("Assign to packed array\n");
 		    lsize = ast.OpMinMax(UMIN, lsize, rsize);
 	    }
 	    lsize = ast.New2(MUL, lsize@.type, lsize,
-			     ast.Const(type.wordtype, width/Target.membits));
+			     ast.Const(type.wordtype, width/target.ByteSize));
 	    lhs = ArrayFix(lhs);
 	    rhs = ArrayFix(rhs);
 	    tree = ast.New2(COPY, lhs@.type, lhs, rhs);
@@ -679,7 +679,7 @@ err.str("Assign to packed array\n");
 	    tree = ast.Child(tree, lhs);
 	    nl += 1;
 	}
-	if tok >= ASGN && tok <= DECR then
+	if tok >= ASGN && tok <= LETAND then
 	{   optok = tok;
 	    tok = Next();
 	    if nl > 1 && optok != ASGN then
@@ -742,7 +742,12 @@ err.str("Assign to packed array\n");
 			{   if rhs@.type != 0 then
 			    {   if optok != ASGN then
 				{   lrhs = expr.Load(lhs);
-				    if optok == INCR then op = ADD; else op = SUB;
+				    if optok
+				    is INCR then op = ADD;
+				    is DECR then op = SUB;
+				    is LETOR then op = OR;
+				    is LETXOR then op = XOR;
+				    is LETAND then op = AND;
 				    rhs = ast.OpBinary(op, lrhs, rhs, 0);
 				}
 				if lhs != 0 then

@@ -128,7 +128,7 @@ package type
     proc NeedSwap(t: Type, to: MemOrderT): boolean
     {   var fm: MemOrderT;
 
-	if t@.size <= Target.membits then return false;
+	if t@.size <= target.ByteSize then return false;
 	fm = t@.memorder;
 	if fm == NATIVE then fm = Target.memorder;
 	if to == NATIVE then to = Target.memorder;
@@ -267,7 +267,7 @@ package type
 		    {   if tok == PBEG then
 			{   tok = Next();
 			    t@.width = BitSize(expr.ConstValue(type.wordtype) *
-					Target.membits);
+					target.ByteSize);
 			    t@.widthattr = true;
 			    lex.Expect(PEND);
 			}
@@ -284,9 +284,9 @@ package type
 		    {   if tok == PBEG then
 			{   tok = Next();
 			    t@.align = BitSize(expr.ConstValue(type.wordtype) *
-					Target.membits);
+					target.ByteSize);
 			    if t@.align == 0 then
-				t@.align = Target.membits; // minimum align
+				t@.align = target.ByteSize; // minimum align
 			    t@.alignattr = true;
 			    lex.Expect(PEND);
 			}
@@ -397,7 +397,7 @@ package type
 	    t@.base = type.bytetype;
 	    t@.lo = 0;
 	    t@.hi = pad - 1;
-	    t@.size = pad * Target.membits;
+	    t@.size = pad * target.ByteSize;
 	    t@.width = t@.size;
 	    t@.align = type.bytetype@.align;
 	    t@.final = true;
@@ -560,14 +560,14 @@ package type
 			    else
 			    {
 				if atoffs != 0 then
-				{   atoffs = atoffs * Target.membits;
+				{   atoffs = atoffs * target.ByteSize;
 //err.str("offs="); err.uint(offs); err.str(" atoffs="); err.uint(atoffs); err.nl();
 				    if atoffs != 0 && atoffs < offs then
 					lex.Error(BADAT);
 				    else if atoffs > offs then
 				    {
 					index = FieldPad(prev,
-						    (atoffs-offs)/Target.membits, index);
+						    (atoffs-offs)/target.ByteSize, index);
 					offs = atoffs;
 				    }
 				}
@@ -584,7 +584,7 @@ package type
 					if mod != 0 then
 					{   // field needs padding
 					    index = FieldPad(prev,
-						(falign-mod)/Target.membits, index);
+						(falign-mod)/target.ByteSize, index);
 					    offs += falign - mod;
 					}
 				    }
@@ -611,7 +611,7 @@ package type
 //type.DumpT(t, true);
 		    }
 		    else if !t@.packed && t@.size > offs then
-		    {   index = FieldPad(prev, (t@.size-offs)/Target.membits, index);
+		    {   index = FieldPad(prev, (t@.size-offs)/target.ByteSize, index);
 		    }
 		}
 		if t@.width == 0 then
@@ -630,7 +630,7 @@ package type
 		    {   if t@.packed then
 			    align = 1;
 			else
-			    align = Target.membits;
+			    align = target.ByteSize;
 		    }
 		    else
 			align = target.ialign(t@.size);
@@ -1180,7 +1180,7 @@ if debug.tests[2] then {
 			if t@.packed then
 			    offs += symb.OffsT(s@.type@.size);
 			else
-			    offs += symb.OffsT(s@.type@.width / Target.membits);
+			    offs += symb.OffsT(s@.type@.width / target.ByteSize);
 			err.nl();
 			s = s@.next;
 		    }

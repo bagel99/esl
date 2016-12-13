@@ -3,6 +3,8 @@
 
 package target
 {
+    const ByteSize = 8;		// All targets must be byte addressable
+
     alias type.NINTS as IntSizesMax;
     const TargetsMax = 31;
     type SizeAlign:
@@ -13,7 +15,6 @@ package target
     {
 	memorder:   type.MemOrderT;
 	bitorder:   type.BitOrderT;
-	membits:    0..255;		// number of bits in smallest addressable
 	regsize:    0..255;		// width of integer registers
 	mustalign:  boolean;
 	nisize:     0..IntSizesMax-1;
@@ -31,43 +32,43 @@ package target
     var   TargetName: @[]Char;
     var   Triple:     @[]Char;
     const Model32LEU: ModelT =  // 32-bit little-endian no-alignment
-    {   LE, LSB, 8, 32, false,
+    {   LE, LSB, 32, false,
 	4,
 	{32, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
     const Model32LEA: ModelT =  // 32-bit little-endian partial alignment
-    {   LE, LSB, 8, 32, true,
+    {   LE, LSB, 32, true,
 	4,
 	{32, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
     const Model32LEF: ModelT =  // 32-bit little-endian full alignment
-    {   LE, LSB, 8, 32, true,
+    {   LE, LSB, 32, true,
 	4,
 	{32, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,64}, {0,0}, {0,0}  }
     };
     const Model64LEU: ModelT =  // 64-bit little-endian no-alignment
-    {   LE, LSB, 8, 64, false,
+    {   LE, LSB, 64, false,
 	5,
 	{64, 64},
 	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,64}, {0,0}  }
     };
     const Model32BEA: ModelT =  // 32-bit big-endian partial alignment
-    {   BE, MSB, 8, 32, true,
+    {   BE, MSB, 32, true,
 	5,
 	{32, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
     const Model64BEA: ModelT =  // 64-bit big-endian strict alignment
-    {   BE, MSB, 8, 64, true,
+    {   BE, MSB, 64, true,
 	4,
 	{64, 64},
 	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,128}, {0,0}  }
     };
     const Model16LEA: ModelT =  // 16-bit little-endian strict alignment
-    {   LE, LSB, 8, 16, true,
+    {   LE, LSB, 16, true,
 	3,
 	{16, 16},
 	{   {8, 8}, {16,16}, {32,16}, {0,0}, {0,0}, {0,0}  }
@@ -137,7 +138,7 @@ package target
     {   var i: 0..IntSizesMax;
 	var bits: type.BitSize;
 
-	bits = bytes * Target.membits;
+	bits = bytes * ByteSize;
 	i = 0;
 	while i < Target.nisize-1 && Target.isizes[i].size < bits do
 	    i += 1;

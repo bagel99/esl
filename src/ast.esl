@@ -455,7 +455,7 @@ package ast
 			rhs@.valu = rhs@.width;
 		    else
 			rhs@.valu = _clznz(rhs@.valu) -
-			    (Valu?size*Target.membits - rhs@.width);
+			    (Valu?size*target.ByteSize - rhs@.width);
 		}
 		is CTZ, CTZNZ  then
 		{   if rhs@.valu == 0 then

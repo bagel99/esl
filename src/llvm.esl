@@ -179,13 +179,13 @@ package llvm
     proc PWidth(t: Type)
     {
 	if t != 0 then
-	    f.uint(t@.width/Target.membits);
+	    f.uint(t@.width/target.ByteSize);
     }
 
     proc PAlign(t: Type)
     {
 	if t != 0 then
-	    f.uint(t@.align/Target.membits);
+	    f.uint(t@.align/target.ByteSize);
     }
 
     // FIXME - make a feature switch?
@@ -553,9 +553,9 @@ package llvm
     {   var n: type.BitSize;
 
 	n = t@.align;
-	if n >= Target.membits then
+	if n >= target.ByteSize then
 	{   f.str(", align ");
-	    f.uint(n / Target.membits);
+	    f.uint(n / target.ByteSize);
 	}
     }
 
@@ -1143,14 +1143,14 @@ package llvm
 	{   is = target.iindex(totsize);
 	    // make sure chunk size evenly divides total size
 	    while is > 0 &&
-		  totsize % (Target.isizes[is].size/Target.membits) != 0 do
+		  totsize % (Target.isizes[is].size/target.ByteSize) != 0 do
 		is -= 1;
 	}
 	else
 	{   is = target.iindex(elsize);
 	    // make sure element size evenly divides chunk size
 	    while is > 0 &&
-		  (Target.isizes[is].size/Target.membits) % elsize != 0 do
+		  (Target.isizes[is].size/target.ByteSize) % elsize != 0 do
 		is -= 1;
 	}
 	return _min(ia, is);
@@ -1165,7 +1165,7 @@ package llvm
         var size: _uint;	//
 	var i: 0..target.IntSizesMax;
 
-	elsize = node@.child[0]@.type@.base@.base@.width/Target.membits;
+	elsize = node@.child[0]@.type@.base@.base@.width/target.ByteSize;
 	align = _uint(node@.child[3]@.valu);
 	length = 0;	// 0 means variable
 	if node@.child[2]@.op == CONST then
@@ -1174,8 +1174,8 @@ package llvm
 	i = GetChunkSize(length, elsize, align);
 // err.str("elsize="); err.uint(elsize); err.str(" length="); err.uint(length);
 // err.str(" align="); err.uint(align); err.str(" chunk="); err.uint(i);
-	size = Target.isizes[i].size/Target.membits;
-	align = Target.isizes[i].align/Target.membits;
+	size = Target.isizes[i].size/target.ByteSize;
+	align = Target.isizes[i].align/target.ByteSize;
 //err.str(" size="); err.uint(size); err.str(" align="); err.uint(align); err.nl();
 	if length != 0 && length <= size then	// can do with one load
 	{
@@ -1348,27 +1348,27 @@ package llvm
 	    Print("\t%N = fptosi %0T %0N to %T", node);
 	is BSWAP then
 	{   Print("\t%N = call %T @llvm.bswap.%T(%T %0N)", node);
-	    UseIntrinsic(BSWAP, node@.width/Target@.membits, node@.type);
+	    UseIntrinsic(BSWAP, node@.width/target.ByteSize, node@.type);
 	}
 	is CLZ then
 	{   Print("\t%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)", node);
-	    UseIntrinsic(CLZ, node@.width/Target@.membits, node@.type);
+	    UseIntrinsic(CLZ, node@.width/target.ByteSize, node@.type);
 	}
 	is CLZNZ then
 	{   Print("\t%N = call %T @llvm.ctlz.%T(%0T %0N, i1 true)", node);
-	    UseIntrinsic(CLZ, node@.width/Target@.membits, node@.type);
+	    UseIntrinsic(CLZ, node@.width/target.ByteSize, node@.type);
 	}
 	is CTZ then
 	{   Print("\t%N = call %T @llvm.cttz.%T(%0T %0N, i1 false)", node);
-	    UseIntrinsic(CTZ, node@.width/Target@.membits, node@.type);
+	    UseIntrinsic(CTZ, node@.width/target.ByteSize, node@.type);
 	}
 	is CTZNZ then
 	{   Print("\t%N = call %T @llvm.cttz.%T(%0T %0N, i1 true)", node);
-	    UseIntrinsic(CTZ, node@.width/Target@.membits, node@.type);
+	    UseIntrinsic(CTZ, node@.width/target.ByteSize, node@.type);
 	}
 	is POP then
 	{   Print("\t%N = call %T @llvm.ctpop.%T(%0T %0N)", node);
-	    UseIntrinsic(POP, node@.width/Target@.membits, node@.type);
+	    UseIntrinsic(POP, node@.width/target.ByteSize, node@.type);
 	}
 	PEndLine(node);
 	return false;
@@ -1810,7 +1810,7 @@ package llvm
 	    Print("%T* %0N", load);
 	    if offs@.type@.base@.unalgn then
 	    {   f.str(", align ");
-		f.uint64(offs@.type@.base@.align/Target.membits);
+		f.uint64(offs@.type@.base@.align/target.ByteSize);
 	    }
 	    PEndLine(load);
 	}
@@ -1851,7 +1851,7 @@ package llvm
 		Print(", %K %D", lhs);
 		if lhs@.type@.base@.unalgn then
 		{   f.str(", align ");
-		    f.uint64(lhs@.type@.base@.align/Target.membits);
+		    f.uint64(lhs@.type@.base@.align/target.ByteSize);
 		}
 		PEndLine(store);
 	    }
