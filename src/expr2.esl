@@ -567,7 +567,11 @@ package expr
 			_uint(tree@.child[1]@.valu)*size);
 		}
 		else
-		    alignment = tree@.type@.base@.base@.align/target.ByteSize;
+		{   if tree@.op == SLICE then
+			alignment = tree@.type@.base@.base@.align/target.ByteSize;
+		    else    // INDEX
+			alignment = tree@.type@.base@.align/target.ByteSize;
+		}
 	    }
 	}
 	is CLIST, SCON then	// constant aggregate
@@ -2096,7 +2100,11 @@ type.DumpT(t, false); err.nl();
 	if tok == ID then
 	{   s = symb.Find(lex.Ident);
 	    tok = Next();
-	    if s != 0 && s@.kind == TYPE then
+	    if s == 0 then
+	    {   lex.ErrorI(UNDEFID, lex.Ident);
+		return ast.Null, ast.Null;    // something that doesn't propagate errors
+	    }
+	    if s@.kind == TYPE then
 	    {
 		if tok == AEND || tok == ID then    // naked type
 		{   t = s@.type;
