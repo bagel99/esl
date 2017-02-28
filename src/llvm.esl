@@ -32,7 +32,7 @@ package llvm
     var labthis: seqnoT;	// label sequence number of this basic block
     var loopexit: seqnoT;	// label sequence number for this loop exit
     type Intrinsics:
-    (   MEMCPY, MEMMOVE, MEMSET, MEMCMP, ZLEN, BSWAP,
+    (   MEMCPY, MEMMOVE, MEMSET, MEMCMP, ZLEN, BSWAP, BITREV,
 	CLZ, CTZ, POP,
 	END
     );
@@ -83,6 +83,13 @@ package llvm
 		{   do
 		    {   dummy.type = piu@.type;
 			Print("declare %K @llvm.bswap.%K(%K)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is BITREV then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @llvm.bitreverse.%K(%K)\n", dummy);
 			piu = piu@.next;
 		    } while piu != 0;
 		}
@@ -1350,6 +1357,10 @@ package llvm
 	{   Print("\t%N = call %T @llvm.bswap.%T(%T %0N)", node);
 	    UseIntrinsic(BSWAP, node@.width/target.ByteSize, node@.type);
 	}
+	is BITREV then
+	{   Print("\t%N = call %T @llvm.bitreverse.%T(%T %0N)", node);
+	    UseIntrinsic(BITREV, node@.width/target.ByteSize, node@.type);
+	}
 	is CLZ then
 	{   Print("\t%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)", node);
 	    UseIntrinsic(CLZ, node@.width/target.ByteSize, node@.type);
@@ -1994,7 +2005,7 @@ f.flush();
 	is TRUNC then ChangeSize(node, "trunc");
 	is BSWAP, NOT, NEG, FNEG, FCVTL, FCVTS, CVTUF, CVTIF, CVTFU, CVTFI then
 	    UnaryOp(node);
-	is CLZ, CLZNZ, CTZ, CTZNZ, POP then UnaryOp(node);
+	is CLZ, CLZNZ, CTZ, CTZNZ, POP, BITREV then UnaryOp(node);
 	is ABS then Abs(node);
 	is UMIN, UMAX, SMIN, SMAX then MinMax(node);
 	is ROL, ROR then Rotate(node);

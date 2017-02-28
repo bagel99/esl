@@ -6,7 +6,7 @@ package lex
     // Order is warnings, errors, internal errors
     type Errors:
     (   // Warnings
-	NOTIMPL,    EXPERIMENT,
+	NOTIMPL,    EXPERIMENT, WRONGATTR,
 	TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,  AMBIGUOUS,
 	// Errors
 	BADNL,      ILLCHR,     ILLUTF8,    CMTEOF,     BADEOF,     BADCHR,
@@ -32,6 +32,7 @@ package lex
     {
 	[NOTIMPL] =	"Feature not yet implemented: ",
 	[EXPERIMENT] =  "Feature is experimental: ",
+	[WRONGATTR] =   "Attribute not valid for type: ",
 	[TRUNC] =	"Truncation may cause loss of data",
 	[TOSIGNED] =	"Converting unsigned to signed integer",
 	[TOUNSIGN] =	"Converting signed to unsigned integer",
@@ -262,25 +263,12 @@ package lex
     const LinesMax = 0xFFFF;	// Max lines in a file, files in a program
     type LinesRange: 0..LinesMax;
     const ErrorMax = 10;	// Max errors before terminate
-    type SearchPathEntry:
-    {   next:		@SearchPathEntry;
-	path:		[]Char;
-    };
-    type Path: @SearchPathEntry;
-    var  pathhead, pathtail:Path;
-
-    type FileListEntry:
-    {   next:		@FileListEntry;
-	name:		[]Char;
-    };
-    type FileList: @FileListEntry;
-    var  filehead, filetail: FileList;
 
     type FileContext:
     {
 	prev:		@FileContext;
-	filepath:	Path;
-	filename:	FileList;
+	filepath:	@[]Char;
+	filename:	@[]Char;
 	fd:		sys.fildes;
 	lineno:		LinesRange;
 	cchar:		BufRange;		// index into buf
@@ -326,9 +314,6 @@ package lex
     );
     var saves: State = FIRST;		// look behind state
 
-    // These are for error message use
-    proc Filename(): []Char;
-
     proc Lineno():0..LinesMax
     {
 	if f == 0 then
@@ -339,10 +324,10 @@ package lex
     proc ErrorSub(error: Errors)
     {
 	if f@.filepath != 0 then
-	{   err.str(f@.filepath@.path);
+	{   err.str(f@.filepath);
 	    err.chr('/');
 	}
-	err.str(f@.filename@.name);
+	err.str(f@.filename);
 	err.chr(':');
 	err.uint(Lineno());
 	err.str(": ");
@@ -392,144 +377,6 @@ package lex
 	err.nl();
     }
 
-    proc SearchPathAdd(newpath: @[]Char, prepend: boolean): Path
-    {   var np: Path;
-	var len: _uint;
-
-	len = zstr.len(newpath, PathMax);
-	np = Path(sys.malloc(SearchPathEntry?size + len+1));
-	zstr.copy(np@.path, newpath, len+1);
-	if pathhead == 0 then
-	{   np@.next = 0;
-	    pathhead = np;
-	    pathtail = np;
-	}
-	else
-	{   if prepend then
-	    {   np@.next = pathhead;
-		pathhead = np;
-	    }
-	    else
-	    {   np@.next = 0;
-		pathtail@.next = np;
-		pathtail = np;
-	    }
-	}
-	return np;
-    }
-
-    proc SearchPathPrint()
-    {   var pp: Path;
-
-	err.str("Search path \"");
-	pp = pathhead;
-	while (pp != 0) do
-	{   err.str(pp@.path);
-	    err.chr(':');
-	    pp = pp@.next;
-	}
-	err.str("\"\n");
-    }
-
-    proc FileListAdd(filename: @[]Char): FileList
-    {   var fp: FileList;
-	var len: _uint;
-	
-	len = zstr.len(filename, NameMax);
-	fp = FileList(sys.malloc(FileListEntry?size + len+1));
-	zstr.copy(fp@.name, filename, len+1);
-	if filehead == 0 then
-	    filehead = fp;
-	else
-	    filetail@.next = fp;
-	filetail = fp;
-	return fp;
-    }
-
-    proc FileOpen(filename: @[]Char): boolean
-    {   var nf: File;
-	var fd: sys.fildes;
-	var pp: Path;
-	var fp: FileList;
-	var i: _uint;
-	var pathbuf: [PathMax]Char;
-
-	if f != 0 then
-	{   // search SearchPath trying to open file
-	    pp = pathhead;
-	    while pp != 0 do
-	    {
-		zstr.copy(pathbuf, pp@.path, PathMax);
-		zstr.cat(pathbuf, "/", PathMax);
-		i = zstr.len(pathbuf, PathMax);
-		zstr.cat(pathbuf, filename, PathMax);
-		fd = sys.open(pathbuf, sys.O_RDONLY, 0);
-	      exit fd >= 0;
-		pp = pp@.next;
-	    }
-	}
-	else
-	{   zstr.copy(pathbuf, filename, PathMax);
-	    fd = sys.open(pathbuf, sys.O_RDONLY, 0);
-	    i = zstr.rfind(pathbuf, '/', PathMax);
-	    if i == PathMax then		// '/' not found
-	    {   pp = SearchPathAdd(".", true);
-		i = 0;
-	    }
-	    else
-	    {   pathbuf[i] = 0;	// terminate
-		pp = SearchPathAdd(pathbuf, true);
-		i += 1;
-	    }
-	}
-	if fd < 0 then
-	    return false;
-	fp = FileListAdd(pathbuf[i:]);
-	if debug.files then
-	{   err.str("Open  file \"");
-	    err.str(pathbuf);
-	    err.str("\"\n");
-	}
-	if feature.mflag then
-	{
-	    msg.str(" \\\n ");
-	    if pp != 0 && (pp@.path[0] != '.' || pp@.path[1] != 0) then
-	    {   msg.str(pp@.path);
-		msg.chr('/');
-	    }
-	    msg.str(pathbuf[i:]);
-	}
-	nf = File(sys.malloc(FileContext?size));
-	nf@.filename = fp;
-	nf@.filepath = pp;
-	nf@.fd = fd;
-	nf@.lineno = 1;
-	nf@.cchar = 0;
-	nf@.nchar = 0;
-	nf@.prev = f;
-	f = nf;
-	return true;        
-    }
-
-    // Search to see if we have not imported this yet, if not, open it
-    proc FileCheck(filename: @[]Char): boolean
-    {   var fp: FileList;
-	var fullname: [256]Char;
-
-	zstr.copy(fullname, filename, 256);
-	zstr.cat(fullname, ".esl", 256);
-	fp = filehead;
-	while fp != 0 do
-	{
-	    if zstr.eq(fp@.name, fullname, NameMax) then
-		return false;	// already imported
-	    fp = fp@.next;
-	}
-	if FileOpen(fullname) then return true;
-	ErrorI(BADIMPORT, filename);
-	return false;
-    }
-
     proc FileClose()
     {   var of: File;
 
@@ -538,10 +385,10 @@ package lex
 	    if debug.files then
 	    {   err.str("Close file \"");
 		if f@.filepath != 0 then
-		{   err.str(f@.filepath@.path);
+		{   err.str(f@.filepath);
 		    err.chr('/');
 		}
-		err.str(f@.filename@.name);
+		err.str(f@.filename);
 		err.str("\"\n");
 	    }
 	    of = f;
@@ -549,6 +396,21 @@ package lex
 	    // sys.free(of)
 	}
     }
+
+    proc FileOpen(name: @[]Char, path: @[]Char, fd: sys.fildes)
+    {   var nf: File;
+
+	nf = File(sys.malloc(FileContext?size));
+	nf@.filename = name;
+	nf@.filepath = path;
+	nf@.fd = fd;
+	nf@.lineno = 1;
+	nf@.cchar = 0;
+	nf@.nchar = 0;
+	nf@.prev = f;
+	f = nf;
+    }
+
 
     proc FillBuf()
     {   var k: _int;

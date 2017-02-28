@@ -22,7 +22,7 @@ package ast
 	GETRV,
 	LOAD,
 	STORE,		// assignment
-	ZEXT,   SEXT,   TRUNC,	BSWAP,
+	ZEXT,   SEXT,   TRUNC,	BSWAP,   BITREV,
 	NEG,	NOT,	ABS,
 	FNEG,   FCVTL,  FCVTS,
 	CVTUF,	CVTIF,  CVTFU,	CVTFI,
@@ -65,7 +65,7 @@ package ast
 	[COPY]=   4,	[ACOPY]=  4,	[AEQ]=    4,	[ANE]=    4,
 	[GETRV]=  1,	[LOAD]=   1,	[STORE]=  2,
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,
-	[BSWAP]=  1,
+	[BSWAP]=  1,    [BITREV]= 1,
 	[NEG]=    1,	[NOT]=    1,
 	[ABS]=	  3,	// will convert into IFEXPR
 	[FNEG]=   1,    [FCVTL]=  1,    [FCVTS]=  1,

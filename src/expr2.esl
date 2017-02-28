@@ -609,7 +609,9 @@ package expr
 	is SLICE then
 	{   size = ast.Const(type.wordtype,
 			     node@.type@.base@.base@.width/target.ByteSize);
-	    size = ast.New2(MUL, type.wordtype, node@.child[2], size);        
+	    // LLVM wants multiply to be word sized
+	    size = ast.New2(MUL, type.wordtype,
+			    ast.ExtendT(node@.child[2], type.wordtype), size);
 	}
 	else
 	{   lex.ErrorS(NOTIMPL, "GetSize: unexpected node");
@@ -1317,6 +1319,7 @@ else
 	    is ROL    then tree = Rotate(false);
 	    is ROR    then tree = Rotate(true);
 	    is BSWAP  then tree = IntrinsicUnary(BSWAP);
+	    is BITREV then tree = IntrinsicUnary(BITREV);
 	    is PACKLE then tree = Pack(LE);
 	    is PACKBE then tree = Pack(BE);
 	    is UNPKLE then tree = Unpk(LE);

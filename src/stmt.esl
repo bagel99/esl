@@ -644,7 +644,9 @@ err.str("Assign to packed array\n");
 	    {   if rsize@.op != CONST || rsize@.valu != 0 then
 		    lsize = ast.OpMinMax(UMIN, lsize, rsize);
 	    }
-	    lsize = ast.New2(MUL, lsize@.type, lsize,
+	    // make sure muliply is on wordtype
+	    lsize = ast.New2(MUL, type.wordtype,
+			     ast.ExtendT(lsize, type.wordtype),
 			     ast.Const(type.wordtype, width/target.ByteSize));
 	    lhs = ArrayFix(lhs);
 	    rhs = ArrayFix(rhs);
@@ -1139,9 +1141,9 @@ err.str("Assign to packed array\n");
 			    tok = Next();
 			}
 			else
-			{   tok = Next();
-			    if ns@.kind == PACK then
-			    {   if tok == DOT then
+			{   if ns@.kind == PACK then
+			    {   tok = Next();
+				if tok == DOT then
 				{   tok = Next();
 				    if tok == ID then
 				    {   ns = symb.FindLocal(ns@.symblist, lex.Ident);
@@ -1165,7 +1167,15 @@ symb.DumpS(ns);
 				}
 				else lex.ErrorI(DEFID, lex.Ident);
 			    }
-			    else lex.ErrorI(DEFID, lex.Ident);
+			    else
+			    {   // ident was defined, but not a package
+				// if not at this level, we can alias to it
+				if symb.FindThisLevel(lex.Ident) == 0 then
+				    s = symb.Clone(s, lex.Ident);
+				else
+				    lex.ErrorI(DEFID, lex.Ident);
+				tok = Next();
+			    }
 			}
 		    }
 		    else lex.Error(EXPECTID);
@@ -1387,15 +1397,139 @@ symb.DumpS(ns);
 	return tree;
     }
 
+    /*
+     * Import file handling
+     * FIXME - move to a separate file?
+     */
+
+    alias lex.PathMax as PathMax;
+    type SearchPathEntry:
+    {   next:		@SearchPathEntry;
+	path:		[]Char;
+    };
+    type Path: @SearchPathEntry;
+    var  pathhead, pathtail:Path;
+
+    proc SearchPathAdd(newpath: @[]Char, prepend: boolean): Path
+    {   var np: Path;
+	var len: _uint;
+
+	len = zstr.len(newpath, PathMax);
+	np = Path(sys.malloc(SearchPathEntry?size + len+1));
+	zstr.copy(np@.path, newpath, len+1);
+	if pathhead == 0 then
+	{   np@.next = 0;
+	    pathhead = np;
+	    pathtail = np;
+	}
+	else
+	{   if prepend then
+	    {   np@.next = pathhead;
+		pathhead = np;
+	    }
+	    else
+	    {   np@.next = 0;
+		pathtail@.next = np;
+		pathtail = np;
+	    }
+	}
+	return np;
+    }
+
+    proc SearchPathPrint()
+    {   var pp: Path;
+
+	err.str("Search path \"");
+	pp = pathhead;
+	while (pp != 0) do
+	{   err.str(pp@.path);
+	    err.chr(':');
+	    pp = pp@.next;
+	}
+	err.str("\"\n");
+    }
+
+    proc FileFind(filename: @[]Char, istop: boolean): boolean
+    {   var fd: sys.fildes;
+	var pp: Path;
+	var fp: @[]_byte;
+	var i: _uint;
+	var pathbuf: [PathMax]Char;
+
+	if !istop then
+	{   // search SearchPath trying to open file
+	    pp = pathhead;
+	    while pp != 0 do
+	    {
+		zstr.copy(pathbuf, pp@.path, PathMax);
+		zstr.cat(pathbuf, "/", PathMax);
+		i = zstr.len(pathbuf, PathMax);
+		zstr.cat(pathbuf, filename, PathMax);
+		fd = sys.open(pathbuf, sys.O_RDONLY, 0);
+	      exit fd >= 0;
+		pp = pp@.next;
+	    }
+	}
+	else
+	{   zstr.copy(pathbuf, filename, PathMax);
+	    fd = sys.open(pathbuf, sys.O_RDONLY, 0);
+	    i = zstr.rfind(pathbuf, '/', PathMax);
+	    if i == PathMax then		// '/' not found
+	    {   pp = SearchPathAdd(".", true);
+		i = 0;
+	    }
+	    else
+	    {   pathbuf[i] = 0;	// terminate
+		pp = SearchPathAdd(pathbuf, true);
+		i += 1;
+	    }
+	}
+	if fd < 0 then
+	    return false;
+	fp = symb.NewImport(pathbuf[i:]);
+	if debug.files then
+	{   err.str("Open  file \"");
+	    err.str(pathbuf);
+	    err.str("\"\n");
+	}
+	if feature.mflag then
+	{
+	    msg.str(" \\\n ");
+	    if pp != 0 && (pp@.path[0] != '.' || pp@.path[1] != 0) then
+	    {   msg.str(pp@.path);
+		msg.chr('/');
+	    }
+	    msg.str(pathbuf[i:]);
+	}
+	lex.FileOpen(fp, pp.path, fd);
+	return true;  
+    }
+
+    // Search to see if we have not imported this yet, if not, open it
+    proc ImportCheck(filename: @[]Char): boolean
+    {   var fullname: [256]Char;
+
+	zstr.copy(fullname, filename, 256);
+	zstr.cat(fullname, ".esl", 256);
+	if symb.FindImport(fullname) then
+	    return false;	// already imported
+	if FileFind(fullname, false) then
+	    return true;
+	else
+	{   lex.ErrorI(BADIMPORT, filename);
+	    return false;
+	}
+    }
+
     proc ImportSub(filename: @[]Char): Ast
     {   var tree, stree: Ast;
 	var tok, savetok: TokenT;
 	var fs: Symb;
 
 	tree = 0;
-	if lex.FileCheck(filename) then
+	if ImportCheck(filename) then
 	{   savetok = Token;
-	    fs = symb.NewFile(lex.f@.filepath@.path, lex.f@.filename@.name);
+	    fs = symb.NewFile(lex.f@.filepath, lex.f@.filename);
 	    tok = Next();
 	    tree = ast.New(SEQ, 0);
 	    if symb.curpack != 0 then
@@ -1557,7 +1691,7 @@ symb.DumpS(ns);
 	var tok: TokenT;
 	var s: Symb;
 
-	s = symb.NewFile(lex.f@.filepath@.path, lex.f@.filename@.name);
+	s = symb.NewFile(lex.f@.filepath, lex.f@.filename);
 	symb.curpack = 0;
 	tree = ast.New(SEQ, 0);
 	tok = Next();

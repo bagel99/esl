@@ -10,7 +10,7 @@ package symb
 	CLZ, CLZNZ, CTZ, CTZNZ, POP,
 	CVT, NEW, DEL, ZERO, ZLEN,
 	PACKLE, PACKBE, UNPKLE, UNPKBE,
-	ROL, ROR, BSWAP
+	ROL, ROR, BSWAP, BITREV
     );
     type SymbNode:
     {
@@ -271,6 +271,33 @@ package symb
 	}
 	else lex.ErrorI(UNDEFID, name);
 	return s;
+    }
+
+    const ImportSymbol = "_IMPORT";
+
+    proc FindImport(name: @[]_byte): boolean
+    {   var s: Symb;
+
+//err.str("FindImport: "); err.str(name); err.nl();
+	s = FindLocal(symbs[level].frst, ImportSymbol);
+//err.str("\ts1="); err.uint(_uintptr(s)); err.nl();
+	if s != 0 then
+	    s = FindLocal(s.symblist, name);
+//err.str("\ts2="); err.uint(_uintptr(s)); err.nl();
+	return s != 0;
+    }
+
+    proc NewImport(name: @[]_byte): @[]_byte
+    {   var s, t: Symb;
+
+//err.str("NewImport: "); err.str(name); err.nl();
+	s = FindLocal(symbs[level].frst, ImportSymbol);
+	if s == 0 then
+	    s = New(USYMB, ImportSymbol, VISIBLE);
+	t = NewString(name, zstr.len(name, 256));
+	t.next = s.symblist;
+	s.symblist = t;
+	return t.ident;
     }
 
     proc IsDefined(name: @lex.Identifier): boolean

@@ -96,7 +96,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 		targetarch = argv[i];
 	    }
 	}
-	is 'I' then lex.SearchPathAdd(argv[i]@[2:], false);
+	is 'I' then stmt.SearchPathAdd(argv[i]@[2:], false);
 	is 'o' then
 	{   if argv[i]@[2] != 0 then
 		outfile = argv[i]@[2:];
@@ -176,8 +176,8 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	target.list();
 	return 2;
     }
-    if debug.files then lex.SearchPathPrint();
-    if !lex.FileOpen(argv[i]@) then
+    if debug.files then stmt.SearchPathPrint();
+    if !stmt.FileFind(argv[i]@, true) then
     {   err.str("Unable to open input file: ");
 	err.str(argv[i]@);
 	err.nl();

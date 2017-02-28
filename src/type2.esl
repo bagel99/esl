@@ -253,7 +253,12 @@ package type
 			t@.atbase = at;
 		    }
 		    if atok
-		    is KPACK then   t@.packed = true;
+		    is KPACK then
+		    {   if t@.kind == RECORD || t@.kind == ARRAY then
+			    t@.packed = true;
+			else
+			    lex.ErrorT(WRONGATTR, KPACK);
+		    }
 		    is KNOPAD then  t@.noepad = true;
 		    is KLSB then    t@.bitorder = LSB;
 		    is KMSB then    t@.bitorder = MSB;
@@ -372,19 +377,10 @@ package type
 	s@.type = t;
     }
 
-    // replace with something clever
-    proc bitsize(x: _uint64): 0..255
-    {   var t: _uint64;
-	var n: 0..255;
-
-	n = 1;
-	t = 1;
-	while t < x do
-	{   t = t<<1;
-	    t += 1;
-	    n += 1;
-	}
-	return n;
+    proc bitsize(x: _uint64): _uint
+    {
+	if x == 0 then return 1;
+	return x?bits - _clznz(x);
     }
 
     proc FieldPad(prev: Symb, pad: BitSize, index: symb.OffsT): symb.OffsT

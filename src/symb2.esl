@@ -132,6 +132,7 @@ package symb
 	NewIntrinsic("_rol", ROL);
 	NewIntrinsic("_ror", ROR);
 	NewIntrinsic("_bswap", BSWAP);
+	NewIntrinsic("_bitrev", BITREV);
 
 	// library routines
 	libnew = NewLibrary("memalloc", taddr);
