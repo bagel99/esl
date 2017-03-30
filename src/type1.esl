@@ -68,6 +68,7 @@ package type
     var floattypes:[NFLOATS]Type;
 
     proc New(kind: TypeT): Type;
+    proc MakeRef(bt: Type): Type;
     proc NewBuiltin(kind: TypeT, name: @lex.Identifier, size: BitSize): Type;
     proc Final(t: Type);
     proc Compat(t1: Type, t2: Type): boolean;

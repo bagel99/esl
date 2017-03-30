@@ -140,7 +140,7 @@ package lex
 	ID,		// all keywords follow this
 	KTYPE,	KVAR,	KCONST,	KIMPORT,KALIAS,	KERROR,
 	KPROC,	KPACKAGE,
-	KASM,   KCALL,
+	KASM,   KASSERT,KCALL,
 	KRET,   KIF,	KWHILE,				// must be contiguous
 	KFOR,	KLOOP,	KEXIT,
 	KTHEN,	KELIF,  KELSE,	KIS,    KDO,	KWITH,  KAS,
@@ -208,6 +208,7 @@ package lex
 	[KPROC] =	"proc",
 	[KPACKAGE] =	"package",
 	[KASM] =	"asm",
+	[KASSERT] =     "assert",
 	[KCALL] =       "call",
 	[KRET] =	"return",
 	[KIF] =		"if",

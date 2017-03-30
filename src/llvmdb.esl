@@ -77,9 +77,6 @@ package llvmdb
     var seqno: seqnoT;
     var unit, file, subr, blok, expr: seqnoT;
     var nullmeta, filenamedir, globals, subprogs, retained, enums, imported: seqnoT;
-    const MAXFILENEST = 32;
-    var fileinx: _uint = 0;
-    var filenest: [MAXFILENEST] seqnoT;
     var gvhead, gvtail: Symb;	// linked list of global variables
     var lvhead, lvtail: Symb;	// linked list of local variables
     var sphead, sptail: Symb;	// linked list of subprograms
@@ -853,16 +850,13 @@ package llvmdb
 	}
 	filenamedir = tag;	    // so others can reference it
 	PFileDir(tag, fs);
-	filenest[fileinx] = tag;
-	fileinx += 1;		    // FIXME - check for overflow
     }
 
     proc FileFinish(fs: Symb)
     {
-	if fileinx > 0 then
-	{   fileinx -= 1;
-	    filenamedir = filenest[fileinx-1];
-	}
+	fs = fs@.package;
+	if fs != 0 then
+	    filenamedir = fs@.dbtag;
     }
 
     proc ProgStart(fs: Symb, opt: boolean)

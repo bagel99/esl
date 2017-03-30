@@ -1,0 +1,173 @@
+/*
+ * Interface to Posix system
+ *
+ * Copyright (c) 2009-2013, Brian G. Lucas.  See LICENSE file.
+ * $Id: sys.esl 297 2013-05-20 20:36:47Z bgl $
+ */
+
+package sys
+{
+    type errcode:
+    (   ENONE,  EPERM,	ENOENT, ESRCH,	EINTR,	EIO,	ENXIO,	E2BIG,
+	ENOEXEC,EBADF,	ECHILD, EAGAIN,	ENOMEM,	EACCES,	EFAULT,	ENOTBLK,
+	EBUSY,  EEXIST,	EXDEV,	ENODEV,	ENOTDIR,EISDIR, EINVAL,	ENFILE,
+	EMFILE,	ENOTTY,	ETXTBSY,EFBIG,	ENOSPC,	ESPIPE,	EROFS,	EMLINK,
+	EPIPE,	EDOM,	ERANGE,
+	ENODATA=61
+    );
+    type pid_t: _int;
+    type uid_t: _int;
+    type gid_t: _int;
+    type fildes: _int;
+    type mode_t: _int;
+    const fdin:  fildes = 0;
+    const fdout: fildes = 1;
+    const fderr: fildes = 2;
+    type fcflags:   // fcntl and open flags
+    {   ACCESS:   (RDONLY, WRONLY, RDWR): bits(2);
+	_:        0..0xF;   // reserved
+	CREAT:    boolean;  // 0o100
+	EXCL:     boolean;  // 0o200
+	NOCTTY:   boolean;  // 0o400
+	TRUNC:    boolean;  // 0o1000
+	APPEND:   boolean;  // 0o2000
+	NONBLOCK: boolean;  // 0o4000
+	SYNC:     boolean;  // 0o10000
+	ASYNC:    boolean;  // 0o20000
+	_:        0..0o77;
+	CLOEXEC:  boolean;  // 0o2000000
+    }: packed, lsb, le, size(_int?size);
+    const fcnull: fcflags = { .ACCESS=RDONLY };     // all zeros
+    type fcmodes:   // fcntl operations
+    ( DUPFD, GETFD, SETFD, GETFL, SETFL, GETLK, SETLK, SETLKW,
+      SETOWN, GETOWN,
+      GETLK64=12, SETLK64, SETLKW64,
+      DUPFD_CLOEXEC=1030
+    );
+    proc fcntl(fd:fildes, mode:fcmodes, flags:fcflags): _int: external;
+    proc open(name: @_memory, flags:fcflags, mode: mode_t):_int: external;
+    proc close(fd:fildes):: external;
+    proc read(fd:fildes, buf:@_memory, len:_uint):_int: external;
+    proc write(fd:fildes, buf:@_memory, len:_uint):_int : external;
+
+    type iovec:
+    {   base:  _address;
+	len:   _uint;
+    };
+    proc writev(fd: fildes, iov: @[]iovec, iovcnt: _uint): _int: external;
+
+    type ioctl_code:    // Linux ioctl encoding
+    {   command: _uint8;
+        family:  _uint8;
+        size:    0..0x3FFF;
+        dir:     (IO, IOW, IOR, IOWR);
+    }: packed, lsb;
+    proc ioctl(fd:fildes, code:ioctl_code, data:@_memory):_int: external;
+    type off_t: _int;       // WARNING - word sized
+    type off64_t: _int64;
+    type ino_t: _uint;      // WARNING - word sized
+    type whence_t: (SET, CUR, END): bits(_uint?size);
+    proc lseek(fd:fildes, offs:off_t, whence:whence_t): _int:  external;
+    proc lseek64(fd:fildes, offs:off64_t, whence:whence_t): _int:  external;
+    proc sleep(seconds: _uint): : external;
+    proc alarm(seconds: _uint): : external;
+    proc exit(code:_int):: external;
+    proc __errno_location(): @_int : external;
+    proc errno(): _int
+    {   var loc: @_int;
+	loc = __errno_location();
+	return loc@;
+    }
+    type signals:(HUP=1,  INT,   QUIT,  ILL,   TRAP,  ABRT,  BUS,
+	    FPE,   KILL,  USR1,  SEGV,  USR2,  PIPE,  ALRM,  TERM,
+	    STKFLT,CHLD,  CONT,  STOP,  TSTP,  TTIN,  TTOU,  URG,
+	    XCPU,  XFSZ,  VTALRM,PROF,  WINCH, IO,    PWR,   SYS);
+    type sahandler: @_(sig:_int);
+    type sigact:	// WARNING - layout is very arch dependent
+    {   handler:sahandler;
+	mask:   _uint32;
+	flags:  _uint32;
+	restorer: @_memory;	// UNUSED;
+    };
+    proc sigaction(sig:signals, act:@sigact, oact:@sigact):_int:external;
+    proc signal(sig:signals, handler:sahandler): :external; // WARN-obsolete
+
+    type time_t: _int;      // different size on 64 and 32 bit systems
+    type timeval:
+    {   sec: time_t;
+	usec:_uint;	    // microseconds
+    };
+
+    type itimer: (REAL, VIRTUAL, PROF);
+    type itimerval:
+    {   interval: timeval;
+	initial:  timeval;
+    };
+    proc setitimer(which:itimer, new:@itimerval,
+	                         old:@itimerval):_int: external;
+    proc getitimer(which:itimer, old:@itimerval):_int: external;
+    proc pause():: external;
+if _defined(fset_array) then {
+    const fdsetsize = 2;
+    type fdset: [fdsetsize]_uint32;	// just up to 64 fildes for now
+    proc select(nfds:_uint, rdfds:@fdset, wrfds:@fdset, exfds:@fdset,
+	        timeout:@timeval):_int: external;
+    proc (fds: @fdset) Zero ()::inline
+    {   var i: _uint;
+	i = 0;
+	while i < fdsetsize do
+	{   fds[i] = 0;
+	    i += 1;
+	}
+    }
+    proc (fds: @fdset) Set (fd: fildes)::inline
+    {
+	fds[fd/_uint32?bits] = fds[fd/_uint32?bits] | (1 << fd%_uint32?bits);
+    }
+    proc (fds: @fdset) Set (fd: fildes)::inline
+    {
+	fds[fd/_uint32?bits] = fds[fd/_uint32?bits] & ~(1 << fd%_uint32?bits);
+    }
+    proc (fds: @fdset) IsSet (fd: fildes):boolean:inline
+    {
+	return (fds[fd/_uint32?bits]&(1 << fd%_uint32?bits)) != 0;
+    }
+} else {
+    type fdset: _uint;    // just up to 32/64 fildes for now
+    proc select(nfds:_uint, rdfds:@fdset, wrfds:@fdset, exfds:@fdset,
+	        timeout:@timeval):_int: external;
+    proc (fds: @fdset) Zero ()::inline
+    {
+	fds = 0;
+    }
+    proc (fds: @fdset) Set (fd: fildes)::inline
+    {   var ufd: _uint;
+	ufd = _uint(fd);
+	fds@ = fds@ | (1 << ufd);
+    }
+    proc (fds: @fdset) Clr (fd: fildes)::inline
+    {   var ufd: _uint;
+	ufd = _uint(fd);
+	fds@ = fds@ & ~(1 << ufd);
+    }
+    proc (fds: fdset) IsSet (fd: fildes):boolean:inline
+    {   var ufd: _uint;
+	ufd = _uint(fd);
+	return (fds & (1 << ufd)) != 0;
+    }
+}
+    proc memset(ptr:@_memory, val:_uint, len:_uint):: external;
+    proc memcpy(to:@_memory, fm:@_memory, len:_uint):: external;
+    proc malloc(nbytes:_uint):@_memory : external;
+    proc zalloc(nbytes:_uint):@_memory
+    {   var ptr: @_memory;
+	ptr = malloc(nbytes);
+	memset(ptr, 0, nbytes);
+	return ptr;
+    }
+    proc free(ptr: @_memory):: external;
+
+    proc getenv(name: _address): _address: external;
+}
+// vim: ts=8 sw=4 noet nowrap
+

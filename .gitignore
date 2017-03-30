@@ -1,0 +1,16 @@
+*.o
+*.s
+*.a
+*.out
+*.bin
+*.elf
+*.ll
+*~
+/tests/
+/doc/Notes*
+/doc/ToDo
+/doc/Done
+/doc/Downloads.txt
+/doc/*.pdf
+/Cmp
+/Diff

@@ -20,6 +20,8 @@ var feature:
 	trunc: boolean;
 	tcall: boolean;
 	ambig: boolean;
+	assert:boolean;
+	bounds:boolean;
 	debug: _uint8;		// debug version 1 or 2
 	syntax37: boolean;      // use new load, getelementprt IR syntax in 3.7
     };
@@ -126,6 +128,11 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	    {   i += 1;
 		llvmversion = argv[i];
 	    }
+	}
+	is 'A' then
+	{   if argv[i]@[2]
+	    is 'a' then feature.assert = true;
+	    is 'b' then feature.bounds = true;
 	}
 	i += 1;
     }

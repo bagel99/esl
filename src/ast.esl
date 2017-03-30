@@ -47,7 +47,8 @@ package ast
 	SEL,		// select, multi-arm if
 	IS,		// one arm of a select
 	RET,		// return value
-	PROC		// procedure
+	PROC,		// procedure
+	ASSERT		// assertion
     );
     const NumChildDefault: [Op]0..255 =
     {   [NULL]=	  0,
@@ -90,7 +91,7 @@ package ast
 	[SEQ]=    8,	[LOOP]=   1,	[EXIT]=   2,
 	[IF]=     3,	[SEL]=    8,	[IS]=     4,
 	[RET]=    1,
-	[PROC]=   3
+	[PROC]=   3,    [ASSERT]= 1
     };
     type NSubNodes: 0..0xFFFF;
     type AstNode:
@@ -255,6 +256,21 @@ package ast
 	if t != 0 then
 	    pa@.width = t@.width;
 	return pa;
+    }
+
+    proc OpIfExpr(ctree: Ast, ttree: Ast, ftree: Ast, t: Type): Ast
+    {   var tree: Ast;
+
+	if ctree@.op == CONST then
+	{   if ctree@.valu != 0 then
+		tree = ttree;
+	    else
+		tree = ftree;
+	}
+	else
+	    tree = New3(IFEXPR, ttree@.type, ctree, ttree, ftree);
+	tree@.width = t@.width;
+	return tree;
     }
 
     proc CheckConstTruncate(node: Ast, size: type.BitSize)
@@ -436,7 +452,7 @@ package ast
 	return n;
     }
 
-    proc OpUnary(op:ast.Op, rhs:Ast): Ast
+    proc OpUnary(op:Op, rhs:Ast): Ast
     {   var tree: Ast;
 
 	tree = 0;
@@ -526,6 +542,42 @@ package ast
 		is ADD then lhs@.valu += rhs@.valu;
 		is SUB then lhs@.valu -= rhs@.valu;
 		tree = lhs;
+	    }
+	    else
+		tree = OpBinary(op, lhs, rhs, t);
+	}
+	return tree;
+    }
+
+    proc OpShfL(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
+    {   var tree: Ast;
+	var result: Valu;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   result = lhs@.valu << rhs@.valu;
+		tree = Dup(lhs);
+		tree@.valu = result;
+	    }
+	    else
+		tree = OpBinary(op, lhs, rhs, t);
+	}
+	return tree;
+    }
+
+    proc OpShfR(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
+    {   var tree: Ast;
+	var result: Valu;
+
+	tree = 0;
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   if op
+		is LSR then result = lhs@.valu >> rhs@.valu;
+		is ASR then result = Valu(type.SValu(lhs@.valu) >> rhs@.valu);
+		tree = Dup(lhs);
+		tree@.valu = result;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
@@ -687,6 +739,125 @@ package ast
 	return New2(op, lhs@.type, lhs, rhs);
     }
 
+    proc CheckRefAttributes(to: Type, fm: Type): boolean
+    {
+	if to == 0 || fm == 0 then return false;
+	// Check endian
+	if to@.memorder != fm@.memorder then
+	    return false;
+	// Check alignment
+	if to@.align > fm.align then
+	    return false;
+	if to@.kind == REF && fm@.kind == REF then
+	    return CheckRefAttributes(to@.base, fm@.base);
+	return true;
+    }
+
+    proc CoerceToRef(tree: Ast): Ast
+    {
+	if tree@.op == LOAD then
+	    tree = tree@.child[0];		// undo the load
+	else if tree@.op == BSWAP && tree@.child[0]@.op == LOAD then
+	    tree = tree@.child[0]@.child[0];
+	// FIXME: this is very likely wrong
+	if tree@.op
+	is SCON, CLIST then
+	    tree = New1(BYREF, type.MakeRef(tree@.type), tree);
+	is VAR then
+	    {}
+	else
+	    tree = New1(BYREF, tree@.type, tree);
+	return tree;
+    }
+
+    proc Adjust(tree: Ast, to: Type): Ast
+    {   var fm: Type;
+	var ok: boolean;
+
+	fm = tree@.type;
+	if fm == 0 then		// undefined type
+	    return tree;
+	ok = true;
+	if to@.kind
+	is REF then
+	{   if to@.base != 0 then
+	    {   if fm@.kind == REF && (to@.base == type.memtype || type.Compat(to, fm)) then
+		{   if fm@.base != to@.base then
+		    {   tree = Cast(tree, to);
+			fm = tree@.type;
+		    }
+		}
+		else
+		{   tree = CoerceToRef(tree);
+		    fm = tree@.type;
+		    // Coerce to REF memtype is always OK
+		    if to@.base == type.memtype || type.Compat(to, fm) then
+		    {   if fm != to then
+			{   tree = Cast(tree, to);
+			    fm = tree@.type;
+			}
+		    }
+		    else ok = false;
+		}
+		// Fix types when formal is a flex
+		if to@.flex && !fm@.flex then
+		    tree = New1(CAST, to, tree);
+		// Check attributes
+		if !CheckRefAttributes(to, fm) then
+		    lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
+	    }
+	}
+	is REFPROC then
+	{   ok = type.Compat(to, fm);
+	}
+	is ENUM then
+	{   ok = type.Compat(fm, to);
+	    if to@.width != tree@.width then
+		tree = ExtendT(tree, to);
+	}
+	is UINT then
+	{   ok = type.Compat(fm, to);
+	    if !ok then
+	    {   if fm.kind == SINT then
+		{   if feature.trunc then lex.Error(TOUNSIGN);
+		    ok = true;
+		}
+	    }
+	    if to@.width != tree@.width then
+		tree = ExtendT(tree, to);
+	}
+	is SINT then
+	{   ok = type.Compat(fm, to);
+	    if !ok && fm.kind == UINT then
+	    {   if feature.trunc then lex.Error(TOSIGNED);
+		ok = true;
+	    }
+	    if to@.width != tree@.width then
+		tree = ExtendT(tree, to);
+	}
+	is FLOAT then
+	{
+	    if to@.width != tree@.width then
+		tree = ExtendT(tree, to);
+	}
+	is RECORD, ARRAY then
+	{   if fm.packed && to.packed then
+	    {   ok = type.Compat(fm, to);
+	        if ok && to@.width != tree@.width then
+		    tree = ExtendT(tree, to);
+	    }
+	}
+	if !ok then
+{
+	    lex.Error(TYPEASSIGN);
+err.str("fm="); type.DumpT(fm, false);
+err.str("\nto="); type.DumpT(to, false);
+err.nl();
+}
+//	tree = CheckSwap(lhs, tree);    // FIXME - do for parms and retv?
+	return tree;
+    }
+
 
 
     proc Init()
@@ -762,7 +933,7 @@ package ast
 	[SEL]=   "SEL",
 	[IS]=    "IS",
 	[RET]=   "RET",
-	[PROC]=  "PROC"
+	[PROC]=  "PROC",	[ASSERT]="ASSERT"
     };
 
     proc Print(node: Ast)

@@ -1,0 +1,17 @@
+import sys;
+import out;
+const err: out.OutFD = sys.fderr;
+
+proc assert(why: _uint, file: @[]_byte, line: _uint): : global("_assert")
+{
+    if why
+    is 0 then err.str("assert failed");
+    err.str(" at line ");
+    err.uint(line);
+    err.str(" in file ");
+    err.str(file);
+    err.nl();
+    sys.exit(-1);
+}  
+
+

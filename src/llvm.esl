@@ -34,7 +34,7 @@ package llvm
     type Intrinsics:
     (   MEMCPY, MEMMOVE, MEMSET, MEMCMP, ZLEN, BSWAP, BITREV,
 	CLZ, CTZ, POP,
-	END
+	ASSERT,   END
     );
     type IntrinsicUse:
     {   next:   @IntrinsicUse;
@@ -128,6 +128,9 @@ package llvm
 			piu = piu@.next;
 		    } while piu != 0;
 		}
+		is ASSERT then
+		    Print("declare void @_assert(%W, [0 x i8]*, %W) noreturn\n",
+			  dummy);
 	    }
 	    i += 1;
 	}
@@ -849,7 +852,12 @@ package llvm
 	if node@.seqno != 0 then return;   // already declared
 	node@.seqno = 1;    // mark declared
 	Print("%S = private unnamed_addr constant %K ", node);
-	n = StringRange(node@.type.Span());
+	if node@.type != 0 then
+	    n = StringRange(node@.type.Span());
+	else    // no type
+	{
+	    n = zstr.len(node@.symb@.ident, lex.StringMax);
+	}
 	PString(node@.symb@.ident, n, true);
 	f.nl();
     }
@@ -945,6 +953,18 @@ package llvm
 	f.str(", ");
 	RefLabel(nfalse);
 	PEndLine(node);
+    }
+
+    proc Assert(node: Ast)
+    {
+	GenSub(node@.child[0]);
+	Print("\tcall void @_assert(%W ", node);
+	f.uint64(node@.valu);
+	Print(", [0 x i8]* %N, %W ", node@.child[0]);
+	f.str("");
+	f.uint16(node@.lineno);
+	f.str(")\n");
+	UseIntrinsic(ASSERT, 0, 0);
     }
 
     proc If(node: Ast): boolean
@@ -1900,7 +1920,7 @@ package llvm
 	Print("\t%N = select i1 %0N, %1T %1N, %2T %2N", node);
 	PEndLine(node);
     }
-	
+
     proc GenSub(node: Ast): boolean
     {   var term: boolean;	// basic block has been terminated
 
@@ -1909,6 +1929,7 @@ package llvm
 	if node@.seqno != 0 then return term;
 	if node@.op
 	is NOP then { GenSub(node@.child[0]); node@.seqno = node@.child[0]@.seqno; }
+	is ASSERT then Assert(node);
 	is FILE then
 	{   if feature.gflag then llvmdb.FileStart(node@.symb@);
 	    GenSub(node@.child[0]);

@@ -729,7 +729,7 @@ err.str("Assign to packed array\n");
 				lrhs@.width = tl@.type@.width;
 				lrhs@.valu = i;
 				if lhs != 0 && lhs@.op != FIELD then
-				{   lrhs = expr.Adjust(lrhs, lhs@.type@.base);
+				{   lrhs = ast.Adjust(lrhs, lhs@.type@.base);
 				    lrhs = CheckSwap(lhs, lrhs);
 				}
 				tree = ast.Child(tree, lrhs);
@@ -754,7 +754,7 @@ err.str("Assign to packed array\n");
 				}
 				if lhs != 0 then
 				{   if lhs@.op != FIELD then
-				    {   rhs = expr.Adjust(rhs, lhs@.type@.base);
+				    {   rhs = ast.Adjust(rhs, lhs@.type@.base);
 				        rhs = CheckSwap(lhs, rhs);
 				    }
 				}
@@ -828,7 +828,7 @@ err.str("Assign to packed array\n");
 	    if rval != 0 then
 	    {   if tl != 0 then
 		{   if t != 0 then
-		    {   rval = expr.Adjust(rval, t);
+		    {   rval = ast.Adjust(rval, t);
 			tree = ast.Child(tree, rval);
 			if t@.kind == REF then
 			{   tree@.type = t@.base;
@@ -855,6 +855,25 @@ err.str("Assign to packed array\n");
 	}
 	lex.Expect(SEMI);
 	return tree;
+    }
+
+    proc Assert(): Ast
+    {   var tree, ctree: Ast;
+	var t: Type;
+
+	ctree = expr.Bool(type.booltype);
+	if feature.assert then
+	{   ctree = ast.New1(NOT, 0, ctree);
+	    tree = expr.NewString(symb.curfile@.ident,
+				  zstr.len(symb.curfile@.ident, lex.PathMax));
+	    tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
+	    tree = ast.New1(CAST, type.addrtype, tree);
+	    tree = ast.New1(ASSERT, 0, tree);
+	    tree@.valu = 0;     // FIXME - make an enum
+	    tree = ast.New3(IF, 0, ctree, tree, 0);
+	    return tree;
+	}
+	return 0;
     }
 
     proc If(): Ast
@@ -1001,7 +1020,7 @@ err.str("Assign to packed array\n");
 	    incr = 0;
 	    if ix != 0 then
 	    {   if fm != 0 then
-		{   fm = expr.Adjust(fm, ix@.type@.base);
+		{   fm = ast.Adjust(fm, ix@.type@.base);
 		    init = ast.New2(STORE, t, ix, fm);
 		}
 		if to != 0 then
@@ -1204,7 +1223,7 @@ symb.DumpS(ns);
 
     const stmtlist:[]TokenT =
     { KTYPE, KVAR, KCONST, KIF, KWHILE, KLOOP, KDO, KFOR, KEXIT, KRET,
-      KASM, KALIAS, KERROR, KCALL, NONE };
+      KASM, KALIAS, KERROR, KCALL, KASSERT, NONE };
 
     proc Statement(): Ast
     {   var tree, stree: Ast;
@@ -1277,6 +1296,7 @@ symb.DumpS(ns);
 		tok2 = Next();
 		tree = AssignOrCall(s);
 	    }
+	    is KASSERT then tree = Assert();
 	    is SEMI then    {}		// ignore extra semicolons
 	    else lex.ErrorT(BADSTMTT, tok);
 	}
@@ -1551,6 +1571,7 @@ symb.DumpS(ns);
 	    tree = ast.New1(FILE, 0, tree);
 	    tree@.symb = fs;
 	    lex.FileClose();
+	    symb.curfile = symb.curfile@.package;
 	    Token = savetok;
 	}
 	return tree;

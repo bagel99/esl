@@ -43,6 +43,7 @@ package symb
     const NestMax = 31;
     type levels: 0..NestMax;
     var  level: levels;
+    var  curfile: Symb;		// current file
     var  curpack: Symb;		// current package, 0 if not in a package
     var  curproc: Symb;		// current procedure, 0 if not in a procedure
     var  libnew, libnewnz, libdel: Symb;
@@ -142,12 +143,16 @@ package symb
 
     alias lex.PathMax as PathMax;
     proc NewFile(path: @[]_byte, file: @[]_byte): Symb
-    {   var full: [PathMax]Char;
+    {   var fs: Symb;
+	var full: [PathMax]Char;
 
 	zstr.copy(full, path, PathMax);
 	zstr.cat(full, "/", PathMax);
 	zstr.cat(full, file, PathMax);
-	return New(FILE, full, PRIVATE);
+	fs = New(FILE, full, PRIVATE);
+	fs@.package = curfile;
+	curfile = fs;
+	return fs;
     }
 
     proc NewString(str: @[]_byte, len: _uint): Symb
