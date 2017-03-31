@@ -232,6 +232,7 @@ package type
 	KLE, KBE,
 	KRO, KWO,
 	KINPUT, KOUTPUT,
+	KRNDDN, KRNDUP, KRNDTZ, KRNDFZ, KRNDNS, KRNDNL, KRNDNE, KRNDNO,
 	KMEMSZ, KBITSZ, KALIGN,
 	NONE
     };
@@ -266,6 +267,14 @@ package type
 		    is KBE then     t@.memorder = BE;
 		    is KRO then     t@.access = RO;
 		    is KWO then     t@.access = WO;
+		    is KRNDDN then  t@.round = DN;
+		    is KRNDUP then  t@.round = UP;
+		    is KRNDTZ then  t@.round = TZ;
+		    is KRNDFZ then  t@.round = FZ;
+		    is KRNDNS then  t@.round = NS;
+		    is KRNDNL then  t@.round = NL;
+		    is KRNDNE then  t@.round = NE;
+		    is KRNDNO then  t@.round = NO;
 		    is KINPUT then  t@.input = true;
 		    is KOUTPUT then t@.output = true;
 		    is KMEMSZ then 
@@ -1026,6 +1035,71 @@ if debug.tests[2] then {
 	return t;
     }
 
+    proc SimpleUConst(): _uint
+    {   var tok: TokenT;
+	var val: _uint;
+	var s: Symb;
+
+	tok = Token;
+	if tok
+	is NUM then
+	{   val = lex.Number;
+	    tok = Next();
+	    return val;
+	}
+	is ID then
+	{   s = symb.Find(lex.Ident);
+	    tok = Next();
+	    if s != 0 && s@.kind == CONSTANT && s@.type@.kind == UINT then
+		return s@.const@.valu;
+	}
+	lex.ErrorS(NOTIMPL, "require simple unsigned constant");
+	return 0;
+    }
+
+    proc DefFixed(kind: TypeT): Type
+    {   var tok: TokenT;
+        var size, frac: _uint;
+        var t: Type;
+
+	t = unkntype;		// in case all goes wrong
+	tok = Token;
+	if tok == PBEG then
+	{   tok = Next();
+	    size = SimpleUConst();
+	    frac = 0;		// default
+	    tok = Token;
+	    if tok == COMMA then
+	    {   tok = Next();
+		frac = SimpleUConst();
+	    }
+	    lex.Expect(PEND);
+	    t = New(kind);
+	    t@.size =  size;
+	    t@.width = target.isize(size);      // FIXME?
+	    if kind == SINT then
+	    {   if frac <= size-1 then
+		{   t@.scale = frac;
+		    t@.hi = (1 << (size-1)) - 1;
+		    t@.lo = ~t@.hi;
+		}
+		else
+		    lex.Error(BADFRAC);
+	    }
+	    else    // UINT
+	    {   if frac <= size then
+		{   t@.scale = frac;
+		    t@.hi = (1 << size) - 1;    // mod assumed
+		    t@.lo = 0;
+		}
+		else
+		    lex.Error(BADFRAC);
+	    }
+	}
+	else lex.Error(NOWIDTH);
+	return t;
+    }
+
     proc Def(tok: TokenT, bt: Type): Type
     {   var t: Type;
 	var s: Symb;
@@ -1051,7 +1125,12 @@ if debug.tests[2] then {
 		    }
 		    else    // just type name
 		    {   t = s@.type;
-		        if t == 0 then
+		        if t != 0 then
+		        {   if t@.generic &&
+			       (t@.kind == SINT || t@.kind == UINT) then
+				t = DefFixed(t@.kind);
+		        }
+		        else
 			{   lex.Error(NOIDTYPE);
 			    t = unkntype;
 			}
@@ -1134,13 +1213,24 @@ if debug.tests[2] then {
 	    else
 	    {   if t@.kind
 		is UINT then 
-		{
-		    err.uint64(t@.lo); err.str(".."); err.uint64(t@.hi);
+		{   if t@.scale == 0 then
+		    {   err.uint64(t@.lo);
+		        err.str(".."); err.uint64(t@.hi);
+		    }
+		    else
+		    {   err.str("_ufix("); err.uint(t@.width);
+			err.chr(','); err.int(t@.scale); err.chr(')');
+		    }
 		}
 		is SINT then 
-		{
-		    err.int64(_int64(t@.lo)); err.str("..");
-		    err.int64(_int64(t@.hi));
+		{   if t@.scale == 0 then
+		    {   err.int64(_int64(t@.lo));
+		        err.str(".."); err.int64(_int64(t@.hi));
+		    }
+		    else
+		    {   err.str("_sfix("); err.uint(t@.width);
+			err.chr(','); err.int(t@.scale); err.chr(')');
+		    }
 		}
 		is ENUM then 
 		{   err.chr('(');

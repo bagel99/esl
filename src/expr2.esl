@@ -1657,9 +1657,17 @@ type.DumpT(t, false); err.nl();
 		    tree@.type = type.wordtype;	// FIXME: ?
 		else
 		{   if et@.kind
-		    is UINT, SINT then
-		    {   if et@.size > tree@.width then   // widen
+		    is UINT then
+		    {   tree@.type = type.wordtype;
+			if et@.size > tree@.width then   // widen
 			    tree@.width = et@.size;
+			tree@.fscale = 0;
+		    }
+		    is SINT then
+		    {   tree@.type = type.swordtype;
+			if et@.size > tree@.width then   // widen
+			    tree@.width = et@.size;
+			tree@.fscale = 0;
 		    }
 		    is REF, REFPROC then    // want pointer constant
 			tree@.width = Target.ptr.size;
@@ -1669,12 +1677,22 @@ type.DumpT(t, false); err.nl();
 		tok = Next();
 	    }
 	    is FNUM then
-	    {   tree = ast.New(FCON, et);
-		tree@.valu = lex.Number;
-		tree@.width = 64;			// FIXME: ?
-		tree@.scale = lex.Scale;
-		if et == 0 then
-		    tree@.type = type.floattype;
+	    {   if et == 0 then
+		    et = type.floattype;
+		if et@.kind
+		is FLOAT then
+		{   tree = ast.New(FCON, et);
+		    tree@.width = 64;			// FIXME: ?
+		    tree@.valu = lex.Number;
+		    tree@.fscale = lex.Scale;
+		}
+		is UINT, SINT then
+		{   tree = ast.New(CONST,et);
+		    tree@.valu = lex.Number;
+		    tree@.fscale = lex.Scale;
+		}
+		else
+		    lex.ErrorS(NOTIMPL, "must be fixed or float");
 		tok = Next();
 	    }
 	    is STR then
@@ -1687,7 +1705,6 @@ type.DumpT(t, false); err.nl();
 	    }
 	    is GBEG then
 		tree = CompositeValue(et);
-
 	}
 	return tree;
     }
@@ -2075,7 +2092,7 @@ type.DumpT(t, false); err.nl();
 	    else
 	    {   tree = Bool(t);	    // scalar
 		if tree != 0 then
-		{   tree = ast.Extend(tree, t@.width, false);   // usually truncates
+		{   tree = ast.Adjust(tree, t);
 		    tree@.type = t;
 		}
 	    }

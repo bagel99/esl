@@ -446,7 +446,7 @@ package llvm
 	var hex: _uint64;
 
 	tmp = _cvt(_float64, _int64(node@.valu));
-	scl = node@.scale;
+	scl = node@.fscale;
 	if scl > 0 then
 	{   do
 	    {   tmp = tmp / 10.0;   // FIXME - rounding?

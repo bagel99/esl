@@ -1,0 +1,105 @@
+
+package trig
+{
+    type BAM32:  _ufix(32,32);	// binary angular measure
+    type Q32_30: _sfix(32,30): rndns;
+    
+    const tabatan: [30] Q32_30 =
+    {	0.50000000000000,
+	0.29516723530087,
+	0.15595826075474,
+	0.07916684832113,
+	0.03973704861108,
+	0.01988789564718,
+	0.00994637455790,
+	0.00497349078734,
+	0.00248678333743,
+	0.00124339641185,
+	0.00062169879882,
+	0.00031084947352,
+	0.00015542474603,
+	0.00007771237417,
+	0.00003885618723,
+	0.00001942809363,
+	0.00000971404682,
+	0.00000485702341,
+	0.00000242851170,
+	0.00000121425585,
+	0.00000060712793,
+	0.00000030356396,
+	0.00000015178198,
+	0.00000007589099,
+	0.00000003794550,
+	0.00000001897275,
+	0.00000000948637,
+	0.00000000474319,
+	0.00000000237159,
+	0.00000000118580
+    };
+
+    const kfactor: Q32_30 = 0.60725293500888;
+
+    /*
+     * Sin/Cos via CORDIC method
+     * Angle must be in the first quadrant, i.e., 0.0 <= angle < 0.25
+     * Therefore the 2 high bits of theta are zero and there are only
+     * 30 bits of significance.
+     * Result is good to about 28 bits.
+     */
+    proc cordic(angle: BAM32): Q32_30, Q32_30
+    {   var x, y: Q32_30;
+	var theta: Q32_30;
+	var i: _uint;
+
+	theta = Q32_30(angle);
+	x = 0;
+	y = kfactor;
+	for i from 0 to 29 do
+	{
+	    if theta < 0 then
+	    {	x, y = x - (y>>i), y + (x>>i);
+	        theta += tabatan[i];
+	    }
+	    else
+	    {   x, y = x + (y>>i), y - (x>>i);
+	    	theta -= tabatan[i];
+	    }
+//err.str("tab="); err.hex32(_uint32(tabatan[i]));
+//err.str(" theta="); err.hex32(_uint32(theta));
+//err.str(" x="); err.hex32(_uint32(x));
+//err.str(" y="); err.hex32(_uint32(y));
+//err.nl();
+	}
+	if y < 0.0 then y = -y;
+	return x, y;
+    }
+
+    proc sincos(angle: BAM32): Q32_30, Q32_30
+    {   var sin, cos: Q32_30;
+	const bam90:  BAM32 = 0.25;
+	const bam180: BAM32 = 0.50;
+	const bam270: BAM32 = 0.75;
+
+	if angle >= bam90 then
+	{   if angle >= bam180 then
+	    {   if angle >= bam270 then
+	    	{   sin, cos = cordic(angle-bam270);
+	    	    return -sin, cos;
+	    	}
+	    	else
+	    	{   sin, cos = cordic(angle-bam180);
+		    return -sin, -cos;
+	    	}
+	    }
+	    else
+	    {   sin, cos = cordic(angle-bam90);
+		return cos, -sin;
+	    }
+	}
+	else
+	{   sin, cos = cordic(angle);
+	    return sin, cos;
+	}
+    }
+}
+

@@ -105,6 +105,12 @@ package symb
 	type.floattypes[1] = type.NewBuiltin(FLOAT, "_float64", 64);
 	type.floattype = type.floattypes[1];    // default
 
+	// the generic fixed point types
+	t = type.NewBuiltin(UINT, "_ufix", 0);
+	t@.generic = true;
+	t = type.NewBuiltin(SINT, "_sfix", 0);
+	t@.generic = true;
+
 	// the "unknown" type
 	type.unkntype = type.New(UTYPE);
 	type.unkntype@.size = target.ByteSize;	// give it non-zero size

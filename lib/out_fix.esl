@@ -1,0 +1,265 @@
+import out;
+
+// FIXME - round the output at the output precision
+
+package out	// extends package out
+{	
+
+    proc (o: OutFD) ufix16(x: _uint16, prec: _uint, bp: _uint)
+    {   var w: _uint32;	// _ufix(32,16)
+
+	w = _uint32(x);		// zero extend
+	if bp < 16 then
+	{   w = w << (16-bp);	// shift binary point between half-words
+	    o.uint16(_uint16(w >> 16));
+	}
+	else
+	    o.chr('0');
+	o.chr('.');
+	while prec > 0 do
+	{   x = _uint16(w);	// keep lo half
+	    w = x * 10;		// hi half has value 0..9
+	    o.chr('0'+ (w >> 16));
+	    prec -= 1;
+	}	
+    }
+
+    proc (o: OutFD) ufix16_16(x: _ufix(16,16), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 16);
+    }
+
+    proc (o: OutFD) ufix16_15(x: _ufix(16,15), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 15);
+    }
+
+    proc (o: OutFD) ufix16_14(x: _ufix(16,14), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 14);
+    }
+
+    proc (o: OutFD) ufix16_13(x: _ufix(16,13), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 13);
+    }
+
+    proc (o: OutFD) ufix16_12(x: _ufix(16,12), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 12);
+    }
+
+    proc (o: OutFD) ufix16_11(x: _ufix(16,11), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 11);
+    }
+
+    proc (o: OutFD) ufix16_10(x: _ufix(16,10), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 10);
+    }
+
+    proc (o: OutFD) ufix16_9(x: _ufix(16,9), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 9);
+    }
+
+    proc (o: OutFD) ufix16_8(x: _ufix(16,8), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 8);
+    }
+
+    proc (o: OutFD) ufix16_7(x: _ufix(16,7), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 7);
+    }
+
+    proc (o: OutFD) ufix16_6(x: _ufix(16,6), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 6);
+    }
+
+    proc (o: OutFD) ufix16_5(x: _ufix(16,5), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 5);
+    }
+
+    proc (o: OutFD) ufix16_4(x: _ufix(16,4), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 4);
+    }
+
+    proc (o: OutFD) ufix16_3(x: _ufix(16,3), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 3);
+    }
+
+    proc (o: OutFD) ufix16_2(x: _ufix(16,2), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 2);
+    }
+
+    proc (o: OutFD) ufix16_1(x: _ufix(16,1), prec: _uint)
+    {
+    	o.ufix16(_uint16(x), prec, 1);
+    }
+
+    proc (o: OutFD) sfix16(x: _int16, prec: _uint, bp: _uint)
+    {
+	if x < 0 then
+	{   o.chr('-');
+	    x = -x;		// FIXME - check for x?min
+	}
+	o.ufix16(_uint16(x), prec, bp);
+    }
+
+    proc (o: OutFD) sfix16_15(x: _sfix(16,15), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 15);
+    }
+
+    proc (o: OutFD) sfix16_14(x: _sfix(16,14), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 14);
+    }
+
+    proc (o: OutFD) sfix16_13(x: _sfix(16,13), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 13);
+    }
+
+    proc (o: OutFD) sfix16_12(x: _sfix(16,12), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 12);
+    }
+
+    proc (o: OutFD) sfix16_11(x: _sfix(16,11), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 11);
+    }
+
+    proc (o: OutFD) sfix16_10(x: _sfix(16,10), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 10);
+    }
+
+    proc (o: OutFD) sfix16_9(x: _sfix(16,9), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 9);
+    }
+
+    proc (o: OutFD) sfix16_8(x: _sfix(16,8), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 8);
+    }
+
+    proc (o: OutFD) sfix16_7(x: _sfix(16,7), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 7);
+    }
+
+    proc (o: OutFD) sfix16_6(x: _sfix(16,6), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 6);
+    }
+
+    proc (o: OutFD) sfix16_5(x: _sfix(16,5), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 5);
+    }
+
+    proc (o: OutFD) sfix16_4(x: _sfix(16,4), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 4);
+    }
+
+    proc (o: OutFD) sfix16_3(x: _sfix(16,3), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 3);
+    }
+
+    proc (o: OutFD) sfix16_2(x: _sfix(16,2), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 2);
+    }
+
+    proc (o: OutFD) sfix16_1(x: _sfix(16,1), prec: _uint)
+    {
+    	o.sfix16(_int16(x), prec, 1);
+    }
+
+
+    proc (o: OutFD) ufix32(x: _uint32, prec: _uint, bp: _uint)
+    {   var w: _uint64;	// _ufix(64,32)
+
+	w = _uint64(x);		// zero extend
+	if bp < 32 then
+	{   w = w << (32-bp);	// shift binary point between words
+	    o.uint32(_uint32(w >> 32));
+	}
+	else
+	    o.chr('0');
+	o.chr('.');
+	while prec > 0 do
+	{   x = _uint32(w);	// keep lo half
+	    w = x * 10;		// hi half has value 0..9
+	    o.chr('0'+ (w >> 32));
+	    prec -= 1;
+	}	
+    }
+
+    proc (o: OutFD) ufix32_32(x: _ufix(32,32), prec: _uint)
+    {
+	o.ufix32(_uint32(x), prec, 32);
+    }
+
+    proc (o: OutFD) ufix32_31(x: _ufix(32,31), prec: _uint)
+    {
+	o.ufix32(_uint32(x), prec, 31);
+    }
+
+    proc (o: OutFD) ufix32_30(x: _ufix(32,30), prec: _uint)
+    {
+	o.ufix32(_uint32(x), prec, 30);
+    }
+
+    proc (o: OutFD) ufix32_16(x: _ufix(32,16), prec: _uint)
+    {
+	o.ufix32(_uint32(x), prec, 16);
+    }
+
+    proc (o: OutFD) ufix32_8(x: _ufix(32,8), prec: _uint)
+    {
+	o.ufix32(_uint32(x), prec, 8);
+    }
+
+    // FIXME - complete ufix32_
+
+    proc (o: OutFD) sfix32(x: _int32, prec: _uint, bp: _uint)
+    {
+	if x < 0 then
+	{   o.chr('-');
+	    x = -x;		// FIXME - check for x?min
+	}
+	o.ufix32(_uint32(x), prec, bp);
+    }
+
+    proc (o: OutFD) sfix32_31(x: _sfix(32,31), prec: _uint)
+    {
+	o.sfix32(_int32(x), prec, 31);
+    }
+
+    proc (o: OutFD) sfix32_30(x: _sfix(32,30), prec: _uint)
+    {
+	o.sfix32(_int32(x), prec, 30);
+    }
+
+    proc (o: OutFD) sfix32_8(x: _sfix(32,8), prec: _uint)
+    {
+	o.sfix32(_int32(x), prec, 8);
+    }
+
+    // FIXME - complete sfix32_
+
+}
+

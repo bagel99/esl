@@ -1,0 +1,48 @@
+
+import out_fix;
+const fdo: out.OutFD = sys.fdout;
+const err: out.OutFD = sys.fderr;
+
+import cordic_fix32;
+alias trig.Q32_30 as Q32_30;
+alias trig.BAM32 as BAM;
+
+proc testsincos(x: _uint32)
+{
+    var sin, cos: Q32_30;
+    var phi: BAM;
+
+    phi = BAM(x);
+    sin,cos = trig.sincos(phi);
+    fdo.ufix32_32(phi,10); fdo.chr('['); fdo.hex32(_uint32(x)); fdo.chr(']');
+    fdo.chr(' ');
+    fdo.str(" sin=");
+    fdo.sfix32_30(sin,10); fdo.chr('['); fdo.hex32(_uint32(sin)); fdo.chr(']');
+    fdo.str(" cos=");
+    fdo.sfix32_30(cos,10); fdo.chr('['); fdo.hex32(_uint32(cos)); fdo.chr(']');
+    fdo.nl();
+}
+
+proc main(): _int
+{
+    fdo.str("Test sin/cos\n");
+    testsincos(0);
+    testsincos(0x1555_5555);	// 30 degrees
+    testsincos(0x2000_0000);	// 45 degrees
+    testsincos(0x2AAA_AAAB);	// 60 degrees
+    testsincos(0x4000_0000);	// 90 degrees
+    testsincos(0x5555_5555);	// 120 degrees
+    testsincos(0x6000_0000);	// 135 degrees
+    testsincos(0x6AAA_AAAB);	// 150 degrees
+    testsincos(0x8000_0000);	// 180 degrees
+    testsincos(0x9555_5555);	// 210 degrees
+    testsincos(0xA000_0000);	// 225 degrees
+    testsincos(0xAAAA_AAAB);	// 240 degrees
+    testsincos(0xC000_0000);	// 270 degrees
+    testsincos(0xD555_5555);	// 300 degrees
+    testsincos(0xE000_0000);	// 315 degrees
+    testsincos(0xEAAA_AAAB);	// 330 degrees
+
+    return 0;
+}
+

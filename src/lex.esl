@@ -24,6 +24,7 @@ package lex
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
 	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,
 	PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
+	NOWIDTH,    BADFRAC,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -123,6 +124,8 @@ package lex
 	[PACKFIXED] =   "Array for _packXX/_unpkXX must have fixed size",
 	[PACKSIZE] =    "Array for _packXX/_unpkXX to large for target machine",
 	[PACKUINT] =    "Scalar for _packXX must be unsigned int",
+	[NOWIDTH] =     "Missing width specification for fixed int",
+	[BADFRAC] =     "Illegal fractional part",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
@@ -148,6 +151,7 @@ package lex
 	// attributes begin here
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,KAT,
+	KRNDDN, KRNDUP, KRNDTZ, KRNDFZ, KRNDNS, KRNDNL, KRNDNE, KRNDNO,
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
 	KINLINE,KNOINLINE,KINTR,KWEAK,
 	// type properties begin here
@@ -238,6 +242,14 @@ package lex
 	[KINPUT] =	"in",
 	[KOUTPUT] =	"out",
 	[KAT] =		"at",
+	[KRNDDN] =      "rnddn",
+	[KRNDUP] =      "rndup",
+	[KRNDTZ] =      "rndtz",
+	[KRNDFZ] =      "rndfz",
+	[KRNDNS] =      "rndns",
+	[KRNDNL] =      "rndnl",
+	[KRNDNE] =      "rndne",
+	[KRNDNO] =      "rndno",
 	[KEXTERN] =	"external",	// attributes for vars and procs
 	[KGLOBAL] =	"global",
 	[KSECTION] =	"section",
