@@ -10,7 +10,8 @@ package symb
 	CLZ, CLZNZ, CTZ, CTZNZ, POP,
 	CVT, NEW, DEL, ZERO, ZLEN,
 	PACKLE, PACKBE, UNPKLE, UNPKBE,
-	ROL, ROR, BSWAP, BITREV
+	ROL, ROR, BSWAP, BITREV,
+	SQRT
     );
     type SymbNode:
     {

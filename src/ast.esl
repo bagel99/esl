@@ -23,7 +23,7 @@ package ast
 	LOAD,
 	STORE,		// assignment
 	ZEXT,   SEXT,   TRUNC,	BSWAP,   BITREV,
-	NEG,	NOT,	ABS,
+	NEG,	NOT,	ABS,    SQRT,
 	FNEG,   FCVTL,  FCVTS,
 	CVTUF,	CVTIF,  CVTFU,	CVTFI,
 	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,	ZLEN,
@@ -353,7 +353,8 @@ package ast
 	if tree == 0 then return tree;
 	if to@.kind
 	is ENUM then
-	{   if tree@.type@.kind == UINT then		// UINT -> ENUM
+	{   if tree@.type@.kind
+	    is ENUM, UINT then			// ENUM, UINT -> ENUM
 		tree = ExtendCast(tree, to);
 	    else
 		lex.Error(BADCAST);
@@ -900,6 +901,7 @@ err.nl();
 	[TRUNC]= "TRUNC",
 	[BSWAP]= "BSWAP",
 	[NEG]=   "NEG",		[NOT]=   "NOT",		[ABS]=   "ABS",
+	[SQRT]=  "SQRT",
 	[FNEG]=  "FNEG",	[FCVTL]= "FCVTL",       [FCVTS]= "FCVTS",
 	[CVTUF]= "CVTUF",	[CVTIF]= "CVTIF",
 	[CVTFU]= "CVTFU",	[CVTFI]= "CVTFI",

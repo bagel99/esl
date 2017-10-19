@@ -1106,7 +1106,38 @@ else
 	return tree;
     }
 
-    proc Convert(): Ast
+    proc Convert(t: Type): Ast
+    {   var tree: Ast;
+        var to, fm: TypeT;
+        var op: ast.Op;
+
+	tree = Bool(0);
+	if tree != 0 && t != 0 then
+	{   to = t@.kind;
+	    fm = tree@.type@.kind;
+	    // FIXME - much more needed here
+	    op = NULL;
+	    if to
+	    is  FLOAT then
+	    {   if fm
+		is UINT then op = CVTUF;
+		is SINT then op = CVTIF;
+	    }
+	    is UINT then
+	    {   if fm == FLOAT then op = CVTFU;
+	    }
+	    is SINT then
+	    {   if fm == FLOAT then op = CVTFI;
+	    }
+	    if op != NULL then
+	    {   tree = ast.New1(op, t, tree);
+		tree@.width = t@.width;
+	    }
+	}
+        return tree;
+    }
+
+    proc ConvertOld(): Ast
     {   var tok: TokenT;
         var tree: Ast;
         var t: Type;
@@ -1125,32 +1156,10 @@ else
 		else lex.Error(NOTTYPE);
 	    }
 	    else lex.ErrorS(UNDEFID, lex.Ident);
-	    tok = Next();        
+	    tok = Next();
 	    if tok == COMMA then
 	    {   tok = Next();
-		tree = Bool(0);
-		if tree != 0 && t != 0 then
-		{   to = t@.kind;
-		    fm = tree@.type@.kind;
-		    // FIXME - much more needed here
-		    op = NULL;
-		    if to
-		    is  FLOAT then
-		    {   if fm
-			is UINT then op = CVTUF;
-			is SINT then op = CVTIF;
-		    }
-		    is UINT then
-		    {   if fm == FLOAT then op = CVTFU;
-		    }
-		    is SINT then
-		    {   if fm == FLOAT then op = CVTFI;
-		    }
-		    if op != NULL then
-		    {   tree = ast.New1(op, t, tree);
-			tree@.width = t@.width;
-		    }
-		}
+		tree = Convert(t);
 	    }
         }
         else lex.Error(NOTTYPE);
@@ -1179,6 +1188,11 @@ else
 	    {   tree = IntrinsicUnary(ABS);
 		if tree != 0 && tree@.type@.kind == SINT then
 		    tree@.type = target.utype(tree@.width);
+	    }
+	    is SQRT then
+	    {	tree = IntrinsicUnary(SQRT);
+		if tree@.type@.kind == SINT then
+		    lex.Error(OPTYPE);
 	    }
 	    is MIN, MAX then
 	    {   lhs = Bool(0);
@@ -1219,7 +1233,7 @@ else
 	    is PACKBE then tree = Pack(BE);
 	    is UNPKLE then tree = Unpk(LE);
 	    is UNPKBE then tree = Unpk(BE);
-	    is CVT    then tree = Convert();
+	    is CVT    then tree = ConvertOld();
 	    is ZERO   then tree = Zero();
 	    is NEW    then tree = New();
 	    is DEL    then tree = Delete();
@@ -1629,6 +1643,12 @@ type.DumpT(t, false); err.nl();
 		    }
 		    else    // simple cast
 			tree = ast.Cast(tree, t);
+		    tok = lex.Expect(PEND);
+		}
+		is STAR then		// convert
+		{   tok = Next();
+		    tok = lex.Expect(PBEG);
+		    tree = Convert(t);
 		    tok = lex.Expect(PEND);
 		}
 		is GBEG then		// composite
