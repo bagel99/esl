@@ -99,7 +99,7 @@ package ast
 	op:	Op;		// what kind of node is this
 	num:	NSubNodes;	// number of subnodes
 	max:	NSubNodes;	// maximum allocated slots for subnode
-	scale:	_int16;
+	fscale: _int16;		// see below
 	lineno:	_uint16;	// source code line number
 	seqno:	_uint16;	// used by LLVM
 	width:	type.BitSize;	// current width in bits
@@ -108,6 +108,9 @@ package ast
 	valu:	type.Valu;
 	child:	[]@AstNode;
     };
+    // fscale is the decimal scaling for floating point constants,
+    // or binary scaling for fixed point constants.
+
     type Ast: @AstNode;
 
     var Null: Ast;
@@ -147,7 +150,7 @@ package ast
 	// Record copy?
 	pn@.op =    po@.op;
 	pn@.width = po@.width;
-	pn@.scale = po@.scale;
+	pn@.fscale= po@.fscale;
 	pn@.lineno= po@.lineno;
 	pn@.num =   po@.num;
 	pn@.seqno = po@.seqno;
@@ -952,12 +955,26 @@ err.nl();
 	err.str(" nc=");
 	err.uint(node@.num);
 	if node@.op
-	is CONST, OFFSET, COPY, GETRV, CLZ, CTZ then
-	{   err.str(" value=");
-	    if node@.op == CONST && node@.type@.kind == SINT then
+	is OFFSET, COPY, GETRV, CLZ, CTZ then
+	{   err.str(" val=");
+	    err.uint64(node@.valu);
+	}
+	is CONST then
+	{   err.str(" val=");
+	    if node@.type@.kind == SINT then
 		err.int64(_int64(node@.valu));
 	    else
 		err.uint64(node@.valu);
+	    if node@.fscale != 0 then
+	    {   err.str(" scl=");
+		err.int16(node@.fscale);
+	    }
+	}
+	is FCON then
+	{   err.str(" val=");
+	    err.uint64(node@.valu);
+	    err.str(" scl=");
+	    err.int16(node@.fscale);
 	}
 	is SCON then
 	{   err.str(" id ");

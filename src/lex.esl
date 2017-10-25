@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// Copyright (c) 2009-2017, Brian G. Lucas.  See LICENSE file.
 // $Id$
 
 package lex
@@ -24,6 +24,7 @@ package lex
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
 	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,
 	PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
+	LONGNUM,    LONGFRAC,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -123,6 +124,8 @@ package lex
 	[PACKFIXED] =   "Array for _packXX/_unpkXX must have fixed size",
 	[PACKSIZE] =    "Array for _packXX/_unpkXX to large for target machine",
 	[PACKUINT] =    "Scalar for _packXX must be unsigned int",
+	[LONGNUM] =     "Too many digits in number",
+	[LONGFRAC] =    "Too many digits in fractional part",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
@@ -136,7 +139,7 @@ package lex
 	EQ,	NE,	LT,	GT,	LE,	GE,	// must be contiguous
 	BAND,	BOR,					// **
 	PBEG,	PEND,	ABEG,	AEND,	GBEG,	GEND,
-	NUM,	FNUM,   STR,
+	NUM,	FNUM,   ENUM,   STR,
 	ID,		// all keywords follow this
 	KTYPE,	KVAR,	KCONST,	KIMPORT,KALIAS,	KERROR,
 	KPROC,	KPACKAGE,
@@ -197,6 +200,7 @@ package lex
 	[GEND] =	"}",
 	[NUM] =		"NUMBER",
 	[FNUM] =	"FNUM",
+	[ENUM] =	"ENUM",
 	[STR] =		"STRING",
 	[ID] =		"IDENT",
 	[KTYPE] =	"type",
@@ -423,20 +427,46 @@ package lex
 	f@.nchar = BufRange(k);
     }
 
-    proc MakeFnum(n: _uint64, scale1: _uint)
-    {   var scale: _int;
+    proc MakeFloat(hasexp: boolean): _uint64, _int16
+    {   var n, t: _uint64;
+	var s: _int16;
+	var i: _uint;
 
-	scale = _int(scale1);
-	Number = n;
-	Scale = scale;
+	n = Number;
+	s = StringLen;
+//err.str("MakeFloat: n="); err.uint64(Number); err.str(" k="); err.uint16(s); err.nl();
+	if s > 0 then
+	{   for i from 0 to s-1 do
+	    {   t = (n * 10) + StringBuf[i];
+		if t < n then
+		{   lex.Error(LONGFRAC);
+		    t = 0;
+		}
+		n = t;
+	    }
+	}
+	if hasexp then
+	    s -= Scale;
+	return n, s;
     }
 
-    proc MakeFnumE(n: _uint64, scale1: _uint, scale2: _int)
-    {   var scale: _int;
+    proc MakeNum(k: _uint, base: _uint)
+    {   var n, t: _uint64;
+	var i: _uint;
 
-	scale = _int(scale1) - scale2;
+//err.str("MakeNum k="); err.uint(k); err.nl();
+	n = 0;
+	i = 0;
+	while i < k do
+	{   t = (n * base) + StringBuf[i];
+	    if t < n then
+	    {   lex.Error(LONGNUM);
+		t = 1;
+	    }
+	    n = t;
+	    i += 1;
+	}
 	Number = n;
-	Scale = scale;
     }
 
     proc EscChar(c: Char): Char
@@ -505,10 +535,9 @@ package lex
 	var tok: TokenT;
 	var i: 0..BufSize;
 	var e: 0..BufSize;
-	var j, k: 0..StringMax;
+	var k: 0..StringMax;
 	var str, neg: boolean;
 	var h: _uint32;		// for hex and unicode escapes
-	var n: _uint64;		// for numbers
 
 	state = FIRST;
 	if saves != FIRST then
@@ -518,6 +547,7 @@ package lex
 	tok = NONE;
 	i = f@.cchar;
 	e = f@.nchar;
+	k = 0;
 	loop
 	{   if i >= e then
 	    {   FillBuf();
@@ -562,39 +592,38 @@ package lex
 		is '&' then state = AND;
 		is '|' then state = OR;
 		is '^' then state = XOR;
-		is '0' then      { n = 0;     state = ZERO; }
-		is '1'..'9' then { n = c-'0'; j = 1; state = DEC; }
+		is '0' then state = ZERO;
+		is '1'..'9' then { StringBuf[0] = c-'0'; k = 1; state = DEC; }
 		is '\'' then state = CHR;
-		is '"' then { j = 0; state = STR; }
+		is '"' then { k = 0; state = STR; }
 		is ' ','\t','\n','\r','\f' then // whitespace
 		{ }
-
 		is 'A'..'Z', 'a'..'z', '_' then
-		{   Ident[0] = c;  j = 1; state = ID; }
+		{   Ident[0] = c;  k = 1; state = ID; }
 		is 0xC2 .. 0xDF then		// 2 byte UTF8
-		{   Ident[0] = c;  j = 1; state = ID1; }
+		{   Ident[0] = c;  k = 1; state = ID1; }
 		is 0xE0 .. 0xEF then		// 3 byte UTF8
-		{   Ident[0] = c;  j = 1; state = ID2; }
+		{   Ident[0] = c;  k = 1; state = ID2; }
 		is 0xF0 .. 0xF4 then		// 4 byte UTF8
-		{   Ident[0] = c;  j = 1; state = ID3; }
+		{   Ident[0] = c;  k = 1; state = ID3; }
 		else
 		    Error(ILLCHR);
 	    }
 	    is ID then
 		if c
 		is 'A'..'Z', 'a'..'z', '0'..'9', '_' then
-		{   Ident[j] = c; j += 1; }
+		{   Ident[k] = c;  k += 1; }
 		is 0xC2 .. 0xDF then		// 2 byte UTF8
-		{   Ident[j] = c;  j += 1; state = ID1; }
+		{   Ident[k] = c;  k += 1; state = ID1; }
 		is 0xE0 .. 0xEF then		// 3 byte UTF8
-		{   Ident[j] = c;  j += 1; state = ID2; }
+		{   Ident[k] = c;  k += 1; state = ID2; }
 		is 0xF0 .. 0xF4 then		// 4 byte UTF8
-		{   Ident[j] = c;  j += 1; state = ID3; }
+		{   Ident[k] = c;  k += 1; state = ID3; }
 		else
-		{   Ident[j] = 0; tok = ID; }   // end of identifier
+		{   Ident[k] = 0; tok = ID; }   // end of identifier
 	    is ID1, ID2, ID3 then     // in a UTF8 sequence in identifier
 		if (c & 0b1100_0000) == 0b1000_0000 then
-		{   Ident[j] = c; j += 1; state -= 1; }
+		{   Ident[k] = c; k += 1; state -= 1; }
 		else
 		    Error(ILLUTF8);
 	    is DIV then
@@ -611,7 +640,7 @@ package lex
 	    is DOT then
 		if c
 		is '.' then { tok = RANGE; i += 1; }
-		is '0'..'9' then { n = 0; k = 0; j = 0; state = DECD; }
+		is '0'..'9' then { k = 0; state = DECD; }
 		else    tok = DOT;
 	    is PLUS then
 		if c
@@ -658,51 +687,48 @@ package lex
 		is 'b' then state = BIN;
 		is 'o' then state = OCT;
 		is 'x' then state = HEX;
-		is '0'..'9' then { n = c-'0'; j = 1; state = DEC; }
-		is '_'      then {            j = 0; state = DEC; }
-		is '.'      then { k = 0;     j = 0; state = DECD; }
-		else    { Number = n; tok = NUM; }
+		is '_' then state = DEC;
+		is '0'..'9' then { StringBuf[k] = c-'0'; k += 1; state = DEC; }
+		is '.'      then { Number = 0; state = DECD; }
+		else    { Number = 0; tok = NUM; }
 	    }
 	    is BIN then
 		if c
-		is '0'..'1' then n = (n<<1) + (c-'0');
+		is '0'..'1' then { StringBuf[k] = c-'0'; k += 1; }
 		is '_' then {}
-		else    { Number = n; tok = NUM; }
+		else    { MakeNum(k, 2); tok = NUM; }
 	    is OCT then
 		if c
-		is '0'..'7' then n = (n<<3) + (c-'0');
+		is '0'..'7' then { StringBuf[k] = c-'0'; k += 1; }
 		is '_' then {}
-		else    { Number = n; tok = NUM; }
+		else    { MakeNum(k, 8); tok = NUM; }
 	    is HEX then
 		if c
-		is '0'..'9' then n = (n<<4) + (c-'0');
-		is 'A'..'F' then n = (n<<4) + (c-'A'+10);
-		is 'a'..'f' then n = (n<<4) + (c-'a'+10);
+		is '0'..'9' then { StringBuf[k] = c-'0'; k += 1; }
+		is 'A'..'F' then { StringBuf[k] = c-'A'+10; k += 1; }
+		is 'a'..'f' then { StringBuf[k] = c-'a'+10; k += 1; }
 		is '_' then {}
-		else    { Number = n; tok = NUM; }
+		else    { MakeNum(k, 16); tok = NUM; }
 	    is DEC then
 		if c
-		is '0'..'9' then { n = n*10 + (c-'0'); j += 1; }
+		is '0'..'9' then { StringBuf[k] = c-'0'; k += 1; }
 		is '_' then {}
-		is '.' then { k = 0; state = DECD; }
-		else    { Number = n; tok = NUM; }
+		is '.' then { MakeNum(k, 10); k = 0; state = DECD; }
+		else    { MakeNum(k, 10); tok = NUM; }
 	    is DECD then
 		if c
 		is '.' then     // simple decimal integer followed by ..
-		    { saves = DOT; Number = n; tok = NUM; }
-		is '0'..'9' then
-		{   n = n*10 + (c-'0'); j += 1;
-		    k += 1; state = DECF;
-		}
+		{ saves = DOT; tok = NUM; }
+		is '0'..'9' then { StringBuf[k] = c-'0'; k += 1; state = DECF; }
 		is '_' then {}
 		is 'e','E' then state = EXP1;
-		else { MakeFnum(n, k); tok = FNUM; }
+		else { StringLen = 0; tok = FNUM; } // no fraction
 	    is DECF then
 		if c
-		is '0'..'9' then { n = n*10 + (c-'0'); j += 1; k += 1; }
+		is '0'..'9' then { StringBuf[k] = c-'0'; k += 1; }
 		is '_' then {}
-		is 'e','E' then state = EXP1;
-		else { MakeFnum(n, k); tok = FNUM; }
+		is 'e','E' then { StringLen = k; state = EXP1; }
+		else { StringLen = k; tok = FNUM; }
 	    is EXP1 then
 		if c
 		is '-' then { h = 0; neg = true; state = EXP2; }
@@ -716,7 +742,8 @@ package lex
 		{   var exp: _int;
 		    exp = _int(h);
 		    if neg then exp = -exp;
-		    MakeFnumE(n, k, exp); tok = FNUM;
+		    Scale = exp;
+		    tok = ENUM;
 		}
 	    is CHR then
 	    {	str = false;
@@ -734,14 +761,14 @@ package lex
 	    {   str = true;
 		if c
 		is '"' then
-		{   StringBuf[j] = 0;	// terminate
-		    StringLen = j+1;
+		{   StringBuf[k] = 0;	// terminate
+		    StringLen = k+1;
 		    tok = STR; i += 1;
 		}
 		is '\n' then { Error(BADNL); state = FIRST; }
 		is '\\' then state = ESC;
 		else
-		{   if j < StringMax then { StringBuf[j] = c; j += 1; }
+		{   if k < StringMax then { StringBuf[k] = c; k += 1; }
 		    else Error(Errors.STRLONG);
 		}
 	    }
@@ -753,7 +780,7 @@ package lex
 		is 'U' then { h = 0; state = U321; }
 		else
 		{   if str then
-		    {   if j < StringMax then { StringBuf[j] = EscChar(c); j += 1; }
+		    {   if k < StringMax then { StringBuf[k] = EscChar(c); k += 1; }
 			else Error(STRLONG);
 			state = STR;
 		    }
@@ -772,7 +799,7 @@ package lex
 		else
 		{   h = EscHex(c, h);
 		    if str then
-		    {   if j < StringMax then { StringBuf[j] = Char(h); j += 1; }
+		    {   if k < StringMax then { StringBuf[k] = Char(h); k += 1; }
 			else Error(STRLONG);
 			state = STR;
 		    }
@@ -784,7 +811,7 @@ package lex
 		else
 		{   h = EscHex(c, h);
 		    if str then
-		    {   j = StringRange(EscUTF8(h, j));
+		    {   k = StringRange(EscUTF8(h, k));
 			state = STR;
 		    }
 		    else state = CHREND;

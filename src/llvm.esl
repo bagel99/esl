@@ -456,17 +456,19 @@ package llvm
     }
 
     proc PFloat(node: Ast)
-    {   var tmp: _float64;
+    {   var tmp, ten: _float64;
 	var scl: _int;
 	var hex: _uint64;
 
 	tmp = _cvt(_float64, _int64(node@.valu));
-	scl = node@.scale;
+	scl = node@.fscale;
 	if scl > 0 then
-	{   do
-	    {   tmp = tmp / 10.0;   // FIXME - rounding?
+	{   ten = 1.0;
+	    do
+	    {   ten = ten * 10.0;
 		scl -= 1;
 	    } while scl != 0;
+	    tmp = tmp / ten;
 	}
 	elif scl < 0 then
 	{   do

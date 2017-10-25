@@ -1689,12 +1689,19 @@ type.DumpT(t, false); err.nl();
 		tok = Next();
 	    }
 	    is FNUM then
-	    {   tree = ast.New(FCON, et);
-		tree@.valu = lex.Number;
-		tree@.width = 64;			// FIXME: ?
-		tree@.scale = lex.Scale;
-		if et == 0 then
+	    {   if et == 0 then
 		    tree@.type = type.floattype;
+		tree = ast.New(FCON, et);
+		tree@.width = 64;			// FIXME: ?
+		    tree@.valu, tree@.fscale = lex.MakeFloat(false);
+		tok = Next();
+	    }
+	    is ENUM then
+	    {   if et == 0 then
+		    et = type.floattype;
+		tree = ast.New(FCON, et);
+		tree@.width = 64;			// FIXME: ?
+		tree@.valu, tree@.fscale = lex.MakeFloat(true);
 		tok = Next();
 	    }
 	    is STR then
