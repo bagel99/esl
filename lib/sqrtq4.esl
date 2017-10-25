@@ -1,0 +1,31 @@
+/*
+ * Fixed point square root
+ *
+ * Adapted from original algorithm by Ken Turkowski
+ *
+ * fbits must be even
+ */
+
+proc sqrtq4(x: _uint32, fbits: _uint): _uint32
+{
+    var root, remhi, remlo, test: _uint32;
+    var n: _uint;
+
+    root = 0;
+    remhi = 0;
+    remlo = x;
+    n = 16 + (fbits >> 1);
+    do
+    {   remhi = (remhi << 2) | (remlo >> 30);
+	remlo = remlo << 2;
+	root = root << 1;
+	test = (root << 1) + 1;
+	if remhi >= test then
+	{   remhi -= test;
+	    root += 1;
+	}
+	n -= 1;
+    } while n != 0;
+    return root;
+}
+

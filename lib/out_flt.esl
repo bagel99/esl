@@ -1,0 +1,104 @@
+import out;
+
+package out
+{
+    // internal routine to print exponent part
+    proc (o: OutFD) prtexp(exp: _int16)
+    {
+	o.chr('e');
+	if exp < 0 then
+	{   exp = -exp;
+	    o.chr('-');
+	}
+	else
+	    o.chr('+');
+	if exp < 10 then
+	    o.chr('0');
+	o.uint16(_uint16(exp));
+    }
+
+    proc (o: OutFD) float32(x: _float32)
+    {	var frac: _uint32;
+	var bexp: _int16;	// binary exponent
+	var dexp: _int16;	// decimal exponent
+	var sign: boolean;
+
+	frac = _uint32(x);
+//o.hex32(frac); o.chr(':');
+	sign = (frac >> 31) != 0;
+	bexp = _int16((frac >> 23) & 0xFF) - 127;
+	frac = (frac & 0x7F_FFFF) | 0x80_0000;
+//o.hex32(frac); o.nl();
+	frac = frac << 5;	// convert to _ufix(32,28)
+	dexp = 0;
+	if bexp > 0 then
+	{   do
+	    {
+		if frac >= 0x5000_0000 then	// 5.0
+		{   frac = frac / 10;		// FIXME - round?
+		    dexp += 1;
+		}
+	        frac = frac << 1;
+		bexp -= 1;
+	    } while bexp != 0;
+	}
+	elif bexp < 0 then
+	{   do
+	    {   frac = frac >> 1;
+		if frac < 0x1000_0000 then	// 1.0
+		{   frac = frac * 10;
+		   dexp -= 1;
+		}
+		bexp += 1;
+	    } while bexp != 0;
+	}
+	if sign then
+	   o.chr('-');
+	o.ufix32(frac, 8, 28);
+	o.prtexp(dexp);
+    }
+
+    proc (o: OutFD) float64(x: _float64)
+    {	var frac: _uint64;
+	var bexp: _int16;	// binary exponent
+	var dexp: _int16;	// decimal exponent
+	var sign: boolean;
+
+	frac = _uint64(x);
+//o.hex64(frac); o.chr(':');
+	sign = (frac >> 63) != 0;
+	bexp = _int16((frac >> 52) & 0x7FF) - 1023;
+	frac = (frac & 0xF_FFFF_FFFF_FFFF) | 0x10_0000_0000_0000;
+//o.hex64(frac); o.chr(':');
+	frac = frac << 8;	// convert to _ufix(64,60)
+//o.hex64(frac); o.chr(':');
+	dexp = 0;
+	if bexp > 0 then
+	{   do
+	    {
+		if frac >= 0x5000_0000_0000_0000 then	// 5.0
+		{   frac = frac / 10;		// FIXME - round?
+		    dexp += 1;
+		}
+	        frac = frac << 1;
+		bexp -= 1;
+	    } while bexp != 0;
+	}
+	elif bexp < 0 then
+	{   do
+	    {   frac = frac >> 1;
+		if frac < 0x1000_0000_0000_0000 then	// 1.0
+		{   frac = frac * 10;
+		    dexp -= 1;
+		}
+		bexp += 1;
+	    } while bexp != 0;
+	}
+	if sign then
+	   o.chr('-');
+	o.ufix64(frac, 16, 60);
+	o.prtexp(dexp);
+    }
+
+}
+

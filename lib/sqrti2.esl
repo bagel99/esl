@@ -1,0 +1,23 @@
+/*
+ * Square root of unsigned integer
+ * Returned value is rounded towards zero.
+ * Adapted from Hacker's Delight
+ */
+
+proc sqrti2(x: _uint32): _uint8
+{   var m, b, y: _uint16;
+
+    m = 0x4000;
+    y = 0;
+    do
+    {	b = y | m;
+	y = y >> 1;
+	if x >= b then
+	{   x -= b;
+	    y |= m;
+	}
+	m = m >> 2;
+    } while m > 0;
+    return _uint8(y);
+}
+
