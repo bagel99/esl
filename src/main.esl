@@ -26,8 +26,6 @@ var feature:
 	syntax37: boolean;      // use new load, getelementprt IR syntax in 3.7
     };
 
-const default_llvmversion = "3.7.0";
-
 import sys;
 import zstr;
 import out;
@@ -149,17 +147,25 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	}
     }
     // Check for LLVM backend version
-    var goodversion: boolean = false;
-    if llvmversion == 0 then
-	llvmversion = default_llvmversion;
-    if llvmversion[0] == '3' && llvmversion[1] == '.' then
-    {   goodversion = true;
-	if llvmversion[2]
-	is '4', '5' then { feature.debug = 1; feature.syntax37 = false; }
-	is '6' then      { feature.debug = 2; feature.syntax37 = false; }
-	is '7' then      { feature.debug = 3; feature.syntax37 = true; }
-	is '8' then      { feature.debug = 4; feature.syntax37 = true; }
-	else goodversion = false;
+    var goodversion: boolean = true;    // assume OK
+    feature.debug = 5;			// assume the latest
+    feature.syntax37 = true;		// assume the latest
+    if llvmversion != 0 then
+    {   if llvmversion[0]
+        is '3' then
+        {   if llvmversion[1] == '.' then
+	    {   if llvmversion[2]
+		is '4', '5' then { feature.debug = 1; feature.syntax37 = false; }
+		is '6' then      { feature.debug = 2; feature.syntax37 = false; }
+		is '7' then      { feature.debug = 3; feature.syntax37 = true; }
+		is '8' then      { feature.debug = 4; feature.syntax37 = true; }
+		is '9' then      { feature.debug = 5; feature.syntax37 = true; }
+		else goodversion = false;
+	    }
+	    else goodversion = false;
+	}
+	is '4', '5', '6' then
+	    { feature.debug = 6; feature.syntax37 = true; }
     }
     if !goodversion then
     {   err.str("Unsupported LLVM backend version: ");
@@ -167,8 +173,8 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	err.nl();
 	return 2;
     }
-    if feature.gflag && feature.debug < 3 then
-    {   err.str("Debug information no support with LLVM version: ");
+    if feature.gflag && feature.debug < 5 then
+    {   err.str("Debug information not supported for LLVM version: ");
         err.str(llvmversion);
 	err.nl();
 	feature.gflag = false;

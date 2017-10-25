@@ -23,7 +23,7 @@ package ast
 	LOAD,
 	STORE,		// assignment
 	ZEXT,   SEXT,   TRUNC,	BSWAP,   BITREV,
-	NEG,	NOT,	ABS,
+	NEG,	NOT,	ABS,    SQRT,
 	FNEG,   FCVTL,  FCVTS,
 	CVTUF,	CVTIF,  CVTFU,	CVTFI,
 	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,	ZLEN,
@@ -108,8 +108,8 @@ package ast
 	valu:	type.Valu;
 	child:	[]@AstNode;
     };
-    // fscale is the decimal scaling for floating point or fixed point
-    // constants.  Thus it only is used for CONST or FCON nodes.
+    // fscale is the decimal scaling for floating point constants,
+    // or binary scaling for fixed point constants.
 
     type Ast: @AstNode;
 
@@ -357,7 +357,8 @@ package ast
 	if tree == 0 then return tree;
 	if to@.kind
 	is ENUM then
-	{   if tree@.type@.kind == UINT then		// UINT -> ENUM
+	{   if tree@.type@.kind
+	    is ENUM, UINT then			// ENUM, UINT -> ENUM
 		tree = ExtendCast(tree, to);
 	    else
 		lex.Error(BADCAST);
@@ -535,32 +536,33 @@ package ast
 	return New2(op, lhs@.type, lhs, rhs);
     }
 
-    proc FixedAdjust(tree: Ast, t: Type): Ast;      // forward
+    proc AdjustFixed(tree: Ast, t: Type): Ast;      // forward
 
     // ADD, SUB
     proc OpAdd(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
     {   var tree: Ast;
+	var scale: _int;
 
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
-	{
-	    var scale: _int;
-	    if t != 0 then scale = t@.scale; else scale = lhs@.type.scale;
+	{   if t == 0 then t = lhs@.type;
+	    scale = t@.scale;
 //err.str("OpAdd scale: lhs="); err.uint16(lhs.type.scale);
 //err.str(" rhs="); err.uint16(rhs.type.scale);
 //err.str(" to="); err.uint16(scale); err.nl();
-	    if lhs@.fscale != 0 || lhs@.type.scale != scale then
-		lhs = FixedAdjust(lhs, t);
-	    if rhs@.fscale != 0 || rhs@.type.scale != scale then
-		rhs = FixedAdjust(rhs, lhs@.type);
+	    if lhs@.type.scale != scale then
+		lhs = AdjustFixed(lhs, t);
+	    if rhs@.type.scale != scale then
+		rhs = AdjustFixed(rhs, t);
 	    if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
 	    {   if op
 		is ADD then lhs@.valu += rhs@.valu;
 		is SUB then lhs@.valu -= rhs@.valu;
-		tree = lhs;
+		tree = Dup(lhs);
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
+	    tree@.type = t;
 	}
 	return tree;
     }
@@ -603,17 +605,30 @@ package ast
 
     proc OpMul(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
     {   var tree: Ast;
+	var scale, tscale: _int;
+	var twidth: _uint;
 
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is MUL then lhs@.valu = lhs@.valu * rhs@.valu;
-		is LSL,ASL then lhs@.valu = lhs@.valu << rhs@.valu;
-		tree = lhs;
+	{   if t == 0 then t = lhs@.type;
+	    scale = t@.scale;
+	    tscale = lhs.type.scale + rhs.type.scale;   // what MUL produces
+	    twidth = lhs.type.size + rhs.type.size;   // what MUL produces
+//err.str("OpMul scale: lhs="); err.uint16(lhs.type.scale);
+//err.str(" rhs="); err.uint16(rhs.type.scale);
+//err.str(" to="); err.uint16(scale); err.nl();
+	    if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	    {   lhs@.valu = lhs@.valu * rhs@.valu;
+		tree = Dup(lhs);
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
+	    if tscale != scale then
+	    {   tree@.type =
+		  type.MakeFixed(tree@.type@.kind, twidth, tscale);
+		tree = AdjustFixed(tree, t);
+	    }
+	    tree@.type = t;
 	}
 	return tree;
     }
@@ -786,64 +801,16 @@ package ast
 	return tree;
     }
 
-    proc MakeFixed(node: Ast, to: Type): Ast
-    {   var r, n, i, f: _uint64;
-	var s, b, k, z: _uint;
+    proc AdjustFixedConst(node: Ast, to: Type): Ast
+    {   var n, m, r: _uint64;
+	var fms, tos, fmi, toi, k: _uint;
 	var round: type.RoundT;
 	var issigned, isneg: boolean;
-
-	// FIXME - should we dup node in case multiple references?
-        n = node@.valu;
-	s = _uint(node@.fscale);
-	if to@.scale < 0 then
-	{   lex.ErrorS(NOTIMPL, "negative fixed point scale");
-	    return node;
-	}
-	b = to@.scale;
-	issigned = node@.type@.kind == SINT;
-	isneg = false;
-	if issigned && type.SValu(node@.valu) < 0 then
-	{   isneg = true;
-	    n = _uint64(-_int64(n));
-	}
-//err.str("MakeFixed: b=");  err.int(b); err.str(" n="); err.uint64(n);
-//err.str(" s="); err.int(s); err.nl();
-	i = n;
-	r = 1;
-	while s > 0 do
-	{   r = r * 10;
-	    i = i / 10;
-	    s -= 1;
-	}
-	f = i;
-	n -= i * r;		    // eliminate integer part
-	s = _uint64?bits - to@.size + b;    // working fraction size
-	if !issigned then
-	    s -= 1;		    // allow for an overflow bit
-	k = s - b;		    // final shift
-	z = _clz(f);		    // leading zeros in f
-//err.str("\ti="); err.uint64(i); err.str(" r="); err.uint64(r);
-//err.str(" s="); err.uint(s);
-//err.str(" z="); err.uint(z);
-//err.str(" k="); err.uint(k); err.nl();
-//err.str("\tf0="); err.hex64(f); err.nl();
-	if z < s then
-	    lex.Error(TRUNC);
-	while s > 0 do
-	{   f = f << 1;
-	    n = n << 1;
-	    if n >= r then
-	    {   n -= r;
-		f = f | 1;
-	    }
-	    s -= 1;
-	}
-//err.str("\tf1="); err.hex64(f); err.nl();
-	round = to@.round;
-	var wyx: 0..0b111;  // w is bit just left of rounding point
+	type WYX: 0..0b111; // w is bit just left of rounding point
 			    // y is bit just right of rounding point
 			    // x is 1 if any bits right of y are non-zero
-	const adjpos: [8][type.RoundT]0..1 =
+	var wyx: WYX;
+	const adjpos: [WYX][type.RoundT]0..1 =
 	{ // DN, UP, TZ, FZ, NS, NL, NE, NO        wyx
 	   {  0,  0,  0,  0,  0,  0,  0,  0 },  // 000
 	   {  0,  1,  0,  1,  0,  0,  0,  0 },  // 001
@@ -854,7 +821,7 @@ package ast
 	   {  0,  1,  0,  1,  0,  1,  1,  0 },  // 110
 	   {  0,  1,  0,  1,  1,  1,  1,  1 }   // 111
 	};
-	const adjneg: [8][type.RoundT]0..1 =
+	const adjneg: [WYX][type.RoundT]0..1 =
 	{ // DN, UP, TZ, FZ, NS, NL, NE, NO        wyx
 	   {  0,  0,  0,  0,  0,  0,  0,  0 },  // 000
 	   {  0,  1,  1,  0,  1,  1,  1,  1 },  // 001
@@ -865,58 +832,115 @@ package ast
 	   {  0,  1,  1,  0,  1,  0,  0,  1 },  // 110
 	   {  0,  1,  1,  0,  0,  0,  0,  0 }   // 111
 	};
-	wyx = ((f >> (k-1)) & 0x3) << 1;
-	if (f & ((1 << (k-1)) - 1)) != 0 then
-	    wyx += 1;
-//err.str("\twyx="); err.uint8(wyx); err.nl();
-	if !issigned || !isneg then       // unsigned rounding
+const db: boolean = false;
+	// FIXME - should we dup node in case multiple references?
+        n = node@.valu;
+        // assert node@.fscale >= 0;
+	fms = _uint(node@.fscale);  // from fractional size
+	if to@.scale < 0 then
+	{   lex.ErrorS(NOTIMPL, "negative fixed point scale");
+	    return node;
+	}
+	tos = to@.scale;	    // to fractional size
+	toi = to@.size - tos;		    // to integer size
+	fmi = node@.width - fms;	    // from integer size
+	issigned = node@.type@.kind == SINT;
+	isneg = false;
+	if issigned then
+	{   if type.SValu(node@.valu) < 0 then
+	    {   isneg = true;
+		n = _uint64(-_int64(n));
+	    }
+	    // allow for sign bit
+	    toi -= 1;  fmi -= 1;
+	}
+if db then {
+err.str("AdjustFixedConst: to=(");
+err.uint(to@.size); err.chr(','); err.int(tos);
+err.str(") fm=("); err.uint(node@.type@.size); err.chr(','); err.int(fms);
+err.str(") n="); err.hex64(n); err.nl();
+err.str("\ttoi="); err.uint(toi); err.str(" fmi="); err.uint(fmi); err.nl();
+}
+	if tos >= fms then
+	{   if tos == fms then
+		return node;
+	    lex.ErrorS(NOTIMPL, "Larger fixed point fraction\n");
+	}
+	else	// fraction size decreases
 	{
-	    if f > _uint64(_int64?max) then     // overflow into sign
-	    {   if f == 0x8000_0000_0000_0000 then  // allow this
-		    f -= 1;     // positive limit, convert to max positive
-		else
-		    lex.Error(TRUNC);
-		round = DN;     // don't round
+	    k = fms - tos;      // decrease in scale
+	    if k > 0 then
+	    {   wyx = ((n >> (k-1)) & 0x3) << 1;
+		if (n & ((1 << (k-1)) - 1)) != 0 then
+		    wyx += 1;
 	    }
-	    r = _uint64(adjpos[wyx][round]) << k;
-	    f += r;
-//err.str("\tf2="); err.hex64(f); err.nl();
-	    if f > _uint64(_int64?max) then     // overflow into sign
-		f -= r;	    // undo rounding
-	    f = f >> k;	    // final shift
-	}
-	else		// number is negative
-	{   var v: _int64;
-	    if f > _uint64(_int64?max) then     // overflow into sign
-	    {   if f != 0x8000_0000_0000_0000 then  // allow this
+	    else
+		wyx = 0;
+	    round = to@.round;
+if db then {
+err.str("\tk="); err.uint(k); err.str(" wyx="); err.uint8(wyx);
+err.str(" round="); err.uint8(_uint8(round)); err.nl();
+}
+	    if !issigned || !isneg then       // unsigned rounding
+	    {
+		r = _uint64(adjpos[wyx][round]);
+		n = n >> k;	    // final shift
+		n += r;
+		// check for integer part overflow, must be done after rounding
+		m = 1 << (tos+toi);
+if db then {
+err.str("\tn2="); err.hex64(n); err.str(" r="); err.uint64(r);
+err.str(" m="); err.hex64(m); err.nl();
+}
+		if n >= m then       // integer part too large
+		{   if n == m then   // OK, but adjust
+			n -= 1;
+		    else
+			lex.Error(TRUNC);
+		}
+	    }
+	    else		// signed rounding
+	    {   var v: _int64;
+		r = _uint64(adjneg[wyx][round]);
+		v = -_int64(n);	// restore its negativity
+		v = v >> k;	    // final shift
+		v += r;
+		n = _uint64(v);
+		// check for integer part overflow, must be done after rounding
+		m = _uint64?max << (tos+toi);
+if db then {
+err.str("\tn2="); err.hex64(n); err.str(" r="); err.uint64(r);
+err.str(" m="); err.hex64(m); err.nl();
+}
+		if n != 0 && n < m then
 		    lex.Error(TRUNC);
 	    }
-	    r = _uint64(adjneg[wyx][round]) << k;
-	    f -= r;
-	    v = -_int64(f);	// restore its negativity
-	    f = _uint64(v >> k);    // final shift
 	}
-//err.str("\tf3="); err.hex64(f); err.nl();
-	node@.valu = f;
-	node@.fscale = 0;
+	node@.valu = n;
+	node@.fscale = tos;
+	node@.type = to;
+	node@.width = to@.width;
 	return node;
     }
 
-    proc FixedAdjust(tree: Ast, to: Type): Ast
+    proc AdjustFixed(tree: Ast, to: Type): Ast
     {   var fmscale, toscale: _uint;
 	var issigned: boolean;
 	var op: Op;
 	var shf: _uint;
+const db: boolean = false;
 
-	if tree@.op == CONST && tree@.fscale != 0 then
-	    return MakeFixed(tree, to);
+	if tree@.op == CONST && tree@.fscale != 0  then
+	    return AdjustFixedConst(tree, to);
         issigned = to@.kind == SINT;
         fmscale = tree@.type@.scale;
         toscale = to@.scale;
-//err.str("FixedAdjust fm=");  err.uint(tree@.type@.width);
-//err.chr(','); err.uint(fmscale);
-//err.str(" to="); err.uint(to@.width);
-//err.chr(','); err.uint(toscale);  err.nl();
+if db then {
+err.str("AdjustFixed fm=");  err.uint(tree@.type@.width);
+err.chr(','); err.uint(fmscale);
+err.str(" to="); err.uint(to@.width);
+err.chr(','); err.uint(toscale);  err.nl();
+}
 	if to@.width > tree@.width then
 	    tree = ExtendT(tree, to);
         if toscale > fmscale then
@@ -1046,7 +1070,7 @@ package ast
 		}
 	    }
 	    if tree@.fscale != 0 || to@.scale != fm@.scale then
-		tree = FixedAdjust(tree, to);
+		tree = AdjustFixed(tree, to);
 	    elif to@.width != tree@.width then
 		tree = ExtendT(tree, to);
 	}
@@ -1057,7 +1081,7 @@ package ast
 		ok = true;
 	    }
 	    if tree@.fscale != 0 || to@.scale != fm@.scale then
-		tree = FixedAdjust(tree, to);
+		tree = AdjustFixed(tree, to);
 	    elif to@.width != tree@.width then
 		tree = ExtendT(tree, to);
 	}
@@ -1124,6 +1148,7 @@ err.nl();
 	[TRUNC]= "TRUNC",
 	[BSWAP]= "BSWAP",
 	[NEG]=   "NEG",		[NOT]=   "NOT",		[ABS]=   "ABS",
+	[SQRT]=  "SQRT",
 	[FNEG]=  "FNEG",	[FCVTL]= "FCVTL",       [FCVTS]= "FCVTS",
 	[CVTUF]= "CVTUF",	[CVTIF]= "CVTIF",
 	[CVTFU]= "CVTFU",	[CVTFI]= "CVTFI",
@@ -1174,17 +1199,31 @@ err.nl();
 	err.str(" nc=");
 	err.uint(node@.num);
 	if node@.op
-	is CONST, OFFSET, COPY, GETRV, CLZ, CTZ then
-	{   err.str(" value=");
-	    if node@.op == CONST && node@.type@.kind == SINT then
+	is OFFSET, COPY, GETRV, CLZ, CTZ then
+	{   err.str(" val=");
+	    err.uint64(node@.valu);
+	}
+	is CONST then
+	{   err.str(" val=");
+	    if node@.type@.kind == SINT then
 		err.int64(_int64(node@.valu));
 	    else
 		err.uint64(node@.valu);
+	    if node@.fscale != 0 then
+	    {   err.str(" scl=");
+		err.int16(node@.fscale);
+	    }
+	}
+	is FCON then
+	{   err.str(" val=");
+	    err.uint64(node@.valu);
+	    err.str(" scl=");
+	    err.int16(node@.fscale);
 	}
 	is SCON then
 	{   err.str(" id ");
 	    err.uint32(_uint32(node@.valu));
-	    err.str(" value=\"");
+	    err.str(" val=\"");
 	    err.strn(node@.symb@.ident, node@.type.Span()-1);
 	    err.chr('"');
 	}

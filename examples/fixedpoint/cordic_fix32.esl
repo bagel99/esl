@@ -3,7 +3,7 @@ package trig
 {
     type BAM32:  _ufix(32,32);	// binary angular measure
     type Q32_30: _sfix(32,30): rndns;
-    
+
     const tabatan: [30] Q32_30 =
     {	0.50000000000000,
 	0.29516723530087,
@@ -62,7 +62,7 @@ package trig
 	    }
 	    else
 	    {   x, y = x + (y>>i), y - (x>>i);
-	    	theta -= tabatan[i];
+		theta -= tabatan[i];
 	    }
 //err.str("tab="); err.hex32(_uint32(tabatan[i]));
 //err.str(" theta="); err.hex32(_uint32(theta));
@@ -83,13 +83,13 @@ package trig
 	if angle >= bam90 then
 	{   if angle >= bam180 then
 	    {   if angle >= bam270 then
-	    	{   sin, cos = cordic(angle-bam270);
-	    	    return -sin, cos;
-	    	}
-	    	else
-	    	{   sin, cos = cordic(angle-bam180);
+		{   sin, cos = cordic(angle-bam270);
+		   return -sin, cos;
+		}
+		else
+		{   sin, cos = cordic(angle-bam180);
 		    return -sin, -cos;
-	    	}
+		}
 	    }
 	    else
 	    {   sin, cos = cordic(angle-bam90);

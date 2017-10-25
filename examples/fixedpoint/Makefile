@@ -14,7 +14,7 @@ INC=	-I../../lib
 	$(GCC)  $< $(LIB)/lib.a -o $@
 
 %.s: %.ll
-	$(LLVM) -m$(ARCH) $< 
+	$(LLVM) -m$(ARCH) $<
 
 %.ll: %.esl
 	$(ESLC) -m$(ARCH) $(INC) $(OPT) $< >$@

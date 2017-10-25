@@ -330,7 +330,6 @@ package llvmdb
 	return tagt;
     }
 
-    // Used only for feature.debug > 1
     proc PCompositeType(tag: seqnoT, from: seqnoT, members: seqnoT,
 			dwat: @[]_byte, t:Type)
     {
@@ -594,7 +593,7 @@ package llvmdb
     }
 
     proc DefVar(s: Symb): seqnoT
-    {   var tag: seqnoT;
+    {   var ttag, vtag: seqnoT;
 
 	seqno += 1;
 	s@.dbtag = seqno;
@@ -605,13 +604,10 @@ package llvmdb
 	    llvm.PType(s@.type);
 	    f.str("* ");
 	    llvm.PName(s);
-	    if feature.debug <= 1 then f.chr('}');
 	    f.str(", metadata !");
 	    f.uint(seqno);
-	    if feature.debug > 1 then
-	    {   f.str(", metadata !");
-		f.uint(expr);
-	    }
+	    f.str(", metadata !");
+	    f.uint(expr);
 	    f.chr(')');
 	    PLine(s@.lineno);
 	    f.nl();	
@@ -626,19 +622,40 @@ package llvmdb
 	}
 	else
 	{
-	    tag = DefType(s@.type);
-	    PStart(s@.dbtag, "DIGlobalVariable");
+	    vtag = s@.dbtag;
+	    if feature.debug >= 6 then
+	    {   var etag: seqnoT;
+		seqno += 1;
+		etag = seqno;
+		if s@.linkage != FIXED then
+		{   f.str(", !dbg ");  PMetaRef(etag, NONE);
+		}
+		f.nl();
+		ttag = DefType(s@.type);
+		PStart(etag, "DIGlobalVariableExpression");
+		f.str("var: ");  PMetaRef(vtag, COMMA);
+		f.str("expr: !DIExpression())\n");
+		s@.dbtag = etag;     // replace with indirect thru GVE
+	    }
+	    else
+	    {   f.nl();
+		ttag = DefType(s@.type);
+	    }
+	    PStartDistinct(vtag, "DIGlobalVariable");
+//	    PStart(s@.dbtag, "DIGlobalVariable");
 	    f.str("name: ");  PFullName(s, COMMA);
 	    f.str("scope: ");  PMetaRef(0, COMMA);
 	    f.str("file: ");  PMetaRef(filenamedir, COMMA);
 	    f.str("line: ");  PUint(s@.lineno, COMMA);
-	    f.str("type: ");  PMetaRef(tag, COMMA);
+	    f.str("type: ");  PMetaRef(ttag, COMMA);
 	    f.str("isLocal: ");  PBoolean(s@.linkage == NORMAL, COMMA);
-	    f.str("isDefinition: ");  PBoolean(s@.linkage != EXTERN, COMMA);
-	    f.str("variable: ");
+	    f.str("isDefinition: ");  PBoolean(s@.linkage != EXTERN, NONE);
+	    if feature.debug < 6 then
+	    {   f.str(", variable: ");
 		llvm.PType(s@.type);
 		f.str("* ");
 		llvm.PName(s);
+	    }
 	    f.str(")\n");
 	    // We are re-using the next field in Symb,
 	    // we are done using it, right?
@@ -733,6 +750,7 @@ package llvmdb
 	{   f.str("flags: ");  PString("DIFlagPrototyped", COMMA);
 	}
 	f.str("isOptimized: ");  PBoolean(false, COMMA);
+	f.str("unit: "); PMetaRef(unit, COMMA);
 /*
 	f.str("function: ");
 	    llvm.PRetvType(ps@.retvlist, false);
@@ -774,8 +792,6 @@ package llvmdb
 		stag = seqno;
 	    }
 	    PStart(stag, "DILocalVariable");
-	    if feature.debug < 4 then
-	    {   f.str("tag: ");  PString("DW_TAG_arg_variable", COMMA); }
 	    f.str("name: ");  PName(s, COMMA);
 	    f.str("arg: ");  PUint(argno, COMMA);
 	    f.str("scope: ");  PMetaRef(subr, COMMA);
@@ -791,8 +807,6 @@ package llvmdb
 	{   ttag = DefType(s@.type);
 	    stag = s@.dbtag;
 	    PStart(stag, "DILocalVariable");
-	    if feature.debug < 4 then
-	    {   f.str("tag: ");  PString("DW_TAG_auto_variable", COMMA); }
 	    f.str("name: ");  PName(s, COMMA);
 	    f.str("scope: ");  PMetaRef(subr, COMMA);
 	    f.str("file: ");  PMetaRef(filenamedir, COMMA);
@@ -878,7 +892,6 @@ package llvmdb
 	f.str("!1 = !{i32 2, !\"Dwarf Version\", i32 4}\n");
 	f.str("!2 = !{i32 2, !\"Debug Info Version\", ");
 	debugversion = 3;
-	if feature.debug < 3 then debugversion = feature.debug;
 	P32(debugversion, BRACE);
 	// emit Compile Unit
 	PStartDistinct(unit, "DICompileUnit");
@@ -887,8 +900,7 @@ package llvmdb
 	f.str("producer: ");  PQString("ESL Compiler", COMMA);
 	f.str("isOptimized: ");  PBoolean(false, COMMA);   // FIXME
 	f.str("runtimeVersion: ");  PUint(0, COMMA);
-	f.str("emissionKind: ");  PUint(1, COMMA);
-	f.str("subprograms: ");  PMetaRef(subprogs, COMMA);
+	f.str("emissionKind: "); f.str("FullDebug, ");
 	f.str("globals: ");  PMetaRef(globals, NONE);
 	f.str(")\n");
 	// file name and directory will be output later

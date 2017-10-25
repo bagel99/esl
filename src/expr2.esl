@@ -1,11 +1,11 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
+// Copyright (c) 2009-2017, Brian G. Lucas.  See LICENSE file.
 // $Id$
 
 package expr
 {
     const skiplist:[4]TokenT = { PEND, GEND, SEMI, NONE };
 
-    const proplist:[]TokenT = { KMIN, KMAX, KBITSZ, KMEMSZ, KALIGN, KLEN, NONE };
+    const proplist:[]TokenT = { KMIN, KMAX, KBITSZ, KFRACSZ, KMEMSZ, KALIGN, KLEN, NONE };
 
     proc TypeProperty(t: Type): Ast
     {   var tree: Ast;
@@ -18,6 +18,7 @@ package expr
 	    if t != 0 then
 	    {   if tok
 		is KBITSZ then tree = ast.Const(type.wordtype, t@.size);
+		is KFRACSZ then tree = ast.Const(type.wordtype, t@.scale);
 		is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/target.ByteSize);
 		is KALIGN then tree = ast.Const(type.wordtype, t@.align/target.ByteSize);
 		is KMIN then
@@ -1106,7 +1107,38 @@ else
 	return tree;
     }
 
-    proc Convert(): Ast
+    proc Convert(t: Type): Ast
+    {   var tree: Ast;
+        var to, fm: TypeT;
+        var op: ast.Op;
+
+	tree = Bool(0);
+	if tree != 0 && t != 0 then
+	{   to = t@.kind;
+	    fm = tree@.type@.kind;
+	    // FIXME - much more needed here
+	    op = NULL;
+	    if to
+	    is  FLOAT then
+	    {   if fm
+		is UINT then op = CVTUF;
+		is SINT then op = CVTIF;
+	    }
+	    is UINT then
+	    {   if fm == FLOAT then op = CVTFU;
+	    }
+	    is SINT then
+	    {   if fm == FLOAT then op = CVTFI;
+	    }
+	    if op != NULL then
+	    {   tree = ast.New1(op, t, tree);
+		tree@.width = t@.width;
+	    }
+	}
+        return tree;
+    }
+
+    proc ConvertOld(): Ast
     {   var tok: TokenT;
         var tree: Ast;
         var t: Type;
@@ -1125,32 +1157,10 @@ else
 		else lex.Error(NOTTYPE);
 	    }
 	    else lex.ErrorS(UNDEFID, lex.Ident);
-	    tok = Next();        
+	    tok = Next();
 	    if tok == COMMA then
 	    {   tok = Next();
-		tree = Bool(0);
-		if tree != 0 && t != 0 then
-		{   to = t@.kind;
-		    fm = tree@.type@.kind;
-		    // FIXME - much more needed here
-		    op = NULL;
-		    if to
-		    is  FLOAT then
-		    {   if fm
-			is UINT then op = CVTUF;
-			is SINT then op = CVTIF;
-		    }
-		    is UINT then
-		    {   if fm == FLOAT then op = CVTFU;
-		    }
-		    is SINT then
-		    {   if fm == FLOAT then op = CVTFI;
-		    }
-		    if op != NULL then
-		    {   tree = ast.New1(op, t, tree);
-			tree@.width = t@.width;
-		    }
-		}
+		tree = Convert(t);
 	    }
         }
         else lex.Error(NOTTYPE);
@@ -1179,6 +1189,11 @@ else
 	    {   tree = IntrinsicUnary(ABS);
 		if tree != 0 && tree@.type@.kind == SINT then
 		    tree@.type = target.utype(tree@.width);
+	    }
+	    is SQRT then
+	    {	tree = IntrinsicUnary(SQRT);
+		if tree@.type@.kind == SINT then
+		    lex.Error(OPTYPE);
 	    }
 	    is MIN, MAX then
 	    {   lhs = Bool(0);
@@ -1219,7 +1234,7 @@ else
 	    is PACKBE then tree = Pack(BE);
 	    is UNPKLE then tree = Unpk(LE);
 	    is UNPKBE then tree = Unpk(BE);
-	    is CVT    then tree = Convert();
+	    is CVT    then tree = ConvertOld();
 	    is ZERO   then tree = Zero();
 	    is NEW    then tree = New();
 	    is DEL    then tree = Delete();
@@ -1605,6 +1620,8 @@ type.DumpT(t, false); err.nl();
 	{
 	    if s@.kind == TYPE then
 	    {   t = s@.type;
+		if t@.generic then
+		    t = type.DefFixed(t@.kind);
 		if tok
 		is DOT then		// possible enum const
 		{   tok = Next();
@@ -1629,6 +1646,12 @@ type.DumpT(t, false); err.nl();
 		    }
 		    else    // simple cast
 			tree = ast.Cast(tree, t);
+		    tok = lex.Expect(PEND);
+		}
+		is STAR then		// convert
+		{   tok = Next();
+		    tok = lex.Expect(PBEG);
+		    tree = Convert(t);
 		    tok = lex.Expect(PEND);
 		}
 		is GBEG then		// composite
@@ -1683,13 +1706,33 @@ type.DumpT(t, false); err.nl();
 		is FLOAT then
 		{   tree = ast.New(FCON, et);
 		    tree@.width = 64;			// FIXME: ?
-		    tree@.valu = lex.Number;
-		    tree@.fscale = lex.Scale;
+		    tree@.valu, tree@.fscale = lex.MakeFloat(false);
 		}
 		is UINT, SINT then
 		{   tree = ast.New(CONST,et);
-		    tree@.valu = lex.Number;
-		    tree@.fscale = lex.Scale;
+		    tree@.width = 64;			// FIXME: ?
+		    tree@.valu, tree@.fscale = lex.MakeFixed();
+		    if et@.kind == SINT then    // allow space for sign bit
+		    {   tree@.valu = tree@.valu >> 1;
+			tree@.fscale -= 1;
+		    }
+		    tree@.type = type.Clone(tree@.type);
+		    tree@.type@.size = 64;
+		    tree@.type@.scale = tree@.fscale;
+//err.hex64(tree@.valu); err.chr('('); err.uint16(tree@.fscale); err.str(") ");
+//err.ufix64(tree@.valu, 20, tree@.fscale); err.nl();
+		}
+		else
+		    lex.ErrorS(NOTIMPL, "must be fixed or float");
+		tok = Next();
+	    }
+	    is ENUM then
+	    {   if et == 0 then
+		    et = type.floattype;
+		if et@.kind == FLOAT then
+		{   tree = ast.New(FCON, et);
+		    tree@.width = 64;			// FIXME: ?
+		    tree@.valu, tree@.fscale = lex.MakeFloat(true);
 		}
 		else
 		    lex.ErrorS(NOTIMPL, "must be fixed or float");

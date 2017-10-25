@@ -73,6 +73,7 @@ package type
 
     proc New(kind: TypeT): Type;
     proc MakeRef(bt: Type): Type;
+    proc MakeFixed(kind: TypeT, width: _uint, scale: _uint): Type;
     proc NewBuiltin(kind: TypeT, name: @lex.Identifier, size: BitSize): Type;
     proc Final(t: Type);
     proc Compat(t1: Type, t2: Type): boolean;

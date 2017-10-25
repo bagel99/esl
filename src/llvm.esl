@@ -33,7 +33,7 @@ package llvm
     var loopexit: seqnoT;	// label sequence number for this loop exit
     type Intrinsics:
     (   MEMCPY, MEMMOVE, MEMSET, MEMCMP, ZLEN, BSWAP, BITREV,
-	CLZ, CTZ, POP,
+	CLZ, CTZ, POP, SQRTF, SQRTI, SQRTQ,
 	ASSERT,   END
     );
     type IntrinsicUse:
@@ -128,6 +128,27 @@ package llvm
 			piu = piu@.next;
 		    } while piu != 0;
 		}
+		is SQRTF then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @llvm.sqrt.%K(%K)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is SQRTI then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @sqrti%B(%K)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is SQRTQ then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @sqrtq%B(%K, %W)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
 		is ASSERT then
 		    Print("declare void @_assert(%W, [0 x i8]*, %W) noreturn\n",
 			  dummy);
@@ -196,6 +217,12 @@ package llvm
     {
 	if t != 0 then
 	    f.uint(t@.align/target.ByteSize);
+    }
+
+    proc PScale(t: Type)
+    {
+	if t != 0 then
+	    f.uint(t@.scale);
     }
 
     // FIXME - make a feature switch?
@@ -401,12 +428,13 @@ package llvm
 	}
 	is GLOBAL, WEAK, EXTERN then
 	{   f.chr('@');
-	    if s@.kind == PROC && s@.bound then
-		PMethod(s);
             if s@.altsymb != 0 then
                 f.str(s@.altsymb@.ident);
 	    else
+	    {   if s@.kind == PROC && s@.bound then
+		    PMethod(s);
 		f.str(s@.ident);
+	    }
 	}
 	is FIXED then
 	{   f.str("inttoptr(");
@@ -441,17 +469,19 @@ package llvm
     }
 
     proc PFloat(node: Ast)
-    {   var tmp: _float64;
+    {   var tmp, ten: _float64;
 	var scl: _int;
 	var hex: _uint64;
 
 	tmp = _cvt(_float64, _int64(node@.valu));
 	scl = node@.fscale;
 	if scl > 0 then
-	{   do
-	    {   tmp = tmp / 10.0;   // FIXME - rounding?
+	{   ten = 1.0;
+	    do
+	    {   ten = ten * 10.0;
 		scl -= 1;
 	    } while scl != 0;
+	    tmp = tmp / ten;
 	}
 	elif scl < 0 then
 	{   do
@@ -534,6 +564,7 @@ package llvm
 		is 'K' then PType(t);
 		is 'A' then PAlign(t);
 		is 'B' then PWidth(t);
+		is 'F' then PScale(t);
 		is 'R' then PDerefType(t);
 		is 'T' then NodeType(node);
 		is 'I' then NodeName(node);
@@ -839,8 +870,10 @@ package llvm
 	    }
 	    is EXTERN then
 		Print("%I = external global %K", node);
-	    f.nl();
-	    if feature.gflag then llvmdb.DefVar(s);
+	    if feature.gflag then
+		llvmdb.DefVar(s);
+	    else
+		f.nl();
 	}
     }
 
@@ -1400,6 +1433,22 @@ package llvm
 	is POP then
 	{   Print("\t%N = call %T @llvm.ctpop.%T(%0T %0N)", node);
 	    UseIntrinsic(POP, node@.width/target.ByteSize, node@.type);
+	}
+	is SQRT then
+	{   if node@.type@.kind == FLOAT then
+	    {   Print("\t%N = call %T @llvm.sqrt.%T(%0T %0N)", node);
+		UseIntrinsic(SQRTF, node@.width/target.ByteSize, node@.type);
+	    }
+	    else    // must be UINT
+	    {   if node@.type@.scale != 0 then
+		{   Print("\t%N = call %T @sqrtq%B(%0T %0N, %W %0F)", node);
+		    UseIntrinsic(SQRTQ, node@.width/target.ByteSize, node@.type);
+		}
+		else
+		{   Print("\t%N = call %T @sqrti%B(%0T %0N)", node);
+		    UseIntrinsic(SQRTI, node@.width/target.ByteSize, node@.type);
+		}
+	    }
 	}
 	PEndLine(node);
 	return false;
@@ -2026,7 +2075,7 @@ f.flush();
 	is TRUNC then ChangeSize(node, "trunc");
 	is BSWAP, NOT, NEG, FNEG, FCVTL, FCVTS, CVTUF, CVTIF, CVTFU, CVTFI then
 	    UnaryOp(node);
-	is CLZ, CLZNZ, CTZ, CTZNZ, POP, BITREV then UnaryOp(node);
+	is CLZ, CLZNZ, CTZ, CTZNZ, POP, BITREV, SQRT then UnaryOp(node);
 	is ABS then Abs(node);
 	is UMIN, UMAX, SMIN, SMAX then MinMax(node);
 	is ROL, ROR then Rotate(node);

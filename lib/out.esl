@@ -209,6 +209,94 @@ package out
 	else
 	    o.int32(_int32(in));
     }
+
+    /*
+     * Fixed point output using only integers
+     */
+    proc (o: OutFD) ufix16(x: _uint16, prec: _uint, bp: _uint)
+    {   var w: _uint32;	// _ufix(32,16)
+
+	w = _uint32(x);		// zero extend
+	if bp < 16 then
+	{   w = w << (16-bp);	// shift binary point between half-words
+	    o.uint16(_uint16(w >> 16));
+	}
+	else
+	    o.chr('0');
+	o.chr('.');
+	while prec > 0 do
+	{   x = _uint16(w);	// keep lo half
+	    w = x * 10;		// hi half has value 0..9
+	    o.chr('0'+ (w >> 16));
+	    prec -= 1;
+	}
+    }
+
+    proc (o: OutFD) sfix16(x: _int16, prec: _uint, bp: _uint)
+    {
+	if x < 0 then
+	{   o.chr('-');
+	    x = -x;		// FIXME - check for x?min
+	}
+	o.ufix16(_uint16(x), prec, bp);
+    }
+
+    proc (o: OutFD) ufix32(x: _uint32, prec: _uint, bp: _uint)
+    {   var w: _uint64;	// _ufix(64,32)
+
+	w = _uint64(x);		// zero extend
+	if bp < 32 then
+	{   w = w << (32-bp);	// shift binary point between words
+	    o.uint32(_uint32(w >> 32));
+	}
+	else
+	    o.chr('0');
+	o.chr('.');
+	while prec > 0 do
+	{   x = _uint32(w);	// keep lo half
+	    w = x * 10;		// hi half has value 0..9
+	    o.chr('0'+ (w >> 32));
+	    prec -= 1;
+	}
+    }
+
+    proc (o: OutFD) sfix32(x: _int32, prec: _uint, bp: _uint)
+    {
+	if x < 0 then
+	{   o.chr('-');
+	    x = -x;		// FIXME - check for x?min
+	}
+	o.ufix32(_uint32(x), prec, bp);
+    }
+
+    proc (o: OutFD) ufix64(x: _uint64, prec: _uint, bp: _uint)
+    {   var w: _uint128;
+
+	w = _uint128(x);
+	if bp < 64 then
+	{   o.uint64(_uint32(x >> bp));
+	    w = x << (64-bp);	// shift binary point to top
+	}
+	else
+	    o.chr('0');
+	o.chr('.');
+	while prec > 0 do
+	{   x = _uint64(w);	// keep lo half
+	    w = x * 10;		// hi half has value 0..9
+	    o.chr('0'+ (w >> 64));
+	    prec -= 1;
+	}
+    }
+
+    proc (o: OutFD) sfix64(x: _int64, prec: _uint, bp: _uint)
+    {
+	if x < 0 then
+	{   o.chr('-');
+	    x = -x;		// FIXME - check for x?min
+	}
+	o.ufix32(_uint64(x), prec, bp);
+    }
+
 }
 // vim: ts=8 sw=4 noet nowrap
 

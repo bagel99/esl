@@ -1057,6 +1057,33 @@ if debug.tests[2] then {
 	return 0;
     }
 
+    proc MakeFixed(kind: TypeT, width: _uint, scale: _uint): Type
+    {   var t: Type;
+
+	t = New(kind);
+	t@.size =  width;
+	t@.width = target.isize(width);      // FIXME?
+	if kind == SINT then
+	{   if scale <= width-1 then
+	    {   t@.scale = scale;
+		t@.hi = (1 << (width-1)) - 1;
+		t@.lo = ~t@.hi;
+	    }
+	    else
+		lex.Error(BADFRAC);
+	}
+	else    // UINT
+	{   if scale <= width then
+	    {   t@.scale = scale;
+		t@.hi = (1 << width) - 1;    // mod assumed
+		t@.lo = 0;
+	    }
+	    else
+		lex.Error(BADFRAC);
+	}
+	return t;
+    }
+
     proc DefFixed(kind: TypeT): Type
     {   var tok: TokenT;
         var size, frac: _uint;
@@ -1074,27 +1101,7 @@ if debug.tests[2] then {
 		frac = SimpleUConst();
 	    }
 	    lex.Expect(PEND);
-	    t = New(kind);
-	    t@.size =  size;
-	    t@.width = target.isize(size);      // FIXME?
-	    if kind == SINT then
-	    {   if frac <= size-1 then
-		{   t@.scale = frac;
-		    t@.hi = (1 << (size-1)) - 1;
-		    t@.lo = ~t@.hi;
-		}
-		else
-		    lex.Error(BADFRAC);
-	    }
-	    else    // UINT
-	    {   if frac <= size then
-		{   t@.scale = frac;
-		    t@.hi = (1 << size) - 1;    // mod assumed
-		    t@.lo = 0;
-		}
-		else
-		    lex.Error(BADFRAC);
-	    }
+	    t = MakeFixed(kind, size, frac);
 	}
 	else lex.Error(NOWIDTH);
 	return t;
