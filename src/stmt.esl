@@ -301,8 +301,19 @@ package stmt
 		if tok == COLON then
 		    t = type.VarAttributes(s, t);
 		type.Final(t);
-		iv = 0;	// assume no initial value
 		tok = Token;
+		if tok == PBEG then
+		{   var val: Valu;
+		    tok = Next();
+		    if !t@.flex then
+			lex.Error(NOSIZE);
+		    val = expr.ConstValue(type.wordtype);
+		    if t@.kind
+		    is ARRAY then t = expr.ArrayFixFlex(t, _uint(val));
+		    is RECORD then t = expr.RecordFixFlex(t, _uint(val));
+		    tok = lex.Expect(PEND);
+		}
+		iv = 0;	// assume no initial value
 		if tok == ASGN then
 		{   tok = Next();
 		    iv = expr.Const(t);
@@ -310,6 +321,8 @@ package stmt
 			t = iv@.type;       // iv may have fixed a flex
 		    s@.hasdef = true;
 		}
+		if t@.flex && s@.linkage < WEAK then
+		    lex.Error(FLEXSIZE);
 	    }
 	    else
 	    {   t = type.unkntype;

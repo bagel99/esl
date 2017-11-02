@@ -67,7 +67,7 @@ package llvm
     proc DeclareIntrinsics()
     {   var i: Intrinsics;
 	var piu: pIntrinsicUse;
-	var dummy: ast.AstNode;     // just to Print width/align of type
+	var dummy: ast.AstNode(0);  // just to Print width/align of type
 
 	dummy.type = 0;
 	i = MEMCPY;
@@ -473,7 +473,7 @@ package llvm
 	var scl: _int;
 	var hex: _uint64;
 
-	tmp = _cvt(_float64, _int64(node@.valu));
+	tmp = _float64*(_int64(node@.valu));
 	scl = node@.fscale;
 	if scl > 0 then
 	{   ten = 1.0;

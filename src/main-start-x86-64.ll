@@ -773,7 +773,7 @@ return:
 }
 @err = constant i64 2, align 8
 @msg = constant i64 1, align 8
-@lex_FirstError = internal constant i8 8, align 1
+@lex_FirstError = internal constant i8 9, align 1
 @S.5 = private unnamed_addr constant [30 x i8] c"Feature not yet implemented: \00"
 @S.6 = private unnamed_addr constant [26 x i8] c"Feature is experimental: \00"
 @S.7 = private unnamed_addr constant [31 x i8] c"Attribute not valid for type: \00"
@@ -782,206 +782,207 @@ return:
 @S.10 = private unnamed_addr constant [38 x i8] c"Converting signed to unsigned integer\00"
 @S.11 = private unnamed_addr constant [42 x i8] c"Pointer converted from wrong size integer\00"
 @S.12 = private unnamed_addr constant [33 x i8] c"Use of identifier is ambiguous: \00"
-@S.13 = private unnamed_addr constant [44 x i8] c"End of line in string or character constant\00"
-@S.14 = private unnamed_addr constant [28 x i8] c"Illegal character in source\00"
-@S.15 = private unnamed_addr constant [30 x i8] c"Illegal byte in UTF8 sequence\00"
-@S.16 = private unnamed_addr constant [23 x i8] c"End of file in comment\00"
-@S.17 = private unnamed_addr constant [23 x i8] c"Unexpected end of file\00"
-@S.18 = private unnamed_addr constant [29 x i8] c"Malformed character constant\00"
-@S.19 = private unnamed_addr constant [53 x i8] c"Malformed hex escape in string or character constant\00"
-@S.20 = private unnamed_addr constant [25 x i8] c"Malformed unicode escape\00"
-@S.21 = private unnamed_addr constant [20 x i8] c"Identifier too long\00"
-@S.22 = private unnamed_addr constant [16 x i8] c"String too long\00"
-@S.23 = private unnamed_addr constant [11 x i8] c"Expected: \00"
-@S.24 = private unnamed_addr constant [20 x i8] c"Expected identifier\00"
-@S.25 = private unnamed_addr constant [23 x i8] c"Undefined identifier: \00"
-@S.26 = private unnamed_addr constant [28 x i8] c"Identifier already in use: \00"
-@S.27 = private unnamed_addr constant [18 x i8] c"Undefined field: \00"
-@S.28 = private unnamed_addr constant [24 x i8] c"Unexpected identifier: \00"
-@S.29 = private unnamed_addr constant [35 x i8] c"Cannot dereference incomplete type\00"
-@S.30 = private unnamed_addr constant [28 x i8] c"Illegal index specification\00"
-@S.31 = private unnamed_addr constant [25 x i8] c"Identifier has no type: \00"
-@S.32 = private unnamed_addr constant [25 x i8] c"Expected type identifier\00"
-@S.33 = private unnamed_addr constant [25 x i8] c"Error in type definition\00"
-@S.34 = private unnamed_addr constant [26 x i8] c"Enumeration type required\00"
-@S.35 = private unnamed_addr constant [33 x i8] c"Illegal use of type identifier: \00"
-@S.36 = private unnamed_addr constant [34 x i8] c"Operation not suppported for type\00"
-@S.37 = private unnamed_addr constant [25 x i8] c"Error in type definition\00"
-@S.38 = private unnamed_addr constant [20 x i8] c"Unknown attribute: \00"
-@S.39 = private unnamed_addr constant [45 x i8] c"Statement begins with undefined identifier: \00"
-@S.40 = private unnamed_addr constant [49 x i8] c"Statement begins with inappropriate identifier: \00"
-@S.41 = private unnamed_addr constant [44 x i8] c"Statement begins with inappropriate token: \00"
-@S.42 = private unnamed_addr constant [37 x i8] c"Illegal comparison, bad type perhaps\00"
-@S.43 = private unnamed_addr constant [46 x i8] c"Syntax error in possible assignment statement\00"
-@S.44 = private unnamed_addr constant [19 x i8] c"Illegal assignment\00"
-@S.45 = private unnamed_addr constant [26 x i8] c"Illegal lhs in assignment\00"
-@S.46 = private unnamed_addr constant [26 x i8] c"Illegal rhs in assignment\00"
-@S.47 = private unnamed_addr constant [28 x i8] c"Type mismatch in assignment\00"
-@S.48 = private unnamed_addr constant [36 x i8] c"Not enough rhs values in assignment\00"
-@S.49 = private unnamed_addr constant [34 x i8] c"Too many rhs values in assignment\00"
-@S.50 = private unnamed_addr constant [38 x i8] c"Call of undefined forward procedure: \00"
-@S.51 = private unnamed_addr constant [51 x i8] c"Parameter types changed from forward declaration: \00"
-@S.52 = private unnamed_addr constant [54 x i8] c"Return value types changed from forward declaration: \00"
-@S.53 = private unnamed_addr constant [28 x i8] c"Boolean expression required\00"
-@S.54 = private unnamed_addr constant [37 x i8] c"Unsigned integer expression required\00"
-@S.55 = private unnamed_addr constant [13 x i8] c"Illegal cast\00"
-@S.56 = private unnamed_addr constant [33 x i8] c"Missing type for composite value\00"
-@S.57 = private unnamed_addr constant [33 x i8] c"Illegal type for composite value\00"
-@S.58 = private unnamed_addr constant [41 x i8] c"Missing or undefined property identifier\00"
-@S.59 = private unnamed_addr constant [25 x i8] c"Expecting \22then\22 or \22is\22\00"
-@S.60 = private unnamed_addr constant [21 x i8] c"Error in \22is\22 clause\00"
-@S.61 = private unnamed_addr constant [34 x i8] c"Return statement not in procedure\00"
-@S.62 = private unnamed_addr constant [29 x i8] c"Exit statement not in a loop\00"
-@S.63 = private unnamed_addr constant [29 x i8] c"Unknown statement in package\00"
-@S.64 = private unnamed_addr constant [14 x i8] c"Not a pointer\00"
-@S.65 = private unnamed_addr constant [13 x i8] c"Not an array\00"
-@S.66 = private unnamed_addr constant [33 x i8] c"Array copy with undefined length\00"
-@S.67 = private unnamed_addr constant [20 x i8] c"Illegal array index\00"
-@S.68 = private unnamed_addr constant [13 x i8] c"Not a record\00"
-@S.69 = private unnamed_addr constant [35 x i8] c"Syntax error in record declaration\00"
-@S.70 = private unnamed_addr constant [27 x i8] c"Base type must be a record\00"
-@S.71 = private unnamed_addr constant [33 x i8] c"Base type must be an enumeration\00"
-@S.72 = private unnamed_addr constant [41 x i8] c"Insufficient arguments to procedure call\00"
-@S.73 = private unnamed_addr constant [37 x i8] c"Too many arguments to procedure call\00"
-@S.74 = private unnamed_addr constant [49 x i8] c"Actual parameter type not compatible with formal\00"
-@S.75 = private unnamed_addr constant [22 x i8] c"Too many initializers\00"
-@S.76 = private unnamed_addr constant [32 x i8] c"Const requires a constant value\00"
-@S.77 = private unnamed_addr constant [43 x i8] c"Expression must be a compile-time constant\00"
-@S.78 = private unnamed_addr constant [22 x i8] c"Unable to open file: \00"
-@S.79 = private unnamed_addr constant [29 x i8] c"Expected variable identifier\00"
-@S.80 = private unnamed_addr constant [35 x i8] c"Flexible array must be final field\00"
-@S.81 = private unnamed_addr constant [28 x i8] c"Unresolved forward symbol: \00"
-@S.82 = private unnamed_addr constant [30 x i8] c"Syntax error in for statement\00"
-@S.83 = private unnamed_addr constant [22 x i8] c"Expected section name\00"
-@S.84 = private unnamed_addr constant [24 x i8] c"Packed record too large\00"
-@S.85 = private unnamed_addr constant [23 x i8] c"Packed array too large\00"
-@S.86 = private unnamed_addr constant [44 x i8] c"Can not specify size for fixed sized object\00"
-@S.87 = private unnamed_addr constant [44 x i8] c"Must specify size for variable sized object\00"
-@S.88 = private unnamed_addr constant [47 x i8] c"Specified size smaller that actual object size\00"
-@S.89 = private unnamed_addr constant [31 x i8] c"Illegal field offset specified\00"
-@S.90 = private unnamed_addr constant [22 x i8] c"Too few return values\00"
-@S.91 = private unnamed_addr constant [23 x i8] c"Too many return values\00"
-@S.92 = private unnamed_addr constant [43 x i8] c"Not an array or array with flexible length\00"
-@S.93 = private unnamed_addr constant [19 x i8] c"Array bounds error\00"
-@S.94 = private unnamed_addr constant [53 x i8] c"Arg for _packXX/_unpkXX must be array/slice of bytes\00"
-@S.95 = private unnamed_addr constant [47 x i8] c"Array for _packXX/_unpkXX must have fixed size\00"
-@S.96 = private unnamed_addr constant [54 x i8] c"Array for _packXX/_unpkXX to large for target machine\00"
-@S.97 = private unnamed_addr constant [40 x i8] c"Scalar for _packXX must be unsigned int\00"
-@S.98 = private unnamed_addr constant [26 x i8] c"Too many digits in number\00"
-@S.99 = private unnamed_addr constant [35 x i8] c"Too many digits in fractional part\00"
-@S.100 = private unnamed_addr constant [42 x i8] c"Missing width specification for fixed int\00"
-@S.101 = private unnamed_addr constant [24 x i8] c"Illegal fractional part\00"
-@S.102 = private unnamed_addr constant [24 x i8] c"Program defined error: \00"
-@S.103 = private unnamed_addr constant [26 x i8] c"Internal compiler error: \00"
-@lex_ErrMsg = internal constant [99 x [0 x i8]*] [ [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8], [30 x i8]* @S.5 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.6 )  to [0 x i8]* ), [0 x i8]* bitcast( [31 x i8]* getelementptr( [31 x i8], [31 x i8]* @S.7 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8], [34 x i8]* @S.8 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8], [38 x i8]* @S.9 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8], [38 x i8]* @S.10 )  to [0 x i8]* ), [0 x i8]* bitcast( [42 x i8]* getelementptr( [42 x i8], [42 x i8]* @S.11 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.12 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8], [44 x i8]* @S.13 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.14 )  to [0 x i8]* ), [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8], [30 x i8]* @S.15 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.16 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.17 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8], [29 x i8]* @S.18 )  to [0 x i8]* ), [0 x i8]* bitcast( [53 x i8]* getelementptr( [53 x i8], [53 x i8]* @S.19 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.20 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.21 )  to [0 x i8]* ), [0 x i8]* bitcast( [16 x i8]* getelementptr( [16 x i8], [16 x i8]* @S.22 )  to [0 x i8]* ), [0 x i8]* bitcast( [11 x i8]* getelementptr( [11 x i8], [11 x i8]* @S.23 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.24 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.25 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.26 )  to [0 x i8]* ), [0 x i8]* bitcast( [18 x i8]* getelementptr( [18 x i8], [18 x i8]* @S.27 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8], [24 x i8]* @S.28 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8], [35 x i8]* @S.29 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.30 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.31 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.32 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.33 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.34 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.35 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8], [34 x i8]* @S.36 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.37 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.38 )  to [0 x i8]* ), [0 x i8]* bitcast( [45 x i8]* getelementptr( [45 x i8], [45 x i8]* @S.39 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8], [49 x i8]* @S.40 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8], [44 x i8]* @S.41 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8], [37 x i8]* @S.42 )  to [0 x i8]* ), [0 x i8]* bitcast( [46 x i8]* getelementptr( [46 x i8], [46 x i8]* @S.43 )  to [0 x i8]* ), [0 x i8]* bitcast( [19 x i8]* getelementptr( [19 x i8], [19 x i8]* @S.44 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.45 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.46 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.47 )  to [0 x i8]* ), [0 x i8]* bitcast( [36 x i8]* getelementptr( [36 x i8], [36 x i8]* @S.48 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8], [34 x i8]* @S.49 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8], [38 x i8]* @S.50 )  to [0 x i8]* ), [0 x i8]* bitcast( [51 x i8]* getelementptr( [51 x i8], [51 x i8]* @S.51 )  to [0 x i8]* ), [0 x i8]* bitcast( [54 x i8]* getelementptr( [54 x i8], [54 x i8]* @S.52 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.53 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8], [37 x i8]* @S.54 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8], [13 x i8]* @S.55 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.56 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.57 )  to [0 x i8]* ), [0 x i8]* bitcast( [41 x i8]* getelementptr( [41 x i8], [41 x i8]* @S.58 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.59 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8], [21 x i8]* @S.60 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8], [34 x i8]* @S.61 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8], [29 x i8]* @S.62 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8], [29 x i8]* @S.63 )  to [0 x i8]* ), [0 x i8]* bitcast( [14 x i8]* getelementptr( [14 x i8], [14 x i8]* @S.64 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8], [13 x i8]* @S.65 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.66 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.67 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8], [13 x i8]* @S.68 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8], [35 x i8]* @S.69 )  to [0 x i8]* ), [0 x i8]* bitcast( [27 x i8]* getelementptr( [27 x i8], [27 x i8]* @S.70 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.71 )  to [0 x i8]* ), [0 x i8]* bitcast( [41 x i8]* getelementptr( [41 x i8], [41 x i8]* @S.72 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8], [37 x i8]* @S.73 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8], [49 x i8]* @S.74 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.75 )  to [0 x i8]* ), [0 x i8]* bitcast( [32 x i8]* getelementptr( [32 x i8], [32 x i8]* @S.76 )  to [0 x i8]* ), [0 x i8]* bitcast( [43 x i8]* getelementptr( [43 x i8], [43 x i8]* @S.77 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.78 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8], [29 x i8]* @S.79 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8], [35 x i8]* @S.80 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.81 )  to [0 x i8]* ), [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8], [30 x i8]* @S.82 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.83 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8], [24 x i8]* @S.84 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.85 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8], [44 x i8]* @S.86 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8], [44 x i8]* @S.87 )  to [0 x i8]* ), [0 x i8]* bitcast( [47 x i8]* getelementptr( [47 x i8], [47 x i8]* @S.88 )  to [0 x i8]* ), [0 x i8]* bitcast( [31 x i8]* getelementptr( [31 x i8], [31 x i8]* @S.89 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.90 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.91 )  to [0 x i8]* ), [0 x i8]* bitcast( [43 x i8]* getelementptr( [43 x i8], [43 x i8]* @S.92 )  to [0 x i8]* ), [0 x i8]* bitcast( [19 x i8]* getelementptr( [19 x i8], [19 x i8]* @S.93 )  to [0 x i8]* ), [0 x i8]* bitcast( [53 x i8]* getelementptr( [53 x i8], [53 x i8]* @S.94 )  to [0 x i8]* ), [0 x i8]* bitcast( [47 x i8]* getelementptr( [47 x i8], [47 x i8]* @S.95 )  to [0 x i8]* ), [0 x i8]* bitcast( [54 x i8]* getelementptr( [54 x i8], [54 x i8]* @S.96 )  to [0 x i8]* ), [0 x i8]* bitcast( [40 x i8]* getelementptr( [40 x i8], [40 x i8]* @S.97 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.98 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8], [35 x i8]* @S.99 )  to [0 x i8]* ), [0 x i8]* bitcast( [42 x i8]* getelementptr( [42 x i8], [42 x i8]* @S.100 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8], [24 x i8]* @S.101 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8], [24 x i8]* @S.102 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.103 )  to [0 x i8]* ) ], align 8
-@S.105 = private unnamed_addr constant [1 x i8] c"\00"
-@S.106 = private unnamed_addr constant [10 x i8] c"ENDOFFILE\00"
-@S.107 = private unnamed_addr constant [2 x i8] c".\00"
-@S.108 = private unnamed_addr constant [2 x i8] c":\00"
-@S.109 = private unnamed_addr constant [2 x i8] c";\00"
-@S.110 = private unnamed_addr constant [2 x i8] c",\00"
-@S.111 = private unnamed_addr constant [3 x i8] c"..\00"
-@S.112 = private unnamed_addr constant [2 x i8] c"@\00"
-@S.113 = private unnamed_addr constant [2 x i8] c"?\00"
-@S.114 = private unnamed_addr constant [2 x i8] c"=\00"
-@S.115 = private unnamed_addr constant [3 x i8] c"+=\00"
-@S.116 = private unnamed_addr constant [3 x i8] c"-=\00"
-@S.117 = private unnamed_addr constant [3 x i8] c"|=\00"
-@S.118 = private unnamed_addr constant [3 x i8] c"^=\00"
-@S.119 = private unnamed_addr constant [3 x i8] c"&=\00"
-@S.120 = private unnamed_addr constant [2 x i8] c"!\00"
-@S.121 = private unnamed_addr constant [2 x i8] c"~\00"
-@S.122 = private unnamed_addr constant [2 x i8] c"+\00"
-@S.123 = private unnamed_addr constant [2 x i8] c"-\00"
-@S.124 = private unnamed_addr constant [2 x i8] c"|\00"
-@S.125 = private unnamed_addr constant [2 x i8] c"^\00"
-@S.126 = private unnamed_addr constant [2 x i8] c"*\00"
-@S.127 = private unnamed_addr constant [2 x i8] c"/\00"
-@S.128 = private unnamed_addr constant [2 x i8] c"%\00"
-@S.129 = private unnamed_addr constant [3 x i8] c"<<\00"
-@S.130 = private unnamed_addr constant [3 x i8] c">>\00"
-@S.131 = private unnamed_addr constant [2 x i8] c"&\00"
-@S.132 = private unnamed_addr constant [3 x i8] c"==\00"
-@S.133 = private unnamed_addr constant [3 x i8] c"!=\00"
-@S.134 = private unnamed_addr constant [2 x i8] c"<\00"
-@S.135 = private unnamed_addr constant [2 x i8] c">\00"
-@S.136 = private unnamed_addr constant [3 x i8] c"<=\00"
-@S.137 = private unnamed_addr constant [3 x i8] c">=\00"
-@S.138 = private unnamed_addr constant [3 x i8] c"&&\00"
-@S.139 = private unnamed_addr constant [3 x i8] c"||\00"
-@S.140 = private unnamed_addr constant [2 x i8] c"(\00"
-@S.141 = private unnamed_addr constant [2 x i8] c")\00"
-@S.142 = private unnamed_addr constant [2 x i8] c"[\00"
-@S.143 = private unnamed_addr constant [2 x i8] c"]\00"
-@S.144 = private unnamed_addr constant [2 x i8] c"{\00"
-@S.145 = private unnamed_addr constant [2 x i8] c"}\00"
-@S.146 = private unnamed_addr constant [7 x i8] c"NUMBER\00"
-@S.147 = private unnamed_addr constant [5 x i8] c"FNUM\00"
-@S.148 = private unnamed_addr constant [5 x i8] c"ENUM\00"
-@S.149 = private unnamed_addr constant [7 x i8] c"STRING\00"
-@S.150 = private unnamed_addr constant [6 x i8] c"IDENT\00"
-@S.151 = private unnamed_addr constant [5 x i8] c"type\00"
-@S.152 = private unnamed_addr constant [4 x i8] c"var\00"
-@S.153 = private unnamed_addr constant [6 x i8] c"const\00"
-@S.154 = private unnamed_addr constant [7 x i8] c"import\00"
-@S.155 = private unnamed_addr constant [6 x i8] c"alias\00"
-@S.156 = private unnamed_addr constant [6 x i8] c"error\00"
-@S.157 = private unnamed_addr constant [5 x i8] c"proc\00"
-@S.158 = private unnamed_addr constant [8 x i8] c"package\00"
-@S.159 = private unnamed_addr constant [4 x i8] c"asm\00"
-@S.160 = private unnamed_addr constant [7 x i8] c"assert\00"
-@S.161 = private unnamed_addr constant [5 x i8] c"call\00"
-@S.162 = private unnamed_addr constant [7 x i8] c"return\00"
-@S.163 = private unnamed_addr constant [3 x i8] c"if\00"
-@S.164 = private unnamed_addr constant [6 x i8] c"while\00"
-@S.165 = private unnamed_addr constant [4 x i8] c"for\00"
-@S.166 = private unnamed_addr constant [5 x i8] c"loop\00"
-@S.167 = private unnamed_addr constant [5 x i8] c"exit\00"
-@S.168 = private unnamed_addr constant [5 x i8] c"then\00"
-@S.169 = private unnamed_addr constant [5 x i8] c"elif\00"
-@S.170 = private unnamed_addr constant [5 x i8] c"else\00"
-@S.171 = private unnamed_addr constant [3 x i8] c"is\00"
-@S.172 = private unnamed_addr constant [3 x i8] c"do\00"
-@S.173 = private unnamed_addr constant [5 x i8] c"with\00"
-@S.174 = private unnamed_addr constant [3 x i8] c"as\00"
-@S.175 = private unnamed_addr constant [3 x i8] c"in\00"
-@S.176 = private unnamed_addr constant [5 x i8] c"from\00"
-@S.177 = private unnamed_addr constant [3 x i8] c"to\00"
-@S.178 = private unnamed_addr constant [3 x i8] c"by\00"
-@S.179 = private unnamed_addr constant [7 x i8] c"packed\00"
-@S.180 = private unnamed_addr constant [6 x i8] c"nopad\00"
-@S.181 = private unnamed_addr constant [4 x i8] c"lsb\00"
-@S.182 = private unnamed_addr constant [4 x i8] c"msb\00"
-@S.183 = private unnamed_addr constant [3 x i8] c"le\00"
-@S.184 = private unnamed_addr constant [3 x i8] c"be\00"
-@S.185 = private unnamed_addr constant [3 x i8] c"ro\00"
-@S.186 = private unnamed_addr constant [3 x i8] c"wo\00"
-@S.187 = private unnamed_addr constant [3 x i8] c"in\00"
-@S.188 = private unnamed_addr constant [4 x i8] c"out\00"
-@S.189 = private unnamed_addr constant [3 x i8] c"at\00"
-@S.190 = private unnamed_addr constant [6 x i8] c"rnddn\00"
-@S.191 = private unnamed_addr constant [6 x i8] c"rndup\00"
-@S.192 = private unnamed_addr constant [6 x i8] c"rndtz\00"
-@S.193 = private unnamed_addr constant [6 x i8] c"rndfz\00"
-@S.194 = private unnamed_addr constant [6 x i8] c"rndns\00"
-@S.195 = private unnamed_addr constant [6 x i8] c"rndnl\00"
-@S.196 = private unnamed_addr constant [6 x i8] c"rndne\00"
-@S.197 = private unnamed_addr constant [6 x i8] c"rndno\00"
-@S.198 = private unnamed_addr constant [9 x i8] c"external\00"
-@S.199 = private unnamed_addr constant [7 x i8] c"global\00"
-@S.200 = private unnamed_addr constant [8 x i8] c"section\00"
-@S.201 = private unnamed_addr constant [6 x i8] c"align\00"
-@S.202 = private unnamed_addr constant [7 x i8] c"inline\00"
-@S.203 = private unnamed_addr constant [9 x i8] c"noinline\00"
-@S.204 = private unnamed_addr constant [10 x i8] c"interrupt\00"
-@S.205 = private unnamed_addr constant [5 x i8] c"weak\00"
-@S.206 = private unnamed_addr constant [4 x i8] c"min\00"
-@S.207 = private unnamed_addr constant [4 x i8] c"max\00"
-@S.208 = private unnamed_addr constant [5 x i8] c"bits\00"
-@S.209 = private unnamed_addr constant [6 x i8] c"fbits\00"
-@S.210 = private unnamed_addr constant [5 x i8] c"size\00"
-@S.211 = private unnamed_addr constant [4 x i8] c"len\00"
-@lex_keywords = internal constant [107 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8], [1 x i8]* @S.105 )  to [0 x i8]* ), [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.106 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.107 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.108 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.109 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.110 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.111 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.112 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.113 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.114 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.115 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.116 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.117 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.118 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.119 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.120 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.121 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.122 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.123 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.124 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.125 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.126 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.127 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.128 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.129 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.130 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.131 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.132 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.133 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.134 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.135 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.136 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.137 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.138 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.139 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.140 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.141 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.142 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.143 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.144 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.145 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.146 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.147 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.148 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.149 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.150 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.151 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.152 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.153 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.154 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.155 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.156 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.157 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.158 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.159 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.160 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.161 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.162 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.163 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.164 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.165 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.166 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.167 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.168 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.169 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.170 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.171 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.172 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.173 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.174 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.175 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.176 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.177 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.178 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.179 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.180 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.181 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.182 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.183 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.184 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.185 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.186 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.187 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.188 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.189 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.190 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.191 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.192 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.193 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.194 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.195 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.196 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.197 )  to [0 x i8]* ), [0 x i8]* bitcast( [9 x i8]* getelementptr( [9 x i8], [9 x i8]* @S.198 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.199 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.200 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.201 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.202 )  to [0 x i8]* ), [0 x i8]* bitcast( [9 x i8]* getelementptr( [9 x i8], [9 x i8]* @S.203 )  to [0 x i8]* ), [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.204 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.205 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.206 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.207 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.208 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.209 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.210 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.211 )  to [0 x i8]* ) ], align 8
+@S.13 = private unnamed_addr constant [49 x i8] c"Size of zero assumed for flex size specification\00"
+@S.14 = private unnamed_addr constant [44 x i8] c"End of line in string or character constant\00"
+@S.15 = private unnamed_addr constant [28 x i8] c"Illegal character in source\00"
+@S.16 = private unnamed_addr constant [30 x i8] c"Illegal byte in UTF8 sequence\00"
+@S.17 = private unnamed_addr constant [23 x i8] c"End of file in comment\00"
+@S.18 = private unnamed_addr constant [23 x i8] c"Unexpected end of file\00"
+@S.19 = private unnamed_addr constant [29 x i8] c"Malformed character constant\00"
+@S.20 = private unnamed_addr constant [53 x i8] c"Malformed hex escape in string or character constant\00"
+@S.21 = private unnamed_addr constant [25 x i8] c"Malformed unicode escape\00"
+@S.22 = private unnamed_addr constant [20 x i8] c"Identifier too long\00"
+@S.23 = private unnamed_addr constant [16 x i8] c"String too long\00"
+@S.24 = private unnamed_addr constant [11 x i8] c"Expected: \00"
+@S.25 = private unnamed_addr constant [20 x i8] c"Expected identifier\00"
+@S.26 = private unnamed_addr constant [23 x i8] c"Undefined identifier: \00"
+@S.27 = private unnamed_addr constant [28 x i8] c"Identifier already in use: \00"
+@S.28 = private unnamed_addr constant [18 x i8] c"Undefined field: \00"
+@S.29 = private unnamed_addr constant [24 x i8] c"Unexpected identifier: \00"
+@S.30 = private unnamed_addr constant [35 x i8] c"Cannot dereference incomplete type\00"
+@S.31 = private unnamed_addr constant [28 x i8] c"Illegal index specification\00"
+@S.32 = private unnamed_addr constant [25 x i8] c"Identifier has no type: \00"
+@S.33 = private unnamed_addr constant [25 x i8] c"Expected type identifier\00"
+@S.34 = private unnamed_addr constant [25 x i8] c"Error in type definition\00"
+@S.35 = private unnamed_addr constant [26 x i8] c"Enumeration type required\00"
+@S.36 = private unnamed_addr constant [33 x i8] c"Illegal use of type identifier: \00"
+@S.37 = private unnamed_addr constant [34 x i8] c"Operation not suppported for type\00"
+@S.38 = private unnamed_addr constant [25 x i8] c"Error in type definition\00"
+@S.39 = private unnamed_addr constant [20 x i8] c"Unknown attribute: \00"
+@S.40 = private unnamed_addr constant [45 x i8] c"Statement begins with undefined identifier: \00"
+@S.41 = private unnamed_addr constant [49 x i8] c"Statement begins with inappropriate identifier: \00"
+@S.42 = private unnamed_addr constant [44 x i8] c"Statement begins with inappropriate token: \00"
+@S.43 = private unnamed_addr constant [37 x i8] c"Illegal comparison, bad type perhaps\00"
+@S.44 = private unnamed_addr constant [46 x i8] c"Syntax error in possible assignment statement\00"
+@S.45 = private unnamed_addr constant [19 x i8] c"Illegal assignment\00"
+@S.46 = private unnamed_addr constant [26 x i8] c"Illegal lhs in assignment\00"
+@S.47 = private unnamed_addr constant [26 x i8] c"Illegal rhs in assignment\00"
+@S.48 = private unnamed_addr constant [28 x i8] c"Type mismatch in assignment\00"
+@S.49 = private unnamed_addr constant [36 x i8] c"Not enough rhs values in assignment\00"
+@S.50 = private unnamed_addr constant [34 x i8] c"Too many rhs values in assignment\00"
+@S.51 = private unnamed_addr constant [38 x i8] c"Call of undefined forward procedure: \00"
+@S.52 = private unnamed_addr constant [51 x i8] c"Parameter types changed from forward declaration: \00"
+@S.53 = private unnamed_addr constant [54 x i8] c"Return value types changed from forward declaration: \00"
+@S.54 = private unnamed_addr constant [28 x i8] c"Boolean expression required\00"
+@S.55 = private unnamed_addr constant [37 x i8] c"Unsigned integer expression required\00"
+@S.56 = private unnamed_addr constant [13 x i8] c"Illegal cast\00"
+@S.57 = private unnamed_addr constant [33 x i8] c"Missing type for composite value\00"
+@S.58 = private unnamed_addr constant [33 x i8] c"Illegal type for composite value\00"
+@S.59 = private unnamed_addr constant [41 x i8] c"Missing or undefined property identifier\00"
+@S.60 = private unnamed_addr constant [25 x i8] c"Expecting \22then\22 or \22is\22\00"
+@S.61 = private unnamed_addr constant [21 x i8] c"Error in \22is\22 clause\00"
+@S.62 = private unnamed_addr constant [34 x i8] c"Return statement not in procedure\00"
+@S.63 = private unnamed_addr constant [29 x i8] c"Exit statement not in a loop\00"
+@S.64 = private unnamed_addr constant [29 x i8] c"Unknown statement in package\00"
+@S.65 = private unnamed_addr constant [14 x i8] c"Not a pointer\00"
+@S.66 = private unnamed_addr constant [13 x i8] c"Not an array\00"
+@S.67 = private unnamed_addr constant [33 x i8] c"Array copy with undefined length\00"
+@S.68 = private unnamed_addr constant [20 x i8] c"Illegal array index\00"
+@S.69 = private unnamed_addr constant [13 x i8] c"Not a record\00"
+@S.70 = private unnamed_addr constant [35 x i8] c"Syntax error in record declaration\00"
+@S.71 = private unnamed_addr constant [27 x i8] c"Base type must be a record\00"
+@S.72 = private unnamed_addr constant [33 x i8] c"Base type must be an enumeration\00"
+@S.73 = private unnamed_addr constant [41 x i8] c"Insufficient arguments to procedure call\00"
+@S.74 = private unnamed_addr constant [37 x i8] c"Too many arguments to procedure call\00"
+@S.75 = private unnamed_addr constant [49 x i8] c"Actual parameter type not compatible with formal\00"
+@S.76 = private unnamed_addr constant [22 x i8] c"Too many initializers\00"
+@S.77 = private unnamed_addr constant [32 x i8] c"Const requires a constant value\00"
+@S.78 = private unnamed_addr constant [43 x i8] c"Expression must be a compile-time constant\00"
+@S.79 = private unnamed_addr constant [22 x i8] c"Unable to open file: \00"
+@S.80 = private unnamed_addr constant [29 x i8] c"Expected variable identifier\00"
+@S.81 = private unnamed_addr constant [35 x i8] c"Flexible array must be final field\00"
+@S.82 = private unnamed_addr constant [28 x i8] c"Unresolved forward symbol: \00"
+@S.83 = private unnamed_addr constant [30 x i8] c"Syntax error in for statement\00"
+@S.84 = private unnamed_addr constant [22 x i8] c"Expected section name\00"
+@S.85 = private unnamed_addr constant [24 x i8] c"Packed record too large\00"
+@S.86 = private unnamed_addr constant [23 x i8] c"Packed array too large\00"
+@S.87 = private unnamed_addr constant [44 x i8] c"Can not specify size for fixed sized object\00"
+@S.88 = private unnamed_addr constant [44 x i8] c"Must specify size for variable sized object\00"
+@S.89 = private unnamed_addr constant [47 x i8] c"Specified size smaller that actual object size\00"
+@S.90 = private unnamed_addr constant [31 x i8] c"Illegal field offset specified\00"
+@S.91 = private unnamed_addr constant [22 x i8] c"Too few return values\00"
+@S.92 = private unnamed_addr constant [23 x i8] c"Too many return values\00"
+@S.93 = private unnamed_addr constant [43 x i8] c"Not an array or array with flexible length\00"
+@S.94 = private unnamed_addr constant [19 x i8] c"Array bounds error\00"
+@S.95 = private unnamed_addr constant [53 x i8] c"Arg for _packXX/_unpkXX must be array/slice of bytes\00"
+@S.96 = private unnamed_addr constant [47 x i8] c"Array for _packXX/_unpkXX must have fixed size\00"
+@S.97 = private unnamed_addr constant [54 x i8] c"Array for _packXX/_unpkXX to large for target machine\00"
+@S.98 = private unnamed_addr constant [40 x i8] c"Scalar for _packXX must be unsigned int\00"
+@S.99 = private unnamed_addr constant [26 x i8] c"Too many digits in number\00"
+@S.100 = private unnamed_addr constant [35 x i8] c"Too many digits in fractional part\00"
+@S.101 = private unnamed_addr constant [42 x i8] c"Missing width specification for fixed int\00"
+@S.102 = private unnamed_addr constant [24 x i8] c"Illegal fractional part\00"
+@S.103 = private unnamed_addr constant [24 x i8] c"Program defined error: \00"
+@S.104 = private unnamed_addr constant [26 x i8] c"Internal compiler error: \00"
+@lex_ErrMsg = internal constant [100 x [0 x i8]*] [ [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8], [30 x i8]* @S.5 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.6 )  to [0 x i8]* ), [0 x i8]* bitcast( [31 x i8]* getelementptr( [31 x i8], [31 x i8]* @S.7 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8], [34 x i8]* @S.8 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8], [38 x i8]* @S.9 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8], [38 x i8]* @S.10 )  to [0 x i8]* ), [0 x i8]* bitcast( [42 x i8]* getelementptr( [42 x i8], [42 x i8]* @S.11 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.12 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8], [49 x i8]* @S.13 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8], [44 x i8]* @S.14 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.15 )  to [0 x i8]* ), [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8], [30 x i8]* @S.16 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.17 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.18 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8], [29 x i8]* @S.19 )  to [0 x i8]* ), [0 x i8]* bitcast( [53 x i8]* getelementptr( [53 x i8], [53 x i8]* @S.20 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.21 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.22 )  to [0 x i8]* ), [0 x i8]* bitcast( [16 x i8]* getelementptr( [16 x i8], [16 x i8]* @S.23 )  to [0 x i8]* ), [0 x i8]* bitcast( [11 x i8]* getelementptr( [11 x i8], [11 x i8]* @S.24 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.25 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.26 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.27 )  to [0 x i8]* ), [0 x i8]* bitcast( [18 x i8]* getelementptr( [18 x i8], [18 x i8]* @S.28 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8], [24 x i8]* @S.29 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8], [35 x i8]* @S.30 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.31 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.32 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.33 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.34 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.35 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.36 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8], [34 x i8]* @S.37 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.38 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.39 )  to [0 x i8]* ), [0 x i8]* bitcast( [45 x i8]* getelementptr( [45 x i8], [45 x i8]* @S.40 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8], [49 x i8]* @S.41 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8], [44 x i8]* @S.42 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8], [37 x i8]* @S.43 )  to [0 x i8]* ), [0 x i8]* bitcast( [46 x i8]* getelementptr( [46 x i8], [46 x i8]* @S.44 )  to [0 x i8]* ), [0 x i8]* bitcast( [19 x i8]* getelementptr( [19 x i8], [19 x i8]* @S.45 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.46 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.47 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.48 )  to [0 x i8]* ), [0 x i8]* bitcast( [36 x i8]* getelementptr( [36 x i8], [36 x i8]* @S.49 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8], [34 x i8]* @S.50 )  to [0 x i8]* ), [0 x i8]* bitcast( [38 x i8]* getelementptr( [38 x i8], [38 x i8]* @S.51 )  to [0 x i8]* ), [0 x i8]* bitcast( [51 x i8]* getelementptr( [51 x i8], [51 x i8]* @S.52 )  to [0 x i8]* ), [0 x i8]* bitcast( [54 x i8]* getelementptr( [54 x i8], [54 x i8]* @S.53 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.54 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8], [37 x i8]* @S.55 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8], [13 x i8]* @S.56 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.57 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.58 )  to [0 x i8]* ), [0 x i8]* bitcast( [41 x i8]* getelementptr( [41 x i8], [41 x i8]* @S.59 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.60 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8], [21 x i8]* @S.61 )  to [0 x i8]* ), [0 x i8]* bitcast( [34 x i8]* getelementptr( [34 x i8], [34 x i8]* @S.62 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8], [29 x i8]* @S.63 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8], [29 x i8]* @S.64 )  to [0 x i8]* ), [0 x i8]* bitcast( [14 x i8]* getelementptr( [14 x i8], [14 x i8]* @S.65 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8], [13 x i8]* @S.66 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.67 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.68 )  to [0 x i8]* ), [0 x i8]* bitcast( [13 x i8]* getelementptr( [13 x i8], [13 x i8]* @S.69 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8], [35 x i8]* @S.70 )  to [0 x i8]* ), [0 x i8]* bitcast( [27 x i8]* getelementptr( [27 x i8], [27 x i8]* @S.71 )  to [0 x i8]* ), [0 x i8]* bitcast( [33 x i8]* getelementptr( [33 x i8], [33 x i8]* @S.72 )  to [0 x i8]* ), [0 x i8]* bitcast( [41 x i8]* getelementptr( [41 x i8], [41 x i8]* @S.73 )  to [0 x i8]* ), [0 x i8]* bitcast( [37 x i8]* getelementptr( [37 x i8], [37 x i8]* @S.74 )  to [0 x i8]* ), [0 x i8]* bitcast( [49 x i8]* getelementptr( [49 x i8], [49 x i8]* @S.75 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.76 )  to [0 x i8]* ), [0 x i8]* bitcast( [32 x i8]* getelementptr( [32 x i8], [32 x i8]* @S.77 )  to [0 x i8]* ), [0 x i8]* bitcast( [43 x i8]* getelementptr( [43 x i8], [43 x i8]* @S.78 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.79 )  to [0 x i8]* ), [0 x i8]* bitcast( [29 x i8]* getelementptr( [29 x i8], [29 x i8]* @S.80 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8], [35 x i8]* @S.81 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.82 )  to [0 x i8]* ), [0 x i8]* bitcast( [30 x i8]* getelementptr( [30 x i8], [30 x i8]* @S.83 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.84 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8], [24 x i8]* @S.85 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.86 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8], [44 x i8]* @S.87 )  to [0 x i8]* ), [0 x i8]* bitcast( [44 x i8]* getelementptr( [44 x i8], [44 x i8]* @S.88 )  to [0 x i8]* ), [0 x i8]* bitcast( [47 x i8]* getelementptr( [47 x i8], [47 x i8]* @S.89 )  to [0 x i8]* ), [0 x i8]* bitcast( [31 x i8]* getelementptr( [31 x i8], [31 x i8]* @S.90 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.91 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.92 )  to [0 x i8]* ), [0 x i8]* bitcast( [43 x i8]* getelementptr( [43 x i8], [43 x i8]* @S.93 )  to [0 x i8]* ), [0 x i8]* bitcast( [19 x i8]* getelementptr( [19 x i8], [19 x i8]* @S.94 )  to [0 x i8]* ), [0 x i8]* bitcast( [53 x i8]* getelementptr( [53 x i8], [53 x i8]* @S.95 )  to [0 x i8]* ), [0 x i8]* bitcast( [47 x i8]* getelementptr( [47 x i8], [47 x i8]* @S.96 )  to [0 x i8]* ), [0 x i8]* bitcast( [54 x i8]* getelementptr( [54 x i8], [54 x i8]* @S.97 )  to [0 x i8]* ), [0 x i8]* bitcast( [40 x i8]* getelementptr( [40 x i8], [40 x i8]* @S.98 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.99 )  to [0 x i8]* ), [0 x i8]* bitcast( [35 x i8]* getelementptr( [35 x i8], [35 x i8]* @S.100 )  to [0 x i8]* ), [0 x i8]* bitcast( [42 x i8]* getelementptr( [42 x i8], [42 x i8]* @S.101 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8], [24 x i8]* @S.102 )  to [0 x i8]* ), [0 x i8]* bitcast( [24 x i8]* getelementptr( [24 x i8], [24 x i8]* @S.103 )  to [0 x i8]* ), [0 x i8]* bitcast( [26 x i8]* getelementptr( [26 x i8], [26 x i8]* @S.104 )  to [0 x i8]* ) ], align 8
+@S.106 = private unnamed_addr constant [1 x i8] c"\00"
+@S.107 = private unnamed_addr constant [10 x i8] c"ENDOFFILE\00"
+@S.108 = private unnamed_addr constant [2 x i8] c".\00"
+@S.109 = private unnamed_addr constant [2 x i8] c":\00"
+@S.110 = private unnamed_addr constant [2 x i8] c";\00"
+@S.111 = private unnamed_addr constant [2 x i8] c",\00"
+@S.112 = private unnamed_addr constant [3 x i8] c"..\00"
+@S.113 = private unnamed_addr constant [2 x i8] c"@\00"
+@S.114 = private unnamed_addr constant [2 x i8] c"?\00"
+@S.115 = private unnamed_addr constant [2 x i8] c"=\00"
+@S.116 = private unnamed_addr constant [3 x i8] c"+=\00"
+@S.117 = private unnamed_addr constant [3 x i8] c"-=\00"
+@S.118 = private unnamed_addr constant [3 x i8] c"|=\00"
+@S.119 = private unnamed_addr constant [3 x i8] c"^=\00"
+@S.120 = private unnamed_addr constant [3 x i8] c"&=\00"
+@S.121 = private unnamed_addr constant [2 x i8] c"!\00"
+@S.122 = private unnamed_addr constant [2 x i8] c"~\00"
+@S.123 = private unnamed_addr constant [2 x i8] c"+\00"
+@S.124 = private unnamed_addr constant [2 x i8] c"-\00"
+@S.125 = private unnamed_addr constant [2 x i8] c"|\00"
+@S.126 = private unnamed_addr constant [2 x i8] c"^\00"
+@S.127 = private unnamed_addr constant [2 x i8] c"*\00"
+@S.128 = private unnamed_addr constant [2 x i8] c"/\00"
+@S.129 = private unnamed_addr constant [2 x i8] c"%\00"
+@S.130 = private unnamed_addr constant [3 x i8] c"<<\00"
+@S.131 = private unnamed_addr constant [3 x i8] c">>\00"
+@S.132 = private unnamed_addr constant [2 x i8] c"&\00"
+@S.133 = private unnamed_addr constant [3 x i8] c"==\00"
+@S.134 = private unnamed_addr constant [3 x i8] c"!=\00"
+@S.135 = private unnamed_addr constant [2 x i8] c"<\00"
+@S.136 = private unnamed_addr constant [2 x i8] c">\00"
+@S.137 = private unnamed_addr constant [3 x i8] c"<=\00"
+@S.138 = private unnamed_addr constant [3 x i8] c">=\00"
+@S.139 = private unnamed_addr constant [3 x i8] c"&&\00"
+@S.140 = private unnamed_addr constant [3 x i8] c"||\00"
+@S.141 = private unnamed_addr constant [2 x i8] c"(\00"
+@S.142 = private unnamed_addr constant [2 x i8] c")\00"
+@S.143 = private unnamed_addr constant [2 x i8] c"[\00"
+@S.144 = private unnamed_addr constant [2 x i8] c"]\00"
+@S.145 = private unnamed_addr constant [2 x i8] c"{\00"
+@S.146 = private unnamed_addr constant [2 x i8] c"}\00"
+@S.147 = private unnamed_addr constant [7 x i8] c"NUMBER\00"
+@S.148 = private unnamed_addr constant [5 x i8] c"FNUM\00"
+@S.149 = private unnamed_addr constant [5 x i8] c"ENUM\00"
+@S.150 = private unnamed_addr constant [7 x i8] c"STRING\00"
+@S.151 = private unnamed_addr constant [6 x i8] c"IDENT\00"
+@S.152 = private unnamed_addr constant [5 x i8] c"type\00"
+@S.153 = private unnamed_addr constant [4 x i8] c"var\00"
+@S.154 = private unnamed_addr constant [6 x i8] c"const\00"
+@S.155 = private unnamed_addr constant [7 x i8] c"import\00"
+@S.156 = private unnamed_addr constant [6 x i8] c"alias\00"
+@S.157 = private unnamed_addr constant [6 x i8] c"error\00"
+@S.158 = private unnamed_addr constant [5 x i8] c"proc\00"
+@S.159 = private unnamed_addr constant [8 x i8] c"package\00"
+@S.160 = private unnamed_addr constant [4 x i8] c"asm\00"
+@S.161 = private unnamed_addr constant [7 x i8] c"assert\00"
+@S.162 = private unnamed_addr constant [5 x i8] c"call\00"
+@S.163 = private unnamed_addr constant [7 x i8] c"return\00"
+@S.164 = private unnamed_addr constant [3 x i8] c"if\00"
+@S.165 = private unnamed_addr constant [6 x i8] c"while\00"
+@S.166 = private unnamed_addr constant [4 x i8] c"for\00"
+@S.167 = private unnamed_addr constant [5 x i8] c"loop\00"
+@S.168 = private unnamed_addr constant [5 x i8] c"exit\00"
+@S.169 = private unnamed_addr constant [5 x i8] c"then\00"
+@S.170 = private unnamed_addr constant [5 x i8] c"elif\00"
+@S.171 = private unnamed_addr constant [5 x i8] c"else\00"
+@S.172 = private unnamed_addr constant [3 x i8] c"is\00"
+@S.173 = private unnamed_addr constant [3 x i8] c"do\00"
+@S.174 = private unnamed_addr constant [5 x i8] c"with\00"
+@S.175 = private unnamed_addr constant [3 x i8] c"as\00"
+@S.176 = private unnamed_addr constant [3 x i8] c"in\00"
+@S.177 = private unnamed_addr constant [5 x i8] c"from\00"
+@S.178 = private unnamed_addr constant [3 x i8] c"to\00"
+@S.179 = private unnamed_addr constant [3 x i8] c"by\00"
+@S.180 = private unnamed_addr constant [7 x i8] c"packed\00"
+@S.181 = private unnamed_addr constant [6 x i8] c"nopad\00"
+@S.182 = private unnamed_addr constant [4 x i8] c"lsb\00"
+@S.183 = private unnamed_addr constant [4 x i8] c"msb\00"
+@S.184 = private unnamed_addr constant [3 x i8] c"le\00"
+@S.185 = private unnamed_addr constant [3 x i8] c"be\00"
+@S.186 = private unnamed_addr constant [3 x i8] c"ro\00"
+@S.187 = private unnamed_addr constant [3 x i8] c"wo\00"
+@S.188 = private unnamed_addr constant [3 x i8] c"in\00"
+@S.189 = private unnamed_addr constant [4 x i8] c"out\00"
+@S.190 = private unnamed_addr constant [3 x i8] c"at\00"
+@S.191 = private unnamed_addr constant [6 x i8] c"rnddn\00"
+@S.192 = private unnamed_addr constant [6 x i8] c"rndup\00"
+@S.193 = private unnamed_addr constant [6 x i8] c"rndtz\00"
+@S.194 = private unnamed_addr constant [6 x i8] c"rndfz\00"
+@S.195 = private unnamed_addr constant [6 x i8] c"rndns\00"
+@S.196 = private unnamed_addr constant [6 x i8] c"rndnl\00"
+@S.197 = private unnamed_addr constant [6 x i8] c"rndne\00"
+@S.198 = private unnamed_addr constant [6 x i8] c"rndno\00"
+@S.199 = private unnamed_addr constant [9 x i8] c"external\00"
+@S.200 = private unnamed_addr constant [7 x i8] c"global\00"
+@S.201 = private unnamed_addr constant [8 x i8] c"section\00"
+@S.202 = private unnamed_addr constant [6 x i8] c"align\00"
+@S.203 = private unnamed_addr constant [7 x i8] c"inline\00"
+@S.204 = private unnamed_addr constant [9 x i8] c"noinline\00"
+@S.205 = private unnamed_addr constant [10 x i8] c"interrupt\00"
+@S.206 = private unnamed_addr constant [5 x i8] c"weak\00"
+@S.207 = private unnamed_addr constant [4 x i8] c"min\00"
+@S.208 = private unnamed_addr constant [4 x i8] c"max\00"
+@S.209 = private unnamed_addr constant [5 x i8] c"bits\00"
+@S.210 = private unnamed_addr constant [6 x i8] c"fbits\00"
+@S.211 = private unnamed_addr constant [5 x i8] c"size\00"
+@S.212 = private unnamed_addr constant [4 x i8] c"len\00"
+@lex_keywords = internal constant [107 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8], [1 x i8]* @S.106 )  to [0 x i8]* ), [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.107 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.108 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.109 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.110 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.111 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.112 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.113 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.114 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.115 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.116 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.117 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.118 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.119 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.120 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.121 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.122 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.123 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.124 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.125 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.126 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.127 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.128 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.129 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.130 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.131 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.132 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.133 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.134 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.135 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.136 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.137 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.138 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.139 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.140 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.141 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.142 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.143 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.144 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.145 )  to [0 x i8]* ), [0 x i8]* bitcast( [2 x i8]* getelementptr( [2 x i8], [2 x i8]* @S.146 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.147 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.148 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.149 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.150 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.151 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.152 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.153 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.154 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.155 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.156 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.157 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.158 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.159 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.160 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.161 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.162 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.163 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.164 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.165 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.166 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.167 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.168 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.169 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.170 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.171 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.172 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.173 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.174 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.175 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.176 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.177 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.178 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.179 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.180 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.181 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.182 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.183 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.184 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.185 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.186 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.187 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.188 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.189 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.190 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.191 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.192 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.193 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.194 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.195 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.196 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.197 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.198 )  to [0 x i8]* ), [0 x i8]* bitcast( [9 x i8]* getelementptr( [9 x i8], [9 x i8]* @S.199 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.200 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.201 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.202 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.203 )  to [0 x i8]* ), [0 x i8]* bitcast( [9 x i8]* getelementptr( [9 x i8], [9 x i8]* @S.204 )  to [0 x i8]* ), [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.205 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.206 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.207 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.208 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.209 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.210 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.211 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.212 )  to [0 x i8]* ) ], align 8
 @lex_StringMax = internal constant i64 4095, align 8
 @lex_IdentMax = internal constant i64 255, align 8
 @lex_BufSize = internal constant i64 4096, align 8
@@ -1018,11 +1019,11 @@ return:
 	%5 = load i16, i16* %rv.0
 	ret i16 %5
 }
-@S.212 = private unnamed_addr constant [3 x i8] c": \00"
-@S.213 = private unnamed_addr constant [28 x i8] c"\0AToo many errors, quiting.\0A\00"
+@S.213 = private unnamed_addr constant [3 x i8] c": \00"
+@S.214 = private unnamed_addr constant [28 x i8] c"\0AToo many errors, quiting.\0A\00"
 declare external void @exit(i64)
-@S.214 = private unnamed_addr constant [8 x i8] c"Error: \00"
-@S.215 = private unnamed_addr constant [10 x i8] c"Warning: \00"
+@S.215 = private unnamed_addr constant [8 x i8] c"Error: \00"
+@S.216 = private unnamed_addr constant [10 x i8] c"Warning: \00"
 define internal void @lex_ErrorSub(i8 zeroext %error$) nounwind {
 L.0:
 	%error = alloca i8
@@ -1050,11 +1051,11 @@ L.1:
 	%12 = call i16 @lex_Lineno()
 	%13 = zext i16 %12 to i64
 	call void @sys_fildes_uint(i64 2, i64 %13)
-	%14 = getelementptr [3 x i8], [3 x i8]* @S.212
+	%14 = getelementptr [3 x i8], [3 x i8]* @S.213
 	%15 = bitcast [3 x i8]* %14 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %15)
 	%16 = load i8, i8* %error
-	%17 = icmp uge i8 %16, 8
+	%17 = icmp uge i8 %16, 9
 	br i1 %17, label %L.4, label %L.5
 L.4:
 	%18 = load i8, i8* @lex_ErrorCount
@@ -1064,25 +1065,25 @@ L.4:
 	%21 = icmp uge i8 %20, 10
 	br i1 %21, label %L.7, label %L.6
 L.7:
-	%22 = getelementptr [28 x i8], [28 x i8]* @S.213
+	%22 = getelementptr [28 x i8], [28 x i8]* @S.214
 	%23 = bitcast [28 x i8]* %22 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %23)
 	call void @exit(i64 1)
 	br label %L.6
 L.6:
-	%24 = getelementptr [8 x i8], [8 x i8]* @S.214
+	%24 = getelementptr [8 x i8], [8 x i8]* @S.215
 	%25 = bitcast [8 x i8]* %24 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %25)
 	br label %L.3
 L.5:
-	%26 = getelementptr [10 x i8], [10 x i8]* @S.215
+	%26 = getelementptr [10 x i8], [10 x i8]* @S.216
 	%27 = bitcast [10 x i8]* %26 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %27)
 	br label %L.3
 L.3:
 	%28 = load i8, i8* %error
 	%29 = zext i8 %28 to i64
-	%30 = getelementptr [99 x [0 x i8]*], [99 x [0 x i8]*]* @lex_ErrMsg, i64 0, i64 %29
+	%30 = getelementptr [100 x [0 x i8]*], [100 x [0 x i8]*]* @lex_ErrMsg, i64 0, i64 %29
 	%31 = load [0 x i8]*, [0 x i8]** %30
 	%32 = bitcast [0 x i8]* %31 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %32)
@@ -1155,8 +1156,8 @@ return:
 	ret void
 }
 declare external void @close(i64)
-@S.216 = private unnamed_addr constant [13 x i8] c"Close file \22\00"
-@S.217 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
+@S.217 = private unnamed_addr constant [13 x i8] c"Close file \22\00"
+@S.218 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
 define internal void @lex_FileClose() nounwind {
 L.0:
 	%of = alloca %lex.FileContext*
@@ -1173,7 +1174,7 @@ L.2:
 	%7 = icmp ne i8 %6, 0
 	br i1 %7, label %L.4, label %L.3
 L.4:
-	%8 = getelementptr [13 x i8], [13 x i8]* @S.216
+	%8 = getelementptr [13 x i8], [13 x i8]* @S.217
 	%9 = bitcast [13 x i8]* %8 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %9)
 	%10 = load %lex.FileContext*, %lex.FileContext** @lex_f
@@ -1195,7 +1196,7 @@ L.5:
 	%20 = load [0 x i8]*, [0 x i8]** %19
 	%21 = bitcast [0 x i8]* %20 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %21)
-	%22 = getelementptr [3 x i8], [3 x i8]* @S.217
+	%22 = getelementptr [3 x i8], [3 x i8]* @S.218
 	%23 = bitcast [3 x i8]* %22 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %23)
 	br label %L.3
@@ -1506,7 +1507,7 @@ L.5:
 	%18 = icmp ult i64 %16, %17
 	br i1 %18, label %L.7, label %L.6
 L.7:
-	call void @lex_Error(i8 94)
+	call void @lex_Error(i8 95)
 	store i64 0, i64* %t
 	br label %L.6
 L.6:
@@ -1574,7 +1575,7 @@ L.3:
 	%14 = icmp ult i64 %12, %13
 	br i1 %14, label %L.5, label %L.4
 L.5:
-	call void @lex_Error(i8 93)
+	call void @lex_Error(i8 94)
 	store i64 1, i64* %t
 	br label %L.4
 L.4:
@@ -1685,7 +1686,7 @@ L.5:
 	store i8 %9, i8* %c
 	br label %L.2
 L.1:
-	call void @lex_Error(i8 14)
+	call void @lex_Error(i8 15)
 	%10 = load i32, i32* %h
 	store i32 %10, i32* %rv.0
 	br label %return
@@ -1736,7 +1737,7 @@ L.2:
 	%10 = icmp uge i64 %9, 4
 	br i1 %10, label %L.6, label %L.7
 L.6:
-	call void @lex_Error(i8 15)
+	call void @lex_Error(i8 16)
 	store i64 0, i64* %rv.0
 	br label %return
 L.7:
@@ -1749,7 +1750,7 @@ L.7:
 	%16 = icmp uge i64 %15, 4095
 	br i1 %16, label %L.9, label %L.8
 L.9:
-	call void @lex_Error(i8 17)
+	call void @lex_Error(i8 18)
 	store i64 0, i64* %rv.0
 	br label %return
 L.8:
@@ -1862,10 +1863,10 @@ L.8:
 L.11:
 	br label %L.10
 L.12:
-	call void @lex_Error(i8 11)
+	call void @lex_Error(i8 12)
 	br label %L.10
 L.9:
-	call void @lex_Error(i8 12)
+	call void @lex_Error(i8 13)
 	br label %L.10
 L.10:
 	store i8 1, i8* %tok
@@ -2247,7 +2248,7 @@ L.83:
 	store i8 27, i8* %state
 	br label %L.49
 L.48:
-	call void @lex_Error(i8 9)
+	call void @lex_Error(i8 10)
 	br label %L.49
 L.49:
 	br label %L.14
@@ -2441,7 +2442,7 @@ L.91:
 	store i8 %110, i8* %state
 	br label %L.90
 L.92:
-	call void @lex_Error(i8 10)
+	call void @lex_Error(i8 11)
 	br label %L.90
 L.90:
 	br label %L.14
@@ -3125,11 +3126,11 @@ L.41:
 		i64 92, label %L.191
 	]
 L.189:
-	call void @lex_Error(i8 13)
+	call void @lex_Error(i8 14)
 	store i8 0, i8* %state
 	br label %L.188
 L.190:
-	call void @lex_Error(i8 8)
+	call void @lex_Error(i8 9)
 	store i8 0, i8* %state
 	br label %L.188
 L.191:
@@ -3159,7 +3160,7 @@ L.194:
 	store i16 %288, i16* %i
 	br label %L.193
 L.192:
-	call void @lex_Error(i8 13)
+	call void @lex_Error(i8 14)
 	store i8 0, i8* %state
 	br label %L.193
 L.193:
@@ -3187,7 +3188,7 @@ L.197:
 	store i16 %297, i16* %i
 	br label %L.196
 L.198:
-	call void @lex_Error(i8 8)
+	call void @lex_Error(i8 9)
 	store i8 0, i8* %state
 	br label %L.196
 L.199:
@@ -3208,7 +3209,7 @@ L.201:
 	store i16 %305, i16* %k
 	br label %L.200
 L.202:
-	call void @lex_Error(i8 17)
+	call void @lex_Error(i8 18)
 	br label %L.200
 L.200:
 	br label %L.196
@@ -3224,7 +3225,7 @@ L.44:
 		i64 85, label %L.208
 	]
 L.205:
-	call void @lex_Error(i8 8)
+	call void @lex_Error(i8 9)
 	store i8 0, i8* %state
 	br label %L.204
 L.206:
@@ -3259,7 +3260,7 @@ L.213:
 	store i16 %318, i16* %k
 	br label %L.212
 L.214:
-	call void @lex_Error(i8 17)
+	call void @lex_Error(i8 18)
 	br label %L.212
 L.212:
 	store i8 30, i8* %state
@@ -3282,7 +3283,7 @@ L.45:
 		i64 10, label %L.217
 	]
 L.217:
-	call void @lex_Error(i8 8)
+	call void @lex_Error(i8 9)
 	store i8 0, i8* %state
 	br label %L.216
 L.215:
@@ -3303,7 +3304,7 @@ L.46:
 		i64 10, label %L.220
 	]
 L.220:
-	call void @lex_Error(i8 8)
+	call void @lex_Error(i8 9)
 	store i8 0, i8* %state
 	br label %L.219
 L.218:
@@ -3330,7 +3331,7 @@ L.225:
 	store i16 %344, i16* %k
 	br label %L.224
 L.226:
-	call void @lex_Error(i8 17)
+	call void @lex_Error(i8 18)
 	br label %L.224
 L.224:
 	store i8 30, i8* %state
@@ -3349,7 +3350,7 @@ L.47:
 		i64 10, label %L.229
 	]
 L.229:
-	call void @lex_Error(i8 8)
+	call void @lex_Error(i8 9)
 	store i8 0, i8* %state
 	br label %L.228
 L.227:
@@ -3497,7 +3498,7 @@ L.4:
 	br label %L.3
 L.5:
 	%12 = load i8, i8* %expect
-	call void @lex_ErrorT(i8 18, i8 %12)
+	call void @lex_ErrorT(i8 19, i8 %12)
 	br label %L.3
 L.3:
 	%13 = load i8, i8* %tok
@@ -3507,9 +3508,9 @@ return:
 	%14 = load i8, i8* %rv.0
 	ret i8 %14
 }
-@S.220 = private unnamed_addr constant [7 x i8] c" line=\00"
-@S.221 = private unnamed_addr constant [6 x i8] c" tok=\00"
-@S.222 = private unnamed_addr constant [3 x i8] c" \22\00"
+@S.221 = private unnamed_addr constant [7 x i8] c" line=\00"
+@S.222 = private unnamed_addr constant [6 x i8] c" tok=\00"
+@S.223 = private unnamed_addr constant [3 x i8] c" \22\00"
 define internal void @lex_WhereAmI([0 x i8]* %msg$) nounwind {
 L.0:
 	%msg = alloca [0 x i8]*
@@ -3517,13 +3518,13 @@ L.0:
 	%0 = load [0 x i8]*, [0 x i8]** %msg
 	%1 = bitcast [0 x i8]* %0 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %1)
-	%2 = getelementptr [7 x i8], [7 x i8]* @S.220
+	%2 = getelementptr [7 x i8], [7 x i8]* @S.221
 	%3 = bitcast [7 x i8]* %2 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %3)
 	%4 = call i16 @lex_Lineno()
 	%5 = zext i16 %4 to i64
 	call void @sys_fildes_uint(i64 2, i64 %5)
-	%6 = getelementptr [6 x i8], [6 x i8]* @S.221
+	%6 = getelementptr [6 x i8], [6 x i8]* @S.222
 	%7 = bitcast [6 x i8]* %6 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %7)
 	%8 = load i8, i8* @lex_Token
@@ -3536,7 +3537,7 @@ L.0:
 	%14 = icmp eq i8 %13, 45
 	br i1 %14, label %L.2, label %L.1
 L.2:
-	%15 = getelementptr [3 x i8], [3 x i8]* @S.222
+	%15 = getelementptr [3 x i8], [3 x i8]* @S.223
 	%16 = bitcast [3 x i8]* %15 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %16)
 	%17 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
@@ -3671,7 +3672,7 @@ L.2:
 	%6 = load [0 x i8]*, [0 x i8]** %toklist
 	%7 = getelementptr [0 x i8], [0 x i8]* %6, i64 0, i64 0
 	%8 = load i8, i8* %7
-	call void @lex_ErrorT(i8 18, i8 %8)
+	call void @lex_ErrorT(i8 19, i8 %8)
 	%9 = load [0 x i8]*, [0 x i8]** %toklist
 	%10 = call i8 @lex_Skip([0 x i8]* %9)
 	store i8 %10, i8* %tok
@@ -3747,66 +3748,66 @@ return:
 @target_Model64BEA = internal constant %target.ModelT { i8 1, i8 1, i8 64, i8 1, i8 5, %target.SizeAlign { i8 64, i8 64 }, [6 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 32 }, %target.SizeAlign { i8 64, i8 64 }, %target.SizeAlign { i8 128, i8 128 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
 @target_Model16LEA = internal constant %target.ModelT { i8 2, i8 2, i8 16, i8 1, i8 3, %target.SizeAlign { i8 16, i8 16 }, [6 x %target.SizeAlign] [ %target.SizeAlign { i8 8, i8 8 }, %target.SizeAlign { i8 16, i8 16 }, %target.SizeAlign { i8 32, i8 16 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 }, %target.SizeAlign { i8 0, i8 0 } ] }, align 1
 %target.TargetT = type {[0 x i8]*, [0 x i8]*, %target.ModelT*}
-@S.292 = private unnamed_addr constant [4 x i8] c"x86\00"
-@S.293 = private unnamed_addr constant [23 x i8] c"i386-unknown-linux-gnu\00"
-@S.295 = private unnamed_addr constant [5 x i8] c"i386\00"
-@S.296 = private unnamed_addr constant [23 x i8] c"i386-unknown-linux-gnu\00"
-@S.298 = private unnamed_addr constant [5 x i8] c"i486\00"
-@S.299 = private unnamed_addr constant [23 x i8] c"i486-unknown-linux-gnu\00"
-@S.301 = private unnamed_addr constant [5 x i8] c"i586\00"
-@S.302 = private unnamed_addr constant [23 x i8] c"i586-unknown-linux-gnu\00"
-@S.304 = private unnamed_addr constant [5 x i8] c"i686\00"
-@S.305 = private unnamed_addr constant [23 x i8] c"i686-unknown-linux-gnu\00"
-@S.307 = private unnamed_addr constant [7 x i8] c"x86-64\00"
-@S.308 = private unnamed_addr constant [25 x i8] c"x86_64-unknown-linux-gnu\00"
-@S.310 = private unnamed_addr constant [7 x i8] c"x86_64\00"
-@S.311 = private unnamed_addr constant [25 x i8] c"x86_64-unknown-linux-gnu\00"
-@S.313 = private unnamed_addr constant [14 x i8] c"x86_64-darwin\00"
-@S.314 = private unnamed_addr constant [22 x i8] c"x86_64-apple-darwin10\00"
-@S.316 = private unnamed_addr constant [10 x i8] c"cortex-m0\00"
-@S.317 = private unnamed_addr constant [25 x i8] c"thumbv6m-unknown-unknown\00"
-@S.319 = private unnamed_addr constant [10 x i8] c"cortex-m3\00"
-@S.320 = private unnamed_addr constant [25 x i8] c"thumbv7m-unknown-unknown\00"
-@S.322 = private unnamed_addr constant [16 x i8] c"cortex-m3-align\00"
-@S.323 = private unnamed_addr constant [25 x i8] c"thumbv7m-unknown-unknown\00"
-@S.325 = private unnamed_addr constant [10 x i8] c"cortex-m4\00"
-@S.326 = private unnamed_addr constant [25 x i8] c"thumbv7m-unknown-unknown\00"
-@S.328 = private unnamed_addr constant [7 x i8] c"armv7l\00"
-@S.329 = private unnamed_addr constant [28 x i8] c"arm-unknown-linux-gnueabihf\00"
-@S.331 = private unnamed_addr constant [8 x i8] c"arm920t\00"
-@S.332 = private unnamed_addr constant [22 x i8] c"thumb-unknown-unknown\00"
-@S.334 = private unnamed_addr constant [5 x i8] c"mips\00"
-@S.335 = private unnamed_addr constant [21 x i8] c"mips-unknown-unknown\00"
-@S.337 = private unnamed_addr constant [7 x i8] c"mipsle\00"
-@S.338 = private unnamed_addr constant [21 x i8] c"mips-unknown-unknown\00"
-@S.340 = private unnamed_addr constant [6 x i8] c"xcore\00"
-@S.341 = private unnamed_addr constant [22 x i8] c"xcore-unknown-unknown\00"
-@S.343 = private unnamed_addr constant [5 x i8] c"bfin\00"
-@S.344 = private unnamed_addr constant [21 x i8] c"bfin-unknown-unknown\00"
-@S.346 = private unnamed_addr constant [6 x i8] c"ppc32\00"
-@S.347 = private unnamed_addr constant [20 x i8] c"ppc32-unknown-linux\00"
-@S.349 = private unnamed_addr constant [6 x i8] c"ppc64\00"
-@S.350 = private unnamed_addr constant [20 x i8] c"ppc64-unknown-linux\00"
-@S.352 = private unnamed_addr constant [6 x i8] c"s390x\00"
-@S.353 = private unnamed_addr constant [22 x i8] c"systemz-unknown-linux\00"
-@S.355 = private unnamed_addr constant [8 x i8] c"systemz\00"
-@S.356 = private unnamed_addr constant [22 x i8] c"systemz-unknown-linux\00"
-@S.358 = private unnamed_addr constant [8 x i8] c"aarch64\00"
-@S.359 = private unnamed_addr constant [22 x i8] c"aarch64-unknown-linux\00"
-@S.361 = private unnamed_addr constant [6 x i8] c"riscv\00"
-@S.362 = private unnamed_addr constant [20 x i8] c"riscv-unknown-linux\00"
-@S.364 = private unnamed_addr constant [8 x i8] c"riscv64\00"
-@S.365 = private unnamed_addr constant [22 x i8] c"riscv64-unknown-linux\00"
-@S.367 = private unnamed_addr constant [7 x i8] c"msp430\00"
-@S.368 = private unnamed_addr constant [23 x i8] c"msp430-generic-generic\00"
-@target_Targets = internal constant [26 x %target.TargetT] [ %target.TargetT { [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.292 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.293 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.295 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.296 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.298 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.299 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.301 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.302 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.304 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.305 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.307 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.308 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.310 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.311 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [14 x i8]* getelementptr( [14 x i8], [14 x i8]* @S.313 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.314 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.316 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.317 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.319 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.320 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [16 x i8]* getelementptr( [16 x i8], [16 x i8]* @S.322 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.323 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.325 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.326 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.328 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.329 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEF )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.331 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.332 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.334 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8], [21 x i8]* @S.335 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32BEA )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.337 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8], [21 x i8]* @S.338 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.340 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.341 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.343 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8], [21 x i8]* @S.344 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.346 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.347 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32BEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.349 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.350 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.352 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.353 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.355 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.356 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.358 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.359 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.361 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.362 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.364 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.365 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.367 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.368 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model16LEA )  } ], align 8
+@S.293 = private unnamed_addr constant [4 x i8] c"x86\00"
+@S.294 = private unnamed_addr constant [23 x i8] c"i386-unknown-linux-gnu\00"
+@S.296 = private unnamed_addr constant [5 x i8] c"i386\00"
+@S.297 = private unnamed_addr constant [23 x i8] c"i386-unknown-linux-gnu\00"
+@S.299 = private unnamed_addr constant [5 x i8] c"i486\00"
+@S.300 = private unnamed_addr constant [23 x i8] c"i486-unknown-linux-gnu\00"
+@S.302 = private unnamed_addr constant [5 x i8] c"i586\00"
+@S.303 = private unnamed_addr constant [23 x i8] c"i586-unknown-linux-gnu\00"
+@S.305 = private unnamed_addr constant [5 x i8] c"i686\00"
+@S.306 = private unnamed_addr constant [23 x i8] c"i686-unknown-linux-gnu\00"
+@S.308 = private unnamed_addr constant [7 x i8] c"x86-64\00"
+@S.309 = private unnamed_addr constant [25 x i8] c"x86_64-unknown-linux-gnu\00"
+@S.311 = private unnamed_addr constant [7 x i8] c"x86_64\00"
+@S.312 = private unnamed_addr constant [25 x i8] c"x86_64-unknown-linux-gnu\00"
+@S.314 = private unnamed_addr constant [14 x i8] c"x86_64-darwin\00"
+@S.315 = private unnamed_addr constant [22 x i8] c"x86_64-apple-darwin10\00"
+@S.317 = private unnamed_addr constant [10 x i8] c"cortex-m0\00"
+@S.318 = private unnamed_addr constant [25 x i8] c"thumbv6m-unknown-unknown\00"
+@S.320 = private unnamed_addr constant [10 x i8] c"cortex-m3\00"
+@S.321 = private unnamed_addr constant [25 x i8] c"thumbv7m-unknown-unknown\00"
+@S.323 = private unnamed_addr constant [16 x i8] c"cortex-m3-align\00"
+@S.324 = private unnamed_addr constant [25 x i8] c"thumbv7m-unknown-unknown\00"
+@S.326 = private unnamed_addr constant [10 x i8] c"cortex-m4\00"
+@S.327 = private unnamed_addr constant [25 x i8] c"thumbv7m-unknown-unknown\00"
+@S.329 = private unnamed_addr constant [7 x i8] c"armv7l\00"
+@S.330 = private unnamed_addr constant [28 x i8] c"arm-unknown-linux-gnueabihf\00"
+@S.332 = private unnamed_addr constant [8 x i8] c"arm920t\00"
+@S.333 = private unnamed_addr constant [22 x i8] c"thumb-unknown-unknown\00"
+@S.335 = private unnamed_addr constant [5 x i8] c"mips\00"
+@S.336 = private unnamed_addr constant [21 x i8] c"mips-unknown-unknown\00"
+@S.338 = private unnamed_addr constant [7 x i8] c"mipsle\00"
+@S.339 = private unnamed_addr constant [21 x i8] c"mips-unknown-unknown\00"
+@S.341 = private unnamed_addr constant [6 x i8] c"xcore\00"
+@S.342 = private unnamed_addr constant [22 x i8] c"xcore-unknown-unknown\00"
+@S.344 = private unnamed_addr constant [5 x i8] c"bfin\00"
+@S.345 = private unnamed_addr constant [21 x i8] c"bfin-unknown-unknown\00"
+@S.347 = private unnamed_addr constant [6 x i8] c"ppc32\00"
+@S.348 = private unnamed_addr constant [20 x i8] c"ppc32-unknown-linux\00"
+@S.350 = private unnamed_addr constant [6 x i8] c"ppc64\00"
+@S.351 = private unnamed_addr constant [20 x i8] c"ppc64-unknown-linux\00"
+@S.353 = private unnamed_addr constant [6 x i8] c"s390x\00"
+@S.354 = private unnamed_addr constant [22 x i8] c"systemz-unknown-linux\00"
+@S.356 = private unnamed_addr constant [8 x i8] c"systemz\00"
+@S.357 = private unnamed_addr constant [22 x i8] c"systemz-unknown-linux\00"
+@S.359 = private unnamed_addr constant [8 x i8] c"aarch64\00"
+@S.360 = private unnamed_addr constant [22 x i8] c"aarch64-unknown-linux\00"
+@S.362 = private unnamed_addr constant [6 x i8] c"riscv\00"
+@S.363 = private unnamed_addr constant [20 x i8] c"riscv-unknown-linux\00"
+@S.365 = private unnamed_addr constant [8 x i8] c"riscv64\00"
+@S.366 = private unnamed_addr constant [22 x i8] c"riscv64-unknown-linux\00"
+@S.368 = private unnamed_addr constant [7 x i8] c"msp430\00"
+@S.369 = private unnamed_addr constant [23 x i8] c"msp430-generic-generic\00"
+@target_Targets = internal constant [26 x %target.TargetT] [ %target.TargetT { [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.293 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.294 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.296 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.297 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.299 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.300 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.302 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.303 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.305 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.306 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.308 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.309 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.311 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.312 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [14 x i8]* getelementptr( [14 x i8], [14 x i8]* @S.314 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.315 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.317 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.318 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.320 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.321 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [16 x i8]* getelementptr( [16 x i8], [16 x i8]* @S.323 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.324 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [10 x i8]* getelementptr( [10 x i8], [10 x i8]* @S.326 )  to [0 x i8]* ), [0 x i8]* bitcast( [25 x i8]* getelementptr( [25 x i8], [25 x i8]* @S.327 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.329 )  to [0 x i8]* ), [0 x i8]* bitcast( [28 x i8]* getelementptr( [28 x i8], [28 x i8]* @S.330 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEF )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.332 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.333 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.335 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8], [21 x i8]* @S.336 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32BEA )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.338 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8], [21 x i8]* @S.339 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.341 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.342 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.344 )  to [0 x i8]* ), [0 x i8]* bitcast( [21 x i8]* getelementptr( [21 x i8], [21 x i8]* @S.345 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.347 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.348 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32BEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.350 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.351 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.353 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.354 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.356 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.357 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64BEA )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.359 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.360 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.362 )  to [0 x i8]* ), [0 x i8]* bitcast( [20 x i8]* getelementptr( [20 x i8], [20 x i8]* @S.363 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model32LEU )  }, %target.TargetT { [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.365 )  to [0 x i8]* ), [0 x i8]* bitcast( [22 x i8]* getelementptr( [22 x i8], [22 x i8]* @S.366 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model64LEU )  }, %target.TargetT { [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.368 )  to [0 x i8]* ), [0 x i8]* bitcast( [23 x i8]* getelementptr( [23 x i8], [23 x i8]* @S.369 )  to [0 x i8]* ), %target.ModelT* getelementptr( %target.ModelT, %target.ModelT* @target_Model16LEA )  } ], align 8
 @target_Target = internal global %target.ModelT* zeroinitializer, align 8
-@S.369 = private unnamed_addr constant [42 x i8] c"Supported targets and generated triples:\0A\00"
-@S.370 = private unnamed_addr constant [3 x i8] c": \00"
+@S.370 = private unnamed_addr constant [42 x i8] c"Supported targets and generated triples:\0A\00"
+@S.371 = private unnamed_addr constant [3 x i8] c": \00"
 define internal void @target_list() nounwind {
 L.0:
 	%i = alloca i64
-	%0 = getelementptr [42 x i8], [42 x i8]* @S.369
+	%0 = getelementptr [42 x i8], [42 x i8]* @S.370
 	%1 = bitcast [42 x i8]* %0 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %1)
 	store i64 0, i64* %i
@@ -3823,7 +3824,7 @@ L.3:
 	%8 = load [0 x i8]*, [0 x i8]** %7
 	%9 = bitcast [0 x i8]* %8 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %9)
-	%10 = getelementptr [3 x i8], [3 x i8]* @S.370
+	%10 = getelementptr [3 x i8], [3 x i8]* @S.371
 	%11 = bitcast [3 x i8]* %10 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %11)
 	%12 = load i64, i64* %i
@@ -4162,7 +4163,7 @@ return:
 @symb_libdel = internal global %symb.SymbNode* zeroinitializer, align 8
 %symb.symblist = type {%symb.SymbNode*, %symb.SymbNode*, %symb.SymbNode*}
 @symb_symbs = internal global [32 x %symb.symblist] zeroinitializer, align 8
-@S.371 = private unnamed_addr constant [2 x i8] c"_\00"
+@S.372 = private unnamed_addr constant [2 x i8] c"_\00"
 define internal zeroext i8 @symb_IsAnon([0 x i8]* %id$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -4170,7 +4171,7 @@ L.0:
 	store [0 x i8]* %id$, [0 x i8]** %id
 	%0 = load [0 x i8]*, [0 x i8]** %id
 	%1 = bitcast [0 x i8]* %0 to [0 x i8]*
-	%2 = getelementptr [2 x i8], [2 x i8]* @S.371
+	%2 = getelementptr [2 x i8], [2 x i8]* @S.372
 	%3 = bitcast [2 x i8]* %2 to [0 x i8]*
 	%4 = call i8 @zstr_eq([0 x i8]* %1, [0 x i8]* %3, i64 255)
 	store i8 %4, i8* %rv.0
@@ -4415,7 +4416,7 @@ L.11:
 	br label %return
 L.12:
 	%30 = load [0 x i8]*, [0 x i8]** %name
-	call void @lex_ErrorI(i8 21, [0 x i8]* %30)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %30)
 	br label %L.10
 L.10:
 	br label %L.8
@@ -4502,7 +4503,7 @@ return:
 	%78 = load %symb.SymbNode*, %symb.SymbNode** %rv.0
 	ret %symb.SymbNode* %78
 }
-@S.372 = private unnamed_addr constant [2 x i8] c"/\00"
+@S.373 = private unnamed_addr constant [2 x i8] c"/\00"
 define internal %symb.SymbNode* @symb_NewFile([0 x i8]* %path$, [0 x i8]* %file$) nounwind {
 L.0:
 	%rv.0 = alloca %symb.SymbNode*
@@ -4517,7 +4518,7 @@ L.0:
 	%2 = bitcast [0 x i8]* %1 to [0 x i8]*
 	call void @zstr_copy([0 x i8]* %0, [0 x i8]* %2, i64 1024)
 	%3 = bitcast [1024 x i8]* %full to [0 x i8]*
-	%4 = getelementptr [2 x i8], [2 x i8]* @S.372
+	%4 = getelementptr [2 x i8], [2 x i8]* @S.373
 	%5 = bitcast [2 x i8]* %4 to [0 x i8]*
 	call void @zstr_cat([0 x i8]* %3, [0 x i8]* %5, i64 1024)
 	%6 = bitcast [1024 x i8]* %full to [0 x i8]*
@@ -4978,10 +4979,10 @@ L.5:
 		i64 3, label %L.9
 	]
 L.8:
-	call void @lex_Error(i8 27)
+	call void @lex_Error(i8 28)
 	br label %L.7
 L.9:
-	call void @lex_Error(i8 74)
+	call void @lex_Error(i8 75)
 	br label %L.7
 L.6:
 	br label %L.7
@@ -4991,7 +4992,7 @@ L.4:
 	br label %L.1
 L.3:
 	%11 = load [0 x i8]*, [0 x i8]** %name
-	call void @lex_ErrorI(i8 20, [0 x i8]* %11)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %11)
 	br label %L.1
 L.1:
 	%12 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -5226,8 +5227,8 @@ return:
 	%38 = load %symb.SymbNode*, %symb.SymbNode** %rv.0
 	ret %symb.SymbNode* %38
 }
-@S.374 = private unnamed_addr constant [4 x i8] c"In \00"
-@S.375 = private unnamed_addr constant [10 x i8] c" unused: \00"
+@S.375 = private unnamed_addr constant [4 x i8] c"In \00"
+@S.376 = private unnamed_addr constant [10 x i8] c" unused: \00"
 define internal void @symb_Pop() nounwind {
 L.0:
 	%0 = load i8, i8* @symb_level
@@ -5276,7 +5277,7 @@ L.12:
 	%25 = phi i1 [ false, %L.10 ], [ %24, %L.11 ]
 	br i1 %25, label %L.14, label %L.13
 L.14:
-	%26 = getelementptr [4 x i8], [4 x i8]* @S.374
+	%26 = getelementptr [4 x i8], [4 x i8]* @S.375
 	%27 = bitcast [4 x i8]* %26 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %27)
 	%28 = load %symb.SymbNode*, %symb.SymbNode** @symb_curpack
@@ -5296,7 +5297,7 @@ L.15:
 	%36 = getelementptr [0 x i8], [0 x i8]* %35
 	%37 = bitcast [0 x i8]* %36 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %37)
-	%38 = getelementptr [10 x i8], [10 x i8]* @S.375
+	%38 = getelementptr [10 x i8], [10 x i8]* @S.376
 	%39 = bitcast [10 x i8]* %38 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %39)
 	%40 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -6324,7 +6325,7 @@ L.13:
 	store %ast.AstNode* %15, %ast.AstNode** %tree
 	br label %L.12
 L.11:
-	call void @lex_Error(i8 50)
+	call void @lex_Error(i8 51)
 	br label %L.12
 L.12:
 	br label %L.4
@@ -6389,7 +6390,7 @@ L.23:
 	store %type.TypeNode* %47, %type.TypeNode** %49
 	br label %L.22
 L.24:
-	call void @lex_Error(i8 50)
+	call void @lex_Error(i8 51)
 	br label %L.22
 L.22:
 	br label %L.15
@@ -6406,7 +6407,7 @@ L.19:
 	store i32 %55, i32* %57
 	br label %L.15
 L.14:
-	call void @lex_Error(i8 50)
+	call void @lex_Error(i8 51)
 	br label %L.15
 L.15:
 	br label %L.4
@@ -6428,7 +6429,7 @@ L.27:
 	store %ast.AstNode* %66, %ast.AstNode** %tree
 	br label %L.26
 L.25:
-	call void @lex_Error(i8 50)
+	call void @lex_Error(i8 51)
 	br label %L.26
 L.26:
 	br label %L.4
@@ -6453,7 +6454,7 @@ L.29:
 	store i32 %78, i32* %80
 	br label %L.28
 L.30:
-	call void @lex_Error(i8 50)
+	call void @lex_Error(i8 51)
 	br label %L.28
 L.28:
 	br label %L.4
@@ -6555,12 +6556,12 @@ L.43:
 	store i32 %141, i32* %143
 	br label %L.42
 L.44:
-	call void @lex_Error(i8 50)
+	call void @lex_Error(i8 51)
 	br label %L.42
 L.42:
 	br label %L.32
 L.31:
-	call void @lex_Error(i8 50)
+	call void @lex_Error(i8 51)
 	br label %L.32
 L.32:
 	br label %L.4
@@ -6588,7 +6589,7 @@ L.48:
 	store %ast.AstNode* %157, %ast.AstNode** %tree
 	br label %L.47
 L.49:
-	call void @lex_Error(i8 50)
+	call void @lex_Error(i8 51)
 	br label %L.47
 L.47:
 	br label %L.4
@@ -6625,7 +6626,7 @@ L.2:
 	%11 = phi i1 [ false, %L.0 ], [ %10, %L.1 ]
 	br i1 %11, label %L.4, label %L.3
 L.4:
-	call void @lex_Error(i8 48)
+	call void @lex_Error(i8 49)
 	br label %L.3
 L.3:
 	%12 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -6693,7 +6694,7 @@ return:
 	%10 = load i64, i64* %rv.0
 	ret i64 %10
 }
-@S.377 = private unnamed_addr constant [26 x i8] c"Unhandled unary operation\00"
+@S.378 = private unnamed_addr constant [26 x i8] c"Unhandled unary operation\00"
 define internal %ast.AstNode* @ast_OpUnary(i8 zeroext %op$, %ast.AstNode* %rhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -6845,9 +6846,9 @@ L.14:
 	store i64 %80, i64* %82
 	br label %L.7
 L.6:
-	%83 = getelementptr [26 x i8], [26 x i8]* @S.377
+	%83 = getelementptr [26 x i8], [26 x i8]* @S.378
 	%84 = bitcast [26 x i8]* %83 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %84)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %84)
 	br label %L.7
 L.7:
 	%85 = load %ast.AstNode*, %ast.AstNode** %rhs
@@ -7089,6 +7090,7 @@ L.0:
 	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
 	store %type.TypeNode* %t$, %type.TypeNode** %t
 	%tree = alloca %ast.AstNode*
+	%scale = alloca i64
 	store %ast.AstNode* null, %ast.AstNode** %tree
 	%0 = load %ast.AstNode*, %ast.AstNode** %lhs
 	%1 = icmp ne %ast.AstNode* %0, null
@@ -7101,143 +7103,122 @@ L.2:
 	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
 	br i1 %4, label %L.4, label %L.3
 L.4:
-	%scale = alloca i64
 	%5 = load %type.TypeNode*, %type.TypeNode** %t
-	%6 = icmp ne %type.TypeNode* %5, null
-	br i1 %6, label %L.6, label %L.7
+	%6 = icmp eq %type.TypeNode* %5, null
+	br i1 %6, label %L.6, label %L.5
 L.6:
-	%7 = load %type.TypeNode*, %type.TypeNode** %t
-	%8 = getelementptr %type.TypeNode, %type.TypeNode* %7, i64 0, i32 12
-	%9 = load i16, i16* %8
-	%10 = sext i16 %9 to i64
-	store i64 %10, i64* %scale
-	br label %L.5
-L.7:
-	%11 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%12 = getelementptr %ast.AstNode, %ast.AstNode* %11, i64 0, i32 8
-	%13 = load %type.TypeNode*, %type.TypeNode** %12
-	%14 = getelementptr %type.TypeNode, %type.TypeNode* %13, i64 0, i32 12
-	%15 = load i16, i16* %14
-	%16 = sext i16 %15 to i64
-	store i64 %16, i64* %scale
+	%7 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%8 = getelementptr %ast.AstNode, %ast.AstNode* %7, i64 0, i32 8
+	%9 = load %type.TypeNode*, %type.TypeNode** %8
+	store %type.TypeNode* %9, %type.TypeNode** %t
 	br label %L.5
 L.5:
-	%17 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%18 = getelementptr %ast.AstNode, %ast.AstNode* %17, i64 0, i32 4
-	%19 = load i16, i16* %18
-	%20 = icmp ne i16 %19, 0
-	br i1 %20, label %L.9, label %L.8
+	%10 = load %type.TypeNode*, %type.TypeNode** %t
+	%11 = getelementptr %type.TypeNode, %type.TypeNode* %10, i64 0, i32 12
+	%12 = load i16, i16* %11
+	%13 = sext i16 %12 to i64
+	store i64 %13, i64* %scale
+	%14 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%15 = getelementptr %ast.AstNode, %ast.AstNode* %14, i64 0, i32 8
+	%16 = load %type.TypeNode*, %type.TypeNode** %15
+	%17 = getelementptr %type.TypeNode, %type.TypeNode* %16, i64 0, i32 12
+	%18 = load i16, i16* %17
+	%19 = sext i16 %18 to i64
+	%20 = load i64, i64* %scale
+	%21 = icmp ne i64 %19, %20
+	br i1 %21, label %L.8, label %L.7
 L.8:
-	%21 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%22 = getelementptr %ast.AstNode, %ast.AstNode* %21, i64 0, i32 8
-	%23 = load %type.TypeNode*, %type.TypeNode** %22
-	%24 = getelementptr %type.TypeNode, %type.TypeNode* %23, i64 0, i32 12
-	%25 = load i16, i16* %24
-	%26 = sext i16 %25 to i64
-	%27 = load i64, i64* %scale
-	%28 = icmp ne i64 %26, %27
-	br label %L.9
-L.9:
-	%29 = phi i1 [ true, %L.5 ], [ %28, %L.8 ]
-	br i1 %29, label %L.11, label %L.10
-L.11:
-	%30 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%31 = load %type.TypeNode*, %type.TypeNode** %t
-	%32 = call %ast.AstNode* @ast_AdjustFixed(%ast.AstNode* %30, %type.TypeNode* %31)
-	store %ast.AstNode* %32, %ast.AstNode** %lhs
-	br label %L.10
+	%22 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%23 = load %type.TypeNode*, %type.TypeNode** %t
+	%24 = call %ast.AstNode* @ast_AdjustFixed(%ast.AstNode* %22, %type.TypeNode* %23)
+	store %ast.AstNode* %24, %ast.AstNode** %lhs
+	br label %L.7
+L.7:
+	%25 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%26 = getelementptr %ast.AstNode, %ast.AstNode* %25, i64 0, i32 8
+	%27 = load %type.TypeNode*, %type.TypeNode** %26
+	%28 = getelementptr %type.TypeNode, %type.TypeNode* %27, i64 0, i32 12
+	%29 = load i16, i16* %28
+	%30 = sext i16 %29 to i64
+	%31 = load i64, i64* %scale
+	%32 = icmp ne i64 %30, %31
+	br i1 %32, label %L.10, label %L.9
 L.10:
 	%33 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%34 = getelementptr %ast.AstNode, %ast.AstNode* %33, i64 0, i32 4
-	%35 = load i16, i16* %34
-	%36 = icmp ne i16 %35, 0
-	br i1 %36, label %L.13, label %L.12
+	%34 = load %type.TypeNode*, %type.TypeNode** %t
+	%35 = call %ast.AstNode* @ast_AdjustFixed(%ast.AstNode* %33, %type.TypeNode* %34)
+	store %ast.AstNode* %35, %ast.AstNode** %rhs
+	br label %L.9
+L.9:
+	%36 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%37 = getelementptr %ast.AstNode, %ast.AstNode* %36, i64 0, i32 0
+	%38 = load i8, i8* %37
+	%39 = icmp eq i8 %38, 6
+	br i1 %39, label %L.11, label %L.12
+L.11:
+	%40 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%41 = getelementptr %ast.AstNode, %ast.AstNode* %40, i64 0, i32 0
+	%42 = load i8, i8* %41
+	%43 = icmp eq i8 %42, 6
+	br label %L.12
 L.12:
-	%37 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%38 = getelementptr %ast.AstNode, %ast.AstNode* %37, i64 0, i32 8
-	%39 = load %type.TypeNode*, %type.TypeNode** %38
-	%40 = getelementptr %type.TypeNode, %type.TypeNode* %39, i64 0, i32 12
-	%41 = load i16, i16* %40
-	%42 = sext i16 %41 to i64
-	%43 = load i64, i64* %scale
-	%44 = icmp ne i64 %42, %43
-	br label %L.13
-L.13:
-	%45 = phi i1 [ true, %L.10 ], [ %44, %L.12 ]
-	br i1 %45, label %L.15, label %L.14
-L.15:
-	%46 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%47 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%48 = getelementptr %ast.AstNode, %ast.AstNode* %47, i64 0, i32 8
-	%49 = load %type.TypeNode*, %type.TypeNode** %48
-	%50 = call %ast.AstNode* @ast_AdjustFixed(%ast.AstNode* %46, %type.TypeNode* %49)
-	store %ast.AstNode* %50, %ast.AstNode** %rhs
-	br label %L.14
+	%44 = phi i1 [ false, %L.9 ], [ %43, %L.11 ]
+	br i1 %44, label %L.14, label %L.15
 L.14:
-	%51 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%52 = getelementptr %ast.AstNode, %ast.AstNode* %51, i64 0, i32 0
-	%53 = load i8, i8* %52
-	%54 = icmp eq i8 %53, 6
-	br i1 %54, label %L.16, label %L.17
+	%45 = load i8, i8* %op
+	%46 = zext i8 %45 to i64
+	switch i64 %46, label %L.16 [
+		i64 53, label %L.18
+		i64 54, label %L.19
+	]
+L.18:
+	%47 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%48 = getelementptr %ast.AstNode, %ast.AstNode* %47, i64 0, i32 10
+	%49 = load i64, i64* %48
+	%50 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%51 = getelementptr %ast.AstNode, %ast.AstNode* %50, i64 0, i32 10
+	%52 = load i64, i64* %51
+	%53 = add i64 %49, %52
+	store i64 %53, i64* %48
+	br label %L.17
+L.19:
+	%54 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%55 = getelementptr %ast.AstNode, %ast.AstNode* %54, i64 0, i32 10
+	%56 = load i64, i64* %55
+	%57 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%58 = getelementptr %ast.AstNode, %ast.AstNode* %57, i64 0, i32 10
+	%59 = load i64, i64* %58
+	%60 = sub i64 %56, %59
+	store i64 %60, i64* %55
+	br label %L.17
 L.16:
-	%55 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%56 = getelementptr %ast.AstNode, %ast.AstNode* %55, i64 0, i32 0
-	%57 = load i8, i8* %56
-	%58 = icmp eq i8 %57, 6
 	br label %L.17
 L.17:
-	%59 = phi i1 [ false, %L.14 ], [ %58, %L.16 ]
-	br i1 %59, label %L.19, label %L.20
-L.19:
-	%60 = load i8, i8* %op
-	%61 = zext i8 %60 to i64
-	switch i64 %61, label %L.21 [
-		i64 53, label %L.23
-		i64 54, label %L.24
-	]
-L.23:
-	%62 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%63 = getelementptr %ast.AstNode, %ast.AstNode* %62, i64 0, i32 10
-	%64 = load i64, i64* %63
+	%61 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%62 = call %ast.AstNode* @ast_Dup(%ast.AstNode* %61)
+	store %ast.AstNode* %62, %ast.AstNode** %tree
+	br label %L.13
+L.15:
+	%63 = load i8, i8* %op
+	%64 = load %ast.AstNode*, %ast.AstNode** %lhs
 	%65 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%66 = getelementptr %ast.AstNode, %ast.AstNode* %65, i64 0, i32 10
-	%67 = load i64, i64* %66
-	%68 = add i64 %64, %67
-	store i64 %68, i64* %63
-	br label %L.22
-L.24:
-	%69 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%70 = getelementptr %ast.AstNode, %ast.AstNode* %69, i64 0, i32 10
-	%71 = load i64, i64* %70
-	%72 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%73 = getelementptr %ast.AstNode, %ast.AstNode* %72, i64 0, i32 10
-	%74 = load i64, i64* %73
-	%75 = sub i64 %71, %74
-	store i64 %75, i64* %70
-	br label %L.22
-L.21:
-	br label %L.22
-L.22:
-	%76 = load %ast.AstNode*, %ast.AstNode** %lhs
-	store %ast.AstNode* %76, %ast.AstNode** %tree
-	br label %L.18
-L.20:
-	%77 = load i8, i8* %op
-	%78 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%79 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%80 = load %type.TypeNode*, %type.TypeNode** %t
-	%81 = call %ast.AstNode* @ast_OpBinary(i8 %77, %ast.AstNode* %78, %ast.AstNode* %79, %type.TypeNode* %80)
-	store %ast.AstNode* %81, %ast.AstNode** %tree
-	br label %L.18
-L.18:
+	%66 = load %type.TypeNode*, %type.TypeNode** %t
+	%67 = call %ast.AstNode* @ast_OpBinary(i8 %63, %ast.AstNode* %64, %ast.AstNode* %65, %type.TypeNode* %66)
+	store %ast.AstNode* %67, %ast.AstNode** %tree
+	br label %L.13
+L.13:
+	%68 = load %type.TypeNode*, %type.TypeNode** %t
+	%69 = load %ast.AstNode*, %ast.AstNode** %tree
+	%70 = getelementptr %ast.AstNode, %ast.AstNode* %69, i64 0, i32 8
+	store %type.TypeNode* %68, %type.TypeNode** %70
 	br label %L.3
 L.3:
-	%82 = load %ast.AstNode*, %ast.AstNode** %tree
-	store %ast.AstNode* %82, %ast.AstNode** %rv.0
+	%71 = load %ast.AstNode*, %ast.AstNode** %tree
+	store %ast.AstNode* %71, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%83 = load %ast.AstNode*, %ast.AstNode** %rv.0
-	ret %ast.AstNode* %83
+	%72 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %72
 }
 define internal %ast.AstNode* @ast_OpShfL(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$, %type.TypeNode* %t$) nounwind {
 L.0:
@@ -7420,6 +7401,9 @@ L.0:
 	store %ast.AstNode* %rhs$, %ast.AstNode** %rhs
 	store %type.TypeNode* %t$, %type.TypeNode** %t
 	%tree = alloca %ast.AstNode*
+	%scale = alloca i64
+	%tscale = alloca i64
+	%twidth = alloca i64
 	store %ast.AstNode* null, %ast.AstNode** %tree
 	%0 = load %ast.AstNode*, %ast.AstNode** %lhs
 	%1 = icmp ne %ast.AstNode* %0, null
@@ -7432,75 +7416,121 @@ L.2:
 	%4 = phi i1 [ false, %L.0 ], [ %3, %L.1 ]
 	br i1 %4, label %L.4, label %L.3
 L.4:
-	%5 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%6 = getelementptr %ast.AstNode, %ast.AstNode* %5, i64 0, i32 0
-	%7 = load i8, i8* %6
-	%8 = icmp eq i8 %7, 6
-	br i1 %8, label %L.5, label %L.6
-L.5:
-	%9 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%10 = getelementptr %ast.AstNode, %ast.AstNode* %9, i64 0, i32 0
-	%11 = load i8, i8* %10
-	%12 = icmp eq i8 %11, 6
-	br label %L.6
+	%5 = load %type.TypeNode*, %type.TypeNode** %t
+	%6 = icmp eq %type.TypeNode* %5, null
+	br i1 %6, label %L.6, label %L.5
 L.6:
-	%13 = phi i1 [ false, %L.4 ], [ %12, %L.5 ]
-	br i1 %13, label %L.8, label %L.9
-L.8:
-	%14 = load i8, i8* %op
-	%15 = zext i8 %14 to i64
-	switch i64 %15, label %L.10 [
-		i64 55, label %L.12
-		i64 78, label %L.13
-		i64 80, label %L.13
-	]
-L.12:
-	%16 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%17 = getelementptr %ast.AstNode, %ast.AstNode* %16, i64 0, i32 10
-	%18 = load i64, i64* %17
-	%19 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%20 = getelementptr %ast.AstNode, %ast.AstNode* %19, i64 0, i32 10
-	%21 = load i64, i64* %20
-	%22 = mul i64 %18, %21
-	%23 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%24 = getelementptr %ast.AstNode, %ast.AstNode* %23, i64 0, i32 10
-	store i64 %22, i64* %24
-	br label %L.11
-L.13:
-	%25 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%26 = getelementptr %ast.AstNode, %ast.AstNode* %25, i64 0, i32 10
-	%27 = load i64, i64* %26
-	%28 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%29 = getelementptr %ast.AstNode, %ast.AstNode* %28, i64 0, i32 10
-	%30 = load i64, i64* %29
-	%31 = shl i64 %27, %30
-	%32 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%33 = getelementptr %ast.AstNode, %ast.AstNode* %32, i64 0, i32 10
-	store i64 %31, i64* %33
-	br label %L.11
-L.10:
-	br label %L.11
-L.11:
-	%34 = load %ast.AstNode*, %ast.AstNode** %lhs
-	store %ast.AstNode* %34, %ast.AstNode** %tree
-	br label %L.7
-L.9:
-	%35 = load i8, i8* %op
-	%36 = load %ast.AstNode*, %ast.AstNode** %lhs
-	%37 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%38 = load %type.TypeNode*, %type.TypeNode** %t
-	%39 = call %ast.AstNode* @ast_OpBinary(i8 %35, %ast.AstNode* %36, %ast.AstNode* %37, %type.TypeNode* %38)
-	store %ast.AstNode* %39, %ast.AstNode** %tree
-	br label %L.7
+	%7 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%8 = getelementptr %ast.AstNode, %ast.AstNode* %7, i64 0, i32 8
+	%9 = load %type.TypeNode*, %type.TypeNode** %8
+	store %type.TypeNode* %9, %type.TypeNode** %t
+	br label %L.5
+L.5:
+	%10 = load %type.TypeNode*, %type.TypeNode** %t
+	%11 = getelementptr %type.TypeNode, %type.TypeNode* %10, i64 0, i32 12
+	%12 = load i16, i16* %11
+	%13 = sext i16 %12 to i64
+	store i64 %13, i64* %scale
+	%14 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%15 = getelementptr %ast.AstNode, %ast.AstNode* %14, i64 0, i32 8
+	%16 = load %type.TypeNode*, %type.TypeNode** %15
+	%17 = getelementptr %type.TypeNode, %type.TypeNode* %16, i64 0, i32 12
+	%18 = load i16, i16* %17
+	%19 = sext i16 %18 to i64
+	%20 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%21 = getelementptr %ast.AstNode, %ast.AstNode* %20, i64 0, i32 8
+	%22 = load %type.TypeNode*, %type.TypeNode** %21
+	%23 = getelementptr %type.TypeNode, %type.TypeNode* %22, i64 0, i32 12
+	%24 = load i16, i16* %23
+	%25 = sext i16 %24 to i64
+	%26 = add i64 %19, %25
+	store i64 %26, i64* %tscale
+	%27 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%28 = getelementptr %ast.AstNode, %ast.AstNode* %27, i64 0, i32 8
+	%29 = load %type.TypeNode*, %type.TypeNode** %28
+	%30 = getelementptr %type.TypeNode, %type.TypeNode* %29, i64 0, i32 9
+	%31 = load i32, i32* %30
+	%32 = zext i32 %31 to i64
+	%33 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%34 = getelementptr %ast.AstNode, %ast.AstNode* %33, i64 0, i32 8
+	%35 = load %type.TypeNode*, %type.TypeNode** %34
+	%36 = getelementptr %type.TypeNode, %type.TypeNode* %35, i64 0, i32 9
+	%37 = load i32, i32* %36
+	%38 = zext i32 %37 to i64
+	%39 = add i64 %32, %38
+	store i64 %39, i64* %twidth
+	%40 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%41 = getelementptr %ast.AstNode, %ast.AstNode* %40, i64 0, i32 0
+	%42 = load i8, i8* %41
+	%43 = icmp eq i8 %42, 6
+	br i1 %43, label %L.7, label %L.8
 L.7:
+	%44 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%45 = getelementptr %ast.AstNode, %ast.AstNode* %44, i64 0, i32 0
+	%46 = load i8, i8* %45
+	%47 = icmp eq i8 %46, 6
+	br label %L.8
+L.8:
+	%48 = phi i1 [ false, %L.5 ], [ %47, %L.7 ]
+	br i1 %48, label %L.10, label %L.11
+L.10:
+	%49 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%50 = getelementptr %ast.AstNode, %ast.AstNode* %49, i64 0, i32 10
+	%51 = load i64, i64* %50
+	%52 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%53 = getelementptr %ast.AstNode, %ast.AstNode* %52, i64 0, i32 10
+	%54 = load i64, i64* %53
+	%55 = mul i64 %51, %54
+	%56 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%57 = getelementptr %ast.AstNode, %ast.AstNode* %56, i64 0, i32 10
+	store i64 %55, i64* %57
+	%58 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%59 = call %ast.AstNode* @ast_Dup(%ast.AstNode* %58)
+	store %ast.AstNode* %59, %ast.AstNode** %tree
+	br label %L.9
+L.11:
+	%60 = load i8, i8* %op
+	%61 = load %ast.AstNode*, %ast.AstNode** %lhs
+	%62 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%63 = load %type.TypeNode*, %type.TypeNode** %t
+	%64 = call %ast.AstNode* @ast_OpBinary(i8 %60, %ast.AstNode* %61, %ast.AstNode* %62, %type.TypeNode* %63)
+	store %ast.AstNode* %64, %ast.AstNode** %tree
+	br label %L.9
+L.9:
+	%65 = load i64, i64* %tscale
+	%66 = load i64, i64* %scale
+	%67 = icmp ne i64 %65, %66
+	br i1 %67, label %L.13, label %L.12
+L.13:
+	%68 = load %ast.AstNode*, %ast.AstNode** %tree
+	%69 = getelementptr %ast.AstNode, %ast.AstNode* %68, i64 0, i32 8
+	%70 = load %type.TypeNode*, %type.TypeNode** %69
+	%71 = getelementptr %type.TypeNode, %type.TypeNode* %70, i64 0, i32 15
+	%72 = load i8, i8* %71
+	%73 = load i64, i64* %twidth
+	%74 = load i64, i64* %tscale
+	%75 = call %type.TypeNode* @type_MakeFixed(i8 %72, i64 %73, i64 %74)
+	%76 = load %ast.AstNode*, %ast.AstNode** %tree
+	%77 = getelementptr %ast.AstNode, %ast.AstNode* %76, i64 0, i32 8
+	store %type.TypeNode* %75, %type.TypeNode** %77
+	%78 = load %ast.AstNode*, %ast.AstNode** %tree
+	%79 = load %type.TypeNode*, %type.TypeNode** %t
+	%80 = call %ast.AstNode* @ast_AdjustFixed(%ast.AstNode* %78, %type.TypeNode* %79)
+	store %ast.AstNode* %80, %ast.AstNode** %tree
+	br label %L.12
+L.12:
+	%81 = load %type.TypeNode*, %type.TypeNode** %t
+	%82 = load %ast.AstNode*, %ast.AstNode** %tree
+	%83 = getelementptr %ast.AstNode, %ast.AstNode* %82, i64 0, i32 8
+	store %type.TypeNode* %81, %type.TypeNode** %83
 	br label %L.3
 L.3:
-	%40 = load %ast.AstNode*, %ast.AstNode** %tree
-	store %ast.AstNode* %40, %ast.AstNode** %rv.0
+	%84 = load %ast.AstNode*, %ast.AstNode** %tree
+	store %ast.AstNode* %84, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%41 = load %ast.AstNode*, %ast.AstNode** %rv.0
-	ret %ast.AstNode* %41
+	%85 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %85
 }
 define internal %ast.AstNode* @ast_OpDiv(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$, %type.TypeNode* %t$) nounwind {
 L.0:
@@ -8151,7 +8181,7 @@ L.0:
 	%5 = icmp ne i8 %4, 4
 	br i1 %5, label %L.2, label %L.1
 L.2:
-	call void @lex_Error(i8 31)
+	call void @lex_Error(i8 32)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.1:
@@ -8392,8 +8422,8 @@ return:
 @ast_AdjustFixedConst_adjpos = internal constant [8 x [8 x i8]] [ [8 x i8] [ i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0 ], [8 x i8] [ i8 0, i8 1, i8 0, i8 1, i8 0, i8 0, i8 0, i8 0 ], [8 x i8] [ i8 0, i8 1, i8 0, i8 1, i8 0, i8 1, i8 0, i8 1 ], [8 x i8] [ i8 0, i8 1, i8 0, i8 1, i8 1, i8 1, i8 1, i8 1 ], [8 x i8] [ i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0 ], [8 x i8] [ i8 0, i8 1, i8 0, i8 1, i8 0, i8 0, i8 0, i8 0 ], [8 x i8] [ i8 0, i8 1, i8 0, i8 1, i8 0, i8 1, i8 1, i8 0 ], [8 x i8] [ i8 0, i8 1, i8 0, i8 1, i8 1, i8 1, i8 1, i8 1 ] ], align 1
 @ast_AdjustFixedConst_adjneg = internal constant [8 x [8 x i8]] [ [8 x i8] [ i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0 ], [8 x i8] [ i8 0, i8 1, i8 1, i8 0, i8 1, i8 1, i8 1, i8 1 ], [8 x i8] [ i8 0, i8 1, i8 1, i8 0, i8 1, i8 0, i8 1, i8 0 ], [8 x i8] [ i8 0, i8 1, i8 1, i8 0, i8 0, i8 0, i8 0, i8 0 ], [8 x i8] [ i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0, i8 0 ], [8 x i8] [ i8 0, i8 1, i8 1, i8 0, i8 1, i8 1, i8 1, i8 1 ], [8 x i8] [ i8 0, i8 1, i8 1, i8 0, i8 1, i8 0, i8 0, i8 1 ], [8 x i8] [ i8 0, i8 1, i8 1, i8 0, i8 0, i8 0, i8 0, i8 0 ] ], align 1
 @ast_AdjustFixedConst_db = internal constant i8 0, align 1
-@S.396 = private unnamed_addr constant [27 x i8] c"negative fixed point scale\00"
-@S.397 = private unnamed_addr constant [29 x i8] c"Larger fixed point fraction\0A\00"
+@S.397 = private unnamed_addr constant [27 x i8] c"negative fixed point scale\00"
+@S.398 = private unnamed_addr constant [29 x i8] c"Larger fixed point fraction\0A\00"
 define internal %ast.AstNode* @ast_AdjustFixedConst(%ast.AstNode* %node$, %type.TypeNode* %to$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -8428,7 +8458,7 @@ L.0:
 	%10 = icmp slt i16 %9, 0
 	br i1 %10, label %L.2, label %L.1
 L.2:
-	%11 = getelementptr [27 x i8], [27 x i8]* @S.396
+	%11 = getelementptr [27 x i8], [27 x i8]* @S.397
 	%12 = bitcast [27 x i8]* %11 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %12)
 	%13 = load %ast.AstNode*, %ast.AstNode** %node
@@ -8501,7 +8531,7 @@ L.11:
 	store %ast.AstNode* %55, %ast.AstNode** %rv.0
 	br label %return
 L.10:
-	%56 = getelementptr [29 x i8], [29 x i8]* @S.397
+	%56 = getelementptr [29 x i8], [29 x i8]* @S.398
 	%57 = bitcast [29 x i8]* %56 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %57)
 	br label %L.7
@@ -8675,8 +8705,9 @@ return:
 	%158 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %158
 }
-@S.398 = private unnamed_addr constant [26 x i8] c"Fixed point rounding mode\00"
+@ast_AdjustFixed_db = internal constant i8 0, align 1
 @S.399 = private unnamed_addr constant [26 x i8] c"Fixed point rounding mode\00"
+@S.400 = private unnamed_addr constant [26 x i8] c"Fixed point rounding mode\00"
 define internal %ast.AstNode* @ast_AdjustFixed(%ast.AstNode* %tree$, %type.TypeNode* %to$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -8829,7 +8860,7 @@ L.20:
 	store %ast.AstNode* %87, %ast.AstNode** %tree
 	br label %L.16
 L.15:
-	%88 = getelementptr [26 x i8], [26 x i8]* @S.398
+	%88 = getelementptr [26 x i8], [26 x i8]* @S.399
 	%89 = bitcast [26 x i8]* %88 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %89)
 	br label %L.16
@@ -8959,7 +8990,7 @@ L.28:
 	store %ast.AstNode* %185, %ast.AstNode** %tree
 	br label %L.22
 L.21:
-	%186 = getelementptr [26 x i8], [26 x i8]* @S.399
+	%186 = getelementptr [26 x i8], [26 x i8]* @S.400
 	%187 = bitcast [26 x i8]* %186 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %187)
 	br label %L.22
@@ -8999,9 +9030,9 @@ return:
 	%206 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %206
 }
-@S.400 = private unnamed_addr constant [34 x i8] c"Ref alignment or endian mismatch\0A\00"
-@S.401 = private unnamed_addr constant [4 x i8] c"fm=\00"
-@S.402 = private unnamed_addr constant [5 x i8] c"\0Ato=\00"
+@S.401 = private unnamed_addr constant [34 x i8] c"Ref alignment or endian mismatch\0A\00"
+@S.402 = private unnamed_addr constant [4 x i8] c"fm=\00"
+@S.403 = private unnamed_addr constant [5 x i8] c"\0Ato=\00"
 define internal %ast.AstNode* @ast_Adjust(%ast.AstNode* %tree$, %type.TypeNode* %to$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -9165,7 +9196,7 @@ L.32:
 	%83 = xor i1 %82, true
 	br i1 %83, label %L.35, label %L.34
 L.35:
-	%84 = getelementptr [34 x i8], [34 x i8]* @S.400
+	%84 = getelementptr [34 x i8], [34 x i8]* @S.401
 	%85 = bitcast [34 x i8]* %84 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %85)
 	br label %L.34
@@ -9413,13 +9444,13 @@ L.4:
 	%216 = xor i1 %215, true
 	br i1 %216, label %L.75, label %L.74
 L.75:
-	call void @lex_Error(i8 42)
-	%217 = getelementptr [4 x i8], [4 x i8]* @S.401
+	call void @lex_Error(i8 43)
+	%217 = getelementptr [4 x i8], [4 x i8]* @S.402
 	%218 = bitcast [4 x i8]* %217 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %218)
 	%219 = load %type.TypeNode*, %type.TypeNode** %fm
 	call void @type_DumpT(%type.TypeNode* %219, i8 0)
-	%220 = getelementptr [5 x i8], [5 x i8]* @S.402
+	%220 = getelementptr [5 x i8], [5 x i8]* @S.403
 	%221 = bitcast [5 x i8]* %220 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %221)
 	%222 = load %type.TypeNode*, %type.TypeNode** %to
@@ -9443,122 +9474,122 @@ L.0:
 return:
 	ret void
 }
-@S.404 = private unnamed_addr constant [5 x i8] c"NULL\00"
-@S.405 = private unnamed_addr constant [4 x i8] c"NOP\00"
-@S.406 = private unnamed_addr constant [5 x i8] c"FILE\00"
-@S.407 = private unnamed_addr constant [8 x i8] c"PACKAGE\00"
-@S.408 = private unnamed_addr constant [7 x i8] c"DCLVAR\00"
-@S.409 = private unnamed_addr constant [7 x i8] c"DCLCON\00"
-@S.410 = private unnamed_addr constant [6 x i8] c"CONST\00"
-@S.411 = private unnamed_addr constant [7 x i8] c"FCONST\00"
-@S.412 = private unnamed_addr constant [7 x i8] c"STRCON\00"
-@S.419 = private unnamed_addr constant [6 x i8] c"CLIST\00"
-@S.418 = private unnamed_addr constant [7 x i8] c"CRANGE\00"
-@S.413 = private unnamed_addr constant [6 x i8] c"FIELD\00"
-@S.414 = private unnamed_addr constant [4 x i8] c"VAR\00"
-@S.421 = private unnamed_addr constant [7 x i8] c"OFFSET\00"
-@S.422 = private unnamed_addr constant [6 x i8] c"INDEX\00"
-@S.423 = private unnamed_addr constant [6 x i8] c"SLICE\00"
-@S.424 = private unnamed_addr constant [6 x i8] c"BYREF\00"
-@S.420 = private unnamed_addr constant [5 x i8] c"CAST\00"
-@S.415 = private unnamed_addr constant [5 x i8] c"CALL\00"
-@S.416 = private unnamed_addr constant [6 x i8] c"CALLI\00"
-@S.417 = private unnamed_addr constant [4 x i8] c"ASM\00"
-@S.425 = private unnamed_addr constant [4 x i8] c"SET\00"
-@S.426 = private unnamed_addr constant [5 x i8] c"COPY\00"
-@S.427 = private unnamed_addr constant [6 x i8] c"ACOPY\00"
-@S.428 = private unnamed_addr constant [4 x i8] c"AEQ\00"
-@S.429 = private unnamed_addr constant [4 x i8] c"ANE\00"
-@S.430 = private unnamed_addr constant [6 x i8] c"GETRV\00"
-@S.431 = private unnamed_addr constant [5 x i8] c"LOAD\00"
-@S.432 = private unnamed_addr constant [6 x i8] c"STORE\00"
-@S.433 = private unnamed_addr constant [5 x i8] c"ZEXT\00"
-@S.434 = private unnamed_addr constant [5 x i8] c"SEXT\00"
-@S.435 = private unnamed_addr constant [6 x i8] c"TRUNC\00"
-@S.436 = private unnamed_addr constant [6 x i8] c"BSWAP\00"
-@S.437 = private unnamed_addr constant [4 x i8] c"NEG\00"
-@S.438 = private unnamed_addr constant [4 x i8] c"NOT\00"
-@S.439 = private unnamed_addr constant [4 x i8] c"ABS\00"
-@S.440 = private unnamed_addr constant [5 x i8] c"SQRT\00"
-@S.441 = private unnamed_addr constant [5 x i8] c"FNEG\00"
-@S.442 = private unnamed_addr constant [6 x i8] c"FCVTL\00"
-@S.443 = private unnamed_addr constant [6 x i8] c"FCVTS\00"
-@S.444 = private unnamed_addr constant [6 x i8] c"CVTUF\00"
-@S.445 = private unnamed_addr constant [6 x i8] c"CVTIF\00"
-@S.446 = private unnamed_addr constant [6 x i8] c"CVTFU\00"
-@S.447 = private unnamed_addr constant [6 x i8] c"CVTFI\00"
-@S.448 = private unnamed_addr constant [4 x i8] c"CLZ\00"
-@S.449 = private unnamed_addr constant [6 x i8] c"CLZNZ\00"
-@S.450 = private unnamed_addr constant [4 x i8] c"CTZ\00"
-@S.451 = private unnamed_addr constant [6 x i8] c"CTZNZ\00"
-@S.452 = private unnamed_addr constant [4 x i8] c"POP\00"
-@S.453 = private unnamed_addr constant [5 x i8] c"ZLEN\00"
-@S.454 = private unnamed_addr constant [4 x i8] c"ROL\00"
-@S.455 = private unnamed_addr constant [4 x i8] c"ROR\00"
-@S.456 = private unnamed_addr constant [4 x i8] c"ADD\00"
-@S.457 = private unnamed_addr constant [4 x i8] c"SUB\00"
-@S.458 = private unnamed_addr constant [4 x i8] c"MUL\00"
-@S.459 = private unnamed_addr constant [4 x i8] c"DIV\00"
-@S.460 = private unnamed_addr constant [4 x i8] c"MOD\00"
-@S.461 = private unnamed_addr constant [3 x i8] c"EQ\00"
-@S.462 = private unnamed_addr constant [3 x i8] c"NE\00"
-@S.463 = private unnamed_addr constant [4 x i8] c"ULT\00"
-@S.464 = private unnamed_addr constant [4 x i8] c"UGT\00"
-@S.465 = private unnamed_addr constant [4 x i8] c"ULE\00"
-@S.466 = private unnamed_addr constant [4 x i8] c"UGE\00"
-@S.467 = private unnamed_addr constant [4 x i8] c"SLT\00"
-@S.468 = private unnamed_addr constant [4 x i8] c"SGT\00"
-@S.469 = private unnamed_addr constant [4 x i8] c"SLE\00"
-@S.470 = private unnamed_addr constant [4 x i8] c"SGE\00"
-@S.471 = private unnamed_addr constant [4 x i8] c"FEQ\00"
-@S.472 = private unnamed_addr constant [4 x i8] c"FNE\00"
-@S.473 = private unnamed_addr constant [4 x i8] c"FLT\00"
-@S.474 = private unnamed_addr constant [4 x i8] c"FGT\00"
-@S.475 = private unnamed_addr constant [4 x i8] c"FLE\00"
-@S.476 = private unnamed_addr constant [4 x i8] c"FGE\00"
-@S.477 = private unnamed_addr constant [5 x i8] c"UMIN\00"
-@S.478 = private unnamed_addr constant [5 x i8] c"UMAX\00"
-@S.479 = private unnamed_addr constant [5 x i8] c"SMIN\00"
-@S.480 = private unnamed_addr constant [5 x i8] c"SMAX\00"
-@S.481 = private unnamed_addr constant [4 x i8] c"LSL\00"
-@S.482 = private unnamed_addr constant [4 x i8] c"LSR\00"
-@S.483 = private unnamed_addr constant [4 x i8] c"ASL\00"
-@S.484 = private unnamed_addr constant [4 x i8] c"ASR\00"
-@S.485 = private unnamed_addr constant [4 x i8] c"AND\00"
-@S.486 = private unnamed_addr constant [3 x i8] c"OR\00"
-@S.487 = private unnamed_addr constant [4 x i8] c"XOR\00"
-@S.488 = private unnamed_addr constant [5 x i8] c"BAND\00"
-@S.489 = private unnamed_addr constant [4 x i8] c"BOR\00"
-@S.490 = private unnamed_addr constant [5 x i8] c"BNOT\00"
-@S.491 = private unnamed_addr constant [5 x i8] c"FADD\00"
-@S.492 = private unnamed_addr constant [5 x i8] c"FSUB\00"
-@S.493 = private unnamed_addr constant [5 x i8] c"FMUL\00"
-@S.494 = private unnamed_addr constant [5 x i8] c"FDIV\00"
-@S.495 = private unnamed_addr constant [5 x i8] c"FREM\00"
-@S.496 = private unnamed_addr constant [7 x i8] c"IFEXPR\00"
-@S.497 = private unnamed_addr constant [4 x i8] c"SEQ\00"
-@S.498 = private unnamed_addr constant [5 x i8] c"LOOP\00"
-@S.499 = private unnamed_addr constant [5 x i8] c"EXIT\00"
-@S.500 = private unnamed_addr constant [3 x i8] c"IF\00"
-@S.501 = private unnamed_addr constant [4 x i8] c"SEL\00"
-@S.502 = private unnamed_addr constant [3 x i8] c"IS\00"
-@S.503 = private unnamed_addr constant [4 x i8] c"RET\00"
-@S.504 = private unnamed_addr constant [5 x i8] c"PROC\00"
-@S.505 = private unnamed_addr constant [7 x i8] c"ASSERT\00"
-@ast_OpName = internal constant [103 x [0 x i8]*] [ [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.404 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.405 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.406 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.407 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.408 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.409 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.410 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.411 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.412 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.419 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.418 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.413 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.414 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.421 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.422 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.423 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.424 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.420 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.415 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.416 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.417 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.425 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.426 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.427 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.428 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.429 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.430 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.431 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.432 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.433 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.434 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.435 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.436 )  to [0 x i8]* ), [0 x i8]* null, [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.437 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.438 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.439 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.440 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.441 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.442 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.443 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.444 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.445 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.446 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.447 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.448 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.449 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.450 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.451 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.452 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.453 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.454 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.455 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.456 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.457 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.458 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.459 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.460 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.461 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.462 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.463 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.464 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.465 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.466 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.467 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.468 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.469 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.470 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.471 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.472 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.473 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.474 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.475 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.476 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.477 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.478 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.479 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.480 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.481 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.482 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.483 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.484 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.485 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.486 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.487 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.488 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.489 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.490 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.491 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.492 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.493 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.494 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.495 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.496 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.497 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.498 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.499 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.500 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.501 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.502 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.503 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.504 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.505 )  to [0 x i8]* ) ], align 8
-@S.506 = private unnamed_addr constant [5 x i8] c"(sz=\00"
-@S.507 = private unnamed_addr constant [5 x i8] c" ln=\00"
-@S.508 = private unnamed_addr constant [5 x i8] c" nc=\00"
-@S.509 = private unnamed_addr constant [6 x i8] c" val=\00"
+@S.405 = private unnamed_addr constant [5 x i8] c"NULL\00"
+@S.406 = private unnamed_addr constant [4 x i8] c"NOP\00"
+@S.407 = private unnamed_addr constant [5 x i8] c"FILE\00"
+@S.408 = private unnamed_addr constant [8 x i8] c"PACKAGE\00"
+@S.409 = private unnamed_addr constant [7 x i8] c"DCLVAR\00"
+@S.410 = private unnamed_addr constant [7 x i8] c"DCLCON\00"
+@S.411 = private unnamed_addr constant [6 x i8] c"CONST\00"
+@S.412 = private unnamed_addr constant [7 x i8] c"FCONST\00"
+@S.413 = private unnamed_addr constant [7 x i8] c"STRCON\00"
+@S.420 = private unnamed_addr constant [6 x i8] c"CLIST\00"
+@S.419 = private unnamed_addr constant [7 x i8] c"CRANGE\00"
+@S.414 = private unnamed_addr constant [6 x i8] c"FIELD\00"
+@S.415 = private unnamed_addr constant [4 x i8] c"VAR\00"
+@S.422 = private unnamed_addr constant [7 x i8] c"OFFSET\00"
+@S.423 = private unnamed_addr constant [6 x i8] c"INDEX\00"
+@S.424 = private unnamed_addr constant [6 x i8] c"SLICE\00"
+@S.425 = private unnamed_addr constant [6 x i8] c"BYREF\00"
+@S.421 = private unnamed_addr constant [5 x i8] c"CAST\00"
+@S.416 = private unnamed_addr constant [5 x i8] c"CALL\00"
+@S.417 = private unnamed_addr constant [6 x i8] c"CALLI\00"
+@S.418 = private unnamed_addr constant [4 x i8] c"ASM\00"
+@S.426 = private unnamed_addr constant [4 x i8] c"SET\00"
+@S.427 = private unnamed_addr constant [5 x i8] c"COPY\00"
+@S.428 = private unnamed_addr constant [6 x i8] c"ACOPY\00"
+@S.429 = private unnamed_addr constant [4 x i8] c"AEQ\00"
+@S.430 = private unnamed_addr constant [4 x i8] c"ANE\00"
+@S.431 = private unnamed_addr constant [6 x i8] c"GETRV\00"
+@S.432 = private unnamed_addr constant [5 x i8] c"LOAD\00"
+@S.433 = private unnamed_addr constant [6 x i8] c"STORE\00"
+@S.434 = private unnamed_addr constant [5 x i8] c"ZEXT\00"
+@S.435 = private unnamed_addr constant [5 x i8] c"SEXT\00"
+@S.436 = private unnamed_addr constant [6 x i8] c"TRUNC\00"
+@S.437 = private unnamed_addr constant [6 x i8] c"BSWAP\00"
+@S.438 = private unnamed_addr constant [4 x i8] c"NEG\00"
+@S.439 = private unnamed_addr constant [4 x i8] c"NOT\00"
+@S.440 = private unnamed_addr constant [4 x i8] c"ABS\00"
+@S.441 = private unnamed_addr constant [5 x i8] c"SQRT\00"
+@S.442 = private unnamed_addr constant [5 x i8] c"FNEG\00"
+@S.443 = private unnamed_addr constant [6 x i8] c"FCVTL\00"
+@S.444 = private unnamed_addr constant [6 x i8] c"FCVTS\00"
+@S.445 = private unnamed_addr constant [6 x i8] c"CVTUF\00"
+@S.446 = private unnamed_addr constant [6 x i8] c"CVTIF\00"
+@S.447 = private unnamed_addr constant [6 x i8] c"CVTFU\00"
+@S.448 = private unnamed_addr constant [6 x i8] c"CVTFI\00"
+@S.449 = private unnamed_addr constant [4 x i8] c"CLZ\00"
+@S.450 = private unnamed_addr constant [6 x i8] c"CLZNZ\00"
+@S.451 = private unnamed_addr constant [4 x i8] c"CTZ\00"
+@S.452 = private unnamed_addr constant [6 x i8] c"CTZNZ\00"
+@S.453 = private unnamed_addr constant [4 x i8] c"POP\00"
+@S.454 = private unnamed_addr constant [5 x i8] c"ZLEN\00"
+@S.455 = private unnamed_addr constant [4 x i8] c"ROL\00"
+@S.456 = private unnamed_addr constant [4 x i8] c"ROR\00"
+@S.457 = private unnamed_addr constant [4 x i8] c"ADD\00"
+@S.458 = private unnamed_addr constant [4 x i8] c"SUB\00"
+@S.459 = private unnamed_addr constant [4 x i8] c"MUL\00"
+@S.460 = private unnamed_addr constant [4 x i8] c"DIV\00"
+@S.461 = private unnamed_addr constant [4 x i8] c"MOD\00"
+@S.462 = private unnamed_addr constant [3 x i8] c"EQ\00"
+@S.463 = private unnamed_addr constant [3 x i8] c"NE\00"
+@S.464 = private unnamed_addr constant [4 x i8] c"ULT\00"
+@S.465 = private unnamed_addr constant [4 x i8] c"UGT\00"
+@S.466 = private unnamed_addr constant [4 x i8] c"ULE\00"
+@S.467 = private unnamed_addr constant [4 x i8] c"UGE\00"
+@S.468 = private unnamed_addr constant [4 x i8] c"SLT\00"
+@S.469 = private unnamed_addr constant [4 x i8] c"SGT\00"
+@S.470 = private unnamed_addr constant [4 x i8] c"SLE\00"
+@S.471 = private unnamed_addr constant [4 x i8] c"SGE\00"
+@S.472 = private unnamed_addr constant [4 x i8] c"FEQ\00"
+@S.473 = private unnamed_addr constant [4 x i8] c"FNE\00"
+@S.474 = private unnamed_addr constant [4 x i8] c"FLT\00"
+@S.475 = private unnamed_addr constant [4 x i8] c"FGT\00"
+@S.476 = private unnamed_addr constant [4 x i8] c"FLE\00"
+@S.477 = private unnamed_addr constant [4 x i8] c"FGE\00"
+@S.478 = private unnamed_addr constant [5 x i8] c"UMIN\00"
+@S.479 = private unnamed_addr constant [5 x i8] c"UMAX\00"
+@S.480 = private unnamed_addr constant [5 x i8] c"SMIN\00"
+@S.481 = private unnamed_addr constant [5 x i8] c"SMAX\00"
+@S.482 = private unnamed_addr constant [4 x i8] c"LSL\00"
+@S.483 = private unnamed_addr constant [4 x i8] c"LSR\00"
+@S.484 = private unnamed_addr constant [4 x i8] c"ASL\00"
+@S.485 = private unnamed_addr constant [4 x i8] c"ASR\00"
+@S.486 = private unnamed_addr constant [4 x i8] c"AND\00"
+@S.487 = private unnamed_addr constant [3 x i8] c"OR\00"
+@S.488 = private unnamed_addr constant [4 x i8] c"XOR\00"
+@S.489 = private unnamed_addr constant [5 x i8] c"BAND\00"
+@S.490 = private unnamed_addr constant [4 x i8] c"BOR\00"
+@S.491 = private unnamed_addr constant [5 x i8] c"BNOT\00"
+@S.492 = private unnamed_addr constant [5 x i8] c"FADD\00"
+@S.493 = private unnamed_addr constant [5 x i8] c"FSUB\00"
+@S.494 = private unnamed_addr constant [5 x i8] c"FMUL\00"
+@S.495 = private unnamed_addr constant [5 x i8] c"FDIV\00"
+@S.496 = private unnamed_addr constant [5 x i8] c"FREM\00"
+@S.497 = private unnamed_addr constant [7 x i8] c"IFEXPR\00"
+@S.498 = private unnamed_addr constant [4 x i8] c"SEQ\00"
+@S.499 = private unnamed_addr constant [5 x i8] c"LOOP\00"
+@S.500 = private unnamed_addr constant [5 x i8] c"EXIT\00"
+@S.501 = private unnamed_addr constant [3 x i8] c"IF\00"
+@S.502 = private unnamed_addr constant [4 x i8] c"SEL\00"
+@S.503 = private unnamed_addr constant [3 x i8] c"IS\00"
+@S.504 = private unnamed_addr constant [4 x i8] c"RET\00"
+@S.505 = private unnamed_addr constant [5 x i8] c"PROC\00"
+@S.506 = private unnamed_addr constant [7 x i8] c"ASSERT\00"
+@ast_OpName = internal constant [103 x [0 x i8]*] [ [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.405 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.406 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.407 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.408 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.409 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.410 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.411 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.412 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.413 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.420 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.419 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.414 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.415 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.422 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.423 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.424 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.425 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.421 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.416 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.417 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.418 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.426 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.427 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.428 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.429 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.430 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.431 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.432 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.433 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.434 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.435 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.436 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.437 )  to [0 x i8]* ), [0 x i8]* null, [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.438 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.439 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.440 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.441 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.442 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.443 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.444 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.445 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.446 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.447 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.448 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.449 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.450 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.451 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.452 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.453 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.454 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.455 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.456 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.457 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.458 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.459 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.460 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.461 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.462 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.463 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.464 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.465 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.466 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.467 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.468 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.469 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.470 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.471 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.472 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.473 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.474 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.475 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.476 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.477 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.478 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.479 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.480 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.481 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.482 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.483 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.484 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.485 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.486 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.487 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.488 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.489 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.490 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.491 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.492 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.493 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.494 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.495 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.496 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.497 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.498 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.499 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.500 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.501 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.502 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.503 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.504 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.505 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.506 )  to [0 x i8]* ) ], align 8
+@S.507 = private unnamed_addr constant [5 x i8] c"(sz=\00"
+@S.508 = private unnamed_addr constant [5 x i8] c" ln=\00"
+@S.509 = private unnamed_addr constant [5 x i8] c" nc=\00"
 @S.510 = private unnamed_addr constant [6 x i8] c" val=\00"
-@S.511 = private unnamed_addr constant [6 x i8] c" scl=\00"
-@S.512 = private unnamed_addr constant [6 x i8] c" val=\00"
-@S.513 = private unnamed_addr constant [6 x i8] c" scl=\00"
-@S.514 = private unnamed_addr constant [5 x i8] c" id \00"
-@S.515 = private unnamed_addr constant [7 x i8] c" val=\22\00"
-@S.516 = private unnamed_addr constant [7 x i8] c" name=\00"
-@S.517 = private unnamed_addr constant [7 x i8] c"*NULL*\00"
-@S.518 = private unnamed_addr constant [7 x i8] c" bits=\00"
+@S.511 = private unnamed_addr constant [6 x i8] c" val=\00"
+@S.512 = private unnamed_addr constant [6 x i8] c" scl=\00"
+@S.513 = private unnamed_addr constant [6 x i8] c" val=\00"
+@S.514 = private unnamed_addr constant [6 x i8] c" scl=\00"
+@S.515 = private unnamed_addr constant [5 x i8] c" id \00"
+@S.516 = private unnamed_addr constant [7 x i8] c" val=\22\00"
+@S.517 = private unnamed_addr constant [7 x i8] c" name=\00"
+@S.518 = private unnamed_addr constant [7 x i8] c"*NULL*\00"
+@S.519 = private unnamed_addr constant [7 x i8] c" bits=\00"
 define internal void @ast_Print(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -9586,7 +9617,7 @@ L.1:
 	%12 = load [0 x i8]*, [0 x i8]** %11
 	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %13)
-	%14 = getelementptr [5 x i8], [5 x i8]* @S.506
+	%14 = getelementptr [5 x i8], [5 x i8]* @S.507
 	%15 = bitcast [5 x i8]* %14 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %15)
 	%16 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9594,7 +9625,7 @@ L.1:
 	%18 = load i32, i32* %17
 	%19 = zext i32 %18 to i64
 	call void @sys_fildes_uint(i64 2, i64 %19)
-	%20 = getelementptr [5 x i8], [5 x i8]* @S.507
+	%20 = getelementptr [5 x i8], [5 x i8]* @S.508
 	%21 = bitcast [5 x i8]* %20 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %21)
 	%22 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9602,7 +9633,7 @@ L.1:
 	%24 = load i16, i16* %23
 	%25 = zext i16 %24 to i64
 	call void @sys_fildes_uint(i64 2, i64 %25)
-	%26 = getelementptr [5 x i8], [5 x i8]* @S.508
+	%26 = getelementptr [5 x i8], [5 x i8]* @S.509
 	%27 = bitcast [5 x i8]* %26 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %27)
 	%28 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9632,7 +9663,7 @@ L.1:
 		i64 11, label %L.10
 	]
 L.5:
-	%36 = getelementptr [6 x i8], [6 x i8]* @S.509
+	%36 = getelementptr [6 x i8], [6 x i8]* @S.510
 	%37 = bitcast [6 x i8]* %36 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %37)
 	%38 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9641,7 +9672,7 @@ L.5:
 	call void @sys_fildes_uint64(i64 2, i64 %40)
 	br label %L.4
 L.6:
-	%41 = getelementptr [6 x i8], [6 x i8]* @S.510
+	%41 = getelementptr [6 x i8], [6 x i8]* @S.511
 	%42 = bitcast [6 x i8]* %41 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %42)
 	%43 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9670,7 +9701,7 @@ L.11:
 	%58 = icmp ne i16 %57, 0
 	br i1 %58, label %L.15, label %L.14
 L.15:
-	%59 = getelementptr [6 x i8], [6 x i8]* @S.511
+	%59 = getelementptr [6 x i8], [6 x i8]* @S.512
 	%60 = bitcast [6 x i8]* %59 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %60)
 	%61 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9681,14 +9712,14 @@ L.15:
 L.14:
 	br label %L.4
 L.7:
-	%64 = getelementptr [6 x i8], [6 x i8]* @S.512
+	%64 = getelementptr [6 x i8], [6 x i8]* @S.513
 	%65 = bitcast [6 x i8]* %64 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %65)
 	%66 = load %ast.AstNode*, %ast.AstNode** %node
 	%67 = getelementptr %ast.AstNode, %ast.AstNode* %66, i64 0, i32 10
 	%68 = load i64, i64* %67
 	call void @sys_fildes_uint64(i64 2, i64 %68)
-	%69 = getelementptr [6 x i8], [6 x i8]* @S.513
+	%69 = getelementptr [6 x i8], [6 x i8]* @S.514
 	%70 = bitcast [6 x i8]* %69 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %70)
 	%71 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9697,7 +9728,7 @@ L.7:
 	call void @sys_fildes_int16(i64 2, i16 %73)
 	br label %L.4
 L.8:
-	%74 = getelementptr [5 x i8], [5 x i8]* @S.514
+	%74 = getelementptr [5 x i8], [5 x i8]* @S.515
 	%75 = bitcast [5 x i8]* %74 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %75)
 	%76 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9705,7 +9736,7 @@ L.8:
 	%78 = load i64, i64* %77
 	%79 = trunc i64 %78 to i32
 	call void @sys_fildes_uint32(i64 2, i32 %79)
-	%80 = getelementptr [7 x i8], [7 x i8]* @S.515
+	%80 = getelementptr [7 x i8], [7 x i8]* @S.516
 	%81 = bitcast [7 x i8]* %80 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %81)
 	%82 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9723,7 +9754,7 @@ L.8:
 	call void @sys_fildes_chr(i64 2, i8 34)
 	br label %L.4
 L.9:
-	%93 = getelementptr [7 x i8], [7 x i8]* @S.516
+	%93 = getelementptr [7 x i8], [7 x i8]* @S.517
 	%94 = bitcast [7 x i8]* %93 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %94)
 	%95 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9741,14 +9772,14 @@ L.17:
 	call void @sys_fildes_str(i64 2, [0 x i8]* %103)
 	br label %L.16
 L.18:
-	%104 = getelementptr [7 x i8], [7 x i8]* @S.517
+	%104 = getelementptr [7 x i8], [7 x i8]* @S.518
 	%105 = bitcast [7 x i8]* %104 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %105)
 	br label %L.16
 L.16:
 	br label %L.4
 L.10:
-	%106 = getelementptr [7 x i8], [7 x i8]* @S.518
+	%106 = getelementptr [7 x i8], [7 x i8]* @S.519
 	%107 = bitcast [7 x i8]* %106 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %107)
 	%108 = load %ast.AstNode*, %ast.AstNode** %node
@@ -9775,7 +9806,7 @@ return:
 	ret void
 }
 @ast_blanks = internal constant [65 x i8] c"                                                                \00", align 1
-@S.520 = private unnamed_addr constant [8 x i8] c"*NULL*\0A\00"
+@S.521 = private unnamed_addr constant [8 x i8] c"*NULL*\0A\00"
 define internal void @ast_DumpSub(%ast.AstNode* %tree$, i64 %level$) nounwind {
 L.0:
 	%tree = alloca %ast.AstNode*
@@ -9790,7 +9821,7 @@ L.0:
 	%4 = icmp eq %ast.AstNode* %3, null
 	br i1 %4, label %L.2, label %L.3
 L.2:
-	%5 = getelementptr [8 x i8], [8 x i8]* @S.520
+	%5 = getelementptr [8 x i8], [8 x i8]* @S.521
 	%6 = bitcast [8 x i8]* %5 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %6)
 	br label %L.1
@@ -9900,7 +9931,7 @@ return:
 	%18 = load %symb.SymbNode*, %symb.SymbNode** %rv.0
 	ret %symb.SymbNode* %18
 }
-@S.521 = private unnamed_addr constant [2 x i8] c"_\00"
+@S.522 = private unnamed_addr constant [2 x i8] c"_\00"
 define internal void @symb_AddLibFormal(%symb.SymbNode* %s$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -9910,7 +9941,7 @@ L.0:
 	%fs = alloca %symb.SymbNode*
 	%pfs = alloca %symb.SymbNode*
 	%tfs = alloca %symb.SymbNode*
-	%0 = getelementptr [2 x i8], [2 x i8]* @S.521
+	%0 = getelementptr [2 x i8], [2 x i8]* @S.522
 	%1 = bitcast [2 x i8]* %0 to [0 x i8]*
 	%2 = call %symb.SymbNode* @symb_New(i8 3, [0 x i8]* %1, i8 2)
 	store %symb.SymbNode* %2, %symb.SymbNode** %fs
@@ -9961,57 +9992,57 @@ L.4:
 return:
 	ret void
 }
-@S.522 = private unnamed_addr constant [5 x i8] c"true\00"
-@S.523 = private unnamed_addr constant [6 x i8] c"false\00"
-@S.524 = private unnamed_addr constant [9 x i8] c"_boolean\00"
-@S.525 = private unnamed_addr constant [8 x i8] c"boolean\00"
-@S.526 = private unnamed_addr constant [6 x i8] c"false\00"
-@S.527 = private unnamed_addr constant [5 x i8] c"true\00"
-@S.528 = private unnamed_addr constant [6 x i8] c"_byte\00"
-@S.529 = private unnamed_addr constant [8 x i8] c"_memory\00"
-@S.530 = private unnamed_addr constant [9 x i8] c"_address\00"
-@S.531 = private unnamed_addr constant [6 x i8] c"_uint\00"
-@S.532 = private unnamed_addr constant [5 x i8] c"_int\00"
-@S.533 = private unnamed_addr constant [9 x i8] c"_uintptr\00"
-@S.534 = private unnamed_addr constant [7 x i8] c"_uint8\00"
-@S.535 = private unnamed_addr constant [6 x i8] c"_int8\00"
-@S.536 = private unnamed_addr constant [8 x i8] c"_uint16\00"
-@S.537 = private unnamed_addr constant [7 x i8] c"_int16\00"
-@S.538 = private unnamed_addr constant [8 x i8] c"_uint32\00"
-@S.539 = private unnamed_addr constant [7 x i8] c"_int32\00"
-@S.540 = private unnamed_addr constant [8 x i8] c"_uint64\00"
-@S.541 = private unnamed_addr constant [7 x i8] c"_int64\00"
-@S.542 = private unnamed_addr constant [9 x i8] c"_uint128\00"
-@S.543 = private unnamed_addr constant [8 x i8] c"_int128\00"
-@S.544 = private unnamed_addr constant [9 x i8] c"_float32\00"
-@S.545 = private unnamed_addr constant [9 x i8] c"_float64\00"
-@S.546 = private unnamed_addr constant [6 x i8] c"_ufix\00"
-@S.547 = private unnamed_addr constant [6 x i8] c"_sfix\00"
-@S.548 = private unnamed_addr constant [9 x i8] c"_defined\00"
-@S.549 = private unnamed_addr constant [5 x i8] c"_abs\00"
-@S.550 = private unnamed_addr constant [5 x i8] c"_min\00"
-@S.551 = private unnamed_addr constant [5 x i8] c"_max\00"
-@S.552 = private unnamed_addr constant [5 x i8] c"_clz\00"
-@S.553 = private unnamed_addr constant [7 x i8] c"_clznz\00"
-@S.554 = private unnamed_addr constant [5 x i8] c"_ctz\00"
-@S.555 = private unnamed_addr constant [7 x i8] c"_ctznz\00"
-@S.556 = private unnamed_addr constant [5 x i8] c"_pop\00"
-@S.557 = private unnamed_addr constant [5 x i8] c"_cvt\00"
-@S.558 = private unnamed_addr constant [5 x i8] c"_new\00"
-@S.559 = private unnamed_addr constant [8 x i8] c"_delete\00"
-@S.560 = private unnamed_addr constant [6 x i8] c"_zero\00"
-@S.561 = private unnamed_addr constant [6 x i8] c"_zlen\00"
-@S.562 = private unnamed_addr constant [8 x i8] c"_packle\00"
-@S.563 = private unnamed_addr constant [8 x i8] c"_packbe\00"
-@S.564 = private unnamed_addr constant [8 x i8] c"_unpkle\00"
-@S.565 = private unnamed_addr constant [8 x i8] c"_unpkbe\00"
-@S.566 = private unnamed_addr constant [5 x i8] c"_rol\00"
-@S.567 = private unnamed_addr constant [5 x i8] c"_ror\00"
-@S.568 = private unnamed_addr constant [7 x i8] c"_bswap\00"
-@S.569 = private unnamed_addr constant [8 x i8] c"_bitrev\00"
-@S.570 = private unnamed_addr constant [6 x i8] c"_sqrt\00"
-@S.571 = private unnamed_addr constant [9 x i8] c"memalloc\00"
-@S.572 = private unnamed_addr constant [8 x i8] c"memfree\00"
+@S.523 = private unnamed_addr constant [5 x i8] c"true\00"
+@S.524 = private unnamed_addr constant [6 x i8] c"false\00"
+@S.525 = private unnamed_addr constant [9 x i8] c"_boolean\00"
+@S.526 = private unnamed_addr constant [8 x i8] c"boolean\00"
+@S.527 = private unnamed_addr constant [6 x i8] c"false\00"
+@S.528 = private unnamed_addr constant [5 x i8] c"true\00"
+@S.529 = private unnamed_addr constant [6 x i8] c"_byte\00"
+@S.530 = private unnamed_addr constant [8 x i8] c"_memory\00"
+@S.531 = private unnamed_addr constant [9 x i8] c"_address\00"
+@S.532 = private unnamed_addr constant [6 x i8] c"_uint\00"
+@S.533 = private unnamed_addr constant [5 x i8] c"_int\00"
+@S.534 = private unnamed_addr constant [9 x i8] c"_uintptr\00"
+@S.535 = private unnamed_addr constant [7 x i8] c"_uint8\00"
+@S.536 = private unnamed_addr constant [6 x i8] c"_int8\00"
+@S.537 = private unnamed_addr constant [8 x i8] c"_uint16\00"
+@S.538 = private unnamed_addr constant [7 x i8] c"_int16\00"
+@S.539 = private unnamed_addr constant [8 x i8] c"_uint32\00"
+@S.540 = private unnamed_addr constant [7 x i8] c"_int32\00"
+@S.541 = private unnamed_addr constant [8 x i8] c"_uint64\00"
+@S.542 = private unnamed_addr constant [7 x i8] c"_int64\00"
+@S.543 = private unnamed_addr constant [9 x i8] c"_uint128\00"
+@S.544 = private unnamed_addr constant [8 x i8] c"_int128\00"
+@S.545 = private unnamed_addr constant [9 x i8] c"_float32\00"
+@S.546 = private unnamed_addr constant [9 x i8] c"_float64\00"
+@S.547 = private unnamed_addr constant [6 x i8] c"_ufix\00"
+@S.548 = private unnamed_addr constant [6 x i8] c"_sfix\00"
+@S.549 = private unnamed_addr constant [9 x i8] c"_defined\00"
+@S.550 = private unnamed_addr constant [5 x i8] c"_abs\00"
+@S.551 = private unnamed_addr constant [5 x i8] c"_min\00"
+@S.552 = private unnamed_addr constant [5 x i8] c"_max\00"
+@S.553 = private unnamed_addr constant [5 x i8] c"_clz\00"
+@S.554 = private unnamed_addr constant [7 x i8] c"_clznz\00"
+@S.555 = private unnamed_addr constant [5 x i8] c"_ctz\00"
+@S.556 = private unnamed_addr constant [7 x i8] c"_ctznz\00"
+@S.557 = private unnamed_addr constant [5 x i8] c"_pop\00"
+@S.558 = private unnamed_addr constant [5 x i8] c"_cvt\00"
+@S.559 = private unnamed_addr constant [5 x i8] c"_new\00"
+@S.560 = private unnamed_addr constant [8 x i8] c"_delete\00"
+@S.561 = private unnamed_addr constant [6 x i8] c"_zero\00"
+@S.562 = private unnamed_addr constant [6 x i8] c"_zlen\00"
+@S.563 = private unnamed_addr constant [8 x i8] c"_packle\00"
+@S.564 = private unnamed_addr constant [8 x i8] c"_packbe\00"
+@S.565 = private unnamed_addr constant [8 x i8] c"_unpkle\00"
+@S.566 = private unnamed_addr constant [8 x i8] c"_unpkbe\00"
+@S.567 = private unnamed_addr constant [5 x i8] c"_rol\00"
+@S.568 = private unnamed_addr constant [5 x i8] c"_ror\00"
+@S.569 = private unnamed_addr constant [7 x i8] c"_bswap\00"
+@S.570 = private unnamed_addr constant [8 x i8] c"_bitrev\00"
+@S.571 = private unnamed_addr constant [6 x i8] c"_sqrt\00"
+@S.572 = private unnamed_addr constant [9 x i8] c"memalloc\00"
+@S.573 = private unnamed_addr constant [8 x i8] c"memfree\00"
 define internal void @symb_InitDecl() nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -10024,7 +10055,7 @@ L.0:
 	%1 = load %type.TypeNode*, %type.TypeNode** %t
 	%2 = getelementptr %type.TypeNode, %type.TypeNode* %1, i64 0, i32 9
 	store i32 1, i32* %2
-	%3 = getelementptr [5 x i8], [5 x i8]* @S.522
+	%3 = getelementptr [5 x i8], [5 x i8]* @S.523
 	%4 = bitcast [5 x i8]* %3 to [0 x i8]*
 	%5 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %4, i8 2)
 	store %symb.SymbNode* %5, %symb.SymbNode** %s1
@@ -10033,7 +10064,7 @@ L.0:
 	%8 = load %symb.SymbNode*, %symb.SymbNode** %s1
 	%9 = getelementptr %symb.SymbNode, %symb.SymbNode* %8, i64 0, i32 9
 	store %ast.AstNode* %7, %ast.AstNode** %9
-	%10 = getelementptr [6 x i8], [6 x i8]* @S.523
+	%10 = getelementptr [6 x i8], [6 x i8]* @S.524
 	%11 = bitcast [6 x i8]* %10 to [0 x i8]*
 	%12 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %11, i8 2)
 	store %symb.SymbNode* %12, %symb.SymbNode** %s0
@@ -10052,7 +10083,7 @@ L.0:
 	store %symb.SymbNode* %20, %symb.SymbNode** %22
 	%23 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @type_Final(%type.TypeNode* %23)
-	%24 = getelementptr [9 x i8], [9 x i8]* @S.524
+	%24 = getelementptr [9 x i8], [9 x i8]* @S.525
 	%25 = bitcast [9 x i8]* %24 to [0 x i8]*
 	%26 = call %symb.SymbNode* @symb_New(i8 2, [0 x i8]* %25, i8 0)
 	store %symb.SymbNode* %26, %symb.SymbNode** %s
@@ -10073,11 +10104,11 @@ L.0:
 	%37 = load %type.TypeNode*, %type.TypeNode** %t
 	store %type.TypeNode* %37, %type.TypeNode** @type_booltype
 	%38 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%39 = getelementptr [8 x i8], [8 x i8]* @S.525
+	%39 = getelementptr [8 x i8], [8 x i8]* @S.526
 	%40 = bitcast [8 x i8]* %39 to [0 x i8]*
 	%41 = call %symb.SymbNode* @symb_Clone(%symb.SymbNode* %38, [0 x i8]* %40)
 	store %symb.SymbNode* %41, %symb.SymbNode** %s
-	%42 = getelementptr [6 x i8], [6 x i8]* @S.526
+	%42 = getelementptr [6 x i8], [6 x i8]* @S.527
 	%43 = bitcast [6 x i8]* %42 to [0 x i8]*
 	%44 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %43, i8 0)
 	store %symb.SymbNode* %44, %symb.SymbNode** %s
@@ -10090,7 +10121,7 @@ L.0:
 	%50 = load %symb.SymbNode*, %symb.SymbNode** %s
 	%51 = getelementptr %symb.SymbNode, %symb.SymbNode* %50, i64 0, i32 9
 	store %ast.AstNode* %49, %ast.AstNode** %51
-	%52 = getelementptr [5 x i8], [5 x i8]* @S.527
+	%52 = getelementptr [5 x i8], [5 x i8]* @S.528
 	%53 = bitcast [5 x i8]* %52 to [0 x i8]*
 	%54 = call %symb.SymbNode* @symb_New(i8 1, [0 x i8]* %53, i8 0)
 	store %symb.SymbNode* %54, %symb.SymbNode** %s
@@ -10103,11 +10134,11 @@ L.0:
 	%60 = load %symb.SymbNode*, %symb.SymbNode** %s
 	%61 = getelementptr %symb.SymbNode, %symb.SymbNode* %60, i64 0, i32 9
 	store %ast.AstNode* %59, %ast.AstNode** %61
-	%62 = getelementptr [6 x i8], [6 x i8]* @S.528
+	%62 = getelementptr [6 x i8], [6 x i8]* @S.529
 	%63 = bitcast [6 x i8]* %62 to [0 x i8]*
 	%64 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %63, i32 8)
 	store %type.TypeNode* %64, %type.TypeNode** @type_bytetype
-	%65 = getelementptr [8 x i8], [8 x i8]* @S.529
+	%65 = getelementptr [8 x i8], [8 x i8]* @S.530
 	%66 = bitcast [8 x i8]* %65 to [0 x i8]*
 	%67 = call %type.TypeNode* @type_NewBuiltin(i8 6, [0 x i8]* %66, i32 0)
 	store %type.TypeNode* %67, %type.TypeNode** @type_memtype
@@ -10121,7 +10152,7 @@ L.0:
 	%73 = load %type.TypeNode*, %type.TypeNode** @type_memtype
 	%74 = getelementptr %type.TypeNode, %type.TypeNode* %73, i64 0, i32 28
 	store i8 1, i8* %74
-	%75 = getelementptr [9 x i8], [9 x i8]* @S.530
+	%75 = getelementptr [9 x i8], [9 x i8]* @S.531
 	%76 = bitcast [9 x i8]* %75 to [0 x i8]*
 	%77 = load %target.ModelT*, %target.ModelT** @target_Target
 	%78 = getelementptr %target.ModelT, %target.ModelT* %77, i64 0, i32 5
@@ -10144,7 +10175,7 @@ L.0:
 	store i32 %90, i32* %92
 	%93 = load %type.TypeNode*, %type.TypeNode** %taddr
 	store %type.TypeNode* %93, %type.TypeNode** @type_addrtype
-	%94 = getelementptr [6 x i8], [6 x i8]* @S.531
+	%94 = getelementptr [6 x i8], [6 x i8]* @S.532
 	%95 = bitcast [6 x i8]* %94 to [0 x i8]*
 	%96 = load %target.ModelT*, %target.ModelT** @target_Target
 	%97 = getelementptr %target.ModelT, %target.ModelT* %96, i64 0, i32 2
@@ -10152,7 +10183,7 @@ L.0:
 	%99 = zext i8 %98 to i32
 	%100 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %95, i32 %99)
 	store %type.TypeNode* %100, %type.TypeNode** @type_wordtype
-	%101 = getelementptr [5 x i8], [5 x i8]* @S.532
+	%101 = getelementptr [5 x i8], [5 x i8]* @S.533
 	%102 = bitcast [5 x i8]* %101 to [0 x i8]*
 	%103 = load %target.ModelT*, %target.ModelT** @target_Target
 	%104 = getelementptr %target.ModelT, %target.ModelT* %103, i64 0, i32 2
@@ -10160,7 +10191,7 @@ L.0:
 	%106 = zext i8 %105 to i32
 	%107 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %102, i32 %106)
 	store %type.TypeNode* %107, %type.TypeNode** @type_swordtype
-	%108 = getelementptr [9 x i8], [9 x i8]* @S.533
+	%108 = getelementptr [9 x i8], [9 x i8]* @S.534
 	%109 = bitcast [9 x i8]* %108 to [0 x i8]*
 	%110 = load %target.ModelT*, %target.ModelT** @target_Target
 	%111 = getelementptr %target.ModelT, %target.ModelT* %110, i64 0, i32 5
@@ -10169,42 +10200,42 @@ L.0:
 	%114 = zext i8 %113 to i32
 	%115 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %109, i32 %114)
 	store %type.TypeNode* %115, %type.TypeNode** @type_uintptrtype
-	%116 = getelementptr [7 x i8], [7 x i8]* @S.534
+	%116 = getelementptr [7 x i8], [7 x i8]* @S.535
 	%117 = bitcast [7 x i8]* %116 to [0 x i8]*
 	%118 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %117, i32 8)
 	%119 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_uinttypes, i64 0, i64 0
 	store %type.TypeNode* %118, %type.TypeNode** %119
-	%120 = getelementptr [6 x i8], [6 x i8]* @S.535
+	%120 = getelementptr [6 x i8], [6 x i8]* @S.536
 	%121 = bitcast [6 x i8]* %120 to [0 x i8]*
 	%122 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %121, i32 8)
 	%123 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_inttypes, i64 0, i64 0
 	store %type.TypeNode* %122, %type.TypeNode** %123
-	%124 = getelementptr [8 x i8], [8 x i8]* @S.536
+	%124 = getelementptr [8 x i8], [8 x i8]* @S.537
 	%125 = bitcast [8 x i8]* %124 to [0 x i8]*
 	%126 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %125, i32 16)
 	%127 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_uinttypes, i64 0, i64 1
 	store %type.TypeNode* %126, %type.TypeNode** %127
-	%128 = getelementptr [7 x i8], [7 x i8]* @S.537
+	%128 = getelementptr [7 x i8], [7 x i8]* @S.538
 	%129 = bitcast [7 x i8]* %128 to [0 x i8]*
 	%130 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %129, i32 16)
 	%131 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_inttypes, i64 0, i64 1
 	store %type.TypeNode* %130, %type.TypeNode** %131
-	%132 = getelementptr [8 x i8], [8 x i8]* @S.538
+	%132 = getelementptr [8 x i8], [8 x i8]* @S.539
 	%133 = bitcast [8 x i8]* %132 to [0 x i8]*
 	%134 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %133, i32 32)
 	%135 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_uinttypes, i64 0, i64 2
 	store %type.TypeNode* %134, %type.TypeNode** %135
-	%136 = getelementptr [7 x i8], [7 x i8]* @S.539
+	%136 = getelementptr [7 x i8], [7 x i8]* @S.540
 	%137 = bitcast [7 x i8]* %136 to [0 x i8]*
 	%138 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %137, i32 32)
 	%139 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_inttypes, i64 0, i64 2
 	store %type.TypeNode* %138, %type.TypeNode** %139
-	%140 = getelementptr [8 x i8], [8 x i8]* @S.540
+	%140 = getelementptr [8 x i8], [8 x i8]* @S.541
 	%141 = bitcast [8 x i8]* %140 to [0 x i8]*
 	%142 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %141, i32 64)
 	%143 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_uinttypes, i64 0, i64 3
 	store %type.TypeNode* %142, %type.TypeNode** %143
-	%144 = getelementptr [7 x i8], [7 x i8]* @S.541
+	%144 = getelementptr [7 x i8], [7 x i8]* @S.542
 	%145 = bitcast [7 x i8]* %144 to [0 x i8]*
 	%146 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %145, i32 64)
 	%147 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_inttypes, i64 0, i64 3
@@ -10217,24 +10248,24 @@ L.0:
 	%153 = icmp ne i8 %152, 0
 	br i1 %153, label %L.2, label %L.1
 L.2:
-	%154 = getelementptr [9 x i8], [9 x i8]* @S.542
+	%154 = getelementptr [9 x i8], [9 x i8]* @S.543
 	%155 = bitcast [9 x i8]* %154 to [0 x i8]*
 	%156 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %155, i32 128)
 	%157 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_uinttypes, i64 0, i64 4
 	store %type.TypeNode* %156, %type.TypeNode** %157
-	%158 = getelementptr [8 x i8], [8 x i8]* @S.543
+	%158 = getelementptr [8 x i8], [8 x i8]* @S.544
 	%159 = bitcast [8 x i8]* %158 to [0 x i8]*
 	%160 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %159, i32 128)
 	%161 = getelementptr [6 x %type.TypeNode*], [6 x %type.TypeNode*]* @type_inttypes, i64 0, i64 4
 	store %type.TypeNode* %160, %type.TypeNode** %161
 	br label %L.1
 L.1:
-	%162 = getelementptr [9 x i8], [9 x i8]* @S.544
+	%162 = getelementptr [9 x i8], [9 x i8]* @S.545
 	%163 = bitcast [9 x i8]* %162 to [0 x i8]*
 	%164 = call %type.TypeNode* @type_NewBuiltin(i8 4, [0 x i8]* %163, i32 32)
 	%165 = getelementptr [2 x %type.TypeNode*], [2 x %type.TypeNode*]* @type_floattypes, i64 0, i64 0
 	store %type.TypeNode* %164, %type.TypeNode** %165
-	%166 = getelementptr [9 x i8], [9 x i8]* @S.545
+	%166 = getelementptr [9 x i8], [9 x i8]* @S.546
 	%167 = bitcast [9 x i8]* %166 to [0 x i8]*
 	%168 = call %type.TypeNode* @type_NewBuiltin(i8 4, [0 x i8]* %167, i32 64)
 	%169 = getelementptr [2 x %type.TypeNode*], [2 x %type.TypeNode*]* @type_floattypes, i64 0, i64 1
@@ -10242,14 +10273,14 @@ L.1:
 	%170 = getelementptr [2 x %type.TypeNode*], [2 x %type.TypeNode*]* @type_floattypes, i64 0, i64 1
 	%171 = load %type.TypeNode*, %type.TypeNode** %170
 	store %type.TypeNode* %171, %type.TypeNode** @type_floattype
-	%172 = getelementptr [6 x i8], [6 x i8]* @S.546
+	%172 = getelementptr [6 x i8], [6 x i8]* @S.547
 	%173 = bitcast [6 x i8]* %172 to [0 x i8]*
 	%174 = call %type.TypeNode* @type_NewBuiltin(i8 2, [0 x i8]* %173, i32 0)
 	store %type.TypeNode* %174, %type.TypeNode** %t
 	%175 = load %type.TypeNode*, %type.TypeNode** %t
 	%176 = getelementptr %type.TypeNode, %type.TypeNode* %175, i64 0, i32 20
 	store i8 1, i8* %176
-	%177 = getelementptr [6 x i8], [6 x i8]* @S.547
+	%177 = getelementptr [6 x i8], [6 x i8]* @S.548
 	%178 = bitcast [6 x i8]* %177 to [0 x i8]*
 	%179 = call %type.TypeNode* @type_NewBuiltin(i8 3, [0 x i8]* %178, i32 0)
 	store %type.TypeNode* %179, %type.TypeNode** %t
@@ -10264,76 +10295,76 @@ L.1:
 	%185 = load %type.TypeNode*, %type.TypeNode** @type_unkntype
 	%186 = getelementptr %type.TypeNode, %type.TypeNode* %185, i64 0, i32 11
 	store i32 8, i32* %186
-	%187 = getelementptr [9 x i8], [9 x i8]* @S.548
+	%187 = getelementptr [9 x i8], [9 x i8]* @S.549
 	%188 = bitcast [9 x i8]* %187 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %188, i8 1)
-	%189 = getelementptr [5 x i8], [5 x i8]* @S.549
+	%189 = getelementptr [5 x i8], [5 x i8]* @S.550
 	%190 = bitcast [5 x i8]* %189 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %190, i8 2)
-	%191 = getelementptr [5 x i8], [5 x i8]* @S.550
+	%191 = getelementptr [5 x i8], [5 x i8]* @S.551
 	%192 = bitcast [5 x i8]* %191 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %192, i8 3)
-	%193 = getelementptr [5 x i8], [5 x i8]* @S.551
+	%193 = getelementptr [5 x i8], [5 x i8]* @S.552
 	%194 = bitcast [5 x i8]* %193 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %194, i8 4)
-	%195 = getelementptr [5 x i8], [5 x i8]* @S.552
+	%195 = getelementptr [5 x i8], [5 x i8]* @S.553
 	%196 = bitcast [5 x i8]* %195 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %196, i8 5)
-	%197 = getelementptr [7 x i8], [7 x i8]* @S.553
+	%197 = getelementptr [7 x i8], [7 x i8]* @S.554
 	%198 = bitcast [7 x i8]* %197 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %198, i8 6)
-	%199 = getelementptr [5 x i8], [5 x i8]* @S.554
+	%199 = getelementptr [5 x i8], [5 x i8]* @S.555
 	%200 = bitcast [5 x i8]* %199 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %200, i8 7)
-	%201 = getelementptr [7 x i8], [7 x i8]* @S.555
+	%201 = getelementptr [7 x i8], [7 x i8]* @S.556
 	%202 = bitcast [7 x i8]* %201 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %202, i8 8)
-	%203 = getelementptr [5 x i8], [5 x i8]* @S.556
+	%203 = getelementptr [5 x i8], [5 x i8]* @S.557
 	%204 = bitcast [5 x i8]* %203 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %204, i8 9)
-	%205 = getelementptr [5 x i8], [5 x i8]* @S.557
+	%205 = getelementptr [5 x i8], [5 x i8]* @S.558
 	%206 = bitcast [5 x i8]* %205 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %206, i8 10)
-	%207 = getelementptr [5 x i8], [5 x i8]* @S.558
+	%207 = getelementptr [5 x i8], [5 x i8]* @S.559
 	%208 = bitcast [5 x i8]* %207 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %208, i8 11)
-	%209 = getelementptr [8 x i8], [8 x i8]* @S.559
+	%209 = getelementptr [8 x i8], [8 x i8]* @S.560
 	%210 = bitcast [8 x i8]* %209 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %210, i8 12)
-	%211 = getelementptr [6 x i8], [6 x i8]* @S.560
+	%211 = getelementptr [6 x i8], [6 x i8]* @S.561
 	%212 = bitcast [6 x i8]* %211 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %212, i8 13)
-	%213 = getelementptr [6 x i8], [6 x i8]* @S.561
+	%213 = getelementptr [6 x i8], [6 x i8]* @S.562
 	%214 = bitcast [6 x i8]* %213 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %214, i8 14)
-	%215 = getelementptr [8 x i8], [8 x i8]* @S.562
+	%215 = getelementptr [8 x i8], [8 x i8]* @S.563
 	%216 = bitcast [8 x i8]* %215 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %216, i8 15)
-	%217 = getelementptr [8 x i8], [8 x i8]* @S.563
+	%217 = getelementptr [8 x i8], [8 x i8]* @S.564
 	%218 = bitcast [8 x i8]* %217 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %218, i8 16)
-	%219 = getelementptr [8 x i8], [8 x i8]* @S.564
+	%219 = getelementptr [8 x i8], [8 x i8]* @S.565
 	%220 = bitcast [8 x i8]* %219 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %220, i8 17)
-	%221 = getelementptr [8 x i8], [8 x i8]* @S.565
+	%221 = getelementptr [8 x i8], [8 x i8]* @S.566
 	%222 = bitcast [8 x i8]* %221 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %222, i8 18)
-	%223 = getelementptr [5 x i8], [5 x i8]* @S.566
+	%223 = getelementptr [5 x i8], [5 x i8]* @S.567
 	%224 = bitcast [5 x i8]* %223 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %224, i8 19)
-	%225 = getelementptr [5 x i8], [5 x i8]* @S.567
+	%225 = getelementptr [5 x i8], [5 x i8]* @S.568
 	%226 = bitcast [5 x i8]* %225 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %226, i8 20)
-	%227 = getelementptr [7 x i8], [7 x i8]* @S.568
+	%227 = getelementptr [7 x i8], [7 x i8]* @S.569
 	%228 = bitcast [7 x i8]* %227 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %228, i8 21)
-	%229 = getelementptr [8 x i8], [8 x i8]* @S.569
+	%229 = getelementptr [8 x i8], [8 x i8]* @S.570
 	%230 = bitcast [8 x i8]* %229 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %230, i8 22)
-	%231 = getelementptr [6 x i8], [6 x i8]* @S.570
+	%231 = getelementptr [6 x i8], [6 x i8]* @S.571
 	%232 = bitcast [6 x i8]* %231 to [0 x i8]*
 	call void @symb_NewIntrinsic([0 x i8]* %232, i8 23)
-	%233 = getelementptr [9 x i8], [9 x i8]* @S.571
+	%233 = getelementptr [9 x i8], [9 x i8]* @S.572
 	%234 = bitcast [9 x i8]* %233 to [0 x i8]*
 	%235 = load %type.TypeNode*, %type.TypeNode** %taddr
 	%236 = call %symb.SymbNode* @symb_NewLibrary([0 x i8]* %234, %type.TypeNode* %235)
@@ -10347,7 +10378,7 @@ L.1:
 	%241 = load %symb.SymbNode*, %symb.SymbNode** @symb_libnew
 	%242 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
 	call void @symb_AddLibFormal(%symb.SymbNode* %241, %type.TypeNode* %242)
-	%243 = getelementptr [8 x i8], [8 x i8]* @S.572
+	%243 = getelementptr [8 x i8], [8 x i8]* @S.573
 	%244 = bitcast [8 x i8]* %243 to [0 x i8]*
 	%245 = call %symb.SymbNode* @symb_NewLibrary([0 x i8]* %244, %type.TypeNode* null)
 	store %symb.SymbNode* %245, %symb.SymbNode** @symb_libdel
@@ -10399,7 +10430,7 @@ L.0:
 return:
 	ret void
 }
-@S.573 = private unnamed_addr constant [3 x i8] c", \00"
+@S.574 = private unnamed_addr constant [3 x i8] c", \00"
 define internal void @symb_DumpFormals(%symb.SymbNode* %ss$) nounwind {
 L.0:
 	%ss = alloca %symb.SymbNode*
@@ -10421,7 +10452,7 @@ L.3:
 	%7 = icmp eq %symb.SymbNode* %6, null
 	br i1 %7, label %L.4, label %L.5
 L.5:
-	%8 = getelementptr [3 x i8], [3 x i8]* @S.573
+	%8 = getelementptr [3 x i8], [3 x i8]* @S.574
 	%9 = bitcast [3 x i8]* %8 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %9)
 	br label %L.3
@@ -10465,11 +10496,11 @@ L.1:
 return:
 	ret void
 }
-@S.574 = private unnamed_addr constant [9 x i8] c": global\00"
-@S.575 = private unnamed_addr constant [11 x i8] c": external\00"
-@S.576 = private unnamed_addr constant [9 x i8] c": fixed(\00"
-@S.577 = private unnamed_addr constant [3 x i8] c"(\22\00"
-@S.578 = private unnamed_addr constant [3 x i8] c"\22)\00"
+@S.575 = private unnamed_addr constant [9 x i8] c": global\00"
+@S.576 = private unnamed_addr constant [11 x i8] c": external\00"
+@S.577 = private unnamed_addr constant [9 x i8] c": fixed(\00"
+@S.578 = private unnamed_addr constant [3 x i8] c"(\22\00"
+@S.579 = private unnamed_addr constant [3 x i8] c"\22)\00"
 define internal void @symb_DumpLinkage(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -10484,17 +10515,17 @@ L.0:
 		i64 6, label %L.5
 	]
 L.3:
-	%4 = getelementptr [9 x i8], [9 x i8]* @S.574
+	%4 = getelementptr [9 x i8], [9 x i8]* @S.575
 	%5 = bitcast [9 x i8]* %4 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %5)
 	br label %L.2
 L.4:
-	%6 = getelementptr [11 x i8], [11 x i8]* @S.575
+	%6 = getelementptr [11 x i8], [11 x i8]* @S.576
 	%7 = bitcast [11 x i8]* %6 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %7)
 	br label %L.2
 L.5:
-	%8 = getelementptr [9 x i8], [9 x i8]* @S.576
+	%8 = getelementptr [9 x i8], [9 x i8]* @S.577
 	%9 = bitcast [9 x i8]* %8 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %9)
 	%10 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10512,7 +10543,7 @@ L.2:
 	%16 = icmp ne %symb.SymbNode* %15, null
 	br i1 %16, label %L.7, label %L.6
 L.7:
-	%17 = getelementptr [3 x i8], [3 x i8]* @S.577
+	%17 = getelementptr [3 x i8], [3 x i8]* @S.578
 	%18 = bitcast [3 x i8]* %17 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %18)
 	%19 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10522,7 +10553,7 @@ L.7:
 	%23 = getelementptr [0 x i8], [0 x i8]* %22
 	%24 = bitcast [0 x i8]* %23 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %24)
-	%25 = getelementptr [3 x i8], [3 x i8]* @S.578
+	%25 = getelementptr [3 x i8], [3 x i8]* @S.579
 	%26 = bitcast [3 x i8]* %25 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %26)
 	br label %L.6
@@ -10531,19 +10562,19 @@ L.6:
 return:
 	ret void
 }
-@S.579 = private unnamed_addr constant [10 x i8] c"constant \00"
-@S.580 = private unnamed_addr constant [6 x i8] c"type \00"
-@S.581 = private unnamed_addr constant [5 x i8] c"var \00"
-@S.582 = private unnamed_addr constant [7 x i8] c"field \00"
-@S.583 = private unnamed_addr constant [6 x i8] c"proc \00"
-@S.584 = private unnamed_addr constant [11 x i8] c"intrinsic \00"
-@S.585 = private unnamed_addr constant [3 x i8] c"()\00"
-@S.586 = private unnamed_addr constant [9 x i8] c"package \00"
-@S.587 = private unnamed_addr constant [7 x i8] c"alias \00"
-@S.588 = private unnamed_addr constant [5 x i8] c" to \00"
-@S.589 = private unnamed_addr constant [8 x i8] c"string \00"
-@S.590 = private unnamed_addr constant [11 x i8] c"undefined \00"
-@S.591 = private unnamed_addr constant [11 x i8] c" (forward)\00"
+@S.580 = private unnamed_addr constant [10 x i8] c"constant \00"
+@S.581 = private unnamed_addr constant [6 x i8] c"type \00"
+@S.582 = private unnamed_addr constant [5 x i8] c"var \00"
+@S.583 = private unnamed_addr constant [7 x i8] c"field \00"
+@S.584 = private unnamed_addr constant [6 x i8] c"proc \00"
+@S.585 = private unnamed_addr constant [11 x i8] c"intrinsic \00"
+@S.586 = private unnamed_addr constant [3 x i8] c"()\00"
+@S.587 = private unnamed_addr constant [9 x i8] c"package \00"
+@S.588 = private unnamed_addr constant [7 x i8] c"alias \00"
+@S.589 = private unnamed_addr constant [5 x i8] c" to \00"
+@S.590 = private unnamed_addr constant [8 x i8] c"string \00"
+@S.591 = private unnamed_addr constant [11 x i8] c"undefined \00"
+@S.592 = private unnamed_addr constant [11 x i8] c" (forward)\00"
 define internal void @symb_DumpS(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -10564,7 +10595,7 @@ L.0:
 		i64 9, label %L.10
 	]
 L.3:
-	%4 = getelementptr [10 x i8], [10 x i8]* @S.579
+	%4 = getelementptr [10 x i8], [10 x i8]* @S.580
 	%5 = bitcast [10 x i8]* %4 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %5)
 	%6 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10606,14 +10637,14 @@ L.16:
 L.15:
 	br label %L.2
 L.4:
-	%28 = getelementptr [6 x i8], [6 x i8]* @S.580
+	%28 = getelementptr [6 x i8], [6 x i8]* @S.581
 	%29 = bitcast [6 x i8]* %28 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %29)
 	%30 = load %symb.SymbNode*, %symb.SymbNode** %s
 	call void @symb_DumpST(%symb.SymbNode* %30, i8 1)
 	br label %L.2
 L.5:
-	%31 = getelementptr [5 x i8], [5 x i8]* @S.581
+	%31 = getelementptr [5 x i8], [5 x i8]* @S.582
 	%32 = bitcast [5 x i8]* %31 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %32)
 	%33 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10622,7 +10653,7 @@ L.5:
 	call void @symb_DumpLinkage(%symb.SymbNode* %34)
 	br label %L.2
 L.6:
-	%35 = getelementptr [7 x i8], [7 x i8]* @S.582
+	%35 = getelementptr [7 x i8], [7 x i8]* @S.583
 	%36 = bitcast [7 x i8]* %35 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %36)
 	%37 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10638,7 +10669,7 @@ L.7:
 	%44 = icmp eq i16 %43, 0
 	br i1 %44, label %L.18, label %L.19
 L.18:
-	%45 = getelementptr [6 x i8], [6 x i8]* @S.583
+	%45 = getelementptr [6 x i8], [6 x i8]* @S.584
 	%46 = bitcast [6 x i8]* %45 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %46)
 	%47 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10656,7 +10687,7 @@ L.18:
 	call void @symb_DumpReturns(%type.TypeListEntry* %56)
 	br label %L.17
 L.19:
-	%57 = getelementptr [11 x i8], [11 x i8]* @S.584
+	%57 = getelementptr [11 x i8], [11 x i8]* @S.585
 	%58 = bitcast [11 x i8]* %57 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %58)
 	%59 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10664,7 +10695,7 @@ L.19:
 	%61 = getelementptr [0 x i8], [0 x i8]* %60
 	%62 = bitcast [0 x i8]* %61 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %62)
-	%63 = getelementptr [3 x i8], [3 x i8]* @S.585
+	%63 = getelementptr [3 x i8], [3 x i8]* @S.586
 	%64 = bitcast [3 x i8]* %63 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %64)
 	br label %L.17
@@ -10673,7 +10704,7 @@ L.17:
 	call void @symb_DumpLinkage(%symb.SymbNode* %65)
 	br label %L.2
 L.8:
-	%66 = getelementptr [9 x i8], [9 x i8]* @S.586
+	%66 = getelementptr [9 x i8], [9 x i8]* @S.587
 	%67 = bitcast [9 x i8]* %66 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %67)
 	%68 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10683,7 +10714,7 @@ L.8:
 	call void @sys_fildes_str(i64 2, [0 x i8]* %71)
 	br label %L.2
 L.9:
-	%72 = getelementptr [7 x i8], [7 x i8]* @S.587
+	%72 = getelementptr [7 x i8], [7 x i8]* @S.588
 	%73 = bitcast [7 x i8]* %72 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %73)
 	%74 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10691,7 +10722,7 @@ L.9:
 	%76 = getelementptr [0 x i8], [0 x i8]* %75
 	%77 = bitcast [0 x i8]* %76 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %77)
-	%78 = getelementptr [5 x i8], [5 x i8]* @S.588
+	%78 = getelementptr [5 x i8], [5 x i8]* @S.589
 	%79 = bitcast [5 x i8]* %78 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %79)
 	%80 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10703,7 +10734,7 @@ L.9:
 	call void @sys_fildes_str(i64 2, [0 x i8]* %85)
 	br label %L.2
 L.10:
-	%86 = getelementptr [8 x i8], [8 x i8]* @S.589
+	%86 = getelementptr [8 x i8], [8 x i8]* @S.590
 	%87 = bitcast [8 x i8]* %86 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %87)
 	%88 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10713,7 +10744,7 @@ L.10:
 	call void @sys_fildes_str(i64 2, [0 x i8]* %91)
 	br label %L.2
 L.1:
-	%92 = getelementptr [11 x i8], [11 x i8]* @S.590
+	%92 = getelementptr [11 x i8], [11 x i8]* @S.591
 	%93 = bitcast [11 x i8]* %92 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %93)
 	%94 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -10729,7 +10760,7 @@ L.2:
 	%101 = icmp ne i8 %100, 0
 	br i1 %101, label %L.21, label %L.20
 L.21:
-	%102 = getelementptr [11 x i8], [11 x i8]* @S.591
+	%102 = getelementptr [11 x i8], [11 x i8]* @S.592
 	%103 = bitcast [11 x i8]* %102 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %103)
 	br label %L.20
@@ -10739,9 +10770,9 @@ L.20:
 return:
 	ret void
 }
-@S.592 = private unnamed_addr constant [11 x i8] c"*** level \00"
-@S.593 = private unnamed_addr constant [10 x i8] c" package \00"
-@S.594 = private unnamed_addr constant [6 x i8] c" ***\0A\00"
+@S.593 = private unnamed_addr constant [11 x i8] c"*** level \00"
+@S.594 = private unnamed_addr constant [10 x i8] c" package \00"
+@S.595 = private unnamed_addr constant [6 x i8] c" ***\0A\00"
 define internal void @symb_Dump(i8 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i8
@@ -10771,7 +10802,7 @@ L.1:
 	store i64 %10, i64* %i
 	br label %L.4
 L.4:
-	%11 = getelementptr [11 x i8], [11 x i8]* @S.592
+	%11 = getelementptr [11 x i8], [11 x i8]* @S.593
 	%12 = bitcast [11 x i8]* %11 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %12)
 	%13 = load i64, i64* %i
@@ -10783,7 +10814,7 @@ L.4:
 	%18 = icmp ne %symb.SymbNode* %17, null
 	br i1 %18, label %L.7, label %L.6
 L.7:
-	%19 = getelementptr [10 x i8], [10 x i8]* @S.593
+	%19 = getelementptr [10 x i8], [10 x i8]* @S.594
 	%20 = bitcast [10 x i8]* %19 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %20)
 	%21 = load i64, i64* %i
@@ -10796,7 +10827,7 @@ L.7:
 	call void @sys_fildes_str(i64 2, [0 x i8]* %27)
 	br label %L.6
 L.6:
-	%28 = getelementptr [6 x i8], [6 x i8]* @S.594
+	%28 = getelementptr [6 x i8], [6 x i8]* @S.595
 	%29 = bitcast [6 x i8]* %28 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %29)
 	%30 = load i64, i64* %i
@@ -11007,7 +11038,7 @@ L.1:
 	%3 = xor i1 %2, true
 	br i1 %3, label %L.2, label %L.3
 L.3:
-	call void @lex_ErrorSub(i8 76)
+	call void @lex_ErrorSub(i8 77)
 	%4 = load %type.fwd*, %type.fwd** %f
 	%5 = getelementptr %type.fwd, %type.fwd* %4, i64 0, i32 1
 	%6 = load %symb.SymbNode*, %symb.SymbNode** %5
@@ -11682,7 +11713,7 @@ L.4:
 L.3:
 	br label %L.1
 L.1:
-	call void @lex_Error(i8 78)
+	call void @lex_Error(i8 79)
 	br label %return
 return:
 	ret void
@@ -12039,13 +12070,13 @@ L.54:
 	br label %L.50
 L.52:
 	%144 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 33, [0 x i8]* %144)
+	call void @lex_ErrorI(i8 34, [0 x i8]* %144)
 	br label %L.50
 L.50:
 	br label %L.47
 L.49:
 	%145 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 33, [0 x i8]* %145)
+	call void @lex_ErrorI(i8 34, [0 x i8]* %145)
 	%146 = call i8 @lex_Next()
 	store i8 %146, i8* %tok
 	br label %L.47
@@ -12058,7 +12089,7 @@ L.5:
 	%148 = icmp ne i8 %147, 4
 	br i1 %148, label %L.67, label %L.66
 L.67:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	%149 = bitcast [5 x i8]* @type_askip2 to [0 x i8]*
 	%150 = call i8 @lex_Skip([0 x i8]* %149)
 	store i8 %150, i8* %tok
@@ -12174,7 +12205,7 @@ return:
 	%5 = load i64, i64* %rv.0
 	ret i64 %5
 }
-@S.602 = private unnamed_addr constant [2 x i8] c"_\00"
+@S.603 = private unnamed_addr constant [2 x i8] c"_\00"
 define internal zeroext i16 @type_FieldPad(%symb.SymbNode* %prev$, i32 zeroext %pad$, i16 zeroext %index$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -12236,7 +12267,7 @@ L.3:
 	store %type.TypeNode* %32, %type.TypeNode** %t
 	br label %L.1
 L.1:
-	%33 = getelementptr [2 x i8], [2 x i8]* @S.602
+	%33 = getelementptr [2 x i8], [2 x i8]* @S.603
 	%34 = bitcast [2 x i8]* %33 to [0 x i8]*
 	%35 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %34, i8 2)
 	store %symb.SymbNode* %35, %symb.SymbNode** %s
@@ -12271,7 +12302,7 @@ return:
 	%55 = load i16, i16* %rv.0
 	ret i16 %55
 }
-@S.603 = private unnamed_addr constant [2 x i8] c"_\00"
+@S.604 = private unnamed_addr constant [2 x i8] c"_\00"
 define internal zeroext i16 @type_BitFieldPad(%symb.SymbNode* %prev$, i32 zeroext %pad$, i16 zeroext %index$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -12297,7 +12328,7 @@ L.0:
 	%7 = load %type.TypeNode*, %type.TypeNode** %t
 	%8 = getelementptr %type.TypeNode, %type.TypeNode* %7, i64 0, i32 33
 	store i8 1, i8* %8
-	%9 = getelementptr [2 x i8], [2 x i8]* @S.603
+	%9 = getelementptr [2 x i8], [2 x i8]* @S.604
 	%10 = bitcast [2 x i8]* %9 to [0 x i8]*
 	%11 = call %symb.SymbNode* @symb_New(i8 4, [0 x i8]* %10, i8 2)
 	store %symb.SymbNode* %11, %symb.SymbNode** %s
@@ -12379,16 +12410,16 @@ return:
 	%21 = load %type.TypeNode*, %type.TypeNode** %rv.0
 	ret %type.TypeNode* %21
 }
-@S.605 = private unnamed_addr constant [6 x i8] c"UTYPE\00"
-@S.606 = private unnamed_addr constant [5 x i8] c"ENUM\00"
-@S.607 = private unnamed_addr constant [5 x i8] c"UINT\00"
-@S.608 = private unnamed_addr constant [5 x i8] c"SINT\00"
-@S.609 = private unnamed_addr constant [6 x i8] c"FLOAT\00"
-@S.610 = private unnamed_addr constant [4 x i8] c"REF\00"
-@S.611 = private unnamed_addr constant [6 x i8] c"ARRAY\00"
-@S.612 = private unnamed_addr constant [7 x i8] c"RECORD\00"
-@S.613 = private unnamed_addr constant [8 x i8] c"REFPROC\00"
-@type_DumpType_tname = internal constant [9 x [0 x i8]*] [ [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.605 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.606 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.607 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.608 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.609 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.610 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.611 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.612 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.613 )  to [0 x i8]* ) ], align 8
+@S.606 = private unnamed_addr constant [6 x i8] c"UTYPE\00"
+@S.607 = private unnamed_addr constant [5 x i8] c"ENUM\00"
+@S.608 = private unnamed_addr constant [5 x i8] c"UINT\00"
+@S.609 = private unnamed_addr constant [5 x i8] c"SINT\00"
+@S.610 = private unnamed_addr constant [6 x i8] c"FLOAT\00"
+@S.611 = private unnamed_addr constant [4 x i8] c"REF\00"
+@S.612 = private unnamed_addr constant [6 x i8] c"ARRAY\00"
+@S.613 = private unnamed_addr constant [7 x i8] c"RECORD\00"
+@S.614 = private unnamed_addr constant [8 x i8] c"REFPROC\00"
+@type_DumpType_tname = internal constant [9 x [0 x i8]*] [ [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.606 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.607 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.608 )  to [0 x i8]* ), [0 x i8]* bitcast( [5 x i8]* getelementptr( [5 x i8], [5 x i8]* @S.609 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.610 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.611 )  to [0 x i8]* ), [0 x i8]* bitcast( [6 x i8]* getelementptr( [6 x i8], [6 x i8]* @S.612 )  to [0 x i8]* ), [0 x i8]* bitcast( [7 x i8]* getelementptr( [7 x i8], [7 x i8]* @S.613 )  to [0 x i8]* ), [0 x i8]* bitcast( [8 x i8]* getelementptr( [8 x i8], [8 x i8]* @S.614 )  to [0 x i8]* ) ], align 8
 define internal void @type_DumpType([0 x i8]* %msg$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%msg = alloca [0 x i8]*
@@ -12414,8 +12445,8 @@ L.0:
 return:
 	ret void
 }
-@S.614 = private unnamed_addr constant [20 x i8] c"Field align is zero\00"
-@S.615 = private unnamed_addr constant [23 x i8] c"Array of aligned items\00"
+@S.615 = private unnamed_addr constant [20 x i8] c"Field align is zero\00"
+@S.616 = private unnamed_addr constant [23 x i8] c"Array of aligned items\00"
 define internal void @type_Final(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -12768,7 +12799,7 @@ L.50:
 	%212 = getelementptr %symb.SymbNode, %symb.SymbNode* %211, i64 0, i32 22
 	%213 = getelementptr [0 x i8], [0 x i8]* %212
 	%214 = bitcast [0 x i8]* %213 to [0 x i8]*
-	call void @lex_ErrorI(i8 75, [0 x i8]* %214)
+	call void @lex_ErrorI(i8 76, [0 x i8]* %214)
 	br label %L.49
 L.51:
 	%215 = load %type.TypeNode*, %type.TypeNode** %t
@@ -12808,7 +12839,7 @@ L.56:
 	%236 = phi i1 [ false, %L.53 ], [ %235, %L.55 ]
 	br i1 %236, label %L.58, label %L.59
 L.58:
-	call void @lex_Error(i8 84)
+	call void @lex_Error(i8 85)
 	br label %L.57
 L.59:
 	%237 = load i32, i32* %atoffs
@@ -12905,7 +12936,7 @@ L.73:
 	%295 = phi i1 [ false, %L.70 ], [ %294, %L.72 ]
 	br i1 %295, label %L.75, label %L.76
 L.75:
-	call void @lex_Error(i8 84)
+	call void @lex_Error(i8 85)
 	br label %L.74
 L.76:
 	%296 = load i32, i32* %atoffs
@@ -12933,9 +12964,9 @@ L.71:
 	%308 = icmp eq i32 %307, 0
 	br i1 %308, label %L.80, label %L.81
 L.80:
-	%309 = getelementptr [20 x i8], [20 x i8]* @S.614
+	%309 = getelementptr [20 x i8], [20 x i8]* @S.615
 	%310 = bitcast [20 x i8]* %309 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %310)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %310)
 	br label %L.79
 L.81:
 	%311 = load i32, i32* %offs
@@ -13023,7 +13054,7 @@ L.88:
 	%359 = icmp ult i32 %357, %358
 	br i1 %359, label %L.90, label %L.91
 L.90:
-	call void @lex_Error(i8 83)
+	call void @lex_Error(i8 84)
 	br label %L.89
 L.91:
 	%360 = load %type.TypeNode*, %type.TypeNode** %t
@@ -13179,7 +13210,7 @@ L.117:
 	%446 = phi i1 [ false, %L.103 ], [ %445, %L.116 ]
 	br i1 %446, label %L.119, label %L.118
 L.119:
-	call void @lex_Error(i8 79)
+	call void @lex_Error(i8 80)
 	br label %L.118
 L.118:
 	br label %L.18
@@ -13257,7 +13288,7 @@ L.126:
 	%499 = icmp ult i32 %493, %498
 	br i1 %499, label %L.129, label %L.128
 L.129:
-	%500 = getelementptr [23 x i8], [23 x i8]* @S.615
+	%500 = getelementptr [23 x i8], [23 x i8]* @S.616
 	%501 = bitcast [23 x i8]* %500 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %501)
 	%502 = load %type.TypeNode*, %type.TypeNode** %t
@@ -13307,7 +13338,7 @@ L.134:
 	%528 = phi i1 [ false, %L.120 ], [ %527, %L.133 ]
 	br i1 %528, label %L.136, label %L.135
 L.136:
-	call void @lex_Error(i8 80)
+	call void @lex_Error(i8 81)
 	br label %L.135
 L.135:
 	br label %L.18
@@ -13452,7 +13483,7 @@ L.7:
 	store i32 %50, i32* %v
 	br label %L.3
 L.5:
-	call void @lex_Error(i8 66)
+	call void @lex_Error(i8 67)
 	br label %L.3
 L.3:
 	br label %L.1
@@ -13482,7 +13513,7 @@ L.22:
 	br i1 %62, label %L.25, label %L.24
 L.25:
 	%63 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 21, [0 x i8]* %63)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %63)
 	br label %L.24
 L.24:
 	%64 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
@@ -13498,7 +13529,7 @@ L.24:
 	store i8 %70, i8* %tok
 	br label %L.21
 L.23:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.21
 L.21:
 	%71 = load i8, i8* %tok
@@ -13531,7 +13562,7 @@ L.29:
 	br i1 %85, label %L.32, label %L.31
 L.32:
 	%86 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 21, [0 x i8]* %86)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %86)
 	br label %L.31
 L.31:
 	%87 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
@@ -13541,7 +13572,7 @@ L.31:
 	store i8 %89, i8* %tok
 	br label %L.28
 L.30:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.28
 L.28:
 	br label %L.16
@@ -13570,7 +13601,7 @@ L.37:
 	store i32 %103, i32* %v
 	br label %L.36
 L.38:
-	call void @lex_Error(i8 49)
+	call void @lex_Error(i8 50)
 	%104 = load %type.TypeNode*, %type.TypeNode** %t
 	%105 = load i32, i32* %v
 	%106 = zext i32 %105 to i64
@@ -13877,19 +13908,19 @@ L.17:
 L.16:
 	br label %L.14
 L.13:
-	call void @lex_Error(i8 32)
+	call void @lex_Error(i8 33)
 	br label %L.14
 L.14:
 	br label %L.10
 L.12:
-	call void @lex_Error(i8 72)
+	call void @lex_Error(i8 73)
 	br label %L.10
 L.10:
 	br label %L.6
 L.6:
 	br label %L.1
 L.3:
-	call void @lex_ErrorT(i8 18, i8 6)
+	call void @lex_ErrorT(i8 19, i8 6)
 	br label %L.1
 L.1:
 	%51 = load %type.TypeNode*, %type.TypeNode** %t
@@ -13899,7 +13930,7 @@ return:
 	%52 = load %type.TypeNode*, %type.TypeNode** %rv.0
 	ret %type.TypeNode* %52
 }
-@S.616 = private unnamed_addr constant [20 x i8] c"field inital values\00"
+@S.617 = private unnamed_addr constant [20 x i8] c"field inital values\00"
 define internal %type.TypeNode* @type_Record(%type.TypeNode* %bt$) nounwind {
 L.0:
 	%rv.0 = alloca %type.TypeNode*
@@ -13992,7 +14023,7 @@ L.7:
 	br label %L.3
 L.5:
 	store %type.TypeNode* null, %type.TypeNode** %bt
-	call void @lex_Error(i8 65)
+	call void @lex_Error(i8 66)
 	br label %L.3
 L.3:
 	br label %L.1
@@ -14022,7 +14053,7 @@ L.19:
 	br i1 %59, label %L.21, label %L.20
 L.21:
 	%60 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 21, [0 x i8]* %60)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %60)
 	br label %L.20
 L.20:
 	%61 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
@@ -14077,14 +14108,14 @@ L.25:
 L.28:
 	%89 = call i8 @lex_Next()
 	store i8 %89, i8* %tok
-	%90 = getelementptr [20 x i8], [20 x i8]* @S.616
+	%90 = getelementptr [20 x i8], [20 x i8]* @S.617
 	%91 = bitcast [20 x i8]* %90 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %91)
 	br label %L.27
 L.27:
 	br label %L.18
 L.17:
-	call void @lex_Error(i8 64)
+	call void @lex_Error(i8 65)
 	br label %L.18
 L.18:
 	%92 = call i8 @lex_Expect(i8 4)
@@ -14100,7 +14131,7 @@ return:
 	%95 = load %type.TypeNode*, %type.TypeNode** %rv.0
 	ret %type.TypeNode* %95
 }
-@S.617 = private unnamed_addr constant [36 x i8] c"Array dimensions must be constants\0A\00"
+@S.618 = private unnamed_addr constant [36 x i8] c"Array dimensions must be constants\0A\00"
 define internal %type.TypeNode* @type_Array() nounwind {
 L.0:
 	%rv.0 = alloca %type.TypeNode*
@@ -14157,7 +14188,7 @@ L.7:
 	store %type.TypeNode* %28, %type.TypeNode** %30
 	br label %L.6
 L.8:
-	%31 = getelementptr [36 x i8], [36 x i8]* @S.617
+	%31 = getelementptr [36 x i8], [36 x i8]* @S.618
 	%32 = bitcast [36 x i8]* %31 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %32)
 	br label %L.6
@@ -14185,7 +14216,7 @@ return:
 	%42 = load %type.TypeNode*, %type.TypeNode** %rv.0
 	ret %type.TypeNode* %42
 }
-@S.618 = private unnamed_addr constant [41 x i8] c"Aggregate parameter by value not allowed\00"
+@S.619 = private unnamed_addr constant [41 x i8] c"Aggregate parameter by value not allowed\00"
 define internal void @type_DefProc(%symb.SymbNode* %procs$, %symb.SymbNode* %meths$) nounwind {
 L.0:
 	%procs = alloca %symb.SymbNode*
@@ -14238,7 +14269,7 @@ L.11:
 	br i1 %20, label %L.14, label %L.13
 L.14:
 	%21 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 21, [0 x i8]* %21)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %21)
 	br label %L.13
 L.13:
 	%22 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
@@ -14266,7 +14297,7 @@ L.16:
 	store i8 %34, i8* %tok
 	br label %L.15
 L.17:
-	call void @lex_ErrorT(i8 18, i8 3)
+	call void @lex_ErrorT(i8 19, i8 3)
 	br label %L.15
 L.15:
 	%35 = getelementptr %A.2, %A.2* @debug, i64 0, i32 3
@@ -14291,7 +14322,7 @@ L.22:
 	%47 = xor i1 %46, true
 	br i1 %47, label %L.24, label %L.23
 L.24:
-	%48 = getelementptr [41 x i8], [41 x i8]* @S.618
+	%48 = getelementptr [41 x i8], [41 x i8]* @S.619
 	%49 = bitcast [41 x i8]* %48 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %49)
 	br label %L.23
@@ -14332,7 +14363,7 @@ L.27:
 	store %symb.SymbNode* %65, %symb.SymbNode** %prevs
 	br label %L.10
 L.12:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.10
 L.10:
 	%66 = load i8, i8* %tok
@@ -14349,7 +14380,7 @@ L.6:
 	store i8 %69, i8* %tok
 	br label %L.1
 L.3:
-	call void @lex_ErrorT(i8 18, i8 35)
+	call void @lex_ErrorT(i8 19, i8 35)
 	br label %L.1
 L.1:
 	%70 = load i8, i8* %tok
@@ -14441,7 +14472,7 @@ L.2:
 	%8 = phi i1 [ false, %L.0 ], [ %7, %L.1 ]
 	br i1 %8, label %L.4, label %L.3
 L.4:
-	call void @lex_Error(i8 27)
+	call void @lex_Error(i8 28)
 	br label %L.3
 L.3:
 	%9 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -14544,7 +14575,7 @@ return:
 	%41 = load %type.TypeNode*, %type.TypeNode** %rv.0
 	ret %type.TypeNode* %41
 }
-@S.619 = private unnamed_addr constant [33 x i8] c"require simple unsigned constant\00"
+@S.620 = private unnamed_addr constant [33 x i8] c"require simple unsigned constant\00"
 define internal i64 @type_SimpleUConst() nounwind {
 L.0:
 	%rv.0 = alloca i64
@@ -14609,7 +14640,7 @@ L.9:
 L.1:
 	br label %L.2
 L.2:
-	%28 = getelementptr [33 x i8], [33 x i8]* @S.619
+	%28 = getelementptr [33 x i8], [33 x i8]* @S.620
 	%29 = bitcast [33 x i8]* %28 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %29)
 	store i64 0, i64* %rv.0
@@ -14617,6 +14648,99 @@ L.2:
 return:
 	%30 = load i64, i64* %rv.0
 	ret i64 %30
+}
+define internal %type.TypeNode* @type_MakeFixed(i8 zeroext %kind$, i64 %width$, i64 %scale$) nounwind {
+L.0:
+	%rv.0 = alloca %type.TypeNode*
+	%kind = alloca i8
+	%width = alloca i64
+	%scale = alloca i64
+	store i8 %kind$, i8* %kind
+	store i64 %width$, i64* %width
+	store i64 %scale$, i64* %scale
+	%t = alloca %type.TypeNode*
+	%0 = load i8, i8* %kind
+	%1 = call %type.TypeNode* @type_New(i8 %0)
+	store %type.TypeNode* %1, %type.TypeNode** %t
+	%2 = load i64, i64* %width
+	%3 = trunc i64 %2 to i32
+	%4 = load %type.TypeNode*, %type.TypeNode** %t
+	%5 = getelementptr %type.TypeNode, %type.TypeNode* %4, i64 0, i32 9
+	store i32 %3, i32* %5
+	%6 = load i64, i64* %width
+	%7 = trunc i64 %6 to i32
+	%8 = call i32 @target_isize(i32 %7)
+	%9 = load %type.TypeNode*, %type.TypeNode** %t
+	%10 = getelementptr %type.TypeNode, %type.TypeNode* %9, i64 0, i32 10
+	store i32 %8, i32* %10
+	%11 = load i8, i8* %kind
+	%12 = icmp eq i8 %11, 3
+	br i1 %12, label %L.2, label %L.3
+L.2:
+	%13 = load i64, i64* %scale
+	%14 = load i64, i64* %width
+	%15 = sub i64 %14, 1
+	%16 = icmp ule i64 %13, %15
+	br i1 %16, label %L.5, label %L.6
+L.5:
+	%17 = load i64, i64* %scale
+	%18 = trunc i64 %17 to i16
+	%19 = load %type.TypeNode*, %type.TypeNode** %t
+	%20 = getelementptr %type.TypeNode, %type.TypeNode* %19, i64 0, i32 12
+	store i16 %18, i16* %20
+	%21 = load i64, i64* %width
+	%22 = sub i64 %21, 1
+	%23 = shl i64 1, %22
+	%24 = sub i64 %23, 1
+	%25 = load %type.TypeNode*, %type.TypeNode** %t
+	%26 = getelementptr %type.TypeNode, %type.TypeNode* %25, i64 0, i32 8
+	store i64 %24, i64* %26
+	%27 = load %type.TypeNode*, %type.TypeNode** %t
+	%28 = getelementptr %type.TypeNode, %type.TypeNode* %27, i64 0, i32 8
+	%29 = load i64, i64* %28
+	%30 = xor i64 %29, -1
+	%31 = load %type.TypeNode*, %type.TypeNode** %t
+	%32 = getelementptr %type.TypeNode, %type.TypeNode* %31, i64 0, i32 7
+	store i64 %30, i64* %32
+	br label %L.4
+L.6:
+	call void @lex_Error(i8 97)
+	br label %L.4
+L.4:
+	br label %L.1
+L.3:
+	%33 = load i64, i64* %scale
+	%34 = load i64, i64* %width
+	%35 = icmp ule i64 %33, %34
+	br i1 %35, label %L.8, label %L.9
+L.8:
+	%36 = load i64, i64* %scale
+	%37 = trunc i64 %36 to i16
+	%38 = load %type.TypeNode*, %type.TypeNode** %t
+	%39 = getelementptr %type.TypeNode, %type.TypeNode* %38, i64 0, i32 12
+	store i16 %37, i16* %39
+	%40 = load i64, i64* %width
+	%41 = shl i64 1, %40
+	%42 = sub i64 %41, 1
+	%43 = load %type.TypeNode*, %type.TypeNode** %t
+	%44 = getelementptr %type.TypeNode, %type.TypeNode* %43, i64 0, i32 8
+	store i64 %42, i64* %44
+	%45 = load %type.TypeNode*, %type.TypeNode** %t
+	%46 = getelementptr %type.TypeNode, %type.TypeNode* %45, i64 0, i32 7
+	store i64 0, i64* %46
+	br label %L.7
+L.9:
+	call void @lex_Error(i8 97)
+	br label %L.7
+L.7:
+	br label %L.1
+L.1:
+	%47 = load %type.TypeNode*, %type.TypeNode** %t
+	store %type.TypeNode* %47, %type.TypeNode** %rv.0
+	br label %return
+return:
+	%48 = load %type.TypeNode*, %type.TypeNode** %rv.0
+	ret %type.TypeNode* %48
 }
 define internal %type.TypeNode* @type_DefFixed(i8 zeroext %kind$) nounwind {
 L.0:
@@ -14654,92 +14778,21 @@ L.5:
 L.4:
 	%11 = call i8 @lex_Expect(i8 36)
 	%12 = load i8, i8* %kind
-	%13 = call %type.TypeNode* @type_New(i8 %12)
-	store %type.TypeNode* %13, %type.TypeNode** %t
-	%14 = load i64, i64* %size
-	%15 = trunc i64 %14 to i32
-	%16 = load %type.TypeNode*, %type.TypeNode** %t
-	%17 = getelementptr %type.TypeNode, %type.TypeNode* %16, i64 0, i32 9
-	store i32 %15, i32* %17
-	%18 = load i64, i64* %size
-	%19 = trunc i64 %18 to i32
-	%20 = call i32 @target_isize(i32 %19)
-	%21 = load %type.TypeNode*, %type.TypeNode** %t
-	%22 = getelementptr %type.TypeNode, %type.TypeNode* %21, i64 0, i32 10
-	store i32 %20, i32* %22
-	%23 = load i8, i8* %kind
-	%24 = icmp eq i8 %23, 3
-	br i1 %24, label %L.7, label %L.8
-L.7:
-	%25 = load i64, i64* %frac
-	%26 = load i64, i64* %size
-	%27 = sub i64 %26, 1
-	%28 = icmp ule i64 %25, %27
-	br i1 %28, label %L.10, label %L.11
-L.10:
-	%29 = load i64, i64* %frac
-	%30 = trunc i64 %29 to i16
-	%31 = load %type.TypeNode*, %type.TypeNode** %t
-	%32 = getelementptr %type.TypeNode, %type.TypeNode* %31, i64 0, i32 12
-	store i16 %30, i16* %32
-	%33 = load i64, i64* %size
-	%34 = sub i64 %33, 1
-	%35 = shl i64 1, %34
-	%36 = sub i64 %35, 1
-	%37 = load %type.TypeNode*, %type.TypeNode** %t
-	%38 = getelementptr %type.TypeNode, %type.TypeNode* %37, i64 0, i32 8
-	store i64 %36, i64* %38
-	%39 = load %type.TypeNode*, %type.TypeNode** %t
-	%40 = getelementptr %type.TypeNode, %type.TypeNode* %39, i64 0, i32 8
-	%41 = load i64, i64* %40
-	%42 = xor i64 %41, -1
-	%43 = load %type.TypeNode*, %type.TypeNode** %t
-	%44 = getelementptr %type.TypeNode, %type.TypeNode* %43, i64 0, i32 7
-	store i64 %42, i64* %44
-	br label %L.9
-L.11:
-	call void @lex_Error(i8 96)
-	br label %L.9
-L.9:
-	br label %L.6
-L.8:
-	%45 = load i64, i64* %frac
-	%46 = load i64, i64* %size
-	%47 = icmp ule i64 %45, %46
-	br i1 %47, label %L.13, label %L.14
-L.13:
-	%48 = load i64, i64* %frac
-	%49 = trunc i64 %48 to i16
-	%50 = load %type.TypeNode*, %type.TypeNode** %t
-	%51 = getelementptr %type.TypeNode, %type.TypeNode* %50, i64 0, i32 12
-	store i16 %49, i16* %51
-	%52 = load i64, i64* %size
-	%53 = shl i64 1, %52
-	%54 = sub i64 %53, 1
-	%55 = load %type.TypeNode*, %type.TypeNode** %t
-	%56 = getelementptr %type.TypeNode, %type.TypeNode* %55, i64 0, i32 8
-	store i64 %54, i64* %56
-	%57 = load %type.TypeNode*, %type.TypeNode** %t
-	%58 = getelementptr %type.TypeNode, %type.TypeNode* %57, i64 0, i32 7
-	store i64 0, i64* %58
-	br label %L.12
-L.14:
-	call void @lex_Error(i8 96)
-	br label %L.12
-L.12:
-	br label %L.6
-L.6:
+	%13 = load i64, i64* %size
+	%14 = load i64, i64* %frac
+	%15 = call %type.TypeNode* @type_MakeFixed(i8 %12, i64 %13, i64 %14)
+	store %type.TypeNode* %15, %type.TypeNode** %t
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 95)
+	call void @lex_Error(i8 96)
 	br label %L.1
 L.1:
-	%59 = load %type.TypeNode*, %type.TypeNode** %t
-	store %type.TypeNode* %59, %type.TypeNode** %rv.0
+	%16 = load %type.TypeNode*, %type.TypeNode** %t
+	store %type.TypeNode* %16, %type.TypeNode** %rv.0
 	br label %return
 return:
-	%60 = load %type.TypeNode*, %type.TypeNode** %rv.0
-	ret %type.TypeNode* %60
+	%17 = load %type.TypeNode*, %type.TypeNode** %rv.0
+	ret %type.TypeNode* %17
 }
 define internal %type.TypeNode* @type_Def(i8 zeroext %tok$, %type.TypeNode* %bt$) nounwind {
 L.0:
@@ -14854,7 +14907,7 @@ L.28:
 L.27:
 	br label %L.20
 L.22:
-	call void @lex_Error(i8 26)
+	call void @lex_Error(i8 27)
 	%51 = load %type.TypeNode*, %type.TypeNode** @type_unkntype
 	store %type.TypeNode* %51, %type.TypeNode** %t
 	br label %L.20
@@ -14872,13 +14925,13 @@ L.16:
 L.13:
 	%55 = call i8 @lex_Next()
 	store i8 %55, i8* %tok
-	call void @lex_Error(i8 27)
+	call void @lex_Error(i8 28)
 	br label %L.14
 L.14:
 	br label %L.10
 L.12:
 	%56 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %56)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %56)
 	br label %L.10
 L.10:
 	br label %L.2
@@ -14934,7 +14987,7 @@ L.31:
 L.29:
 	br label %L.2
 L.1:
-	call void @lex_Error(i8 28)
+	call void @lex_Error(i8 29)
 	br label %L.2
 L.2:
 	%79 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15030,40 +15083,40 @@ return:
 	%43 = load %type.TypeNode*, %type.TypeNode** %rv.0
 	ret %type.TypeNode* %43
 }
-@S.621 = private unnamed_addr constant [1 x i8] c"\00"
-@S.622 = private unnamed_addr constant [4 x i8] c"msb\00"
-@S.623 = private unnamed_addr constant [4 x i8] c"lsb\00"
-@type_bitorderstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8], [1 x i8]* @S.621 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.622 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.623 )  to [0 x i8]* ) ], align 8
-@S.625 = private unnamed_addr constant [1 x i8] c"\00"
-@S.626 = private unnamed_addr constant [3 x i8] c"be\00"
-@S.627 = private unnamed_addr constant [3 x i8] c"le\00"
-@type_memorderstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8], [1 x i8]* @S.625 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.626 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.627 )  to [0 x i8]* ) ], align 8
-@S.629 = private unnamed_addr constant [3 x i8] c"RW\00"
-@S.630 = private unnamed_addr constant [3 x i8] c"RO\00"
-@S.631 = private unnamed_addr constant [3 x i8] c"WO\00"
-@type_accessstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.629 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.630 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.631 )  to [0 x i8]* ) ], align 8
+@S.622 = private unnamed_addr constant [1 x i8] c"\00"
+@S.623 = private unnamed_addr constant [4 x i8] c"msb\00"
+@S.624 = private unnamed_addr constant [4 x i8] c"lsb\00"
+@type_bitorderstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8], [1 x i8]* @S.622 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.623 )  to [0 x i8]* ), [0 x i8]* bitcast( [4 x i8]* getelementptr( [4 x i8], [4 x i8]* @S.624 )  to [0 x i8]* ) ], align 8
+@S.626 = private unnamed_addr constant [1 x i8] c"\00"
+@S.627 = private unnamed_addr constant [3 x i8] c"be\00"
+@S.628 = private unnamed_addr constant [3 x i8] c"le\00"
+@type_memorderstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [1 x i8]* getelementptr( [1 x i8], [1 x i8]* @S.626 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.627 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.628 )  to [0 x i8]* ) ], align 8
+@S.630 = private unnamed_addr constant [3 x i8] c"RW\00"
+@S.631 = private unnamed_addr constant [3 x i8] c"RO\00"
+@S.632 = private unnamed_addr constant [3 x i8] c"WO\00"
+@type_accessstr = internal constant [3 x [0 x i8]*] [ [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.630 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.631 )  to [0 x i8]* ), [0 x i8]* bitcast( [3 x i8]* getelementptr( [3 x i8], [3 x i8]* @S.632 )  to [0 x i8]* ) ], align 8
 @type_blanks = internal constant [65 x i8] c"                                                                \00", align 1
-@S.633 = private unnamed_addr constant [3 x i8] c"..\00"
-@S.634 = private unnamed_addr constant [7 x i8] c"_ufix(\00"
-@S.635 = private unnamed_addr constant [3 x i8] c"..\00"
-@S.636 = private unnamed_addr constant [7 x i8] c"_sfix(\00"
-@S.637 = private unnamed_addr constant [3 x i8] c", \00"
-@S.638 = private unnamed_addr constant [8 x i8] c"<float>\00"
-@S.639 = private unnamed_addr constant [3 x i8] c"{\0A\00"
-@S.640 = private unnamed_addr constant [3 x i8] c" (\00"
-@S.641 = private unnamed_addr constant [3 x i8] c"0x\00"
-@S.642 = private unnamed_addr constant [4 x i8] c"): \00"
-@S.643 = private unnamed_addr constant [3 x i8] c"..\00"
-@S.644 = private unnamed_addr constant [3 x i8] c"@_\00"
-@S.645 = private unnamed_addr constant [10 x i8] c"*UNKNOWN*\00"
-@S.646 = private unnamed_addr constant [7 x i8] c" size=\00"
-@S.647 = private unnamed_addr constant [7 x i8] c" attr=\00"
-@S.648 = private unnamed_addr constant [8 x i8] c"unalgn \00"
-@S.649 = private unnamed_addr constant [8 x i8] c"packed \00"
-@S.650 = private unnamed_addr constant [8 x i8] c"noepad \00"
-@S.651 = private unnamed_addr constant [8 x i8] c"nofpad \00"
-@S.652 = private unnamed_addr constant [13 x i8] c"\0A\09methods:\0A\09\00"
-@S.653 = private unnamed_addr constant [4 x i8] c"???\00"
+@S.634 = private unnamed_addr constant [3 x i8] c"..\00"
+@S.635 = private unnamed_addr constant [7 x i8] c"_ufix(\00"
+@S.636 = private unnamed_addr constant [3 x i8] c"..\00"
+@S.637 = private unnamed_addr constant [7 x i8] c"_sfix(\00"
+@S.638 = private unnamed_addr constant [3 x i8] c", \00"
+@S.639 = private unnamed_addr constant [8 x i8] c"<float>\00"
+@S.640 = private unnamed_addr constant [3 x i8] c"{\0A\00"
+@S.641 = private unnamed_addr constant [3 x i8] c" (\00"
+@S.642 = private unnamed_addr constant [3 x i8] c"0x\00"
+@S.643 = private unnamed_addr constant [4 x i8] c"): \00"
+@S.644 = private unnamed_addr constant [3 x i8] c"..\00"
+@S.645 = private unnamed_addr constant [3 x i8] c"@_\00"
+@S.646 = private unnamed_addr constant [10 x i8] c"*UNKNOWN*\00"
+@S.647 = private unnamed_addr constant [7 x i8] c" size=\00"
+@S.648 = private unnamed_addr constant [7 x i8] c" attr=\00"
+@S.649 = private unnamed_addr constant [8 x i8] c"unalgn \00"
+@S.650 = private unnamed_addr constant [8 x i8] c"packed \00"
+@S.651 = private unnamed_addr constant [8 x i8] c"noepad \00"
+@S.652 = private unnamed_addr constant [8 x i8] c"nofpad \00"
+@S.653 = private unnamed_addr constant [13 x i8] c"\0A\09methods:\0A\09\00"
+@S.654 = private unnamed_addr constant [4 x i8] c"???\00"
 define internal void @type_Dump2(%type.TypeNode* %t$, i64 %indent$, i8 zeroext %full$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -15126,7 +15179,7 @@ L.20:
 	%25 = getelementptr %type.TypeNode, %type.TypeNode* %24, i64 0, i32 7
 	%26 = load i64, i64* %25
 	call void @sys_fildes_uint64(i64 2, i64 %26)
-	%27 = getelementptr [3 x i8], [3 x i8]* @S.633
+	%27 = getelementptr [3 x i8], [3 x i8]* @S.634
 	%28 = bitcast [3 x i8]* %27 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %28)
 	%29 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15135,7 +15188,7 @@ L.20:
 	call void @sys_fildes_uint64(i64 2, i64 %31)
 	br label %L.19
 L.21:
-	%32 = getelementptr [7 x i8], [7 x i8]* @S.634
+	%32 = getelementptr [7 x i8], [7 x i8]* @S.635
 	%33 = bitcast [7 x i8]* %32 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %33)
 	%34 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15164,7 +15217,7 @@ L.23:
 	%47 = getelementptr %type.TypeNode, %type.TypeNode* %46, i64 0, i32 7
 	%48 = load i64, i64* %47
 	call void @sys_fildes_int64(i64 2, i64 %48)
-	%49 = getelementptr [3 x i8], [3 x i8]* @S.635
+	%49 = getelementptr [3 x i8], [3 x i8]* @S.636
 	%50 = bitcast [3 x i8]* %49 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %50)
 	%51 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15173,7 +15226,7 @@ L.23:
 	call void @sys_fildes_int64(i64 2, i64 %53)
 	br label %L.22
 L.24:
-	%54 = getelementptr [7 x i8], [7 x i8]* @S.636
+	%54 = getelementptr [7 x i8], [7 x i8]* @S.637
 	%55 = bitcast [7 x i8]* %54 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %55)
 	%56 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15225,7 +15278,7 @@ L.27:
 	%84 = icmp eq %symb.SymbNode* %83, null
 	br i1 %84, label %L.26, label %L.28
 L.28:
-	%85 = getelementptr [3 x i8], [3 x i8]* @S.637
+	%85 = getelementptr [3 x i8], [3 x i8]* @S.638
 	%86 = bitcast [3 x i8]* %85 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %86)
 	br label %L.25
@@ -15233,12 +15286,12 @@ L.26:
 	call void @sys_fildes_chr(i64 2, i8 41)
 	br label %L.10
 L.14:
-	%87 = getelementptr [8 x i8], [8 x i8]* @S.638
+	%87 = getelementptr [8 x i8], [8 x i8]* @S.639
 	%88 = bitcast [8 x i8]* %87 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %88)
 	br label %L.10
 L.15:
-	%89 = getelementptr [3 x i8], [3 x i8]* @S.639
+	%89 = getelementptr [3 x i8], [3 x i8]* @S.640
 	%90 = bitcast [3 x i8]* %89 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %90)
 	store i16 0, i16* %offs
@@ -15262,7 +15315,7 @@ L.31:
 	%102 = getelementptr [0 x i8], [0 x i8]* %101
 	%103 = bitcast [0 x i8]* %102 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %103)
-	%104 = getelementptr [3 x i8], [3 x i8]* @S.640
+	%104 = getelementptr [3 x i8], [3 x i8]* @S.641
 	%105 = bitcast [3 x i8]* %104 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %105)
 	%106 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15275,14 +15328,14 @@ L.33:
 	call void @sys_fildes_uint16(i64 2, i16 %110)
 	br label %L.32
 L.34:
-	%111 = getelementptr [3 x i8], [3 x i8]* @S.641
+	%111 = getelementptr [3 x i8], [3 x i8]* @S.642
 	%112 = bitcast [3 x i8]* %111 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %112)
 	%113 = load i16, i16* %offs
 	call void @sys_fildes_hex16(i64 2, i16 %113)
 	br label %L.32
 L.32:
-	%114 = getelementptr [4 x i8], [4 x i8]* @S.642
+	%114 = getelementptr [4 x i8], [4 x i8]* @S.643
 	%115 = bitcast [4 x i8]* %114 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %115)
 	%116 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -15346,7 +15399,7 @@ L.40:
 	%152 = load i64, i64* %151
 	%153 = trunc i64 %152 to i32
 	call void @sys_fildes_uint32(i64 2, i32 %153)
-	%154 = getelementptr [3 x i8], [3 x i8]* @S.643
+	%154 = getelementptr [3 x i8], [3 x i8]* @S.644
 	%155 = bitcast [3 x i8]* %154 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %155)
 	%156 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15404,7 +15457,7 @@ L.45:
 L.43:
 	br label %L.10
 L.18:
-	%189 = getelementptr [3 x i8], [3 x i8]* @S.644
+	%189 = getelementptr [3 x i8], [3 x i8]* @S.645
 	%190 = bitcast [3 x i8]* %189 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %190)
 	%191 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15421,12 +15474,12 @@ L.18:
 	call void @symb_DumpReturns(%type.TypeListEntry* %200)
 	br label %L.10
 L.9:
-	%201 = getelementptr [10 x i8], [10 x i8]* @S.645
+	%201 = getelementptr [10 x i8], [10 x i8]* @S.646
 	%202 = bitcast [10 x i8]* %201 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %202)
 	br label %L.10
 L.10:
-	%203 = getelementptr [7 x i8], [7 x i8]* @S.646
+	%203 = getelementptr [7 x i8], [7 x i8]* @S.647
 	%204 = bitcast [7 x i8]* %203 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %204)
 	%205 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15446,7 +15499,7 @@ L.10:
 	%215 = load i32, i32* %214
 	%216 = zext i32 %215 to i64
 	call void @sys_fildes_uint(i64 2, i64 %216)
-	%217 = getelementptr [7 x i8], [7 x i8]* @S.647
+	%217 = getelementptr [7 x i8], [7 x i8]* @S.648
 	%218 = bitcast [7 x i8]* %217 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %218)
 	%219 = load %type.TypeNode*, %type.TypeNode** %t
@@ -15455,7 +15508,7 @@ L.10:
 	%222 = icmp ne i8 %221, 0
 	br i1 %222, label %L.47, label %L.46
 L.47:
-	%223 = getelementptr [8 x i8], [8 x i8]* @S.648
+	%223 = getelementptr [8 x i8], [8 x i8]* @S.649
 	%224 = bitcast [8 x i8]* %223 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %224)
 	br label %L.46
@@ -15466,7 +15519,7 @@ L.46:
 	%228 = icmp ne i8 %227, 0
 	br i1 %228, label %L.49, label %L.48
 L.49:
-	%229 = getelementptr [8 x i8], [8 x i8]* @S.649
+	%229 = getelementptr [8 x i8], [8 x i8]* @S.650
 	%230 = bitcast [8 x i8]* %229 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %230)
 	br label %L.48
@@ -15477,7 +15530,7 @@ L.48:
 	%234 = icmp ne i8 %233, 0
 	br i1 %234, label %L.51, label %L.50
 L.51:
-	%235 = getelementptr [8 x i8], [8 x i8]* @S.650
+	%235 = getelementptr [8 x i8], [8 x i8]* @S.651
 	%236 = bitcast [8 x i8]* %235 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %236)
 	br label %L.50
@@ -15488,7 +15541,7 @@ L.50:
 	%240 = icmp ne i8 %239, 0
 	br i1 %240, label %L.53, label %L.52
 L.53:
-	%241 = getelementptr [8 x i8], [8 x i8]* @S.651
+	%241 = getelementptr [8 x i8], [8 x i8]* @S.652
 	%242 = bitcast [8 x i8]* %241 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %242)
 	br label %L.52
@@ -15582,7 +15635,7 @@ L.65:
 	%297 = getelementptr %type.TypeNode, %type.TypeNode* %296, i64 0, i32 5
 	%298 = load %symb.SymbNode*, %symb.SymbNode** %297
 	store %symb.SymbNode* %298, %symb.SymbNode** %s
-	%299 = getelementptr [13 x i8], [13 x i8]* @S.652
+	%299 = getelementptr [13 x i8], [13 x i8]* @S.653
 	%300 = bitcast [13 x i8]* %299 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %300)
 	br label %L.66
@@ -15606,7 +15659,7 @@ L.64:
 L.6:
 	br label %L.1
 L.3:
-	%307 = getelementptr [4 x i8], [4 x i8]* @S.653
+	%307 = getelementptr [4 x i8], [4 x i8]* @S.654
 	%308 = bitcast [4 x i8]* %307 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %308)
 	br label %L.1
@@ -15724,7 +15777,7 @@ L.20:
 	store %ast.AstNode* %50, %ast.AstNode** %tree
 	br label %L.19
 L.21:
-	call void @lex_Error(i8 87)
+	call void @lex_Error(i8 88)
 	br label %L.19
 L.19:
 	br label %L.16
@@ -15762,7 +15815,7 @@ L.26:
 	store %ast.AstNode* %71, %ast.AstNode** %tree
 	br label %L.25
 L.27:
-	call void @lex_Error(i8 87)
+	call void @lex_Error(i8 88)
 	br label %L.25
 L.25:
 	br label %L.22
@@ -15800,12 +15853,12 @@ L.31:
 	store %ast.AstNode* %90, %ast.AstNode** %tree
 	br label %L.30
 L.32:
-	call void @lex_Error(i8 87)
+	call void @lex_Error(i8 88)
 	br label %L.30
 L.30:
 	br label %L.8
 L.7:
-	call void @lex_Error(i8 53)
+	call void @lex_Error(i8 54)
 	br label %L.8
 L.8:
 	br label %L.4
@@ -15817,7 +15870,7 @@ L.6:
 L.4:
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 53)
+	call void @lex_Error(i8 54)
 	br label %L.1
 L.1:
 	%93 = call i8 @lex_Next()
@@ -16024,7 +16077,7 @@ L.4:
 	br label %L.1
 L.2:
 	%30 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %30)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %30)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 return:
@@ -16176,7 +16229,7 @@ L.8:
 	store %type.TypeNode* %18, %type.TypeNode** %20
 	br label %L.7
 L.9:
-	call void @lex_Error(i8 52)
+	call void @lex_Error(i8 53)
 	br label %L.7
 L.7:
 	%21 = call i8 @lex_Next()
@@ -16210,7 +16263,7 @@ L.14:
 L.13:
 	br label %L.10
 L.12:
-	call void @lex_Error(i8 72)
+	call void @lex_Error(i8 73)
 	%37 = call i8 @lex_Next()
 	store i8 %37, i8* %tok
 	br label %L.10
@@ -16220,7 +16273,7 @@ L.4:
 	br label %L.1
 L.3:
 	%38 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %38)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %38)
 	br label %L.1
 L.1:
 	%39 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -16230,7 +16283,7 @@ return:
 	%40 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %40
 }
-@S.656 = private unnamed_addr constant [26 x i8] c"No CLIST for packed array\00"
+@S.657 = private unnamed_addr constant [26 x i8] c"No CLIST for packed array\00"
 define internal %ast.AstNode* @expr_ArrayPack(%type.TypeNode* %t$, %ast.AstNode* %intree$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -16256,9 +16309,9 @@ L.0:
 	%3 = icmp ne i8 %2, 9
 	br i1 %3, label %L.2, label %L.1
 L.2:
-	%4 = getelementptr [26 x i8], [26 x i8]* @S.656
+	%4 = getelementptr [26 x i8], [26 x i8]* @S.657
 	%5 = bitcast [26 x i8]* %4 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %5)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %5)
 	%6 = load %ast.AstNode*, %ast.AstNode** %tree
 	store %ast.AstNode* %6, %ast.AstNode** %rv.0
 	br label %return
@@ -16617,7 +16670,7 @@ L.19:
 	br i1 %78, label %L.26, label %L.25
 L.26:
 	store i8 1, i8* %once
-	call void @lex_Error(i8 70)
+	call void @lex_Error(i8 71)
 	br label %L.25
 L.25:
 	br label %L.17
@@ -16729,7 +16782,7 @@ L.41:
 	%142 = xor i1 %141, true
 	br i1 %142, label %L.43, label %L.42
 L.43:
-	call void @lex_Error(i8 71)
+	call void @lex_Error(i8 72)
 	br label %L.42
 L.42:
 	br label %L.39
@@ -16753,7 +16806,7 @@ L.48:
 	store %ast.AstNode* %149, %ast.AstNode** %tree
 	br label %L.47
 L.49:
-	call void @lex_ErrorT(i8 18, i8 39)
+	call void @lex_ErrorT(i8 19, i8 39)
 	br label %L.47
 L.47:
 	br label %L.44
@@ -16767,8 +16820,8 @@ return:
 	%151 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %151
 }
-@S.657 = private unnamed_addr constant [27 x i8] c"No CLIST for packed record\00"
-@S.658 = private unnamed_addr constant [33 x i8] c"Malformed LIST for packed record\00"
+@S.658 = private unnamed_addr constant [27 x i8] c"No CLIST for packed record\00"
+@S.659 = private unnamed_addr constant [33 x i8] c"Malformed LIST for packed record\00"
 define internal %ast.AstNode* @expr_RecordPack(%type.TypeNode* %t$, %ast.AstNode* %intree$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -16795,9 +16848,9 @@ L.0:
 	%3 = icmp ne i8 %2, 9
 	br i1 %3, label %L.2, label %L.1
 L.2:
-	%4 = getelementptr [27 x i8], [27 x i8]* @S.657
+	%4 = getelementptr [27 x i8], [27 x i8]* @S.658
 	%5 = bitcast [27 x i8]* %4 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %5)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %5)
 	%6 = load %ast.AstNode*, %ast.AstNode** %tree
 	store %ast.AstNode* %6, %ast.AstNode** %rv.0
 	br label %return
@@ -16869,9 +16922,9 @@ L.11:
 	%46 = icmp uge i16 %42, %45
 	br i1 %46, label %L.14, label %L.13
 L.14:
-	%47 = getelementptr [33 x i8], [33 x i8]* @S.658
+	%47 = getelementptr [33 x i8], [33 x i8]* @S.659
 	%48 = bitcast [33 x i8]* %47 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %48)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %48)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.13:
@@ -16984,13 +17037,13 @@ return:
 	%115 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %115
 }
-define internal %type.TypeNode* @expr_RecordFixFlex(%type.TypeNode* %bt$, %ast.AstNode* %node$) nounwind {
+define internal %type.TypeNode* @expr_RecordFixFlex(%type.TypeNode* %bt$, i64 %len$) nounwind {
 L.0:
 	%rv.0 = alloca %type.TypeNode*
 	%bt = alloca %type.TypeNode*
-	%node = alloca %ast.AstNode*
+	%len = alloca i64
 	store %type.TypeNode* %bt$, %type.TypeNode** %bt
-	store %ast.AstNode* %node$, %ast.AstNode** %node
+	store i64 %len$, i64* %len
 	%t = alloca %type.TypeNode*
 	%s = alloca %symb.SymbNode*
 	%ps = alloca %symb.SymbNode*
@@ -17046,41 +17099,38 @@ L.4:
 	store %symb.SymbNode* %29, %symb.SymbNode** %bs
 	br label %L.1
 L.2:
-	%30 = load %ast.AstNode*, %ast.AstNode** %node
-	%31 = getelementptr %ast.AstNode, %ast.AstNode* %30, i64 0, i32 11
-	%32 = load %ast.AstNode*, %ast.AstNode** %node
-	%33 = getelementptr %ast.AstNode, %ast.AstNode* %32, i64 0, i32 2
-	%34 = load i16, i16* %33
-	%35 = sub i16 %34, 1
-	%36 = zext i16 %35 to i64
-	%37 = getelementptr [0 x %ast.AstNode*], [0 x %ast.AstNode*]* %31, i64 0, i64 %36
-	%38 = load %ast.AstNode*, %ast.AstNode** %37
-	%39 = getelementptr %ast.AstNode, %ast.AstNode* %38, i64 0, i32 8
-	%40 = load %type.TypeNode*, %type.TypeNode** %39
-	%41 = load %symb.SymbNode*, %symb.SymbNode** %ps
-	%42 = getelementptr %symb.SymbNode, %symb.SymbNode* %41, i64 0, i32 1
-	store %type.TypeNode* %40, %type.TypeNode** %42
-	%43 = load %type.TypeNode*, %type.TypeNode** %bt
+	%30 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%31 = getelementptr %symb.SymbNode, %symb.SymbNode* %30, i64 0, i32 1
+	%32 = load %type.TypeNode*, %type.TypeNode** %31
+	%33 = load i64, i64* %len
+	%34 = call %type.TypeNode* @expr_ArrayFixFlex(%type.TypeNode* %32, i64 %33)
+	%35 = load %symb.SymbNode*, %symb.SymbNode** %ps
+	%36 = getelementptr %symb.SymbNode, %symb.SymbNode* %35, i64 0, i32 1
+	store %type.TypeNode* %34, %type.TypeNode** %36
+	%37 = load %type.TypeNode*, %type.TypeNode** %t
+	%38 = getelementptr %type.TypeNode, %type.TypeNode* %37, i64 0, i32 28
+	store i8 0, i8* %38
+	%39 = load %type.TypeNode*, %type.TypeNode** %bt
+	%40 = load %type.TypeNode*, %type.TypeNode** %t
+	%41 = getelementptr %type.TypeNode, %type.TypeNode* %40, i64 0, i32 0
+	store %type.TypeNode* %39, %type.TypeNode** %41
+	%42 = load %type.TypeNode*, %type.TypeNode** %t
+	%43 = getelementptr %type.TypeNode, %type.TypeNode* %42, i64 0, i32 9
+	store i32 0, i32* %43
 	%44 = load %type.TypeNode*, %type.TypeNode** %t
-	%45 = getelementptr %type.TypeNode, %type.TypeNode* %44, i64 0, i32 0
-	store %type.TypeNode* %43, %type.TypeNode** %45
+	%45 = getelementptr %type.TypeNode, %type.TypeNode* %44, i64 0, i32 10
+	store i32 0, i32* %45
 	%46 = load %type.TypeNode*, %type.TypeNode** %t
-	%47 = getelementptr %type.TypeNode, %type.TypeNode* %46, i64 0, i32 9
-	store i32 0, i32* %47
+	%47 = getelementptr %type.TypeNode, %type.TypeNode* %46, i64 0, i32 33
+	store i8 0, i8* %47
 	%48 = load %type.TypeNode*, %type.TypeNode** %t
-	%49 = getelementptr %type.TypeNode, %type.TypeNode* %48, i64 0, i32 10
-	store i32 0, i32* %49
-	%50 = load %type.TypeNode*, %type.TypeNode** %t
-	%51 = getelementptr %type.TypeNode, %type.TypeNode* %50, i64 0, i32 33
-	store i8 0, i8* %51
-	%52 = load %type.TypeNode*, %type.TypeNode** %t
-	call void @type_Final(%type.TypeNode* %52)
-	%53 = load %type.TypeNode*, %type.TypeNode** %t
-	store %type.TypeNode* %53, %type.TypeNode** %rv.0
+	call void @type_Final(%type.TypeNode* %48)
+	%49 = load %type.TypeNode*, %type.TypeNode** %t
+	store %type.TypeNode* %49, %type.TypeNode** %rv.0
 	br label %return
 return:
-	%54 = load %type.TypeNode*, %type.TypeNode** %rv.0
-	ret %type.TypeNode* %54
+	%50 = load %type.TypeNode*, %type.TypeNode** %rv.0
+	ret %type.TypeNode* %50
 }
 define internal %ast.AstNode* @expr_RecordConst(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -17147,14 +17197,14 @@ L.13:
 	br label %L.12
 L.14:
 	%27 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %27)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %27)
 	br label %L.12
 L.12:
 	%28 = call i8 @lex_Next()
 	store i8 %28, i8* %tok
 	br label %L.9
 L.11:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.9
 L.9:
 	%29 = call i8 @lex_Expect(i8 9)
@@ -17235,7 +17285,7 @@ L.24:
 	br i1 %69, label %L.28, label %L.27
 L.28:
 	store i8 1, i8* %once
-	call void @lex_Error(i8 70)
+	call void @lex_Error(i8 71)
 	br label %L.27
 L.27:
 	br label %L.22
@@ -17331,59 +17381,78 @@ L.38:
 	%127 = icmp ne i8 %126, 0
 	br i1 %127, label %L.41, label %L.40
 L.41:
-	%128 = load %type.TypeNode*, %type.TypeNode** %t
-	%129 = load %ast.AstNode*, %ast.AstNode** %tree
-	%130 = call %type.TypeNode* @expr_RecordFixFlex(%type.TypeNode* %128, %ast.AstNode* %129)
-	%131 = load %ast.AstNode*, %ast.AstNode** %tree
-	%132 = getelementptr %ast.AstNode, %ast.AstNode* %131, i64 0, i32 8
-	store %type.TypeNode* %130, %type.TypeNode** %132
+	%128 = load %ast.AstNode*, %ast.AstNode** %tree
+	%129 = getelementptr %ast.AstNode, %ast.AstNode* %128, i64 0, i32 11
+	%130 = load %ast.AstNode*, %ast.AstNode** %tree
+	%131 = getelementptr %ast.AstNode, %ast.AstNode* %130, i64 0, i32 2
+	%132 = load i16, i16* %131
+	%133 = sub i16 %132, 1
+	%134 = zext i16 %133 to i64
+	%135 = getelementptr [0 x %ast.AstNode*], [0 x %ast.AstNode*]* %129, i64 0, i64 %134
+	%136 = load %ast.AstNode*, %ast.AstNode** %135
+	%137 = getelementptr %ast.AstNode, %ast.AstNode* %136, i64 0, i32 8
+	%138 = load %type.TypeNode*, %type.TypeNode** %137
+	store %type.TypeNode* %138, %type.TypeNode** %ft
+	%139 = load %type.TypeNode*, %type.TypeNode** %t
+	%140 = load %type.TypeNode*, %type.TypeNode** %ft
+	%141 = getelementptr %type.TypeNode, %type.TypeNode* %140, i64 0, i32 8
+	%142 = load i64, i64* %141
+	%143 = load %type.TypeNode*, %type.TypeNode** %ft
+	%144 = getelementptr %type.TypeNode, %type.TypeNode* %143, i64 0, i32 7
+	%145 = load i64, i64* %144
+	%146 = sub i64 %142, %145
+	%147 = add i64 %146, 1
+	%148 = call %type.TypeNode* @expr_RecordFixFlex(%type.TypeNode* %139, i64 %147)
+	%149 = load %ast.AstNode*, %ast.AstNode** %tree
+	%150 = getelementptr %ast.AstNode, %ast.AstNode* %149, i64 0, i32 8
+	store %type.TypeNode* %148, %type.TypeNode** %150
 	br label %L.40
 L.40:
-	%133 = load %type.TypeNode*, %type.TypeNode** %t
-	%134 = getelementptr %type.TypeNode, %type.TypeNode* %133, i64 0, i32 24
-	%135 = load i8, i8* %134
-	%136 = icmp ne i8 %135, 0
-	br i1 %136, label %L.43, label %L.44
+	%151 = load %type.TypeNode*, %type.TypeNode** %t
+	%152 = getelementptr %type.TypeNode, %type.TypeNode* %151, i64 0, i32 24
+	%153 = load i8, i8* %152
+	%154 = icmp ne i8 %153, 0
+	br i1 %154, label %L.43, label %L.44
 L.43:
-	%137 = load %type.TypeNode*, %type.TypeNode** %t
-	%138 = load %ast.AstNode*, %ast.AstNode** %tree
-	%139 = call %ast.AstNode* @expr_RecordPack(%type.TypeNode* %137, %ast.AstNode* %138)
-	store %ast.AstNode* %139, %ast.AstNode** %tree
+	%155 = load %type.TypeNode*, %type.TypeNode** %t
+	%156 = load %ast.AstNode*, %ast.AstNode** %tree
+	%157 = call %ast.AstNode* @expr_RecordPack(%type.TypeNode* %155, %ast.AstNode* %156)
+	store %ast.AstNode* %157, %ast.AstNode** %tree
 	br label %L.42
 L.44:
-	%140 = load %ast.AstNode*, %ast.AstNode** %tree
-	%141 = call i8 @expr_IsAggregateConst(%ast.AstNode* %140)
-	%142 = icmp ne i8 %141, 0
-	%143 = xor i1 %142, true
-	br i1 %143, label %L.46, label %L.45
+	%158 = load %ast.AstNode*, %ast.AstNode** %tree
+	%159 = call i8 @expr_IsAggregateConst(%ast.AstNode* %158)
+	%160 = icmp ne i8 %159, 0
+	%161 = xor i1 %160, true
+	br i1 %161, label %L.46, label %L.45
 L.46:
-	call void @lex_Error(i8 71)
+	call void @lex_Error(i8 72)
 	br label %L.45
 L.45:
 	br label %L.42
 L.42:
 	br label %L.1
 L.3:
-	%144 = load i8, i8* %tok
-	%145 = icmp eq i8 %144, 45
-	br i1 %145, label %L.48, label %L.49
+	%162 = load i8, i8* %tok
+	%163 = icmp eq i8 %162, 45
+	br i1 %163, label %L.48, label %L.49
 L.48:
-	%146 = load %type.TypeNode*, %type.TypeNode** %t
-	%147 = call %ast.AstNode* @expr_CompositeNamedConstant(%type.TypeNode* %146)
-	store %ast.AstNode* %147, %ast.AstNode** %tree
+	%164 = load %type.TypeNode*, %type.TypeNode** %t
+	%165 = call %ast.AstNode* @expr_CompositeNamedConstant(%type.TypeNode* %164)
+	store %ast.AstNode* %165, %ast.AstNode** %tree
 	br label %L.47
 L.49:
-	call void @lex_ErrorT(i8 18, i8 39)
+	call void @lex_ErrorT(i8 19, i8 39)
 	br label %L.47
 L.47:
 	br label %L.1
 L.1:
-	%148 = load %ast.AstNode*, %ast.AstNode** %tree
-	store %ast.AstNode* %148, %ast.AstNode** %rv.0
+	%166 = load %ast.AstNode*, %ast.AstNode** %tree
+	store %ast.AstNode* %166, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%149 = load %ast.AstNode*, %ast.AstNode** %rv.0
-	ret %ast.AstNode* %149
+	%167 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %167
 }
 define internal %ast.AstNode* @expr_CompositeValue(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -17423,12 +17492,12 @@ L.8:
 	store %ast.AstNode* %13, %ast.AstNode** %tree
 	br label %L.5
 L.4:
-	call void @lex_Error(i8 52)
+	call void @lex_Error(i8 53)
 	br label %L.5
 L.5:
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 51)
+	call void @lex_Error(i8 52)
 	br label %L.1
 L.1:
 	%14 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -17578,7 +17647,7 @@ return:
 	%43 = load i64, i64* %rv.0
 	ret i64 %43
 }
-@S.659 = private unnamed_addr constant [30 x i8] c"GetAlignment: unexpected node\00"
+@S.660 = private unnamed_addr constant [30 x i8] c"GetAlignment: unexpected node\00"
 define internal i64 @expr_GetAlignment(%ast.AstNode* %tree$) nounwind {
 L.0:
 	%rv.0 = alloca i64
@@ -17791,7 +17860,7 @@ L.10:
 	store i64 %131, i64* %alignment
 	br label %L.4
 L.3:
-	%132 = getelementptr [30 x i8], [30 x i8]* @S.659
+	%132 = getelementptr [30 x i8], [30 x i8]* @S.660
 	%133 = bitcast [30 x i8]* %132 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %133)
 	%134 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -17805,8 +17874,8 @@ return:
 	%136 = load i64, i64* %rv.0
 	ret i64 %136
 }
-@S.660 = private unnamed_addr constant [17 x i8] c"Load via non-REF\00"
-@S.661 = private unnamed_addr constant [25 x i8] c"GetSize: unexpected node\00"
+@S.661 = private unnamed_addr constant [17 x i8] c"Load via non-REF\00"
+@S.662 = private unnamed_addr constant [25 x i8] c"GetSize: unexpected node\00"
 define internal %ast.AstNode* @expr_GetSize(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -17864,9 +17933,9 @@ L.8:
 	store %ast.AstNode* %31, %ast.AstNode** %size
 	br label %L.7
 L.9:
-	%32 = getelementptr [17 x i8], [17 x i8]* @S.660
+	%32 = getelementptr [17 x i8], [17 x i8]* @S.661
 	%33 = bitcast [17 x i8]* %32 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %33)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %33)
 	br label %L.7
 L.7:
 	br label %L.2
@@ -17911,7 +17980,7 @@ L.6:
 	store %ast.AstNode* %66, %ast.AstNode** %size
 	br label %L.2
 L.1:
-	%67 = getelementptr [25 x i8], [25 x i8]* @S.661
+	%67 = getelementptr [25 x i8], [25 x i8]* @S.662
 	%68 = bitcast [25 x i8]* %67 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %68)
 	%69 = load %ast.AstNode*, %ast.AstNode** %node
@@ -18292,7 +18361,7 @@ return:
 	%126 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %126
 }
-@S.662 = private unnamed_addr constant [17 x i8] c"Load via non-REF\00"
+@S.663 = private unnamed_addr constant [17 x i8] c"Load via non-REF\00"
 define internal %ast.AstNode* @expr_Load(%ast.AstNode* %tree$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -18365,7 +18434,7 @@ L.10:
 L.9:
 	br label %L.6
 L.8:
-	call void @lex_Error(i8 24)
+	call void @lex_Error(i8 25)
 	br label %L.6
 L.6:
 	br label %L.3
@@ -18376,9 +18445,9 @@ L.5:
 	%48 = icmp ne i8 %47, 11
 	br i1 %48, label %L.12, label %L.11
 L.12:
-	%49 = getelementptr [17 x i8], [17 x i8]* @S.662
+	%49 = getelementptr [17 x i8], [17 x i8]* @S.663
 	%50 = bitcast [17 x i8]* %49 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %50)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %50)
 	%51 = load %ast.AstNode*, %ast.AstNode** %tree
 	call void @ast_Dump(%ast.AstNode* %51)
 	br label %L.11
@@ -18545,7 +18614,7 @@ L.2:
 	%15 = xor i1 %14, true
 	br i1 %15, label %L.5, label %L.4
 L.5:
-	call void @lex_Error(i8 81)
+	call void @lex_Error(i8 82)
 	br label %L.4
 L.4:
 	%16 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
@@ -18575,7 +18644,7 @@ L.3:
 	%34 = icmp ne i8 %33, 0
 	br i1 %34, label %L.7, label %L.6
 L.7:
-	call void @lex_Error(i8 82)
+	call void @lex_Error(i8 83)
 	br label %L.6
 L.6:
 	br label %L.1
@@ -18652,7 +18721,7 @@ L.2:
 	%15 = xor i1 %14, true
 	br i1 %15, label %L.5, label %L.4
 L.5:
-	call void @lex_Error(i8 81)
+	call void @lex_Error(i8 82)
 	br label %L.4
 L.4:
 	%16 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
@@ -18682,7 +18751,7 @@ L.3:
 	%34 = icmp ne i8 %33, 0
 	br i1 %34, label %L.7, label %L.6
 L.7:
-	call void @lex_Error(i8 82)
+	call void @lex_Error(i8 83)
 	br label %L.6
 L.6:
 	br label %L.1
@@ -18715,7 +18784,7 @@ return:
 	%mrv1 = insertvalue { %ast.AstNode*, %ast.AstNode* } %mrv0,%ast.AstNode* %45,1
 	ret  { %ast.AstNode*, %ast.AstNode* } %mrv1
 }
-@S.663 = private unnamed_addr constant [13 x i8] c"UnLoad error\00"
+@S.664 = private unnamed_addr constant [13 x i8] c"UnLoad error\00"
 define internal %ast.AstNode* @expr_UnLoad(%ast.AstNode* %tree$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -18734,9 +18803,9 @@ L.2:
 	store %ast.AstNode* %7, %ast.AstNode** %tree
 	br label %L.1
 L.3:
-	%8 = getelementptr [13 x i8], [13 x i8]* @S.663
+	%8 = getelementptr [13 x i8], [13 x i8]* @S.664
 	%9 = bitcast [13 x i8]* %8 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %9)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %9)
 	%10 = load %ast.AstNode*, %ast.AstNode** %tree
 	call void @ast_Dump(%ast.AstNode* %10)
 	br label %L.1
@@ -18834,7 +18903,7 @@ L.7:
 L.6:
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.1
 L.1:
 	%51 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -18905,7 +18974,7 @@ L.5:
 L.4:
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.1
 L.1:
 	%32 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -18915,7 +18984,7 @@ return:
 	%33 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %33
 }
-@S.664 = private unnamed_addr constant [23 x i8] c"expr.Zero: VAR not REF\00"
+@S.665 = private unnamed_addr constant [23 x i8] c"expr.Zero: VAR not REF\00"
 define internal %ast.AstNode* @expr_Zero() nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -18973,9 +19042,9 @@ L.10:
 L.9:
 	br label %L.6
 L.8:
-	%29 = getelementptr [23 x i8], [23 x i8]* @S.664
+	%29 = getelementptr [23 x i8], [23 x i8]* @S.665
 	%30 = bitcast [23 x i8]* %29 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %30)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %30)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.6:
@@ -19006,7 +19075,7 @@ L.12:
 	%50 = xor i1 %49, true
 	br i1 %50, label %L.14, label %L.13
 L.14:
-	call void @lex_Error(i8 81)
+	call void @lex_Error(i8 82)
 	br label %L.13
 L.13:
 	%51 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
@@ -19100,7 +19169,7 @@ L.0:
 	%6 = icmp ne i8 %5, 2
 	br i1 %6, label %L.2, label %L.1
 L.2:
-	call void @lex_Error(i8 31)
+	call void @lex_Error(i8 32)
 	br label %L.1
 L.1:
 	%7 = load i8, i8* @lex_Token
@@ -19113,7 +19182,7 @@ L.4:
 	store %ast.AstNode* %10, %ast.AstNode** %shft
 	br label %L.3
 L.5:
-	call void @lex_ErrorT(i8 18, i8 5)
+	call void @lex_ErrorT(i8 19, i8 5)
 	br label %L.3
 L.3:
 	%11 = load i8, i8* %right
@@ -19177,7 +19246,7 @@ L.1:
 	%12 = xor i1 %11, true
 	br i1 %12, label %L.4, label %L.3
 L.4:
-	call void @lex_Error(i8 89)
+	call void @lex_Error(i8 90)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	store %type.TypeNode* null, %type.TypeNode** %rv.1
 	store %type.TypeNode* null, %type.TypeNode** %rv.2
@@ -19232,7 +19301,7 @@ L.5:
 	%41 = icmp eq i64 %40, 0
 	br i1 %41, label %L.13, label %L.12
 L.13:
-	call void @lex_Error(i8 90)
+	call void @lex_Error(i8 91)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	store %type.TypeNode* null, %type.TypeNode** %rv.1
 	store %type.TypeNode* null, %type.TypeNode** %rv.2
@@ -19250,7 +19319,7 @@ L.12:
 	%49 = icmp eq %type.TypeNode* %48, null
 	br i1 %49, label %L.15, label %L.14
 L.15:
-	call void @lex_Error(i8 91)
+	call void @lex_Error(i8 92)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	store %type.TypeNode* null, %type.TypeNode** %rv.1
 	store %type.TypeNode* null, %type.TypeNode** %rv.2
@@ -19350,7 +19419,7 @@ L.0:
 	%5 = icmp ne i8 %4, 5
 	br i1 %5, label %L.2, label %L.1
 L.2:
-	call void @lex_ErrorT(i8 18, i8 5)
+	call void @lex_ErrorT(i8 19, i8 5)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.1:
@@ -19380,7 +19449,7 @@ L.5:
 	%18 = icmp ne i8 %17, 2
 	br i1 %18, label %L.8, label %L.7
 L.8:
-	call void @lex_Error(i8 92)
+	call void @lex_Error(i8 93)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.7:
@@ -19694,13 +19763,13 @@ L.8:
 	store %type.TypeNode* %13, %type.TypeNode** %t
 	br label %L.7
 L.9:
-	call void @lex_Error(i8 27)
+	call void @lex_Error(i8 28)
 	br label %L.7
 L.7:
 	br label %L.4
 L.6:
 	%14 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorS(i8 20, [0 x i8]* %14)
+	call void @lex_ErrorS(i8 21, [0 x i8]* %14)
 	br label %L.4
 L.4:
 	%15 = call i8 @lex_Next()
@@ -19718,7 +19787,7 @@ L.11:
 L.10:
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 27)
+	call void @lex_Error(i8 28)
 	br label %L.1
 L.1:
 	%21 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -19728,7 +19797,7 @@ return:
 	%22 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %22
 }
-@S.665 = private unnamed_addr constant [18 x i8] c"Intrinsic unknown\00"
+@S.666 = private unnamed_addr constant [18 x i8] c"Intrinsic unknown\00"
 define internal %ast.AstNode* @expr_Intrinsic(%symb.SymbNode* %ps$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -19794,7 +19863,7 @@ L.29:
 	store %ast.AstNode* %16, %ast.AstNode** %tree
 	br label %L.28
 L.30:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.28
 L.28:
 	br label %L.5
@@ -19837,7 +19906,7 @@ L.8:
 	%39 = icmp eq i8 %38, 3
 	br i1 %39, label %L.36, label %L.35
 L.36:
-	call void @lex_Error(i8 31)
+	call void @lex_Error(i8 32)
 	br label %L.35
 L.35:
 	br label %L.5
@@ -19975,7 +20044,7 @@ L.55:
 	%112 = phi i1 [ true, %L.57 ], [ %111, %L.54 ]
 	br i1 %112, label %L.61, label %L.60
 L.61:
-	call void @lex_Error(i8 31)
+	call void @lex_Error(i8 32)
 	br label %L.60
 L.60:
 	%113 = load %ast.AstNode*, %ast.AstNode** %lhs
@@ -20064,16 +20133,16 @@ L.27:
 	store %ast.AstNode* %142, %ast.AstNode** %tree
 	br label %L.5
 L.4:
-	%143 = getelementptr [18 x i8], [18 x i8]* @S.665
+	%143 = getelementptr [18 x i8], [18 x i8]* @S.666
 	%144 = bitcast [18 x i8]* %143 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %144)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %144)
 	br label %L.5
 L.5:
 	%145 = call i8 @lex_Expect(i8 36)
 	store i8 %145, i8* %tok
 	br label %L.1
 L.3:
-	call void @lex_ErrorT(i8 18, i8 35)
+	call void @lex_ErrorT(i8 19, i8 35)
 	br label %L.1
 L.1:
 	%146 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -20178,7 +20247,7 @@ L.14:
 	%46 = icmp eq %symb.SymbNode* %45, null
 	br i1 %46, label %L.17, label %L.16
 L.17:
-	call void @lex_Error(i8 68)
+	call void @lex_Error(i8 69)
 	%47 = bitcast [4 x i8]* @expr_skiplist to [0 x i8]*
 	%48 = call i8 @lex_Skip([0 x i8]* %47)
 	store i8 %48, i8* %tok
@@ -20225,7 +20294,7 @@ L.12:
 	store i8 %70, i8* %tok
 	br label %L.9
 L.11:
-	call void @lex_ErrorT(i8 18, i8 35)
+	call void @lex_ErrorT(i8 19, i8 35)
 	br label %L.9
 L.9:
 	%71 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -20241,7 +20310,7 @@ L.22:
 	%77 = phi i1 [ false, %L.9 ], [ %76, %L.21 ]
 	br i1 %77, label %L.24, label %L.23
 L.24:
-	call void @lex_Error(i8 67)
+	call void @lex_Error(i8 68)
 	br label %L.23
 L.23:
 	%78 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -20451,7 +20520,7 @@ L.17:
 	store i8 %34, i8* %tok
 	br label %L.16
 L.18:
-	call void @lex_Error(i8 59)
+	call void @lex_Error(i8 60)
 	br label %L.16
 L.16:
 	br label %L.13
@@ -20547,7 +20616,7 @@ L.37:
 	store %type.TypeNode* %81, %type.TypeNode** %t
 	br label %L.36
 L.38:
-	call void @lex_Error(i8 24)
+	call void @lex_Error(i8 25)
 	store %ast.AstNode* null, %ast.AstNode** %tree
 	br label %L.36
 L.36:
@@ -20642,14 +20711,14 @@ L.45:
 	br label %L.42
 L.44:
 	%149 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorS(i8 22, [0 x i8]* %149)
+	call void @lex_ErrorS(i8 23, [0 x i8]* %149)
 	br label %L.42
 L.42:
 	%150 = call i8 @lex_Next()
 	store i8 %150, i8* %tok
 	br label %L.39
 L.41:
-	call void @lex_Error(i8 63)
+	call void @lex_Error(i8 64)
 	%151 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @type_DumpT(%type.TypeNode* %151, i8 0)
 	call void @sys_fildes_nl(i64 2)
@@ -20659,7 +20728,7 @@ L.39:
 L.28:
 	br label %L.19
 L.21:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.19
 L.19:
 	br label %L.9
@@ -20687,7 +20756,7 @@ L.51:
 	store %type.TypeNode* %165, %type.TypeNode** %t
 	br label %L.50
 L.52:
-	call void @lex_Error(i8 24)
+	call void @lex_Error(i8 25)
 	store %ast.AstNode* null, %ast.AstNode** %tree
 	br label %L.50
 L.50:
@@ -20709,7 +20778,7 @@ L.54:
 	%175 = icmp eq %ast.AstNode* %174, null
 	br i1 %175, label %L.57, label %L.56
 L.57:
-	call void @lex_Error(i8 62)
+	call void @lex_Error(i8 63)
 	%176 = load %ast.AstNode*, %ast.AstNode** @ast_Null
 	store %ast.AstNode* %176, %ast.AstNode** %index
 	br label %L.56
@@ -20754,7 +20823,7 @@ L.59:
 	%202 = phi i1 [ false, %L.61 ], [ %201, %L.63 ]
 	br i1 %202, label %L.65, label %L.64
 L.65:
-	call void @lex_Error(i8 88)
+	call void @lex_Error(i8 89)
 	%203 = load %type.TypeNode*, %type.TypeNode** %t
 	%204 = getelementptr %type.TypeNode, %type.TypeNode* %203, i64 0, i32 7
 	%205 = load i64, i64* %204
@@ -20872,7 +20941,7 @@ L.75:
 	%279 = phi i1 [ false, %L.77 ], [ %278, %L.74 ]
 	br i1 %279, label %L.83, label %L.82
 L.83:
-	call void @lex_Error(i8 88)
+	call void @lex_Error(i8 89)
 	br label %L.82
 L.82:
 	%280 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -20962,7 +21031,7 @@ L.84:
 L.71:
 	br label %L.53
 L.55:
-	call void @lex_Error(i8 60)
+	call void @lex_Error(i8 61)
 	br label %L.53
 L.53:
 	%343 = call i8 @lex_Expect(i8 38)
@@ -21100,7 +21169,7 @@ L.1:
 	%59 = getelementptr %symb.SymbNode, %symb.SymbNode* %58, i64 0, i32 22
 	%60 = getelementptr [0 x i8], [0 x i8]* %59
 	%61 = bitcast [0 x i8]* %60 to [0 x i8]*
-	call void @lex_ErrorI(i8 23, [0 x i8]* %61)
+	call void @lex_ErrorI(i8 24, [0 x i8]* %61)
 	br label %L.2
 L.2:
 	%62 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -21141,13 +21210,13 @@ L.4:
 	br i1 %9, label %L.7, label %L.6
 L.7:
 	%10 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %10)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %10)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.6:
 	br label %L.3
 L.5:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.3:
@@ -21278,8 +21347,8 @@ return:
 	%34 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %34
 }
-@S.666 = private unnamed_addr constant [23 x i8] c"must be fixed or float\00"
 @S.667 = private unnamed_addr constant [23 x i8] c"must be fixed or float\00"
+@S.668 = private unnamed_addr constant [23 x i8] c"must be fixed or float\00"
 define internal %ast.AstNode* @expr_Term(%type.TypeNode* %et$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -21332,7 +21401,7 @@ L.10:
 	br label %L.9
 L.11:
 	%20 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %20)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %20)
 	br label %L.9
 L.9:
 	%21 = call i8 @lex_Next()
@@ -21401,7 +21470,7 @@ L.29:
 	%52 = getelementptr %symb.SymbNode, %symb.SymbNode* %51, i64 0, i32 22
 	%53 = getelementptr [0 x i8], [0 x i8]* %52
 	%54 = bitcast [0 x i8]* %53 to [0 x i8]*
-	call void @lex_ErrorI(i8 30, [0 x i8]* %54)
+	call void @lex_ErrorI(i8 31, [0 x i8]* %54)
 	br label %L.27
 L.27:
 	br label %L.21
@@ -21461,7 +21530,7 @@ L.20:
 	%79 = getelementptr %symb.SymbNode, %symb.SymbNode* %78, i64 0, i32 22
 	%80 = getelementptr [0 x i8], [0 x i8]* %79
 	%81 = bitcast [0 x i8]* %80 to [0 x i8]*
-	call void @lex_ErrorI(i8 30, [0 x i8]* %81)
+	call void @lex_ErrorI(i8 31, [0 x i8]* %81)
 	br label %L.21
 L.21:
 	br label %L.15
@@ -21700,7 +21769,7 @@ L.61:
 	store i16 %214, i16* %218
 	br label %L.58
 L.57:
-	%219 = getelementptr [23 x i8], [23 x i8]* @S.666
+	%219 = getelementptr [23 x i8], [23 x i8]* @S.667
 	%220 = bitcast [23 x i8]* %219 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %220)
 	br label %L.58
@@ -21740,7 +21809,7 @@ L.66:
 	store i16 %235, i16* %239
 	br label %L.65
 L.67:
-	%240 = getelementptr [23 x i8], [23 x i8]* @S.667
+	%240 = getelementptr [23 x i8], [23 x i8]* @S.668
 	%241 = bitcast [23 x i8]* %240 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %241)
 	br label %L.65
@@ -22159,7 +22228,7 @@ return:
 	%50 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %50
 }
-@S.672 = private unnamed_addr constant [36 x i8] c"ArrayCompare: packed and not packed\00"
+@S.673 = private unnamed_addr constant [36 x i8] c"ArrayCompare: packed and not packed\00"
 define internal %ast.AstNode* @expr_ArrayCompare(i8 zeroext %op$, %ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -22192,7 +22261,7 @@ L.2:
 	%12 = xor i1 %11, true
 	br i1 %12, label %L.4, label %L.3
 L.4:
-	%13 = getelementptr [36 x i8], [36 x i8]* @S.672
+	%13 = getelementptr [36 x i8], [36 x i8]* @S.673
 	%14 = bitcast [36 x i8]* %13 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %14)
 	br label %L.3
@@ -22758,7 +22827,7 @@ L.10:
 	%127 = xor i1 %126, true
 	br i1 %127, label %L.59, label %L.58
 L.59:
-	call void @lex_Error(i8 37)
+	call void @lex_Error(i8 38)
 	br label %L.58
 L.58:
 	br label %L.7
@@ -22795,63 +22864,74 @@ L.1:
 L.3:
 	%5 = call i8 @lex_Next()
 	store i8 %5, i8* %tok
-	%6 = load %ast.AstNode*, %ast.AstNode** %tree
-	%7 = getelementptr %ast.AstNode, %ast.AstNode* %6, i64 0, i32 8
-	%8 = load %type.TypeNode*, %type.TypeNode** %7
-	%9 = call %ast.AstNode* @expr_Compare(%type.TypeNode* %8)
-	store %ast.AstNode* %9, %ast.AstNode** %rhs
-	%10 = load %ast.AstNode*, %ast.AstNode** %tree
-	%11 = getelementptr %ast.AstNode, %ast.AstNode* %10, i64 0, i32 0
-	%12 = load i8, i8* %11
-	%13 = icmp eq i8 %12, 6
-	br i1 %13, label %L.5, label %L.6
-L.5:
-	%14 = load %ast.AstNode*, %ast.AstNode** %tree
-	%15 = getelementptr %ast.AstNode, %ast.AstNode* %14, i64 0, i32 10
-	%16 = load i64, i64* %15
-	%17 = icmp ne i64 %16, 0
-	br i1 %17, label %L.8, label %L.7
-L.8:
-	%18 = load %ast.AstNode*, %ast.AstNode** %rhs
-	store %ast.AstNode* %18, %ast.AstNode** %tree
-	br label %L.7
-L.7:
-	br label %L.4
-L.6:
-	%19 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%20 = getelementptr %ast.AstNode, %ast.AstNode* %19, i64 0, i32 0
-	%21 = load i8, i8* %20
-	%22 = icmp eq i8 %21, 6
-	br i1 %22, label %L.10, label %L.11
-L.10:
-	%23 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%24 = getelementptr %ast.AstNode, %ast.AstNode* %23, i64 0, i32 10
-	%25 = load i64, i64* %24
-	%26 = icmp eq i64 %25, 0
-	br i1 %26, label %L.13, label %L.12
-L.13:
-	%27 = load %ast.AstNode*, %ast.AstNode** %rhs
-	store %ast.AstNode* %27, %ast.AstNode** %tree
-	br label %L.12
-L.12:
-	br label %L.9
-L.11:
-	%28 = load %ast.AstNode*, %ast.AstNode** %tree
-	%29 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%30 = call %ast.AstNode* @ast_OpBool(i8 85, %ast.AstNode* %28, %ast.AstNode* %29)
-	store %ast.AstNode* %30, %ast.AstNode** %tree
-	br label %L.9
-L.9:
-	br label %L.4
+	%6 = load %type.TypeNode*, %type.TypeNode** @type_booltype
+	%7 = call %ast.AstNode* @expr_Compare(%type.TypeNode* %6)
+	store %ast.AstNode* %7, %ast.AstNode** %rhs
+	%8 = load %ast.AstNode*, %ast.AstNode** %tree
+	%9 = icmp ne %ast.AstNode* %8, null
+	br i1 %9, label %L.4, label %L.5
 L.4:
+	%10 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%11 = icmp ne %ast.AstNode* %10, null
+	br label %L.5
+L.5:
+	%12 = phi i1 [ false, %L.3 ], [ %11, %L.4 ]
+	br i1 %12, label %L.7, label %L.6
+L.7:
+	%13 = load %ast.AstNode*, %ast.AstNode** %tree
+	%14 = getelementptr %ast.AstNode, %ast.AstNode* %13, i64 0, i32 0
+	%15 = load i8, i8* %14
+	%16 = icmp eq i8 %15, 6
+	br i1 %16, label %L.9, label %L.10
+L.9:
+	%17 = load %ast.AstNode*, %ast.AstNode** %tree
+	%18 = getelementptr %ast.AstNode, %ast.AstNode* %17, i64 0, i32 10
+	%19 = load i64, i64* %18
+	%20 = icmp ne i64 %19, 0
+	br i1 %20, label %L.12, label %L.11
+L.12:
+	%21 = load %ast.AstNode*, %ast.AstNode** %rhs
+	store %ast.AstNode* %21, %ast.AstNode** %tree
+	br label %L.11
+L.11:
+	br label %L.8
+L.10:
+	%22 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%23 = getelementptr %ast.AstNode, %ast.AstNode* %22, i64 0, i32 0
+	%24 = load i8, i8* %23
+	%25 = icmp eq i8 %24, 6
+	br i1 %25, label %L.14, label %L.15
+L.14:
+	%26 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%27 = getelementptr %ast.AstNode, %ast.AstNode* %26, i64 0, i32 10
+	%28 = load i64, i64* %27
+	%29 = icmp eq i64 %28, 0
+	br i1 %29, label %L.17, label %L.16
+L.17:
+	%30 = load %ast.AstNode*, %ast.AstNode** %rhs
+	store %ast.AstNode* %30, %ast.AstNode** %tree
+	br label %L.16
+L.16:
+	br label %L.13
+L.15:
+	%31 = load %ast.AstNode*, %ast.AstNode** %tree
+	%32 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%33 = call %ast.AstNode* @ast_OpBool(i8 85, %ast.AstNode* %31, %ast.AstNode* %32)
+	store %ast.AstNode* %33, %ast.AstNode** %tree
+	br label %L.13
+L.13:
+	br label %L.8
+L.8:
+	br label %L.6
+L.6:
 	br label %L.1
 L.2:
-	%31 = load %ast.AstNode*, %ast.AstNode** %tree
-	store %ast.AstNode* %31, %ast.AstNode** %rv.0
+	%34 = load %ast.AstNode*, %ast.AstNode** %tree
+	store %ast.AstNode* %34, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%32 = load %ast.AstNode*, %ast.AstNode** %rv.0
-	ret %ast.AstNode* %32
+	%35 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %35
 }
 define internal %ast.AstNode* @expr_Bool(%type.TypeNode* %t$) nounwind {
 L.0:
@@ -22874,63 +22954,74 @@ L.1:
 L.3:
 	%5 = call i8 @lex_Next()
 	store i8 %5, i8* %tok
-	%6 = load %ast.AstNode*, %ast.AstNode** %tree
-	%7 = getelementptr %ast.AstNode, %ast.AstNode* %6, i64 0, i32 8
-	%8 = load %type.TypeNode*, %type.TypeNode** %7
-	%9 = call %ast.AstNode* @expr_BoolAnd(%type.TypeNode* %8)
-	store %ast.AstNode* %9, %ast.AstNode** %rhs
-	%10 = load %ast.AstNode*, %ast.AstNode** %tree
-	%11 = getelementptr %ast.AstNode, %ast.AstNode* %10, i64 0, i32 0
-	%12 = load i8, i8* %11
-	%13 = icmp eq i8 %12, 6
-	br i1 %13, label %L.5, label %L.6
-L.5:
-	%14 = load %ast.AstNode*, %ast.AstNode** %tree
-	%15 = getelementptr %ast.AstNode, %ast.AstNode* %14, i64 0, i32 10
-	%16 = load i64, i64* %15
-	%17 = icmp eq i64 %16, 0
-	br i1 %17, label %L.8, label %L.7
-L.8:
-	%18 = load %ast.AstNode*, %ast.AstNode** %rhs
-	store %ast.AstNode* %18, %ast.AstNode** %tree
-	br label %L.7
-L.7:
-	br label %L.4
-L.6:
-	%19 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%20 = getelementptr %ast.AstNode, %ast.AstNode* %19, i64 0, i32 0
-	%21 = load i8, i8* %20
-	%22 = icmp eq i8 %21, 6
-	br i1 %22, label %L.10, label %L.11
-L.10:
-	%23 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%24 = getelementptr %ast.AstNode, %ast.AstNode* %23, i64 0, i32 10
-	%25 = load i64, i64* %24
-	%26 = icmp ne i64 %25, 0
-	br i1 %26, label %L.13, label %L.12
-L.13:
-	%27 = load %ast.AstNode*, %ast.AstNode** %rhs
-	store %ast.AstNode* %27, %ast.AstNode** %tree
-	br label %L.12
-L.12:
-	br label %L.9
-L.11:
-	%28 = load %ast.AstNode*, %ast.AstNode** %tree
-	%29 = load %ast.AstNode*, %ast.AstNode** %rhs
-	%30 = call %ast.AstNode* @ast_OpBool(i8 86, %ast.AstNode* %28, %ast.AstNode* %29)
-	store %ast.AstNode* %30, %ast.AstNode** %tree
-	br label %L.9
-L.9:
-	br label %L.4
+	%6 = load %type.TypeNode*, %type.TypeNode** @type_booltype
+	%7 = call %ast.AstNode* @expr_Compare(%type.TypeNode* %6)
+	store %ast.AstNode* %7, %ast.AstNode** %rhs
+	%8 = load %ast.AstNode*, %ast.AstNode** %tree
+	%9 = icmp ne %ast.AstNode* %8, null
+	br i1 %9, label %L.4, label %L.5
 L.4:
+	%10 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%11 = icmp ne %ast.AstNode* %10, null
+	br label %L.5
+L.5:
+	%12 = phi i1 [ false, %L.3 ], [ %11, %L.4 ]
+	br i1 %12, label %L.7, label %L.6
+L.7:
+	%13 = load %ast.AstNode*, %ast.AstNode** %tree
+	%14 = getelementptr %ast.AstNode, %ast.AstNode* %13, i64 0, i32 0
+	%15 = load i8, i8* %14
+	%16 = icmp eq i8 %15, 6
+	br i1 %16, label %L.9, label %L.10
+L.9:
+	%17 = load %ast.AstNode*, %ast.AstNode** %tree
+	%18 = getelementptr %ast.AstNode, %ast.AstNode* %17, i64 0, i32 10
+	%19 = load i64, i64* %18
+	%20 = icmp eq i64 %19, 0
+	br i1 %20, label %L.12, label %L.11
+L.12:
+	%21 = load %ast.AstNode*, %ast.AstNode** %rhs
+	store %ast.AstNode* %21, %ast.AstNode** %tree
+	br label %L.11
+L.11:
+	br label %L.8
+L.10:
+	%22 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%23 = getelementptr %ast.AstNode, %ast.AstNode* %22, i64 0, i32 0
+	%24 = load i8, i8* %23
+	%25 = icmp eq i8 %24, 6
+	br i1 %25, label %L.14, label %L.15
+L.14:
+	%26 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%27 = getelementptr %ast.AstNode, %ast.AstNode* %26, i64 0, i32 10
+	%28 = load i64, i64* %27
+	%29 = icmp ne i64 %28, 0
+	br i1 %29, label %L.17, label %L.16
+L.17:
+	%30 = load %ast.AstNode*, %ast.AstNode** %rhs
+	store %ast.AstNode* %30, %ast.AstNode** %tree
+	br label %L.16
+L.16:
+	br label %L.13
+L.15:
+	%31 = load %ast.AstNode*, %ast.AstNode** %tree
+	%32 = load %ast.AstNode*, %ast.AstNode** %rhs
+	%33 = call %ast.AstNode* @ast_OpBool(i8 86, %ast.AstNode* %31, %ast.AstNode* %32)
+	store %ast.AstNode* %33, %ast.AstNode** %tree
+	br label %L.13
+L.13:
+	br label %L.8
+L.8:
+	br label %L.6
+L.6:
 	br label %L.1
 L.2:
-	%31 = load %ast.AstNode*, %ast.AstNode** %tree
-	store %ast.AstNode* %31, %ast.AstNode** %rv.0
+	%34 = load %ast.AstNode*, %ast.AstNode** %tree
+	store %ast.AstNode* %34, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%32 = load %ast.AstNode*, %ast.AstNode** %rv.0
-	ret %ast.AstNode* %32
+	%35 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %35
 }
 define internal { %ast.AstNode*, %ast.AstNode* } @expr_GetRange() nounwind {
 L.0:
@@ -22957,7 +23048,7 @@ L.2:
 	br i1 %7, label %L.4, label %L.3
 L.4:
 	%8 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %8)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %8)
 	%9 = load %ast.AstNode*, %ast.AstNode** @ast_Null
 	store %ast.AstNode* %9, %ast.AstNode** %rv.0
 	%10 = load %ast.AstNode*, %ast.AstNode** @ast_Null
@@ -23171,7 +23262,7 @@ L.26:
 	store %ast.AstNode* %63, %ast.AstNode** %tree
 	br label %L.25
 L.27:
-	call void @lex_Error(i8 52)
+	call void @lex_Error(i8 53)
 	br label %L.25
 L.25:
 	br label %L.23
@@ -23290,7 +23381,7 @@ L.9:
 L.4:
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 72)
+	call void @lex_Error(i8 73)
 	br label %L.1
 L.1:
 	%29 = load i64, i64* %rv
@@ -23657,7 +23748,7 @@ L.3:
 	%15 = xor i1 %14, true
 	br i1 %15, label %L.6, label %L.5
 L.6:
-	call void @lex_Error(i8 48)
+	call void @lex_Error(i8 49)
 	%16 = load %ast.AstNode*, %ast.AstNode** %ctree
 	%17 = getelementptr %ast.AstNode, %ast.AstNode* %16, i64 0, i32 10
 	store i64 0, i64* %17
@@ -23752,7 +23843,7 @@ L.24:
 	store i8 %55, i8* %tok
 	br label %L.23
 L.25:
-	call void @lex_ErrorT(i8 18, i8 63)
+	call void @lex_ErrorT(i8 19, i8 63)
 	br label %L.23
 L.23:
 	%56 = load i8, i8* %doit
@@ -23793,7 +23884,7 @@ L.33:
 L.11:
 	br label %L.2
 L.1:
-	call void @lex_Error(i8 54)
+	call void @lex_Error(i8 55)
 	br label %L.2
 L.2:
 	%69 = bitcast [3 x i8]* @stmt_elselist to [0 x i8]*
@@ -23870,7 +23961,7 @@ L.2:
 	%7 = phi i1 [ true, %L.0 ], [ %6, %L.1 ]
 	br i1 %7, label %L.4, label %L.3
 L.4:
-	call void @lex_Error(i8 72)
+	call void @lex_Error(i8 73)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.3:
@@ -23934,13 +24025,13 @@ L.12:
 	store %type.TypeNode* %21, %type.TypeNode** %bt
 	br label %L.11
 L.13:
-	call void @lex_Error(i8 27)
+	call void @lex_Error(i8 28)
 	br label %L.11
 L.11:
 	br label %L.8
 L.10:
 	%22 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %22)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %22)
 	br label %L.8
 L.8:
 	%23 = call i8 @lex_Next()
@@ -24034,7 +24125,7 @@ L.16:
 	store i8 %67, i8* %tok
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.1
 L.1:
 	%68 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -24132,7 +24223,7 @@ L.7:
 	store i8 %15, i8* %tok
 	br label %L.6
 L.8:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.6
 L.6:
 	br label %L.3
@@ -24160,100 +24251,165 @@ L.13:
 L.12:
 	%27 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @type_Final(%type.TypeNode* %27)
-	store %ast.AstNode* null, %ast.AstNode** %iv
 	%28 = load i8, i8* @lex_Token
 	store i8 %28, i8* %tok
 	%29 = load i8, i8* %tok
-	%30 = icmp eq i8 %29, 9
+	%30 = icmp eq i8 %29, 35
 	br i1 %30, label %L.15, label %L.14
 L.15:
+	%val = alloca i64
 	%31 = call i8 @lex_Next()
 	store i8 %31, i8* %tok
 	%32 = load %type.TypeNode*, %type.TypeNode** %t
-	%33 = call %ast.AstNode* @expr_Const(%type.TypeNode* %32)
-	store %ast.AstNode* %33, %ast.AstNode** %iv
-	%34 = load %type.TypeNode*, %type.TypeNode** %t
-	%35 = getelementptr %type.TypeNode, %type.TypeNode* %34, i64 0, i32 28
-	%36 = load i8, i8* %35
-	%37 = icmp ne i8 %36, 0
-	br i1 %37, label %L.17, label %L.16
+	%33 = getelementptr %type.TypeNode, %type.TypeNode* %32, i64 0, i32 28
+	%34 = load i8, i8* %33
+	%35 = icmp ne i8 %34, 0
+	%36 = xor i1 %35, true
+	br i1 %36, label %L.17, label %L.16
 L.17:
-	%38 = load %ast.AstNode*, %ast.AstNode** %iv
-	%39 = getelementptr %ast.AstNode, %ast.AstNode* %38, i64 0, i32 8
-	%40 = load %type.TypeNode*, %type.TypeNode** %39
-	store %type.TypeNode* %40, %type.TypeNode** %t
+	call void @lex_Error(i8 82)
 	br label %L.16
 L.16:
-	%41 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%42 = getelementptr %symb.SymbNode, %symb.SymbNode* %41, i64 0, i32 17
-	store i8 1, i8* %42
+	%37 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
+	%38 = call i64 @expr_ConstValue(%type.TypeNode* %37)
+	store i64 %38, i64* %val
+	%39 = load %type.TypeNode*, %type.TypeNode** %t
+	%40 = getelementptr %type.TypeNode, %type.TypeNode* %39, i64 0, i32 15
+	%41 = load i8, i8* %40
+	%42 = zext i8 %41 to i64
+	switch i64 %42, label %L.18 [
+		i64 6, label %L.20
+		i64 7, label %L.21
+	]
+L.20:
+	%43 = load %type.TypeNode*, %type.TypeNode** %t
+	%44 = load i64, i64* %val
+	%45 = call %type.TypeNode* @expr_ArrayFixFlex(%type.TypeNode* %43, i64 %44)
+	store %type.TypeNode* %45, %type.TypeNode** %t
+	br label %L.19
+L.21:
+	%46 = load %type.TypeNode*, %type.TypeNode** %t
+	%47 = load i64, i64* %val
+	%48 = call %type.TypeNode* @expr_RecordFixFlex(%type.TypeNode* %46, i64 %47)
+	store %type.TypeNode* %48, %type.TypeNode** %t
+	br label %L.19
+L.18:
+	br label %L.19
+L.19:
+	%49 = call i8 @lex_Expect(i8 36)
+	store i8 %49, i8* %tok
 	br label %L.14
 L.14:
+	store %ast.AstNode* null, %ast.AstNode** %iv
+	%50 = load i8, i8* %tok
+	%51 = icmp eq i8 %50, 9
+	br i1 %51, label %L.23, label %L.22
+L.23:
+	%52 = call i8 @lex_Next()
+	store i8 %52, i8* %tok
+	%53 = load %type.TypeNode*, %type.TypeNode** %t
+	%54 = call %ast.AstNode* @expr_Const(%type.TypeNode* %53)
+	store %ast.AstNode* %54, %ast.AstNode** %iv
+	%55 = load %type.TypeNode*, %type.TypeNode** %t
+	%56 = getelementptr %type.TypeNode, %type.TypeNode* %55, i64 0, i32 28
+	%57 = load i8, i8* %56
+	%58 = icmp ne i8 %57, 0
+	br i1 %58, label %L.25, label %L.24
+L.25:
+	%59 = load %ast.AstNode*, %ast.AstNode** %iv
+	%60 = getelementptr %ast.AstNode, %ast.AstNode* %59, i64 0, i32 8
+	%61 = load %type.TypeNode*, %type.TypeNode** %60
+	store %type.TypeNode* %61, %type.TypeNode** %t
+	br label %L.24
+L.24:
+	%62 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%63 = getelementptr %symb.SymbNode, %symb.SymbNode* %62, i64 0, i32 17
+	store i8 1, i8* %63
+	br label %L.22
+L.22:
+	%64 = load %type.TypeNode*, %type.TypeNode** %t
+	%65 = getelementptr %type.TypeNode, %type.TypeNode* %64, i64 0, i32 28
+	%66 = load i8, i8* %65
+	%67 = icmp ne i8 %66, 0
+	br i1 %67, label %L.26, label %L.27
+L.26:
+	%68 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%69 = getelementptr %symb.SymbNode, %symb.SymbNode* %68, i64 0, i32 14
+	%70 = load i8, i8* %69
+	%71 = icmp ult i8 %70, 4
+	br label %L.27
+L.27:
+	%72 = phi i1 [ false, %L.22 ], [ %71, %L.26 ]
+	br i1 %72, label %L.29, label %L.28
+L.29:
+	call void @lex_Error(i8 8)
+	br label %L.28
+L.28:
 	br label %L.9
 L.11:
-	%43 = load %type.TypeNode*, %type.TypeNode** @type_unkntype
-	store %type.TypeNode* %43, %type.TypeNode** %t
-	call void @lex_ErrorT(i8 18, i8 3)
+	%73 = load %type.TypeNode*, %type.TypeNode** @type_unkntype
+	store %type.TypeNode* %73, %type.TypeNode** %t
+	call void @lex_ErrorT(i8 19, i8 3)
 	br label %L.9
 L.9:
-	%44 = load %symb.SymbNode*, %symb.SymbNode** %ss
-	%45 = getelementptr %symb.SymbNode, %symb.SymbNode* %44, i64 0, i32 0
-	%46 = load %symb.SymbNode*, %symb.SymbNode** %45
-	%47 = icmp eq %symb.SymbNode* %46, null
-	br i1 %47, label %L.19, label %L.20
-L.19:
-	%48 = load %symb.SymbNode*, %symb.SymbNode** %ss
-	%49 = load %type.TypeNode*, %type.TypeNode** %t
-	%50 = load %ast.AstNode*, %ast.AstNode** %iv
-	%51 = call %ast.AstNode* @stmt_VarNew(%symb.SymbNode* %48, %type.TypeNode* %49, %ast.AstNode* %50)
-	store %ast.AstNode* %51, %ast.AstNode** %tree
-	br label %L.18
-L.20:
-	%52 = call %ast.AstNode* @ast_New(i8 94, %type.TypeNode* null)
-	store %ast.AstNode* %52, %ast.AstNode** %tree
-	br label %L.21
-L.21:
-	%53 = load %symb.SymbNode*, %symb.SymbNode** %ss
-	%54 = load %type.TypeNode*, %type.TypeNode** %t
-	%55 = load %ast.AstNode*, %ast.AstNode** %iv
-	%56 = call %ast.AstNode* @stmt_VarNew(%symb.SymbNode* %53, %type.TypeNode* %54, %ast.AstNode* %55)
-	store %ast.AstNode* %56, %ast.AstNode** %stree
-	%57 = load %ast.AstNode*, %ast.AstNode** %tree
-	%58 = load %ast.AstNode*, %ast.AstNode** %stree
-	%59 = call %ast.AstNode* @ast_Child(%ast.AstNode* %57, %ast.AstNode* %58)
-	store %ast.AstNode* %59, %ast.AstNode** %tree
-	%60 = load %symb.SymbNode*, %symb.SymbNode** %ss
-	%61 = load %symb.SymbNode*, %symb.SymbNode** %s
-	%62 = icmp eq %symb.SymbNode* %60, %61
-	br i1 %62, label %L.25, label %L.24
-L.24:
-	%63 = load %symb.SymbNode*, %symb.SymbNode** %ss
-	%64 = getelementptr %symb.SymbNode, %symb.SymbNode* %63, i64 0, i32 0
-	%65 = load %symb.SymbNode*, %symb.SymbNode** %64
-	%66 = icmp eq %symb.SymbNode* %65, null
-	br label %L.25
-L.25:
-	%67 = phi i1 [ true, %L.21 ], [ %66, %L.24 ]
-	br i1 %67, label %L.22, label %L.23
-L.23:
-	%68 = load %symb.SymbNode*, %symb.SymbNode** %ss
-	%69 = getelementptr %symb.SymbNode, %symb.SymbNode* %68, i64 0, i32 0
-	%70 = load %symb.SymbNode*, %symb.SymbNode** %69
-	store %symb.SymbNode* %70, %symb.SymbNode** %ss
-	br label %L.21
-L.22:
-	br label %L.18
-L.18:
-	%71 = call i8 @lex_Expect(i8 4)
-	store i8 %71, i8* %tok
+	%74 = load %symb.SymbNode*, %symb.SymbNode** %ss
+	%75 = getelementptr %symb.SymbNode, %symb.SymbNode* %74, i64 0, i32 0
+	%76 = load %symb.SymbNode*, %symb.SymbNode** %75
+	%77 = icmp eq %symb.SymbNode* %76, null
+	br i1 %77, label %L.31, label %L.32
+L.31:
+	%78 = load %symb.SymbNode*, %symb.SymbNode** %ss
+	%79 = load %type.TypeNode*, %type.TypeNode** %t
+	%80 = load %ast.AstNode*, %ast.AstNode** %iv
+	%81 = call %ast.AstNode* @stmt_VarNew(%symb.SymbNode* %78, %type.TypeNode* %79, %ast.AstNode* %80)
+	store %ast.AstNode* %81, %ast.AstNode** %tree
+	br label %L.30
+L.32:
+	%82 = call %ast.AstNode* @ast_New(i8 94, %type.TypeNode* null)
+	store %ast.AstNode* %82, %ast.AstNode** %tree
+	br label %L.33
+L.33:
+	%83 = load %symb.SymbNode*, %symb.SymbNode** %ss
+	%84 = load %type.TypeNode*, %type.TypeNode** %t
+	%85 = load %ast.AstNode*, %ast.AstNode** %iv
+	%86 = call %ast.AstNode* @stmt_VarNew(%symb.SymbNode* %83, %type.TypeNode* %84, %ast.AstNode* %85)
+	store %ast.AstNode* %86, %ast.AstNode** %stree
+	%87 = load %ast.AstNode*, %ast.AstNode** %tree
+	%88 = load %ast.AstNode*, %ast.AstNode** %stree
+	%89 = call %ast.AstNode* @ast_Child(%ast.AstNode* %87, %ast.AstNode* %88)
+	store %ast.AstNode* %89, %ast.AstNode** %tree
+	%90 = load %symb.SymbNode*, %symb.SymbNode** %ss
+	%91 = load %symb.SymbNode*, %symb.SymbNode** %s
+	%92 = icmp eq %symb.SymbNode* %90, %91
+	br i1 %92, label %L.37, label %L.36
+L.36:
+	%93 = load %symb.SymbNode*, %symb.SymbNode** %ss
+	%94 = getelementptr %symb.SymbNode, %symb.SymbNode* %93, i64 0, i32 0
+	%95 = load %symb.SymbNode*, %symb.SymbNode** %94
+	%96 = icmp eq %symb.SymbNode* %95, null
+	br label %L.37
+L.37:
+	%97 = phi i1 [ true, %L.33 ], [ %96, %L.36 ]
+	br i1 %97, label %L.34, label %L.35
+L.35:
+	%98 = load %symb.SymbNode*, %symb.SymbNode** %ss
+	%99 = getelementptr %symb.SymbNode, %symb.SymbNode* %98, i64 0, i32 0
+	%100 = load %symb.SymbNode*, %symb.SymbNode** %99
+	store %symb.SymbNode* %100, %symb.SymbNode** %ss
+	br label %L.33
+L.34:
+	br label %L.30
+L.30:
+	%101 = call i8 @lex_Expect(i8 4)
+	store i8 %101, i8* %tok
 	br label %L.1
 L.1:
-	%72 = load %ast.AstNode*, %ast.AstNode** %tree
-	store %ast.AstNode* %72, %ast.AstNode** %rv.0
+	%102 = load %ast.AstNode*, %ast.AstNode** %tree
+	store %ast.AstNode* %102, %ast.AstNode** %rv.0
 	br label %return
 return:
-	%73 = load %ast.AstNode*, %ast.AstNode** %rv.0
-	ret %ast.AstNode* %73
+	%103 = load %ast.AstNode*, %ast.AstNode** %rv.0
+	ret %ast.AstNode* %103
 }
 define internal %ast.AstNode* @stmt_ConstDecl() nounwind {
 L.0:
@@ -24411,7 +24567,7 @@ L.11:
 	store i8 1, i8* %80
 	br label %L.8
 L.10:
-	call void @lex_Error(i8 71)
+	call void @lex_Error(i8 72)
 	br label %L.8
 L.8:
 	%81 = load %type.TypeNode*, %type.TypeNode** %t
@@ -24420,7 +24576,7 @@ L.8:
 	store %type.TypeNode* %81, %type.TypeNode** %83
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.1
 L.1:
 	%84 = call i8 @lex_Expect(i8 4)
@@ -24462,7 +24618,7 @@ return:
 	ret i16 %9
 }
 @stmt_Asm_MaxArg = internal constant i64 9, align 8
-@S.688 = private unnamed_addr constant [18 x i8] c"'~' in constraint\00"
+@S.689 = private unnamed_addr constant [18 x i8] c"'~' in constraint\00"
 define internal %ast.AstNode* @stmt_Asm() nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -24607,7 +24763,7 @@ L.17:
 	store i16 %69, i16* %narg
 	br label %L.15
 L.18:
-	%70 = getelementptr [18 x i8], [18 x i8]* @S.688
+	%70 = getelementptr [18 x i8], [18 x i8]* @S.689
 	%71 = bitcast [18 x i8]* %70 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %71)
 	%72 = load [0 x i8]*, [0 x i8]** %what
@@ -24669,7 +24825,7 @@ L.25:
 L.10:
 	br label %L.6
 L.8:
-	call void @lex_ErrorT(i8 18, i8 44)
+	call void @lex_ErrorT(i8 19, i8 44)
 	br label %L.6
 L.6:
 	store i8 0, i8* %na
@@ -24740,7 +24896,7 @@ L.35:
 	store i8 %146, i8* %tok
 	br label %L.32
 L.34:
-	call void @lex_ErrorT(i8 18, i8 5)
+	call void @lex_ErrorT(i8 19, i8 5)
 	br label %L.32
 L.32:
 	br label %L.29
@@ -24910,7 +25066,7 @@ L.44:
 L.4:
 	br label %L.1
 L.3:
-	call void @lex_ErrorT(i8 18, i8 44)
+	call void @lex_ErrorT(i8 19, i8 44)
 	br label %L.1
 L.1:
 	%247 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -25089,8 +25245,8 @@ return:
 	%30 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %30
 }
-@S.689 = private unnamed_addr constant [24 x i8] c"Assign to packed array\0A\00"
-@S.690 = private unnamed_addr constant [20 x i8] c"packed array slices\00"
+@S.690 = private unnamed_addr constant [24 x i8] c"Assign to packed array\0A\00"
+@S.691 = private unnamed_addr constant [20 x i8] c"packed array slices\00"
 define internal %ast.AstNode* @stmt_AssignArray(%ast.AstNode* %lhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -25139,7 +25295,7 @@ L.4:
 	%19 = phi i1 [ true, %L.1 ], [ %18, %L.3 ]
 	br i1 %19, label %L.6, label %L.5
 L.6:
-	call void @lex_Error(i8 60)
+	call void @lex_Error(i8 61)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
 	br label %return
 L.5:
@@ -25149,7 +25305,7 @@ L.5:
 	%23 = icmp ne i8 %22, 0
 	br i1 %23, label %L.8, label %L.9
 L.8:
-	%24 = getelementptr [24 x i8], [24 x i8]* @S.689
+	%24 = getelementptr [24 x i8], [24 x i8]* @S.690
 	%25 = bitcast [24 x i8]* %24 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %25)
 	%26 = load %ast.AstNode*, %ast.AstNode** %lhs
@@ -25158,7 +25314,7 @@ L.8:
 	%29 = icmp eq i8 %28, 15
 	br i1 %29, label %L.11, label %L.10
 L.11:
-	%30 = getelementptr [20 x i8], [20 x i8]* @S.690
+	%30 = getelementptr [20 x i8], [20 x i8]* @S.691
 	%31 = bitcast [20 x i8]* %30 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %31)
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
@@ -25322,7 +25478,7 @@ L.30:
 	%134 = phi i1 [ false, %L.27 ], [ %133, %L.29 ]
 	br i1 %134, label %L.32, label %L.33
 L.32:
-	call void @lex_Error(i8 61)
+	call void @lex_Error(i8 62)
 	br label %L.31
 L.33:
 	%135 = load %ast.AstNode*, %ast.AstNode** %rsize
@@ -25398,7 +25554,7 @@ return:
 	%177 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %177
 }
-@S.691 = private unnamed_addr constant [19 x i8] c"Assign LHS not REF\00"
+@S.692 = private unnamed_addr constant [19 x i8] c"Assign LHS not REF\00"
 define internal %ast.AstNode* @stmt_Assign(%ast.AstNode* %lhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -25485,7 +25641,7 @@ L.15:
 	%30 = phi i1 [ false, %L.12 ], [ %29, %L.14 ]
 	br i1 %30, label %L.17, label %L.16
 L.17:
-	call void @lex_Error(i8 39)
+	call void @lex_Error(i8 40)
 	br label %L.16
 L.16:
 	store i16 0, i16* %nr
@@ -25531,9 +25687,9 @@ L.26:
 	store %type.TypeNode* %56, %type.TypeNode** %t
 	br label %L.25
 L.27:
-	%57 = getelementptr [19 x i8], [19 x i8]* @S.691
+	%57 = getelementptr [19 x i8], [19 x i8]* @S.692
 	%58 = bitcast [19 x i8]* %57 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %58)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %58)
 	%59 = load %ast.AstNode*, %ast.AstNode** %lhs
 	call void @ast_Dump(%ast.AstNode* %59)
 	br label %L.25
@@ -25581,7 +25737,7 @@ L.38:
 	store %ast.AstNode* %79, %ast.AstNode** %tree
 	br label %L.37
 L.39:
-	call void @lex_Error(i8 39)
+	call void @lex_Error(i8 40)
 	br label %L.37
 L.37:
 	%80 = load i16, i16* %nr
@@ -25628,7 +25784,7 @@ L.50:
 	store %ast.AstNode* %101, %ast.AstNode** %tree
 	br label %L.49
 L.51:
-	call void @lex_Error(i8 39)
+	call void @lex_Error(i8 40)
 	br label %L.49
 L.49:
 	%102 = load i16, i16* %nr
@@ -25844,7 +26000,7 @@ L.84:
 L.82:
 	br label %L.70
 L.72:
-	call void @lex_Error(i8 41)
+	call void @lex_Error(i8 42)
 	br label %L.70
 L.70:
 	%222 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -25882,17 +26038,17 @@ L.88:
 	%236 = icmp ult i16 %234, %235
 	br i1 %236, label %L.90, label %L.91
 L.90:
-	call void @lex_Error(i8 43)
+	call void @lex_Error(i8 44)
 	br label %L.89
 L.91:
-	call void @lex_Error(i8 44)
+	call void @lex_Error(i8 45)
 	br label %L.89
 L.89:
 	br label %L.87
 L.87:
 	br label %L.11
 L.13:
-	call void @lex_Error(i8 38)
+	call void @lex_Error(i8 39)
 	br label %L.11
 L.11:
 	%237 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -25958,7 +26114,7 @@ L.6:
 	br label %L.3
 L.5:
 	%19 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %19)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %19)
 	%20 = bitcast [3 x i8]* @stmt_skiplist to [0 x i8]*
 	%21 = call i8 @lex_Skip([0 x i8]* %20)
 	store i8 %21, i8* %tok
@@ -25993,7 +26149,7 @@ L.2:
 	store %type.TypeListEntry* %4, %type.TypeListEntry** %tl
 	br label %L.1
 L.3:
-	call void @lex_Error(i8 56)
+	call void @lex_Error(i8 57)
 	br label %L.1
 L.1:
 	%5 = call %ast.AstNode* @ast_New(i8 100, %type.TypeNode* null)
@@ -26076,7 +26232,7 @@ L.17:
 L.15:
 	br label %L.12
 L.14:
-	call void @lex_Error(i8 86)
+	call void @lex_Error(i8 87)
 	br label %L.12
 L.12:
 	br label %L.10
@@ -26105,7 +26261,7 @@ L.5:
 	%59 = icmp ne %type.TypeListEntry* %58, null
 	br i1 %59, label %L.24, label %L.23
 L.24:
-	call void @lex_Error(i8 85)
+	call void @lex_Error(i8 86)
 	br label %L.23
 L.23:
 	%60 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -26294,7 +26450,7 @@ L.17:
 	%37 = phi i1 [ false, %L.14 ], [ %36, %L.16 ]
 	br i1 %37, label %L.19, label %L.18
 L.19:
-	call void @lex_Error(i8 72)
+	call void @lex_Error(i8 73)
 	br label %L.18
 L.18:
 	%38 = load i8, i8* @lex_Token
@@ -26318,7 +26474,7 @@ L.23:
 	%49 = icmp ne i8 %48, 6
 	br i1 %49, label %L.25, label %L.24
 L.25:
-	call void @lex_Error(i8 72)
+	call void @lex_Error(i8 73)
 	br label %L.24
 L.24:
 	%50 = load %ast.AstNode*, %ast.AstNode** %vlo
@@ -26376,7 +26532,7 @@ L.11:
 	%77 = icmp eq i8 %76, 98
 	br i1 %77, label %L.31, label %L.30
 L.31:
-	call void @lex_Error(i8 48)
+	call void @lex_Error(i8 49)
 	br label %L.30
 L.30:
 	%78 = call i8 @lex_Next()
@@ -26389,7 +26545,7 @@ L.30:
 	store %ast.AstNode* %82, %ast.AstNode** %tree
 	br label %L.9
 L.8:
-	call void @lex_Error(i8 54)
+	call void @lex_Error(i8 55)
 	br label %L.9
 L.9:
 	%83 = bitcast [3 x i8]* @stmt_elselist to [0 x i8]*
@@ -26543,7 +26699,7 @@ L.7:
 	br label %L.6
 L.8:
 	%23 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %23)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %23)
 	%24 = load %type.TypeNode*, %type.TypeNode** @type_unkntype
 	store %type.TypeNode* %24, %type.TypeNode** %t
 	store %ast.AstNode* null, %ast.AstNode** %ix
@@ -26605,7 +26761,7 @@ L.13:
 	%52 = call i8 @lex_Expect(i8 67)
 	br label %L.10
 L.9:
-	call void @lex_Error(i8 77)
+	call void @lex_Error(i8 78)
 	%53 = call i8 @lex_Next()
 	store i8 %53, i8* %tok
 	br label %L.10
@@ -26676,7 +26832,7 @@ L.16:
 	store %ast.AstNode* %94, %ast.AstNode** %tree
 	br label %L.1
 L.3:
-	call void @lex_ErrorT(i8 18, i8 45)
+	call void @lex_ErrorT(i8 19, i8 45)
 	br label %L.1
 L.1:
 	%95 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -26711,7 +26867,7 @@ L.4:
 	store %ast.AstNode* %11, %ast.AstNode** %ctree
 	br label %L.3
 L.5:
-	call void @lex_Error(i8 48)
+	call void @lex_Error(i8 49)
 	br label %L.3
 L.3:
 	%12 = load %ast.AstNode*, %ast.AstNode** %ctree
@@ -26782,7 +26938,7 @@ L.4:
 	store %ast.AstNode* %15, %ast.AstNode** %ctree
 	br label %L.3
 L.5:
-	call void @lex_Error(i8 48)
+	call void @lex_Error(i8 49)
 	br label %L.3
 L.3:
 	%16 = load %ast.AstNode*, %ast.AstNode** %ctree
@@ -26866,7 +27022,7 @@ L.0:
 	%2 = icmp eq i8 %1, 0
 	br i1 %2, label %L.2, label %L.1
 L.2:
-	call void @lex_Error(i8 57)
+	call void @lex_Error(i8 58)
 	br label %L.1
 L.1:
 	%3 = call %ast.AstNode* @ast_New(i8 96, %type.TypeNode* null)
@@ -26891,7 +27047,7 @@ L.6:
 	store %ast.AstNode* %15, %ast.AstNode** %ctree
 	br label %L.5
 L.7:
-	call void @lex_Error(i8 48)
+	call void @lex_Error(i8 49)
 	br label %L.5
 L.5:
 	br label %L.3
@@ -26926,7 +27082,7 @@ return:
 	%30 = load %ast.AstNode*, %ast.AstNode** %rv.0
 	ret %ast.AstNode* %30
 }
-@S.692 = private unnamed_addr constant [32 x i8] c"Fix cross package forward proc\0A\00"
+@S.693 = private unnamed_addr constant [32 x i8] c"Fix cross package forward proc\0A\00"
 define internal %ast.AstNode* @stmt_Alias() nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -26989,12 +27145,12 @@ L.17:
 	br i1 %27, label %L.20, label %L.19
 L.20:
 	%28 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %28)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %28)
 	br label %L.19
 L.19:
 	br label %L.16
 L.18:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.16
 L.16:
 	br label %L.9
@@ -27002,7 +27158,7 @@ L.10:
 	br label %L.6
 L.8:
 	%29 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %29)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %29)
 	%30 = call i8 @lex_Next()
 	store i8 %30, i8* %tok
 	br label %L.6
@@ -27109,7 +27265,7 @@ L.48:
 	%89 = phi i1 [ false, %L.50 ], [ %88, %L.47 ]
 	br i1 %89, label %L.52, label %L.53
 L.52:
-	%90 = getelementptr [32 x i8], [32 x i8]* @S.692
+	%90 = getelementptr [32 x i8], [32 x i8]* @S.693
 	%91 = bitcast [32 x i8]* %90 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %91)
 	%92 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -27118,7 +27274,7 @@ L.52:
 	call void @symb_DumpS(%symb.SymbNode* %93)
 	br label %L.51
 L.53:
-	call void @lex_Error(i8 27)
+	call void @lex_Error(i8 28)
 	br label %L.51
 L.51:
 	br label %L.44
@@ -27126,20 +27282,20 @@ L.44:
 	br label %L.39
 L.41:
 	%94 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 20, [0 x i8]* %94)
+	call void @lex_ErrorI(i8 21, [0 x i8]* %94)
 	br label %L.39
 L.39:
 	%95 = call i8 @lex_Next()
 	store i8 %95, i8* %tok
 	br label %L.36
 L.38:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.36
 L.36:
 	br label %L.33
 L.35:
 	%96 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 21, [0 x i8]* %96)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %96)
 	br label %L.33
 L.33:
 	br label %L.30
@@ -27156,7 +27312,7 @@ L.55:
 	br label %L.54
 L.56:
 	%103 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 21, [0 x i8]* %103)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %103)
 	br label %L.54
 L.54:
 	%104 = call i8 @lex_Next()
@@ -27167,17 +27323,17 @@ L.30:
 L.27:
 	br label %L.24
 L.26:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.24
 L.24:
 	br label %L.21
 L.23:
-	call void @lex_ErrorT(i8 18, i8 69)
+	call void @lex_ErrorT(i8 19, i8 69)
 	br label %L.21
 L.21:
 	br label %L.3
 L.5:
-	call void @lex_Error(i8 19)
+	call void @lex_Error(i8 20)
 	br label %L.3
 L.3:
 	%105 = load i8, i8* %tok
@@ -27207,12 +27363,12 @@ L.0:
 	br i1 %2, label %L.2, label %L.3
 L.2:
 	%3 = bitcast [4096 x i8]* @lex_StringBuf to [0 x i8]*
-	call void @lex_ErrorS(i8 97, [0 x i8]* %3)
+	call void @lex_ErrorS(i8 98, [0 x i8]* %3)
 	%4 = call i8 @lex_Next()
 	store i8 %4, i8* %tok
 	br label %L.1
 L.3:
-	call void @lex_ErrorT(i8 18, i8 44)
+	call void @lex_ErrorT(i8 19, i8 44)
 	br label %L.1
 L.1:
 	store %ast.AstNode* null, %ast.AstNode** %rv.0
@@ -27391,7 +27547,7 @@ L.51:
 	br label %L.50
 L.52:
 	%55 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 35, [0 x i8]* %55)
+	call void @lex_ErrorI(i8 36, [0 x i8]* %55)
 	%56 = bitcast [16 x i8]* @stmt_stmtlist to [0 x i8]*
 	%57 = call i8 @lex_Skip([0 x i8]* %56)
 	store i8 %57, i8* %tok
@@ -27470,7 +27626,7 @@ L.46:
 	br label %L.29
 L.28:
 	%77 = load i8, i8* %tok
-	call void @lex_ErrorT(i8 36, i8 %77)
+	call void @lex_ErrorT(i8 37, i8 %77)
 	br label %L.29
 L.29:
 	br label %L.1
@@ -27577,17 +27733,17 @@ L.19:
 L.18:
 	br label %L.13
 L.15:
-	call void @lex_Error(i8 27)
+	call void @lex_Error(i8 28)
 	br label %L.13
 L.13:
 	br label %L.10
 L.9:
-	call void @lex_ErrorT(i8 18, i8 45)
+	call void @lex_ErrorT(i8 19, i8 45)
 	br label %L.10
 L.10:
 	br label %L.6
 L.8:
-	call void @lex_ErrorT(i8 18, i8 3)
+	call void @lex_ErrorT(i8 19, i8 3)
 	br label %L.6
 L.6:
 	%40 = load %type.TypeNode*, %type.TypeNode** %t
@@ -27596,7 +27752,7 @@ L.6:
 	store %type.TypeNode* %40, %type.TypeNode** %42
 	br label %L.3
 L.5:
-	call void @lex_ErrorT(i8 18, i8 45)
+	call void @lex_ErrorT(i8 19, i8 45)
 	br label %L.3
 L.3:
 	%43 = call i8 @lex_Expect(i8 36)
@@ -27629,7 +27785,7 @@ L.27:
 	br i1 %59, label %L.30, label %L.29
 L.30:
 	%60 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 21, [0 x i8]* %60)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %60)
 	br label %L.29
 L.29:
 	br label %L.26
@@ -27694,7 +27850,7 @@ L.34:
 	%98 = getelementptr %symb.SymbNode, %symb.SymbNode* %97, i64 0, i32 22
 	%99 = getelementptr [0 x i8], [0 x i8]* %98
 	%100 = bitcast [0 x i8]* %99 to [0 x i8]*
-	call void @lex_ErrorI(i8 46, [0 x i8]* %100)
+	call void @lex_ErrorI(i8 47, [0 x i8]* %100)
 	br label %L.33
 L.33:
 	%101 = load %type.TypeListEntry*, %type.TypeListEntry** %ft
@@ -27710,7 +27866,7 @@ L.36:
 	%109 = getelementptr %symb.SymbNode, %symb.SymbNode* %108, i64 0, i32 22
 	%110 = getelementptr [0 x i8], [0 x i8]* %109
 	%111 = bitcast [0 x i8]* %110 to [0 x i8]*
-	call void @lex_ErrorI(i8 47, [0 x i8]* %111)
+	call void @lex_ErrorI(i8 48, [0 x i8]* %111)
 	br label %L.35
 L.35:
 	br label %L.31
@@ -27832,7 +27988,7 @@ L.51:
 L.39:
 	br label %L.20
 L.22:
-	call void @lex_ErrorT(i8 18, i8 45)
+	call void @lex_ErrorT(i8 19, i8 45)
 	br label %L.20
 L.20:
 	%172 = load %ast.AstNode*, %ast.AstNode** %tree
@@ -27918,12 +28074,12 @@ return:
 	%35 = load %stmt.SearchPathEntry*, %stmt.SearchPathEntry** %rv.0
 	ret %stmt.SearchPathEntry* %35
 }
-@S.694 = private unnamed_addr constant [14 x i8] c"Search path \22\00"
-@S.695 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
+@S.695 = private unnamed_addr constant [14 x i8] c"Search path \22\00"
+@S.696 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
 define internal void @stmt_SearchPathPrint() nounwind {
 L.0:
 	%pp = alloca %stmt.SearchPathEntry*
-	%0 = getelementptr [14 x i8], [14 x i8]* @S.694
+	%0 = getelementptr [14 x i8], [14 x i8]* @S.695
 	%1 = bitcast [14 x i8]* %0 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %1)
 	%2 = load %stmt.SearchPathEntry*, %stmt.SearchPathEntry** @stmt_pathhead
@@ -27947,19 +28103,19 @@ L.3:
 	store %stmt.SearchPathEntry* %12, %stmt.SearchPathEntry** %pp
 	br label %L.1
 L.2:
-	%13 = getelementptr [3 x i8], [3 x i8]* @S.695
+	%13 = getelementptr [3 x i8], [3 x i8]* @S.696
 	%14 = bitcast [3 x i8]* %13 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %14)
 	br label %return
 return:
 	ret void
 }
-@S.696 = private unnamed_addr constant [2 x i8] c"/\00"
+@S.697 = private unnamed_addr constant [2 x i8] c"/\00"
 declare external i64 @open([0 x i8]*, i64, i64)
-@S.697 = private unnamed_addr constant [2 x i8] c".\00"
-@S.698 = private unnamed_addr constant [13 x i8] c"Open  file \22\00"
-@S.699 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
-@S.700 = private unnamed_addr constant [5 x i8] c" \5C\0A \00"
+@S.698 = private unnamed_addr constant [2 x i8] c".\00"
+@S.699 = private unnamed_addr constant [13 x i8] c"Open  file \22\00"
+@S.700 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
+@S.701 = private unnamed_addr constant [5 x i8] c" \5C\0A \00"
 define internal zeroext i8 @stmt_FileFind([0 x i8]* %filename$, i8 zeroext %istop$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -27993,7 +28149,7 @@ L.6:
 	%11 = bitcast [0 x i8]* %10 to [0 x i8]*
 	call void @zstr_copy([0 x i8]* %7, [0 x i8]* %11, i64 1024)
 	%12 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
-	%13 = getelementptr [2 x i8], [2 x i8]* @S.696
+	%13 = getelementptr [2 x i8], [2 x i8]* @S.697
 	%14 = bitcast [2 x i8]* %13 to [0 x i8]*
 	call void @zstr_cat([0 x i8]* %12, [0 x i8]* %14, i64 1024)
 	%15 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
@@ -28032,7 +28188,7 @@ L.3:
 	%35 = icmp eq i64 %34, 1024
 	br i1 %35, label %L.9, label %L.10
 L.9:
-	%36 = getelementptr [2 x i8], [2 x i8]* @S.697
+	%36 = getelementptr [2 x i8], [2 x i8]* @S.698
 	%37 = bitcast [2 x i8]* %36 to [0 x i8]*
 	%38 = call %stmt.SearchPathEntry* @stmt_SearchPathAdd([0 x i8]* %37, i8 1)
 	store %stmt.SearchPathEntry* %38, %stmt.SearchPathEntry** %pp
@@ -28072,12 +28228,12 @@ L.11:
 	%56 = icmp ne i8 %55, 0
 	br i1 %56, label %L.14, label %L.13
 L.14:
-	%57 = getelementptr [13 x i8], [13 x i8]* @S.698
+	%57 = getelementptr [13 x i8], [13 x i8]* @S.699
 	%58 = bitcast [13 x i8]* %57 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %58)
 	%59 = bitcast [1024 x i8]* %pathbuf to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %59)
-	%60 = getelementptr [3 x i8], [3 x i8]* @S.699
+	%60 = getelementptr [3 x i8], [3 x i8]* @S.700
 	%61 = bitcast [3 x i8]* %60 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %61)
 	br label %L.13
@@ -28087,7 +28243,7 @@ L.13:
 	%64 = icmp ne i8 %63, 0
 	br i1 %64, label %L.16, label %L.15
 L.16:
-	%65 = getelementptr [5 x i8], [5 x i8]* @S.700
+	%65 = getelementptr [5 x i8], [5 x i8]* @S.701
 	%66 = bitcast [5 x i8]* %65 to [0 x i8]*
 	call void @sys_fildes_str(i64 1, [0 x i8]* %66)
 	%67 = load %stmt.SearchPathEntry*, %stmt.SearchPathEntry** %pp
@@ -28144,7 +28300,7 @@ return:
 	%97 = load i8, i8* %rv.0
 	ret i8 %97
 }
-@S.701 = private unnamed_addr constant [5 x i8] c".esl\00"
+@S.702 = private unnamed_addr constant [5 x i8] c".esl\00"
 define internal zeroext i8 @stmt_ImportCheck([0 x i8]* %filename$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -28156,7 +28312,7 @@ L.0:
 	%2 = bitcast [0 x i8]* %1 to [0 x i8]*
 	call void @zstr_copy([0 x i8]* %0, [0 x i8]* %2, i64 256)
 	%3 = bitcast [256 x i8]* %fullname to [0 x i8]*
-	%4 = getelementptr [5 x i8], [5 x i8]* @S.701
+	%4 = getelementptr [5 x i8], [5 x i8]* @S.702
 	%5 = bitcast [5 x i8]* %4 to [0 x i8]*
 	call void @zstr_cat([0 x i8]* %3, [0 x i8]* %5, i64 256)
 	%6 = bitcast [256 x i8]* %fullname to [0 x i8]*
@@ -28177,7 +28333,7 @@ L.4:
 L.5:
 	%12 = load [0 x i8]*, [0 x i8]** %filename
 	%13 = bitcast [0 x i8]* %12 to [0 x i8]*
-	call void @lex_ErrorI(i8 73, [0 x i8]* %13)
+	call void @lex_ErrorI(i8 74, [0 x i8]* %13)
 	store i8 0, i8* %rv.0
 	br label %return
 L.3:
@@ -28432,7 +28588,7 @@ L.1:
 	%23 = icmp eq i8 %22, 45
 	br i1 %23, label %L.13, label %L.14
 L.13:
-	call void @lex_Error(i8 58)
+	call void @lex_Error(i8 59)
 	%24 = bitcast [3 x i8]* @stmt_skiplist to [0 x i8]*
 	%25 = call i8 @lex_Skip([0 x i8]* %24)
 	store i8 %25, i8* %tok
@@ -28443,7 +28599,7 @@ L.14:
 	br i1 %27, label %L.16, label %L.15
 L.16:
 	%28 = load i8, i8* %tok
-	call void @lex_ErrorT(i8 36, i8 %28)
+	call void @lex_ErrorT(i8 37, i8 %28)
 	br label %L.15
 L.15:
 	%29 = call i8 @lex_Next()
@@ -28493,7 +28649,7 @@ L.5:
 	br i1 %12, label %L.7, label %L.6
 L.7:
 	%13 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 21, [0 x i8]* %13)
+	call void @lex_ErrorI(i8 22, [0 x i8]* %13)
 	br label %L.6
 L.6:
 	br label %L.3
@@ -28674,11 +28830,11 @@ L.14:
 	br i1 %26, label %L.16, label %L.17
 L.16:
 	%27 = bitcast [256 x i8]* @lex_Ident to [0 x i8]*
-	call void @lex_ErrorI(i8 35, [0 x i8]* %27)
+	call void @lex_ErrorI(i8 36, [0 x i8]* %27)
 	br label %L.15
 L.17:
 	%28 = load i8, i8* %tok
-	call void @lex_ErrorT(i8 36, i8 %28)
+	call void @lex_ErrorT(i8 37, i8 %28)
 	br label %L.15
 L.15:
 	%29 = bitcast [3 x i8]* @stmt_skiplist to [0 x i8]*
@@ -29450,9 +29606,9 @@ return:
 	%1 = load i16, i16* %rv.0
 	ret i16 %1
 }
-@S.707 = private unnamed_addr constant [3 x i8] c"}\0A\00"
-@S.708 = private unnamed_addr constant [3 x i8] c", \00"
-@S.709 = private unnamed_addr constant [3 x i8] c" )\00"
+@S.708 = private unnamed_addr constant [3 x i8] c"}\0A\00"
+@S.709 = private unnamed_addr constant [3 x i8] c", \00"
+@S.710 = private unnamed_addr constant [3 x i8] c" )\00"
 define internal void @llvmdb_PTerminator(i8 zeroext %term$) nounwind {
 L.0:
 	%term = alloca i8
@@ -29466,19 +29622,19 @@ L.0:
 	]
 L.3:
 	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%3 = getelementptr [3 x i8], [3 x i8]* @S.707
+	%3 = getelementptr [3 x i8], [3 x i8]* @S.708
 	%4 = bitcast [3 x i8]* %3 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %2, [0 x i8]* %4)
 	br label %L.2
 L.4:
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%6 = getelementptr [3 x i8], [3 x i8]* @S.708
+	%6 = getelementptr [3 x i8], [3 x i8]* @S.709
 	%7 = bitcast [3 x i8]* %6 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
 	br label %L.2
 L.5:
 	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%9 = getelementptr [3 x i8], [3 x i8]* @S.709
+	%9 = getelementptr [3 x i8], [3 x i8]* @S.710
 	%10 = bitcast [3 x i8]* %9 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %8, [0 x i8]* %10)
 	br label %L.2
@@ -29503,7 +29659,7 @@ L.0:
 return:
 	ret void
 }
-@S.710 = private unnamed_addr constant [5 x i8] c" = !\00"
+@S.711 = private unnamed_addr constant [5 x i8] c" = !\00"
 define internal void @llvmdb_PMetaSeq(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
@@ -29511,14 +29667,14 @@ L.0:
 	%0 = load i16, i16* %n
 	call void @llvmdb_PSeq(i16 %0)
 	%1 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%2 = getelementptr [5 x i8], [5 x i8]* @S.710
+	%2 = getelementptr [5 x i8], [5 x i8]* @S.711
 	%3 = bitcast [5 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	br label %return
 return:
 	ret void
 }
-@S.711 = private unnamed_addr constant [14 x i8] c" = distinct !\00"
+@S.712 = private unnamed_addr constant [14 x i8] c" = distinct !\00"
 define internal void @llvmdb_PMetaSeqD(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
@@ -29526,7 +29682,7 @@ L.0:
 	%0 = load i16, i16* %n
 	call void @llvmdb_PSeq(i16 %0)
 	%1 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%2 = getelementptr [14 x i8], [14 x i8]* @S.711
+	%2 = getelementptr [14 x i8], [14 x i8]* @S.712
 	%3 = bitcast [14 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	br label %return
@@ -29813,13 +29969,13 @@ L.0:
 return:
 	ret void
 }
-@S.712 = private unnamed_addr constant [5 x i8] c"null\00"
+@S.713 = private unnamed_addr constant [5 x i8] c"null\00"
 define internal void @llvmdb_PNull(i8 zeroext %term$) nounwind {
 L.0:
 	%term = alloca i8
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [5 x i8], [5 x i8]* @S.712
+	%1 = getelementptr [5 x i8], [5 x i8]* @S.713
 	%2 = bitcast [5 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load i8, i8* %term
@@ -29828,8 +29984,8 @@ L.0:
 return:
 	ret void
 }
-@S.713 = private unnamed_addr constant [5 x i8] c"true\00"
-@S.714 = private unnamed_addr constant [6 x i8] c"false\00"
+@S.714 = private unnamed_addr constant [5 x i8] c"true\00"
+@S.715 = private unnamed_addr constant [6 x i8] c"false\00"
 define internal void @llvmdb_PBoolean(i8 zeroext %b$, i8 zeroext %term$) nounwind {
 L.0:
 	%b = alloca i8
@@ -29841,13 +29997,13 @@ L.0:
 	br i1 %1, label %L.2, label %L.3
 L.2:
 	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%3 = getelementptr [5 x i8], [5 x i8]* @S.713
+	%3 = getelementptr [5 x i8], [5 x i8]* @S.714
 	%4 = bitcast [5 x i8]* %3 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %2, [0 x i8]* %4)
 	br label %L.1
 L.3:
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%6 = getelementptr [6 x i8], [6 x i8]* @S.714
+	%6 = getelementptr [6 x i8], [6 x i8]* @S.715
 	%7 = bitcast [6 x i8]* %6 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
 	br label %L.1
@@ -29858,7 +30014,7 @@ L.1:
 return:
 	ret void
 }
-@S.715 = private unnamed_addr constant [5 x i8] c"i32 \00"
+@S.716 = private unnamed_addr constant [5 x i8] c"i32 \00"
 define internal void @llvmdb_P32(i32 zeroext %v$, i8 zeroext %term$) nounwind {
 L.0:
 	%v = alloca i32
@@ -29866,7 +30022,7 @@ L.0:
 	store i32 %v$, i32* %v
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [5 x i8], [5 x i8]* @S.715
+	%1 = getelementptr [5 x i8], [5 x i8]* @S.716
 	%2 = bitcast [5 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -29878,7 +30034,7 @@ L.0:
 return:
 	ret void
 }
-@S.716 = private unnamed_addr constant [5 x i8] c"i64 \00"
+@S.717 = private unnamed_addr constant [5 x i8] c"i64 \00"
 define internal void @llvmdb_P64(i64 %v$, i8 zeroext %term$) nounwind {
 L.0:
 	%v = alloca i64
@@ -29886,7 +30042,7 @@ L.0:
 	store i64 %v$, i64* %v
 	store i8 %term$, i8* %term
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [5 x i8], [5 x i8]* @S.716
+	%1 = getelementptr [5 x i8], [5 x i8]* @S.717
 	%2 = bitcast [5 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -30008,19 +30164,19 @@ return:
 	%16 = load i64, i64* %rv.0
 	ret i64 %16
 }
-@S.717 = private unnamed_addr constant [12 x i8] c"DIBasicType\00"
-@S.718 = private unnamed_addr constant [7 x i8] c"name: \00"
-@S.719 = private unnamed_addr constant [7 x i8] c"size: \00"
-@S.720 = private unnamed_addr constant [8 x i8] c"align: \00"
-@S.721 = private unnamed_addr constant [18 x i8] c"encoding: DW_ATE_\00"
-@S.722 = private unnamed_addr constant [8 x i8] c"boolean\00"
-@S.723 = private unnamed_addr constant [14 x i8] c"unsigned_char\00"
-@S.724 = private unnamed_addr constant [9 x i8] c"unsigned\00"
-@S.725 = private unnamed_addr constant [12 x i8] c"signed_char\00"
-@S.726 = private unnamed_addr constant [7 x i8] c"signed\00"
-@S.727 = private unnamed_addr constant [8 x i8] c"address\00"
-@S.728 = private unnamed_addr constant [6 x i8] c"float\00"
-@S.729 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.718 = private unnamed_addr constant [12 x i8] c"DIBasicType\00"
+@S.719 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.720 = private unnamed_addr constant [7 x i8] c"size: \00"
+@S.721 = private unnamed_addr constant [8 x i8] c"align: \00"
+@S.722 = private unnamed_addr constant [18 x i8] c"encoding: DW_ATE_\00"
+@S.723 = private unnamed_addr constant [8 x i8] c"boolean\00"
+@S.724 = private unnamed_addr constant [14 x i8] c"unsigned_char\00"
+@S.725 = private unnamed_addr constant [9 x i8] c"unsigned\00"
+@S.726 = private unnamed_addr constant [12 x i8] c"signed_char\00"
+@S.727 = private unnamed_addr constant [7 x i8] c"signed\00"
+@S.728 = private unnamed_addr constant [8 x i8] c"address\00"
+@S.729 = private unnamed_addr constant [6 x i8] c"float\00"
+@S.730 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal zeroext i16 @llvmdb_DefBasicType(i8 zeroext %dwtype$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -30035,7 +30191,7 @@ L.0:
 	%2 = load i16, i16* @llvmdb_seqno
 	store i16 %2, i16* %tagt
 	%3 = load i16, i16* %tagt
-	%4 = getelementptr [12 x i8], [12 x i8]* @S.717
+	%4 = getelementptr [12 x i8], [12 x i8]* @S.718
 	%5 = bitcast [12 x i8]* %4 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %3, [0 x i8]* %5)
 	%6 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30045,7 +30201,7 @@ L.0:
 	br i1 %9, label %L.2, label %L.1
 L.2:
 	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%11 = getelementptr [7 x i8], [7 x i8]* @S.718
+	%11 = getelementptr [7 x i8], [7 x i8]* @S.719
 	%12 = bitcast [7 x i8]* %11 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
 	%13 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30058,7 +30214,7 @@ L.2:
 	br label %L.1
 L.1:
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%20 = getelementptr [7 x i8], [7 x i8]* @S.719
+	%20 = getelementptr [7 x i8], [7 x i8]* @S.720
 	%21 = bitcast [7 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	%22 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30067,7 +30223,7 @@ L.1:
 	%25 = zext i32 %24 to i64
 	call void @llvmdb_PUint(i64 %25, i8 0)
 	%26 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%27 = getelementptr [8 x i8], [8 x i8]* @S.720
+	%27 = getelementptr [8 x i8], [8 x i8]* @S.721
 	%28 = bitcast [8 x i8]* %27 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
 	%29 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30076,7 +30232,7 @@ L.1:
 	%32 = zext i32 %31 to i64
 	call void @llvmdb_PUint(i64 %32, i8 0)
 	%33 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%34 = getelementptr [18 x i8], [18 x i8]* @S.721
+	%34 = getelementptr [18 x i8], [18 x i8]* @S.722
 	%35 = bitcast [18 x i8]* %34 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %33, [0 x i8]* %35)
 	%36 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30097,7 +30253,7 @@ L.5:
 	br i1 %42, label %L.10, label %L.11
 L.10:
 	%43 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%44 = getelementptr [8 x i8], [8 x i8]* @S.722
+	%44 = getelementptr [8 x i8], [8 x i8]* @S.723
 	%45 = bitcast [8 x i8]* %44 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %43, [0 x i8]* %45)
 	br label %L.9
@@ -30109,13 +30265,13 @@ L.11:
 	br i1 %49, label %L.13, label %L.14
 L.13:
 	%50 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%51 = getelementptr [14 x i8], [14 x i8]* @S.723
+	%51 = getelementptr [14 x i8], [14 x i8]* @S.724
 	%52 = bitcast [14 x i8]* %51 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %50, [0 x i8]* %52)
 	br label %L.12
 L.14:
 	%53 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%54 = getelementptr [9 x i8], [9 x i8]* @S.724
+	%54 = getelementptr [9 x i8], [9 x i8]* @S.725
 	%55 = bitcast [9 x i8]* %54 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %53, [0 x i8]* %55)
 	br label %L.12
@@ -30131,13 +30287,13 @@ L.6:
 	br i1 %59, label %L.16, label %L.17
 L.16:
 	%60 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%61 = getelementptr [12 x i8], [12 x i8]* @S.725
+	%61 = getelementptr [12 x i8], [12 x i8]* @S.726
 	%62 = bitcast [12 x i8]* %61 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %60, [0 x i8]* %62)
 	br label %L.15
 L.17:
 	%63 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%64 = getelementptr [7 x i8], [7 x i8]* @S.726
+	%64 = getelementptr [7 x i8], [7 x i8]* @S.727
 	%65 = bitcast [7 x i8]* %64 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %63, [0 x i8]* %65)
 	br label %L.15
@@ -30145,13 +30301,13 @@ L.15:
 	br label %L.4
 L.7:
 	%66 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%67 = getelementptr [8 x i8], [8 x i8]* @S.727
+	%67 = getelementptr [8 x i8], [8 x i8]* @S.728
 	%68 = bitcast [8 x i8]* %67 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %66, [0 x i8]* %68)
 	br label %L.4
 L.8:
 	%69 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%70 = getelementptr [6 x i8], [6 x i8]* @S.728
+	%70 = getelementptr [6 x i8], [6 x i8]* @S.729
 	%71 = bitcast [6 x i8]* %70 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
 	br label %L.4
@@ -30159,7 +30315,7 @@ L.3:
 	br label %L.4
 L.4:
 	%72 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%73 = getelementptr [3 x i8], [3 x i8]* @S.729
+	%73 = getelementptr [3 x i8], [3 x i8]* @S.730
 	%74 = bitcast [3 x i8]* %73 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %72, [0 x i8]* %74)
 	%75 = load i16, i16* %tagt
@@ -30169,16 +30325,16 @@ return:
 	%76 = load i16, i16* %rv.0
 	ret i16 %76
 }
-@S.730 = private unnamed_addr constant [16 x i8] c"DICompositeType\00"
-@S.731 = private unnamed_addr constant [13 x i8] c"tag: DW_TAG_\00"
-@S.732 = private unnamed_addr constant [7 x i8] c"name: \00"
-@S.733 = private unnamed_addr constant [7 x i8] c"file: \00"
-@S.734 = private unnamed_addr constant [7 x i8] c"line: \00"
-@S.735 = private unnamed_addr constant [7 x i8] c"size: \00"
-@S.736 = private unnamed_addr constant [8 x i8] c"align: \00"
-@S.737 = private unnamed_addr constant [13 x i8] c", baseType: \00"
-@S.738 = private unnamed_addr constant [13 x i8] c", elements: \00"
-@S.739 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.731 = private unnamed_addr constant [16 x i8] c"DICompositeType\00"
+@S.732 = private unnamed_addr constant [13 x i8] c"tag: DW_TAG_\00"
+@S.733 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.734 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.735 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.736 = private unnamed_addr constant [7 x i8] c"size: \00"
+@S.737 = private unnamed_addr constant [8 x i8] c"align: \00"
+@S.738 = private unnamed_addr constant [13 x i8] c", baseType: \00"
+@S.739 = private unnamed_addr constant [13 x i8] c", elements: \00"
+@S.740 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_PCompositeType(i16 zeroext %tag$, i16 zeroext %from$, i16 zeroext %members$, [0 x i8]* %dwat$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%tag = alloca i16
@@ -30192,11 +30348,11 @@ L.0:
 	store [0 x i8]* %dwat$, [0 x i8]** %dwat
 	store %type.TypeNode* %t$, %type.TypeNode** %t
 	%0 = load i16, i16* %tag
-	%1 = getelementptr [16 x i8], [16 x i8]* @S.730
+	%1 = getelementptr [16 x i8], [16 x i8]* @S.731
 	%2 = bitcast [16 x i8]* %1 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %0, [0 x i8]* %2)
 	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%4 = getelementptr [13 x i8], [13 x i8]* @S.731
+	%4 = getelementptr [13 x i8], [13 x i8]* @S.732
 	%5 = bitcast [13 x i8]* %4 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
 	%6 = load [0 x i8]*, [0 x i8]** %dwat
@@ -30209,7 +30365,7 @@ L.0:
 	br i1 %11, label %L.2, label %L.1
 L.2:
 	%12 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%13 = getelementptr [7 x i8], [7 x i8]* @S.732
+	%13 = getelementptr [7 x i8], [7 x i8]* @S.733
 	%14 = bitcast [7 x i8]* %13 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %14)
 	%15 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30219,7 +30375,7 @@ L.2:
 	br label %L.1
 L.1:
 	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%19 = getelementptr [7 x i8], [7 x i8]* @S.733
+	%19 = getelementptr [7 x i8], [7 x i8]* @S.734
 	%20 = bitcast [7 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
 	%21 = load i16, i16* @llvmdb_filenamedir
@@ -30231,7 +30387,7 @@ L.1:
 	br i1 %25, label %L.4, label %L.3
 L.4:
 	%26 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%27 = getelementptr [7 x i8], [7 x i8]* @S.734
+	%27 = getelementptr [7 x i8], [7 x i8]* @S.735
 	%28 = bitcast [7 x i8]* %27 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
 	%29 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30244,7 +30400,7 @@ L.4:
 	br label %L.3
 L.3:
 	%35 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%36 = getelementptr [7 x i8], [7 x i8]* @S.735
+	%36 = getelementptr [7 x i8], [7 x i8]* @S.736
 	%37 = bitcast [7 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	%38 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30253,7 +30409,7 @@ L.3:
 	%41 = zext i32 %40 to i64
 	call void @llvmdb_PUint(i64 %41, i8 0)
 	%42 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%43 = getelementptr [8 x i8], [8 x i8]* @S.736
+	%43 = getelementptr [8 x i8], [8 x i8]* @S.737
 	%44 = bitcast [8 x i8]* %43 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %42, [0 x i8]* %44)
 	%45 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30266,7 +30422,7 @@ L.3:
 	br i1 %50, label %L.6, label %L.5
 L.6:
 	%51 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%52 = getelementptr [13 x i8], [13 x i8]* @S.737
+	%52 = getelementptr [13 x i8], [13 x i8]* @S.738
 	%53 = bitcast [13 x i8]* %52 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %51, [0 x i8]* %53)
 	%54 = load i16, i16* %from
@@ -30278,7 +30434,7 @@ L.5:
 	br i1 %56, label %L.8, label %L.7
 L.8:
 	%57 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%58 = getelementptr [13 x i8], [13 x i8]* @S.738
+	%58 = getelementptr [13 x i8], [13 x i8]* @S.739
 	%59 = bitcast [13 x i8]* %58 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %57, [0 x i8]* %59)
 	%60 = load i16, i16* %members
@@ -30286,19 +30442,19 @@ L.8:
 	br label %L.7
 L.7:
 	%61 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%62 = getelementptr [3 x i8], [3 x i8]* @S.739
+	%62 = getelementptr [3 x i8], [3 x i8]* @S.740
 	%63 = bitcast [3 x i8]* %62 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %61, [0 x i8]* %63)
 	br label %return
 return:
 	ret void
 }
-@S.740 = private unnamed_addr constant [14 x i8] c"DIDerivedType\00"
-@S.741 = private unnamed_addr constant [13 x i8] c"tag: DW_TAG_\00"
-@S.742 = private unnamed_addr constant [11 x i8] c"baseType: \00"
-@S.743 = private unnamed_addr constant [7 x i8] c"size: \00"
-@S.744 = private unnamed_addr constant [8 x i8] c"align: \00"
-@S.745 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.741 = private unnamed_addr constant [14 x i8] c"DIDerivedType\00"
+@S.742 = private unnamed_addr constant [13 x i8] c"tag: DW_TAG_\00"
+@S.743 = private unnamed_addr constant [11 x i8] c"baseType: \00"
+@S.744 = private unnamed_addr constant [7 x i8] c"size: \00"
+@S.745 = private unnamed_addr constant [8 x i8] c"align: \00"
+@S.746 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_PDerivedType(i16 zeroext %tag$, i16 zeroext %from$, [0 x i8]* %dwat$, %type.TypeNode* %t$) nounwind {
 L.0:
 	%tag = alloca i16
@@ -30310,24 +30466,24 @@ L.0:
 	store [0 x i8]* %dwat$, [0 x i8]** %dwat
 	store %type.TypeNode* %t$, %type.TypeNode** %t
 	%0 = load i16, i16* %tag
-	%1 = getelementptr [14 x i8], [14 x i8]* @S.740
+	%1 = getelementptr [14 x i8], [14 x i8]* @S.741
 	%2 = bitcast [14 x i8]* %1 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %0, [0 x i8]* %2)
 	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%4 = getelementptr [13 x i8], [13 x i8]* @S.741
+	%4 = getelementptr [13 x i8], [13 x i8]* @S.742
 	%5 = bitcast [13 x i8]* %4 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %3, [0 x i8]* %5)
 	%6 = load [0 x i8]*, [0 x i8]** %dwat
 	%7 = bitcast [0 x i8]* %6 to [0 x i8]*
 	call void @llvmdb_PString([0 x i8]* %7, i8 0)
 	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%9 = getelementptr [11 x i8], [11 x i8]* @S.742
+	%9 = getelementptr [11 x i8], [11 x i8]* @S.743
 	%10 = bitcast [11 x i8]* %9 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %8, [0 x i8]* %10)
 	%11 = load i16, i16* %from
 	call void @llvmdb_PMetaRef(i16 %11, i8 0)
 	%12 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%13 = getelementptr [7 x i8], [7 x i8]* @S.743
+	%13 = getelementptr [7 x i8], [7 x i8]* @S.744
 	%14 = bitcast [7 x i8]* %13 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %14)
 	%15 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30336,7 +30492,7 @@ L.0:
 	%18 = zext i32 %17 to i64
 	call void @llvmdb_PUint(i64 %18, i8 0)
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%20 = getelementptr [8 x i8], [8 x i8]* @S.744
+	%20 = getelementptr [8 x i8], [8 x i8]* @S.745
 	%21 = bitcast [8 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	%22 = load %type.TypeNode*, %type.TypeNode** %t
@@ -30345,7 +30501,7 @@ L.0:
 	%25 = zext i32 %24 to i64
 	call void @llvmdb_PUint(i64 %25, i8 3)
 	%26 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%27 = getelementptr [3 x i8], [3 x i8]* @S.745
+	%27 = getelementptr [3 x i8], [3 x i8]* @S.746
 	%28 = bitcast [3 x i8]* %27 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
 	br label %return
@@ -30378,7 +30534,7 @@ return:
 	%6 = load i16, i16* %rv.0
 	ret i16 %6
 }
-@S.746 = private unnamed_addr constant [13 x i8] c"pointer_type\00"
+@S.747 = private unnamed_addr constant [13 x i8] c"pointer_type\00"
 define internal zeroext i16 @llvmdb_DefRefType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -30418,7 +30574,7 @@ L.1:
 	store i16 %17, i16* %tagr
 	%18 = load i16, i16* %tagr
 	%19 = load i16, i16* %tagb
-	%20 = getelementptr [13 x i8], [13 x i8]* @S.746
+	%20 = getelementptr [13 x i8], [13 x i8]* @S.747
 	%21 = bitcast [13 x i8]* %20 to [0 x i8]*
 	%22 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @llvmdb_PDerivedType(i16 %18, i16 %19, [0 x i8]* %21, %type.TypeNode* %22)
@@ -30429,10 +30585,10 @@ return:
 	%24 = load i16, i16* %rv.0
 	ret i16 %24
 }
-@S.747 = private unnamed_addr constant [11 x i8] c"DISubrange\00"
-@S.748 = private unnamed_addr constant [8 x i8] c"count: \00"
-@S.749 = private unnamed_addr constant [15 x i8] c", lowerBound: \00"
-@S.750 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.748 = private unnamed_addr constant [11 x i8] c"DISubrange\00"
+@S.749 = private unnamed_addr constant [8 x i8] c"count: \00"
+@S.750 = private unnamed_addr constant [15 x i8] c", lowerBound: \00"
+@S.751 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal zeroext i16 @llvmdb_DefRange(i64 %lo$, i64 %hi$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -30447,11 +30603,11 @@ L.0:
 	%2 = load i16, i16* @llvmdb_seqno
 	store i16 %2, i16* %tagr
 	%3 = load i16, i16* %tagr
-	%4 = getelementptr [11 x i8], [11 x i8]* @S.747
+	%4 = getelementptr [11 x i8], [11 x i8]* @S.748
 	%5 = bitcast [11 x i8]* %4 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %3, [0 x i8]* %5)
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = getelementptr [8 x i8], [8 x i8]* @S.748
+	%7 = getelementptr [8 x i8], [8 x i8]* @S.749
 	%8 = bitcast [8 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	%9 = load i64, i64* %hi
@@ -30464,7 +30620,7 @@ L.0:
 	br i1 %14, label %L.2, label %L.1
 L.2:
 	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = getelementptr [15 x i8], [15 x i8]* @S.749
+	%16 = getelementptr [15 x i8], [15 x i8]* @S.750
 	%17 = bitcast [15 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	%18 = load i64, i64* %lo
@@ -30472,7 +30628,7 @@ L.2:
 	br label %L.1
 L.1:
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%20 = getelementptr [3 x i8], [3 x i8]* @S.750
+	%20 = getelementptr [3 x i8], [3 x i8]* @S.751
 	%21 = bitcast [3 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	%22 = load i16, i16* %tagr
@@ -30482,10 +30638,10 @@ return:
 	%23 = load i16, i16* %rv.0
 	ret i16 %23
 }
-@S.751 = private unnamed_addr constant [13 x i8] c"DIEnumerator\00"
-@S.752 = private unnamed_addr constant [7 x i8] c"name: \00"
-@S.753 = private unnamed_addr constant [8 x i8] c"value: \00"
-@S.754 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.752 = private unnamed_addr constant [13 x i8] c"DIEnumerator\00"
+@S.753 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.754 = private unnamed_addr constant [8 x i8] c"value: \00"
+@S.755 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal zeroext i16 @llvmdb_DefEnumConst(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -30498,11 +30654,11 @@ L.0:
 	%2 = load i16, i16* @llvmdb_seqno
 	store i16 %2, i16* %tagc
 	%3 = load i16, i16* %tagc
-	%4 = getelementptr [13 x i8], [13 x i8]* @S.751
+	%4 = getelementptr [13 x i8], [13 x i8]* @S.752
 	%5 = bitcast [13 x i8]* %4 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %3, [0 x i8]* %5)
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = getelementptr [7 x i8], [7 x i8]* @S.752
+	%7 = getelementptr [7 x i8], [7 x i8]* @S.753
 	%8 = bitcast [7 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	%9 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -30511,7 +30667,7 @@ L.0:
 	%12 = bitcast [0 x i8]* %11 to [0 x i8]*
 	call void @llvmdb_PQString([0 x i8]* %12, i8 0)
 	%13 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%14 = getelementptr [8 x i8], [8 x i8]* @S.753
+	%14 = getelementptr [8 x i8], [8 x i8]* @S.754
 	%15 = bitcast [8 x i8]* %14 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %13, [0 x i8]* %15)
 	%16 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -30521,7 +30677,7 @@ L.0:
 	%20 = load i64, i64* %19
 	call void @llvmdb_PUint(i64 %20, i8 3)
 	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%22 = getelementptr [3 x i8], [3 x i8]* @S.754
+	%22 = getelementptr [3 x i8], [3 x i8]* @S.755
 	%23 = bitcast [3 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	%24 = load i16, i16* %tagc
@@ -30531,7 +30687,7 @@ return:
 	%25 = load i16, i16* %rv.0
 	ret i16 %25
 }
-@S.755 = private unnamed_addr constant [17 x i8] c"enumeration_type\00"
+@S.756 = private unnamed_addr constant [17 x i8] c"enumeration_type\00"
 define internal zeroext i16 @llvmdb_DefEnumerationType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -30613,7 +30769,7 @@ L.7:
 	store i16 %36, i16* %tage
 	%37 = load i16, i16* %tage
 	%38 = load i16, i16* %list
-	%39 = getelementptr [17 x i8], [17 x i8]* @S.755
+	%39 = getelementptr [17 x i8], [17 x i8]* @S.756
 	%40 = bitcast [17 x i8]* %39 to [0 x i8]*
 	%41 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @llvmdb_PCompositeType(i16 %37, i16 0, i16 %38, [0 x i8]* %40, %type.TypeNode* %41)
@@ -30624,7 +30780,7 @@ return:
 	%43 = load i16, i16* %rv.0
 	ret i16 %43
 }
-@S.756 = private unnamed_addr constant [11 x i8] c"array_type\00"
+@S.757 = private unnamed_addr constant [11 x i8] c"array_type\00"
 define internal zeroext i16 @llvmdb_DefArrayType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -30676,7 +30832,7 @@ L.3:
 	%23 = load i16, i16* %taga
 	%24 = load i16, i16* %tagb
 	%25 = load i16, i16* %tagl
-	%26 = getelementptr [11 x i8], [11 x i8]* @S.756
+	%26 = getelementptr [11 x i8], [11 x i8]* @S.757
 	%27 = bitcast [11 x i8]* %26 to [0 x i8]*
 	%28 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @llvmdb_PCompositeType(i16 %23, i16 %24, i16 %25, [0 x i8]* %27, %type.TypeNode* %28)
@@ -30687,7 +30843,7 @@ return:
 	%30 = load i16, i16* %rv.0
 	ret i16 %30
 }
-@S.757 = private unnamed_addr constant [7 x i8] c"member\00"
+@S.758 = private unnamed_addr constant [7 x i8] c"member\00"
 define internal zeroext i16 @llvmdb_DefField(%symb.SymbNode* %s$, i16 zeroext %rec$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -30712,7 +30868,7 @@ L.0:
 	store i16 %7, i16* %tagf
 	%8 = load i16, i16* %tagf
 	%9 = load i16, i16* %tagt
-	%10 = getelementptr [7 x i8], [7 x i8]* @S.757
+	%10 = getelementptr [7 x i8], [7 x i8]* @S.758
 	%11 = bitcast [7 x i8]* %10 to [0 x i8]*
 	%12 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @llvmdb_PDerivedType(i16 %8, i16 %9, [0 x i8]* %11, %type.TypeNode* %12)
@@ -30723,7 +30879,7 @@ return:
 	%14 = load i16, i16* %rv.0
 	ret i16 %14
 }
-@S.758 = private unnamed_addr constant [15 x i8] c"structure_type\00"
+@S.759 = private unnamed_addr constant [15 x i8] c"structure_type\00"
 define internal zeroext i16 @llvmdb_DefRecordType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -30750,7 +30906,7 @@ L.0:
 	store i16 %8, i16* %list
 	%9 = load i16, i16* %rec
 	%10 = load i16, i16* %list
-	%11 = getelementptr [15 x i8], [15 x i8]* @S.758
+	%11 = getelementptr [15 x i8], [15 x i8]* @S.759
 	%12 = bitcast [15 x i8]* %11 to [0 x i8]*
 	%13 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @llvmdb_PCompositeType(i16 %9, i16 0, i16 %10, [0 x i8]* %12, %type.TypeNode* %13)
@@ -31032,11 +31188,11 @@ return:
 	%89 = load i16, i16* %rv.0
 	ret i16 %89
 }
-@S.759 = private unnamed_addr constant [11 x i8] c"DILocation\00"
-@S.760 = private unnamed_addr constant [7 x i8] c"line: \00"
-@S.761 = private unnamed_addr constant [9 x i8] c"column: \00"
-@S.762 = private unnamed_addr constant [8 x i8] c"scope: \00"
-@S.763 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.760 = private unnamed_addr constant [11 x i8] c"DILocation\00"
+@S.761 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.762 = private unnamed_addr constant [9 x i8] c"column: \00"
+@S.763 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.764 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_DefLines() nounwind {
 L.0:
 	%ln = alloca %llvmdb.LineT*
@@ -31052,11 +31208,11 @@ L.3:
 	%4 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
 	%5 = getelementptr %llvmdb.LineT, %llvmdb.LineT* %4, i64 0, i32 1
 	%6 = load i16, i16* %5
-	%7 = getelementptr [11 x i8], [11 x i8]* @S.759
+	%7 = getelementptr [11 x i8], [11 x i8]* @S.760
 	%8 = bitcast [11 x i8]* %7 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %6, [0 x i8]* %8)
 	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%10 = getelementptr [7 x i8], [7 x i8]* @S.760
+	%10 = getelementptr [7 x i8], [7 x i8]* @S.761
 	%11 = bitcast [7 x i8]* %10 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %9, [0 x i8]* %11)
 	%12 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
@@ -31065,12 +31221,12 @@ L.3:
 	%15 = zext i16 %14 to i64
 	call void @llvmdb_PUint(i64 %15, i8 0)
 	%16 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%17 = getelementptr [9 x i8], [9 x i8]* @S.761
+	%17 = getelementptr [9 x i8], [9 x i8]* @S.762
 	%18 = bitcast [9 x i8]* %17 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %16, [0 x i8]* %18)
 	call void @llvmdb_PUint(i64 0, i8 0)
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%20 = getelementptr [8 x i8], [8 x i8]* @S.762
+	%20 = getelementptr [8 x i8], [8 x i8]* @S.763
 	%21 = bitcast [8 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	%22 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
@@ -31078,7 +31234,7 @@ L.3:
 	%24 = load i16, i16* %23
 	call void @llvmdb_PMetaRef(i16 %24, i8 3)
 	%25 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%26 = getelementptr [3 x i8], [3 x i8]* @S.763
+	%26 = getelementptr [3 x i8], [3 x i8]* @S.764
 	%27 = bitcast [3 x i8]* %26 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %25, [0 x i8]* %27)
 	%28 = load %llvmdb.LineT*, %llvmdb.LineT** %ln
@@ -31093,7 +31249,7 @@ L.2:
 return:
 	ret void
 }
-@S.764 = private unnamed_addr constant [8 x i8] c", !dbg \00"
+@S.765 = private unnamed_addr constant [8 x i8] c", !dbg \00"
 define internal void @llvmdb_PLine(i16 zeroext %lineno$) nounwind {
 L.0:
 	%lineno = alloca i16
@@ -31159,7 +31315,7 @@ L.6:
 	br label %L.3
 L.3:
 	%32 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%33 = getelementptr [8 x i8], [8 x i8]* @S.764
+	%33 = getelementptr [8 x i8], [8 x i8]* @S.765
 	%34 = bitcast [8 x i8]* %33 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %32, [0 x i8]* %34)
 	%35 = load i16, i16* %tag
@@ -31168,25 +31324,25 @@ L.3:
 return:
 	ret void
 }
-@S.765 = private unnamed_addr constant [39 x i8] c"\09call void @llvm.dbg.declare(metadata \00"
-@S.766 = private unnamed_addr constant [3 x i8] c"* \00"
-@S.767 = private unnamed_addr constant [13 x i8] c", metadata !\00"
+@S.766 = private unnamed_addr constant [39 x i8] c"\09call void @llvm.dbg.declare(metadata \00"
+@S.767 = private unnamed_addr constant [3 x i8] c"* \00"
 @S.768 = private unnamed_addr constant [13 x i8] c", metadata !\00"
-@S.769 = private unnamed_addr constant [8 x i8] c", !dbg \00"
-@S.770 = private unnamed_addr constant [27 x i8] c"DIGlobalVariableExpression\00"
-@S.771 = private unnamed_addr constant [6 x i8] c"var: \00"
-@S.772 = private unnamed_addr constant [24 x i8] c"expr: !DIExpression())\0A\00"
-@S.773 = private unnamed_addr constant [17 x i8] c"DIGlobalVariable\00"
-@S.774 = private unnamed_addr constant [7 x i8] c"name: \00"
-@S.775 = private unnamed_addr constant [8 x i8] c"scope: \00"
-@S.776 = private unnamed_addr constant [7 x i8] c"file: \00"
-@S.777 = private unnamed_addr constant [7 x i8] c"line: \00"
-@S.778 = private unnamed_addr constant [7 x i8] c"type: \00"
-@S.779 = private unnamed_addr constant [10 x i8] c"isLocal: \00"
-@S.780 = private unnamed_addr constant [15 x i8] c"isDefinition: \00"
-@S.781 = private unnamed_addr constant [13 x i8] c", variable: \00"
-@S.782 = private unnamed_addr constant [3 x i8] c"* \00"
-@S.783 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.769 = private unnamed_addr constant [13 x i8] c", metadata !\00"
+@S.770 = private unnamed_addr constant [8 x i8] c", !dbg \00"
+@S.771 = private unnamed_addr constant [27 x i8] c"DIGlobalVariableExpression\00"
+@S.772 = private unnamed_addr constant [6 x i8] c"var: \00"
+@S.773 = private unnamed_addr constant [24 x i8] c"expr: !DIExpression())\0A\00"
+@S.774 = private unnamed_addr constant [17 x i8] c"DIGlobalVariable\00"
+@S.775 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.776 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.777 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.778 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.779 = private unnamed_addr constant [7 x i8] c"type: \00"
+@S.780 = private unnamed_addr constant [10 x i8] c"isLocal: \00"
+@S.781 = private unnamed_addr constant [15 x i8] c"isDefinition: \00"
+@S.782 = private unnamed_addr constant [13 x i8] c", variable: \00"
+@S.783 = private unnamed_addr constant [3 x i8] c"* \00"
+@S.784 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal zeroext i16 @llvmdb_DefVar(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%rv.0 = alloca i16
@@ -31211,7 +31367,7 @@ L.0:
 	]
 L.3:
 	%9 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%10 = getelementptr [39 x i8], [39 x i8]* @S.765
+	%10 = getelementptr [39 x i8], [39 x i8]* @S.766
 	%11 = bitcast [39 x i8]* %10 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %9, [0 x i8]* %11)
 	%12 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31219,13 +31375,13 @@ L.3:
 	%14 = load %type.TypeNode*, %type.TypeNode** %13
 	call void @llvm_PType(%type.TypeNode* %14)
 	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = getelementptr [3 x i8], [3 x i8]* @S.766
+	%16 = getelementptr [3 x i8], [3 x i8]* @S.767
 	%17 = bitcast [3 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	%18 = load %symb.SymbNode*, %symb.SymbNode** %s
 	call void @llvm_PName(%symb.SymbNode* %18)
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%20 = getelementptr [13 x i8], [13 x i8]* @S.767
+	%20 = getelementptr [13 x i8], [13 x i8]* @S.768
 	%21 = bitcast [13 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	%22 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -31233,7 +31389,7 @@ L.3:
 	%24 = zext i16 %23 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %22, i64 %24)
 	%25 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%26 = getelementptr [13 x i8], [13 x i8]* @S.768
+	%26 = getelementptr [13 x i8], [13 x i8]* @S.769
 	%27 = bitcast [13 x i8]* %26 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %25, [0 x i8]* %27)
 	%28 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -31299,7 +31455,7 @@ L.10:
 	br i1 %61, label %L.13, label %L.12
 L.13:
 	%62 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%63 = getelementptr [8 x i8], [8 x i8]* @S.769
+	%63 = getelementptr [8 x i8], [8 x i8]* @S.770
 	%64 = bitcast [8 x i8]* %63 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %62, [0 x i8]* %64)
 	%65 = load i16, i16* %etag
@@ -31314,17 +31470,17 @@ L.12:
 	%70 = call i16 @llvmdb_DefType(%type.TypeNode* %69)
 	store i16 %70, i16* %ttag
 	%71 = load i16, i16* %etag
-	%72 = getelementptr [27 x i8], [27 x i8]* @S.770
+	%72 = getelementptr [27 x i8], [27 x i8]* @S.771
 	%73 = bitcast [27 x i8]* %72 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %71, [0 x i8]* %73)
 	%74 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%75 = getelementptr [6 x i8], [6 x i8]* @S.771
+	%75 = getelementptr [6 x i8], [6 x i8]* @S.772
 	%76 = bitcast [6 x i8]* %75 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %74, [0 x i8]* %76)
 	%77 = load i16, i16* %vtag
 	call void @llvmdb_PMetaRef(i16 %77, i8 0)
 	%78 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%79 = getelementptr [24 x i8], [24 x i8]* @S.772
+	%79 = getelementptr [24 x i8], [24 x i8]* @S.773
 	%80 = bitcast [24 x i8]* %79 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %78, [0 x i8]* %80)
 	%81 = load i16, i16* %etag
@@ -31343,28 +31499,28 @@ L.11:
 	br label %L.9
 L.9:
 	%89 = load i16, i16* %vtag
-	%90 = getelementptr [17 x i8], [17 x i8]* @S.773
+	%90 = getelementptr [17 x i8], [17 x i8]* @S.774
 	%91 = bitcast [17 x i8]* %90 to [0 x i8]*
 	call void @llvmdb_PStartDistinct(i16 %89, [0 x i8]* %91)
 	%92 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%93 = getelementptr [7 x i8], [7 x i8]* @S.774
+	%93 = getelementptr [7 x i8], [7 x i8]* @S.775
 	%94 = bitcast [7 x i8]* %93 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %92, [0 x i8]* %94)
 	%95 = load %symb.SymbNode*, %symb.SymbNode** %s
 	call void @llvmdb_PFullName(%symb.SymbNode* %95, i8 0)
 	%96 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%97 = getelementptr [8 x i8], [8 x i8]* @S.775
+	%97 = getelementptr [8 x i8], [8 x i8]* @S.776
 	%98 = bitcast [8 x i8]* %97 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %96, [0 x i8]* %98)
 	call void @llvmdb_PMetaRef(i16 0, i8 0)
 	%99 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%100 = getelementptr [7 x i8], [7 x i8]* @S.776
+	%100 = getelementptr [7 x i8], [7 x i8]* @S.777
 	%101 = bitcast [7 x i8]* %100 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %99, [0 x i8]* %101)
 	%102 = load i16, i16* @llvmdb_filenamedir
 	call void @llvmdb_PMetaRef(i16 %102, i8 0)
 	%103 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%104 = getelementptr [7 x i8], [7 x i8]* @S.777
+	%104 = getelementptr [7 x i8], [7 x i8]* @S.778
 	%105 = bitcast [7 x i8]* %104 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %103, [0 x i8]* %105)
 	%106 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31373,13 +31529,13 @@ L.9:
 	%109 = zext i16 %108 to i64
 	call void @llvmdb_PUint(i64 %109, i8 0)
 	%110 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%111 = getelementptr [7 x i8], [7 x i8]* @S.778
+	%111 = getelementptr [7 x i8], [7 x i8]* @S.779
 	%112 = bitcast [7 x i8]* %111 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %110, [0 x i8]* %112)
 	%113 = load i16, i16* %ttag
 	call void @llvmdb_PMetaRef(i16 %113, i8 0)
 	%114 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%115 = getelementptr [10 x i8], [10 x i8]* @S.779
+	%115 = getelementptr [10 x i8], [10 x i8]* @S.780
 	%116 = bitcast [10 x i8]* %115 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %114, [0 x i8]* %116)
 	%117 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31389,7 +31545,7 @@ L.9:
 	%121 = zext i1 %120 to i8
 	call void @llvmdb_PBoolean(i8 %121, i8 0)
 	%122 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%123 = getelementptr [15 x i8], [15 x i8]* @S.780
+	%123 = getelementptr [15 x i8], [15 x i8]* @S.781
 	%124 = bitcast [15 x i8]* %123 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %122, [0 x i8]* %124)
 	%125 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31404,7 +31560,7 @@ L.9:
 	br i1 %132, label %L.15, label %L.14
 L.15:
 	%133 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%134 = getelementptr [13 x i8], [13 x i8]* @S.781
+	%134 = getelementptr [13 x i8], [13 x i8]* @S.782
 	%135 = bitcast [13 x i8]* %134 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %133, [0 x i8]* %135)
 	%136 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31412,7 +31568,7 @@ L.15:
 	%138 = load %type.TypeNode*, %type.TypeNode** %137
 	call void @llvm_PType(%type.TypeNode* %138)
 	%139 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%140 = getelementptr [3 x i8], [3 x i8]* @S.782
+	%140 = getelementptr [3 x i8], [3 x i8]* @S.783
 	%141 = bitcast [3 x i8]* %140 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %139, [0 x i8]* %141)
 	%142 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31420,7 +31576,7 @@ L.15:
 	br label %L.14
 L.14:
 	%143 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%144 = getelementptr [3 x i8], [3 x i8]* @S.783
+	%144 = getelementptr [3 x i8], [3 x i8]* @S.784
 	%145 = bitcast [3 x i8]* %144 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %143, [0 x i8]* %145)
 	%146 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31453,9 +31609,9 @@ return:
 	%157 = load i16, i16* %rv.0
 	ret i16 %157
 }
-@S.784 = private unnamed_addr constant [17 x i8] c"DISubroutineType\00"
-@S.785 = private unnamed_addr constant [8 x i8] c"types: \00"
-@S.786 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.785 = private unnamed_addr constant [17 x i8] c"DISubroutineType\00"
+@S.786 = private unnamed_addr constant [8 x i8] c"types: \00"
+@S.787 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_DefSubroutine(i16 zeroext %stag$, %symb.SymbNode* %ps$) nounwind {
 L.0:
 	%stag = alloca i16
@@ -31604,17 +31760,17 @@ L.22:
 	br label %L.19
 L.20:
 	%71 = load i16, i16* %stag
-	%72 = getelementptr [17 x i8], [17 x i8]* @S.784
+	%72 = getelementptr [17 x i8], [17 x i8]* @S.785
 	%73 = bitcast [17 x i8]* %72 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %71, [0 x i8]* %73)
 	%74 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%75 = getelementptr [8 x i8], [8 x i8]* @S.785
+	%75 = getelementptr [8 x i8], [8 x i8]* @S.786
 	%76 = bitcast [8 x i8]* %75 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %74, [0 x i8]* %76)
 	%77 = load i16, i16* %list
 	call void @llvmdb_PMetaRef(i16 %77, i8 3)
 	%78 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%79 = getelementptr [3 x i8], [3 x i8]* @S.786
+	%79 = getelementptr [3 x i8], [3 x i8]* @S.787
 	%80 = bitcast [3 x i8]* %79 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %78, [0 x i8]* %80)
 	br label %return
@@ -31634,37 +31790,37 @@ L.0:
 return:
 	ret void
 }
-@S.787 = private unnamed_addr constant [13 x i8] c"DISubprogram\00"
 @S.788 = private unnamed_addr constant [13 x i8] c"DISubprogram\00"
-@S.789 = private unnamed_addr constant [7 x i8] c"name: \00"
-@S.790 = private unnamed_addr constant [8 x i8] c"scope: \00"
-@S.791 = private unnamed_addr constant [7 x i8] c"file: \00"
-@S.792 = private unnamed_addr constant [7 x i8] c"line: \00"
-@S.793 = private unnamed_addr constant [7 x i8] c"type: \00"
-@S.794 = private unnamed_addr constant [10 x i8] c"isLocal: \00"
-@S.795 = private unnamed_addr constant [15 x i8] c"isDefinition: \00"
-@S.796 = private unnamed_addr constant [12 x i8] c"scopeLine: \00"
-@S.797 = private unnamed_addr constant [8 x i8] c"flags: \00"
-@S.798 = private unnamed_addr constant [17 x i8] c"DIFlagPrototyped\00"
-@S.799 = private unnamed_addr constant [14 x i8] c"isOptimized: \00"
-@S.800 = private unnamed_addr constant [7 x i8] c"unit: \00"
-@S.801 = private unnamed_addr constant [12 x i8] c"variables: \00"
-@S.802 = private unnamed_addr constant [3 x i8] c")\0A\00"
-@S.803 = private unnamed_addr constant [16 x i8] c"DILocalVariable\00"
-@S.804 = private unnamed_addr constant [7 x i8] c"name: \00"
-@S.805 = private unnamed_addr constant [6 x i8] c"arg: \00"
-@S.806 = private unnamed_addr constant [8 x i8] c"scope: \00"
-@S.807 = private unnamed_addr constant [7 x i8] c"file: \00"
-@S.808 = private unnamed_addr constant [7 x i8] c"line: \00"
-@S.809 = private unnamed_addr constant [7 x i8] c"type: \00"
-@S.810 = private unnamed_addr constant [3 x i8] c")\0A\00"
-@S.811 = private unnamed_addr constant [16 x i8] c"DILocalVariable\00"
-@S.812 = private unnamed_addr constant [7 x i8] c"name: \00"
-@S.813 = private unnamed_addr constant [8 x i8] c"scope: \00"
-@S.814 = private unnamed_addr constant [7 x i8] c"file: \00"
-@S.815 = private unnamed_addr constant [7 x i8] c"line: \00"
-@S.816 = private unnamed_addr constant [7 x i8] c"type: \00"
-@S.817 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.789 = private unnamed_addr constant [13 x i8] c"DISubprogram\00"
+@S.790 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.791 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.792 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.793 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.794 = private unnamed_addr constant [7 x i8] c"type: \00"
+@S.795 = private unnamed_addr constant [10 x i8] c"isLocal: \00"
+@S.796 = private unnamed_addr constant [15 x i8] c"isDefinition: \00"
+@S.797 = private unnamed_addr constant [12 x i8] c"scopeLine: \00"
+@S.798 = private unnamed_addr constant [8 x i8] c"flags: \00"
+@S.799 = private unnamed_addr constant [17 x i8] c"DIFlagPrototyped\00"
+@S.800 = private unnamed_addr constant [14 x i8] c"isOptimized: \00"
+@S.801 = private unnamed_addr constant [7 x i8] c"unit: \00"
+@S.802 = private unnamed_addr constant [12 x i8] c"variables: \00"
+@S.803 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.804 = private unnamed_addr constant [16 x i8] c"DILocalVariable\00"
+@S.805 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.806 = private unnamed_addr constant [6 x i8] c"arg: \00"
+@S.807 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.808 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.809 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.810 = private unnamed_addr constant [7 x i8] c"type: \00"
+@S.811 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.812 = private unnamed_addr constant [16 x i8] c"DILocalVariable\00"
+@S.813 = private unnamed_addr constant [7 x i8] c"name: \00"
+@S.814 = private unnamed_addr constant [8 x i8] c"scope: \00"
+@S.815 = private unnamed_addr constant [7 x i8] c"file: \00"
+@S.816 = private unnamed_addr constant [7 x i8] c"line: \00"
+@S.817 = private unnamed_addr constant [7 x i8] c"type: \00"
+@S.818 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_ProcFinish(%symb.SymbNode* %ps$) nounwind {
 L.0:
 	%ps = alloca %symb.SymbNode*
@@ -31693,37 +31849,37 @@ L.0:
 	br i1 %9, label %L.2, label %L.3
 L.2:
 	%10 = load i16, i16* @llvmdb_subr
-	%11 = getelementptr [13 x i8], [13 x i8]* @S.787
+	%11 = getelementptr [13 x i8], [13 x i8]* @S.788
 	%12 = bitcast [13 x i8]* %11 to [0 x i8]*
 	call void @llvmdb_PStartDistinct(i16 %10, [0 x i8]* %12)
 	br label %L.1
 L.3:
 	%13 = load i16, i16* @llvmdb_subr
-	%14 = getelementptr [13 x i8], [13 x i8]* @S.788
+	%14 = getelementptr [13 x i8], [13 x i8]* @S.789
 	%15 = bitcast [13 x i8]* %14 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %13, [0 x i8]* %15)
 	br label %L.1
 L.1:
 	%16 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%17 = getelementptr [7 x i8], [7 x i8]* @S.789
+	%17 = getelementptr [7 x i8], [7 x i8]* @S.790
 	%18 = bitcast [7 x i8]* %17 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %16, [0 x i8]* %18)
 	%19 = load %symb.SymbNode*, %symb.SymbNode** %ps
 	call void @llvmdb_PFullName(%symb.SymbNode* %19, i8 0)
 	%20 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%21 = getelementptr [8 x i8], [8 x i8]* @S.790
+	%21 = getelementptr [8 x i8], [8 x i8]* @S.791
 	%22 = bitcast [8 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	%23 = load i16, i16* @llvmdb_filenamedir
 	call void @llvmdb_PMetaRef(i16 %23, i8 0)
 	%24 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%25 = getelementptr [7 x i8], [7 x i8]* @S.791
+	%25 = getelementptr [7 x i8], [7 x i8]* @S.792
 	%26 = bitcast [7 x i8]* %25 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %24, [0 x i8]* %26)
 	%27 = load i16, i16* @llvmdb_filenamedir
 	call void @llvmdb_PMetaRef(i16 %27, i8 0)
 	%28 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%29 = getelementptr [7 x i8], [7 x i8]* @S.792
+	%29 = getelementptr [7 x i8], [7 x i8]* @S.793
 	%30 = bitcast [7 x i8]* %29 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %28, [0 x i8]* %30)
 	%31 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -31732,13 +31888,13 @@ L.1:
 	%34 = zext i16 %33 to i64
 	call void @llvmdb_PUint(i64 %34, i8 0)
 	%35 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%36 = getelementptr [7 x i8], [7 x i8]* @S.793
+	%36 = getelementptr [7 x i8], [7 x i8]* @S.794
 	%37 = bitcast [7 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	%38 = load i16, i16* %stype
 	call void @llvmdb_PMetaRef(i16 %38, i8 0)
 	%39 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%40 = getelementptr [10 x i8], [10 x i8]* @S.794
+	%40 = getelementptr [10 x i8], [10 x i8]* @S.795
 	%41 = bitcast [10 x i8]* %40 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %39, [0 x i8]* %41)
 	%42 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -31748,13 +31904,13 @@ L.1:
 	%46 = zext i1 %45 to i8
 	call void @llvmdb_PBoolean(i8 %46, i8 0)
 	%47 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%48 = getelementptr [15 x i8], [15 x i8]* @S.795
+	%48 = getelementptr [15 x i8], [15 x i8]* @S.796
 	%49 = bitcast [15 x i8]* %48 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %47, [0 x i8]* %49)
 	%50 = load i8, i8* %isdef
 	call void @llvmdb_PBoolean(i8 %50, i8 0)
 	%51 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%52 = getelementptr [12 x i8], [12 x i8]* @S.796
+	%52 = getelementptr [12 x i8], [12 x i8]* @S.797
 	%53 = bitcast [12 x i8]* %52 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %51, [0 x i8]* %53)
 	%54 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -31770,33 +31926,33 @@ L.1:
 	br i1 %62, label %L.5, label %L.4
 L.5:
 	%63 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%64 = getelementptr [8 x i8], [8 x i8]* @S.797
+	%64 = getelementptr [8 x i8], [8 x i8]* @S.798
 	%65 = bitcast [8 x i8]* %64 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %63, [0 x i8]* %65)
-	%66 = getelementptr [17 x i8], [17 x i8]* @S.798
+	%66 = getelementptr [17 x i8], [17 x i8]* @S.799
 	%67 = bitcast [17 x i8]* %66 to [0 x i8]*
 	call void @llvmdb_PString([0 x i8]* %67, i8 0)
 	br label %L.4
 L.4:
 	%68 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%69 = getelementptr [14 x i8], [14 x i8]* @S.799
+	%69 = getelementptr [14 x i8], [14 x i8]* @S.800
 	%70 = bitcast [14 x i8]* %69 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %68, [0 x i8]* %70)
 	call void @llvmdb_PBoolean(i8 0, i8 0)
 	%71 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%72 = getelementptr [7 x i8], [7 x i8]* @S.800
+	%72 = getelementptr [7 x i8], [7 x i8]* @S.801
 	%73 = bitcast [7 x i8]* %72 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %71, [0 x i8]* %73)
 	%74 = load i16, i16* @llvmdb_unit
 	call void @llvmdb_PMetaRef(i16 %74, i8 0)
 	%75 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%76 = getelementptr [12 x i8], [12 x i8]* @S.801
+	%76 = getelementptr [12 x i8], [12 x i8]* @S.802
 	%77 = bitcast [12 x i8]* %76 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %75, [0 x i8]* %77)
 	%78 = load i16, i16* @llvmdb_nullmeta
 	call void @llvmdb_PMetaRef(i16 %78, i8 3)
 	%79 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%80 = getelementptr [3 x i8], [3 x i8]* @S.802
+	%80 = getelementptr [3 x i8], [3 x i8]* @S.803
 	%81 = bitcast [3 x i8]* %80 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %79, [0 x i8]* %81)
 	%82 = load i16, i16* @llvmdb_subr
@@ -31865,35 +32021,35 @@ L.13:
 	br label %L.12
 L.12:
 	%120 = load i16, i16* %stag
-	%121 = getelementptr [16 x i8], [16 x i8]* @S.803
+	%121 = getelementptr [16 x i8], [16 x i8]* @S.804
 	%122 = bitcast [16 x i8]* %121 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %120, [0 x i8]* %122)
 	%123 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%124 = getelementptr [7 x i8], [7 x i8]* @S.804
+	%124 = getelementptr [7 x i8], [7 x i8]* @S.805
 	%125 = bitcast [7 x i8]* %124 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %123, [0 x i8]* %125)
 	%126 = load %symb.SymbNode*, %symb.SymbNode** %s
 	call void @llvmdb_PName(%symb.SymbNode* %126, i8 0)
 	%127 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%128 = getelementptr [6 x i8], [6 x i8]* @S.805
+	%128 = getelementptr [6 x i8], [6 x i8]* @S.806
 	%129 = bitcast [6 x i8]* %128 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %127, [0 x i8]* %129)
 	%130 = load i64, i64* %argno
 	call void @llvmdb_PUint(i64 %130, i8 0)
 	%131 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%132 = getelementptr [8 x i8], [8 x i8]* @S.806
+	%132 = getelementptr [8 x i8], [8 x i8]* @S.807
 	%133 = bitcast [8 x i8]* %132 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %131, [0 x i8]* %133)
 	%134 = load i16, i16* @llvmdb_subr
 	call void @llvmdb_PMetaRef(i16 %134, i8 0)
 	%135 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%136 = getelementptr [7 x i8], [7 x i8]* @S.807
+	%136 = getelementptr [7 x i8], [7 x i8]* @S.808
 	%137 = bitcast [7 x i8]* %136 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %135, [0 x i8]* %137)
 	%138 = load i16, i16* @llvmdb_filenamedir
 	call void @llvmdb_PMetaRef(i16 %138, i8 0)
 	%139 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%140 = getelementptr [7 x i8], [7 x i8]* @S.808
+	%140 = getelementptr [7 x i8], [7 x i8]* @S.809
 	%141 = bitcast [7 x i8]* %140 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %139, [0 x i8]* %141)
 	%142 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31902,13 +32058,13 @@ L.12:
 	%145 = zext i16 %144 to i64
 	call void @llvmdb_PUint(i64 %145, i8 0)
 	%146 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%147 = getelementptr [7 x i8], [7 x i8]* @S.809
+	%147 = getelementptr [7 x i8], [7 x i8]* @S.810
 	%148 = bitcast [7 x i8]* %147 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %146, [0 x i8]* %148)
 	%149 = load i16, i16* %ttag
 	call void @llvmdb_PMetaRef(i16 %149, i8 3)
 	%150 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%151 = getelementptr [3 x i8], [3 x i8]* @S.810
+	%151 = getelementptr [3 x i8], [3 x i8]* @S.811
 	%152 = bitcast [3 x i8]* %151 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %150, [0 x i8]* %152)
 	%153 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31936,29 +32092,29 @@ L.16:
 	%166 = load i16, i16* %165
 	store i16 %166, i16* %stag
 	%167 = load i16, i16* %stag
-	%168 = getelementptr [16 x i8], [16 x i8]* @S.811
+	%168 = getelementptr [16 x i8], [16 x i8]* @S.812
 	%169 = bitcast [16 x i8]* %168 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %167, [0 x i8]* %169)
 	%170 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%171 = getelementptr [7 x i8], [7 x i8]* @S.812
+	%171 = getelementptr [7 x i8], [7 x i8]* @S.813
 	%172 = bitcast [7 x i8]* %171 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %170, [0 x i8]* %172)
 	%173 = load %symb.SymbNode*, %symb.SymbNode** %s
 	call void @llvmdb_PName(%symb.SymbNode* %173, i8 0)
 	%174 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%175 = getelementptr [8 x i8], [8 x i8]* @S.813
+	%175 = getelementptr [8 x i8], [8 x i8]* @S.814
 	%176 = bitcast [8 x i8]* %175 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %174, [0 x i8]* %176)
 	%177 = load i16, i16* @llvmdb_subr
 	call void @llvmdb_PMetaRef(i16 %177, i8 0)
 	%178 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%179 = getelementptr [7 x i8], [7 x i8]* @S.814
+	%179 = getelementptr [7 x i8], [7 x i8]* @S.815
 	%180 = bitcast [7 x i8]* %179 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %178, [0 x i8]* %180)
 	%181 = load i16, i16* @llvmdb_filenamedir
 	call void @llvmdb_PMetaRef(i16 %181, i8 0)
 	%182 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%183 = getelementptr [7 x i8], [7 x i8]* @S.815
+	%183 = getelementptr [7 x i8], [7 x i8]* @S.816
 	%184 = bitcast [7 x i8]* %183 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %182, [0 x i8]* %184)
 	%185 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -31967,13 +32123,13 @@ L.16:
 	%188 = zext i16 %187 to i64
 	call void @llvmdb_PUint(i64 %188, i8 0)
 	%189 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%190 = getelementptr [7 x i8], [7 x i8]* @S.816
+	%190 = getelementptr [7 x i8], [7 x i8]* @S.817
 	%191 = bitcast [7 x i8]* %190 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %189, [0 x i8]* %191)
 	%192 = load i16, i16* %ttag
 	call void @llvmdb_PMetaRef(i16 %192, i8 3)
 	%193 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%194 = getelementptr [3 x i8], [3 x i8]* @S.817
+	%194 = getelementptr [3 x i8], [3 x i8]* @S.818
 	%195 = bitcast [3 x i8]* %194 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %193, [0 x i8]* %195)
 	%196 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -32005,11 +32161,11 @@ L.0:
 return:
 	ret void
 }
-@S.818 = private unnamed_addr constant [1 x i8] c"\00"
-@S.819 = private unnamed_addr constant [7 x i8] c"DIFile\00"
-@S.820 = private unnamed_addr constant [11 x i8] c"filename: \00"
-@S.821 = private unnamed_addr constant [12 x i8] c"directory: \00"
-@S.822 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.819 = private unnamed_addr constant [1 x i8] c"\00"
+@S.820 = private unnamed_addr constant [7 x i8] c"DIFile\00"
+@S.821 = private unnamed_addr constant [11 x i8] c"filename: \00"
+@S.822 = private unnamed_addr constant [12 x i8] c"directory: \00"
+@S.823 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_PFileDir(i16 zeroext %seqno$, %symb.SymbNode* %fs$) nounwind {
 L.0:
 	%seqno = alloca i16
@@ -32034,7 +32190,7 @@ L.0:
 L.2:
 	%9 = load [0 x i8]*, [0 x i8]** %dir
 	store [0 x i8]* %9, [0 x i8]** %file
-	%10 = getelementptr [1 x i8], [1 x i8]* @S.818
+	%10 = getelementptr [1 x i8], [1 x i8]* @S.819
 	%11 = bitcast [1 x i8]* %10 to [0 x i8]*
 	store [0 x i8]* %11, [0 x i8]** %dir
 	br label %L.1
@@ -32054,25 +32210,25 @@ L.3:
 	br label %L.1
 L.1:
 	%22 = load i16, i16* %seqno
-	%23 = getelementptr [7 x i8], [7 x i8]* @S.819
+	%23 = getelementptr [7 x i8], [7 x i8]* @S.820
 	%24 = bitcast [7 x i8]* %23 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %22, [0 x i8]* %24)
 	%25 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%26 = getelementptr [11 x i8], [11 x i8]* @S.820
+	%26 = getelementptr [11 x i8], [11 x i8]* @S.821
 	%27 = bitcast [11 x i8]* %26 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %25, [0 x i8]* %27)
 	%28 = load [0 x i8]*, [0 x i8]** %file
 	%29 = bitcast [0 x i8]* %28 to [0 x i8]*
 	call void @llvmdb_PQString([0 x i8]* %29, i8 0)
 	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%31 = getelementptr [12 x i8], [12 x i8]* @S.821
+	%31 = getelementptr [12 x i8], [12 x i8]* @S.822
 	%32 = bitcast [12 x i8]* %31 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %30, [0 x i8]* %32)
 	%33 = load [0 x i8]*, [0 x i8]** %dir
 	%34 = bitcast [0 x i8]* %33 to [0 x i8]*
 	call void @llvmdb_PQString([0 x i8]* %34, i8 3)
 	%35 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%36 = getelementptr [3 x i8], [3 x i8]* @S.822
+	%36 = getelementptr [3 x i8], [3 x i8]* @S.823
 	%37 = bitcast [3 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	%38 = load i64, i64* %i
@@ -32146,26 +32302,26 @@ L.1:
 return:
 	ret void
 }
-@S.823 = private unnamed_addr constant [19 x i8] c"!llvm.dbg.cu = !{!\00"
-@S.824 = private unnamed_addr constant [3 x i8] c"}\0A\00"
-@S.825 = private unnamed_addr constant [32 x i8] c"!llvm.module.flags = !{!1, !2}\0A\00"
-@S.826 = private unnamed_addr constant [40 x i8] c"!1 = !{i32 2, !\22Dwarf Version\22, i32 4}\0A\00"
-@S.827 = private unnamed_addr constant [38 x i8] c"!2 = !{i32 2, !\22Debug Info Version\22, \00"
-@S.828 = private unnamed_addr constant [14 x i8] c"DICompileUnit\00"
-@S.829 = private unnamed_addr constant [11 x i8] c"language: \00"
-@S.830 = private unnamed_addr constant [12 x i8] c"DW_LANG_C99\00"
-@S.831 = private unnamed_addr constant [9 x i8] c", file: \00"
-@S.832 = private unnamed_addr constant [11 x i8] c"producer: \00"
-@S.833 = private unnamed_addr constant [13 x i8] c"ESL Compiler\00"
-@S.834 = private unnamed_addr constant [14 x i8] c"isOptimized: \00"
-@S.835 = private unnamed_addr constant [17 x i8] c"runtimeVersion: \00"
-@S.836 = private unnamed_addr constant [15 x i8] c"emissionKind: \00"
-@S.837 = private unnamed_addr constant [12 x i8] c"FullDebug, \00"
-@S.838 = private unnamed_addr constant [10 x i8] c"globals: \00"
-@S.839 = private unnamed_addr constant [3 x i8] c")\0A\00"
-@S.840 = private unnamed_addr constant [4 x i8] c"{}\0A\00"
-@S.841 = private unnamed_addr constant [13 x i8] c"DIExpression\00"
-@S.842 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.824 = private unnamed_addr constant [19 x i8] c"!llvm.dbg.cu = !{!\00"
+@S.825 = private unnamed_addr constant [3 x i8] c"}\0A\00"
+@S.826 = private unnamed_addr constant [32 x i8] c"!llvm.module.flags = !{!1, !2}\0A\00"
+@S.827 = private unnamed_addr constant [40 x i8] c"!1 = !{i32 2, !\22Dwarf Version\22, i32 4}\0A\00"
+@S.828 = private unnamed_addr constant [38 x i8] c"!2 = !{i32 2, !\22Debug Info Version\22, \00"
+@S.829 = private unnamed_addr constant [14 x i8] c"DICompileUnit\00"
+@S.830 = private unnamed_addr constant [11 x i8] c"language: \00"
+@S.831 = private unnamed_addr constant [12 x i8] c"DW_LANG_C99\00"
+@S.832 = private unnamed_addr constant [9 x i8] c", file: \00"
+@S.833 = private unnamed_addr constant [11 x i8] c"producer: \00"
+@S.834 = private unnamed_addr constant [13 x i8] c"ESL Compiler\00"
+@S.835 = private unnamed_addr constant [14 x i8] c"isOptimized: \00"
+@S.836 = private unnamed_addr constant [17 x i8] c"runtimeVersion: \00"
+@S.837 = private unnamed_addr constant [15 x i8] c"emissionKind: \00"
+@S.838 = private unnamed_addr constant [12 x i8] c"FullDebug, \00"
+@S.839 = private unnamed_addr constant [10 x i8] c"globals: \00"
+@S.840 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.841 = private unnamed_addr constant [4 x i8] c"{}\0A\00"
+@S.842 = private unnamed_addr constant [13 x i8] c"DIExpression\00"
+@S.843 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvmdb_ProgStart(%symb.SymbNode* %fs$, i8 zeroext %opt$) nounwind {
 L.0:
 	%fs = alloca %symb.SymbNode*
@@ -32201,7 +32357,7 @@ L.0:
 	%14 = load i16, i16* @llvmdb_seqno
 	store i16 %14, i16* @llvmdb_expr
 	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = getelementptr [19 x i8], [19 x i8]* @S.823
+	%16 = getelementptr [19 x i8], [19 x i8]* @S.824
 	%17 = bitcast [19 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -32209,19 +32365,19 @@ L.0:
 	%20 = zext i16 %19 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %18, i64 %20)
 	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%22 = getelementptr [3 x i8], [3 x i8]* @S.824
+	%22 = getelementptr [3 x i8], [3 x i8]* @S.825
 	%23 = bitcast [3 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	%24 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%25 = getelementptr [32 x i8], [32 x i8]* @S.825
+	%25 = getelementptr [32 x i8], [32 x i8]* @S.826
 	%26 = bitcast [32 x i8]* %25 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %24, [0 x i8]* %26)
 	%27 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%28 = getelementptr [40 x i8], [40 x i8]* @S.826
+	%28 = getelementptr [40 x i8], [40 x i8]* @S.827
 	%29 = bitcast [40 x i8]* %28 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %27, [0 x i8]* %29)
 	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%31 = getelementptr [38 x i8], [38 x i8]* @S.827
+	%31 = getelementptr [38 x i8], [38 x i8]* @S.828
 	%32 = bitcast [38 x i8]* %31 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %30, [0 x i8]* %32)
 	store i64 3, i64* %debugversion
@@ -32229,56 +32385,56 @@ L.0:
 	%34 = trunc i64 %33 to i32
 	call void @llvmdb_P32(i32 %34, i8 1)
 	%35 = load i16, i16* @llvmdb_unit
-	%36 = getelementptr [14 x i8], [14 x i8]* @S.828
+	%36 = getelementptr [14 x i8], [14 x i8]* @S.829
 	%37 = bitcast [14 x i8]* %36 to [0 x i8]*
 	call void @llvmdb_PStartDistinct(i16 %35, [0 x i8]* %37)
 	%38 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%39 = getelementptr [11 x i8], [11 x i8]* @S.829
+	%39 = getelementptr [11 x i8], [11 x i8]* @S.830
 	%40 = bitcast [11 x i8]* %39 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %38, [0 x i8]* %40)
 	%41 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%42 = getelementptr [12 x i8], [12 x i8]* @S.830
+	%42 = getelementptr [12 x i8], [12 x i8]* @S.831
 	%43 = bitcast [12 x i8]* %42 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %41, [0 x i8]* %43)
 	%44 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%45 = getelementptr [9 x i8], [9 x i8]* @S.831
+	%45 = getelementptr [9 x i8], [9 x i8]* @S.832
 	%46 = bitcast [9 x i8]* %45 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %44, [0 x i8]* %46)
 	%47 = load i16, i16* @llvmdb_filenamedir
 	call void @llvmdb_PMetaRef(i16 %47, i8 0)
 	%48 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%49 = getelementptr [11 x i8], [11 x i8]* @S.832
+	%49 = getelementptr [11 x i8], [11 x i8]* @S.833
 	%50 = bitcast [11 x i8]* %49 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %48, [0 x i8]* %50)
-	%51 = getelementptr [13 x i8], [13 x i8]* @S.833
+	%51 = getelementptr [13 x i8], [13 x i8]* @S.834
 	%52 = bitcast [13 x i8]* %51 to [0 x i8]*
 	call void @llvmdb_PQString([0 x i8]* %52, i8 0)
 	%53 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%54 = getelementptr [14 x i8], [14 x i8]* @S.834
+	%54 = getelementptr [14 x i8], [14 x i8]* @S.835
 	%55 = bitcast [14 x i8]* %54 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %53, [0 x i8]* %55)
 	call void @llvmdb_PBoolean(i8 0, i8 0)
 	%56 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%57 = getelementptr [17 x i8], [17 x i8]* @S.835
+	%57 = getelementptr [17 x i8], [17 x i8]* @S.836
 	%58 = bitcast [17 x i8]* %57 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %56, [0 x i8]* %58)
 	call void @llvmdb_PUint(i64 0, i8 0)
 	%59 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%60 = getelementptr [15 x i8], [15 x i8]* @S.836
+	%60 = getelementptr [15 x i8], [15 x i8]* @S.837
 	%61 = bitcast [15 x i8]* %60 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %59, [0 x i8]* %61)
 	%62 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%63 = getelementptr [12 x i8], [12 x i8]* @S.837
+	%63 = getelementptr [12 x i8], [12 x i8]* @S.838
 	%64 = bitcast [12 x i8]* %63 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %62, [0 x i8]* %64)
 	%65 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%66 = getelementptr [10 x i8], [10 x i8]* @S.838
+	%66 = getelementptr [10 x i8], [10 x i8]* @S.839
 	%67 = bitcast [10 x i8]* %66 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %65, [0 x i8]* %67)
 	%68 = load i16, i16* @llvmdb_globals
 	call void @llvmdb_PMetaRef(i16 %68, i8 3)
 	%69 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%70 = getelementptr [3 x i8], [3 x i8]* @S.839
+	%70 = getelementptr [3 x i8], [3 x i8]* @S.840
 	%71 = bitcast [3 x i8]* %70 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
 	%72 = load i16, i16* @llvmdb_filenamedir
@@ -32288,22 +32444,22 @@ L.0:
 	%75 = load i16, i16* @llvmdb_nullmeta
 	call void @llvmdb_PMetaSeq(i16 %75)
 	%76 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%77 = getelementptr [4 x i8], [4 x i8]* @S.840
+	%77 = getelementptr [4 x i8], [4 x i8]* @S.841
 	%78 = bitcast [4 x i8]* %77 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %76, [0 x i8]* %78)
 	%79 = load i16, i16* @llvmdb_expr
-	%80 = getelementptr [13 x i8], [13 x i8]* @S.841
+	%80 = getelementptr [13 x i8], [13 x i8]* @S.842
 	%81 = bitcast [13 x i8]* %80 to [0 x i8]*
 	call void @llvmdb_PStart(i16 %79, [0 x i8]* %81)
 	%82 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%83 = getelementptr [3 x i8], [3 x i8]* @S.842
+	%83 = getelementptr [3 x i8], [3 x i8]* @S.843
 	%84 = bitcast [3 x i8]* %83 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %82, [0 x i8]* %84)
 	br label %return
 return:
 	ret void
 }
-@S.843 = private unnamed_addr constant [80 x i8] c"declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone\0A\00"
+@S.844 = private unnamed_addr constant [80 x i8] c"declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone\0A\00"
 define internal void @llvmdb_ProgFinish() nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -32393,7 +32549,7 @@ L.11:
 	br label %L.9
 L.9:
 	%34 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%35 = getelementptr [80 x i8], [80 x i8]* @S.843
+	%35 = getelementptr [80 x i8], [80 x i8]* @S.844
 	%36 = bitcast [80 x i8]* %35 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %34, [0 x i8]* %36)
 	br label %return
@@ -32487,19 +32643,19 @@ L.8:
 return:
 	ret void
 }
-@S.844 = private unnamed_addr constant [72 x i8] c"declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\0A\00"
-@S.845 = private unnamed_addr constant [66 x i8] c"declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\0A\00"
-@S.846 = private unnamed_addr constant [31 x i8] c"declare %K @llvm.bswap.%K(%K)\0A\00"
-@S.847 = private unnamed_addr constant [36 x i8] c"declare %K @llvm.bitreverse.%K(%K)\0A\00"
-@S.848 = private unnamed_addr constant [34 x i8] c"declare %K @llvm.ctlz.%K(%K, i1)\0A\00"
-@S.849 = private unnamed_addr constant [34 x i8] c"declare %K @llvm.cttz.%K(%K, i1)\0A\00"
-@S.850 = private unnamed_addr constant [31 x i8] c"declare %K @llvm.ctpop.%K(%K)\0A\00"
-@S.851 = private unnamed_addr constant [35 x i8] c"declare i1 @memcmp%*B(%K, %K, %W)\0A\00"
-@S.852 = private unnamed_addr constant [27 x i8] c"declare %W @memlen%*A(%K)\0A\00"
-@S.853 = private unnamed_addr constant [30 x i8] c"declare %K @llvm.sqrt.%K(%K)\0A\00"
-@S.854 = private unnamed_addr constant [25 x i8] c"declare %K @sqrti%B(%K)\0A\00"
-@S.855 = private unnamed_addr constant [29 x i8] c"declare %K @sqrtq%B(%K, %W)\0A\00"
-@S.856 = private unnamed_addr constant [51 x i8] c"declare void @_assert(%W, [0 x i8]*, %W) noreturn\0A\00"
+@S.845 = private unnamed_addr constant [72 x i8] c"declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\0A\00"
+@S.846 = private unnamed_addr constant [66 x i8] c"declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\0A\00"
+@S.847 = private unnamed_addr constant [31 x i8] c"declare %K @llvm.bswap.%K(%K)\0A\00"
+@S.848 = private unnamed_addr constant [36 x i8] c"declare %K @llvm.bitreverse.%K(%K)\0A\00"
+@S.849 = private unnamed_addr constant [34 x i8] c"declare %K @llvm.ctlz.%K(%K, i1)\0A\00"
+@S.850 = private unnamed_addr constant [34 x i8] c"declare %K @llvm.cttz.%K(%K, i1)\0A\00"
+@S.851 = private unnamed_addr constant [31 x i8] c"declare %K @llvm.ctpop.%K(%K)\0A\00"
+@S.852 = private unnamed_addr constant [35 x i8] c"declare i1 @memcmp%*B(%K, %K, %W)\0A\00"
+@S.853 = private unnamed_addr constant [27 x i8] c"declare %W @memlen%*A(%K)\0A\00"
+@S.854 = private unnamed_addr constant [30 x i8] c"declare %K @llvm.sqrt.%K(%K)\0A\00"
+@S.855 = private unnamed_addr constant [25 x i8] c"declare %K @sqrti%B(%K)\0A\00"
+@S.856 = private unnamed_addr constant [29 x i8] c"declare %K @sqrtq%B(%K, %W)\0A\00"
+@S.857 = private unnamed_addr constant [51 x i8] c"declare void @_assert(%W, [0 x i8]*, %W) noreturn\0A\00"
 define internal void @llvm_DeclareIntrinsics() nounwind {
 L.0:
 	%i = alloca i8
@@ -32545,13 +32701,13 @@ L.5:
 		i64 13, label %L.20
 	]
 L.8:
-	%15 = getelementptr [72 x i8], [72 x i8]* @S.844
+	%15 = getelementptr [72 x i8], [72 x i8]* @S.845
 	%16 = bitcast [72 x i8]* %15 to [0 x i8]*
 	%17 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
 	br label %L.7
 L.9:
-	%18 = getelementptr [66 x i8], [66 x i8]* @S.845
+	%18 = getelementptr [66 x i8], [66 x i8]* @S.846
 	%19 = bitcast [66 x i8]* %18 to [0 x i8]*
 	%20 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %19, %ast.AstNode* %20)
@@ -32564,7 +32720,7 @@ L.21:
 	%23 = load %type.TypeNode*, %type.TypeNode** %22
 	%24 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %23, %type.TypeNode** %24
-	%25 = getelementptr [31 x i8], [31 x i8]* @S.846
+	%25 = getelementptr [31 x i8], [31 x i8]* @S.847
 	%26 = bitcast [31 x i8]* %25 to [0 x i8]*
 	%27 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %26, %ast.AstNode* %27)
@@ -32588,7 +32744,7 @@ L.24:
 	%36 = load %type.TypeNode*, %type.TypeNode** %35
 	%37 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %36, %type.TypeNode** %37
-	%38 = getelementptr [36 x i8], [36 x i8]* @S.847
+	%38 = getelementptr [36 x i8], [36 x i8]* @S.848
 	%39 = bitcast [36 x i8]* %38 to [0 x i8]*
 	%40 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %39, %ast.AstNode* %40)
@@ -32612,7 +32768,7 @@ L.27:
 	%49 = load %type.TypeNode*, %type.TypeNode** %48
 	%50 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %49, %type.TypeNode** %50
-	%51 = getelementptr [34 x i8], [34 x i8]* @S.848
+	%51 = getelementptr [34 x i8], [34 x i8]* @S.849
 	%52 = bitcast [34 x i8]* %51 to [0 x i8]*
 	%53 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %52, %ast.AstNode* %53)
@@ -32636,7 +32792,7 @@ L.30:
 	%62 = load %type.TypeNode*, %type.TypeNode** %61
 	%63 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %62, %type.TypeNode** %63
-	%64 = getelementptr [34 x i8], [34 x i8]* @S.849
+	%64 = getelementptr [34 x i8], [34 x i8]* @S.850
 	%65 = bitcast [34 x i8]* %64 to [0 x i8]*
 	%66 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %65, %ast.AstNode* %66)
@@ -32660,7 +32816,7 @@ L.33:
 	%75 = load %type.TypeNode*, %type.TypeNode** %74
 	%76 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %75, %type.TypeNode** %76
-	%77 = getelementptr [31 x i8], [31 x i8]* @S.850
+	%77 = getelementptr [31 x i8], [31 x i8]* @S.851
 	%78 = bitcast [31 x i8]* %77 to [0 x i8]*
 	%79 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %78, %ast.AstNode* %79)
@@ -32684,7 +32840,7 @@ L.36:
 	%88 = load %type.TypeNode*, %type.TypeNode** %87
 	%89 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %88, %type.TypeNode** %89
-	%90 = getelementptr [35 x i8], [35 x i8]* @S.851
+	%90 = getelementptr [35 x i8], [35 x i8]* @S.852
 	%91 = bitcast [35 x i8]* %90 to [0 x i8]*
 	%92 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %91, %ast.AstNode* %92)
@@ -32708,7 +32864,7 @@ L.39:
 	%101 = load %type.TypeNode*, %type.TypeNode** %100
 	%102 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %101, %type.TypeNode** %102
-	%103 = getelementptr [27 x i8], [27 x i8]* @S.852
+	%103 = getelementptr [27 x i8], [27 x i8]* @S.853
 	%104 = bitcast [27 x i8]* %103 to [0 x i8]*
 	%105 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %104, %ast.AstNode* %105)
@@ -32732,7 +32888,7 @@ L.42:
 	%114 = load %type.TypeNode*, %type.TypeNode** %113
 	%115 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %114, %type.TypeNode** %115
-	%116 = getelementptr [30 x i8], [30 x i8]* @S.853
+	%116 = getelementptr [30 x i8], [30 x i8]* @S.854
 	%117 = bitcast [30 x i8]* %116 to [0 x i8]*
 	%118 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %117, %ast.AstNode* %118)
@@ -32756,7 +32912,7 @@ L.45:
 	%127 = load %type.TypeNode*, %type.TypeNode** %126
 	%128 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %127, %type.TypeNode** %128
-	%129 = getelementptr [25 x i8], [25 x i8]* @S.854
+	%129 = getelementptr [25 x i8], [25 x i8]* @S.855
 	%130 = bitcast [25 x i8]* %129 to [0 x i8]*
 	%131 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %130, %ast.AstNode* %131)
@@ -32780,7 +32936,7 @@ L.48:
 	%140 = load %type.TypeNode*, %type.TypeNode** %139
 	%141 = getelementptr %ast.AstNode, %ast.AstNode* %dummy, i64 0, i32 8
 	store %type.TypeNode* %140, %type.TypeNode** %141
-	%142 = getelementptr [29 x i8], [29 x i8]* @S.855
+	%142 = getelementptr [29 x i8], [29 x i8]* @S.856
 	%143 = bitcast [29 x i8]* %142 to [0 x i8]*
 	%144 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %143, %ast.AstNode* %144)
@@ -32797,7 +32953,7 @@ L.50:
 L.49:
 	br label %L.7
 L.20:
-	%151 = getelementptr [51 x i8], [51 x i8]* @S.856
+	%151 = getelementptr [51 x i8], [51 x i8]* @S.857
 	%152 = bitcast [51 x i8]* %151 to [0 x i8]*
 	%153 = bitcast %ast.AstNode* %dummy to %ast.AstNode*
 	call void @llvm_Print([0 x i8]* %152, %ast.AstNode* %153)
@@ -32837,15 +32993,15 @@ L.1:
 return:
 	ret void
 }
-@S.857 = private unnamed_addr constant [2 x i8] c"%\00"
-@S.858 = private unnamed_addr constant [2 x i8] c".\00"
+@S.858 = private unnamed_addr constant [2 x i8] c"%\00"
+@S.859 = private unnamed_addr constant [2 x i8] c".\00"
 define internal void @llvm_PTypeName(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
 	store %type.TypeNode* %t$, %type.TypeNode** %t
 	%s = alloca %symb.SymbNode*
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [2 x i8], [2 x i8]* @S.857
+	%1 = getelementptr [2 x i8], [2 x i8]* @S.858
 	%2 = bitcast [2 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load %type.TypeNode*, %type.TypeNode** %t
@@ -32871,7 +33027,7 @@ L.5:
 	%18 = bitcast [0 x i8]* %17 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %18)
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%20 = getelementptr [2 x i8], [2 x i8]* @S.858
+	%20 = getelementptr [2 x i8], [2 x i8]* @S.859
 	%21 = bitcast [2 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	br label %L.4
@@ -32913,9 +33069,9 @@ L.1:
 return:
 	ret void
 }
-@S.859 = private unnamed_addr constant [2 x i8] c"{\00"
-@S.860 = private unnamed_addr constant [3 x i8] c", \00"
-@S.861 = private unnamed_addr constant [2 x i8] c"}\00"
+@S.860 = private unnamed_addr constant [2 x i8] c"{\00"
+@S.861 = private unnamed_addr constant [3 x i8] c", \00"
+@S.862 = private unnamed_addr constant [2 x i8] c"}\00"
 define internal void @llvm_PRecordType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -32941,7 +33097,7 @@ L.4:
 	br label %L.3
 L.3:
 	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%11 = getelementptr [2 x i8], [2 x i8]* @S.859
+	%11 = getelementptr [2 x i8], [2 x i8]* @S.860
 	%12 = bitcast [2 x i8]* %11 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %12)
 	%13 = load %type.TypeNode*, %type.TypeNode** %t
@@ -32968,13 +33124,13 @@ L.7:
 	br i1 %26, label %L.6, label %L.8
 L.8:
 	%27 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%28 = getelementptr [3 x i8], [3 x i8]* @S.860
+	%28 = getelementptr [3 x i8], [3 x i8]* @S.861
 	%29 = bitcast [3 x i8]* %28 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %27, [0 x i8]* %29)
 	br label %L.5
 L.6:
 	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%31 = getelementptr [2 x i8], [2 x i8]* @S.861
+	%31 = getelementptr [2 x i8], [2 x i8]* @S.862
 	%32 = bitcast [2 x i8]* %31 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %30, [0 x i8]* %32)
 	%33 = load %type.TypeNode*, %type.TypeNode** %t
@@ -33089,9 +33245,9 @@ L.0:
 return:
 	ret void
 }
-@S.862 = private unnamed_addr constant [6 x i8] c"float\00"
-@S.863 = private unnamed_addr constant [7 x i8] c"double\00"
-@S.864 = private unnamed_addr constant [4 x i8] c" x \00"
+@S.863 = private unnamed_addr constant [6 x i8] c"float\00"
+@S.864 = private unnamed_addr constant [7 x i8] c"double\00"
+@S.865 = private unnamed_addr constant [4 x i8] c" x \00"
 define internal void @llvm_PType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -33130,13 +33286,13 @@ L.6:
 	]
 L.13:
 	%11 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%12 = getelementptr [6 x i8], [6 x i8]* @S.862
+	%12 = getelementptr [6 x i8], [6 x i8]* @S.863
 	%13 = bitcast [6 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	br label %L.12
 L.14:
 	%14 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%15 = getelementptr [7 x i8], [7 x i8]* @S.863
+	%15 = getelementptr [7 x i8], [7 x i8]* @S.864
 	%16 = bitcast [7 x i8]* %15 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %14, [0 x i8]* %16)
 	br label %L.12
@@ -33199,7 +33355,7 @@ L.23:
 	%41 = trunc i64 %40 to i32
 	call void @bout_BufIO_uint32(%bout.BufIO* %38, i32 %41)
 	%42 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%43 = getelementptr [4 x i8], [4 x i8]* @S.864
+	%43 = getelementptr [4 x i8], [4 x i8]* @S.865
 	%44 = bitcast [4 x i8]* %43 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %42, [0 x i8]* %44)
 	%45 = load %type.TypeNode*, %type.TypeNode** %t
@@ -33238,7 +33394,7 @@ L.1:
 return:
 	ret void
 }
-@S.865 = private unnamed_addr constant [19 x i8] c"Illegal PDerefType\00"
+@S.866 = private unnamed_addr constant [19 x i8] c"Illegal PDerefType\00"
 define internal void @llvm_PDerefType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -33261,9 +33417,9 @@ L.5:
 	call void @llvm_PType(%type.TypeNode* %8)
 	br label %L.4
 L.3:
-	%9 = getelementptr [19 x i8], [19 x i8]* @S.865
+	%9 = getelementptr [19 x i8], [19 x i8]* @S.866
 	%10 = bitcast [19 x i8]* %9 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %10)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %10)
 	br label %L.4
 L.4:
 	br label %L.1
@@ -33272,8 +33428,8 @@ L.1:
 return:
 	ret void
 }
-@S.866 = private unnamed_addr constant [9 x i8] c" signext\00"
-@S.867 = private unnamed_addr constant [9 x i8] c" zeroext\00"
+@S.867 = private unnamed_addr constant [9 x i8] c" signext\00"
+@S.868 = private unnamed_addr constant [9 x i8] c" zeroext\00"
 define internal void @llvm_PExtend(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -33312,13 +33468,13 @@ L.7:
 	br i1 %18, label %L.9, label %L.10
 L.9:
 	%19 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%20 = getelementptr [9 x i8], [9 x i8]* @S.866
+	%20 = getelementptr [9 x i8], [9 x i8]* @S.867
 	%21 = bitcast [9 x i8]* %20 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %19, [0 x i8]* %21)
 	br label %L.8
 L.10:
 	%22 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%23 = getelementptr [9 x i8], [9 x i8]* @S.867
+	%23 = getelementptr [9 x i8], [9 x i8]* @S.868
 	%24 = bitcast [9 x i8]* %23 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
 	br label %L.8
@@ -33335,10 +33491,10 @@ L.1:
 return:
 	ret void
 }
-@S.868 = private unnamed_addr constant [4 x i8] c" { \00"
-@S.869 = private unnamed_addr constant [3 x i8] c", \00"
-@S.870 = private unnamed_addr constant [3 x i8] c" }\00"
-@S.871 = private unnamed_addr constant [6 x i8] c" void\00"
+@S.869 = private unnamed_addr constant [4 x i8] c" { \00"
+@S.870 = private unnamed_addr constant [3 x i8] c", \00"
+@S.871 = private unnamed_addr constant [3 x i8] c" }\00"
+@S.872 = private unnamed_addr constant [6 x i8] c" void\00"
 define internal void @llvm_PRetvType(%type.TypeListEntry* %tl$, i8 zeroext %extend$) nounwind {
 L.0:
 	%tl = alloca %type.TypeListEntry*
@@ -33357,7 +33513,7 @@ L.2:
 	br i1 %5, label %L.5, label %L.6
 L.5:
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = getelementptr [4 x i8], [4 x i8]* @S.868
+	%7 = getelementptr [4 x i8], [4 x i8]* @S.869
 	%8 = bitcast [4 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	br label %L.7
@@ -33375,13 +33531,13 @@ L.7:
 	br i1 %16, label %L.8, label %L.9
 L.9:
 	%17 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%18 = getelementptr [3 x i8], [3 x i8]* @S.869
+	%18 = getelementptr [3 x i8], [3 x i8]* @S.870
 	%19 = bitcast [3 x i8]* %18 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %17, [0 x i8]* %19)
 	br label %L.7
 L.8:
 	%20 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%21 = getelementptr [3 x i8], [3 x i8]* @S.870
+	%21 = getelementptr [3 x i8], [3 x i8]* @S.871
 	%22 = bitcast [3 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	br label %L.4
@@ -33407,7 +33563,7 @@ L.4:
 	br label %L.1
 L.3:
 	%31 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%32 = getelementptr [6 x i8], [6 x i8]* @S.871
+	%32 = getelementptr [6 x i8], [6 x i8]* @S.872
 	%33 = bitcast [6 x i8]* %32 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %31, [0 x i8]* %33)
 	br label %L.1
@@ -33416,7 +33572,7 @@ L.1:
 return:
 	ret void
 }
-@S.872 = private unnamed_addr constant [3 x i8] c", \00"
+@S.873 = private unnamed_addr constant [3 x i8] c", \00"
 define internal void @llvm_PParmTypes(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -33443,7 +33599,7 @@ L.3:
 	br i1 %11, label %L.2, label %L.4
 L.4:
 	%12 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%13 = getelementptr [3 x i8], [3 x i8]* @S.872
+	%13 = getelementptr [3 x i8], [3 x i8]* @S.873
 	%14 = bitcast [3 x i8]* %13 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %14)
 	br label %L.1
@@ -33454,9 +33610,9 @@ L.2:
 return:
 	ret void
 }
-@S.873 = private unnamed_addr constant [5 x i8] c"null\00"
-@S.874 = private unnamed_addr constant [10 x i8] c"inttoptr(\00"
-@S.875 = private unnamed_addr constant [5 x i8] c" to \00"
+@S.874 = private unnamed_addr constant [5 x i8] c"null\00"
+@S.875 = private unnamed_addr constant [10 x i8] c"inttoptr(\00"
+@S.876 = private unnamed_addr constant [5 x i8] c" to \00"
 define internal void @llvm_ConstantRef(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33471,13 +33627,13 @@ L.0:
 	br i1 %4, label %L.2, label %L.3
 L.2:
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%6 = getelementptr [5 x i8], [5 x i8]* @S.873
+	%6 = getelementptr [5 x i8], [5 x i8]* @S.874
 	%7 = bitcast [5 x i8]* %6 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
 	br label %L.1
 L.3:
 	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%9 = getelementptr [10 x i8], [10 x i8]* @S.874
+	%9 = getelementptr [10 x i8], [10 x i8]* @S.875
 	%10 = bitcast [10 x i8]* %9 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %8, [0 x i8]* %10)
 	%11 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
@@ -33488,7 +33644,7 @@ L.3:
 	%14 = load i64, i64* %v
 	call void @bout_BufIO_uint64(%bout.BufIO* %13, i64 %14)
 	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = getelementptr [5 x i8], [5 x i8]* @S.875
+	%16 = getelementptr [5 x i8], [5 x i8]* @S.876
 	%17 = bitcast [5 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	%18 = load %ast.AstNode*, %ast.AstNode** %node
@@ -33503,8 +33659,8 @@ L.1:
 return:
 	ret void
 }
-@S.876 = private unnamed_addr constant [5 x i8] c"void\00"
-@S.877 = private unnamed_addr constant [2 x i8] c"i\00"
+@S.877 = private unnamed_addr constant [5 x i8] c"void\00"
+@S.878 = private unnamed_addr constant [2 x i8] c"i\00"
 define internal void @llvm_NodeType(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33525,7 +33681,7 @@ L.0:
 	]
 L.3:
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = getelementptr [5 x i8], [5 x i8]* @S.876
+	%7 = getelementptr [5 x i8], [5 x i8]* @S.877
 	%8 = bitcast [5 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	br label %L.2
@@ -33537,7 +33693,7 @@ L.4:
 	br label %L.2
 L.1:
 	%12 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%13 = getelementptr [2 x i8], [2 x i8]* @S.877
+	%13 = getelementptr [2 x i8], [2 x i8]* @S.878
 	%14 = bitcast [2 x i8]* %13 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %12, [0 x i8]* %14)
 	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -33632,9 +33788,9 @@ L.3:
 return:
 	ret void
 }
-@S.878 = private unnamed_addr constant [10 x i8] c"inttoptr(\00"
-@S.879 = private unnamed_addr constant [5 x i8] c" to \00"
-@S.880 = private unnamed_addr constant [3 x i8] c"*)\00"
+@S.879 = private unnamed_addr constant [10 x i8] c"inttoptr(\00"
+@S.880 = private unnamed_addr constant [5 x i8] c" to \00"
+@S.881 = private unnamed_addr constant [3 x i8] c"*)\00"
 define internal void @llvm_PName(%symb.SymbNode* %s$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -33755,7 +33911,7 @@ L.14:
 	br label %L.2
 L.6:
 	%60 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%61 = getelementptr [10 x i8], [10 x i8]* @S.878
+	%61 = getelementptr [10 x i8], [10 x i8]* @S.879
 	%62 = bitcast [10 x i8]* %61 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %60, [0 x i8]* %62)
 	%63 = load %type.TypeNode*, %type.TypeNode** @type_wordtype
@@ -33768,7 +33924,7 @@ L.6:
 	%68 = load i64, i64* %67
 	call void @bout_BufIO_uint64(%bout.BufIO* %65, i64 %68)
 	%69 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%70 = getelementptr [5 x i8], [5 x i8]* @S.879
+	%70 = getelementptr [5 x i8], [5 x i8]* @S.880
 	%71 = bitcast [5 x i8]* %70 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %69, [0 x i8]* %71)
 	%72 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -33794,7 +33950,7 @@ L.23:
 	br label %L.21
 L.21:
 	%85 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%86 = getelementptr [3 x i8], [3 x i8]* @S.880
+	%86 = getelementptr [3 x i8], [3 x i8]* @S.881
 	%87 = bitcast [3 x i8]* %86 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %85, [0 x i8]* %87)
 	br label %L.2
@@ -33820,7 +33976,7 @@ L.0:
 return:
 	ret void
 }
-@S.881 = private unnamed_addr constant [11 x i8] c"__NoName__\00"
+@S.882 = private unnamed_addr constant [11 x i8] c"__NoName__\00"
 define internal void @llvm_NodeName(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33839,7 +33995,7 @@ L.2:
 	br label %L.1
 L.3:
 	%6 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%7 = getelementptr [11 x i8], [11 x i8]* @S.881
+	%7 = getelementptr [11 x i8], [11 x i8]* @S.882
 	%8 = bitcast [11 x i8]* %7 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %6, [0 x i8]* %8)
 	br label %L.1
@@ -33848,7 +34004,7 @@ L.1:
 return:
 	ret void
 }
-@S.882 = private unnamed_addr constant [3 x i8] c"0x\00"
+@S.883 = private unnamed_addr constant [3 x i8] c"0x\00"
 define internal void @llvm_PFloat(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33943,7 +34099,7 @@ L.14:
 	br label %L.12
 L.12:
 	%44 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%45 = getelementptr [3 x i8], [3 x i8]* @S.882
+	%45 = getelementptr [3 x i8], [3 x i8]* @S.883
 	%46 = bitcast [3 x i8]* %45 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %44, [0 x i8]* %46)
 	%47 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -33953,7 +34109,7 @@ L.12:
 return:
 	ret void
 }
-@S.883 = private unnamed_addr constant [23 x i8] c"Assignment to constant\00"
+@S.884 = private unnamed_addr constant [23 x i8] c"Assignment to constant\00"
 define internal void @llvm_NodeDst(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -33976,9 +34132,9 @@ L.3:
 	%9 = icmp ne i8 %8, 5
 	br i1 %9, label %L.6, label %L.5
 L.6:
-	%10 = getelementptr [23 x i8], [23 x i8]* @S.883
+	%10 = getelementptr [23 x i8], [23 x i8]* @S.884
 	%11 = bitcast [23 x i8]* %10 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %11)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %11)
 	br label %L.5
 L.5:
 	%12 = load %ast.AstNode*, %ast.AstNode** %node
@@ -34309,13 +34465,13 @@ L.2:
 return:
 	ret void
 }
-@S.884 = private unnamed_addr constant [5 x i8] c"%rv.\00"
+@S.885 = private unnamed_addr constant [5 x i8] c"%rv.\00"
 define internal void @llvm_PRetValName(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [5 x i8], [5 x i8]* @S.884
+	%1 = getelementptr [5 x i8], [5 x i8]* @S.885
 	%2 = bitcast [5 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -34326,7 +34482,7 @@ L.0:
 return:
 	ret void
 }
-@S.885 = private unnamed_addr constant [9 x i8] c", align \00"
+@S.886 = private unnamed_addr constant [9 x i8] c", align \00"
 define internal void @llvm_Alignment(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -34341,7 +34497,7 @@ L.0:
 	br i1 %4, label %L.2, label %L.1
 L.2:
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%6 = getelementptr [9 x i8], [9 x i8]* @S.885
+	%6 = getelementptr [9 x i8], [9 x i8]* @S.886
 	%7 = bitcast [9 x i8]* %6 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
 	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -34355,9 +34511,9 @@ L.1:
 return:
 	ret void
 }
-@S.886 = private unnamed_addr constant [2 x i8] c",\00"
-@S.887 = private unnamed_addr constant [11 x i8] c" section \22\00"
-@S.888 = private unnamed_addr constant [2 x i8] c"\22\00"
+@S.887 = private unnamed_addr constant [2 x i8] c",\00"
+@S.888 = private unnamed_addr constant [11 x i8] c" section \22\00"
+@S.889 = private unnamed_addr constant [2 x i8] c"\22\00"
 define internal void @llvm_Section(%symb.SymbNode* %s$, i8 zeroext %comma$) nounwind {
 L.0:
 	%s = alloca %symb.SymbNode*
@@ -34373,13 +34529,13 @@ L.2:
 	br i1 %3, label %L.4, label %L.3
 L.4:
 	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%5 = getelementptr [2 x i8], [2 x i8]* @S.886
+	%5 = getelementptr [2 x i8], [2 x i8]* @S.887
 	%6 = bitcast [2 x i8]* %5 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %4, [0 x i8]* %6)
 	br label %L.3
 L.3:
 	%7 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%8 = getelementptr [11 x i8], [11 x i8]* @S.887
+	%8 = getelementptr [11 x i8], [11 x i8]* @S.888
 	%9 = bitcast [11 x i8]* %8 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %7, [0 x i8]* %9)
 	%10 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -34389,7 +34545,7 @@ L.3:
 	%14 = bitcast [0 x i8]* %13 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %10, [0 x i8]* %14)
 	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = getelementptr [2 x i8], [2 x i8]* @S.888
+	%16 = getelementptr [2 x i8], [2 x i8]* @S.889
 	%17 = bitcast [2 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	br label %L.1
@@ -34398,8 +34554,8 @@ L.1:
 return:
 	ret void
 }
-@S.889 = private unnamed_addr constant [9 x i8] c" = type \00"
-@S.890 = private unnamed_addr constant [2 x i8] c"i\00"
+@S.890 = private unnamed_addr constant [9 x i8] c" = type \00"
+@S.891 = private unnamed_addr constant [2 x i8] c"i\00"
 define internal void @llvm_DclType(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -34489,7 +34645,7 @@ L.14:
 	%43 = load %type.TypeNode*, %type.TypeNode** %t
 	call void @llvm_PTypeName(%type.TypeNode* %43)
 	%44 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%45 = getelementptr [9 x i8], [9 x i8]* @S.889
+	%45 = getelementptr [9 x i8], [9 x i8]* @S.890
 	%46 = bitcast [9 x i8]* %45 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %44, [0 x i8]* %46)
 	%47 = load %type.TypeNode*, %type.TypeNode** %t
@@ -34504,7 +34660,7 @@ L.17:
 	%54 = call i32 @target_isize(i32 %53)
 	store i32 %54, i32* %size
 	%55 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%56 = getelementptr [2 x i8], [2 x i8]* @S.890
+	%56 = getelementptr [2 x i8], [2 x i8]* @S.891
 	%57 = bitcast [2 x i8]* %56 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %55, [0 x i8]* %57)
 	%58 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -34529,15 +34685,15 @@ L.3:
 return:
 	ret void
 }
-@S.891 = private unnamed_addr constant [7 x i8] c"define\00"
-@S.892 = private unnamed_addr constant [8 x i8] c"declare\00"
-@S.893 = private unnamed_addr constant [10 x i8] c" internal\00"
-@S.894 = private unnamed_addr constant [6 x i8] c" weak\00"
-@S.895 = private unnamed_addr constant [10 x i8] c" external\00"
-@S.896 = private unnamed_addr constant [5 x i8] c" %I(\00"
-@S.897 = private unnamed_addr constant [3 x i8] c" %\00"
-@S.898 = private unnamed_addr constant [3 x i8] c", \00"
-@S.899 = private unnamed_addr constant [2 x i8] c")\00"
+@S.892 = private unnamed_addr constant [7 x i8] c"define\00"
+@S.893 = private unnamed_addr constant [8 x i8] c"declare\00"
+@S.894 = private unnamed_addr constant [10 x i8] c" internal\00"
+@S.895 = private unnamed_addr constant [6 x i8] c" weak\00"
+@S.896 = private unnamed_addr constant [10 x i8] c" external\00"
+@S.897 = private unnamed_addr constant [5 x i8] c" %I(\00"
+@S.898 = private unnamed_addr constant [3 x i8] c" %\00"
+@S.899 = private unnamed_addr constant [3 x i8] c", \00"
+@S.900 = private unnamed_addr constant [2 x i8] c")\00"
 define internal void @llvm_DclProc(%ast.AstNode* %node$, i8 zeroext %isdefine$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -34555,13 +34711,13 @@ L.0:
 	br i1 %4, label %L.2, label %L.3
 L.2:
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%6 = getelementptr [7 x i8], [7 x i8]* @S.891
+	%6 = getelementptr [7 x i8], [7 x i8]* @S.892
 	%7 = bitcast [7 x i8]* %6 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
 	br label %L.1
 L.3:
 	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%9 = getelementptr [8 x i8], [8 x i8]* @S.892
+	%9 = getelementptr [8 x i8], [8 x i8]* @S.893
 	%10 = bitcast [8 x i8]* %9 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %8, [0 x i8]* %10)
 	br label %L.1
@@ -34578,19 +34734,19 @@ L.1:
 	]
 L.6:
 	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = getelementptr [10 x i8], [10 x i8]* @S.893
+	%16 = getelementptr [10 x i8], [10 x i8]* @S.894
 	%17 = bitcast [10 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	br label %L.5
 L.7:
 	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%19 = getelementptr [6 x i8], [6 x i8]* @S.894
+	%19 = getelementptr [6 x i8], [6 x i8]* @S.895
 	%20 = bitcast [6 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
 	br label %L.5
 L.8:
 	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%22 = getelementptr [10 x i8], [10 x i8]* @S.895
+	%22 = getelementptr [10 x i8], [10 x i8]* @S.896
 	%23 = bitcast [10 x i8]* %22 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %21, [0 x i8]* %23)
 	br label %L.5
@@ -34601,7 +34757,7 @@ L.5:
 	%25 = getelementptr %symb.SymbNode, %symb.SymbNode* %24, i64 0, i32 4
 	%26 = load %type.TypeListEntry*, %type.TypeListEntry** %25
 	call void @llvm_PRetvType(%type.TypeListEntry* %26, i8 1)
-	%27 = getelementptr [5 x i8], [5 x i8]* @S.896
+	%27 = getelementptr [5 x i8], [5 x i8]* @S.897
 	%28 = bitcast [5 x i8]* %27 to [0 x i8]*
 	%29 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %28, %ast.AstNode* %29)
@@ -34629,7 +34785,7 @@ L.11:
 	br i1 %43, label %L.13, label %L.12
 L.13:
 	%44 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%45 = getelementptr [3 x i8], [3 x i8]* @S.897
+	%45 = getelementptr [3 x i8], [3 x i8]* @S.898
 	%46 = bitcast [3 x i8]* %45 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %44, [0 x i8]* %46)
 	%47 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -34651,13 +34807,13 @@ L.12:
 	br i1 %57, label %L.10, label %L.14
 L.14:
 	%58 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%59 = getelementptr [3 x i8], [3 x i8]* @S.898
+	%59 = getelementptr [3 x i8], [3 x i8]* @S.899
 	%60 = bitcast [3 x i8]* %59 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %58, [0 x i8]* %60)
 	br label %L.9
 L.10:
 	%61 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%62 = getelementptr [2 x i8], [2 x i8]* @S.899
+	%62 = getelementptr [2 x i8], [2 x i8]* @S.900
 	%63 = bitcast [2 x i8]* %62 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %61, [0 x i8]* %63)
 	br label %return
@@ -34747,10 +34903,10 @@ L.4:
 return:
 	ret void
 }
-@S.900 = private unnamed_addr constant [4 x i8] c"0.0\00"
-@S.901 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
+@S.901 = private unnamed_addr constant [4 x i8] c"0.0\00"
 @S.902 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
-@S.903 = private unnamed_addr constant [5 x i8] c"null\00"
+@S.903 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
+@S.904 = private unnamed_addr constant [5 x i8] c"null\00"
 define internal void @llvm_DefaultInitializer(%type.TypeNode* %t$) nounwind {
 L.0:
 	%t = alloca %type.TypeNode*
@@ -34775,25 +34931,25 @@ L.3:
 	br label %L.2
 L.4:
 	%5 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%6 = getelementptr [4 x i8], [4 x i8]* @S.900
+	%6 = getelementptr [4 x i8], [4 x i8]* @S.901
 	%7 = bitcast [4 x i8]* %6 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %5, [0 x i8]* %7)
 	br label %L.2
 L.5:
 	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%9 = getelementptr [16 x i8], [16 x i8]* @S.901
+	%9 = getelementptr [16 x i8], [16 x i8]* @S.902
 	%10 = bitcast [16 x i8]* %9 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %8, [0 x i8]* %10)
 	br label %L.2
 L.6:
 	%11 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%12 = getelementptr [16 x i8], [16 x i8]* @S.902
+	%12 = getelementptr [16 x i8], [16 x i8]* @S.903
 	%13 = bitcast [16 x i8]* %12 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %11, [0 x i8]* %13)
 	br label %L.2
 L.7:
 	%14 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%15 = getelementptr [5 x i8], [5 x i8]* @S.903
+	%15 = getelementptr [5 x i8], [5 x i8]* @S.904
 	%16 = bitcast [5 x i8]* %15 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %14, [0 x i8]* %16)
 	br label %L.2
@@ -34804,27 +34960,27 @@ L.2:
 return:
 	ret void
 }
-@S.904 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
-@S.905 = private unnamed_addr constant [3 x i8] c"{ \00"
-@S.906 = private unnamed_addr constant [2 x i8] c" \00"
-@S.907 = private unnamed_addr constant [3 x i8] c", \00"
-@S.908 = private unnamed_addr constant [3 x i8] c" }\00"
-@S.909 = private unnamed_addr constant [3 x i8] c"[ \00"
-@S.910 = private unnamed_addr constant [2 x i8] c" \00"
-@S.911 = private unnamed_addr constant [3 x i8] c", \00"
-@S.912 = private unnamed_addr constant [3 x i8] c" ]\00"
-@S.913 = private unnamed_addr constant [14 x i8] c"bitcast( %T* \00"
-@S.914 = private unnamed_addr constant [29 x i8] c"getelementptr( %T, %T* %N ) \00"
-@S.915 = private unnamed_addr constant [25 x i8] c"getelementptr( %T* %N ) \00"
-@S.916 = private unnamed_addr constant [9 x i8] c" to %T )\00"
-@S.917 = private unnamed_addr constant [13 x i8] c"bitcast( %T \00"
-@S.918 = private unnamed_addr constant [28 x i8] c"getelementptr( %R, %T %N ) \00"
-@S.919 = private unnamed_addr constant [24 x i8] c"getelementptr( %T %N ) \00"
-@S.920 = private unnamed_addr constant [9 x i8] c" to %T )\00"
-@S.921 = private unnamed_addr constant [13 x i8] c"bitcast( %T \00"
-@S.922 = private unnamed_addr constant [28 x i8] c"getelementptr( %R, %T %N ) \00"
-@S.923 = private unnamed_addr constant [24 x i8] c"getelementptr( %T %N ) \00"
-@S.924 = private unnamed_addr constant [9 x i8] c" to %T )\00"
+@S.905 = private unnamed_addr constant [16 x i8] c"zeroinitializer\00"
+@S.906 = private unnamed_addr constant [3 x i8] c"{ \00"
+@S.907 = private unnamed_addr constant [2 x i8] c" \00"
+@S.908 = private unnamed_addr constant [3 x i8] c", \00"
+@S.909 = private unnamed_addr constant [3 x i8] c" }\00"
+@S.910 = private unnamed_addr constant [3 x i8] c"[ \00"
+@S.911 = private unnamed_addr constant [2 x i8] c" \00"
+@S.912 = private unnamed_addr constant [3 x i8] c", \00"
+@S.913 = private unnamed_addr constant [3 x i8] c" ]\00"
+@S.914 = private unnamed_addr constant [14 x i8] c"bitcast( %T* \00"
+@S.915 = private unnamed_addr constant [29 x i8] c"getelementptr( %T, %T* %N ) \00"
+@S.916 = private unnamed_addr constant [25 x i8] c"getelementptr( %T* %N ) \00"
+@S.917 = private unnamed_addr constant [9 x i8] c" to %T )\00"
+@S.918 = private unnamed_addr constant [13 x i8] c"bitcast( %T \00"
+@S.919 = private unnamed_addr constant [28 x i8] c"getelementptr( %R, %T %N ) \00"
+@S.920 = private unnamed_addr constant [24 x i8] c"getelementptr( %T %N ) \00"
+@S.921 = private unnamed_addr constant [9 x i8] c" to %T )\00"
+@S.922 = private unnamed_addr constant [13 x i8] c"bitcast( %T \00"
+@S.923 = private unnamed_addr constant [28 x i8] c"getelementptr( %R, %T %N ) \00"
+@S.924 = private unnamed_addr constant [24 x i8] c"getelementptr( %T %N ) \00"
+@S.925 = private unnamed_addr constant [9 x i8] c" to %T )\00"
 define internal void @llvm_Constant(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -34891,7 +35047,7 @@ L.18:
 	br label %L.17
 L.19:
 	%26 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%27 = getelementptr [16 x i8], [16 x i8]* @S.904
+	%27 = getelementptr [16 x i8], [16 x i8]* @S.905
 	%28 = bitcast [16 x i8]* %27 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %26, [0 x i8]* %28)
 	br label %L.17
@@ -34970,7 +35126,7 @@ L.30:
 	br label %L.29
 L.29:
 	%67 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%68 = getelementptr [3 x i8], [3 x i8]* @S.905
+	%68 = getelementptr [3 x i8], [3 x i8]* @S.906
 	%69 = bitcast [3 x i8]* %68 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %67, [0 x i8]* %69)
 	store i16 0, i16* %i
@@ -34986,7 +35142,7 @@ L.31:
 	%77 = load %type.TypeNode*, %type.TypeNode** %76
 	call void @llvm_PType(%type.TypeNode* %77)
 	%78 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%79 = getelementptr [2 x i8], [2 x i8]* @S.906
+	%79 = getelementptr [2 x i8], [2 x i8]* @S.907
 	%80 = bitcast [2 x i8]* %79 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %78, [0 x i8]* %80)
 	%81 = load %ast.AstNode*, %ast.AstNode** %node
@@ -35007,13 +35163,13 @@ L.31:
 	br i1 %93, label %L.32, label %L.33
 L.33:
 	%94 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%95 = getelementptr [3 x i8], [3 x i8]* @S.907
+	%95 = getelementptr [3 x i8], [3 x i8]* @S.908
 	%96 = bitcast [3 x i8]* %95 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %94, [0 x i8]* %96)
 	br label %L.31
 L.32:
 	%97 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%98 = getelementptr [3 x i8], [3 x i8]* @S.908
+	%98 = getelementptr [3 x i8], [3 x i8]* @S.909
 	%99 = bitcast [3 x i8]* %98 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %97, [0 x i8]* %99)
 	%100 = load %type.TypeNode*, %type.TypeNode** %t
@@ -35038,7 +35194,7 @@ L.36:
 	br label %L.24
 L.26:
 	%110 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%111 = getelementptr [3 x i8], [3 x i8]* @S.909
+	%111 = getelementptr [3 x i8], [3 x i8]* @S.910
 	%112 = bitcast [3 x i8]* %111 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %110, [0 x i8]* %112)
 	store i16 0, i16* %i
@@ -35054,7 +35210,7 @@ L.38:
 	%120 = load %type.TypeNode*, %type.TypeNode** %119
 	call void @llvm_PType(%type.TypeNode* %120)
 	%121 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%122 = getelementptr [2 x i8], [2 x i8]* @S.910
+	%122 = getelementptr [2 x i8], [2 x i8]* @S.911
 	%123 = bitcast [2 x i8]* %122 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %121, [0 x i8]* %123)
 	%124 = load %ast.AstNode*, %ast.AstNode** %node
@@ -35075,13 +35231,13 @@ L.38:
 	br i1 %136, label %L.39, label %L.40
 L.40:
 	%137 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%138 = getelementptr [3 x i8], [3 x i8]* @S.911
+	%138 = getelementptr [3 x i8], [3 x i8]* @S.912
 	%139 = bitcast [3 x i8]* %138 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %137, [0 x i8]* %139)
 	br label %L.38
 L.39:
 	%140 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%141 = getelementptr [3 x i8], [3 x i8]* @S.912
+	%141 = getelementptr [3 x i8], [3 x i8]* @S.913
 	%142 = bitcast [3 x i8]* %141 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %140, [0 x i8]* %142)
 	br label %L.24
@@ -35098,7 +35254,7 @@ L.9:
 	%148 = icmp ne i8 %147, 0
 	br i1 %148, label %L.42, label %L.41
 L.42:
-	%149 = getelementptr [14 x i8], [14 x i8]* @S.913
+	%149 = getelementptr [14 x i8], [14 x i8]* @S.914
 	%150 = bitcast [14 x i8]* %149 to [0 x i8]*
 	%151 = load %ast.AstNode*, %ast.AstNode** %node
 	%152 = getelementptr %ast.AstNode, %ast.AstNode* %151, i64 0, i32 11
@@ -35112,7 +35268,7 @@ L.41:
 	%157 = icmp ne i8 %156, 0
 	br i1 %157, label %L.44, label %L.45
 L.44:
-	%158 = getelementptr [29 x i8], [29 x i8]* @S.914
+	%158 = getelementptr [29 x i8], [29 x i8]* @S.915
 	%159 = bitcast [29 x i8]* %158 to [0 x i8]*
 	%160 = load %ast.AstNode*, %ast.AstNode** %node
 	%161 = getelementptr %ast.AstNode, %ast.AstNode* %160, i64 0, i32 11
@@ -35121,7 +35277,7 @@ L.44:
 	call void @llvm_Print([0 x i8]* %159, %ast.AstNode* %163)
 	br label %L.43
 L.45:
-	%164 = getelementptr [25 x i8], [25 x i8]* @S.915
+	%164 = getelementptr [25 x i8], [25 x i8]* @S.916
 	%165 = bitcast [25 x i8]* %164 to [0 x i8]*
 	%166 = load %ast.AstNode*, %ast.AstNode** %node
 	%167 = getelementptr %ast.AstNode, %ast.AstNode* %166, i64 0, i32 11
@@ -35138,7 +35294,7 @@ L.43:
 	%175 = icmp ne i8 %174, 0
 	br i1 %175, label %L.47, label %L.46
 L.47:
-	%176 = getelementptr [9 x i8], [9 x i8]* @S.916
+	%176 = getelementptr [9 x i8], [9 x i8]* @S.917
 	%177 = bitcast [9 x i8]* %176 to [0 x i8]*
 	%178 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %177, %ast.AstNode* %178)
@@ -35154,7 +35310,7 @@ L.10:
 	%184 = icmp ne i8 %183, 0
 	br i1 %184, label %L.49, label %L.48
 L.49:
-	%185 = getelementptr [13 x i8], [13 x i8]* @S.917
+	%185 = getelementptr [13 x i8], [13 x i8]* @S.918
 	%186 = bitcast [13 x i8]* %185 to [0 x i8]*
 	%187 = load %ast.AstNode*, %ast.AstNode** %node
 	%188 = getelementptr %ast.AstNode, %ast.AstNode* %187, i64 0, i32 11
@@ -35168,7 +35324,7 @@ L.48:
 	%193 = icmp ne i8 %192, 0
 	br i1 %193, label %L.51, label %L.52
 L.51:
-	%194 = getelementptr [28 x i8], [28 x i8]* @S.918
+	%194 = getelementptr [28 x i8], [28 x i8]* @S.919
 	%195 = bitcast [28 x i8]* %194 to [0 x i8]*
 	%196 = load %ast.AstNode*, %ast.AstNode** %node
 	%197 = getelementptr %ast.AstNode, %ast.AstNode* %196, i64 0, i32 11
@@ -35177,7 +35333,7 @@ L.51:
 	call void @llvm_Print([0 x i8]* %195, %ast.AstNode* %199)
 	br label %L.50
 L.52:
-	%200 = getelementptr [24 x i8], [24 x i8]* @S.919
+	%200 = getelementptr [24 x i8], [24 x i8]* @S.920
 	%201 = bitcast [24 x i8]* %200 to [0 x i8]*
 	%202 = load %ast.AstNode*, %ast.AstNode** %node
 	%203 = getelementptr %ast.AstNode, %ast.AstNode* %202, i64 0, i32 11
@@ -35194,7 +35350,7 @@ L.50:
 	%211 = icmp ne i8 %210, 0
 	br i1 %211, label %L.54, label %L.53
 L.54:
-	%212 = getelementptr [9 x i8], [9 x i8]* @S.920
+	%212 = getelementptr [9 x i8], [9 x i8]* @S.921
 	%213 = bitcast [9 x i8]* %212 to [0 x i8]*
 	%214 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %213, %ast.AstNode* %214)
@@ -35222,7 +35378,7 @@ L.57:
 	%227 = icmp ne i8 %226, 0
 	br i1 %227, label %L.59, label %L.58
 L.59:
-	%228 = getelementptr [13 x i8], [13 x i8]* @S.921
+	%228 = getelementptr [13 x i8], [13 x i8]* @S.922
 	%229 = bitcast [13 x i8]* %228 to [0 x i8]*
 	%230 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %229, %ast.AstNode* %230)
@@ -35233,13 +35389,13 @@ L.58:
 	%233 = icmp ne i8 %232, 0
 	br i1 %233, label %L.61, label %L.62
 L.61:
-	%234 = getelementptr [28 x i8], [28 x i8]* @S.922
+	%234 = getelementptr [28 x i8], [28 x i8]* @S.923
 	%235 = bitcast [28 x i8]* %234 to [0 x i8]*
 	%236 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %235, %ast.AstNode* %236)
 	br label %L.60
 L.62:
-	%237 = getelementptr [24 x i8], [24 x i8]* @S.923
+	%237 = getelementptr [24 x i8], [24 x i8]* @S.924
 	%238 = bitcast [24 x i8]* %237 to [0 x i8]*
 	%239 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %238, %ast.AstNode* %239)
@@ -35253,7 +35409,7 @@ L.60:
 	%245 = icmp ne i8 %244, 0
 	br i1 %245, label %L.64, label %L.63
 L.64:
-	%246 = getelementptr [9 x i8], [9 x i8]* @S.924
+	%246 = getelementptr [9 x i8], [9 x i8]* @S.925
 	%247 = bitcast [9 x i8]* %246 to [0 x i8]*
 	%248 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %247, %ast.AstNode* %248)
@@ -35271,14 +35427,14 @@ L.1:
 return:
 	ret void
 }
-@S.925 = private unnamed_addr constant [16 x i8] c"\09%I = alloca %K\00"
-@S.926 = private unnamed_addr constant [7 x i8] c"store \00"
-@S.927 = private unnamed_addr constant [9 x i8] c", %K* %D\00"
-@S.928 = private unnamed_addr constant [29 x i8] c"initialized local composites\00"
-@S.929 = private unnamed_addr constant [25 x i8] c"%I = internal global %K \00"
-@S.930 = private unnamed_addr constant [16 x i8] c"%I = global %K \00"
-@S.931 = private unnamed_addr constant [21 x i8] c"%I = weak global %K \00"
-@S.932 = private unnamed_addr constant [24 x i8] c"%I = external global %K\00"
+@S.926 = private unnamed_addr constant [16 x i8] c"\09%I = alloca %K\00"
+@S.927 = private unnamed_addr constant [7 x i8] c"store \00"
+@S.928 = private unnamed_addr constant [9 x i8] c", %K* %D\00"
+@S.929 = private unnamed_addr constant [29 x i8] c"initialized local composites\00"
+@S.930 = private unnamed_addr constant [25 x i8] c"%I = internal global %K \00"
+@S.931 = private unnamed_addr constant [16 x i8] c"%I = global %K \00"
+@S.932 = private unnamed_addr constant [21 x i8] c"%I = weak global %K \00"
+@S.933 = private unnamed_addr constant [24 x i8] c"%I = external global %K\00"
 define internal void @llvm_DclVar(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -35314,7 +35470,7 @@ L.2:
 		i64 5, label %L.9
 	]
 L.5:
-	%16 = getelementptr [16 x i8], [16 x i8]* @S.925
+	%16 = getelementptr [16 x i8], [16 x i8]* @S.926
 	%17 = bitcast [16 x i8]* %16 to [0 x i8]*
 	%18 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %17, %ast.AstNode* %18)
@@ -35337,7 +35493,7 @@ L.13:
 	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	call void @bout_BufIO_chr(%bout.BufIO* %30, i8 9)
 	%31 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%32 = getelementptr [7 x i8], [7 x i8]* @S.926
+	%32 = getelementptr [7 x i8], [7 x i8]* @S.927
 	%33 = bitcast [7 x i8]* %32 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %31, [0 x i8]* %33)
 	%34 = load %ast.AstNode*, %ast.AstNode** %rhs
@@ -35346,13 +35502,13 @@ L.13:
 	call void @bout_BufIO_chr(%bout.BufIO* %35, i8 32)
 	%36 = load %ast.AstNode*, %ast.AstNode** %rhs
 	call void @llvm_NodeSrc(%ast.AstNode* %36)
-	%37 = getelementptr [9 x i8], [9 x i8]* @S.927
+	%37 = getelementptr [9 x i8], [9 x i8]* @S.928
 	%38 = bitcast [9 x i8]* %37 to [0 x i8]*
 	%39 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %38, %ast.AstNode* %39)
 	br label %L.12
 L.14:
-	%40 = getelementptr [29 x i8], [29 x i8]* @S.928
+	%40 = getelementptr [29 x i8], [29 x i8]* @S.929
 	%41 = bitcast [29 x i8]* %40 to [0 x i8]*
 	call void @lex_ErrorS(i8 0, [0 x i8]* %41)
 	br label %L.12
@@ -35361,7 +35517,7 @@ L.12:
 L.10:
 	br label %L.4
 L.6:
-	%42 = getelementptr [25 x i8], [25 x i8]* @S.929
+	%42 = getelementptr [25 x i8], [25 x i8]* @S.930
 	%43 = bitcast [25 x i8]* %42 to [0 x i8]*
 	%44 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %43, %ast.AstNode* %44)
@@ -35389,7 +35545,7 @@ L.15:
 	call void @llvm_Section(%symb.SymbNode* %56, i8 1)
 	br label %L.4
 L.7:
-	%57 = getelementptr [16 x i8], [16 x i8]* @S.930
+	%57 = getelementptr [16 x i8], [16 x i8]* @S.931
 	%58 = bitcast [16 x i8]* %57 to [0 x i8]*
 	%59 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %58, %ast.AstNode* %59)
@@ -35417,7 +35573,7 @@ L.18:
 	call void @llvm_Section(%symb.SymbNode* %71, i8 1)
 	br label %L.4
 L.8:
-	%72 = getelementptr [21 x i8], [21 x i8]* @S.931
+	%72 = getelementptr [21 x i8], [21 x i8]* @S.932
 	%73 = bitcast [21 x i8]* %72 to [0 x i8]*
 	%74 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %73, %ast.AstNode* %74)
@@ -35445,7 +35601,7 @@ L.21:
 	call void @llvm_Section(%symb.SymbNode* %86, i8 1)
 	br label %L.4
 L.9:
-	%87 = getelementptr [24 x i8], [24 x i8]* @S.932
+	%87 = getelementptr [24 x i8], [24 x i8]* @S.933
 	%88 = bitcast [24 x i8]* %87 to [0 x i8]*
 	%89 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %88, %ast.AstNode* %89)
@@ -35472,7 +35628,7 @@ L.1:
 return:
 	ret void
 }
-@S.933 = private unnamed_addr constant [39 x i8] c"%S = private unnamed_addr constant %K \00"
+@S.934 = private unnamed_addr constant [39 x i8] c"%S = private unnamed_addr constant %K \00"
 define internal void @llvm_DclString(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -35489,7 +35645,7 @@ L.1:
 	%4 = load %ast.AstNode*, %ast.AstNode** %node
 	%5 = getelementptr %ast.AstNode, %ast.AstNode* %4, i64 0, i32 6
 	store i16 1, i16* %5
-	%6 = getelementptr [39 x i8], [39 x i8]* @S.933
+	%6 = getelementptr [39 x i8], [39 x i8]* @S.934
 	%7 = bitcast [39 x i8]* %6 to [0 x i8]*
 	%8 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %7, %ast.AstNode* %8)
@@ -35532,14 +35688,14 @@ L.3:
 return:
 	ret void
 }
-@S.934 = private unnamed_addr constant [27 x i8] c"%S = internal constant %K \00"
+@S.935 = private unnamed_addr constant [27 x i8] c"%S = internal constant %K \00"
 define internal void @llvm_DclAggregate(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
 	store %ast.AstNode* %node$, %ast.AstNode** %node
 	%0 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_ConstScan(%ast.AstNode* %0)
-	%1 = getelementptr [27 x i8], [27 x i8]* @S.934
+	%1 = getelementptr [27 x i8], [27 x i8]* @S.935
 	%2 = bitcast [27 x i8]* %1 to [0 x i8]*
 	%3 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %2, %ast.AstNode* %3)
@@ -35636,8 +35792,8 @@ L.3:
 return:
 	ret void
 }
-@S.935 = private unnamed_addr constant [27 x i8] c"%I = internal constant %K \00"
-@S.936 = private unnamed_addr constant [18 x i8] c"%I = constant %K \00"
+@S.936 = private unnamed_addr constant [27 x i8] c"%I = internal constant %K \00"
+@S.937 = private unnamed_addr constant [18 x i8] c"%I = constant %K \00"
 define internal void @llvm_DclCon(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -35666,13 +35822,13 @@ L.2:
 		i64 3, label %L.6
 	]
 L.5:
-	%13 = getelementptr [27 x i8], [27 x i8]* @S.935
+	%13 = getelementptr [27 x i8], [27 x i8]* @S.936
 	%14 = bitcast [27 x i8]* %13 to [0 x i8]*
 	%15 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %14, %ast.AstNode* %15)
 	br label %L.4
 L.6:
-	%16 = getelementptr [18 x i8], [18 x i8]* @S.936
+	%16 = getelementptr [18 x i8], [18 x i8]* @S.937
 	%17 = bitcast [18 x i8]* %16 to [0 x i8]*
 	%18 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %17, %ast.AstNode* %18)
@@ -35701,13 +35857,13 @@ L.1:
 return:
 	ret void
 }
-@S.937 = private unnamed_addr constant [3 x i8] c"L.\00"
+@S.938 = private unnamed_addr constant [3 x i8] c"L.\00"
 define internal void @llvm_PLabel(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [3 x i8], [3 x i8]* @S.937
+	%1 = getelementptr [3 x i8], [3 x i8]* @S.938
 	%2 = bitcast [3 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -35718,7 +35874,7 @@ L.0:
 return:
 	ret void
 }
-@S.938 = private unnamed_addr constant [3 x i8] c":\0A\00"
+@S.939 = private unnamed_addr constant [3 x i8] c":\0A\00"
 define internal void @llvm_Label(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
@@ -35726,7 +35882,7 @@ L.0:
 	%0 = load i16, i16* %n
 	call void @llvm_PLabel(i16 %0)
 	%1 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%2 = getelementptr [3 x i8], [3 x i8]* @S.938
+	%2 = getelementptr [3 x i8], [3 x i8]* @S.939
 	%3 = bitcast [3 x i8]* %2 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %1, [0 x i8]* %3)
 	%4 = load i16, i16* %n
@@ -35735,13 +35891,13 @@ L.0:
 return:
 	ret void
 }
-@S.939 = private unnamed_addr constant [8 x i8] c"label %\00"
+@S.940 = private unnamed_addr constant [8 x i8] c"label %\00"
 define internal void @llvm_RefLabel(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [8 x i8], [8 x i8]* @S.939
+	%1 = getelementptr [8 x i8], [8 x i8]* @S.940
 	%2 = bitcast [8 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load i16, i16* %n
@@ -35750,13 +35906,13 @@ L.0:
 return:
 	ret void
 }
-@S.940 = private unnamed_addr constant [5 x i8] c"\09br \00"
+@S.941 = private unnamed_addr constant [5 x i8] c"\09br \00"
 define internal void @llvm_Branch(i16 zeroext %n$) nounwind {
 L.0:
 	%n = alloca i16
 	store i16 %n$, i16* %n
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [5 x i8], [5 x i8]* @S.940
+	%1 = getelementptr [5 x i8], [5 x i8]* @S.941
 	%2 = bitcast [5 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load i16, i16* %n
@@ -35767,9 +35923,9 @@ L.0:
 return:
 	ret void
 }
-@S.941 = private unnamed_addr constant [8 x i8] c"\09br i1 \00"
-@S.942 = private unnamed_addr constant [3 x i8] c", \00"
+@S.942 = private unnamed_addr constant [8 x i8] c"\09br i1 \00"
 @S.943 = private unnamed_addr constant [3 x i8] c", \00"
+@S.944 = private unnamed_addr constant [3 x i8] c", \00"
 define internal void @llvm_BranchConditional(%ast.AstNode* %node$, i16 zeroext %ntrue$, i16 zeroext %nfalse$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -35779,19 +35935,19 @@ L.0:
 	store i16 %ntrue$, i16* %ntrue
 	store i16 %nfalse$, i16* %nfalse
 	%0 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%1 = getelementptr [8 x i8], [8 x i8]* @S.941
+	%1 = getelementptr [8 x i8], [8 x i8]* @S.942
 	%2 = bitcast [8 x i8]* %1 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %0, [0 x i8]* %2)
 	%3 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_NodeSrc(%ast.AstNode* %3)
 	%4 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%5 = getelementptr [3 x i8], [3 x i8]* @S.942
+	%5 = getelementptr [3 x i8], [3 x i8]* @S.943
 	%6 = bitcast [3 x i8]* %5 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %4, [0 x i8]* %6)
 	%7 = load i16, i16* %ntrue
 	call void @llvm_RefLabel(i16 %7)
 	%8 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%9 = getelementptr [3 x i8], [3 x i8]* @S.943
+	%9 = getelementptr [3 x i8], [3 x i8]* @S.944
 	%10 = bitcast [3 x i8]* %9 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %8, [0 x i8]* %10)
 	%11 = load i16, i16* %nfalse
@@ -35802,10 +35958,10 @@ L.0:
 return:
 	ret void
 }
-@S.944 = private unnamed_addr constant [24 x i8] c"\09call void @_assert(%W \00"
-@S.945 = private unnamed_addr constant [20 x i8] c", [0 x i8]* %N, %W \00"
-@S.946 = private unnamed_addr constant [1 x i8] c"\00"
-@S.947 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.945 = private unnamed_addr constant [24 x i8] c"\09call void @_assert(%W \00"
+@S.946 = private unnamed_addr constant [20 x i8] c", [0 x i8]* %N, %W \00"
+@S.947 = private unnamed_addr constant [1 x i8] c"\00"
+@S.948 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvm_Assert(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -35815,7 +35971,7 @@ L.0:
 	%2 = getelementptr [0 x %ast.AstNode*], [0 x %ast.AstNode*]* %1, i64 0, i64 0
 	%3 = load %ast.AstNode*, %ast.AstNode** %2
 	%4 = call i8 @llvm_GenSub(%ast.AstNode* %3)
-	%5 = getelementptr [24 x i8], [24 x i8]* @S.944
+	%5 = getelementptr [24 x i8], [24 x i8]* @S.945
 	%6 = bitcast [24 x i8]* %5 to [0 x i8]*
 	%7 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %6, %ast.AstNode* %7)
@@ -35824,7 +35980,7 @@ L.0:
 	%10 = getelementptr %ast.AstNode, %ast.AstNode* %9, i64 0, i32 10
 	%11 = load i64, i64* %10
 	call void @bout_BufIO_uint64(%bout.BufIO* %8, i64 %11)
-	%12 = getelementptr [20 x i8], [20 x i8]* @S.945
+	%12 = getelementptr [20 x i8], [20 x i8]* @S.946
 	%13 = bitcast [20 x i8]* %12 to [0 x i8]*
 	%14 = load %ast.AstNode*, %ast.AstNode** %node
 	%15 = getelementptr %ast.AstNode, %ast.AstNode* %14, i64 0, i32 11
@@ -35832,7 +35988,7 @@ L.0:
 	%17 = load %ast.AstNode*, %ast.AstNode** %16
 	call void @llvm_Print([0 x i8]* %13, %ast.AstNode* %17)
 	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%19 = getelementptr [1 x i8], [1 x i8]* @S.946
+	%19 = getelementptr [1 x i8], [1 x i8]* @S.947
 	%20 = bitcast [1 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
 	%21 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -35841,7 +35997,7 @@ L.0:
 	%24 = load i16, i16* %23
 	call void @bout_BufIO_uint16(%bout.BufIO* %21, i16 %24)
 	%25 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%26 = getelementptr [3 x i8], [3 x i8]* @S.947
+	%26 = getelementptr [3 x i8], [3 x i8]* @S.948
 	%27 = bitcast [3 x i8]* %26 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %25, [0 x i8]* %27)
 	call void @llvm_UseIntrinsic(i8 13, i64 0, %type.TypeNode* null)
@@ -35949,11 +36105,11 @@ return:
 	%52 = load i8, i8* %rv.0
 	ret i8 %52
 }
-@S.948 = private unnamed_addr constant [16 x i8] c"\09switch %T %N, \00"
-@S.949 = private unnamed_addr constant [4 x i8] c" [\0A\00"
-@S.950 = private unnamed_addr constant [7 x i8] c"\09\09%0T \00"
-@S.951 = private unnamed_addr constant [3 x i8] c", \00"
-@S.952 = private unnamed_addr constant [4 x i8] c"\09]\0A\00"
+@S.949 = private unnamed_addr constant [16 x i8] c"\09switch %T %N, \00"
+@S.950 = private unnamed_addr constant [4 x i8] c" [\0A\00"
+@S.951 = private unnamed_addr constant [7 x i8] c"\09\09%0T \00"
+@S.952 = private unnamed_addr constant [3 x i8] c", \00"
+@S.953 = private unnamed_addr constant [4 x i8] c"\09]\0A\00"
 define internal zeroext i8 @llvm_Select(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -35992,7 +36148,7 @@ L.0:
 	%18 = load i16, i16* @llvm_Lseqno
 	%19 = add i16 %18, 1
 	store i16 %19, i16* @llvm_Lseqno
-	%20 = getelementptr [16 x i8], [16 x i8]* @S.948
+	%20 = getelementptr [16 x i8], [16 x i8]* @S.949
 	%21 = bitcast [16 x i8]* %20 to [0 x i8]*
 	%22 = load %ast.AstNode*, %ast.AstNode** %node
 	%23 = getelementptr %ast.AstNode, %ast.AstNode* %22, i64 0, i32 11
@@ -36002,7 +36158,7 @@ L.0:
 	%26 = load i16, i16* %labelse
 	call void @llvm_RefLabel(i16 %26)
 	%27 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%28 = getelementptr [4 x i8], [4 x i8]* @S.949
+	%28 = getelementptr [4 x i8], [4 x i8]* @S.950
 	%29 = bitcast [4 x i8]* %28 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %27, [0 x i8]* %29)
 	store i16 1, i16* %i
@@ -36124,7 +36280,7 @@ L.17:
 	%103 = xor i1 %102, true
 	br i1 %103, label %L.18, label %L.19
 L.19:
-	%104 = getelementptr [7 x i8], [7 x i8]* @S.950
+	%104 = getelementptr [7 x i8], [7 x i8]* @S.951
 	%105 = bitcast [7 x i8]* %104 to [0 x i8]*
 	%106 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %105, %ast.AstNode* %106)
@@ -36133,7 +36289,7 @@ L.19:
 	%109 = trunc i64 %108 to i32
 	call void @bout_BufIO_uint32(%bout.BufIO* %107, i32 %109)
 	%110 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%111 = getelementptr [3 x i8], [3 x i8]* @S.951
+	%111 = getelementptr [3 x i8], [3 x i8]* @S.952
 	%112 = bitcast [3 x i8]* %111 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %110, [0 x i8]* %112)
 	%113 = load %ast.AstNode*, %ast.AstNode** %isnode
@@ -36160,7 +36316,7 @@ L.4:
 	br label %L.1
 L.2:
 	%123 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%124 = getelementptr [4 x i8], [4 x i8]* @S.952
+	%124 = getelementptr [4 x i8], [4 x i8]* @S.953
 	%125 = bitcast [4 x i8]* %124 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %123, [0 x i8]* %125)
 	store i16 1, i16* %i
@@ -36350,13 +36506,13 @@ return:
 	%39 = load i8, i8* %rv.0
 	ret i8 %39
 }
-@S.953 = private unnamed_addr constant [16 x i8] c"\09%N = phi i1 [ \00"
-@S.954 = private unnamed_addr constant [6 x i8] c"false\00"
-@S.955 = private unnamed_addr constant [5 x i8] c"true\00"
-@S.956 = private unnamed_addr constant [4 x i8] c", %\00"
-@S.957 = private unnamed_addr constant [7 x i8] c" ], [ \00"
-@S.958 = private unnamed_addr constant [4 x i8] c", %\00"
-@S.959 = private unnamed_addr constant [4 x i8] c" ]\0A\00"
+@S.954 = private unnamed_addr constant [16 x i8] c"\09%N = phi i1 [ \00"
+@S.955 = private unnamed_addr constant [6 x i8] c"false\00"
+@S.956 = private unnamed_addr constant [5 x i8] c"true\00"
+@S.957 = private unnamed_addr constant [4 x i8] c", %\00"
+@S.958 = private unnamed_addr constant [7 x i8] c" ], [ \00"
+@S.959 = private unnamed_addr constant [4 x i8] c", %\00"
+@S.960 = private unnamed_addr constant [4 x i8] c" ]\0A\00"
 define internal zeroext i8 @llvm_Conditional(%ast.AstNode* %node$, i8 zeroext %isand$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -36426,7 +36582,7 @@ L.1:
 	%38 = load i16, i16* @llvm_Tseqno
 	%39 = add i16 %38, 1
 	store i16 %39, i16* @llvm_Tseqno
-	%40 = getelementptr [16 x i8], [16 x i8]* @S.953
+	%40 = getelementptr [16 x i8], [16 x i8]* @S.954
 	%41 = bitcast [16 x i8]* %40 to [0 x i8]*
 	%42 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %41, %ast.AstNode* %42)
@@ -36435,25 +36591,25 @@ L.1:
 	br i1 %44, label %L.5, label %L.6
 L.5:
 	%45 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%46 = getelementptr [6 x i8], [6 x i8]* @S.954
+	%46 = getelementptr [6 x i8], [6 x i8]* @S.955
 	%47 = bitcast [6 x i8]* %46 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %45, [0 x i8]* %47)
 	br label %L.4
 L.6:
 	%48 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%49 = getelementptr [5 x i8], [5 x i8]* @S.955
+	%49 = getelementptr [5 x i8], [5 x i8]* @S.956
 	%50 = bitcast [5 x i8]* %49 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %48, [0 x i8]* %50)
 	br label %L.4
 L.4:
 	%51 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%52 = getelementptr [4 x i8], [4 x i8]* @S.956
+	%52 = getelementptr [4 x i8], [4 x i8]* @S.957
 	%53 = bitcast [4 x i8]* %52 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %51, [0 x i8]* %53)
 	%54 = load i16, i16* %lablhs
 	call void @llvm_PLabel(i16 %54)
 	%55 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%56 = getelementptr [7 x i8], [7 x i8]* @S.957
+	%56 = getelementptr [7 x i8], [7 x i8]* @S.958
 	%57 = bitcast [7 x i8]* %56 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %55, [0 x i8]* %57)
 	%58 = load %ast.AstNode*, %ast.AstNode** %node
@@ -36464,13 +36620,13 @@ L.4:
 	%63 = load i16, i16* %62
 	call void @llvm_PTempName(i16 %63)
 	%64 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%65 = getelementptr [4 x i8], [4 x i8]* @S.958
+	%65 = getelementptr [4 x i8], [4 x i8]* @S.959
 	%66 = bitcast [4 x i8]* %65 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %64, [0 x i8]* %66)
 	%67 = load i16, i16* %labrhs
 	call void @llvm_PLabel(i16 %67)
 	%68 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%69 = getelementptr [4 x i8], [4 x i8]* @S.959
+	%69 = getelementptr [4 x i8], [4 x i8]* @S.960
 	%70 = bitcast [4 x i8]* %69 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %68, [0 x i8]* %70)
 	store i8 0, i8* %rv.0
@@ -36479,7 +36635,7 @@ return:
 	%71 = load i8, i8* %rv.0
 	ret i8 %71
 }
-@S.960 = private unnamed_addr constant [81 x i8] c"\09call void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
+@S.961 = private unnamed_addr constant [81 x i8] c"\09call void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
 define internal void @llvm_Copy(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -36529,7 +36685,7 @@ L.0:
 	%39 = getelementptr [0 x %ast.AstNode*], [0 x %ast.AstNode*]* %38, i64 0, i64 2
 	%40 = load %ast.AstNode*, %ast.AstNode** %39
 	%41 = call i8 @llvm_GenSub(%ast.AstNode* %40)
-	%42 = getelementptr [81 x i8], [81 x i8]* @S.960
+	%42 = getelementptr [81 x i8], [81 x i8]* @S.961
 	%43 = bitcast [81 x i8]* %42 to [0 x i8]*
 	%44 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %43, %ast.AstNode* %44)
@@ -36538,7 +36694,7 @@ L.0:
 return:
 	ret void
 }
-@S.961 = private unnamed_addr constant [75 x i8] c"\09call void @llvm.memset.p0i8.%W(i8* %0N, %1T %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
+@S.962 = private unnamed_addr constant [75 x i8] c"\09call void @llvm.memset.p0i8.%W(i8* %0N, %1T %1N, %2T %2N, i32 %3N, i1 0)\0A\00"
 define internal void @llvm_Set(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -36578,7 +36734,7 @@ L.0:
 	%30 = getelementptr [0 x %ast.AstNode*], [0 x %ast.AstNode*]* %29, i64 0, i64 2
 	%31 = load %ast.AstNode*, %ast.AstNode** %30
 	%32 = call i8 @llvm_GenSub(%ast.AstNode* %31)
-	%33 = getelementptr [75 x i8], [75 x i8]* @S.961
+	%33 = getelementptr [75 x i8], [75 x i8]* @S.962
 	%34 = bitcast [75 x i8]* %33 to [0 x i8]*
 	%35 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %34, %ast.AstNode* %35)
@@ -36691,10 +36847,10 @@ return:
 	%50 = load i8, i8* %rv.0
 	ret i8 %50
 }
-@S.962 = private unnamed_addr constant [28 x i8] c"\09%N = icmp eq %0T %0N, %1N\0A\00"
-@S.963 = private unnamed_addr constant [28 x i8] c"\09%N = icmp ne %0T %0N, %1N\0A\00"
-@S.964 = private unnamed_addr constant [54 x i8] c"\09%N = call i1 @memcmp%0*B(%0T %0N, %1T %1N, %2T %2N)\0A\00"
-@S.965 = private unnamed_addr constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
+@S.963 = private unnamed_addr constant [28 x i8] c"\09%N = icmp eq %0T %0N, %1N\0A\00"
+@S.964 = private unnamed_addr constant [28 x i8] c"\09%N = icmp ne %0T %0N, %1N\0A\00"
+@S.965 = private unnamed_addr constant [54 x i8] c"\09%N = call i1 @memcmp%0*B(%0T %0N, %1T %1N, %2T %2N)\0A\00"
+@S.966 = private unnamed_addr constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
 define internal zeroext i8 @llvm_ArrayCompare(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -36979,13 +37135,13 @@ L.8:
 	%229 = icmp eq i8 %228, 24
 	br i1 %229, label %L.14, label %L.15
 L.14:
-	%230 = getelementptr [28 x i8], [28 x i8]* @S.962
+	%230 = getelementptr [28 x i8], [28 x i8]* @S.963
 	%231 = bitcast [28 x i8]* %230 to [0 x i8]*
 	%232 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %231, %ast.AstNode* %232)
 	br label %L.13
 L.15:
-	%233 = getelementptr [28 x i8], [28 x i8]* @S.963
+	%233 = getelementptr [28 x i8], [28 x i8]* @S.964
 	%234 = bitcast [28 x i8]* %233 to [0 x i8]*
 	%235 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %234, %ast.AstNode* %235)
@@ -37101,7 +37257,7 @@ L.7:
 	%332 = load %ast.AstNode*, %ast.AstNode** %node
 	%333 = getelementptr %ast.AstNode, %ast.AstNode* %332, i64 0, i32 7
 	store i32 1, i32* %333
-	%334 = getelementptr [54 x i8], [54 x i8]* @S.964
+	%334 = getelementptr [54 x i8], [54 x i8]* @S.965
 	%335 = bitcast [54 x i8]* %334 to [0 x i8]*
 	%336 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %335, %ast.AstNode* %336)
@@ -37133,7 +37289,7 @@ L.17:
 	%357 = load i16, i16* @llvm_Tseqno
 	%358 = add i16 %357, 1
 	store i16 %358, i16* @llvm_Tseqno
-	%359 = getelementptr [24 x i8], [24 x i8]* @S.965
+	%359 = getelementptr [24 x i8], [24 x i8]* @S.966
 	%360 = bitcast [24 x i8]* %359 to [0 x i8]*
 	%361 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %360, %ast.AstNode* %361)
@@ -37346,7 +37502,7 @@ L.1:
 return:
 	ret void
 }
-@S.966 = private unnamed_addr constant [36 x i8] c"\09%N = call %T @memlen%0*A(%0T %0N)\0A\00"
+@S.967 = private unnamed_addr constant [36 x i8] c"\09%N = call %T @memlen%0*A(%0T %0N)\0A\00"
 define internal void @llvm_ZLen(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -37416,7 +37572,7 @@ L.0:
 	%49 = load i16, i16* @llvm_Tseqno
 	%50 = add i16 %49, 1
 	store i16 %50, i16* @llvm_Tseqno
-	%51 = getelementptr [36 x i8], [36 x i8]* @S.966
+	%51 = getelementptr [36 x i8], [36 x i8]* @S.967
 	%52 = bitcast [36 x i8]* %51 to [0 x i8]*
 	%53 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %52, %ast.AstNode* %53)
@@ -37427,25 +37583,25 @@ L.0:
 return:
 	ret void
 }
-@S.967 = private unnamed_addr constant [22 x i8] c"\09%N = xor %0T %0N, -1\00"
-@S.968 = private unnamed_addr constant [21 x i8] c"\09%N = sub %0T 0, %0N\00"
-@S.969 = private unnamed_addr constant [24 x i8] c"\09%N = fsub %0T 0.0, %0N\00"
-@S.970 = private unnamed_addr constant [26 x i8] c"\09%N = fpext %0T %0N to %T\00"
-@S.971 = private unnamed_addr constant [28 x i8] c"\09%N = fptrunc %0T %0N to %T\00"
-@S.972 = private unnamed_addr constant [27 x i8] c"\09%N = uitofp %0T %0N to %T\00"
-@S.973 = private unnamed_addr constant [27 x i8] c"\09%N = sitofp %0T %0N to %T\00"
-@S.974 = private unnamed_addr constant [27 x i8] c"\09%N = fptoui %0T %0N to %T\00"
-@S.975 = private unnamed_addr constant [27 x i8] c"\09%N = fptosi %0T %0N to %T\00"
-@S.976 = private unnamed_addr constant [37 x i8] c"\09%N = call %T @llvm.bswap.%T(%T %0N)\00"
-@S.977 = private unnamed_addr constant [42 x i8] c"\09%N = call %T @llvm.bitreverse.%T(%T %0N)\00"
-@S.978 = private unnamed_addr constant [47 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)\00"
-@S.979 = private unnamed_addr constant [46 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 true)\00"
-@S.980 = private unnamed_addr constant [47 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 false)\00"
-@S.981 = private unnamed_addr constant [46 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 true)\00"
-@S.982 = private unnamed_addr constant [38 x i8] c"\09%N = call %T @llvm.ctpop.%T(%0T %0N)\00"
-@S.983 = private unnamed_addr constant [37 x i8] c"\09%N = call %T @llvm.sqrt.%T(%0T %0N)\00"
-@S.984 = private unnamed_addr constant [40 x i8] c"\09%N = call %T @sqrtq%B(%0T %0N, %W %0F)\00"
-@S.985 = private unnamed_addr constant [32 x i8] c"\09%N = call %T @sqrti%B(%0T %0N)\00"
+@S.968 = private unnamed_addr constant [22 x i8] c"\09%N = xor %0T %0N, -1\00"
+@S.969 = private unnamed_addr constant [21 x i8] c"\09%N = sub %0T 0, %0N\00"
+@S.970 = private unnamed_addr constant [24 x i8] c"\09%N = fsub %0T 0.0, %0N\00"
+@S.971 = private unnamed_addr constant [26 x i8] c"\09%N = fpext %0T %0N to %T\00"
+@S.972 = private unnamed_addr constant [28 x i8] c"\09%N = fptrunc %0T %0N to %T\00"
+@S.973 = private unnamed_addr constant [27 x i8] c"\09%N = uitofp %0T %0N to %T\00"
+@S.974 = private unnamed_addr constant [27 x i8] c"\09%N = sitofp %0T %0N to %T\00"
+@S.975 = private unnamed_addr constant [27 x i8] c"\09%N = fptoui %0T %0N to %T\00"
+@S.976 = private unnamed_addr constant [27 x i8] c"\09%N = fptosi %0T %0N to %T\00"
+@S.977 = private unnamed_addr constant [37 x i8] c"\09%N = call %T @llvm.bswap.%T(%T %0N)\00"
+@S.978 = private unnamed_addr constant [42 x i8] c"\09%N = call %T @llvm.bitreverse.%T(%T %0N)\00"
+@S.979 = private unnamed_addr constant [47 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 false)\00"
+@S.980 = private unnamed_addr constant [46 x i8] c"\09%N = call %T @llvm.ctlz.%T(%0T %0N, i1 true)\00"
+@S.981 = private unnamed_addr constant [47 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 false)\00"
+@S.982 = private unnamed_addr constant [46 x i8] c"\09%N = call %T @llvm.cttz.%T(%0T %0N, i1 true)\00"
+@S.983 = private unnamed_addr constant [38 x i8] c"\09%N = call %T @llvm.ctpop.%T(%0T %0N)\00"
+@S.984 = private unnamed_addr constant [37 x i8] c"\09%N = call %T @llvm.sqrt.%T(%0T %0N)\00"
+@S.985 = private unnamed_addr constant [40 x i8] c"\09%N = call %T @sqrtq%B(%0T %0N, %W %0F)\00"
+@S.986 = private unnamed_addr constant [32 x i8] c"\09%N = call %T @sqrti%B(%0T %0N)\00"
 define internal zeroext i8 @llvm_UnaryOp(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -37487,61 +37643,61 @@ L.0:
 		i64 37, label %L.19
 	]
 L.3:
-	%14 = getelementptr [22 x i8], [22 x i8]* @S.967
+	%14 = getelementptr [22 x i8], [22 x i8]* @S.968
 	%15 = bitcast [22 x i8]* %14 to [0 x i8]*
 	%16 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %15, %ast.AstNode* %16)
 	br label %L.2
 L.4:
-	%17 = getelementptr [21 x i8], [21 x i8]* @S.968
+	%17 = getelementptr [21 x i8], [21 x i8]* @S.969
 	%18 = bitcast [21 x i8]* %17 to [0 x i8]*
 	%19 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %18, %ast.AstNode* %19)
 	br label %L.2
 L.5:
-	%20 = getelementptr [24 x i8], [24 x i8]* @S.969
+	%20 = getelementptr [24 x i8], [24 x i8]* @S.970
 	%21 = bitcast [24 x i8]* %20 to [0 x i8]*
 	%22 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %21, %ast.AstNode* %22)
 	br label %L.2
 L.6:
-	%23 = getelementptr [26 x i8], [26 x i8]* @S.970
+	%23 = getelementptr [26 x i8], [26 x i8]* @S.971
 	%24 = bitcast [26 x i8]* %23 to [0 x i8]*
 	%25 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %24, %ast.AstNode* %25)
 	br label %L.2
 L.7:
-	%26 = getelementptr [28 x i8], [28 x i8]* @S.971
+	%26 = getelementptr [28 x i8], [28 x i8]* @S.972
 	%27 = bitcast [28 x i8]* %26 to [0 x i8]*
 	%28 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %27, %ast.AstNode* %28)
 	br label %L.2
 L.8:
-	%29 = getelementptr [27 x i8], [27 x i8]* @S.972
+	%29 = getelementptr [27 x i8], [27 x i8]* @S.973
 	%30 = bitcast [27 x i8]* %29 to [0 x i8]*
 	%31 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %30, %ast.AstNode* %31)
 	br label %L.2
 L.9:
-	%32 = getelementptr [27 x i8], [27 x i8]* @S.973
+	%32 = getelementptr [27 x i8], [27 x i8]* @S.974
 	%33 = bitcast [27 x i8]* %32 to [0 x i8]*
 	%34 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %33, %ast.AstNode* %34)
 	br label %L.2
 L.10:
-	%35 = getelementptr [27 x i8], [27 x i8]* @S.974
+	%35 = getelementptr [27 x i8], [27 x i8]* @S.975
 	%36 = bitcast [27 x i8]* %35 to [0 x i8]*
 	%37 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %36, %ast.AstNode* %37)
 	br label %L.2
 L.11:
-	%38 = getelementptr [27 x i8], [27 x i8]* @S.975
+	%38 = getelementptr [27 x i8], [27 x i8]* @S.976
 	%39 = bitcast [27 x i8]* %38 to [0 x i8]*
 	%40 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %39, %ast.AstNode* %40)
 	br label %L.2
 L.12:
-	%41 = getelementptr [37 x i8], [37 x i8]* @S.976
+	%41 = getelementptr [37 x i8], [37 x i8]* @S.977
 	%42 = bitcast [37 x i8]* %41 to [0 x i8]*
 	%43 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %42, %ast.AstNode* %43)
@@ -37556,7 +37712,7 @@ L.12:
 	call void @llvm_UseIntrinsic(i8 5, i64 %48, %type.TypeNode* %51)
 	br label %L.2
 L.13:
-	%52 = getelementptr [42 x i8], [42 x i8]* @S.977
+	%52 = getelementptr [42 x i8], [42 x i8]* @S.978
 	%53 = bitcast [42 x i8]* %52 to [0 x i8]*
 	%54 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %53, %ast.AstNode* %54)
@@ -37571,7 +37727,7 @@ L.13:
 	call void @llvm_UseIntrinsic(i8 6, i64 %59, %type.TypeNode* %62)
 	br label %L.2
 L.14:
-	%63 = getelementptr [47 x i8], [47 x i8]* @S.978
+	%63 = getelementptr [47 x i8], [47 x i8]* @S.979
 	%64 = bitcast [47 x i8]* %63 to [0 x i8]*
 	%65 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %64, %ast.AstNode* %65)
@@ -37586,7 +37742,7 @@ L.14:
 	call void @llvm_UseIntrinsic(i8 7, i64 %70, %type.TypeNode* %73)
 	br label %L.2
 L.15:
-	%74 = getelementptr [46 x i8], [46 x i8]* @S.979
+	%74 = getelementptr [46 x i8], [46 x i8]* @S.980
 	%75 = bitcast [46 x i8]* %74 to [0 x i8]*
 	%76 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %75, %ast.AstNode* %76)
@@ -37601,7 +37757,7 @@ L.15:
 	call void @llvm_UseIntrinsic(i8 7, i64 %81, %type.TypeNode* %84)
 	br label %L.2
 L.16:
-	%85 = getelementptr [47 x i8], [47 x i8]* @S.980
+	%85 = getelementptr [47 x i8], [47 x i8]* @S.981
 	%86 = bitcast [47 x i8]* %85 to [0 x i8]*
 	%87 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %86, %ast.AstNode* %87)
@@ -37616,7 +37772,7 @@ L.16:
 	call void @llvm_UseIntrinsic(i8 8, i64 %92, %type.TypeNode* %95)
 	br label %L.2
 L.17:
-	%96 = getelementptr [46 x i8], [46 x i8]* @S.981
+	%96 = getelementptr [46 x i8], [46 x i8]* @S.982
 	%97 = bitcast [46 x i8]* %96 to [0 x i8]*
 	%98 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %97, %ast.AstNode* %98)
@@ -37631,7 +37787,7 @@ L.17:
 	call void @llvm_UseIntrinsic(i8 8, i64 %103, %type.TypeNode* %106)
 	br label %L.2
 L.18:
-	%107 = getelementptr [38 x i8], [38 x i8]* @S.982
+	%107 = getelementptr [38 x i8], [38 x i8]* @S.983
 	%108 = bitcast [38 x i8]* %107 to [0 x i8]*
 	%109 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %108, %ast.AstNode* %109)
@@ -37654,7 +37810,7 @@ L.19:
 	%123 = icmp eq i8 %122, 4
 	br i1 %123, label %L.21, label %L.22
 L.21:
-	%124 = getelementptr [37 x i8], [37 x i8]* @S.983
+	%124 = getelementptr [37 x i8], [37 x i8]* @S.984
 	%125 = bitcast [37 x i8]* %124 to [0 x i8]*
 	%126 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %125, %ast.AstNode* %126)
@@ -37677,7 +37833,7 @@ L.22:
 	%140 = icmp ne i16 %139, 0
 	br i1 %140, label %L.24, label %L.25
 L.24:
-	%141 = getelementptr [40 x i8], [40 x i8]* @S.984
+	%141 = getelementptr [40 x i8], [40 x i8]* @S.985
 	%142 = bitcast [40 x i8]* %141 to [0 x i8]*
 	%143 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %142, %ast.AstNode* %143)
@@ -37692,7 +37848,7 @@ L.24:
 	call void @llvm_UseIntrinsic(i8 12, i64 %148, %type.TypeNode* %151)
 	br label %L.23
 L.25:
-	%152 = getelementptr [32 x i8], [32 x i8]* @S.985
+	%152 = getelementptr [32 x i8], [32 x i8]* @S.986
 	%153 = bitcast [32 x i8]* %152 to [0 x i8]*
 	%154 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %153, %ast.AstNode* %154)
@@ -37721,7 +37877,7 @@ return:
 	%164 = load i8, i8* %rv.0
 	ret i8 %164
 }
-@S.986 = private unnamed_addr constant [3 x i8] c"\22\22\00"
+@S.987 = private unnamed_addr constant [3 x i8] c"\22\22\00"
 define internal void @llvm_PStringCon(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -37732,7 +37888,7 @@ L.0:
 	br i1 %1, label %L.2, label %L.3
 L.2:
 	%2 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%3 = getelementptr [3 x i8], [3 x i8]* @S.986
+	%3 = getelementptr [3 x i8], [3 x i8]* @S.987
 	%4 = bitcast [3 x i8]* %3 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %2, [0 x i8]* %4)
 	br label %L.1
@@ -37760,8 +37916,8 @@ L.1:
 return:
 	ret void
 }
-@S.987 = private unnamed_addr constant [20 x i8] c"\09%N = extractvalue \00"
-@S.988 = private unnamed_addr constant [7 x i8] c" %0N, \00"
+@S.988 = private unnamed_addr constant [20 x i8] c"\09%N = extractvalue \00"
+@S.989 = private unnamed_addr constant [7 x i8] c" %0N, \00"
 define internal void @llvm_GetRV(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -37788,7 +37944,7 @@ L.1:
 	%12 = load i16, i16* @llvm_Tseqno
 	%13 = add i16 %12, 1
 	store i16 %13, i16* @llvm_Tseqno
-	%14 = getelementptr [20 x i8], [20 x i8]* @S.987
+	%14 = getelementptr [20 x i8], [20 x i8]* @S.988
 	%15 = bitcast [20 x i8]* %14 to [0 x i8]*
 	%16 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %15, %ast.AstNode* %16)
@@ -37821,7 +37977,7 @@ L.5:
 L.3:
 	%35 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
 	call void @llvm_PRetvType(%type.TypeListEntry* %35, i8 0)
-	%36 = getelementptr [7 x i8], [7 x i8]* @S.988
+	%36 = getelementptr [7 x i8], [7 x i8]* @S.989
 	%37 = bitcast [7 x i8]* %36 to [0 x i8]*
 	%38 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %37, %ast.AstNode* %38)
@@ -37837,14 +37993,14 @@ L.3:
 return:
 	ret void
 }
-@S.989 = private unnamed_addr constant [6 x i8] c"%N = \00"
-@S.990 = private unnamed_addr constant [5 x i8] c"call\00"
-@S.991 = private unnamed_addr constant [17 x i8] c" asm sideeffect \00"
-@S.992 = private unnamed_addr constant [3 x i8] c", \00"
-@S.993 = private unnamed_addr constant [3 x i8] c" (\00"
-@S.994 = private unnamed_addr constant [6 x i8] c"%T %N\00"
-@S.995 = private unnamed_addr constant [3 x i8] c", \00"
-@S.996 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.990 = private unnamed_addr constant [6 x i8] c"%N = \00"
+@S.991 = private unnamed_addr constant [5 x i8] c"call\00"
+@S.992 = private unnamed_addr constant [17 x i8] c" asm sideeffect \00"
+@S.993 = private unnamed_addr constant [3 x i8] c", \00"
+@S.994 = private unnamed_addr constant [3 x i8] c" (\00"
+@S.995 = private unnamed_addr constant [6 x i8] c"%T %N\00"
+@S.996 = private unnamed_addr constant [3 x i8] c", \00"
+@S.997 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvm_Asm(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -37888,14 +38044,14 @@ L.5:
 	%23 = load i16, i16* @llvm_Tseqno
 	%24 = add i16 %23, 1
 	store i16 %24, i16* @llvm_Tseqno
-	%25 = getelementptr [6 x i8], [6 x i8]* @S.989
+	%25 = getelementptr [6 x i8], [6 x i8]* @S.990
 	%26 = bitcast [6 x i8]* %25 to [0 x i8]*
 	%27 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %26, %ast.AstNode* %27)
 	br label %L.4
 L.4:
 	%28 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%29 = getelementptr [5 x i8], [5 x i8]* @S.990
+	%29 = getelementptr [5 x i8], [5 x i8]* @S.991
 	%30 = bitcast [5 x i8]* %29 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %28, [0 x i8]* %30)
 	%31 = load %ast.AstNode*, %ast.AstNode** %node
@@ -37904,7 +38060,7 @@ L.4:
 	%34 = bitcast %type.TypeNode* %33 to %type.TypeListEntry*
 	call void @llvm_PRetvType(%type.TypeListEntry* %34, i8 0)
 	%35 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%36 = getelementptr [17 x i8], [17 x i8]* @S.991
+	%36 = getelementptr [17 x i8], [17 x i8]* @S.992
 	%37 = bitcast [17 x i8]* %36 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %35, [0 x i8]* %37)
 	%38 = load %ast.AstNode*, %ast.AstNode** %node
@@ -37913,7 +38069,7 @@ L.4:
 	%41 = load %ast.AstNode*, %ast.AstNode** %40
 	call void @llvm_PStringCon(%ast.AstNode* %41)
 	%42 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%43 = getelementptr [3 x i8], [3 x i8]* @S.992
+	%43 = getelementptr [3 x i8], [3 x i8]* @S.993
 	%44 = bitcast [3 x i8]* %43 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %42, [0 x i8]* %44)
 	%45 = load %ast.AstNode*, %ast.AstNode** %node
@@ -37922,7 +38078,7 @@ L.4:
 	%48 = load %ast.AstNode*, %ast.AstNode** %47
 	call void @llvm_PStringCon(%ast.AstNode* %48)
 	%49 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%50 = getelementptr [3 x i8], [3 x i8]* @S.993
+	%50 = getelementptr [3 x i8], [3 x i8]* @S.994
 	%51 = bitcast [3 x i8]* %50 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %49, [0 x i8]* %51)
 	store i16 2, i16* %i
@@ -37935,7 +38091,7 @@ L.4:
 L.7:
 	br label %L.8
 L.8:
-	%57 = getelementptr [6 x i8], [6 x i8]* @S.994
+	%57 = getelementptr [6 x i8], [6 x i8]* @S.995
 	%58 = bitcast [6 x i8]* %57 to [0 x i8]*
 	%59 = load %ast.AstNode*, %ast.AstNode** %node
 	%60 = getelementptr %ast.AstNode, %ast.AstNode* %59, i64 0, i32 11
@@ -37955,7 +38111,7 @@ L.8:
 	br i1 %71, label %L.9, label %L.10
 L.10:
 	%72 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%73 = getelementptr [3 x i8], [3 x i8]* @S.995
+	%73 = getelementptr [3 x i8], [3 x i8]* @S.996
 	%74 = bitcast [3 x i8]* %73 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %72, [0 x i8]* %74)
 	br label %L.8
@@ -37963,7 +38119,7 @@ L.9:
 	br label %L.6
 L.6:
 	%75 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%76 = getelementptr [3 x i8], [3 x i8]* @S.996
+	%76 = getelementptr [3 x i8], [3 x i8]* @S.997
 	%77 = bitcast [3 x i8]* %76 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %75, [0 x i8]* %77)
 	br label %return
@@ -38022,14 +38178,14 @@ L.5:
 return:
 	ret void
 }
-@S.997 = private unnamed_addr constant [6 x i8] c"%N = \00"
-@S.998 = private unnamed_addr constant [6 x i8] c"tail \00"
-@S.999 = private unnamed_addr constant [5 x i8] c"call\00"
-@S.1000 = private unnamed_addr constant [6 x i8] c" %0N(\00"
-@S.1001 = private unnamed_addr constant [5 x i8] c" %I(\00"
-@S.1002 = private unnamed_addr constant [6 x i8] c"%T %N\00"
-@S.1003 = private unnamed_addr constant [3 x i8] c", \00"
-@S.1004 = private unnamed_addr constant [3 x i8] c")\0A\00"
+@S.998 = private unnamed_addr constant [6 x i8] c"%N = \00"
+@S.999 = private unnamed_addr constant [6 x i8] c"tail \00"
+@S.1000 = private unnamed_addr constant [5 x i8] c"call\00"
+@S.1001 = private unnamed_addr constant [6 x i8] c" %0N(\00"
+@S.1002 = private unnamed_addr constant [5 x i8] c" %I(\00"
+@S.1003 = private unnamed_addr constant [6 x i8] c"%T %N\00"
+@S.1004 = private unnamed_addr constant [3 x i8] c", \00"
+@S.1005 = private unnamed_addr constant [3 x i8] c")\0A\00"
 define internal void @llvm_Call(%ast.AstNode* %node$, i8 zeroext %indirect$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -38086,7 +38242,7 @@ L.7:
 	%30 = load i16, i16* @llvm_Tseqno
 	%31 = add i16 %30, 1
 	store i16 %31, i16* @llvm_Tseqno
-	%32 = getelementptr [6 x i8], [6 x i8]* @S.997
+	%32 = getelementptr [6 x i8], [6 x i8]* @S.998
 	%33 = bitcast [6 x i8]* %32 to [0 x i8]*
 	%34 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %33, %ast.AstNode* %34)
@@ -38098,13 +38254,13 @@ L.6:
 	br i1 %37, label %L.9, label %L.8
 L.9:
 	%38 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%39 = getelementptr [6 x i8], [6 x i8]* @S.998
+	%39 = getelementptr [6 x i8], [6 x i8]* @S.999
 	%40 = bitcast [6 x i8]* %39 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %38, [0 x i8]* %40)
 	br label %L.8
 L.8:
 	%41 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%42 = getelementptr [5 x i8], [5 x i8]* @S.999
+	%42 = getelementptr [5 x i8], [5 x i8]* @S.1000
 	%43 = bitcast [5 x i8]* %42 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %41, [0 x i8]* %43)
 	%44 = load %ast.AstNode*, %ast.AstNode** %node
@@ -38117,14 +38273,14 @@ L.8:
 	%50 = icmp ne i8 %49, 0
 	br i1 %50, label %L.11, label %L.12
 L.11:
-	%51 = getelementptr [6 x i8], [6 x i8]* @S.1000
+	%51 = getelementptr [6 x i8], [6 x i8]* @S.1001
 	%52 = bitcast [6 x i8]* %51 to [0 x i8]*
 	%53 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %52, %ast.AstNode* %53)
 	store i16 1, i16* %i
 	br label %L.10
 L.12:
-	%54 = getelementptr [5 x i8], [5 x i8]* @S.1001
+	%54 = getelementptr [5 x i8], [5 x i8]* @S.1002
 	%55 = bitcast [5 x i8]* %54 to [0 x i8]*
 	%56 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %55, %ast.AstNode* %56)
@@ -38140,7 +38296,7 @@ L.10:
 L.14:
 	br label %L.15
 L.15:
-	%62 = getelementptr [6 x i8], [6 x i8]* @S.1002
+	%62 = getelementptr [6 x i8], [6 x i8]* @S.1003
 	%63 = bitcast [6 x i8]* %62 to [0 x i8]*
 	%64 = load %ast.AstNode*, %ast.AstNode** %node
 	%65 = getelementptr %ast.AstNode, %ast.AstNode* %64, i64 0, i32 11
@@ -38160,7 +38316,7 @@ L.15:
 	br i1 %76, label %L.16, label %L.17
 L.17:
 	%77 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%78 = getelementptr [3 x i8], [3 x i8]* @S.1003
+	%78 = getelementptr [3 x i8], [3 x i8]* @S.1004
 	%79 = bitcast [3 x i8]* %78 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %77, [0 x i8]* %79)
 	br label %L.15
@@ -38168,7 +38324,7 @@ L.16:
 	br label %L.13
 L.13:
 	%80 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%81 = getelementptr [3 x i8], [3 x i8]* @S.1004
+	%81 = getelementptr [3 x i8], [3 x i8]* @S.1005
 	%82 = bitcast [3 x i8]* %81 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %80, [0 x i8]* %82)
 	%83 = load %ast.AstNode*, %ast.AstNode** %node
@@ -38185,7 +38341,7 @@ L.19:
 	%92 = getelementptr %symb.SymbNode, %symb.SymbNode* %91, i64 0, i32 22
 	%93 = getelementptr [0 x i8], [0 x i8]* %92
 	%94 = bitcast [0 x i8]* %93 to [0 x i8]*
-	call void @lex_ErrorI(i8 45, [0 x i8]* %94)
+	call void @lex_ErrorI(i8 46, [0 x i8]* %94)
 	br label %L.18
 L.18:
 	br label %return
@@ -38336,33 +38492,33 @@ L.1:
 return:
 	ret void
 }
-@S.1005 = private unnamed_addr constant [14 x i8] c" alwaysinline\00"
-@S.1006 = private unnamed_addr constant [10 x i8] c" noinline\00"
-@S.1007 = private unnamed_addr constant [9 x i8] c" minsize\00"
-@S.1008 = private unnamed_addr constant [9 x i8] c" optsize\00"
-@S.1009 = private unnamed_addr constant [10 x i8] c" nounwind\00"
-@S.1010 = private unnamed_addr constant [4 x i8] c" {\0A\00"
-@S.1011 = private unnamed_addr constant [11 x i8] c" = alloca \00"
-@S.1012 = private unnamed_addr constant [3 x i8] c"\09%\00"
-@S.1013 = private unnamed_addr constant [11 x i8] c" = alloca \00"
-@S.1014 = private unnamed_addr constant [8 x i8] c"\09store \00"
-@S.1015 = private unnamed_addr constant [3 x i8] c" %\00"
-@S.1016 = private unnamed_addr constant [4 x i8] c"$, \00"
-@S.1017 = private unnamed_addr constant [4 x i8] c"* %\00"
-@S.1018 = private unnamed_addr constant [18 x i8] c"\09br label %return\00"
-@S.1019 = private unnamed_addr constant [9 x i8] c"return:\0A\00"
-@S.1020 = private unnamed_addr constant [9 x i8] c" = load \00"
-@S.1021 = private unnamed_addr constant [3 x i8] c", \00"
-@S.1022 = private unnamed_addr constant [3 x i8] c"* \00"
-@S.1023 = private unnamed_addr constant [6 x i8] c"\09%mrv\00"
-@S.1024 = private unnamed_addr constant [15 x i8] c" = insertvalue\00"
-@S.1025 = private unnamed_addr constant [7 x i8] c" undef\00"
-@S.1026 = private unnamed_addr constant [6 x i8] c" %mrv\00"
-@S.1027 = private unnamed_addr constant [6 x i8] c"\09ret \00"
-@S.1028 = private unnamed_addr constant [6 x i8] c" %mrv\00"
-@S.1029 = private unnamed_addr constant [6 x i8] c"\09ret \00"
-@S.1030 = private unnamed_addr constant [10 x i8] c"\09ret void\00"
-@S.1031 = private unnamed_addr constant [3 x i8] c"}\0A\00"
+@S.1006 = private unnamed_addr constant [14 x i8] c" alwaysinline\00"
+@S.1007 = private unnamed_addr constant [10 x i8] c" noinline\00"
+@S.1008 = private unnamed_addr constant [9 x i8] c" minsize\00"
+@S.1009 = private unnamed_addr constant [9 x i8] c" optsize\00"
+@S.1010 = private unnamed_addr constant [10 x i8] c" nounwind\00"
+@S.1011 = private unnamed_addr constant [4 x i8] c" {\0A\00"
+@S.1012 = private unnamed_addr constant [11 x i8] c" = alloca \00"
+@S.1013 = private unnamed_addr constant [3 x i8] c"\09%\00"
+@S.1014 = private unnamed_addr constant [11 x i8] c" = alloca \00"
+@S.1015 = private unnamed_addr constant [8 x i8] c"\09store \00"
+@S.1016 = private unnamed_addr constant [3 x i8] c" %\00"
+@S.1017 = private unnamed_addr constant [4 x i8] c"$, \00"
+@S.1018 = private unnamed_addr constant [4 x i8] c"* %\00"
+@S.1019 = private unnamed_addr constant [18 x i8] c"\09br label %return\00"
+@S.1020 = private unnamed_addr constant [9 x i8] c"return:\0A\00"
+@S.1021 = private unnamed_addr constant [9 x i8] c" = load \00"
+@S.1022 = private unnamed_addr constant [3 x i8] c", \00"
+@S.1023 = private unnamed_addr constant [3 x i8] c"* \00"
+@S.1024 = private unnamed_addr constant [6 x i8] c"\09%mrv\00"
+@S.1025 = private unnamed_addr constant [15 x i8] c" = insertvalue\00"
+@S.1026 = private unnamed_addr constant [7 x i8] c" undef\00"
+@S.1027 = private unnamed_addr constant [6 x i8] c" %mrv\00"
+@S.1028 = private unnamed_addr constant [6 x i8] c"\09ret \00"
+@S.1029 = private unnamed_addr constant [6 x i8] c" %mrv\00"
+@S.1030 = private unnamed_addr constant [6 x i8] c"\09ret \00"
+@S.1031 = private unnamed_addr constant [10 x i8] c"\09ret void\00"
+@S.1032 = private unnamed_addr constant [3 x i8] c"}\0A\00"
 define internal void @llvm_Procedure(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -38398,13 +38554,13 @@ L.2:
 	]
 L.5:
 	%15 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%16 = getelementptr [14 x i8], [14 x i8]* @S.1005
+	%16 = getelementptr [14 x i8], [14 x i8]* @S.1006
 	%17 = bitcast [14 x i8]* %16 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %15, [0 x i8]* %17)
 	br label %L.4
 L.6:
 	%18 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%19 = getelementptr [10 x i8], [10 x i8]* @S.1006
+	%19 = getelementptr [10 x i8], [10 x i8]* @S.1007
 	%20 = bitcast [10 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
 	br label %L.4
@@ -38422,19 +38578,19 @@ L.8:
 	br i1 %26, label %L.10, label %L.9
 L.10:
 	%27 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%28 = getelementptr [9 x i8], [9 x i8]* @S.1007
+	%28 = getelementptr [9 x i8], [9 x i8]* @S.1008
 	%29 = bitcast [9 x i8]* %28 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %27, [0 x i8]* %29)
 	br label %L.9
 L.9:
 	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%31 = getelementptr [9 x i8], [9 x i8]* @S.1008
+	%31 = getelementptr [9 x i8], [9 x i8]* @S.1009
 	%32 = bitcast [9 x i8]* %31 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %30, [0 x i8]* %32)
 	br label %L.7
 L.7:
 	%33 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%34 = getelementptr [10 x i8], [10 x i8]* @S.1009
+	%34 = getelementptr [10 x i8], [10 x i8]* @S.1010
 	%35 = bitcast [10 x i8]* %34 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %33, [0 x i8]* %35)
 	%36 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -38442,7 +38598,7 @@ L.7:
 	%38 = load %symb.SymbNode*, %symb.SymbNode** %37
 	call void @llvm_Section(%symb.SymbNode* %38, i8 0)
 	%39 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%40 = getelementptr [4 x i8], [4 x i8]* @S.1010
+	%40 = getelementptr [4 x i8], [4 x i8]* @S.1011
 	%41 = bitcast [4 x i8]* %40 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %39, [0 x i8]* %41)
 	%42 = load i16, i16* @llvm_Pseqno
@@ -38472,7 +38628,7 @@ L.13:
 	%54 = load i16, i16* %i
 	call void @llvm_PRetValName(i16 %54)
 	%55 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%56 = getelementptr [11 x i8], [11 x i8]* @S.1011
+	%56 = getelementptr [11 x i8], [11 x i8]* @S.1012
 	%57 = bitcast [11 x i8]* %56 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %55, [0 x i8]* %57)
 	%58 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
@@ -38502,7 +38658,7 @@ L.14:
 	br i1 %72, label %L.15, label %L.16
 L.16:
 	%73 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%74 = getelementptr [3 x i8], [3 x i8]* @S.1012
+	%74 = getelementptr [3 x i8], [3 x i8]* @S.1013
 	%75 = bitcast [3 x i8]* %74 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %73, [0 x i8]* %75)
 	%76 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -38512,7 +38668,7 @@ L.16:
 	%80 = bitcast [0 x i8]* %79 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %76, [0 x i8]* %80)
 	%81 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%82 = getelementptr [11 x i8], [11 x i8]* @S.1013
+	%82 = getelementptr [11 x i8], [11 x i8]* @S.1014
 	%83 = bitcast [11 x i8]* %82 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %81, [0 x i8]* %83)
 	%84 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -38539,7 +38695,7 @@ L.17:
 	br i1 %96, label %L.18, label %L.19
 L.19:
 	%97 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%98 = getelementptr [8 x i8], [8 x i8]* @S.1014
+	%98 = getelementptr [8 x i8], [8 x i8]* @S.1015
 	%99 = bitcast [8 x i8]* %98 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %97, [0 x i8]* %99)
 	%100 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -38547,7 +38703,7 @@ L.19:
 	%102 = load %type.TypeNode*, %type.TypeNode** %101
 	call void @llvm_PType(%type.TypeNode* %102)
 	%103 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%104 = getelementptr [3 x i8], [3 x i8]* @S.1015
+	%104 = getelementptr [3 x i8], [3 x i8]* @S.1016
 	%105 = bitcast [3 x i8]* %104 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %103, [0 x i8]* %105)
 	%106 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -38557,7 +38713,7 @@ L.19:
 	%110 = bitcast [0 x i8]* %109 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %106, [0 x i8]* %110)
 	%111 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%112 = getelementptr [4 x i8], [4 x i8]* @S.1016
+	%112 = getelementptr [4 x i8], [4 x i8]* @S.1017
 	%113 = bitcast [4 x i8]* %112 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %111, [0 x i8]* %113)
 	%114 = load %symb.SymbNode*, %symb.SymbNode** %s
@@ -38565,7 +38721,7 @@ L.19:
 	%116 = load %type.TypeNode*, %type.TypeNode** %115
 	call void @llvm_PType(%type.TypeNode* %116)
 	%117 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%118 = getelementptr [4 x i8], [4 x i8]* @S.1017
+	%118 = getelementptr [4 x i8], [4 x i8]* @S.1018
 	%119 = bitcast [4 x i8]* %118 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %117, [0 x i8]* %119)
 	%120 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -38601,7 +38757,7 @@ L.18:
 	br i1 %140, label %L.23, label %L.22
 L.23:
 	%141 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%142 = getelementptr [18 x i8], [18 x i8]* @S.1018
+	%142 = getelementptr [18 x i8], [18 x i8]* @S.1019
 	%143 = bitcast [18 x i8]* %142 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %141, [0 x i8]* %143)
 	%144 = load %ast.AstNode*, %ast.AstNode** %node
@@ -38609,7 +38765,7 @@ L.23:
 	br label %L.22
 L.22:
 	%145 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%146 = getelementptr [9 x i8], [9 x i8]* @S.1019
+	%146 = getelementptr [9 x i8], [9 x i8]* @S.1020
 	%147 = bitcast [9 x i8]* %146 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %145, [0 x i8]* %147)
 	%148 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -38635,7 +38791,7 @@ L.29:
 	%159 = add i16 %157, %158
 	call void @llvm_PTempName(i16 %159)
 	%160 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%161 = getelementptr [9 x i8], [9 x i8]* @S.1020
+	%161 = getelementptr [9 x i8], [9 x i8]* @S.1021
 	%162 = bitcast [9 x i8]* %161 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %160, [0 x i8]* %162)
 	%163 = getelementptr %A.3, %A.3* @feature, i64 0, i32 10
@@ -38648,7 +38804,7 @@ L.31:
 	%168 = load %type.TypeNode*, %type.TypeNode** %167
 	call void @llvm_PType(%type.TypeNode* %168)
 	%169 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%170 = getelementptr [3 x i8], [3 x i8]* @S.1021
+	%170 = getelementptr [3 x i8], [3 x i8]* @S.1022
 	%171 = bitcast [3 x i8]* %170 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %169, [0 x i8]* %171)
 	br label %L.30
@@ -38658,7 +38814,7 @@ L.30:
 	%174 = load %type.TypeNode*, %type.TypeNode** %173
 	call void @llvm_PType(%type.TypeNode* %174)
 	%175 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%176 = getelementptr [3 x i8], [3 x i8]* @S.1022
+	%176 = getelementptr [3 x i8], [3 x i8]* @S.1023
 	%177 = bitcast [3 x i8]* %176 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %175, [0 x i8]* %177)
 	%178 = load i16, i16* %i
@@ -38688,7 +38844,7 @@ L.33:
 	br label %L.35
 L.35:
 	%192 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%193 = getelementptr [6 x i8], [6 x i8]* @S.1023
+	%193 = getelementptr [6 x i8], [6 x i8]* @S.1024
 	%194 = bitcast [6 x i8]* %193 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %192, [0 x i8]* %194)
 	%195 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -38696,7 +38852,7 @@ L.35:
 	%197 = zext i16 %196 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %195, i64 %197)
 	%198 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%199 = getelementptr [15 x i8], [15 x i8]* @S.1024
+	%199 = getelementptr [15 x i8], [15 x i8]* @S.1025
 	%200 = bitcast [15 x i8]* %199 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %198, [0 x i8]* %200)
 	%201 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -38708,13 +38864,13 @@ L.35:
 	br i1 %205, label %L.38, label %L.39
 L.38:
 	%206 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%207 = getelementptr [7 x i8], [7 x i8]* @S.1025
+	%207 = getelementptr [7 x i8], [7 x i8]* @S.1026
 	%208 = bitcast [7 x i8]* %207 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %206, [0 x i8]* %208)
 	br label %L.37
 L.39:
 	%209 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%210 = getelementptr [6 x i8], [6 x i8]* @S.1026
+	%210 = getelementptr [6 x i8], [6 x i8]* @S.1027
 	%211 = bitcast [6 x i8]* %210 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %209, [0 x i8]* %211)
 	%212 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -38758,7 +38914,7 @@ L.40:
 	br label %L.35
 L.36:
 	%236 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%237 = getelementptr [6 x i8], [6 x i8]* @S.1027
+	%237 = getelementptr [6 x i8], [6 x i8]* @S.1028
 	%238 = bitcast [6 x i8]* %237 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %236, [0 x i8]* %238)
 	%239 = load %symb.SymbNode*, %symb.SymbNode** %ps
@@ -38766,7 +38922,7 @@ L.36:
 	%241 = load %type.TypeListEntry*, %type.TypeListEntry** %240
 	call void @llvm_PRetvType(%type.TypeListEntry* %241, i8 0)
 	%242 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%243 = getelementptr [6 x i8], [6 x i8]* @S.1028
+	%243 = getelementptr [6 x i8], [6 x i8]* @S.1029
 	%244 = bitcast [6 x i8]* %243 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %242, [0 x i8]* %244)
 	%245 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -38777,7 +38933,7 @@ L.36:
 	br label %L.32
 L.34:
 	%249 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%250 = getelementptr [6 x i8], [6 x i8]* @S.1029
+	%250 = getelementptr [6 x i8], [6 x i8]* @S.1030
 	%251 = bitcast [6 x i8]* %250 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %249, [0 x i8]* %251)
 	%252 = load %type.TypeListEntry*, %type.TypeListEntry** %tl
@@ -38795,7 +38951,7 @@ L.32:
 	br label %L.24
 L.26:
 	%259 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%260 = getelementptr [10 x i8], [10 x i8]* @S.1030
+	%260 = getelementptr [10 x i8], [10 x i8]* @S.1031
 	%261 = bitcast [10 x i8]* %260 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %259, [0 x i8]* %261)
 	br label %L.24
@@ -38803,7 +38959,7 @@ L.24:
 	%262 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_PEndLine(%ast.AstNode* %262)
 	%263 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%264 = getelementptr [3 x i8], [3 x i8]* @S.1031
+	%264 = getelementptr [3 x i8], [3 x i8]* @S.1032
 	%265 = bitcast [3 x i8]* %264 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %263, [0 x i8]* %265)
 	br label %L.1
@@ -38812,8 +38968,8 @@ L.1:
 return:
 	ret void
 }
-@S.1032 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
-@S.1033 = private unnamed_addr constant [13 x i8] c" %T %0N, %1N\00"
+@S.1033 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
+@S.1034 = private unnamed_addr constant [13 x i8] c" %T %0N, %1N\00"
 define internal zeroext i8 @llvm_BinaryOp(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -38838,7 +38994,7 @@ L.0:
 	%13 = load i16, i16* @llvm_Tseqno
 	%14 = add i16 %13, 1
 	store i16 %14, i16* @llvm_Tseqno
-	%15 = getelementptr [7 x i8], [7 x i8]* @S.1032
+	%15 = getelementptr [7 x i8], [7 x i8]* @S.1033
 	%16 = bitcast [7 x i8]* %15 to [0 x i8]*
 	%17 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
@@ -38846,7 +39002,7 @@ L.0:
 	%19 = load [0 x i8]*, [0 x i8]** %op
 	%20 = bitcast [0 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
-	%21 = getelementptr [13 x i8], [13 x i8]* @S.1033
+	%21 = getelementptr [13 x i8], [13 x i8]* @S.1034
 	%22 = bitcast [13 x i8]* %21 to [0 x i8]*
 	%23 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %22, %ast.AstNode* %23)
@@ -38894,8 +39050,8 @@ return:
 	%14 = load i8, i8* %rv.0
 	ret i8 %14
 }
-@S.1034 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
-@S.1035 = private unnamed_addr constant [14 x i8] c" %0T %0N, %1N\00"
+@S.1035 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
+@S.1036 = private unnamed_addr constant [14 x i8] c" %0T %0N, %1N\00"
 define internal zeroext i8 @llvm_CompareOp(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -38920,7 +39076,7 @@ L.0:
 	%13 = load i16, i16* @llvm_Tseqno
 	%14 = add i16 %13, 1
 	store i16 %14, i16* @llvm_Tseqno
-	%15 = getelementptr [7 x i8], [7 x i8]* @S.1034
+	%15 = getelementptr [7 x i8], [7 x i8]* @S.1035
 	%16 = bitcast [7 x i8]* %15 to [0 x i8]*
 	%17 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %16, %ast.AstNode* %17)
@@ -38928,7 +39084,7 @@ L.0:
 	%19 = load [0 x i8]*, [0 x i8]** %op
 	%20 = bitcast [0 x i8]* %19 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %18, [0 x i8]* %20)
-	%21 = getelementptr [14 x i8], [14 x i8]* @S.1035
+	%21 = getelementptr [14 x i8], [14 x i8]* @S.1036
 	%22 = bitcast [14 x i8]* %21 to [0 x i8]*
 	%23 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %22, %ast.AstNode* %23)
@@ -38940,8 +39096,8 @@ return:
 	%25 = load i8, i8* %rv.0
 	ret i8 %25
 }
-@S.1036 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
-@S.1037 = private unnamed_addr constant [15 x i8] c" %0T %0N to %T\00"
+@S.1037 = private unnamed_addr constant [7 x i8] c"\09%N = \00"
+@S.1038 = private unnamed_addr constant [15 x i8] c" %0T %0N to %T\00"
 define internal void @llvm_ChangeSize(%ast.AstNode* %node$, [0 x i8]* %op$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -38960,7 +39116,7 @@ L.0:
 	%8 = load i16, i16* @llvm_Tseqno
 	%9 = add i16 %8, 1
 	store i16 %9, i16* @llvm_Tseqno
-	%10 = getelementptr [7 x i8], [7 x i8]* @S.1036
+	%10 = getelementptr [7 x i8], [7 x i8]* @S.1037
 	%11 = bitcast [7 x i8]* %10 to [0 x i8]*
 	%12 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %11, %ast.AstNode* %12)
@@ -38968,7 +39124,7 @@ L.0:
 	%14 = load [0 x i8]*, [0 x i8]** %op
 	%15 = bitcast [0 x i8]* %14 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %13, [0 x i8]* %15)
-	%16 = getelementptr [15 x i8], [15 x i8]* @S.1037
+	%16 = getelementptr [15 x i8], [15 x i8]* @S.1038
 	%17 = bitcast [15 x i8]* %16 to [0 x i8]*
 	%18 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %17, %ast.AstNode* %18)
@@ -39089,7 +39245,7 @@ L.9:
 return:
 	ret void
 }
-@S.1038 = private unnamed_addr constant [27 x i8] c"FieldInsert LOAD not found\00"
+@S.1039 = private unnamed_addr constant [27 x i8] c"FieldInsert LOAD not found\00"
 define internal { %ast.AstNode*, %ast.AstNode* } @llvm_FieldInsert(%ast.AstNode* %lhs$, %ast.AstNode* %rhs$) nounwind {
 L.0:
 	%rv.0 = alloca %ast.AstNode*
@@ -39228,9 +39384,9 @@ L.13:
 	store %ast.AstNode* %88, %ast.AstNode** %rhs
 	br label %L.12
 L.14:
-	%89 = getelementptr [27 x i8], [27 x i8]* @S.1038
+	%89 = getelementptr [27 x i8], [27 x i8]* @S.1039
 	%90 = bitcast [27 x i8]* %89 to [0 x i8]*
-	call void @lex_ErrorS(i8 98, [0 x i8]* %90)
+	call void @lex_ErrorS(i8 99, [0 x i8]* %90)
 	br label %L.12
 L.12:
 	br label %L.7
@@ -39247,11 +39403,11 @@ return:
 	%mrv1 = insertvalue { %ast.AstNode*, %ast.AstNode* } %mrv0,%ast.AstNode* %94,1
 	ret  { %ast.AstNode*, %ast.AstNode* } %mrv1
 }
-@S.1039 = private unnamed_addr constant [12 x i8] c"\09%N = load \00"
-@S.1040 = private unnamed_addr constant [10 x i8] c"volatile \00"
-@S.1041 = private unnamed_addr constant [3 x i8] c", \00"
-@S.1042 = private unnamed_addr constant [8 x i8] c"%T* %0N\00"
-@S.1043 = private unnamed_addr constant [9 x i8] c", align \00"
+@S.1040 = private unnamed_addr constant [12 x i8] c"\09%N = load \00"
+@S.1041 = private unnamed_addr constant [10 x i8] c"volatile \00"
+@S.1042 = private unnamed_addr constant [3 x i8] c", \00"
+@S.1043 = private unnamed_addr constant [8 x i8] c"%T* %0N\00"
+@S.1044 = private unnamed_addr constant [9 x i8] c", align \00"
 define internal void @llvm_Load(%ast.AstNode* %load$) nounwind {
 L.0:
 	%load = alloca %ast.AstNode*
@@ -39271,7 +39427,7 @@ L.0:
 	%9 = load i16, i16* @llvm_Tseqno
 	%10 = add i16 %9, 1
 	store i16 %10, i16* @llvm_Tseqno
-	%11 = getelementptr [12 x i8], [12 x i8]* @S.1039
+	%11 = getelementptr [12 x i8], [12 x i8]* @S.1040
 	%12 = bitcast [12 x i8]* %11 to [0 x i8]*
 	%13 = load %ast.AstNode*, %ast.AstNode** %load
 	call void @llvm_Print([0 x i8]* %12, %ast.AstNode* %13)
@@ -39286,7 +39442,7 @@ L.0:
 	br i1 %21, label %L.2, label %L.1
 L.2:
 	%22 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%23 = getelementptr [10 x i8], [10 x i8]* @S.1040
+	%23 = getelementptr [10 x i8], [10 x i8]* @S.1041
 	%24 = bitcast [10 x i8]* %23 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %22, [0 x i8]* %24)
 	br label %L.1
@@ -39301,12 +39457,12 @@ L.4:
 	%30 = load %type.TypeNode*, %type.TypeNode** %29
 	call void @llvm_PType(%type.TypeNode* %30)
 	%31 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%32 = getelementptr [3 x i8], [3 x i8]* @S.1041
+	%32 = getelementptr [3 x i8], [3 x i8]* @S.1042
 	%33 = bitcast [3 x i8]* %32 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %31, [0 x i8]* %33)
 	br label %L.3
 L.3:
-	%34 = getelementptr [8 x i8], [8 x i8]* @S.1042
+	%34 = getelementptr [8 x i8], [8 x i8]* @S.1043
 	%35 = bitcast [8 x i8]* %34 to [0 x i8]*
 	%36 = load %ast.AstNode*, %ast.AstNode** %load
 	call void @llvm_Print([0 x i8]* %35, %ast.AstNode* %36)
@@ -39321,7 +39477,7 @@ L.3:
 	br i1 %44, label %L.6, label %L.5
 L.6:
 	%45 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%46 = getelementptr [9 x i8], [9 x i8]* @S.1043
+	%46 = getelementptr [9 x i8], [9 x i8]* @S.1044
 	%47 = bitcast [9 x i8]* %46 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %45, [0 x i8]* %47)
 	%48 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39343,10 +39499,10 @@ L.5:
 return:
 	ret void
 }
-@S.1044 = private unnamed_addr constant [7 x i8] c"store \00"
-@S.1045 = private unnamed_addr constant [10 x i8] c"volatile \00"
-@S.1046 = private unnamed_addr constant [8 x i8] c", %K %D\00"
-@S.1047 = private unnamed_addr constant [9 x i8] c", align \00"
+@S.1045 = private unnamed_addr constant [7 x i8] c"store \00"
+@S.1046 = private unnamed_addr constant [10 x i8] c"volatile \00"
+@S.1047 = private unnamed_addr constant [8 x i8] c", %K %D\00"
+@S.1048 = private unnamed_addr constant [9 x i8] c", align \00"
 define internal void @llvm_Store(%ast.AstNode* %store$) nounwind {
 L.0:
 	%store = alloca %ast.AstNode*
@@ -39467,7 +39623,7 @@ L.12:
 	%74 = load %bout.BufIO*, %bout.BufIO** @llvm_f
 	call void @bout_BufIO_chr(%bout.BufIO* %74, i8 9)
 	%75 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%76 = getelementptr [7 x i8], [7 x i8]* @S.1044
+	%76 = getelementptr [7 x i8], [7 x i8]* @S.1045
 	%77 = bitcast [7 x i8]* %76 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %75, [0 x i8]* %77)
 	%78 = load %ast.AstNode*, %ast.AstNode** %lhs
@@ -39481,7 +39637,7 @@ L.12:
 	br i1 %85, label %L.14, label %L.13
 L.14:
 	%86 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%87 = getelementptr [10 x i8], [10 x i8]* @S.1045
+	%87 = getelementptr [10 x i8], [10 x i8]* @S.1046
 	%88 = bitcast [10 x i8]* %87 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %86, [0 x i8]* %88)
 	br label %L.13
@@ -39492,7 +39648,7 @@ L.13:
 	call void @bout_BufIO_chr(%bout.BufIO* %90, i8 32)
 	%91 = load %ast.AstNode*, %ast.AstNode** %rhs
 	call void @llvm_NodeSrc(%ast.AstNode* %91)
-	%92 = getelementptr [8 x i8], [8 x i8]* @S.1046
+	%92 = getelementptr [8 x i8], [8 x i8]* @S.1047
 	%93 = bitcast [8 x i8]* %92 to [0 x i8]*
 	%94 = load %ast.AstNode*, %ast.AstNode** %lhs
 	call void @llvm_Print([0 x i8]* %93, %ast.AstNode* %94)
@@ -39507,7 +39663,7 @@ L.13:
 	br i1 %102, label %L.16, label %L.15
 L.16:
 	%103 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%104 = getelementptr [9 x i8], [9 x i8]* @S.1047
+	%104 = getelementptr [9 x i8], [9 x i8]* @S.1048
 	%105 = bitcast [9 x i8]* %104 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %103, [0 x i8]* %105)
 	%106 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -39536,8 +39692,8 @@ L.9:
 return:
 	ret void
 }
-@S.1048 = private unnamed_addr constant [19 x i8] c"\09store %T %N, %T* \00"
-@S.1049 = private unnamed_addr constant [18 x i8] c"\09br label %return\00"
+@S.1049 = private unnamed_addr constant [19 x i8] c"\09store %T %N, %T* \00"
+@S.1050 = private unnamed_addr constant [18 x i8] c"\09br label %return\00"
 define internal zeroext i8 @llvm_Return(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -39571,7 +39727,7 @@ L.5:
 	store %ast.AstNode* %15, %ast.AstNode** %rnode
 	%16 = load %ast.AstNode*, %ast.AstNode** %rnode
 	%17 = call i8 @llvm_GenSub(%ast.AstNode* %16)
-	%18 = getelementptr [19 x i8], [19 x i8]* @S.1048
+	%18 = getelementptr [19 x i8], [19 x i8]* @S.1049
 	%19 = bitcast [19 x i8]* %18 to [0 x i8]*
 	%20 = load %ast.AstNode*, %ast.AstNode** %rnode
 	call void @llvm_Print([0 x i8]* %19, %ast.AstNode* %20)
@@ -39596,7 +39752,7 @@ L.4:
 	br label %L.1
 L.1:
 	%33 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%34 = getelementptr [18 x i8], [18 x i8]* @S.1049
+	%34 = getelementptr [18 x i8], [18 x i8]* @S.1050
 	%35 = bitcast [18 x i8]* %34 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %33, [0 x i8]* %35)
 	%36 = load %ast.AstNode*, %ast.AstNode** %node
@@ -39607,7 +39763,7 @@ return:
 	%37 = load i8, i8* %rv.0
 	ret i8 %37
 }
-@S.1050 = private unnamed_addr constant [38 x i8] c"\09%N = select i1 %0N, %1T %1N, %2T %2N\00"
+@S.1051 = private unnamed_addr constant [38 x i8] c"\09%N = select i1 %0N, %1T %1N, %2T %2N\00"
 define internal void @llvm_IfExpr(%ast.AstNode* %node$) nounwind {
 L.0:
 	%node = alloca %ast.AstNode*
@@ -39634,7 +39790,7 @@ L.0:
 	%18 = load i16, i16* @llvm_Tseqno
 	%19 = add i16 %18, 1
 	store i16 %19, i16* @llvm_Tseqno
-	%20 = getelementptr [38 x i8], [38 x i8]* @S.1050
+	%20 = getelementptr [38 x i8], [38 x i8]* @S.1051
 	%21 = bitcast [38 x i8]* %20 to [0 x i8]*
 	%22 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %21, %ast.AstNode* %22)
@@ -39644,57 +39800,57 @@ L.0:
 return:
 	ret void
 }
-@S.1051 = private unnamed_addr constant [32 x i8] c"\09%N = getelementptr %R, %K %0N\0A\00"
-@S.1052 = private unnamed_addr constant [28 x i8] c"\09%N = getelementptr %K %0N\0A\00"
-@S.1053 = private unnamed_addr constant [45 x i8] c"\09%N = getelementptr %0R, %0K %0N, %W 0, i32 \00"
-@S.1054 = private unnamed_addr constant [40 x i8] c"\09%N = getelementptr %0K %0N, %W 0, i32 \00"
-@S.1055 = private unnamed_addr constant [49 x i8] c"\09%N = getelementptr %0R, %0K %0N, %W 0, %1T %1N\0A\00"
-@S.1056 = private unnamed_addr constant [44 x i8] c"\09%N = getelementptr %0K %0N, %W 0, %1T %1N\0A\00"
-@S.1057 = private unnamed_addr constant [49 x i8] c"\09%N = getelementptr %0R, %0T %0N, %W 0, %1T %1N\0A\00"
-@S.1058 = private unnamed_addr constant [44 x i8] c"\09%N = getelementptr %0T %0N, %W 0, %1T %1N\0A\00"
-@S.1059 = private unnamed_addr constant [27 x i8] c" = bitcast %**K* %N to %T\0A\00"
-@S.1060 = private unnamed_addr constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
-@S.1061 = private unnamed_addr constant [30 x i8] c"\09%N = inttoptr %0T %0N to %T\0A\00"
-@S.1062 = private unnamed_addr constant [30 x i8] c"\09%N = ptrtoint %0T %0N to %T\0A\00"
-@S.1063 = private unnamed_addr constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
-@S.1064 = private unnamed_addr constant [5 x i8] c"zext\00"
-@S.1065 = private unnamed_addr constant [5 x i8] c"sext\00"
-@S.1066 = private unnamed_addr constant [6 x i8] c"trunc\00"
-@S.1067 = private unnamed_addr constant [4 x i8] c"add\00"
-@S.1068 = private unnamed_addr constant [4 x i8] c"sub\00"
-@S.1069 = private unnamed_addr constant [4 x i8] c"mul\00"
-@S.1070 = private unnamed_addr constant [5 x i8] c"udiv\00"
-@S.1071 = private unnamed_addr constant [5 x i8] c"sdiv\00"
-@S.1072 = private unnamed_addr constant [5 x i8] c"urem\00"
-@S.1073 = private unnamed_addr constant [5 x i8] c"srem\00"
-@S.1074 = private unnamed_addr constant [4 x i8] c"shl\00"
-@S.1075 = private unnamed_addr constant [5 x i8] c"lshr\00"
-@S.1076 = private unnamed_addr constant [5 x i8] c"ashr\00"
-@S.1077 = private unnamed_addr constant [5 x i8] c"fadd\00"
-@S.1078 = private unnamed_addr constant [5 x i8] c"fsub\00"
-@S.1079 = private unnamed_addr constant [5 x i8] c"fmul\00"
-@S.1080 = private unnamed_addr constant [5 x i8] c"fdiv\00"
-@S.1081 = private unnamed_addr constant [5 x i8] c"frem\00"
-@S.1082 = private unnamed_addr constant [8 x i8] c"icmp eq\00"
-@S.1083 = private unnamed_addr constant [8 x i8] c"icmp ne\00"
-@S.1084 = private unnamed_addr constant [9 x i8] c"icmp ugt\00"
-@S.1085 = private unnamed_addr constant [9 x i8] c"icmp ult\00"
-@S.1086 = private unnamed_addr constant [9 x i8] c"icmp uge\00"
-@S.1087 = private unnamed_addr constant [9 x i8] c"icmp ule\00"
-@S.1088 = private unnamed_addr constant [9 x i8] c"icmp sgt\00"
-@S.1089 = private unnamed_addr constant [9 x i8] c"icmp slt\00"
-@S.1090 = private unnamed_addr constant [9 x i8] c"icmp sge\00"
-@S.1091 = private unnamed_addr constant [9 x i8] c"icmp sle\00"
-@S.1092 = private unnamed_addr constant [9 x i8] c"fcmp oeq\00"
-@S.1093 = private unnamed_addr constant [9 x i8] c"fcmp one\00"
-@S.1094 = private unnamed_addr constant [9 x i8] c"fcmp ogt\00"
-@S.1095 = private unnamed_addr constant [9 x i8] c"fcmp olt\00"
-@S.1096 = private unnamed_addr constant [9 x i8] c"fcmp oge\00"
-@S.1097 = private unnamed_addr constant [9 x i8] c"fcmp ole\00"
-@S.1098 = private unnamed_addr constant [4 x i8] c"and\00"
-@S.1099 = private unnamed_addr constant [3 x i8] c"or\00"
-@S.1100 = private unnamed_addr constant [4 x i8] c"xor\00"
-@S.1101 = private unnamed_addr constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
+@S.1052 = private unnamed_addr constant [32 x i8] c"\09%N = getelementptr %R, %K %0N\0A\00"
+@S.1053 = private unnamed_addr constant [28 x i8] c"\09%N = getelementptr %K %0N\0A\00"
+@S.1054 = private unnamed_addr constant [45 x i8] c"\09%N = getelementptr %0R, %0K %0N, %W 0, i32 \00"
+@S.1055 = private unnamed_addr constant [40 x i8] c"\09%N = getelementptr %0K %0N, %W 0, i32 \00"
+@S.1056 = private unnamed_addr constant [49 x i8] c"\09%N = getelementptr %0R, %0K %0N, %W 0, %1T %1N\0A\00"
+@S.1057 = private unnamed_addr constant [44 x i8] c"\09%N = getelementptr %0K %0N, %W 0, %1T %1N\0A\00"
+@S.1058 = private unnamed_addr constant [49 x i8] c"\09%N = getelementptr %0R, %0T %0N, %W 0, %1T %1N\0A\00"
+@S.1059 = private unnamed_addr constant [44 x i8] c"\09%N = getelementptr %0T %0N, %W 0, %1T %1N\0A\00"
+@S.1060 = private unnamed_addr constant [27 x i8] c" = bitcast %**K* %N to %T\0A\00"
+@S.1061 = private unnamed_addr constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
+@S.1062 = private unnamed_addr constant [30 x i8] c"\09%N = inttoptr %0T %0N to %T\0A\00"
+@S.1063 = private unnamed_addr constant [30 x i8] c"\09%N = ptrtoint %0T %0N to %T\0A\00"
+@S.1064 = private unnamed_addr constant [29 x i8] c"\09%N = bitcast %0K %0N to %K\0A\00"
+@S.1065 = private unnamed_addr constant [5 x i8] c"zext\00"
+@S.1066 = private unnamed_addr constant [5 x i8] c"sext\00"
+@S.1067 = private unnamed_addr constant [6 x i8] c"trunc\00"
+@S.1068 = private unnamed_addr constant [4 x i8] c"add\00"
+@S.1069 = private unnamed_addr constant [4 x i8] c"sub\00"
+@S.1070 = private unnamed_addr constant [4 x i8] c"mul\00"
+@S.1071 = private unnamed_addr constant [5 x i8] c"udiv\00"
+@S.1072 = private unnamed_addr constant [5 x i8] c"sdiv\00"
+@S.1073 = private unnamed_addr constant [5 x i8] c"urem\00"
+@S.1074 = private unnamed_addr constant [5 x i8] c"srem\00"
+@S.1075 = private unnamed_addr constant [4 x i8] c"shl\00"
+@S.1076 = private unnamed_addr constant [5 x i8] c"lshr\00"
+@S.1077 = private unnamed_addr constant [5 x i8] c"ashr\00"
+@S.1078 = private unnamed_addr constant [5 x i8] c"fadd\00"
+@S.1079 = private unnamed_addr constant [5 x i8] c"fsub\00"
+@S.1080 = private unnamed_addr constant [5 x i8] c"fmul\00"
+@S.1081 = private unnamed_addr constant [5 x i8] c"fdiv\00"
+@S.1082 = private unnamed_addr constant [5 x i8] c"frem\00"
+@S.1083 = private unnamed_addr constant [8 x i8] c"icmp eq\00"
+@S.1084 = private unnamed_addr constant [8 x i8] c"icmp ne\00"
+@S.1085 = private unnamed_addr constant [9 x i8] c"icmp ugt\00"
+@S.1086 = private unnamed_addr constant [9 x i8] c"icmp ult\00"
+@S.1087 = private unnamed_addr constant [9 x i8] c"icmp uge\00"
+@S.1088 = private unnamed_addr constant [9 x i8] c"icmp ule\00"
+@S.1089 = private unnamed_addr constant [9 x i8] c"icmp sgt\00"
+@S.1090 = private unnamed_addr constant [9 x i8] c"icmp slt\00"
+@S.1091 = private unnamed_addr constant [9 x i8] c"icmp sge\00"
+@S.1092 = private unnamed_addr constant [9 x i8] c"icmp sle\00"
+@S.1093 = private unnamed_addr constant [9 x i8] c"fcmp oeq\00"
+@S.1094 = private unnamed_addr constant [9 x i8] c"fcmp one\00"
+@S.1095 = private unnamed_addr constant [9 x i8] c"fcmp ogt\00"
+@S.1096 = private unnamed_addr constant [9 x i8] c"fcmp olt\00"
+@S.1097 = private unnamed_addr constant [9 x i8] c"fcmp oge\00"
+@S.1098 = private unnamed_addr constant [9 x i8] c"fcmp ole\00"
+@S.1099 = private unnamed_addr constant [4 x i8] c"and\00"
+@S.1100 = private unnamed_addr constant [3 x i8] c"or\00"
+@S.1101 = private unnamed_addr constant [4 x i8] c"xor\00"
+@S.1102 = private unnamed_addr constant [24 x i8] c"\09%N = xor i1 %0N, true\0A\00"
 define internal zeroext i8 @llvm_GenSub(%ast.AstNode* %node$) nounwind {
 L.0:
 	%rv.0 = alloca i8
@@ -40002,13 +40158,13 @@ L.24:
 	%103 = icmp ne i8 %102, 0
 	br i1 %103, label %L.95, label %L.96
 L.95:
-	%104 = getelementptr [32 x i8], [32 x i8]* @S.1051
+	%104 = getelementptr [32 x i8], [32 x i8]* @S.1052
 	%105 = bitcast [32 x i8]* %104 to [0 x i8]*
 	%106 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %105, %ast.AstNode* %106)
 	br label %L.94
 L.96:
-	%107 = getelementptr [28 x i8], [28 x i8]* @S.1052
+	%107 = getelementptr [28 x i8], [28 x i8]* @S.1053
 	%108 = bitcast [28 x i8]* %107 to [0 x i8]*
 	%109 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %108, %ast.AstNode* %109)
@@ -40033,13 +40189,13 @@ L.25:
 	%122 = icmp ne i8 %121, 0
 	br i1 %122, label %L.98, label %L.99
 L.98:
-	%123 = getelementptr [45 x i8], [45 x i8]* @S.1053
+	%123 = getelementptr [45 x i8], [45 x i8]* @S.1054
 	%124 = bitcast [45 x i8]* %123 to [0 x i8]*
 	%125 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %124, %ast.AstNode* %125)
 	br label %L.97
 L.99:
-	%126 = getelementptr [40 x i8], [40 x i8]* @S.1054
+	%126 = getelementptr [40 x i8], [40 x i8]* @S.1055
 	%127 = bitcast [40 x i8]* %126 to [0 x i8]*
 	%128 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %127, %ast.AstNode* %128)
@@ -40087,13 +40243,13 @@ L.26:
 	%161 = icmp ne i8 %160, 0
 	br i1 %161, label %L.101, label %L.102
 L.101:
-	%162 = getelementptr [49 x i8], [49 x i8]* @S.1055
+	%162 = getelementptr [49 x i8], [49 x i8]* @S.1056
 	%163 = bitcast [49 x i8]* %162 to [0 x i8]*
 	%164 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %163, %ast.AstNode* %164)
 	br label %L.100
 L.102:
-	%165 = getelementptr [44 x i8], [44 x i8]* @S.1056
+	%165 = getelementptr [44 x i8], [44 x i8]* @S.1057
 	%166 = bitcast [44 x i8]* %165 to [0 x i8]*
 	%167 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %166, %ast.AstNode* %167)
@@ -40139,13 +40295,13 @@ L.27:
 	%197 = icmp ne i8 %196, 0
 	br i1 %197, label %L.104, label %L.105
 L.104:
-	%198 = getelementptr [49 x i8], [49 x i8]* @S.1057
+	%198 = getelementptr [49 x i8], [49 x i8]* @S.1058
 	%199 = bitcast [49 x i8]* %198 to [0 x i8]*
 	%200 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %199, %ast.AstNode* %200)
 	br label %L.103
 L.105:
-	%201 = getelementptr [44 x i8], [44 x i8]* @S.1058
+	%201 = getelementptr [44 x i8], [44 x i8]* @S.1059
 	%202 = bitcast [44 x i8]* %201 to [0 x i8]*
 	%203 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %202, %ast.AstNode* %203)
@@ -40155,7 +40311,7 @@ L.103:
 	call void @bout_BufIO_chr(%bout.BufIO* %204, i8 9)
 	%205 = load i16, i16* %nextseqno
 	call void @llvm_PTempName(i16 %205)
-	%206 = getelementptr [27 x i8], [27 x i8]* @S.1059
+	%206 = getelementptr [27 x i8], [27 x i8]* @S.1060
 	%207 = bitcast [27 x i8]* %206 to [0 x i8]*
 	%208 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %207, %ast.AstNode* %208)
@@ -40196,13 +40352,13 @@ L.107:
 	%236 = icmp eq i8 %235, 5
 	br i1 %236, label %L.110, label %L.111
 L.110:
-	%237 = getelementptr [29 x i8], [29 x i8]* @S.1060
+	%237 = getelementptr [29 x i8], [29 x i8]* @S.1061
 	%238 = bitcast [29 x i8]* %237 to [0 x i8]*
 	%239 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %238, %ast.AstNode* %239)
 	br label %L.109
 L.111:
-	%240 = getelementptr [30 x i8], [30 x i8]* @S.1061
+	%240 = getelementptr [30 x i8], [30 x i8]* @S.1062
 	%241 = bitcast [30 x i8]* %240 to [0 x i8]*
 	%242 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %241, %ast.AstNode* %242)
@@ -40221,13 +40377,13 @@ L.108:
 	%251 = icmp eq i8 %250, 5
 	br i1 %251, label %L.113, label %L.114
 L.113:
-	%252 = getelementptr [30 x i8], [30 x i8]* @S.1062
+	%252 = getelementptr [30 x i8], [30 x i8]* @S.1063
 	%253 = bitcast [30 x i8]* %252 to [0 x i8]*
 	%254 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %253, %ast.AstNode* %254)
 	br label %L.112
 L.114:
-	%255 = getelementptr [29 x i8], [29 x i8]* @S.1063
+	%255 = getelementptr [29 x i8], [29 x i8]* @S.1064
 	%256 = bitcast [29 x i8]* %255 to [0 x i8]*
 	%257 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %256, %ast.AstNode* %257)
@@ -40238,19 +40394,19 @@ L.106:
 	br label %L.6
 L.29:
 	%258 = load %ast.AstNode*, %ast.AstNode** %node
-	%259 = getelementptr [5 x i8], [5 x i8]* @S.1064
+	%259 = getelementptr [5 x i8], [5 x i8]* @S.1065
 	%260 = bitcast [5 x i8]* %259 to [0 x i8]*
 	call void @llvm_ChangeSize(%ast.AstNode* %258, [0 x i8]* %260)
 	br label %L.6
 L.30:
 	%261 = load %ast.AstNode*, %ast.AstNode** %node
-	%262 = getelementptr [5 x i8], [5 x i8]* @S.1065
+	%262 = getelementptr [5 x i8], [5 x i8]* @S.1066
 	%263 = bitcast [5 x i8]* %262 to [0 x i8]*
 	call void @llvm_ChangeSize(%ast.AstNode* %261, [0 x i8]* %263)
 	br label %L.6
 L.31:
 	%264 = load %ast.AstNode*, %ast.AstNode** %node
-	%265 = getelementptr [6 x i8], [6 x i8]* @S.1066
+	%265 = getelementptr [6 x i8], [6 x i8]* @S.1067
 	%266 = bitcast [6 x i8]* %265 to [0 x i8]*
 	call void @llvm_ChangeSize(%ast.AstNode* %264, [0 x i8]* %266)
 	br label %L.6
@@ -40280,213 +40436,213 @@ L.37:
 	br label %L.6
 L.38:
 	%275 = load %ast.AstNode*, %ast.AstNode** %node
-	%276 = getelementptr [4 x i8], [4 x i8]* @S.1067
+	%276 = getelementptr [4 x i8], [4 x i8]* @S.1068
 	%277 = bitcast [4 x i8]* %276 to [0 x i8]*
 	%278 = call i8 @llvm_BinaryOp(%ast.AstNode* %275, [0 x i8]* %277)
 	br label %L.6
 L.39:
 	%279 = load %ast.AstNode*, %ast.AstNode** %node
-	%280 = getelementptr [4 x i8], [4 x i8]* @S.1068
+	%280 = getelementptr [4 x i8], [4 x i8]* @S.1069
 	%281 = bitcast [4 x i8]* %280 to [0 x i8]*
 	%282 = call i8 @llvm_BinaryOp(%ast.AstNode* %279, [0 x i8]* %281)
 	br label %L.6
 L.40:
 	%283 = load %ast.AstNode*, %ast.AstNode** %node
-	%284 = getelementptr [4 x i8], [4 x i8]* @S.1069
+	%284 = getelementptr [4 x i8], [4 x i8]* @S.1070
 	%285 = bitcast [4 x i8]* %284 to [0 x i8]*
 	%286 = call i8 @llvm_BinaryOp(%ast.AstNode* %283, [0 x i8]* %285)
 	br label %L.6
 L.41:
 	%287 = load %ast.AstNode*, %ast.AstNode** %node
-	%288 = getelementptr [5 x i8], [5 x i8]* @S.1070
+	%288 = getelementptr [5 x i8], [5 x i8]* @S.1071
 	%289 = bitcast [5 x i8]* %288 to [0 x i8]*
-	%290 = getelementptr [5 x i8], [5 x i8]* @S.1071
+	%290 = getelementptr [5 x i8], [5 x i8]* @S.1072
 	%291 = bitcast [5 x i8]* %290 to [0 x i8]*
 	%292 = call i8 @llvm_SignedBinaryOp(%ast.AstNode* %287, [0 x i8]* %289, [0 x i8]* %291)
 	br label %L.6
 L.42:
 	%293 = load %ast.AstNode*, %ast.AstNode** %node
-	%294 = getelementptr [5 x i8], [5 x i8]* @S.1072
+	%294 = getelementptr [5 x i8], [5 x i8]* @S.1073
 	%295 = bitcast [5 x i8]* %294 to [0 x i8]*
-	%296 = getelementptr [5 x i8], [5 x i8]* @S.1073
+	%296 = getelementptr [5 x i8], [5 x i8]* @S.1074
 	%297 = bitcast [5 x i8]* %296 to [0 x i8]*
 	%298 = call i8 @llvm_SignedBinaryOp(%ast.AstNode* %293, [0 x i8]* %295, [0 x i8]* %297)
 	br label %L.6
 L.43:
 	%299 = load %ast.AstNode*, %ast.AstNode** %node
-	%300 = getelementptr [4 x i8], [4 x i8]* @S.1074
+	%300 = getelementptr [4 x i8], [4 x i8]* @S.1075
 	%301 = bitcast [4 x i8]* %300 to [0 x i8]*
 	%302 = call i8 @llvm_BinaryOp(%ast.AstNode* %299, [0 x i8]* %301)
 	br label %L.6
 L.44:
 	%303 = load %ast.AstNode*, %ast.AstNode** %node
-	%304 = getelementptr [5 x i8], [5 x i8]* @S.1075
+	%304 = getelementptr [5 x i8], [5 x i8]* @S.1076
 	%305 = bitcast [5 x i8]* %304 to [0 x i8]*
 	%306 = call i8 @llvm_BinaryOp(%ast.AstNode* %303, [0 x i8]* %305)
 	br label %L.6
 L.45:
 	%307 = load %ast.AstNode*, %ast.AstNode** %node
-	%308 = getelementptr [5 x i8], [5 x i8]* @S.1076
+	%308 = getelementptr [5 x i8], [5 x i8]* @S.1077
 	%309 = bitcast [5 x i8]* %308 to [0 x i8]*
 	%310 = call i8 @llvm_BinaryOp(%ast.AstNode* %307, [0 x i8]* %309)
 	br label %L.6
 L.46:
 	%311 = load %ast.AstNode*, %ast.AstNode** %node
-	%312 = getelementptr [5 x i8], [5 x i8]* @S.1077
+	%312 = getelementptr [5 x i8], [5 x i8]* @S.1078
 	%313 = bitcast [5 x i8]* %312 to [0 x i8]*
 	%314 = call i8 @llvm_BinaryOp(%ast.AstNode* %311, [0 x i8]* %313)
 	br label %L.6
 L.47:
 	%315 = load %ast.AstNode*, %ast.AstNode** %node
-	%316 = getelementptr [5 x i8], [5 x i8]* @S.1078
+	%316 = getelementptr [5 x i8], [5 x i8]* @S.1079
 	%317 = bitcast [5 x i8]* %316 to [0 x i8]*
 	%318 = call i8 @llvm_BinaryOp(%ast.AstNode* %315, [0 x i8]* %317)
 	br label %L.6
 L.48:
 	%319 = load %ast.AstNode*, %ast.AstNode** %node
-	%320 = getelementptr [5 x i8], [5 x i8]* @S.1079
+	%320 = getelementptr [5 x i8], [5 x i8]* @S.1080
 	%321 = bitcast [5 x i8]* %320 to [0 x i8]*
 	%322 = call i8 @llvm_BinaryOp(%ast.AstNode* %319, [0 x i8]* %321)
 	br label %L.6
 L.49:
 	%323 = load %ast.AstNode*, %ast.AstNode** %node
-	%324 = getelementptr [5 x i8], [5 x i8]* @S.1080
+	%324 = getelementptr [5 x i8], [5 x i8]* @S.1081
 	%325 = bitcast [5 x i8]* %324 to [0 x i8]*
 	%326 = call i8 @llvm_BinaryOp(%ast.AstNode* %323, [0 x i8]* %325)
 	br label %L.6
 L.50:
 	%327 = load %ast.AstNode*, %ast.AstNode** %node
-	%328 = getelementptr [5 x i8], [5 x i8]* @S.1081
+	%328 = getelementptr [5 x i8], [5 x i8]* @S.1082
 	%329 = bitcast [5 x i8]* %328 to [0 x i8]*
 	%330 = call i8 @llvm_BinaryOp(%ast.AstNode* %327, [0 x i8]* %329)
 	br label %L.6
 L.51:
 	%331 = load %ast.AstNode*, %ast.AstNode** %node
-	%332 = getelementptr [8 x i8], [8 x i8]* @S.1082
+	%332 = getelementptr [8 x i8], [8 x i8]* @S.1083
 	%333 = bitcast [8 x i8]* %332 to [0 x i8]*
 	%334 = call i8 @llvm_CompareOp(%ast.AstNode* %331, [0 x i8]* %333)
 	store i8 %334, i8* %term
 	br label %L.6
 L.52:
 	%335 = load %ast.AstNode*, %ast.AstNode** %node
-	%336 = getelementptr [8 x i8], [8 x i8]* @S.1083
+	%336 = getelementptr [8 x i8], [8 x i8]* @S.1084
 	%337 = bitcast [8 x i8]* %336 to [0 x i8]*
 	%338 = call i8 @llvm_CompareOp(%ast.AstNode* %335, [0 x i8]* %337)
 	store i8 %338, i8* %term
 	br label %L.6
 L.53:
 	%339 = load %ast.AstNode*, %ast.AstNode** %node
-	%340 = getelementptr [9 x i8], [9 x i8]* @S.1084
+	%340 = getelementptr [9 x i8], [9 x i8]* @S.1085
 	%341 = bitcast [9 x i8]* %340 to [0 x i8]*
 	%342 = call i8 @llvm_CompareOp(%ast.AstNode* %339, [0 x i8]* %341)
 	store i8 %342, i8* %term
 	br label %L.6
 L.54:
 	%343 = load %ast.AstNode*, %ast.AstNode** %node
-	%344 = getelementptr [9 x i8], [9 x i8]* @S.1085
+	%344 = getelementptr [9 x i8], [9 x i8]* @S.1086
 	%345 = bitcast [9 x i8]* %344 to [0 x i8]*
 	%346 = call i8 @llvm_CompareOp(%ast.AstNode* %343, [0 x i8]* %345)
 	store i8 %346, i8* %term
 	br label %L.6
 L.55:
 	%347 = load %ast.AstNode*, %ast.AstNode** %node
-	%348 = getelementptr [9 x i8], [9 x i8]* @S.1086
+	%348 = getelementptr [9 x i8], [9 x i8]* @S.1087
 	%349 = bitcast [9 x i8]* %348 to [0 x i8]*
 	%350 = call i8 @llvm_CompareOp(%ast.AstNode* %347, [0 x i8]* %349)
 	store i8 %350, i8* %term
 	br label %L.6
 L.56:
 	%351 = load %ast.AstNode*, %ast.AstNode** %node
-	%352 = getelementptr [9 x i8], [9 x i8]* @S.1087
+	%352 = getelementptr [9 x i8], [9 x i8]* @S.1088
 	%353 = bitcast [9 x i8]* %352 to [0 x i8]*
 	%354 = call i8 @llvm_CompareOp(%ast.AstNode* %351, [0 x i8]* %353)
 	store i8 %354, i8* %term
 	br label %L.6
 L.57:
 	%355 = load %ast.AstNode*, %ast.AstNode** %node
-	%356 = getelementptr [9 x i8], [9 x i8]* @S.1088
+	%356 = getelementptr [9 x i8], [9 x i8]* @S.1089
 	%357 = bitcast [9 x i8]* %356 to [0 x i8]*
 	%358 = call i8 @llvm_CompareOp(%ast.AstNode* %355, [0 x i8]* %357)
 	store i8 %358, i8* %term
 	br label %L.6
 L.58:
 	%359 = load %ast.AstNode*, %ast.AstNode** %node
-	%360 = getelementptr [9 x i8], [9 x i8]* @S.1089
+	%360 = getelementptr [9 x i8], [9 x i8]* @S.1090
 	%361 = bitcast [9 x i8]* %360 to [0 x i8]*
 	%362 = call i8 @llvm_CompareOp(%ast.AstNode* %359, [0 x i8]* %361)
 	store i8 %362, i8* %term
 	br label %L.6
 L.59:
 	%363 = load %ast.AstNode*, %ast.AstNode** %node
-	%364 = getelementptr [9 x i8], [9 x i8]* @S.1090
+	%364 = getelementptr [9 x i8], [9 x i8]* @S.1091
 	%365 = bitcast [9 x i8]* %364 to [0 x i8]*
 	%366 = call i8 @llvm_CompareOp(%ast.AstNode* %363, [0 x i8]* %365)
 	store i8 %366, i8* %term
 	br label %L.6
 L.60:
 	%367 = load %ast.AstNode*, %ast.AstNode** %node
-	%368 = getelementptr [9 x i8], [9 x i8]* @S.1091
+	%368 = getelementptr [9 x i8], [9 x i8]* @S.1092
 	%369 = bitcast [9 x i8]* %368 to [0 x i8]*
 	%370 = call i8 @llvm_CompareOp(%ast.AstNode* %367, [0 x i8]* %369)
 	store i8 %370, i8* %term
 	br label %L.6
 L.61:
 	%371 = load %ast.AstNode*, %ast.AstNode** %node
-	%372 = getelementptr [9 x i8], [9 x i8]* @S.1092
+	%372 = getelementptr [9 x i8], [9 x i8]* @S.1093
 	%373 = bitcast [9 x i8]* %372 to [0 x i8]*
 	%374 = call i8 @llvm_CompareOp(%ast.AstNode* %371, [0 x i8]* %373)
 	store i8 %374, i8* %term
 	br label %L.6
 L.62:
 	%375 = load %ast.AstNode*, %ast.AstNode** %node
-	%376 = getelementptr [9 x i8], [9 x i8]* @S.1093
+	%376 = getelementptr [9 x i8], [9 x i8]* @S.1094
 	%377 = bitcast [9 x i8]* %376 to [0 x i8]*
 	%378 = call i8 @llvm_CompareOp(%ast.AstNode* %375, [0 x i8]* %377)
 	store i8 %378, i8* %term
 	br label %L.6
 L.63:
 	%379 = load %ast.AstNode*, %ast.AstNode** %node
-	%380 = getelementptr [9 x i8], [9 x i8]* @S.1094
+	%380 = getelementptr [9 x i8], [9 x i8]* @S.1095
 	%381 = bitcast [9 x i8]* %380 to [0 x i8]*
 	%382 = call i8 @llvm_CompareOp(%ast.AstNode* %379, [0 x i8]* %381)
 	store i8 %382, i8* %term
 	br label %L.6
 L.64:
 	%383 = load %ast.AstNode*, %ast.AstNode** %node
-	%384 = getelementptr [9 x i8], [9 x i8]* @S.1095
+	%384 = getelementptr [9 x i8], [9 x i8]* @S.1096
 	%385 = bitcast [9 x i8]* %384 to [0 x i8]*
 	%386 = call i8 @llvm_CompareOp(%ast.AstNode* %383, [0 x i8]* %385)
 	store i8 %386, i8* %term
 	br label %L.6
 L.65:
 	%387 = load %ast.AstNode*, %ast.AstNode** %node
-	%388 = getelementptr [9 x i8], [9 x i8]* @S.1096
+	%388 = getelementptr [9 x i8], [9 x i8]* @S.1097
 	%389 = bitcast [9 x i8]* %388 to [0 x i8]*
 	%390 = call i8 @llvm_CompareOp(%ast.AstNode* %387, [0 x i8]* %389)
 	store i8 %390, i8* %term
 	br label %L.6
 L.66:
 	%391 = load %ast.AstNode*, %ast.AstNode** %node
-	%392 = getelementptr [9 x i8], [9 x i8]* @S.1097
+	%392 = getelementptr [9 x i8], [9 x i8]* @S.1098
 	%393 = bitcast [9 x i8]* %392 to [0 x i8]*
 	%394 = call i8 @llvm_CompareOp(%ast.AstNode* %391, [0 x i8]* %393)
 	store i8 %394, i8* %term
 	br label %L.6
 L.67:
 	%395 = load %ast.AstNode*, %ast.AstNode** %node
-	%396 = getelementptr [4 x i8], [4 x i8]* @S.1098
+	%396 = getelementptr [4 x i8], [4 x i8]* @S.1099
 	%397 = bitcast [4 x i8]* %396 to [0 x i8]*
 	%398 = call i8 @llvm_BinaryOp(%ast.AstNode* %395, [0 x i8]* %397)
 	br label %L.6
 L.68:
 	%399 = load %ast.AstNode*, %ast.AstNode** %node
-	%400 = getelementptr [3 x i8], [3 x i8]* @S.1099
+	%400 = getelementptr [3 x i8], [3 x i8]* @S.1100
 	%401 = bitcast [3 x i8]* %400 to [0 x i8]*
 	%402 = call i8 @llvm_BinaryOp(%ast.AstNode* %399, [0 x i8]* %401)
 	br label %L.6
 L.69:
 	%403 = load %ast.AstNode*, %ast.AstNode** %node
-	%404 = getelementptr [4 x i8], [4 x i8]* @S.1100
+	%404 = getelementptr [4 x i8], [4 x i8]* @S.1101
 	%405 = bitcast [4 x i8]* %404 to [0 x i8]*
 	%406 = call i8 @llvm_BinaryOp(%ast.AstNode* %403, [0 x i8]* %405)
 	br label %L.6
@@ -40503,7 +40659,7 @@ L.70:
 	%415 = load i16, i16* @llvm_Tseqno
 	%416 = add i16 %415, 1
 	store i16 %416, i16* @llvm_Tseqno
-	%417 = getelementptr [24 x i8], [24 x i8]* @S.1101
+	%417 = getelementptr [24 x i8], [24 x i8]* @S.1102
 	%418 = bitcast [24 x i8]* %417 to [0 x i8]*
 	%419 = load %ast.AstNode*, %ast.AstNode** %node
 	call void @llvm_Print([0 x i8]* %418, %ast.AstNode* %419)
@@ -40603,19 +40759,19 @@ return:
 	%457 = load i8, i8* %rv.0
 	ret i8 %457
 }
-@S.1102 = private unnamed_addr constant [22 x i8] c"target datalayout = \22\00"
-@S.1103 = private unnamed_addr constant [2 x i8] c"E\00"
-@S.1104 = private unnamed_addr constant [2 x i8] c"e\00"
-@S.1105 = private unnamed_addr constant [4 x i8] c"-p:\00"
-@S.1106 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1103 = private unnamed_addr constant [22 x i8] c"target datalayout = \22\00"
+@S.1104 = private unnamed_addr constant [2 x i8] c"E\00"
+@S.1105 = private unnamed_addr constant [2 x i8] c"e\00"
+@S.1106 = private unnamed_addr constant [4 x i8] c"-p:\00"
 @S.1107 = private unnamed_addr constant [2 x i8] c":\00"
-@S.1108 = private unnamed_addr constant [5 x i8] c"-i1:\00"
-@S.1109 = private unnamed_addr constant [2 x i8] c":\00"
-@S.1110 = private unnamed_addr constant [3 x i8] c"-i\00"
-@S.1111 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1108 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1109 = private unnamed_addr constant [5 x i8] c"-i1:\00"
+@S.1110 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1111 = private unnamed_addr constant [3 x i8] c"-i\00"
 @S.1112 = private unnamed_addr constant [2 x i8] c":\00"
-@S.1113 = private unnamed_addr constant [20 x i8] c"\22\0Atarget triple = \22\00"
-@S.1114 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
+@S.1113 = private unnamed_addr constant [2 x i8] c":\00"
+@S.1114 = private unnamed_addr constant [20 x i8] c"\22\0Atarget triple = \22\00"
+@S.1115 = private unnamed_addr constant [3 x i8] c"\22\0A\00"
 define internal void @llvm_Gen(i64 %fd$, %ast.AstNode* %tree$) nounwind {
 L.0:
 	%fd = alloca i64
@@ -40655,7 +40811,7 @@ L.3:
 	br label %L.1
 L.2:
 	%20 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%21 = getelementptr [22 x i8], [22 x i8]* @S.1102
+	%21 = getelementptr [22 x i8], [22 x i8]* @S.1103
 	%22 = bitcast [22 x i8]* %21 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %20, [0 x i8]* %22)
 	%23 = load %target.ModelT*, %target.ModelT** @target_Target
@@ -40665,19 +40821,19 @@ L.2:
 	br i1 %26, label %L.5, label %L.6
 L.5:
 	%27 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%28 = getelementptr [2 x i8], [2 x i8]* @S.1103
+	%28 = getelementptr [2 x i8], [2 x i8]* @S.1104
 	%29 = bitcast [2 x i8]* %28 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %27, [0 x i8]* %29)
 	br label %L.4
 L.6:
 	%30 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%31 = getelementptr [2 x i8], [2 x i8]* @S.1104
+	%31 = getelementptr [2 x i8], [2 x i8]* @S.1105
 	%32 = bitcast [2 x i8]* %31 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %30, [0 x i8]* %32)
 	br label %L.4
 L.4:
 	%33 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%34 = getelementptr [4 x i8], [4 x i8]* @S.1105
+	%34 = getelementptr [4 x i8], [4 x i8]* @S.1106
 	%35 = bitcast [4 x i8]* %34 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %33, [0 x i8]* %35)
 	%36 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40688,7 +40844,7 @@ L.4:
 	%41 = zext i8 %40 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %36, i64 %41)
 	%42 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%43 = getelementptr [2 x i8], [2 x i8]* @S.1106
+	%43 = getelementptr [2 x i8], [2 x i8]* @S.1107
 	%44 = bitcast [2 x i8]* %43 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %42, [0 x i8]* %44)
 	%45 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40699,7 +40855,7 @@ L.4:
 	%50 = zext i8 %49 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %45, i64 %50)
 	%51 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%52 = getelementptr [2 x i8], [2 x i8]* @S.1107
+	%52 = getelementptr [2 x i8], [2 x i8]* @S.1108
 	%53 = bitcast [2 x i8]* %52 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %51, [0 x i8]* %53)
 	%54 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40710,7 +40866,7 @@ L.4:
 	%59 = zext i8 %58 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %54, i64 %59)
 	%60 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%61 = getelementptr [5 x i8], [5 x i8]* @S.1108
+	%61 = getelementptr [5 x i8], [5 x i8]* @S.1109
 	%62 = bitcast [5 x i8]* %61 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %60, [0 x i8]* %62)
 	%63 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40722,7 +40878,7 @@ L.4:
 	%69 = zext i8 %68 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %63, i64 %69)
 	%70 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%71 = getelementptr [2 x i8], [2 x i8]* @S.1109
+	%71 = getelementptr [2 x i8], [2 x i8]* @S.1110
 	%72 = bitcast [2 x i8]* %71 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %70, [0 x i8]* %72)
 	%73 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40745,7 +40901,7 @@ L.7:
 	br i1 %85, label %L.8, label %L.9
 L.9:
 	%86 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%87 = getelementptr [3 x i8], [3 x i8]* @S.1110
+	%87 = getelementptr [3 x i8], [3 x i8]* @S.1111
 	%88 = bitcast [3 x i8]* %87 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %86, [0 x i8]* %88)
 	%89 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40759,7 +40915,7 @@ L.9:
 	%97 = zext i8 %96 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %89, i64 %97)
 	%98 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%99 = getelementptr [2 x i8], [2 x i8]* @S.1111
+	%99 = getelementptr [2 x i8], [2 x i8]* @S.1112
 	%100 = bitcast [2 x i8]* %99 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %98, [0 x i8]* %100)
 	%101 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40773,7 +40929,7 @@ L.9:
 	%109 = zext i8 %108 to i64
 	call void @bout_BufIO_uint(%bout.BufIO* %101, i64 %109)
 	%110 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%111 = getelementptr [2 x i8], [2 x i8]* @S.1112
+	%111 = getelementptr [2 x i8], [2 x i8]* @S.1113
 	%112 = bitcast [2 x i8]* %111 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %110, [0 x i8]* %112)
 	%113 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40792,7 +40948,7 @@ L.9:
 	br label %L.7
 L.8:
 	%124 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%125 = getelementptr [20 x i8], [20 x i8]* @S.1113
+	%125 = getelementptr [20 x i8], [20 x i8]* @S.1114
 	%126 = bitcast [20 x i8]* %125 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %124, [0 x i8]* %126)
 	%127 = load %bout.BufIO*, %bout.BufIO** @llvm_f
@@ -40800,7 +40956,7 @@ L.8:
 	%129 = bitcast [0 x i8]* %128 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %127, [0 x i8]* %129)
 	%130 = load %bout.BufIO*, %bout.BufIO** @llvm_f
-	%131 = getelementptr [3 x i8], [3 x i8]* @S.1114
+	%131 = getelementptr [3 x i8], [3 x i8]* @S.1115
 	%132 = bitcast [3 x i8]* %131 to [0 x i8]*
 	call void @bout_BufIO_str(%bout.BufIO* %130, [0 x i8]* %132)
 	%133 = getelementptr %A.3, %A.3* @feature, i64 0, i32 3
@@ -40832,13 +40988,13 @@ L.12:
 return:
 	ret void
 }
-@S.1115 = private unnamed_addr constant [5 x i8] c".esl\00"
-@S.1116 = private unnamed_addr constant [5 x i8] c".o: \00"
-@S.1117 = private unnamed_addr constant [35 x i8] c"Unsupported LLVM backend version: \00"
-@S.1118 = private unnamed_addr constant [51 x i8] c"Debug information not supported for LLVM version: \00"
-@S.1119 = private unnamed_addr constant [21 x i8] c"Unsupported target: \00"
-@S.1120 = private unnamed_addr constant [28 x i8] c"Unable to open input file: \00"
-@S.1121 = private unnamed_addr constant [31 x i8] c"Unable to create output file: \00"
+@S.1116 = private unnamed_addr constant [5 x i8] c".esl\00"
+@S.1117 = private unnamed_addr constant [5 x i8] c".o: \00"
+@S.1118 = private unnamed_addr constant [35 x i8] c"Unsupported LLVM backend version: \00"
+@S.1119 = private unnamed_addr constant [51 x i8] c"Debug information not supported for LLVM version: \00"
+@S.1120 = private unnamed_addr constant [21 x i8] c"Unsupported target: \00"
+@S.1121 = private unnamed_addr constant [28 x i8] c"Unable to open input file: \00"
+@S.1122 = private unnamed_addr constant [31 x i8] c"Unable to create output file: \00"
 define i64 @main(i64 %argc$, [0 x [0 x i8]*]* %argv$) nounwind {
 L.0:
 	%rv.0 = alloca i64
@@ -41224,7 +41380,7 @@ L.55:
 	%195 = bitcast i8* %194 to [4 x i8]*
 	%196 = getelementptr [4 x i8], [4 x i8]* %195
 	%197 = bitcast [4 x i8]* %196 to [0 x i8]*
-	%198 = getelementptr [5 x i8], [5 x i8]* @S.1115
+	%198 = getelementptr [5 x i8], [5 x i8]* @S.1116
 	%199 = bitcast [5 x i8]* %198 to [0 x i8]*
 	%200 = call i8 @zstr_eq([0 x i8]* %197, [0 x i8]* %199, i64 1024)
 	%201 = icmp ne i8 %200, 0
@@ -41245,7 +41401,7 @@ L.57:
 	%213 = getelementptr [0 x i8], [0 x i8]* %212
 	%214 = bitcast [0 x i8]* %213 to [0 x i8]*
 	call void @sys_fildes_str(i64 1, [0 x i8]* %214)
-	%215 = getelementptr [5 x i8], [5 x i8]* @S.1116
+	%215 = getelementptr [5 x i8], [5 x i8]* @S.1117
 	%216 = bitcast [5 x i8]* %215 to [0 x i8]*
 	call void @sys_fildes_str(i64 1, [0 x i8]* %216)
 	%217 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
@@ -41263,7 +41419,7 @@ L.54:
 	%goodversion = alloca i8
 	store i8 1, i8* %goodversion
 	%224 = getelementptr %A.3, %A.3* @feature, i64 0, i32 9
-	store i8 5, i8* %224
+	store i8 6, i8* %224
 	%225 = getelementptr %A.3, %A.3* @feature, i64 0, i32 10
 	store i8 1, i8* %225
 	%226 = load [0 x i8]*, [0 x i8]** %llvmversion
@@ -41355,7 +41511,7 @@ L.58:
 	%254 = xor i1 %253, true
 	br i1 %254, label %L.75, label %L.74
 L.75:
-	%255 = getelementptr [35 x i8], [35 x i8]* @S.1117
+	%255 = getelementptr [35 x i8], [35 x i8]* @S.1118
 	%256 = bitcast [35 x i8]* %255 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %256)
 	%257 = load [0 x i8]*, [0 x i8]** %llvmversion
@@ -41378,7 +41534,7 @@ L.77:
 	%265 = phi i1 [ false, %L.74 ], [ %264, %L.76 ]
 	br i1 %265, label %L.79, label %L.78
 L.79:
-	%266 = getelementptr [51 x i8], [51 x i8]* @S.1118
+	%266 = getelementptr [51 x i8], [51 x i8]* @S.1119
 	%267 = bitcast [51 x i8]* %266 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %267)
 	%268 = load [0 x i8]*, [0 x i8]** %llvmversion
@@ -41396,7 +41552,7 @@ L.78:
 	%275 = xor i1 %274, true
 	br i1 %275, label %L.81, label %L.80
 L.81:
-	%276 = getelementptr [21 x i8], [21 x i8]* @S.1119
+	%276 = getelementptr [21 x i8], [21 x i8]* @S.1120
 	%277 = bitcast [21 x i8]* %276 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %277)
 	%278 = load [0 x i8]*, [0 x i8]** %targetarch
@@ -41436,7 +41592,7 @@ L.85:
 	%294 = xor i1 %293, true
 	br i1 %294, label %L.88, label %L.87
 L.88:
-	%295 = getelementptr [28 x i8], [28 x i8]* @S.1120
+	%295 = getelementptr [28 x i8], [28 x i8]* @S.1121
 	%296 = bitcast [28 x i8]* %295 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %296)
 	%297 = load [0 x [0 x i8]*]*, [0 x [0 x i8]*]** %argv
@@ -41462,7 +41618,7 @@ L.90:
 	%309 = icmp slt i64 %308, 0
 	br i1 %309, label %L.92, label %L.91
 L.92:
-	%310 = getelementptr [31 x i8], [31 x i8]* @S.1121
+	%310 = getelementptr [31 x i8], [31 x i8]* @S.1122
 	%311 = bitcast [31 x i8]* %310 to [0 x i8]*
 	call void @sys_fildes_str(i64 2, [0 x i8]* %311)
 	%312 = load [0 x i8]*, [0 x i8]** %outfile

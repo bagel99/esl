@@ -274,35 +274,6 @@ package llvmdb
 	return n;
     }
 
-/*	
-    proc DefRetvs(ps: Symb): seqnoT
-    {   var retvs, tag: seqnoT;
-	var tl: type.TypeList;
-	var term: TermT;
-
-	tl = ps@.retvlist;
-	if tl == 0 then return 0;		// no returned values (void)
-	while tl != 0 do
-	{   DefType(tl@.type);
-	    tl = tl@.next;
-	}
-	tl = ps@.retvlist;
-	if tl@.next == 0 then			// 1 returned value
-	    retvs = tl@.type.dbtag;
-	else					// >1 returned values
-	{   retvs = PNewListStart();
-	    term = COMMA;
-	    while tl != 0 do
-	    {   tag = tl@.type.dbtag;
-		tl = tl@.next;
-		if tl == 0 then term = BRACE;
-		PMetaRef(tag, term);
-	    }
-	}
-	return retvs;
-    }
-*/	
-
     proc DefBasicType(dwtype: DW_ATE, t: type.Type): seqnoT
     {   var tagt: seqnoT;
 

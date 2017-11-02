@@ -148,7 +148,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
     }
     // Check for LLVM backend version
     var goodversion: boolean = true;    // assume OK
-    feature.debug = 5;			// assume the latest
+    feature.debug = 6;			// assume the latest
     feature.syntax37 = true;		// assume the latest
     if llvmversion != 0 then
     {   if llvmversion[0]
