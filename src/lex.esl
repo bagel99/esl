@@ -7,7 +7,7 @@ package lex
     type Errors:
     (   // Warnings
 	NOTIMPL,    EXPERIMENT, WRONGATTR,
-	TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,  AMBIGUOUS,
+	TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,  AMBIGUOUS,  FLEXSIZE,
 	// Errors
 	BADNL,      ILLCHR,     ILLUTF8,    CMTEOF,     BADEOF,     BADCHR,
 	BADHEXESC,  BADUTF8,    IDLONG,     STRLONG,    EXPECT,     EXPECTID,
@@ -39,6 +39,7 @@ package lex
 	[TOUNSIGN] =	"Converting signed to unsigned integer",
 	[BADINTPTR] =	"Pointer converted from wrong size integer",
 	[AMBIGUOUS] =   "Use of identifier is ambiguous: ",
+	[FLEXSIZE] =    "Size of zero assumed for flex size specification",
 	[BADNL] =	"End of line in string or character constant",
 	[ILLCHR] =      "Illegal character in source",
 	[ILLUTF8] =     "Illegal byte in UTF8 sequence",

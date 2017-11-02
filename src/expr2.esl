@@ -377,7 +377,7 @@ package expr
     }
 
     // Convert flex record to non-flex record
-    proc RecordFixFlex(bt: Type, node: Ast): Type
+    proc RecordFixFlex(bt: Type, len: _uint): Type
     {   var t: Type;
 	var s, ps, bs: Symb;
 
@@ -393,8 +393,10 @@ package expr
 	    s@.type = bs@.type;
 	    bs = bs@.next;
 	}
-	// final field must be the flex, change its type
-	ps@.type = node@.child[node@.num-1]@.type;
+	// final field must be the flex
+	// assert ps@.type@.kind == ARRAY
+	ps@.type = ArrayFixFlex(ps@.type, len);
+	t@.flex = false;
 	t@.base = bt;       // set base type for compatibility test
 	// Recalculate size and width
 	t@.size = 0;
@@ -471,7 +473,9 @@ package expr
 		fs = fs@.next;
 	    }
 	    if t@.flex then
-		tree@.type = RecordFixFlex(t, tree);
+	    {   ft = tree@.child[tree@.num-1]@.type;
+		tree@.type = RecordFixFlex(t, ft.hi - ft.lo + 1);
+	    }
 	    if t@.packed then
 		tree = RecordPack(t, tree);
 	    else
@@ -1976,17 +1980,19 @@ type.DumpT(t, false); err.nl();
 	{   tok = Token;
 	  exit tok != BAND;
 	    tok = Next();
-	    rhs = Compare(tree@.type);
-	    if tree@.op == CONST then
-	    {   if tree@.valu != 0 then     // LHS is true
-		    tree = rhs;		    // use RHS otherwise LHS
+	    rhs = Compare(type.booltype);
+	    if tree != 0 && rhs != 0 then
+	    {	if tree@.op == CONST then
+		{   if tree@.valu != 0 then     // LHS is true
+			tree = rhs;		    // use RHS otherwise LHS
+		}
+		elif rhs@.op == CONST then
+		{   if rhs@.valu == 0 then      // RHS is false
+			tree = rhs;		    // use RHS (false) otherwise LHS
+		}
+		else
+		    tree = ast.OpBool(BAND, tree, rhs);
 	    }
-	    elif rhs@.op == CONST then
-	    {   if rhs@.valu == 0 then      // RHS is false
-		    tree = rhs;		    // use RHS (false) otherwise LHS
-	    }
-	    else
-		tree = ast.OpBool(BAND, tree, rhs);
 	}
 	return tree;
     }
@@ -2000,17 +2006,19 @@ type.DumpT(t, false); err.nl();
 	{   tok = Token;
 	  exit tok != BOR;
 	    tok = Next();
-	    rhs = BoolAnd(tree@.type);
-	    if tree@.op == CONST then
-	    {   if tree@.valu == 0 then     // LHS is false
-		    tree = rhs;		    // use RHS otherwise LHS
+	    rhs = Compare(type.booltype);
+	    if tree != 0 && rhs != 0 then
+	    {   if tree@.op == CONST then
+		{   if tree@.valu == 0 then     // LHS is false
+			tree = rhs;		    // use RHS otherwise LHS
+		}
+		elif rhs@.op == CONST then
+		{   if rhs@.valu != 0 then      // RHS is true
+			tree = rhs;		    // use RHS (false) otherwise LHS
+		}
+		else
+		    tree = ast.OpBool(BOR, tree, rhs);
 	    }
-	    elif rhs@.op == CONST then
-	    {   if rhs@.valu != 0 then      // RHS is true
-		    tree = rhs;		    // use RHS (false) otherwise LHS
-	    }
-	    else
-		tree = ast.OpBool(BOR, tree, rhs);
 	}
 	return tree;
     }
