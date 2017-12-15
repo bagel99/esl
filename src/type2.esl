@@ -90,9 +90,37 @@ package type
 	return as == 0 && bs == 0;  // must both be at the end of the list
     }
 
+    proc SameIndex(t1: Type, t2: Type): boolean
+    {
+	// t1 and t2 are arrays
+	if t1@.flex || t2@.flex then return true;
+	assert t1@.index != 0 && t2@.index != 0;
+	return t1@.index@.kind == t2@.index@.kind;
+    }
+
+    proc Same(t1: Type, t2: Type): boolean
+    {
+	if t1 == 0 || t2 == 0 then return true;	// what should this be?
+//err.str("Same\nt1="); type.DumpT(t1, true);
+//err.str("\nt2="); type.DumpT(t2, true); err.nl();
+	if t1 == t2 then return true;		// the trivial case
+	if t1@.kind != t2@.kind then return false;
+	if t2@.kind
+	is UINT, SINT then return t1@.width == t2@.width;
+	is REF then   return Same(t1@.base, t2@.base);
+	is ARRAY then
+	    return Same(t1@.base, t2@.base) && SameIndex(t1, t2);
+	is REFPROC then
+	    return SameSymbList(t1@.list@.parmlist, t2@.list@.parmlist) &&
+	           SameTypeList(t1@.list@.retvlist, t2@.list@.retvlist);
+	return false;
+    }
+
     proc Compat(t1: Type, t2: Type): boolean
     {
 	if t1 == 0 || t2 == 0 then return true;	// what should this be?
+//err.str("Compat\nt1="); type.DumpT(t1, true);
+//err.str("\nt2="); type.DumpT(t2, true); err.nl();
 	if t1 == t2 then return true;		// the trivial case
 	if t1@.kind != t2@.kind then return false;
 	if t1@.atbase != 0 then return Compat(t1@.atbase, t2);
@@ -118,7 +146,8 @@ package type
 	    return false;
 	}
 	is REF then    return Compat(t1@.base, t2@.base);
-	is ARRAY then  return Compat(t1@.base, t2@.base);	// FIXME: check index?
+	is ARRAY then
+	    return Same(t1@.base, t2@.base) && SameIndex(t1, t2);
 	is REFPROC then
 	    return SameSymbList(t1@.list@.parmlist, t2@.list@.parmlist) &&
 	           SameTypeList(t1@.list@.retvlist, t2@.list@.retvlist);
@@ -231,7 +260,7 @@ package type
 	KLSB, KMSB,
 	KLE, KBE,
 	KRO, KWO,
-	KINPUT, KOUTPUT,
+	KINPUT, KOUTPUT,KIO,
 	KMEMSZ, KBITSZ, KALIGN,
 	NONE
     };
@@ -266,8 +295,9 @@ package type
 		    is KBE then     t@.memorder = BE;
 		    is KRO then     t@.access = RO;
 		    is KWO then     t@.access = WO;
-		    is KINPUT then  t@.input = true;
-		    is KOUTPUT then t@.output = true;
+		    is KINPUT then  t@.io.in = true;
+		    is KOUTPUT then t@.io.out = true;
+		    is KIO then     t@.io = {true, true};
 		    is KMEMSZ then 
 		    {   if tok == PBEG then
 			{   tok = Next();
@@ -1190,6 +1220,8 @@ if debug.tests[2] then {
 		    {	err.uint32(_uint32(t@.lo));
 		        err.str("..");
 			err.uint32(_uint32(t@.hi));
+			err.chr(':');
+			Dump2(t@.index, indent, full);
 		    }
 		    err.chr(']');
 		    Dump2(t@.base, indent, full);
@@ -1229,8 +1261,8 @@ if debug.tests[2] then {
 		if t@.access != RW then
 		    err.str(accessstr[t@.access]);
 		err.chr(':');
-		if t@.input then err.chr('I');
-		if t@.output then err.chr('O');
+		if t@.io.in  then err.chr('I');
+		if t@.io.out then err.chr('O');
 		t@.dumped = true;
 		if t@.meths != 0 then
 		{   s = t@.meths;

@@ -151,7 +151,7 @@ package lex
 	KIN,	KFROM,	KTO,    KBY,			// for loop support
 	// attributes begin here
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
-	KRO,	KWO,	KINPUT,	KOUTPUT,KAT,
+	KRO,	KWO,	KINPUT,	KOUTPUT,KIO,    KAT,
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
 	KINLINE,KNOINLINE,KINTR,KWEAK,
 	// type properties begin here
@@ -242,6 +242,7 @@ package lex
 	[KWO] =		"wo",
 	[KINPUT] =	"in",
 	[KOUTPUT] =	"out",
+	[KIO] =		"io",
 	[KAT] =		"at",
 	[KEXTERN] =	"external",	// attributes for vars and procs
 	[KGLOBAL] =	"global",

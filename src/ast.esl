@@ -807,7 +807,7 @@ package ast
 		if to@.flex && !fm@.flex then
 		    tree = New1(CAST, to, tree);
 		// Check attributes
-		if !CheckRefAttributes(to, fm) then
+		if ok && !CheckRefAttributes(to, fm) then
 		    lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
 	    }
 	}

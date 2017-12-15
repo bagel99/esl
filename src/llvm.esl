@@ -159,6 +159,12 @@ package llvm
 	f.nl();
     }
 
+    proc PPkgPfx(s: Symb)
+    {   if s@.package != 0 then PPkgPfx(s@.package);    // recursive
+	f.str(s@.ident);
+	f.chr(package_delimiter);
+    }
+
     proc PTypeName(t: Type)
     {   var s: Symb;
 
@@ -166,9 +172,7 @@ package llvm
 	s = t@.name;
 	if s != 0 then
 	{   if s@.package != 0 then
-	    {   f.str(s@.package@.ident);
-		f.str(".");
-	    }
+		PPkgPfx(s@.package);
 	    f.str(s@.ident);
 	}
 	else
@@ -375,12 +379,6 @@ package llvm
 //{   err.str("Node width disagreement\n"); ast.Dump(node); }
 	    f.str("i"); f.uint(node@.width);
 	}
-    }
-
-    proc PPkgPfx(s: Symb)
-    {   if s@.package != 0 then PPkgPfx(s@.package);    // recursive
-	f.str(s@.ident); 
-	f.chr(package_delimiter);
     }
 
     proc PMethod(s: Symb)
@@ -1861,7 +1859,7 @@ package llvm
 	{   GenSub(offs);
 	    load@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = load ", load);
-	    if offs@.type@.base@.input then
+	    if offs@.type@.base@.io.in then
 		f.str("volatile ");
 	    if feature.syntax37 then
 	    {   PType(load@.type);
@@ -1904,7 +1902,7 @@ package llvm
 	    {   GenSub(lhs);	// then lhs
 		f.chr('\t');
 		f.str("store ");
-		if lhs@.type@.base@.output then
+		if lhs@.type@.base@.io.out then
 		    f.str("volatile ");
 		NodeType(rhs); f.chr(' ');
 		NodeSrc(rhs);
