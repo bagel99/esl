@@ -134,7 +134,7 @@ package lex
     type TokenT:
     (   NONE,	ENDF,
 	DOT,	COLON,	SEMI,	COMMA,	RANGE,	AT,	QUEST,
-	ASGN,	INCR,	DECR,	LETOR,	LETXOR,	LETAND, // **
+	ASGN,	ASGNR,  INCR,	DECR,	LETOR,	LETXOR,	LETAND, // **
 	NOT,	INV,    PLUS,	MINUS,	OR,	XOR,	// must be contiguous
 	STAR,	DIV,	MOD,	SHL,	SHR,	AND,	// must be contiguous
 	EQ,	NE,	LT,	GT,	LE,	GE,	// must be contiguous
@@ -168,6 +168,7 @@ package lex
 	[AT] =		"@",
 	[QUEST] =	"?",
 	[ASGN] =	"=",
+	[ASGNR] =       "=/",
 	[INCR] =	"+=",
 	[DECR] =	"-=",
 	[LETOR] =       "|=",
@@ -665,6 +666,7 @@ package lex
 	    is ASGN then
 		if c
 		is '=' then { tok = EQ; i += 1; }
+		is '/' then { tok = ASGNR; i += 1; }
 		else    tok = ASGN;
 	    is NOT then
 		if c

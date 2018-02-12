@@ -595,7 +595,7 @@ package stmt
 	return tree;
     }
 
-    proc AssignArray(lhs:Ast): Ast
+    proc AssignArray(lhs:Ast, optok: TokenT): Ast
     {   var rhs, tree, lsize, rsize, align: Ast;
 	var lalign, ralign, width: _uint;
 	var tl, tr:Type;
@@ -663,7 +663,10 @@ err.str("Assign to packed array\n");
 			     ast.Const(type.wordtype, width/target.ByteSize));
 	    lhs = ArrayFix(lhs);
 	    rhs = ArrayFix(rhs);
-	    tree = ast.New2(COPY, lhs@.type, lhs, rhs);
+	    if optok == ASGNR then
+		tree = ast.New2(MOVE, lhs@.type, lhs, rhs);
+	    else
+		tree = ast.New2(COPY, lhs@.type, lhs, rhs);
 	    tree = ast.Child(tree, lsize);
 	    align = ast.Const(type.wordtype, lalign);
 	    tree = ast.Child(tree, align);
@@ -715,15 +718,15 @@ err.str("Assign to packed array\n");
 		    }
 		}
 		if t != 0 && t@.kind == RECORD && !t@.packed then
-		{   if optok == ASGN && nl == 1 then
+		{   if optok <= ASGNR && nl == 1 then
 			tree = AssignRecord(lhs);
 		    else
 			lex.Error(ILLASSIGN);
 		    nr += 1;
 		}
 		else if t != 0 && t@.kind == ARRAY && !t@.packed then
-		{   if optok == ASGN && nl == 1 then
-			tree = AssignArray(lhs);
+		{   if optok <= ASGNR && nl == 1 then
+			tree = AssignArray(lhs, optok);
 		    else
 			lex.Error(ILLASSIGN);
 		    nr += 1;
@@ -748,14 +751,14 @@ err.str("Assign to packed array\n");
 				tree = ast.Child(tree, lrhs);
 				i += 1;
 				tl = tl@.next;
-			      exit tl == 0;
+			      exit i >= nl || tl == 0;
 				lhs = tree@.child[nr+i];
 			    }
 			    nr += i;
 			}
 			else 
 			{   if rhs@.type != 0 then
-			    {   if optok != ASGN then
+			    {   if optok > ASGNR then
 				{   lrhs = expr.Load(lhs);
 				    if optok
 				    is INCR then op = ADD;

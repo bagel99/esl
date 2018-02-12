@@ -18,7 +18,7 @@ package ast
 	CAST,
 	CALL,	CALLI,	ASM,
 	SET,
-	COPY,	ACOPY,	AEQ,	ANE,	// record and array operators
+	COPY,	MOVE,	AEQ,	ANE,	// record and array operators
 	GETRV,
 	LOAD,
 	STORE,		// assignment
@@ -63,7 +63,7 @@ package ast
 	[CAST]=   1,
 	[CALL]=   4,	[CALLI]=  5,	[ASM]=    5,
 	[SET]=    4,
-	[COPY]=   4,	[ACOPY]=  4,	[AEQ]=    4,	[ANE]=    4,
+	[COPY]=   4,	[MOVE]=  4,	[AEQ]=    4,	[ANE]=    4,
 	[GETRV]=  1,	[LOAD]=   1,	[STORE]=  2,
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,
 	[BSWAP]=  1,    [BITREV]= 1,
@@ -725,7 +725,7 @@ package ast
 	// LHS known to be FLOAT, so must the RHS
 	if rhs@.type@.kind != FLOAT then
 	{   lex.Error(OPTYPE);
-	    return 0;
+	    return lhs;
 	}
 	tree = 0;
 	// FIXME - constant folding
@@ -893,7 +893,7 @@ err.nl();
 	[BYREF]= "BYREF",
 	[SET]=   "SET",
 	[COPY]=  "COPY",
-	[ACOPY]= "ACOPY",
+	[MOVE]=  "MOVE",
 	[AEQ]=   "AEQ",
 	[ANE]=   "ANE",
 	[GETRV]= "GETRV",
