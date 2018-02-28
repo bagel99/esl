@@ -2,6 +2,7 @@
 package trig
 {
     type BAM16:  _ufix(16,16);	// binary angular measure
+    const TwoPi: BAM16 = 1.0;
     type Q16_14: _sfix(16,14): rndns;
 
     const tabatan: [16] Q16_14 =
@@ -71,7 +72,7 @@ package trig
 	{   if angle >= bam180 then
 	    {   if angle >= bam270 then
 		{   sin, cos = cordic(angle-bam270);
-		    return -sin, cos;
+		    return -cos, sin;
 		}
 		else
 		{   sin, cos = cordic(angle-bam180);
@@ -90,7 +91,68 @@ package trig
 	return sin, cos;
     }
 
+    proc sin(angle: BAM16): Q16_14
+    {   var sin, cos: Q16_14;
+	sin, cos = sincos(angle);
+	return sin;
+    }
+
+    proc cos(angle: BAM16): Q16_14
+    {   var sin, cos: Q16_14;
+	sin, cos = sincos(angle);
+	return cos;
+    }
+
+    proc cordic2(y: Q16_14, x: Q16_14): BAM16
+    {	var theta: Q16_14;
+	var i: _uint;
+
+	theta = 0.0;
+	for i from 1 to 13 do
+	{
+	    if y < 0 then
+	    {	x, y = x - (y>>i), y + (x>>i);
+	        theta -= tabatan[i];
+	    }
+	    else
+	    {   x, y = x + (y>>i), y - (x>>i);
+		theta += tabatan[i];
+	    }
+	}
+	return BAM16(theta);
+    }
+
+    /*
+     * Normalize y, x into the first octant counter-clockwise above the x>0 axis.
+     * After normalization, x >= y so y/x <= 1.0
+     * Return the mapped y, x and the angle needed for adjustment.
+     */
+    proc normalize(y: Q16_14, x: Q16_14): Q16_14, Q16_14, BAM16 //: inline
+    {   var phi: BAM16;
+
+	phi = 0.0;
+	if y < 0  then { x,y = -x,   -y;   phi += 0.500; }
+	if x <= 0 then { x,y =  y,   -x;   phi += 0.250; }
+	if x <= y then { x,y =  x-y, y-x;  phi += 0.125; }
+	return y, x, phi;
+    }
+
+    proc atan2(y: Q16_14, x: Q16_14): BAM16
+    {   var phi: BAM16;
+	var theta: BAM16;
+
+    if y == 0.0 then { if x >= 0 then return 0.00; else return 0.50; }
+    if x == 0.0 then { if y >= 0 then return 0.25; else return 0.75; }
+//PQ14("Before: y=", y);
+//PQ14(" x=", x);
+//err.nl();
+	// reduce to 1st octant
+	y, x, phi = normalize(y, x);
+//PQ14("After: y=", y);
+//PQ14(" x=", x);
+//err.nl();
+
+        return phi + cordic2(y, x);
+    }
 }
-
-
 

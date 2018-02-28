@@ -77,6 +77,8 @@ package llvm
 		if i
 		is MEMCPY then
 		    Print("declare void @llvm.memcpy.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\n", dummy);
+		is MEMMOVE then
+		    Print("declare void @llvm.memmove.p0i8.p0i8.%W(i8*, i8*, %W, i32, i1) nounwind\n", dummy);
 		is MEMSET then
 		    Print("declare void @llvm.memset.p0i8.%W(i8*, i8, %W, i32, i1) nounwind\n", dummy);
 		is BSWAP then
@@ -166,6 +168,12 @@ package llvm
 	f.nl();
     }
 
+    proc PPkgPfx(s: Symb)
+    {   if s@.package != 0 then PPkgPfx(s@.package);    // recursive
+	f.str(s@.ident);
+	f.chr(package_delimiter);
+    }
+
     proc PTypeName(t: Type)
     {   var s: Symb;
 
@@ -173,9 +181,7 @@ package llvm
 	s = t@.name;
 	if s != 0 then
 	{   if s@.package != 0 then
-	    {   f.str(s@.package@.ident);
-		f.str(".");
-	    }
+		PPkgPfx(s@.package);
 	    f.str(s@.ident);
 	}
 	else
@@ -388,12 +394,6 @@ package llvm
 //{   err.str("Node width disagreement\n"); ast.Dump(node); }
 	    f.str("i"); f.uint(node@.width);
 	}
-    }
-
-    proc PPkgPfx(s: Symb)
-    {   if s@.package != 0 then PPkgPfx(s@.package);    // recursive
-	f.str(s@.ident); 
-	f.chr(package_delimiter);
     }
 
     proc PMethod(s: Symb)
@@ -1153,7 +1153,7 @@ package llvm
 	return false;
     }
 
-    proc Copy(node: Ast)
+    proc Copy(node: Ast, ismove: boolean)
     {
 	// LLVM wants i8* types
 	node@.child[0] = ast.Cast(node@.child[0], pbytetype);
@@ -1165,9 +1165,16 @@ package llvm
 	GenSub(node@.child[2]);
 	// FIXME: need to check for potential overlap and use memmove if necessary
 	// FIXME: find alignment, here or during parsing?
-	Print(
-	   "\tcall void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\n", node);
-	UseIntrinsic(MEMCPY, 1, 0);     // FIXME - alignment
+	if ismove then
+	{   Print(
+	    "\tcall void @llvm.memmove.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\n", node);
+	    UseIntrinsic(MEMMOVE, 1, 0);     // FIXME - alignment
+	}
+	else
+	{   Print(
+	    "\tcall void @llvm.memcpy.p0i8.p0i8.%2T(i8* %0N, i8* %1N, %2T %2N, i32 %3N, i1 0)\n", node);
+	    UseIntrinsic(MEMCPY, 1, 0);     // FIXME - alignment
+	}
     }
 
     proc Set(node: Ast)
@@ -1881,7 +1888,7 @@ package llvm
 	{   GenSub(offs);
 	    load@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = load ", load);
-	    if offs@.type@.base@.input then
+	    if offs@.type@.base@.io.in then
 		f.str("volatile ");
 	    if feature.syntax37 then
 	    {   PType(load@.type);
@@ -1924,7 +1931,7 @@ package llvm
 	    {   GenSub(lhs);	// then lhs
 		f.chr('\t');
 		f.str("store ");
-		if lhs@.type@.base@.output then
+		if lhs@.type@.base@.io.out then
 		    f.str("volatile ");
 		NodeType(rhs); f.chr(' ');
 		NodeSrc(rhs);
@@ -1998,10 +2005,10 @@ f.flush();
 	is DCLVAR then DclVar(node);
 	is DCLCON then DclCon(node);
 	is VAR, CONST, FCON, SCON, CLIST then {}
-	is ACOPY then Copy(node);
 	is AEQ, ANE then term = ArrayCompare(node);
 	is SET then Set(node);
-	is COPY then Copy(node);
+	is COPY then Copy(node, false);
+	is MOVE then Copy(node, true);
 	is RET then term = Return(node);
 	is GETRV then GetRV(node);
 	is STORE then Store(node);

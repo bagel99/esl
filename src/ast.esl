@@ -18,7 +18,7 @@ package ast
 	CAST,
 	CALL,	CALLI,	ASM,
 	SET,
-	COPY,	ACOPY,	AEQ,	ANE,	// record and array operators
+	COPY,	MOVE,	AEQ,	ANE,	// record and array operators
 	GETRV,
 	LOAD,
 	STORE,		// assignment
@@ -63,7 +63,7 @@ package ast
 	[CAST]=   1,
 	[CALL]=   4,	[CALLI]=  5,	[ASM]=    5,
 	[SET]=    4,
-	[COPY]=   4,	[ACOPY]=  4,	[AEQ]=    4,	[ANE]=    4,
+	[COPY]=   4,	[MOVE]=  4,	[AEQ]=    4,	[ANE]=    4,
 	[GETRV]=  1,	[LOAD]=   1,	[STORE]=  2,
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,
 	[BSWAP]=  1,    [BITREV]= 1,
@@ -81,7 +81,7 @@ package ast
 	[SLT]=	  2,	[SGT]=	  2,    [SLE]=	  2,    [SGE]=	  2,
 	[FEQ]=    2,    [FNE]=    2,
 	[FLT]=	  2,	[FGT]=	  2,    [FLE]=	  2,    [FGE]=	  2,
-	[UMIN]=   3,	[UMAX]=   3,	[SMIN]=   3,	[SMAX]=   3,  
+	[UMIN]=   3,	[UMAX]=   3,	[SMIN]=   3,	[SMAX]=   3,
 	[LSL]=	  2,    [LSR]=	  2,	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
 	[BAND]=	  2,	[BOR]=	  2,	[BNOT]=	  2,
@@ -133,8 +133,8 @@ package ast
 	pa@ = from@;	// record copy
 	pa@.lineno = lex.Lineno();
 	return pa;
-    }	
-    
+    }
+
     proc Expand(po: Ast, newsize:NSubNodes): Ast
     {   var pn: Ast;
 	var size, i: NSubNodes;
@@ -254,7 +254,10 @@ package ast
     proc Const(t: Type, value: type.Valu): Ast
     {   var pa: Ast;
 
-	pa = New(CONST, t);
+	if t@.kind == FLOAT then
+	    pa = New(FCON, t);
+	else
+	    pa = New(CONST, t);
 	pa@.valu = value;
 	if t != 0 then
 	    pa@.width = t@.width;
@@ -467,7 +470,7 @@ package ast
 		is NEG  then rhs@.valu = type.Valu(-rhs@.valu);
 		is NOT  then rhs@.valu = ~rhs@.valu;
 		is BNOT then rhs@.valu = rhs@.valu ^ 1;
-		is ABS  then 
+		is ABS  then
 		{   if rhs@.type@.kind == SINT && type.SValu(rhs@.valu) < 0 then
 			rhs@.valu = type.Valu(-type.SValu(rhs@.valu));
 		}
@@ -495,7 +498,7 @@ package ast
 	    else
 		tree = New1(op, rhs@.type, rhs);
 	}
-	return tree; 
+	return tree;
     }
 
     // BAND, BOR
@@ -752,7 +755,7 @@ package ast
 	// LHS known to be FLOAT, so must the RHS
 	if rhs@.type@.kind != FLOAT then
 	{   lex.Error(OPTYPE);
-	    return 0;
+	    return lhs;
 	}
 	tree = 0;
 	// FIXME - constant folding
@@ -760,8 +763,13 @@ package ast
 	sr = rhs@.width;
 	// make LHS as wide as result wants it
 	if t != 0 && t@.width > sl then
-	{  lhs = ExtendT(lhs, t);
-	   sl = t@.width;
+	{   lhs = ExtendT(lhs, t);
+	    sl = t@.width;
+	}
+	// if lhs is FCON then change width to that of rhs
+	if lhs@.op == FCON then
+	{   lhs@.width = rhs@.width;
+	    sl = lhs@.width;
 	}
 	if sl > sr then
 	    rhs = ExtendT(rhs, lhs@.type);
@@ -1049,7 +1057,7 @@ err.chr(','); err.uint(toscale);  err.nl();
 		if to@.flex && !fm@.flex then
 		    tree = New1(CAST, to, tree);
 		// Check attributes
-		if !CheckRefAttributes(to, fm) then
+		if ok && !CheckRefAttributes(to, fm) then
 		    lex.ErrorS(NOTIMPL, "Ref alignment or endian mismatch\n");
 	    }
 	}
@@ -1137,7 +1145,7 @@ err.nl();
 	[BYREF]= "BYREF",
 	[SET]=   "SET",
 	[COPY]=  "COPY",
-	[ACOPY]= "ACOPY",
+	[MOVE]=  "MOVE",
 	[AEQ]=   "AEQ",
 	[ANE]=   "ANE",
 	[GETRV]= "GETRV",
@@ -1152,7 +1160,7 @@ err.nl();
 	[FNEG]=  "FNEG",	[FCVTL]= "FCVTL",       [FCVTS]= "FCVTS",
 	[CVTUF]= "CVTUF",	[CVTIF]= "CVTIF",
 	[CVTFU]= "CVTFU",	[CVTFI]= "CVTFI",
-	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",		
+	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",
 	[CTZ]=   "CTZ",		[CTZNZ]= "CTZNZ",
 	[POP]=   "POP",		[ZLEN]=  "ZLEN",
 	[ROL]=   "ROL",		[ROR]=   "ROR",

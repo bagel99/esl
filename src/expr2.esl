@@ -692,7 +692,12 @@ package expr
 	st@.memorder = at@.memorder;
 	blen = 0;
 	slen = 0;
-	if !at@.flex then blen = type.BitSize(at.Span());
+	if at@.flex then
+	    st@.index = type.wordtype;      // must use something
+	else
+	{   st@.index = at@.index;
+	    blen = type.BitSize(at.Span());
+	}
 	if len != 0 then
 	{   if len@.op == CONST then slen = type.BitSize(len@.valu);
 	}
@@ -2093,13 +2098,16 @@ type.DumpT(t, false); err.nl();
 	    expr.savedsym = s;
 	}
 	lo = expr.Bool(0);
+	if lo == 0 then     // default to something
+	    lo = ast.Const(type.wordtype, 0);
+	t = lo@.type;
 	if Token == RANGE then
 	{   tok = Next();
-	    hi = expr.Bool(lo@.type);
+	    hi = expr.Bool(t);
 	}
 	else
-	{   hi = ast.OpAdd(SUB, lo, ast.Const(lo@.type, 1), lo@.type);
-	    lo = ast.Const(lo@.type, 0);
+	{   hi = ast.OpAdd(SUB, lo, ast.Const(t, 1), t);
+	    lo = ast.Const(t, 0);
 	}
 	return lo, hi;
     }

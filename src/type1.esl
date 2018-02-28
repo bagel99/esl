@@ -10,6 +10,7 @@ package type
     type MemOrderT: (NATIVE, BE, LE);
     type AccessT: (RW, RO, WO);
     type RoundT:  (DN, UP, TZ, FZ, NS, NL, NE, NO);
+    type IoT: { in: boolean; out: boolean; }: packed;
     type BitSize: 0..0xFFFFFFFF;
     type TypeNode:
     {
@@ -34,6 +35,7 @@ package type
 	access:	  AccessT;	// access restrictions
 	round:    RoundT;       // rounding mode for fixed point
 	generic: boolean;       // requires specialization
+	io:     IoT;		// external state changes (like C volatile)
 	sizeattr:  boolean;	// size attribute specified
 	widthattr: boolean;	// width attribute specified
 	alignattr: boolean;	// align attribute specified
@@ -42,8 +44,6 @@ package type
 	noepad: boolean;	// record not padded at end
 	nofpad: boolean;	// record contains unaligned fields
 	flex:   boolean;	// flexible array
-	input:  boolean;	// external state changes (like C volatile)	
-	output: boolean;	// changes external state (like C volatile)	
 	printed:boolean;	// llvm defined printed	
 	dumped:	boolean;	// type dump printed
 	final:	boolean;	// type properties are final, do not modify	

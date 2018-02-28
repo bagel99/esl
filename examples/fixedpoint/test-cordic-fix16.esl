@@ -46,21 +46,29 @@ proc main(): _int
 
     fdo.str("Test sin/cos\n");
     testsincos(0);	// 0 degrees
+    testsincos(0x0010); // 0+
     testsincos(0x1555);	// 30 degrees
     testsincos(0x2000);	// 45 degrees
     testsincos(0x2AAB);	// 60 degrees
+    testsincos(0x3FE0);	// 90-
     testsincos(0x4000);	// 90 degrees
+    testsincos(0x4010);	// 90+
     testsincos(0x5555);	// 120 degrees
     testsincos(0x6000);	// 135 degrees
     testsincos(0x6AAB);	// 150 degrees
+    testsincos(0x7FE0);	// 180-
     testsincos(0x8000);	// 180 degrees
+    testsincos(0x8010);	// 180+
     testsincos(0x9555);	// 210 degrees
     testsincos(0xA000);	// 225 degrees
     testsincos(0xAAAB);	// 240 degrees
+    testsincos(0xBFE0);	// 270-
     testsincos(0xC000);	// 270 degrees
+    testsincos(0xC010);	// 270+
     testsincos(0xD555);	// 300 degrees
     testsincos(0xE000);	// 315 degrees
     testsincos(0xEAAB);	// 330 degrees
+    testsincos(0xFFE0);	// 360-
 
     return 0;
 }

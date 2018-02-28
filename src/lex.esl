@@ -136,7 +136,7 @@ package lex
     type TokenT:
     (   NONE,	ENDF,
 	DOT,	COLON,	SEMI,	COMMA,	RANGE,	AT,	QUEST,
-	ASGN,	INCR,	DECR,	LETOR,	LETXOR,	LETAND, // **
+	ASGN,	ASGNR,  INCR,	DECR,	LETOR,	LETXOR,	LETAND, // **
 	NOT,	INV,    PLUS,	MINUS,	OR,	XOR,	// must be contiguous
 	STAR,	DIV,	MOD,	SHL,	SHR,	AND,	// must be contiguous
 	EQ,	NE,	LT,	GT,	LE,	GE,	// must be contiguous
@@ -153,7 +153,7 @@ package lex
 	KIN,	KFROM,	KTO,    KBY,			// for loop support
 	// attributes begin here
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
-	KRO,	KWO,	KINPUT,	KOUTPUT,KAT,
+	KRO,	KWO,	KINPUT,	KOUTPUT,KIO,    KAT,
 	KRNDDN, KRNDUP, KRNDTZ, KRNDFZ, KRNDNS, KRNDNL, KRNDNE, KRNDNO,
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
 	KINLINE,KNOINLINE,KINTR,KWEAK,
@@ -171,6 +171,7 @@ package lex
 	[AT] =		"@",
 	[QUEST] =	"?",
 	[ASGN] =	"=",
+	[ASGNR] =       "=/",
 	[INCR] =	"+=",
 	[DECR] =	"-=",
 	[LETOR] =       "|=",
@@ -245,6 +246,7 @@ package lex
 	[KWO] =		"wo",
 	[KINPUT] =	"in",
 	[KOUTPUT] =	"out",
+	[KIO] =		"io",
 	[KAT] =		"at",
 	[KRNDDN] =      "rnddn",
 	[KRNDUP] =      "rndup",
@@ -671,7 +673,6 @@ package lex
 		is '"' then { k = 0; state = STR; }
 		is ' ','\t','\n','\r','\f' then // whitespace
 		{ }
-
 		is 'A'..'Z', 'a'..'z', '_' then
 		{   Ident[0] = c;  k = 1; state = ID; }
 		is 0xC2 .. 0xDF then		// 2 byte UTF8
@@ -737,6 +738,7 @@ package lex
 	    is ASGN then
 		if c
 		is '=' then { tok = EQ; i += 1; }
+		is '/' then { tok = ASGNR; i += 1; }
 		else    tok = ASGN;
 	    is NOT then
 		if c
