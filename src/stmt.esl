@@ -62,11 +62,11 @@ package stmt
 		if tok == KELSE then
 		{   tok = Next();
 		    CCSkip();
-		}        
+		}
 		else if tok == KELIF then
 		{   Token = KIF;    // fake following if
 		    CCSkip();
-		}        
+		}
 	    }
 	    else
 	    {   lex.Skip(skipstmt);
@@ -165,7 +165,7 @@ package stmt
 		    doneit = true;
 		}
 		else
-		    CCSkip();  
+		    CCSkip();
 		tok = lex.Keyword(isthenlist);
 	      exit tok != KIS;
 	    }
@@ -674,6 +674,11 @@ err.str("Assign to packed array\n");
 	return tree;
     }
 
+    const ops: [TokenT.INCR .. TokenT.LETAND] ast.Op =
+	{ ADD,  SUB,  OR,   XOR,  AND };
+    const fops:[TokenT.INCR .. TokenT.LETAND] ast.Op =
+	{ FADD, FSUB, NULL, NULL, NULL };
+
     proc Assign(lhs: Ast): Ast
     {   var tree, rhs, lrhs: Ast;
 	var t: Type;
@@ -756,17 +761,22 @@ err.str("Assign to packed array\n");
 			    }
 			    nr += i;
 			}
-			else 
+			else
 			{   if rhs@.type != 0 then
 			    {   if optok > ASGNR then
 				{   lrhs = expr.Load(lhs);
-				    if optok
-				    is INCR then op = ADD;
-				    is DECR then op = SUB;
-				    is LETOR then op = OR;
-				    is LETXOR then op = XOR;
-				    is LETAND then op = AND;
-				    rhs = ast.OpBinary(op, lrhs, rhs, 0);
+				    if lrhs@.type@.kind == FLOAT then
+					rhs = ast.OpFloat(fops[optok],
+						lrhs, rhs, lrhs@.type);
+				    else
+				    {   op = ops[optok];
+					if op < OR then
+					    rhs = ast.OpAdd(op,
+						    lrhs, rhs, 0);
+					else
+					    rhs = ast.OpLogic(op,
+						    lrhs, rhs);
+				    }
 				}
 				if lhs != 0 then
 				{   if lhs@.op != FIELD then
@@ -915,7 +925,7 @@ err.str("Assign to packed array\n");
 	}
 	tok = lex.Keyword(isthenlist);
 	if tok
-	is KIS then 
+	is KIS then
 	{   loop
 	    {   ctree = ast.New(IS, 0);
 		loop
@@ -946,7 +956,7 @@ err.str("Assign to packed array\n");
 	      exit tok != KIS;
 	    }
 	}
-	is KTHEN then 
+	is KTHEN then
 	{   if op == SEL then lex.Error(WANTBOOL);
 	    tok = Next();
 	    stree = Statement();
@@ -960,7 +970,7 @@ err.str("Assign to packed array\n");
 	    tok2 = Next();
 	    if s != 0 then	// else is also a valid symbol, disabiguate
 	    {   if tok2
-		is ASGN, INCR, DECR, ABEG, DOT, AT, PBEG then 
+		is ASGN, INCR, DECR, ABEG, DOT, AT, PBEG then
 		    tok = ID;	// assignment or procedure call
 	    }
 	    if tok == ID then
@@ -1072,7 +1082,7 @@ err.str("Assign to packed array\n");
 	tree = ast.New2(SEQ, 0, ctree, tree);
 	tree = ast.New1(LOOP, 0, tree);
 	if LoopLevel > 0 then
-	    LoopLevel -= 1;	
+	    LoopLevel -= 1;
 	return tree;
     }
 
@@ -1094,7 +1104,7 @@ err.str("Assign to packed array\n");
 	tree = ast.New2(SEQ, 0, tree, ctree);
 	tree = ast.New1(LOOP, 0, tree);
 	if LoopLevel > 0 then
-	    LoopLevel -= 1;	
+	    LoopLevel -= 1;
 	return tree;
     }
 
@@ -1272,7 +1282,7 @@ symb.DumpS(ns);
 	    if tok > ID && s != 0 then	// both keyword and valid identifer
 	    {   // Need to disambiguate
 		if tok2
-		is ASGN, INCR, DECR, ABEG, DOT, AT, COMMA then 
+		is ASGN, INCR, DECR, ABEG, DOT, AT, COMMA then
 		    tok = ID;	// assignment
 		is PBEG then
 		{   if s@.kind == PROC && (tok >= KRET && tok <= KWHILE) then
@@ -1284,7 +1294,7 @@ symb.DumpS(ns);
 		}
 	    }
 	    if tok
-	    is ID then 
+	    is ID then
 	    {   if s != 0 then
 		    tree = AssignOrCall(s);
 		else if symb.IsAnon(lex.Ident) then
@@ -1342,12 +1352,12 @@ symb.DumpS(ns);
 		if tok == COLON then
 		{   tok = Next();
 		    if tok
-		    is AT then 
+		    is AT then
 		    {   t = type.Ref();
 			type.Final(t);
 			mt = t@.base;
 		    }
-		    is ID then 
+		    is ID then
 		    {   s = type.Name();
 			tok = Next();
 			if s != 0 then
@@ -1538,7 +1548,7 @@ symb.DumpS(ns);
 	    msg.str(pathbuf[i:]);
 	}
 	lex.FileOpen(fp, pp.path, fd);
-	return true;  
+	return true;
     }
 
     // Search to see if we have not imported this yet, if not, open it
@@ -1654,7 +1664,7 @@ symb.DumpS(ns);
 	var tok: TokenT;
 	var s: Symb;
 	var pkgsave: Symb;
-	
+
 	tree = 0;
 	tok = Token;
 	if tok == ID then
@@ -1690,7 +1700,7 @@ symb.DumpS(ns);
 	return tree;
     }
 
-    const proglist:[]TokenT = 
+    const proglist:[]TokenT =
     { KIMPORT, KALIAS, KPACKAGE, KTYPE, KVAR, KCONST, KPROC, KIF, KERROR, NONE };
 
     proc ProgStmt(): Ast

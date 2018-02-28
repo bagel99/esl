@@ -81,7 +81,7 @@ package ast
 	[SLT]=	  2,	[SGT]=	  2,    [SLE]=	  2,    [SGE]=	  2,
 	[FEQ]=    2,    [FNE]=    2,
 	[FLT]=	  2,	[FGT]=	  2,    [FLE]=	  2,    [FGE]=	  2,
-	[UMIN]=   3,	[UMAX]=   3,	[SMIN]=   3,	[SMAX]=   3,  
+	[UMIN]=   3,	[UMAX]=   3,	[SMIN]=   3,	[SMAX]=   3,
 	[LSL]=	  2,    [LSR]=	  2,	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
 	[BAND]=	  2,	[BOR]=	  2,	[BNOT]=	  2,
@@ -133,8 +133,8 @@ package ast
 	pa@ = from@;	// record copy
 	pa@.lineno = lex.Lineno();
 	return pa;
-    }	
-    
+    }
+
     proc Expand(po: Ast, newsize:NSubNodes): Ast
     {   var pn: Ast;
 	var size, i: NSubNodes;
@@ -254,7 +254,10 @@ package ast
     proc Const(t: Type, value: type.Valu): Ast
     {   var pa: Ast;
 
-	pa = New(CONST, t);
+	if t@.kind == FLOAT then
+	    pa = New(FCON, t);
+	else
+	    pa = New(CONST, t);
 	pa@.valu = value;
 	if t != 0 then
 	    pa@.width = t@.width;
@@ -466,7 +469,7 @@ package ast
 		is NEG  then rhs@.valu = type.Valu(-rhs@.valu);
 		is NOT  then rhs@.valu = ~rhs@.valu;
 		is BNOT then rhs@.valu = rhs@.valu ^ 1;
-		is ABS  then 
+		is ABS  then
 		{   if rhs@.type@.kind == SINT && type.SValu(rhs@.valu) < 0 then
 			rhs@.valu = type.Valu(-type.SValu(rhs@.valu));
 		}
@@ -494,7 +497,7 @@ package ast
 	    else
 		tree = New1(op, rhs@.type, rhs);
 	}
-	return tree; 
+	return tree;
     }
 
     // BAND, BOR
@@ -733,8 +736,13 @@ package ast
 	sr = rhs@.width;
 	// make LHS as wide as result wants it
 	if t != 0 && t@.width > sl then
-	{  lhs = ExtendT(lhs, t);
-	   sl = t@.width;
+	{   lhs = ExtendT(lhs, t);
+	    sl = t@.width;
+	}
+	// if lhs is FCON then change width to that of rhs
+	if lhs@.op == FCON then
+	{   lhs@.width = rhs@.width;
+	    sl = lhs@.width;
 	}
 	if sl > sr then
 	    rhs = ExtendT(rhs, lhs@.type);
@@ -908,7 +916,7 @@ err.nl();
 	[FNEG]=  "FNEG",	[FCVTL]= "FCVTL",       [FCVTS]= "FCVTS",
 	[CVTUF]= "CVTUF",	[CVTIF]= "CVTIF",
 	[CVTFU]= "CVTFU",	[CVTFI]= "CVTFI",
-	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",		
+	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",
 	[CTZ]=   "CTZ",		[CTZNZ]= "CTZNZ",
 	[POP]=   "POP",		[ZLEN]=  "ZLEN",
 	[ROL]=   "ROL",		[ROR]=   "ROR",
