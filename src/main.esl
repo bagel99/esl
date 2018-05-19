@@ -22,6 +22,7 @@ var feature:
 	ambig: boolean;
 	assert:boolean;
 	bounds:boolean;
+	zerol: boolean;		// zero local scalar variables
 	debug: _uint8;		// debug version 1 or 2
 	syntax37: boolean;      // use new load, getelementprt IR syntax in 3.7
     };
@@ -68,7 +69,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
     i = 1;
     while i < argc && argv[i]@[0] == '-' do
     {   if argv[i]@[1]
-	is 'D' then 
+	is 'D' then
 	{   if argv[i]@[2]
 	    is 'a' then debug.ast = true;
 	    is 's' then     // symbols except outermost
@@ -88,7 +89,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 		    debug.tests[argv[i]@[3] - '0'] = true;
 	    }
 	}
-	is 'm' then 
+	is 'm' then
 	{   if argv[i]@[2] != 0 then
 		targetarch = argv[i]@[2:];
 	    else
@@ -105,12 +106,12 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 		outfile = argv[i];
 	    }
 	}
-	is 'O' then 
+	is 'O' then
 	{   if argv[i]@[2]
 	    is 's' then feature.size = YES;
 	    is 'z' then feature.size = MIN;
 	}
-	is 'F' then 
+	is 'F' then
 	{   if argv[i]@[2]
 	    is 'u' then feature.unused = true;
 	    is 't' then feature.trunc = true;
@@ -131,6 +132,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	{   if argv[i]@[2]
 	    is 'a' then feature.assert = true;
 	    is 'b' then feature.bounds = true;
+	    is 'z' then feature.zerol = true;
 	}
 	i += 1;
     }

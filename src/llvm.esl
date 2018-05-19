@@ -203,7 +203,6 @@ package llvm
 	f.str("}");
 	if t@.noepad || t@.nofpad then
 	    f.chr('>');
-	 
     }
 
     proc PWidth(t: Type)
@@ -295,7 +294,7 @@ package llvm
 		lex.ErrorS(COMPILER, "Illegal PDerefType");
 	}
     }
-    
+
     proc PExtend(t: Type)
     {
 	if t != 0 then
@@ -338,7 +337,7 @@ package llvm
 	else					// has no returned value
 	    f.str(" void");
     }
-    
+
     proc PParmTypes(s: Symb)
     {
 	f.chr('(');
@@ -350,7 +349,7 @@ package llvm
 	}
 	f.chr(')');
     }
- 
+
     proc ConstantRef(node: Ast)
     {   var v: type.Valu;
 
@@ -367,7 +366,7 @@ package llvm
 	    f.chr(')');
 	}
     }
-	
+
     proc NodeType(node: Ast)
     {
 	if node@.type@.kind
@@ -395,7 +394,7 @@ package llvm
 	f.str(bs@.ident);
 	f.chr(package_delimiter);
     }
-    
+
     proc PName(s: Symb)
     {
 	if s@.linkage
@@ -635,7 +634,7 @@ package llvm
 		    PRecordType(t);
 		f.nl();
 	    }
-	}		
+	}
     }
 
     proc DclProc(node: Ast, isdefine: boolean)
@@ -813,19 +812,21 @@ package llvm
 	    if s@.linkage
 	    is LOCAL then
 	    {   Print("\t%I = alloca %K", node);
-		if rhs != 0 then     // initialized local
-		{   if node@.type@.kind <= REF then // scalar
+		if node@.type@.kind <= REF then // scalar
+		{   if rhs == 0 && feature.zerol then
+			rhs = ast.Const(node@.type, 0);
+		    if rhs != 0 then     // initialized local
 		    {   f.nl();
 			// FIXME: Print("store %T %N", rhs);
 			GenSub(rhs);
-			f.chr('\t');
-			f.str("store ");
+			f.str("\tstore ");
 			NodeType(rhs); f.chr(' ');
 			NodeSrc(rhs);
 			Print(", %K* %D", node);
 		    }
-		    else lex.ErrorS(NOTIMPL, "initialized local composites");
 		}
+		elif rhs != 0 then
+		    lex.ErrorS(NOTIMPL, "initialized local composites");
 	    }
 	    is NORMAL then
 	    {   Print("%I = internal global %K ", node);
@@ -898,7 +899,7 @@ package llvm
 	    return true;
 	}
 	is CLIST then
-	{   DclAggregate(node);        
+	{   DclAggregate(node);
 	    return true;
 	}
 	return false;
@@ -955,7 +956,7 @@ package llvm
 	f.str("label %");
 	PLabel(n);
     }
-	
+
     proc Branch(n: seqnoT)
     {
 	f.str("\tbr ");
@@ -1107,7 +1108,7 @@ package llvm
 	else				// no "with" clause
 	    BranchConditional(node@.child[0], loopexit, labfalse);
 	Label(labfalse);		// come here if continuing
-	return false;	
+	return false;
     }
 
     proc Conditional(node: Ast, isand: boolean): boolean
@@ -1345,7 +1346,7 @@ package llvm
 	nlhs = ast.New2(lop, t, lhs, rhs);
 	nrhs = ast.New2(rop, t, lhs,
 	    ast.New2(SUB, t,
-	                  ast.Const(t, lhs@.type@.size), rhs));   
+	                  ast.Const(t, lhs@.type@.size), rhs));
 	node@.op = OR;
 	node@.child[0] = nlhs;
 	node@.child[1] = nrhs;
@@ -1439,12 +1440,12 @@ package llvm
 	}
 	PEndLine(node);
 	return false;
-	
+
     }
 
     proc PStringCon(node: Ast)
     {   var n: StringRange;
-    
+
 	if node == 0 then
 	    f.str("\"\"");
 	else
@@ -1452,7 +1453,7 @@ package llvm
 	    PString(node@.symb@.ident, n, false);
 	}
     }
-	    
+
     proc GetRV(node: Ast)
     {   var tl: type.TypeList;
 	var ps: Symb;
@@ -1858,7 +1859,7 @@ package llvm
 	    lex.ErrorS(COMPILER, "FieldInsert LOAD not found");
 	return lhs, rhs;
     }
-	
+
     proc Load(load: Ast)
     {   var offs: Ast;
 
@@ -2040,7 +2041,7 @@ f.flush();
 	    f.chr('\t'); PTempName(nextseqno);
 	    Print(" = bitcast %**K* %N to %T\n", node);
 	    node@.seqno = nextseqno;
-	}	
+	}
 	is CAST then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
@@ -2056,7 +2057,7 @@ f.flush();
 		else
 		    Print("\t%N = bitcast %0K %0N to %K\n", node);
 	    }
-	}	
+	}
 	is ZEXT then  ChangeSize(node, "zext");
 	is SEXT then  ChangeSize(node, "sext");
 	is TRUNC then ChangeSize(node, "trunc");

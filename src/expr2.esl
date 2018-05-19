@@ -50,7 +50,7 @@ package expr
 	}
 	else lex.Error(PROPID);
 	tok = Next();
-	return tree;					
+	return tree;
     }
 
     var strid: Valu = 0;
@@ -84,7 +84,7 @@ package expr
 	t@.hi = nl+nr-1;
 	tree@.symb = symb.NewString2(tree@.symb@.ident, nl, lex.StringBuf, nr);
 //symb.DumpS(tree@.symb);
-	return tree;   
+	return tree;
     }
 
     // Parse string constants, perhaps concatenated
@@ -424,7 +424,7 @@ package expr
 	    max = 0;
 	    fs = t@.list;
 	    loop
-	    {   
+	    {
 		tok = Next();
 		if tok == DOT then	// designated initializer
 		{   tok = Next();
@@ -568,7 +568,7 @@ package expr
 	{   alignment = GetAlignment(tree@.child[0]);
 //err.str("GetAlignment OFFSET initial align="); err.uint(alignment); err.nl();
 	    if alignment != 0 then
-		alignment = FieldAlign(alignment, 
+		alignment = FieldAlign(alignment,
 				       tree@.child[0]@.type@.base, _uint(tree@.valu));
 	}
 	is INDEX, SLICE then 	// possible variable offset
@@ -659,8 +659,8 @@ package expr
 		f = f@.next;
 		n += 1;
 	    }
-	    tree = ast.Const(type.wordtype, offset);		
-	}   
+	    tree = ast.Const(type.wordtype, offset);
+	}
 	is INDEX then
 	{
 	    ctree = GetOffset(node@.child[0]);
@@ -668,7 +668,7 @@ package expr
 	    tree = ast.Const(type.wordtype,
 		node@.child[0]@.type@.base@.base@.width / target.ByteSize);
 	    tree = ast.New2(MUL, type.wordtype,
-		ast.ExtendT(node@.child[1], type.wordtype), tree); 
+		ast.ExtendT(node@.child[1], type.wordtype), tree);
 	}
 	if tree != 0 && ctree != 0 then
 	    tree = ast.New2(ADD, type.wordtype, tree, ctree);
@@ -752,7 +752,7 @@ package expr
 	    }
 	    else lex.Error(BADREF);
 	}
-	else if tree@.op != FIELD then        
+	else if tree@.op != FIELD then
 	{   lex.ErrorS(COMPILER, "Load via non-REF");
 ast.Dump(tree);
 	}
@@ -817,7 +817,7 @@ ast.Dump(tree);
     proc GetSpaceSpec(t: Type): Ast
     {   var space: Ast;
 	var tok: TokenT;
-    
+
         tok = Token;
 	if tok == COMMA then
 	{   tok = Next();
@@ -993,8 +993,8 @@ else
 	}
 	else
 	    lex.ErrorT(EXPECT, COMMA);
-	if right then op = ROR; else op = ROL; 
-	tree = ast.New2(op, tree@.type, tree, shft);  
+	if right then op = ROR; else op = ROL;
+	tree = ast.New2(op, tree@.type, tree, shft);
 	return tree;
     }
 
@@ -1406,7 +1406,7 @@ else
 				    if t@.packed then
 				    {
 					tree = ast.New2(FIELD, s@.type, tree,
-					    ast.Const(type.wordtype, 
+					    ast.Const(type.wordtype,
 					    BitfieldOffset(t, s@.addr)));
 					tree@.valu = s@.type@.size;
 					tree@.width = s@.type@.width;
@@ -1505,7 +1505,7 @@ type.DumpT(t, false); err.nl();
 			}
 		    }
 		}
-		else        
+		else
 		    lex.Error(NOTARRAY);
 		tok = lex.Expect(AEND);
 	    }
@@ -1598,7 +1598,7 @@ type.DumpT(t, false); err.nl();
 	    tree = ast.New2(SUB, type.wordtype, tree, otree);
 	    tree = ast.Cast(tree, t);
 	}
-	return tree;                  
+	return tree;
     }
 
     proc Term(et:Type): Ast
@@ -1611,10 +1611,10 @@ type.DumpT(t, false); err.nl();
 	tok = Token;
 	s = savedsym;
 	savedsym = 0;
-	if s == 0 && tok == ID then    
+	if s == 0 && tok == ID then
 	{   s = symb.Find(lex.Ident);
 	    if s == 0 then
-	    {   
+	    {
 		if et != 0 && et@.kind == ENUM then	// enum context
 		    tree = EnumConst(et);
 		else
@@ -1880,7 +1880,7 @@ type.DumpT(t, false); err.nl();
 	tree = ast.Child(tree, align);
 	return tree;
     }
- 
+
     proc NodeKind(node: Ast): TypeT
     {   var kind: TypeT;
 
@@ -1915,7 +1915,13 @@ type.DumpT(t, false); err.nl();
 		    if NodeKind(tree)
 		    is ENUM, UINT, SINT then
 		    {   if IsSignedBinOp(tree, rhs) then
+			{   // fix rhs const to be signed
+			    if !ok && rhs@.op == CONST then
+			    {	rhs@.type = tree@.type;
+				ok = true;
+			    }
 			    op = scmpop[savetok];
+			}
 			else
 			    op = ucmpop[savetok];
 			tree = ast.OpCompare(op, tree, rhs);
