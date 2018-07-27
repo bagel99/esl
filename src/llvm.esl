@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 // Convert AST to LLVM assembly
 import bout;

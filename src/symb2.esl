@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2014, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 package symb
 {
@@ -63,7 +62,7 @@ package symb
 	t@.lo = 0;
 	t@.hi = 1;
 	type.booltype = t;	// internal use by compiler
-	s = Clone(s, "boolean");	// user convenience 
+	s = Clone(s, "boolean");	// user convenience
 	// now expose the constants false and true
 	s = New(CONSTANT, "false", VISIBLE);
 	s@.type = t;
@@ -82,7 +81,7 @@ package symb
 	taddr@.base = type.memtype;
 	taddr@.align = Target.ptr.align;
 	type.addrtype = taddr;
-	
+
 	// predefined _uint*, _int*
 	type.wordtype = type.NewBuiltin(UINT, "_uint", Target.regsize);
 	type.swordtype = type.NewBuiltin(SINT, "_int", Target.regsize);
@@ -108,7 +107,7 @@ package symb
 	// the "unknown" type
 	type.unkntype = type.New(UTYPE);
 	type.unkntype@.size = target.ByteSize;	// give it non-zero size
-	type.unkntype@.align = target.ByteSize;	// and alignment	
+	type.unkntype@.align = target.ByteSize;	// and alignment
 
 	// intrinsics
 	NewIntrinsic("_defined", DEF);
@@ -134,6 +133,9 @@ package symb
 	NewIntrinsic("_bswap", BSWAP);
 	NewIntrinsic("_bitrev", BITREV);
 	NewIntrinsic("_sqrt", SQRT);
+	NewIntrinsic("_lo", LO);
+	NewIntrinsic("_hi", HI);
+	NewIntrinsic("_splice", SPLICE);
 
 	// library routines
 	libnew = NewLibrary("memalloc", taddr);
@@ -187,7 +189,7 @@ package symb
 	    }
 	}
     }
-    
+
     proc DumpLinkage(s: Symb)
     {
 	if s@.linkage
@@ -214,17 +216,17 @@ package symb
     {   var tl: type.TypeList;
 
 	if s@.kind
-	is CONSTANT then 
+	is CONSTANT then
 	{   err.str("constant "); DumpST(s, false);
 	    if s@.type != 0 && s@.type@.kind <= REF && s@.const != 0 then
-	    {   err.chr('='); 
+	    {   err.chr('=');
 		err.hex64(s@.const@.valu);
 	    }
 	}
 	is TYPE then { err.str("type "); DumpST(s, true); }
 	is VAR then  { err.str("var ");  DumpST(s, false); DumpLinkage(s); }
 	is FIELD then     { err.str("field "); err.str(s@.ident);}
-	is PROC then 
+	is PROC then
 	{   if s@.addr == 0 then
 	    {   err.str("proc ");
 		err.str(s@.ident);
@@ -249,7 +251,7 @@ package symb
 	{   err.str("string ");
 	    err.str(s@.ident);
 	}
-	else 
+	else
 	{   err.str("undefined "); err.str(s@.ident);
 	}
 	if s@.forward then err.str(" (forward)");
@@ -280,8 +282,8 @@ package symb
 	  exit i <= stop;
 	    i -= 1;
 	}
-	
-    } 
+
+    }
 }
 // vim: ts=8 sw=4 noet nowrap
 

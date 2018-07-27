@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 package expr
 {
@@ -860,10 +859,10 @@ ast.Dump(tree);
 	if tree@.op == LOAD then
 	    tree = tree@.child[0];
 	// FIXME - BSWAP-LOAD
-else
-{   lex.ErrorS(COMPILER, "UnLoad error");
-    ast.Dump(tree);
-}
+	else
+	{   lex.ErrorS(COMPILER, "UnLoad error");
+	    ast.Dump(tree);
+	}
 	return tree;
     }
 
@@ -986,7 +985,7 @@ else
 
 	tree = Bool(0);
 	if tree@.type@.kind != UINT then
-	    lex.Error(OPTYPE);
+	    lex.ErrorS(OPTYPE, "_rol or _ror");
 	if Token == COMMA then
 	{   tok = Next();
 	    shft = Bool(0);
@@ -998,7 +997,59 @@ else
 	return tree;
     }
 
-     proc GetArrayArg(): Ast,    // 0 if error
+    proc Splice(et: Type): Ast
+    {   var tree, lhs, rhs: Ast;
+	var dbltype: Type;
+	var dblsize, orgsize: type.BitSize;
+
+	tree = 0;
+	lhs = Bool(0);
+	lex.Expect(COMMA);
+	rhs = Bool(0);
+	if lhs != 0 && rhs != 0 then
+	{   if lhs@.type@.kind == UINT && rhs@.type@.kind == UINT then
+	    {	if et != 0 then
+		{   dbltype = et;
+		    dblsize = et@.size;
+		    orgsize = dblsize / 2;
+		    // FIXME - check for orgsize too small
+		}
+		else
+		{   if lhs@.op != CONST then
+		    {	orgsize = lhs@.type@.size;
+			dblsize = orgsize * 2;
+		    }
+		    elif rhs@.op != CONST then
+		    {	orgsize = rhs@.type@.size;
+			dblsize = orgsize * 2;
+		    }
+		    else
+		    {	// if both CONSTs, just make CONST size
+			dblsize = lhs@.type@.size;
+			orgsize = dblsize / 2;
+		    }
+		    dbltype = target.utype(dblsize);
+		    if dbltype == 0 then
+		    {	lex.ErrorS(OPTYPE, "_splice");
+			return tree;
+		    }
+		}
+		lhs = ast.New1(ZEXT, dbltype, lhs);
+		lhs@.width = dblsize;
+		lhs = ast.OpShfL(LSL, lhs,
+				 ast.Const(type.wordtype, orgsize),
+				 dbltype);
+		rhs = ast.New1(ZEXT, dbltype, rhs);
+		rhs@.width = dblsize;
+		tree = ast.OpLogic(OR, lhs, rhs);
+	    }
+	    else
+		lex.ErrorS(OPTYPE, "_splice");
+	}
+	return tree;
+    }
+
+    proc GetArrayArg(): Ast,    // 0 if error
 			Type,   // type of scalar just wide enough
 			Type    // type of normal scalar wide enough
     {   var arg: Ast;
@@ -1175,7 +1226,7 @@ else
         return tree;
     }
 
-    proc Intrinsic(ps: Symb): Ast
+    proc Intrinsic(ps: Symb, et: Type): Ast
     {   var tree, lhs, rhs: Ast;
 	var tok: TokenT;
 	var which: symb.IntrinsicT;
@@ -1201,7 +1252,7 @@ else
 	    is SQRT then
 	    {	tree = IntrinsicUnary(SQRT);
 		if tree@.type@.kind == SINT then
-		    lex.Error(OPTYPE);
+		    lex.ErrorS(OPTYPE, "_sqrt");
 	    }
 	    is MIN, MAX then
 	    {   lhs = Bool(0);
@@ -1215,6 +1266,25 @@ else
 		    tree = ast.OpMinMax(op, lhs, rhs);
 		}
 	    }
+	    is LO, HI then
+	    {	var haft: Type;
+		var hafsize: type.BitSize;
+		tree = Bool(0);
+		if tree@.type@.kind == UINT && tree@.type@.size >= 16 then
+		{   hafsize = tree@.type@.size/2;
+		    if which == HI then
+		    {	tree = ast.OpShfR(LSR, tree,
+				    ast.Const(type.wordtype, hafsize),
+				    tree@.type);
+		    }
+		    haft = target.utype(hafsize);
+		    tree = ast.New1(TRUNC, haft, tree);
+		    tree@.width = hafsize;
+		}
+		else
+		    lex.ErrorS(OPTYPE, "_lo or _hi");
+	    }
+	    is SPLICE then tree = Splice(et);
 	    is ZLEN then
 	    {   var align: _uint;
 	        lhs = GetLHS(0);
@@ -1223,7 +1293,7 @@ else
 		if lhs@.type@.kind != REF || lhs@.type@.base@.kind != ARRAY ||
 		   lhs@.type@.base@.base@.kind != UINT ||
 		   lhs@.type@.base@.base@.width != target.ByteSize then
-		    lex.Error(OPTYPE);
+		    lex.ErrorS(OPTYPE, "_zlen");
 	        align = GetAlignment(lhs);
 	        tree = ast.New2(ZLEN, type.wordtype, lhs,
 				ast.Const(type.wordtype, align));
@@ -1539,7 +1609,7 @@ type.DumpT(t, false); err.nl();
 	}
 	is PROC then
 	{   if s@.addr != 0 then
-		tree = Intrinsic(s);
+		tree = Intrinsic(s, et);
 	    else
 	    {   if Token == PBEG then
 		    tree = Call(s, 0, 0);

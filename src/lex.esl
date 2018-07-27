@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2017, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 package lex
 {
@@ -63,7 +62,7 @@ package lex
 	[NOTYPE] =	"Error in type definition",
 	[NOTENUM] =	"Enumeration type required",
 	[BADTYPE] =	"Illegal use of type identifier: ",
-	[OPTYPE] =	"Operation not suppported for type",
+	[OPTYPE] =	"Type not suppported for operation: ",
 	[BADTYPDEF] =	"Error in type definition",
 	[BADATTR] =	"Unknown attribute: ",
 	[UNDEFSTMT] =	"Statement begins with undefined identifier: ",

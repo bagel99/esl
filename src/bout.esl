@@ -1,5 +1,4 @@
 // Copyright (c) 2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
 
 // Buffered Output
 // Assumes target wordsize is 32-bits or more.
@@ -139,7 +138,7 @@ package bout
 		in = in >> 4;
 	    }
 	}
-    }  
+    }
 
     proc(bo: @BufIO)  uint64(in: _uint64)
     {	var bp: @_memory;
@@ -227,7 +226,7 @@ package bout
 	else
 	    ui = _uint64(in);
 	bo.uint64(ui);
-    }	
+    }
 
     proc (bo: @BufIO) int32(in: _int32)
     {	var bp: @_memory;
@@ -245,7 +244,7 @@ package bout
 		ui = _uint64(in);
 	    bo.uint32(ui);
 	}
-    }	
+    }
 
     proc (bo: @BufIO) int16(in: _int16)
     {

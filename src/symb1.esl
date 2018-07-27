@@ -1,16 +1,15 @@
-// Copyright (c) 2009-2014, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 package symb
 {
     type SymbT: (USYMB, CONSTANT, TYPE, VAR, FIELD, PROC, PACK, FILE, ALIAS, STRING);
     type LinkT: (FORMAL, LOCAL, NORMAL, GLOBAL, WEAK, EXTERN, FIXED, INLINE, NOINLINE);
     type OffsT: 0..0xFFFF;
-    type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX, 
+    type IntrinsicT: ( NONE, DEF, ABS, MIN, MAX,
 	CLZ, CLZNZ, CTZ, CTZNZ, POP,
 	CVT, NEW, DEL, ZERO, ZLEN,
 	PACKLE, PACKBE, UNPKLE, UNPKBE,
-	ROL, ROR, BSWAP, BITREV,
+	ROL, ROR, BSWAP, BITREV, LO, HI, SPLICE,
 	SQRT
     );
     type SymbNode:
@@ -84,7 +83,7 @@ package symb
 	}
 	return true;
     }
-	
+
     proc FindThisLevel(name: @lex.Identifier): Symb
     {   var s: Symb;
 
@@ -162,11 +161,12 @@ package symb
 	s = Symb(sys.malloc(SymbNode?size + len + 1));
 	_zero(s);
 	s@.ident[0:len] = str@;
+	s@.ident[len] = 0;
 	s@.kind = STRING;
 	s@.lineno = lex.Lineno();
 	return s;
     }
-	
+
     proc NewString2(str1: @[]_byte, len1: _uint,
 		   str2: @[]_byte, len2: _uint): Symb
     {   var s: Symb;
@@ -179,7 +179,7 @@ package symb
 	s@.lineno = lex.Lineno();
 	return s;
     }
-	
+
     proc Clone(os: Symb, name: @lex.Identifier): Symb
      {  var ns: Symb;
 

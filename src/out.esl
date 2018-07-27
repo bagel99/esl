@@ -3,7 +3,6 @@
  * Assumes target wordsize is 32-bits or more.
  *
  * Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
- * $Id$
  */
 
 import sys;
@@ -84,7 +83,7 @@ package out
 	    in = in >> 4;
 	}
 	sys.write(o, buf, 16);
-    }  
+    }
 
     proc (o: fildes) hex(in: _uint):: inline
     {
@@ -170,7 +169,7 @@ package out
 	else
 	    ui = _uint64(in);
 	o.uint64(ui);
-    }	
+    }
 
     proc (o: fildes) int32(in: _int32)
     {	var ui: _uint32;
@@ -186,7 +185,7 @@ package out
 		ui = _uint64(in);
 	    o.uint32(ui);
 	}
-    }	
+    }
 
     proc (o: fildes) int16(in: _int16)
     {

@@ -4,8 +4,7 @@
  * Use clang's calls to DIBuilder routines (llvm/lib/Analysis/DIBuilder.cpp)
  * in clang/lib/CodeGen/CGDebuginfo.cpp as a reference.
  *
- * Copyright (c) 2010-2015, Brian G. Lucas.  See LICENSE file.
- * $Id$
+ * Copyright (c) 2010-2017, Brian G. Lucas.  See LICENSE file.
  */
 
 package llvmdb
@@ -47,7 +46,7 @@ package llvmdb
 	Vector=259
     );
     type DW_ATE:
-    (	Address=1, Boolean=2, ComplexFloat=3, Float=4, 
+    (	Address=1, Boolean=2, ComplexFloat=3, Float=4,
 	Signed=5, SignedChar=6, Unsigned=7, UnsignedChar=8
     );
     const DWLanguage:_uint32 = 12;	// FIXME: using C99 for now
@@ -343,7 +342,7 @@ package llvmdb
 	    return DefBasicType(DW_ATE.Signed, t);
 	else
 	    return DefBasicType(DW_ATE.Unsigned, t);
-    }   
+    }
 
 
     proc DefSubroutine(stag: seqnoT, ps: Symb);	// forward
@@ -401,7 +400,7 @@ package llvmdb
 	}
 	// then the list
 	list = PNewListStart();
-	term = COMMA;  
+	term = COMMA;
 	s = t@.list;
 	while s != 0 do
 	{   tag = s@.dbtag;
@@ -427,7 +426,7 @@ package llvmdb
 	if tagi != 0 then
 	{   tagl = PNewListStart();
 	    PMetaRef(tagi, BRACE);
-	} 
+	}
 	seqno += 1;  taga = seqno;
 	// emit Array
 	PCompositeType(taga, tagb, tagl, "array_type", t);
@@ -467,7 +466,7 @@ package llvmdb
 	}
 	// then the list of fields
 	PListStart(list);
-	term = COMMA; 
+	term = COMMA;
 	s = t@.list;
 	while s != 0 do
 	{   tag = s@.dbtag;
@@ -581,7 +580,7 @@ package llvmdb
 	    f.uint(expr);
 	    f.chr(')');
 	    PLine(s@.lineno);
-	    f.nl();	
+	    f.nl();
 	    if s@.linkage != FORMAL then
 	    {   s@.next = 0;
 		if lvtail == 0 then

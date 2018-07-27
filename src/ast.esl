@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2014, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 package ast
 {
@@ -727,7 +726,7 @@ package ast
 
 	// LHS known to be FLOAT, so must the RHS
 	if rhs@.type@.kind != FLOAT then
-	{   lex.Error(OPTYPE);
+	{   lex.ErrorS(OPTYPE, "floating point operation");
 	    return lhs;
 	}
 	tree = 0;
