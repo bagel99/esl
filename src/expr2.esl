@@ -1288,16 +1288,18 @@ ast.Dump(tree);
 	    is ZLEN then
 	    {   var align: _uint;
 	        lhs = GetLHS(0);
-		if lhs@.op == LOAD && lhs@.type@.kind == ARRAY then	// undo LOAD
-		    lhs = lhs@.child[0];
-		if lhs@.type@.kind != REF || lhs@.type@.base@.kind != ARRAY ||
-		   lhs@.type@.base@.base@.kind != UINT ||
-		   lhs@.type@.base@.base@.width != target.ByteSize then
-		    lex.ErrorS(OPTYPE, "_zlen");
-	        align = GetAlignment(lhs);
-	        tree = ast.New2(ZLEN, type.wordtype, lhs,
-				ast.Const(type.wordtype, align));
-		tree@.width = type.wordtype@.width;
+		if lhs != 0 then
+		{   if lhs@.op == LOAD && lhs@.type@.kind == ARRAY then	// undo LOAD
+			lhs = lhs@.child[0];
+		    if lhs@.type@.kind != REF || lhs@.type@.base@.kind != ARRAY ||
+		       lhs@.type@.base@.base@.kind != UINT ||
+		       lhs@.type@.base@.base@.width != target.ByteSize then
+			lex.ErrorS(OPTYPE, "_zlen");
+		    align = GetAlignment(lhs);
+		    tree = ast.New2(ZLEN, type.wordtype, lhs,
+				    ast.Const(type.wordtype, align));
+		    tree@.width = type.wordtype@.width;
+		}
 	    }
 	    is CLZ    then tree = IntrinsicUnary(CLZ);
 	    is CLZNZ  then tree = IntrinsicUnary(CLZNZ);

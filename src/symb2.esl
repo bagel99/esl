@@ -11,14 +11,14 @@ package symb
 
     proc NewLibrary(name: @lex.Identifier, rett: Type): Symb
     {   var s: Symb;
-	var tl: type.TypeList;
+	var srv: Symb;
 
 	s = New(PROC, name, VISIBLE);
 	s@.linkage = EXTERN;
 	if rett != 0 then
-	{   tl = type.TypeList(sys.zalloc(type.TypeListEntry?size));
-	    tl@.type = rett;
-	    s@.retvlist = tl;
+	{   srv = New(VAR, anonid, PRIVATE);
+	    srv@.type = rett;
+	    s@.retvlist = srv;
 	    s@.type = rett;
 	}
 	return s;
@@ -177,16 +177,17 @@ package symb
 	err.chr(')');
     }
 
-    proc DumpReturns(tl: type.TypeList)
+    proc DumpReturns(srv: Symb)
     {
-	if tl != 0 then
-	{   err.chr(':');
+	if srv != 0 then
+	{   err.chr('(');
 	    loop
-	    {   type.DumpT(tl@.type, false);
-		tl = tl@.next;
-	      exit tl == 0;
+	    {   DumpST(srv, false);
+		srv = srv@.next;
+	      exit srv == 0;
 		err.chr(',');
 	    }
+	    err.chr(')');
 	}
     }
 
@@ -213,8 +214,7 @@ package symb
     }
 
     proc DumpS(s: Symb)
-    {   var tl: type.TypeList;
-
+    {
 	if s@.kind
 	is CONSTANT then
 	{   err.str("constant "); DumpST(s, false);

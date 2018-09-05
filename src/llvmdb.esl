@@ -260,15 +260,15 @@ package llvmdb
     }
 
     proc DefRetvs(ps: Symb): _uint
-    {   var tl: type.TypeList;
+    {   var rs: Symb;
 	var n: _uint;
 
 	n = 0;
-	tl = ps@.retvlist;
-	while tl != 0 do
+	rs = ps@.retvlist;
+	while rs != 0 do
 	{   n += 1;
-	    DefType(tl@.type);
-	    tl = tl@.next;
+	    DefType(rs@.type);
+	    rs = rs@.next;
 	}
 	return n;
     }
@@ -644,16 +644,15 @@ package llvmdb
 
     proc DefSubroutine(stag: seqnoT, ps: Symb)
     {   var tag, list: seqnoT;
-	var s: Symb;
-	var tl: type.TypeList;
+	var s, rs: Symb;
 	var term: TermT;
 
 	// FIXME: what about multiple returned values?
 	// define all the returned values and formals
-	tl = ps@.retvlist;
-	while tl != 0 do
-	{   DefType(tl@.type);
-	    tl = tl@.next;
+	rs = ps@.retvlist;
+	while rs != 0 do
+	{   DefType(rs@.type);
+	    rs = rs@.next;
 	}
 	s = ps@.parmlist;
 	while s != 0 do
@@ -662,18 +661,18 @@ package llvmdb
 	}
 	// now create the list of returned values and formals
 	list = PNewListStart();
-	tl = ps@.retvlist;
+	rs = ps@.retvlist;
 	s = ps@.parmlist;
 	term = COMMA;
-	if tl == 0 then				// no return value
+	if rs == 0 then				// no return value
 	{   if s == 0 then term = BRACE;
 	    PNull(term);
 	}
 	else
-	{   while tl != 0 do
-	    {   tag = tl@.type@.dbtag;
-		tl = tl@.next;
-		if tl == 0 && s == 0 then term = BRACE;
+	{   while rs != 0 do
+	    {   tag = rs@.type@.dbtag;
+		rs = rs@.next;
+		if rs == 0 && s == 0 then term = BRACE;
 		PMetaRef(tag, term);
 	    }
 	}
@@ -770,6 +769,26 @@ package llvmdb
 	    f.str("type: ");  PMetaRef(ttag, NONE);
 	    f.str(")\n");
 	    s = s@.next;
+	}
+	// output return variable descriptors
+	if ps@.retv then
+	{   s = ps@.retvlist;
+	    while s != 0 do
+	    {   ttag = DefType(s@.type);
+		stag = s@.dbtag;
+		if stag == 0 then	// FIXME: shouldn't happen
+		{   seqno += 1;
+		    stag = seqno;
+		}
+		PStart(stag, "DILocalVariable");
+		f.str("name: ");  PName(s, COMMA);
+		f.str("scope: ");  PMetaRef(subr, COMMA);
+		f.str("file: ");  PMetaRef(filenamedir, COMMA);
+		f.str("line: ");  PUint(s@.lineno, COMMA);
+		f.str("type: ");  PMetaRef(ttag, NONE);
+		f.str(")\n");
+		s = s@.next;
+	    }
 	}
 	// output local variable descriptors
 	s = lvhead;

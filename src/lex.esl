@@ -5,7 +5,7 @@ package lex
     // Order is warnings, errors, internal errors
     type Errors:
     (   // Warnings
-	NOTIMPL,    EXPERIMENT, WRONGATTR,
+	NOTIMPL,    EXPERIMENT, WRONGATTR,  OLDRETV,
 	TRUNC,      TOSIGNED,   TOUNSIGN,   BADINTPTR,  AMBIGUOUS,  FLEXSIZE,
 	// Errors
 	BADNL,      ILLCHR,     ILLUTF8,    CMTEOF,     BADEOF,     BADCHR,
@@ -33,6 +33,7 @@ package lex
 	[NOTIMPL] =	"Feature not yet implemented: ",
 	[EXPERIMENT] =  "Feature is experimental: ",
 	[WRONGATTR] =   "Attribute not valid for type: ",
+	[OLDRETV] =	"Depricated syntax for multiple return values",
 	[TRUNC] =	"Truncation may cause loss of data",
 	[TOSIGNED] =	"Converting unsigned to signed integer",
 	[TOUNSIGN] =	"Converting signed to unsigned integer",

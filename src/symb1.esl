@@ -18,7 +18,7 @@ package symb
 	type:	  Type;
 	package:  @SymbNode;	// containing proc/package/file
 	parmlist: @SymbNode;	// for procedures
-	retvlist: type.TypeList;// for procedures, retval types
+	retvlist: @SymbNode;    // for procedures, returned value types
 	symblist: @SymbNode;	// for packages, procedures, aliases
 	altsymb:  @SymbNode;	// alternate name, e.g. external name
 	section:  @SymbNode;    // linker section
@@ -30,6 +30,7 @@ package symb
 	kind:	  SymbT;	// TYPE, VAR, ...
 	linkage:  LinkT;	// LOCAL, NORMAL, ...
 	forward:  boolean;	// forward declared
+	retv:     boolean;      // uses variables for return values
 	bound:    boolean;	// is a bound procedure
 	hasdef:   boolean;	// has default value
 	ispad:    boolean;      // is a field used for padding
@@ -54,12 +55,13 @@ package symb
     };
     var  symbs: [NestMax+1]symblist;
     type Visibility: (VISIBLE, DELAYED, PRIVATE);
+    const anonid: lex.Identifier = "_";
 
 
     // Check for anonymous identifier
     proc IsAnon(id: @lex.Identifier): boolean
     {
-	return zstr.eq(id, "_", lex.IdentMax);
+	return zstr.eq(id, anonid, lex.IdentMax);
     }
 
     proc IsUTF8(id: @lex.Identifier): boolean
@@ -325,6 +327,20 @@ package symb
     proc Save(): Symb
     {
 	return symbs[level].frst;
+    }
+
+    proc Append(s: Symb): Symb
+    {
+	if s != 0 then
+	{   if symbs[level].frst == 0 then      // empty so far
+		symbs[level].frst = s;
+	    else
+		symbs[level].last@.next = s;
+	    while s@.next != 0 do
+		s = s@.next;
+	    symbs[level].last = s;
+	}
+	return s;
     }
 
     proc Push(init: Symb, ps: Symb): Symb

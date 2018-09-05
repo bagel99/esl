@@ -45,12 +45,6 @@ package type
     };
     type Type: @TypeNode;
 
-    type TypeListEntry:
-    {   next:   @TypeListEntry;
-	type:   @TypeNode;
-    };
-    type TypeList: @TypeListEntry;
-
     var unkntype: Type;		// the "unknown" type
     var booltype: Type;
     var bytetype: Type;

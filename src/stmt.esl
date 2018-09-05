@@ -424,7 +424,7 @@ package stmt
 	type constraintT: (IN=10, OUT);	// 0..9 are indirects
 	var constraints: [ArgRange] constraintT;
 	var outputs: [ArgRange]Ast;
-	var tlhead, tltail, tl: type.TypeList;
+	var rs, prevs: Symb;
 
 	tree = ast.New(ASM, 0);
 	tok = Token;
@@ -506,20 +506,19 @@ package stmt
 		    na += 1;
 		}
 		// Set the return value type
-		tlhead = 0;
-		tltail = 0;
+		// Returned values are Symb list on Ast symb.
+		prevs = 0;
 		no = 0;
 		while no < nout do
-		{   tl = type.TypeList(sys.zalloc(type.TypeListEntry?size));
-		    tl@.type = outputs[no]@.type@.base;
-		    if tltail == 0 then
-			tlhead = tl;
-		    else
-			tltail@.next = tl;
-		    tltail = tl;
+		{   rs = symb.New(VAR, symb.anonid, PRIVATE);
+		    rs@.type = outputs[no]@.type@.base;
+		    if tree@.symb == 0 then
+			tree@.symb = rs;
+		    if prevs != 0 then
+			prevs@.next = rs;
+		    prevs = rs;
 		    no += 1;
 		}
-		tree@.type = Type(tlhead);	// WARNING: unioning
 		// Now store the outputs
 		if nout > 0 then
 		{   node = tree;
@@ -541,12 +540,9 @@ package stmt
 			}
 		    }
 		    else
-		    {   // This is a hack because the ASM node overloads type
-			// to point to a TypeList instead of Type, so we need
-			// a node with a real Type.
-			temp = ast.New1(NOP, outputs[0]@.type@.base, node);
-			temp@.width = temp@.type@.width;
-			tree = ast.Child(tree, temp);
+		    {   node@.type = outputs[0]@.type@.base;
+			node@.width = outputs[0]@.type@.base@.width;
+			tree = ast.Child(tree, node);
 		    }
 		}
 	    }
@@ -684,7 +680,7 @@ err.str("Assign to packed array\n");
 	var op: ast.Op;
 	var tok, optok: TokenT;
 	var nl, nr, i: ast.NSubNodes;
-	var tl: type.TypeList;
+	var tl: Symb;
 
 	tree = ast.New1(STORE, 0, lhs);
 	nl = 1;
@@ -831,52 +827,55 @@ err.str("Assign to packed array\n");
     proc Return(): Ast
     {   var tree, rval: Ast;
 	var t: Type;
-	var tl: type.TypeList;
+	var s: Symb;
 	var tok: TokenT;
 
 	tree = 0;
-	tl = 0;
+	s = 0;
 	if symb.curproc != 0 then
-	    tl = symb.curproc@.retvlist;
+	    s = symb.curproc@.retvlist;
 	else
 	    lex.Error(NOPROC);
 	tree = ast.New(RET, 0);
 	tok = Token;
-	loop
+	if !symb.curproc.retv then   // explicit return values
 	{
-	  exit tok == SEMI;
-	    if tl != 0 then
-		t = tl@.type;
-	    else
-		t = 0;
-	    rval = expr.Bool(t);
-	    if rval != 0 then
-	    {   if tl != 0 then
-		{   if t != 0 then
-		    {   rval = ast.Adjust(rval, t);
-			tree = ast.Child(tree, rval);
-			if t@.kind == REF then
-			{   tree@.type = t@.base;
-			    tree@.width = Target.ptr.size;
+	    loop
+	    {
+	      exit tok == SEMI;
+		if s != 0 then
+		    t = s@.type;
+		else
+		    t = 0;
+		rval = expr.Bool(t);
+		if rval != 0 then
+		{   if s != 0 then
+		    {   if t != 0 then
+			{   rval = ast.Adjust(rval, t);
+			    tree = ast.Child(tree, rval);
+			    if t@.kind == REF then
+			    {   tree@.type = t@.base;
+				tree@.width = Target.ptr.size;
+			    }
+			    else
+				tree@.width = t@.width;
 			}
-			else
-			    tree@.width = t@.width;
 		    }
+		    else	    // no RVs left
+			lex.Error(RETTOOMANY);
 		}
-		else	    // no RVs left
-		    lex.Error(RETTOOMANY);
-	    }
-	    if tl != 0 then tl = tl@.next;
-	    tok = Token;
+		if s != 0 then s = s@.next;
+		tok = Token;
 
-	  exit tok != COMMA;
-	    tok = Next();
-	}
-	if tl != 0 then     // more RVs left
-	    lex.Error(RETTOOFEW);
-	if tree@.num != 0 then	// FIXME: fix in llvm?
-	{   tree@.type = tree@.child[0]@.type;	// first returned value
-	    tree@.width = tree@.child[0]@.width;
+	      exit tok != COMMA;
+		tok = Next();
+	    }
+	    if s != 0 then     // more RVs left
+		lex.Error(RETTOOFEW);
+	    if tree@.num != 0 then	// FIXME: fix in llvm?
+	    {   tree@.type = tree@.child[0]@.type;	// first returned value
+		tree@.width = tree@.child[0]@.width;
+	    }
 	}
 	lex.Expect(SEMI);
 	return tree;
@@ -1332,8 +1331,8 @@ symb.DumpS(ns);
     {   var tree: Ast;
 	var tok: TokenT;
 	var t, mt: Type;
-	var s, ms, fs, es: Symb;
-	var ft: type.TypeList;
+	var s, ms, fs, es, rs: Symb;
+	var ft: Symb;
 
 	tree = 0;
 	mt = 0;
@@ -1404,9 +1403,9 @@ symb.DumpS(ns);
 	    type.DefProc(s, ms);
 	    if s@.forward then
 	    {   // Was forward proc, should check for parm/retv changes
-		if !type.SameSymbList(fs, s@.parmlist) then
+		if !type.SameTypes(fs, s@.parmlist) then
 		    lex.ErrorI(FORWPARM, s@.ident);
-		if !type.SameTypeList(ft, s@.retvlist) then
+		if !type.SameTypes(ft, s@.retvlist) then
 		    lex.ErrorI(FORWRETV, s@.ident);
 	    }
 	    tok = Token;
@@ -1418,12 +1417,17 @@ symb.DumpS(ns);
 	    {   s@.forward = false;
 		symb.curproc = s;
 		es = symb.Push(s@.parmlist, 0);	// make parameters visable
+		if s@.retv then
+		    rs = symb.Append(s@.retvlist);  // make return variables visable
+		else
+		    rs = 0;
 		LoopLevel = 0;
 		tree = Statement();
 		if debug.symb.proc then
 		    symb.Dump(1);
 		symb.Pop();			// remove locals+parameters
 		if es != 0 then es@.next = 0;   // restore parameter list end
+		if rs != 0 then rs@.next = 0;   // same for return variables
 		symb.curproc = 0;
 	        t = s@.type;
 		tree = ast.New1(PROC, t, tree);

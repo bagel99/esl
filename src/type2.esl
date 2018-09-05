@@ -68,18 +68,7 @@ package type
     proc ParmList(procs: Symb, meths: Symb);		// forward
     proc Compat(t1: Type, t2: Type): boolean;		// forward
 
-    proc SameTypeList(al: TypeList, bl: TypeList): boolean
-    {
-	while al != 0 && bl != 0 do
-	{   if !Compat(al.type, bl.type) then return false;
-	    al = al.next;
-	    bl = bl.next;
-	}
-	return al == 0 && bl == 0;  // must both be at the end of the list
-    }
-
-    // FIXME: could use SameTypeList() if SymbNode extends from TypeListEntry
-    proc SameSymbList(as: Symb, bs: Symb): boolean
+    proc SameTypes(as: Symb, bs: Symb): boolean
     {
 	while as != 0 && bs != 0 do
 	{   if !Compat(as.type, bs.type) then return false;
@@ -110,8 +99,8 @@ package type
 	is ARRAY then
 	    return Same(t1@.base, t2@.base) && SameIndex(t1, t2);
 	is REFPROC then
-	    return SameSymbList(t1@.list@.parmlist, t2@.list@.parmlist) &&
-	           SameTypeList(t1@.list@.retvlist, t2@.list@.retvlist);
+	    return SameTypes(t1@.list@.parmlist, t2@.list@.parmlist) &&
+		   SameTypes(t1@.list@.retvlist, t2@.list@.retvlist);
 	return false;
     }
 
@@ -148,8 +137,8 @@ package type
 	is ARRAY then
 	    return Same(t1@.base, t2@.base) && SameIndex(t1, t2);
 	is REFPROC then
-	    return SameSymbList(t1@.list@.parmlist, t2@.list@.parmlist) &&
-	           SameTypeList(t1@.list@.retvlist, t2@.list@.retvlist);
+	    return SameTypes(t1@.list@.parmlist, t2@.list@.parmlist) &&
+	           SameTypes(t1@.list@.retvlist, t2@.list@.retvlist);
 	return false;
     }
 
@@ -934,9 +923,8 @@ err.nl();
     }
 
     proc DefProc(procs: Symb, meths: Symb)
-    {   var s, prevs: Symb;
+    {   var s, rs, prevs: Symb;
 	var t: Type;
-	var tl, tlprev: TypeList;
 	var tok: TokenT;
 
 	tok = Token;
@@ -983,26 +971,61 @@ if debug.tests[2] then {
 	    tok = lex.Expect(PEND);
 	}
 	else lex.ErrorT(EXPECT, PBEG);
-	if tok == COLON then	// parse returned value type
+	if tok
+	is COLON then   // parse return value(s) type
 	{   tok = Next();
 	    if tok != COLON then    // not an empty return type
-	    {   tlprev = 0;
+	    {   prevs = 0;
 		loop
 		{   t = type.Def(tok, 0);
 		    type.Final(t);
-		    tl = TypeList(sys.zalloc(TypeListEntry?size));
-		    tl@.type = t;
-		    if tlprev == 0 then
-			procs@.retvlist = tl;
-		    else
-			tlprev@.next = tl;
-		    tlprev = tl;
+		    rs = symb.New(VAR, symb.anonid, PRIVATE);
+		    rs@.type = t;
+		    if procs@.retvlist == 0 then
+			procs@.retvlist = rs;
+		    if prevs != 0 then
+			prevs@.next = rs;
+		    prevs = rs;
 		    tok = Token;
 		  exit tok != COMMA;
 		    tok = Next();
 		}
+		if procs@.retvlist.next != 0 && feature.retv then
+		    lex.Error(OLDRETV);
 		procs@.type = procs@.retvlist@.type;	// first ret type
 	    }
+	}
+	is PBEG then    // parse return value(s), new syntax
+	{   tok = Next();
+	    prevs = 0;
+	    loop
+	    {   if tok == ID then
+		{   if !symb.IsUniqueLocal(procs@.parmlist, lex.Ident) then
+			lex.ErrorI(DEFID, lex.Ident);
+		    rs = symb.New(VAR, lex.Ident, PRIVATE);
+		    tok = Next();
+		    rs@.linkage = LOCAL;    // FIXME - is this OK
+		    t = unkntype;
+		    if tok == COLON then
+		    {   tok = Next();
+			t = type.Def(tok, 0);
+			type.Final(t);
+			tok = Token;
+		    }
+		    else lex.ErrorT(EXPECT, COLON);
+		    rs@.type = t;
+		    if procs@.retvlist == 0 then
+			procs@.retvlist = rs;
+		    if prevs != 0 then
+			prevs@.next = rs;
+		    prevs = rs;
+		}
+		else lex.Error(EXPECTID);
+	      exit tok != COMMA;
+		tok = Next();
+	    }
+	    tok = lex.Expect(PEND);
+	    procs@.retv = true;
 	}
     }
 
