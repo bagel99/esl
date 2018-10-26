@@ -127,9 +127,15 @@ package ast
 
     proc Dup(from: Ast): Ast
     {   var pa: Ast;
+	var i: _uint;
 
 	pa = Ast(sys.zalloc(AstNode?size + from@.max * Ast?size));
 	pa@ = from@;	// record copy
+	i = 0;
+	while i < from@.num do
+	{   pa@.child[i] = from@.child[i];
+	    i += 1;
+	}
 	pa@.lineno = lex.Lineno();
 	return pa;
     }
@@ -226,6 +232,25 @@ package ast
 	return pa;
     }
 
+    proc New4(op:Op, t:type.Type, pc0:Ast, pc1:Ast, pc2:Ast, pc3: Ast): Ast
+    {   var pa: Ast;
+	var n: NSubNodes;
+
+	n = NumChildDefault[op];
+	if n < 4 then
+	    n = 4;
+	pa = Alloc(op, n);
+	pa@.child[0] = pc0;
+	pa@.child[1] = pc1;
+	pa@.child[2] = pc2;
+	pa@.child[3] = pc3;
+	pa@.num = 4;
+	pa@.type = t;
+	if pc0 != 0 then
+	    pa@.width = pc0@.width;
+	return pa;
+    }
+
     proc Child(pp:Ast, pc:Ast): Ast
     {   var n: NSubNodes;
 
@@ -260,6 +285,15 @@ package ast
 	pa@.valu = value;
 	if t != 0 then
 	    pa@.width = t@.width;
+	return pa;
+    }
+
+    proc ConstW(value: type.Valu): Ast
+    {   var pa: Ast;
+
+	pa = New(CONST, type.wordtype);
+	pa@.valu = value;
+	pa@.width = type.wordtype@.width;
 	return pa;
     }
 
@@ -508,10 +542,11 @@ package ast
 	{   lhs = ForceBoolean(lhs);
 	    rhs = ForceBoolean(rhs);
 	    if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is BOR  then lhs@.valu = lhs@.valu | rhs@.valu;
-		is BAND then lhs@.valu = lhs@.valu & rhs@.valu;
-		tree = lhs;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is BOR  then tree@.valu = tree@.valu | rhs@.valu;
+		is BAND then tree@.valu = tree@.valu & rhs@.valu;
 	    }
 	    else
 		tree = New2(op, type.booltype, lhs, rhs);
@@ -544,10 +579,11 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is ADD then lhs@.valu += rhs@.valu;
-		is SUB then lhs@.valu -= rhs@.valu;
-		tree = lhs;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+		if op
+		is ADD then tree@.valu += rhs@.valu;
+		is SUB then tree@.valu -= rhs@.valu;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
@@ -562,9 +598,9 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   result = lhs@.valu << rhs@.valu;
-		tree = Dup(lhs);
-		tree@.valu = result;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        tree@.valu = tree@.valu << rhs@.valu;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
@@ -579,11 +615,11 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is LSR then result = lhs@.valu >> rhs@.valu;
-		is ASR then result = Valu(type.SValu(lhs@.valu) >> rhs@.valu);
-		tree = Dup(lhs);
-		tree@.valu = result;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is LSR then tree@.valu = tree@.valu >> rhs@.valu;
+		is ASR then tree@.valu = Valu(type.SValu(tree@.valu) >> rhs@.valu);
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
@@ -597,10 +633,11 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is MUL then lhs@.valu = lhs@.valu * rhs@.valu;
-		is LSL,ASL then lhs@.valu = lhs@.valu << rhs@.valu;
-		tree = lhs;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is MUL then tree@.valu = tree@.valu * rhs@.valu;
+		is LSL,ASL then tree@.valu = tree@.valu << rhs@.valu;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
@@ -614,12 +651,13 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is DIV then lhs@.valu = lhs@.valu / rhs@.valu;
-		is MOD then lhs@.valu = lhs@.valu % rhs@.valu;
-		is LSR then lhs@.valu = lhs@.valu >> rhs@.valu;
-		is ASR then lhs@.valu = Valu(type.SValu(lhs@.valu) << rhs@.valu);
-		tree = lhs;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is DIV then tree@.valu = tree@.valu / rhs@.valu;
+		is MOD then tree@.valu = tree@.valu % rhs@.valu;
+		is LSR then tree@.valu = tree@.valu >> rhs@.valu;
+		is ASR then tree@.valu = Valu(type.SValu(tree@.valu) << rhs@.valu);
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);   // FIXME - widen not needed
@@ -635,22 +673,23 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
+	    {   // new CONST in case it is shared, assume LHS
+		tree = ast.Const(lhs@.type, lhs@.valu);
+		if op
 		is UMIN then
-		{   if rhs@.valu < lhs.valu then lhs.valu = rhs.valu;
+		{   if rhs@.valu < lhs.valu then tree.valu = rhs.valu;
 		}
 		is UMAX then
-		{   if rhs@.valu > lhs.valu then lhs.valu = rhs.valu;
+		{   if rhs@.valu > lhs.valu then tree.valu = rhs.valu;
 		}
 		is SMIN then
 		{   if type.SValu(rhs@.valu) < type.SValu(lhs.valu) then
-			lhs.valu = rhs.valu;
+			tree.valu = rhs.valu;
 		}
 		is SMAX then
 		{   if type.SValu(rhs@.valu) > type.SValu(lhs.valu) then
-			lhs.valu = rhs.valu;
+			tree.valu = rhs.valu;
 		}
-		tree = lhs;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, 0);
@@ -666,11 +705,12 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is OR then  lhs@.valu = lhs@.valu | rhs@.valu;
-		is XOR then lhs@.valu = lhs@.valu ^ rhs@.valu;
-		is AND then lhs@.valu = lhs@.valu & rhs@.valu;
-		tree = lhs;
+	    {   // new CONST in case it is shared, assume LHS
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is OR then  tree@.valu = tree@.valu | rhs@.valu;
+		is XOR then tree@.valu = tree@.valu ^ rhs@.valu;
+		is AND then tree@.valu = tree@.valu & rhs@.valu;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, 0);
@@ -685,22 +725,23 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is EQ then lhs@.valu = _uint(lhs@.valu == rhs@.valu);
-		is NE then lhs@.valu = _uint(lhs@.valu != rhs@.valu);
-		is ULT then lhs@.valu = _uint(lhs@.valu < rhs@.valu);
-		is UGT then lhs@.valu = _uint(lhs@.valu > rhs@.valu);
-		is ULE then lhs@.valu = _uint(lhs@.valu <= rhs@.valu);
-		is UGE then lhs@.valu = _uint(lhs@.valu >= rhs@.valu);
+	    {   // new CONST in case it is shared, assume LHS
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is EQ then  tree@.valu = _uint(tree@.valu == rhs@.valu);
+		is NE then  tree@.valu = _uint(tree@.valu != rhs@.valu);
+		is ULT then tree@.valu = _uint(tree@.valu < rhs@.valu);
+		is UGT then tree@.valu = _uint(tree@.valu > rhs@.valu);
+		is ULE then tree@.valu = _uint(tree@.valu <= rhs@.valu);
+		is UGE then tree@.valu = _uint(tree@.valu >= rhs@.valu);
 		is SLT then
-		    lhs@.valu = _uint(type.SValu(lhs@.valu) < type.SValu(rhs@.valu));
+		    tree@.valu = _uint(type.SValu(tree@.valu) < type.SValu(rhs@.valu));
 		is SGT then
-		    lhs@.valu = _uint(type.SValu(lhs@.valu) > type.SValu(rhs@.valu));
+		    tree@.valu = _uint(type.SValu(tree@.valu) > type.SValu(rhs@.valu));
 		is SLE then
-		    lhs@.valu = _uint(type.SValu(lhs@.valu) <= type.SValu(rhs@.valu));
+		    tree@.valu = _uint(type.SValu(tree@.valu) <= type.SValu(rhs@.valu));
 		is SGE then
-		    lhs@.valu = _uint(type.SValu(lhs@.valu) >= type.SValu(rhs@.valu));
-		tree = lhs;
+		    tree@.valu = _uint(type.SValu(tree@.valu) >= type.SValu(rhs@.valu));
 	    }
 	    else
 	    {   // FIXME: all the kinds should be examined for legality

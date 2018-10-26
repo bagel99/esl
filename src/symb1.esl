@@ -157,7 +157,7 @@ package symb
 	return fs;
     }
 
-    proc NewString(str: @[]_byte, len: _uint): Symb
+    proc NewString(str: @[]_byte, len: _uint, nopad: boolean): Symb
     {   var s: Symb;
 
 	s = Symb(sys.malloc(SymbNode?size + len + 1));
@@ -165,12 +165,13 @@ package symb
 	s@.ident[0:len] = str@;
 	s@.ident[len] = 0;
 	s@.kind = STRING;
+	s@.ispad = nopad;
 	s@.lineno = lex.Lineno();
 	return s;
     }
 
     proc NewString2(str1: @[]_byte, len1: _uint,
-		   str2: @[]_byte, len2: _uint): Symb
+		   str2: @[]_byte, len2: _uint, nopad: boolean): Symb
     {   var s: Symb;
 
 	s = Symb(sys.malloc(SymbNode?size + len1 + len2 + 1));
@@ -178,6 +179,7 @@ package symb
 	s@.ident[0:len1] = str1@;
 	s@.ident[len1:len2] = str2@;
 	s@.kind = STRING;
+	s@.ispad = nopad;
 	s@.lineno = lex.Lineno();
 	return s;
     }
@@ -302,7 +304,7 @@ package symb
 	s = FindLocal(symbs[level].frst, ImportSymbol);
 	if s == 0 then
 	    s = New(USYMB, ImportSymbol, VISIBLE);
-	t = NewString(name, zstr.len(name, 256));
+	t = NewString(name, zstr.len(name, 256), false);
 	t.next = s.symblist;
 	s.symblist = t;
 	return t.ident;

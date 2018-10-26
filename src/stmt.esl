@@ -378,6 +378,7 @@ package stmt
 			else if tree@.op == SCON &&
 			        t@.hi == tree@.type@.hi-1 then
 			{   // we are allowed to trim the NUL from the string
+err.str("Const SCON dup\n");
 			    tree = ast.Dup(tree);   // dup in case re-using
 			    tree@.type = t;
 			}
@@ -594,11 +595,11 @@ package stmt
     {   var rhs, tree, lsize, rsize, align: Ast;
 	var lalign, ralign, width: _uint;
 	var tl, tr:Type;
+	var op: ast.Op;
 
+	if optok == ASGNR then op = MOVE; else op = COPY;
 	tl = lhs@.type@.base;
 	rhs = expr.Term(tl);
-//err.str("AssignArray:\nlhs=\n");  ast.Dump(lhs);
-//err.str("rhs=\n");  ast.Dump(rhs);
 	if rhs == 0 then return 0;
 	if rhs@.type == 0 || rhs@.type@.kind != ARRAY then
 	{   lex.Error(NOTARRAY);
@@ -622,7 +623,7 @@ err.str("Assign to packed array\n");
 		width = lhs@.child[0]@.type@.base@.base@.width;
 	    }
 	    else
-	    {   lsize = ast.Const(type.wordtype, lhs@.type@.base@.Span());
+	    {   lsize = ast.ConstW(lhs@.type@.base@.Span());
 		width = lhs@.type@.base@.base@.width;
 	    }
 	    if rhs@.op
@@ -630,18 +631,13 @@ err.str("Assign to packed array\n");
 		rhs = expr.UnLoad(rhs);
 	    is SCON, CLIST then
 		rhs = ast.New1(BYREF, type.MakeRef(rhs@.type), rhs);
-//err.str("adjusted rhs=\n");  ast.Dump(rhs);
-//err.str("\tlalign="); err.uint(lalign);
-//err.str(" lsize=\n"); ast.Dump(lsize);
 	    ralign = expr.GetAlignment(rhs);
-//err.str("\tralign="); err.uint(ralign);
 	    if ralign < lalign then
 		lalign = ralign;
 	    if rhs@.op == SLICE then
 		rsize = rhs@.child[2];
 	    else
-		rsize = ast.Const(type.wordtype, rhs@.type@.base@.Span());
-//err.str(" rsize=\n"); ast.Dump(rsize);
+		rsize = ast.ConstW(rhs@.type@.base@.Span());
 	    if lsize@.op == CONST && lsize@.valu == 0 then
 	    {   if rsize@.op == CONST && rsize@.valu == 0 then
 		    lex.Error(ARRAYCOPY);
@@ -652,19 +648,14 @@ err.str("Assign to packed array\n");
 	    {   if rsize@.op != CONST || rsize@.valu != 0 then
 		    lsize = ast.OpMinMax(UMIN, lsize, rsize);
 	    }
-	    // make sure muliply is on wordtype
-	    lsize = ast.New2(MUL, type.wordtype,
-			     ast.ExtendT(lsize, type.wordtype),
-			     ast.Const(type.wordtype, width/target.ByteSize));
-	    lhs = ArrayFix(lhs);
-	    rhs = ArrayFix(rhs);
-	    if optok == ASGNR then
-		tree = ast.New2(MOVE, lhs@.type, lhs, rhs);
-	    else
-		tree = ast.New2(COPY, lhs@.type, lhs, rhs);
-	    tree = ast.Child(tree, lsize);
-	    align = ast.Const(type.wordtype, lalign);
-	    tree = ast.Child(tree, align);
+	    tree = ast.New4(op, lhs@.type.base,
+			ArrayFix(lhs),
+			ArrayFix(rhs),
+			ast.OpMul(MUL,
+			    ast.ExtendT(lsize, type.wordtype),
+			    ast.ConstW(width/target.ByteSize),
+			    type.wordtype),
+			ast.ConstW(lalign));
 	}
 	return tree;
     }
@@ -889,7 +880,8 @@ err.str("Assign to packed array\n");
 	if feature.assert then
 	{   ctree = ast.New1(NOT, 0, ctree);
 	    tree = expr.NewString(symb.curfile@.ident,
-				  zstr.len(symb.curfile@.ident, lex.PathMax));
+				  zstr.len(symb.curfile@.ident, lex.PathMax),
+				  true);
 	    tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
 	    tree = ast.New1(CAST, type.addrtype, tree);
 	    tree = ast.New1(ASSERT, 0, tree);
@@ -1051,7 +1043,7 @@ err.str("Assign to packed array\n");
 		    exit = ast.New1(EXIT, 0,
 			     ast.New2(UGT, t, expr.Load(ix), to));
 		incr = ast.New2(STORE, t, ix,
-			 ast.New2(ADD, t, expr.Load(ix), by));
+			 ast.OpAdd(ADD, expr.Load(ix), by, t));
 	    }
 	    body = Statement();
 	    body = ast.New3(SEQ, 0, exit, body, incr);

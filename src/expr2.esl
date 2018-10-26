@@ -16,9 +16,9 @@ package expr
 	{   tok = lex.Keyword(proplist);
 	    if t != 0 then
 	    {   if tok
-		is KBITSZ then tree = ast.Const(type.wordtype, t@.size);
-		is KMEMSZ then tree = ast.Const(type.wordtype, t@.width/target.ByteSize);
-		is KALIGN then tree = ast.Const(type.wordtype, t@.align/target.ByteSize);
+		is KBITSZ then tree = ast.ConstW(t@.size);
+		is KMEMSZ then tree = ast.ConstW(t@.width/target.ByteSize);
+		is KALIGN then tree = ast.ConstW(t@.align/target.ByteSize);
 		is KMIN then
 		{   if t@.kind == ARRAY then
 		    {   if !t@.flex then
@@ -39,13 +39,13 @@ package expr
 		}
 		is KLEN then
 		{   if t@.kind == ARRAY && !t@.flex then
-			tree = ast.Const(type.wordtype, t.Span());
+			tree = ast.ConstW(t.Span());
 		    else lex.Error(BADLEN);
 		}
 		else lex.Error(PROPID);
 	    }
 	    else
-		tree = ast.Const(type.wordtype, 0); // t == 0, return something
+		tree = ast.ConstW(0); // t == 0, return something
 	}
 	else lex.Error(PROPID);
 	tok = Next();
@@ -54,7 +54,7 @@ package expr
 
     var strid: Valu = 0;
 
-    proc NewString(s:@[]_byte, n:_uint): Ast
+    proc NewString(s:@[]_byte, n:_uint, nul: boolean): Ast
     {   var tree: Ast;
 	var t: Type;
 
@@ -66,7 +66,7 @@ package expr
 	t@.align = t@.base@.align;
 	t@.memorder = Target.memorder;
 	tree = ast.New(SCON, t);
-	tree@.symb = symb.NewString(s, n);
+	tree@.symb = symb.NewString(s, n, !nul);
 	strid += 1;
 	tree@.valu = strid;
 	return tree;
@@ -78,10 +78,13 @@ package expr
 
 	// modify the ARRAY type
 	t = tree@.type;     // assert t@.kind == ARRAY
-	nl = t@.hi;	    // LHS string length without nul termination
-	nr = lex.StringLen; // RHS string length with nul termination
+	nl = t@.hi+1;	    // LHS string length
+	if !tree@.symb@.ispad then
+	    nl -= 1;	    // don't count terminating nul
+	nr = lex.StringLen; // RHS string length
 	t@.hi = nl+nr-1;
-	tree@.symb = symb.NewString2(tree@.symb@.ident, nl, lex.StringBuf, nr);
+	tree@.symb = symb.NewString2(tree@.symb@.ident, nl,
+			lex.StringBuf, nr, !lex.StringNul);
 //symb.DumpS(tree@.symb);
 	return tree;
     }
@@ -91,7 +94,7 @@ package expr
     {   var tree: Ast;
 	var tok: TokenT;
 
-        tree = NewString(lex.StringBuf, lex.StringLen);
+        tree = NewString(lex.StringBuf, lex.StringLen, lex.StringNul);
 	loop
 	{   tok = Next();
 	  exit tok != STR;
@@ -207,8 +210,7 @@ package expr
 	    }
 	    else
 	    {   node = ast.Extend(node, tsize, false);
-		node = ast.New2(LSL, bt, node,
-				ast.Const(type.wordtype, offs));
+		node = ast.New2(LSL, bt, node, ast.ConstW(offs));
 		if vpart == 0 then
 		    vpart = node;
 		else
@@ -217,7 +219,7 @@ package expr
 	    if t@.bitorder != MSB then offs += fsize;
 	    i += 1;
 	}
-	tree = ast.Extend(ast.Const(type.wordtype, cpart), tsize, false);
+	tree = ast.Extend(ast.ConstW(cpart), tsize, false);
 	if vpart != 0 then
 	    tree = ast.New2(OR, type.wordtype, tree, vpart);
 	tree@.type = t;
@@ -242,16 +244,17 @@ package expr
     {   var tree, stree: Ast;
 	var i, j, m, n: ast.NSubNodes;	// what type should this be
 	var tok: TokenT;
-	var once: boolean;
+	var once, isnamed: boolean;
 
 	tree = 0;
+	isnamed = false;
 	tok = Token;
+//err.str("ArrayConst t="); type.DumpT(t, true); err.nl();
 	if tok == GBEG then
 	{   tree = ast.New(CLIST, t);
 	    strid += 1;
 	    tree@.valu = strid;
 	    once = false;
-//err.str("ArrayConst t="); type.DumpT(t, true); err.nl();
 	    if t@.flex then n = 0;
 		       else n = ast.NSubNodes(t.Span());
 	    i = 0;
@@ -316,8 +319,19 @@ package expr
 	else if tok == STR then
 	    tree = String();
 	else if tok == ID then
+	{
 	    tree = CompositeNamedConstant(t);
+	    isnamed = true;
+	}
 	else lex.ErrorT(EXPECT, GBEG);
+	// Fixup any strings, OK to eliminate terminating NUL
+	if tree != 0 && tree@.op == SCON && !t@.flex then
+	{   if tree@.type@.hi > t@.hi then
+		lex.Error(TRUNC);	// more than term NUL trimmed
+	    if isnamed then
+		tree = ast.Dup(tree);
+	    tree@.type = t;
+	}
 	return tree;
     }
 
@@ -356,8 +370,7 @@ package expr
 		}
 		else
 		{   node = ast.Extend(node, tsize, false);
-		    node = ast.New2(LSL, ft, node,
-				    ast.Const(type.wordtype, offs));
+		    node = ast.New2(LSL, ft, node, ast.ConstW(offs));
 		    if vpart == 0 then
 			vpart = node;
 		    else
@@ -368,7 +381,7 @@ package expr
 	    f = f@.next;
 	    i += 1;
 	}
-	tree = ast.Extend(ast.Const(type.wordtype, cpart), tsize, false);
+	tree = ast.Extend(ast.ConstW(cpart), tsize, false);
 	if vpart != 0 then
 	    tree = ast.New2(OR, type.wordtype, tree, vpart);
 	tree@.type = t;
@@ -609,33 +622,29 @@ package expr
 	size = 0;
 	if node@.op
 	is VAR then
-	{   size = ast.Const(type.wordtype,
-			     node@.type@.base@.width/target.ByteSize);
+	{   size = ast.ConstW(node@.type@.base@.width/target.ByteSize);
 	}
 	is LOAD then 		// via a pointer
 	{   if node@.type@.kind == REF then
-		size = ast.Const(type.wordtype,
-				 node@.type@.base@.width/target.ByteSize);
+		size = ast.ConstW(node@.type@.base@.width/target.ByteSize);
 	    else
 		lex.ErrorS(COMPILER, "Load via non-REF");
 	}
 	is INDEX, OFFSET then
-	{   size = ast.Const(type.wordtype,
-			     node@.type@.base@.width/target.ByteSize);
+	{   size = ast.ConstW(node@.type@.base@.width/target.ByteSize);
 	}
 	is SLICE then
-	{   size = ast.Const(type.wordtype,
-			     node@.type@.base@.base@.width/target.ByteSize);
+	{   size = ast.ConstW(node@.type@.base@.base@.width/target.ByteSize);
 	    // LLVM wants multiply to be word sized
-	    size = ast.New2(MUL, type.wordtype,
-			    ast.ExtendT(node@.child[2], type.wordtype), size);
+	    size = ast.OpMul(MUL, ast.ExtendT(node@.child[2], type.wordtype),
+			size, type.wordtype);
 	}
 	else
 	{   lex.ErrorS(NOTIMPL, "GetSize: unexpected node");
 	    ast.Dump(node);
 	}
 	if size == 0 then
-	    size = ast.Const(type.wordtype, 0);
+	    size = ast.ConstW(0);
 //err.str("returns\n"); ast.Dump(size);
 	return size;
     }
@@ -658,19 +667,18 @@ package expr
 		f = f@.next;
 		n += 1;
 	    }
-	    tree = ast.Const(type.wordtype, offset);
+	    tree = ast.ConstW(offset);
 	}
 	is INDEX then
 	{
 	    ctree = GetOffset(node@.child[0]);
 	    // assert node@.child[0]@.type@.base@.kind == ARRAY
-	    tree = ast.Const(type.wordtype,
-		node@.child[0]@.type@.base@.base@.width / target.ByteSize);
-	    tree = ast.New2(MUL, type.wordtype,
-		ast.ExtendT(node@.child[1], type.wordtype), tree);
+	    tree = ast.ConstW(node@.child[0]@.type@.base@.base@.width / target.ByteSize);
+	    tree = ast.OpMul(MUL, ast.ExtendT(node@.child[1], type.wordtype),
+			tree, type.wordtype);
 	}
 	if tree != 0 && ctree != 0 then
-	    tree = ast.New2(ADD, type.wordtype, tree, ctree);
+	    tree = ast.OpAdd(ADD, tree, ctree, type.wordtype);
 //err.str("GetOffset: final="); err.uint(offset); err.nl();
 	return tree;
     }
@@ -700,7 +708,7 @@ package expr
 	{   if len@.op == CONST then slen = type.BitSize(len@.valu);
 	}
 	else
-	    len = ast.Const(type.wordtype, 0);  // stop error propagation
+	    len = ast.ConstW(0);	// stop error propagation
 	if blen == 0 && slen == 0 then
 	    st@.flex = true;
 	else
@@ -727,9 +735,8 @@ package expr
 		st@.align = at@.base@.align;
 	}
 	else
-	    inx = ast.Const(type.wordtype, 0);  // stop error propagation
-	tree = ast.New2(SLICE, type.MakeRef(st), array, inx);
-	tree = ast.Child(tree, len);
+	    inx = ast.ConstW(0);  	// stop error propagation
+	tree = ast.New3(SLICE, type.MakeRef(st), array, inx, len);
 	return tree;
     }
 
@@ -797,15 +804,15 @@ ast.Dump(tree);
 	var tok: TokenT;
 
         tok = Token;
-	size = ast.Const(type.wordtype, t@.width/target.ByteSize);
+	size = ast.ConstW(t@.width/target.ByteSize);
 	if tok == PBEG then
 	{   tok = Next();
 	    if !t@.flex then
 		lex.Error(NOSIZE);
 	    temp = Const(type.wordtype);
-	    temp = ast.New2(MUL, type.wordtype, temp,
-		ast.Const(type.wordtype, FindFlexSize(t)));
-	    size = ast.New2(ADD, type.wordtype, size, temp);
+	    temp = ast.OpMul(MUL, temp,
+		ast.ConstW(FindFlexSize(t)), type.wordtype);
+	    size = ast.OpAdd(ADD, size, temp, type.wordtype);
 	    tok = lex.Expect(PEND);
 	}
 	else if t@.flex then
@@ -823,7 +830,7 @@ ast.Dump(tree);
 	    space = Const(type.wordtype);
 	}
 	else
-	    space = ast.Const(type.wordtype, 0);
+	    space = ast.ConstW(0);
 	return space;
     }
 
@@ -832,15 +839,17 @@ ast.Dump(tree);
 	var tok: TokenT;
 
         tok = Token;
-	size = ast.Const(type.wordtype, t@.width/target.ByteSize);
+	size = ast.ConstW(t@.width/target.ByteSize);
 	if tok == PBEG then
 	{   tok = Next();
 	    if !t@.flex then
 		lex.Error(NOSIZE);
 	    temp = Const(type.wordtype);
+	    temp = ast.OpMul(MUL, temp, ast.ConstW(FindFlexSize(t)),
+		type.wordtype);
 	    temp = ast.New2(MUL, type.wordtype, temp,
-		ast.Const(type.wordtype, FindFlexSize(t)));
-	    size = ast.New2(ADD, type.wordtype, size, temp);
+		ast.ConstW(FindFlexSize(t)));
+	    size = ast.OpAdd(ADD, size, temp, type.wordtype);
 	    tok = lex.Expect(PEND);
 	}
 	else if t@.flex then
@@ -850,7 +859,7 @@ ast.Dump(tree);
 	    space = Const(type.wordtype);
 	}
 	else
-	    space = ast.Const(type.wordtype, 0);
+	    space = ast.ConstW(0);
 	return size, space;
     }
 
@@ -882,14 +891,12 @@ ast.Dump(tree);
 	    tok = Next();
 	    if t != 0 then
 	    {   size = GetSizeSpec(t);
-		tree = ast.New(CALL, 0);
+		tree = ast.New3(CALL, 0, size,
+			    ast.ConstW(t@.align/target.ByteSize),
+			    GetSpaceSpec(t));
 		tree@.symb = symb.libnew;
 		tree@.type = type.addrtype;
 		tree@.width = Target.ptr.size;
-		tree = ast.Child(tree, size);
-		tree = ast.Child(tree,
-			   ast.Const(type.wordtype, t@.align/target.ByteSize));
-		tree = ast.Child(tree, GetSpaceSpec(t));
 		tree = ast.New1(CAST, type.MakeRef(s@.type), tree);
 	    }
 	}
@@ -898,7 +905,7 @@ ast.Dump(tree);
     }
 
     proc Delete(): Ast
-    {   var tree, varb, size, temp: Ast;
+    {   var tree, varb, size: Ast;
 	var tok: TokenT;
 	var t: Type;
 
@@ -910,12 +917,10 @@ ast.Dump(tree);
 	    t = varb@.type@.base;
 	    if t != 0 then
 	    {   size = GetSizeSpec(t);
-		tree = ast.New(CALL, 0);
+		tree = ast.New3(CALL, 0,
+			    ast.New1(CAST, type.addrtype, varb),
+			    size, GetSpaceSpec(t));
 		tree@.symb = symb.libdel;
-		temp = ast.New1(CAST, type.addrtype, varb);
-		tree = ast.Child(tree, temp);
-		tree = ast.Child(tree, size);
-		tree = ast.Child(tree, GetSpaceSpec(t));
 	    }
 	}
 	else lex.Error(EXPECTID);
@@ -946,16 +951,16 @@ ast.Dump(tree);
 		{   lex.ErrorS(COMPILER, "expr.Zero: VAR not REF");
 		    return 0;
 		}
-		size = ast.Const(type.wordtype, t@.width/target.ByteSize);
+		size = ast.ConstW(t@.width/target.ByteSize);
 		align = t@.align/target.ByteSize;
 		if tok == PBEG then
 		{   tok = Next();
 		    if !t@.flex then
 			lex.Error(NOSIZE);
 		    temp = Const(type.wordtype);
-		    temp = ast.New2(MUL, type.wordtype, temp,
-			ast.Const(type.wordtype, FindFlexSize(t)));
-		    size = ast.New2(ADD, type.wordtype, size, temp);
+		    temp = ast.OpMul(MUL, temp,
+			ast.ConstW(FindFlexSize(t)), type.wordtype);
+		    size = ast.OpAdd(ADD, size, temp, type.wordtype);
 		    tok = lex.Expect(PEND);
 		}
 	    }
@@ -963,9 +968,9 @@ ast.Dump(tree);
 	    {   size = GetSize(tree);
 		align = GetAlignment(tree);
 	    }
-	    tree = ast.New3(SET, type.unkntype, tree,
-			    ast.Const(type.bytetype, 0), size);
-	    tree = ast.Child(tree, ast.Const(type.wordtype, align));
+	    tree = ast.New4(SET, type.unkntype, tree,
+			    ast.Const(type.bytetype, 0), size,
+			    ast.Const(type.bytetype, align));
 	}
 	return tree;
     }
@@ -1036,9 +1041,7 @@ ast.Dump(tree);
 		}
 		lhs = ast.New1(ZEXT, dbltype, lhs);
 		lhs@.width = dblsize;
-		lhs = ast.OpShfL(LSL, lhs,
-				 ast.Const(type.wordtype, orgsize),
-				 dbltype);
+		lhs = ast.OpShfL(LSL, lhs, ast.ConstW(orgsize), dbltype);
 		rhs = ast.New1(ZEXT, dbltype, rhs);
 		rhs@.width = dblsize;
 		tree = ast.OpLogic(OR, lhs, rhs);
@@ -1130,8 +1133,7 @@ ast.Dump(tree);
 	{   rhs = ast.ExtendT(rhs, tn);     // extend to natural size
 	    rhs = ast.New1(BSWAP, rhs@.type, rhs);
 	    if shf != 0 then
-		rhs = ast.New2(LSR, rhs@.type, rhs,
-			       ast.Const(type.wordtype, shf));
+		rhs = ast.New2(LSR, rhs@.type, rhs, ast.ConstW(shf));
 	}
 	rhs = ast.ExtendT(rhs, ta);     // extend (trunc) to expected size
 	rhs@.width = ta@.width;
@@ -1160,8 +1162,7 @@ ast.Dump(tree);
 	{   tree = ast.ExtendT(tree, tn);   // extend to natural size
 	    tree = ast.New1(BSWAP, tree@.type, tree);
 	    if shf != 0 then
-		tree = ast.New2(LSR, tree@.type, tree,
-			        ast.Const(type.wordtype, shf));
+		tree = ast.New2(LSR, tree@.type, tree, ast.ConstW(shf));
 	}
 	return tree;
     }
@@ -1273,8 +1274,7 @@ ast.Dump(tree);
 		if tree@.type@.kind == UINT && tree@.type@.size >= 16 then
 		{   hafsize = tree@.type@.size/2;
 		    if which == HI then
-		    {	tree = ast.OpShfR(LSR, tree,
-				    ast.Const(type.wordtype, hafsize),
+		    {	tree = ast.OpShfR(LSR, tree, ast.ConstW(hafsize),
 				    tree@.type);
 		    }
 		    haft = target.utype(hafsize);
@@ -1296,8 +1296,7 @@ ast.Dump(tree);
 		       lhs@.type@.base@.base@.width != target.ByteSize then
 			lex.ErrorS(OPTYPE, "_zlen");
 		    align = GetAlignment(lhs);
-		    tree = ast.New2(ZLEN, type.wordtype, lhs,
-				    ast.Const(type.wordtype, align));
+		    tree = ast.New2(ZLEN, type.wordtype, lhs, ast.ConstW(align));
 		    tree@.width = type.wordtype@.width;
 		}
 	    }
@@ -1478,8 +1477,7 @@ ast.Dump(tree);
 				    if t@.packed then
 				    {
 					tree = ast.New2(FIELD, s@.type, tree,
-					    ast.Const(type.wordtype,
-					    BitfieldOffset(t, s@.addr)));
+					    ast.ConstW(BitfieldOffset(t, s@.addr)));
 					tree@.valu = s@.type@.size;
 					tree@.width = s@.type@.width;
 				    }
@@ -1537,8 +1535,8 @@ type.DumpT(t, false); err.nl();
 		    {   if index@.op == CONST then
 			    index@.valu -= t@.lo;
 			else
-			    index = ast.New2(SUB, t@.index, index,
-					 ast.Const(t@.index, t@.lo));
+			    index = ast.OpAdd(SUB, index,
+					ast.ConstW(t@.lo), type.wordtype);
 		    }
 		    tok = Token;
 		    if tok == COLON then	// array slice
@@ -1561,8 +1559,8 @@ type.DumpT(t, false); err.nl();
 			if t@.packed then
 			{
 			    index = ast.ExtendT(index, type.wordtype);
-			    index = ast.New2(MUL, type.wordtype, index,
-				    ast.Const(type.wordtype, t@.base@.size));
+			    index = ast.OpMul(MUL, index,
+				    ast.ConstW(t@.base@.size), type.wordtype);
 			    tree = ast.New2(FIELD, t@.base, tree, index);
 			    tree@.valu = t@.base@.size;
 			    tree@.width = t@.base@.width;
@@ -1667,7 +1665,7 @@ type.DumpT(t, false); err.nl();
 	    otree = GetOffset(otree);
 	if otree != 0 then
 	{   tree = ast.Cast(tree, type.wordtype);
-	    tree = ast.New2(SUB, type.wordtype, tree, otree);
+	    tree = ast.OpAdd(SUB, tree, otree, type.wordtype);
 	    tree = ast.Cast(tree, t);
 	}
 	return tree;
@@ -1938,17 +1936,17 @@ type.DumpT(t, false); err.nl();
 	if lhs@.op == SLICE then
 	    lsize = lhs@.child[2];
 	else
-	    lsize = ast.Const(type.wordtype, lhs@.type@.base@.Span());
+	    lsize = ast.ConstW(lhs@.type@.base@.Span());
 	if rhs@.op == SLICE then
 	    rsize = rhs@.child[2];
 	else
-	    rsize = ast.Const(type.wordtype, rhs@.type@.base@.Span());
+	    rsize = ast.ConstW(rhs@.type@.base@.Span());
 //err.str("ArrayCompare lsize=\n"); ast.Dump(lsize);
 //err.str("rsize=\n"); ast.Dump(rsize);
 	tree = ast.New2(op, type.booltype, lhs, rhs);
 	tree@.width = 1;
 	tree = ast.Child(tree, lsize);
-	align = ast.Const(type.wordtype, lalign);
+	align = ast.ConstW(lalign);
 	tree = ast.Child(tree, align);
 	return tree;
     }
@@ -2144,7 +2142,7 @@ type.DumpT(t, false); err.nl();
 	}
 	lo = expr.Bool(0);
 	if lo == 0 then     // default to something
-	    lo = ast.Const(type.wordtype, 0);
+	    lo = ast.ConstW(0);
 	t = lo@.type;
 	if Token == RANGE then
 	{   tok = Next();

@@ -293,6 +293,7 @@ package lex
     var Number: _uint64;		// if token is a NUM or FNUM
     var Scale:  _int16;			// power of 10 for FNUM
     var StringLen: 0..StringMax;	// if token is a STR
+    var StringNul: boolean;		// if string is NUL terminated
     var StringBuf: [StringMax+1]Char;	// if token is a STR
     type State:
     (   FIRST,	// first character
@@ -314,9 +315,7 @@ package lex
 	BIN,  OCT,  HEX,
 	DEC,  DECD, DECF, EXP1, EXP2,
 	ID,   ID1,  ID2,  ID3,				// must be consecutive
-	CHR,  CHREND,
-	STR,
-	ESC,
+	CHR,  STR,  ESC,
 	HEX1, HEX2,					// must be consecutive
 	U161, U162, U163, U164,				// must be consecutive
 	U321, U322, U323, U324, U325, U326, U327, U328	// must be consecutive
@@ -753,21 +752,25 @@ package lex
 	    is CHR then
 	    {	str = false;
 		if c
-		is '\'' then { Error(BADCHR); state = FIRST; }
+		is '\'' then
+		{   if k == 0 then { Error(BADCHR); state = FIRST; }
+		    elif k == 1 then { Number = StringBuf[0]; tok = NUM; i += 1; }
+		    else { StringLen = k; StringNul = false; tok = STR; i+= 1; }
+		}
 		is '\n' then { Error(BADNL); state = FIRST; }
 		is '\\' then state = ESC;
-		else     { h = c; state = CHREND; }
+		else
+		{   if k < StringMax then { StringBuf[k] = c; k += 1; }
+		    else Error(Errors.STRLONG);
+		}
 	    }
-	    is CHREND then
-		if c
-		is '\'' then { Number = h; tok = NUM; i += 1; }
-		else     { Error(BADCHR); state = FIRST; }
 	    is STR then
 	    {   str = true;
 		if c
 		is '"' then
 		{   StringBuf[k] = 0;	// terminate
 		    StringLen = k+1;
+		    StringNul = true;
 		    tok = STR; i += 1;
 		}
 		is '\n' then { Error(BADNL); state = FIRST; }
@@ -784,12 +787,9 @@ package lex
 		is 'u' then { h = 0; state = U161; }
 		is 'U' then { h = 0; state = U321; }
 		else
-		{   if str then
-		    {   if k < StringMax then { StringBuf[k] = EscChar(c); k += 1; }
-			else Error(STRLONG);
-			state = STR;
-		    }
-		    else { h = EscChar(c); state= CHREND; }
+		{   if k < StringMax then { StringBuf[k] = EscChar(c); k += 1; }
+		    else Error(STRLONG);
+		    if str then  state = STR; else state = CHR;
 		}
 	    is HEX1, U161 .. U163, U321 .. U327 then
 		if c
@@ -803,23 +803,17 @@ package lex
 		is '\n' then { Error(BADNL); state = FIRST; }	// NL in escape
 		else
 		{   h = EscHex(c, h);
-		    if str then
-		    {   if k < StringMax then { StringBuf[k] = Char(h); k += 1; }
-			else Error(STRLONG);
-			state = STR;
-		    }
-		    else state = CHREND;
+		    if k < StringMax then { StringBuf[k] = Char(h); k += 1; }
+		    else Error(STRLONG);
+		    if str then state = STR; else state = CHR;
 		}
 	    is U164, U328 then
 		if c
 		is '\n' then { Error(BADNL); state = FIRST; }	// NL in escape
 		else
 		{   h = EscHex(c, h);
-		    if str then
-		    {   k = StringRange(EscUTF8(h, k));
-			state = STR;
-		    }
-		    else state = CHREND;
+		    k = StringRange(EscUTF8(h, k));
+		    if str then state = STR; else state = CHR;
 		}
 	  exit tok != NONE;
 	    if c == '\n' then

@@ -125,7 +125,8 @@ package llvm
 		is ZLEN then
 		{   do
 		    {   dummy.type = piu@.type;
-			Print("declare %W @memlen%*A(%K)\n", dummy);
+			dummy.width = piu@.size;
+			Print("declare %W @memlen%X(%K)\n", dummy);
 			piu = piu@.next;
 		    } while piu != 0;
 		}
@@ -560,6 +561,7 @@ package llvm
 		is 'I' then NodeName(node);
 		is 'N' then NodeSrc(node);
 		is 'D' then NodeDst(node);
+		is 'X' then f.uint32(node@.width);
 		is 'W' then PType(type.wordtype);	// target word type
 		is 'S' then // string name
 		{   f.chr('@');
@@ -1278,10 +1280,11 @@ package llvm
 	    GenSub(node@.child[0]);
 	    GenSub(node@.child[1]);
 	    // calculate the number of chunks to be compared
-	    node@.child[2] = ast.New2(DIV, type.wordtype,
-			       ast.New2(MUL, type.wordtype, node@.child[2],
-				 ast.Const(type.wordtype, elsize)),
-			       ast.Const(type.wordtype, size));
+	    // FIXME - change to ast.Div(Div, and ast.Mul(MUL,
+	    node@.child[2] = ast.OpDiv(DIV,
+			       ast.OpMul(MUL, node@.child[2],
+				 ast.ConstW(elsize), type.wordtype),
+			       ast.ConstW(size), type.wordtype);
 	    // LLVM wants count to be register width
 	    node@.child[2] = ast.ExtendT(node@.child[2], type.wordtype);
 	    GenSub(node@.child[2]);
@@ -1351,8 +1354,7 @@ package llvm
 	rhs = ast.ExtendT(rhs, t);
 	nlhs = ast.New2(lop, t, lhs, rhs);
 	nrhs = ast.New2(rop, t, lhs,
-	    ast.New2(SUB, t,
-	                  ast.Const(t, lhs@.type@.size), rhs));
+	    ast.OpAdd(SUB, ast.Const(t, lhs@.type@.size), rhs, t));
 	node@.op = OR;
 	node@.child[0] = nlhs;
 	node@.child[1] = nrhs;
@@ -1816,14 +1818,14 @@ package llvm
     proc FieldExtract(node: Ast)
     {   var tree, mask, shft: Ast;
 
-	mask = ast.Const(type.wordtype, (1<<_uint(node.valu))-1);
+	mask = ast.ConstW((1<<_uint(node.valu))-1);
 	shft = 0;
 	tree = node;
 	while tree@.op == FIELD do
 	{   if shft == 0 then
 		shft = tree@.child[1];
 	    else
-		shft = ast.New2(ADD, type.wordtype, shft, tree@.child[1]);
+		shft = ast.OpAdd(ADD, shft, tree@.child[1], type.wordtype);
 	    tree = tree@.child[0];
 	}
 	// extract works at wordtype, force it
@@ -1841,13 +1843,13 @@ package llvm
     proc FieldInsert(lhs: Ast, rhs: Ast): Ast, Ast
     {   var temp, mask, shft: Ast;
 
-	mask = ast.Const(type.wordtype, (1<<_uint(lhs.valu))-1);
+	mask = ast.ConstW((1<<_uint(lhs.valu))-1);
 	shft = 0;
 	while lhs@.op == FIELD do
 	{   if shft == 0 then
 		shft = lhs@.child[1];
 	    else
-		shft = ast.New2(ADD, type.wordtype, shft, lhs@.child[1]);
+		shft = ast.OpAdd(ADD, shft, lhs@.child[1], type.wordtype);
 	    lhs = lhs@.child[0];
 	}
 	// insert works at wordtype, force it
