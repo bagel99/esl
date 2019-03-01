@@ -16,28 +16,28 @@ package ast
 	OFFSET,	INDEX,	SLICE,	BYREF,
 	CAST,
 	CALL,	CALLI,	ASM,
-	SET,
-	COPY,	MOVE,	AEQ,	ANE,	// record and array operators
+	SET,	COPY,	MOVE,	AEQ,	ANE,	// record and array ops
 	GETRV,
 	LOAD,
 	STORE,		// assignment
-	ZEXT,   SEXT,   TRUNC,	BSWAP,   BITREV,
-	NEG,	NOT,	ABS,    SQRT,
+	// unary ops
+	ZEXT,   SEXT,   TRUNC,	BSWAP,	BITREV,
+	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,
+	NEG,	NOT,	ABS,
+	SQRT,	ZLEN,
 	FNEG,   FCVTL,  FCVTS,
 	CVTUF,	CVTIF,  CVTFU,	CVTFI,
-	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,	ZLEN,
-	ROL,    ROR,
-	ADD,    SUB,
-	MUL,    DIV,    MOD,
-	EQ,     NE,
-	ULT,    UGT,    ULE,    UGE,
-	SLT,    SGT,    SLE,    SGE,
-	FEQ,    FNE,    FLT,    FGT,    FLE,    FGE,
-	UMIN,	UMAX,	SMIN,	SMAX,	// temporary, get replaced by expansion
-	LSL,    LSR,	ASL,    ASR,
+	// binary ops
 	AND,    OR,     XOR,
-	BAND,   BOR,	BNOT,
+	ADD,    SUB,	MUL,    DIV,    MOD,
+	UMIN,	UMAX,	SMIN,	SMAX,		 // expand in llvm
+	LSL,    LSR,	ASL,    ASR,	ROL,    ROR,
+	EQ,     NE,	ULT,    UGT,    ULE,    UGE,
+			SLT,    SGT,    SLE,    SGE,
+	FEQ,    FNE,    FLT,    FGT,    FLE,    FGE,
 	FADD,	FSUB,	FMUL,	FDIV,	FREM,
+	FMIN,   FMAX, 				// expand in llvm
+	BAND,   BOR,	BNOT,
 	IFEXPR,		// select expression
 	SEQ,		// sequence
 	LOOP,
@@ -81,6 +81,7 @@ package ast
 	[FEQ]=    2,    [FNE]=    2,
 	[FLT]=	  2,	[FGT]=	  2,    [FLE]=	  2,    [FGE]=	  2,
 	[UMIN]=   3,	[UMAX]=   3,	[SMIN]=   3,	[SMAX]=   3,
+	[FMIN]=   3,	[FMAX]=   3,
 	[LSL]=	  2,    [LSR]=	  2,	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
 	[BAND]=	  2,	[BOR]=	  2,	[BNOT]=	  2,
@@ -555,127 +556,23 @@ package ast
     }
 
     proc OpBinary(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
-    {
-	var sl, sr: type.BitSize;
-
-	sl = lhs@.width;
-	sr = rhs@.width;
-	// make LHS as wide as result wants it
-	if t != 0 && t@.width > sl then
-	{  lhs = ExtendT(lhs, t);
-	   sl = t@.width;
-	}
-	if sl > sr then
-	    rhs = Extend(rhs, sl, false);
-	else if sr > sl then
-	    lhs = Extend(lhs, sr, false);
-	return New2(op, lhs@.type, lhs, rhs);
-    }
-
-    // ADD, SUB
-    proc OpAdd(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
     {   var tree: Ast;
+	var sl, sr: type.BitSize;
 
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
+	{   if lhs@.op == CONST && rhs@.op == CONST then  // const folding
 	    {   // new CONST in case it is shared
 		tree = ast.Const(lhs@.type, lhs@.valu);
 		if op
 		is ADD then tree@.valu += rhs@.valu;
 		is SUB then tree@.valu -= rhs@.valu;
-	    }
-	    else
-		tree = OpBinary(op, lhs, rhs, t);
-	}
-	return tree;
-    }
-
-    proc OpShfL(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
-    {   var tree: Ast;
-	var result: Valu;
-
-	tree = 0;
-	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   // new CONST in case it is shared
-		tree = ast.Const(lhs@.type, lhs@.valu);
-	        tree@.valu = tree@.valu << rhs@.valu;
-	    }
-	    else
-		tree = OpBinary(op, lhs, rhs, t);
-	}
-	return tree;
-    }
-
-    proc OpShfR(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
-    {   var tree: Ast;
-	var result: Valu;
-
-	tree = 0;
-	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   // new CONST in case it is shared
-		tree = ast.Const(lhs@.type, lhs@.valu);
-	        if op
-		is LSR then tree@.valu = tree@.valu >> rhs@.valu;
-		is ASR then tree@.valu = Valu(type.SValu(tree@.valu) >> rhs@.valu);
-	    }
-	    else
-		tree = OpBinary(op, lhs, rhs, t);
-	}
-	return tree;
-    }
-
-    proc OpMul(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
-    {   var tree: Ast;
-
-	tree = 0;
-	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   // new CONST in case it is shared
-		tree = ast.Const(lhs@.type, lhs@.valu);
-	        if op
 		is MUL then tree@.valu = tree@.valu * rhs@.valu;
 		is LSL,ASL then tree@.valu = tree@.valu << rhs@.valu;
-	    }
-	    else
-		tree = OpBinary(op, lhs, rhs, t);
-	}
-	return tree;
-    }
-
-    proc OpDiv(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
-    {   var tree: Ast;
-
-	tree = 0;
-	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   // new CONST in case it is shared
-		tree = ast.Const(lhs@.type, lhs@.valu);
-	        if op
 		is DIV then tree@.valu = tree@.valu / rhs@.valu;
 		is MOD then tree@.valu = tree@.valu % rhs@.valu;
 		is LSR then tree@.valu = tree@.valu >> rhs@.valu;
 		is ASR then tree@.valu = Valu(type.SValu(tree@.valu) << rhs@.valu);
-	    }
-	    else
-		tree = OpBinary(op, lhs, rhs, t);   // FIXME - widen not needed
-//		tree = OpBinary(op, lhs, rhs, 0);
-	}
-	return tree;
-    }
-
-    // MIN, MAX
-    proc OpMinMax(op: Op, lhs: Ast, rhs: Ast): Ast
-    {   var tree: Ast;
-
-	tree = 0;
-	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   // new CONST in case it is shared, assume LHS
-		tree = ast.Const(lhs@.type, lhs@.valu);
-		if op
 		is UMIN then
 		{   if rhs@.valu < lhs.valu then tree.valu = rhs.valu;
 		}
@@ -690,44 +587,9 @@ package ast
 		{   if type.SValu(rhs@.valu) > type.SValu(lhs.valu) then
 			tree.valu = rhs.valu;
 		}
-	    }
-	    else
-		tree = OpBinary(op, lhs, rhs, 0);
-	}
-	return tree;
-    }
-
-
-    // AND, OR, XOR
-    proc OpLogic(op: Op, lhs: Ast, rhs: Ast): Ast
-    {   var tree: Ast;
-
-	tree = 0;
-	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   // new CONST in case it is shared, assume LHS
-		tree = ast.Const(lhs@.type, lhs@.valu);
-	        if op
 		is OR then  tree@.valu = tree@.valu | rhs@.valu;
 		is XOR then tree@.valu = tree@.valu ^ rhs@.valu;
 		is AND then tree@.valu = tree@.valu & rhs@.valu;
-	    }
-	    else
-		tree = OpBinary(op, lhs, rhs, 0);
-	}
-	return tree;
-    }
-
-    // EQ, NE, ULT, UGT, ULE, UGE, SLT, SGT, SLE, SGE
-    proc OpCompare(op: Op, lhs: Ast, rhs: Ast): Ast
-    {   var tree: Ast;
-
-	tree = 0;
-	if lhs != 0 && rhs != 0 then
-	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   // new CONST in case it is shared, assume LHS
-		tree = ast.Const(lhs@.type, lhs@.valu);
-	        if op
 		is EQ then  tree@.valu = _uint(tree@.valu == rhs@.valu);
 		is NE then  tree@.valu = _uint(tree@.valu != rhs@.valu);
 		is ULT then tree@.valu = _uint(tree@.valu < rhs@.valu);
@@ -744,23 +606,26 @@ package ast
 		    tree@.valu = _uint(type.SValu(tree@.valu) >= type.SValu(rhs@.valu));
 	    }
 	    else
-	    {   // FIXME: all the kinds should be examined for legality
-		// for the various ops
-		if lhs@.type@.kind == REF || lhs@.type@.kind == REFPROC then
-		{   if rhs@.op == CONST then
-		    {   if op == EQ || op == NE then
-			    rhs@.width = Target.ptr.size;
-		    }
+	    {
+		sl = lhs@.width;
+		sr = rhs@.width;
+		// make LHS as wide as result wants it
+		if t != 0 && t@.width > sl then
+		{  lhs = ExtendT(lhs, t);
+		   sl = t@.width;
 		}
-		tree = OpBinary(op, lhs, rhs, 0);
+		if sl > sr then
+		    rhs = Extend(rhs, sl, false);
+		else if sr > sl then
+		    lhs = Extend(lhs, sr, false);
+		tree = New2(op, lhs@.type, lhs, rhs);
 	    }
-	    tree@.type = type.booltype;
-	    tree@.width = 1;
 	}
 	return tree;
+
     }
 
-    // FADD, FSUB, FMUL, FDIV, FREM
+    // FADD, FSUB, FMUL, FDIV, FREM, FMIN, FMAX
     proc OpFloat(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
     {   var tree: Ast;
 	var sl, sr: type.BitSize;
@@ -972,6 +837,7 @@ err.nl();
 	[FLE]=   "FLE",		[FGE]=   "FGE",
 	[UMIN]=  "UMIN",	[UMAX]=  "UMAX",
 	[SMIN]=  "SMIN",	[SMAX]=  "SMAX",
+	[FMIN]=  "FMIN",	[FMAX]=  "FMAX",
 	[LSL]=   "LSL",		[LSR]=   "LSR",
 	[ASL]=   "ASL",		[ASR]=   "ASR",
 	[AND]=   "AND",		[OR]=    "OR",		[XOR]=   "XOR",
@@ -1027,7 +893,7 @@ err.nl();
 	is SCON then
 	{   err.str(" id ");
 	    err.uint32(_uint32(node@.valu));
-	    err.str(" value=\"");
+	    err.str(" val=\"");
 	    err.strn(node@.symb@.ident, node@.type.Span()-1);
 	    err.chr('"');
 	}

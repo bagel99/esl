@@ -1186,13 +1186,24 @@ if debug.tests[2] then {
 	    else
 	    {   if t@.kind
 		is UINT then
-		{
-		    err.uint64(t@.lo); err.str(".."); err.uint64(t@.hi);
+		{   if t@.scale == 0 then
+		    {   err.uint64(t@.lo);
+		        err.str(".."); err.uint64(t@.hi);
+		    }
+		    else
+		    {   err.str("_ufix("); err.uint(t@.width);
+			err.chr(','); err.int(t@.scale); err.chr(')');
+		    }
 		}
 		is SINT then
-		{
-		    err.int64(_int64(t@.lo)); err.str("..");
-		    err.int64(_int64(t@.hi));
+		{   if t@.scale == 0 then
+		    {   err.int64(_int64(t@.lo));
+		        err.str(".."); err.int64(_int64(t@.hi));
+		    }
+		    else
+		    {   err.str("_sfix("); err.uint(t@.width);
+			err.chr(','); err.int(t@.scale); err.chr(')');
+		    }
 		}
 		is ENUM then
 		{   err.chr('(');

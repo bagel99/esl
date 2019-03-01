@@ -646,12 +646,12 @@ err.str("Assign to packed array\n");
 	    }
 	    else
 	    {   if rsize@.op != CONST || rsize@.valu != 0 then
-		    lsize = ast.OpMinMax(UMIN, lsize, rsize);
+		    lsize = ast.OpBinary(UMIN, lsize, rsize, 0);
 	    }
 	    tree = ast.New4(op, lhs@.type.base,
 			ArrayFix(lhs),
 			ArrayFix(rhs),
-			ast.OpMul(MUL,
+			ast.OpBinary(MUL,
 			    ast.ExtendT(lsize, type.wordtype),
 			    ast.ConstW(width/target.ByteSize),
 			    type.wordtype),
@@ -756,12 +756,7 @@ err.str("Assign to packed array\n");
 						lrhs, rhs, lrhs@.type);
 				    else
 				    {   op = ops[optok];
-					if op < OR then
-					    rhs = ast.OpAdd(op,
-						    lrhs, rhs, 0);
-					else
-					    rhs = ast.OpLogic(op,
-						    lrhs, rhs);
+					rhs = ast.OpBinary(op, lrhs, rhs, 0);
 				    }
 				}
 				if lhs != 0 then
@@ -1041,9 +1036,9 @@ err.str("Assign to packed array\n");
 		}
 		if to != 0 then
 		    exit = ast.New1(EXIT, 0,
-			     ast.New2(UGT, t, expr.Load(ix), to));
+			     ast.OpBinary(UGT, expr.Load(ix), to, t));
 		incr = ast.New2(STORE, t, ix,
-			 ast.OpAdd(ADD, expr.Load(ix), by, t));
+			 ast.OpBinary(ADD, expr.Load(ix), by, t));
 	    }
 	    body = Statement();
 	    body = ast.New3(SEQ, 0, exit, body, incr);

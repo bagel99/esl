@@ -32,7 +32,7 @@ package llvm
     var loopexit: seqnoT;	// label sequence number for this loop exit
     type Intrinsics:
     (   MEMCPY, MEMMOVE, MEMSET, MEMCMP, ZLEN, BSWAP, BITREV,
-	CLZ, CTZ, POP, SQRTF, SQRTI,
+	CLZ, CTZ, POP, SQRTF, FABS, SQRTI,
 	ASSERT,   END
     );
     type IntrinsicUse:
@@ -112,6 +112,13 @@ package llvm
 		{   do
 		    {   dummy.type = piu@.type;
 			Print("declare %K @llvm.ctpop.%K(%K)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
+		is FABS then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @llvm.fabs.%G(%K)\n", dummy);
 			piu = piu@.next;
 		    } while piu != 0;
 		}
@@ -282,6 +289,13 @@ package llvm
 		f.chr('*');
 	    }
 	}
+    }
+
+    proc PFType(t: Type)
+    {
+	if t@.size
+	is 32 then f.str("f32");
+	is 64 then f.str("f64");
     }
 
     proc PDerefType(t: Type)
@@ -460,6 +474,8 @@ package llvm
 	    f.str("__NoName__");
     }
 
+    // FIXME - this doesn't give bit exact results for float64.
+    // Replace with a better algorithm.
     proc PFloat(node: Ast)
     {   var tmp, ten: _float64;
 	var scl: _int;
@@ -468,12 +484,10 @@ package llvm
 	tmp = _float64*(_int64(node@.valu));
 	scl = node@.fscale;
 	if scl > 0 then
-	{   ten = 1.0;
-	    do
-	    {   ten = ten * 10.0;
+	{   do
+	    {   tmp = tmp / 10.0;
 		scl -= 1;
 	    } while scl != 0;
-	    tmp = tmp / ten;
 	}
 	elif scl < 0 then
 	{   do
@@ -554,6 +568,7 @@ package llvm
 		}
 		if c
 		is 'K' then PType(t);
+		is 'G' then PFType(t);
 		is 'A' then PAlign(t);
 		is 'B' then PWidth(t);
 		is 'R' then PDerefType(t);
@@ -1281,8 +1296,8 @@ package llvm
 	    GenSub(node@.child[1]);
 	    // calculate the number of chunks to be compared
 	    // FIXME - change to ast.Div(Div, and ast.Mul(MUL,
-	    node@.child[2] = ast.OpDiv(DIV,
-			       ast.OpMul(MUL, node@.child[2],
+	    node@.child[2] = ast.OpBinary(DIV,
+			       ast.OpBinary(MUL, node@.child[2],
 				 ast.ConstW(elsize), type.wordtype),
 			       ast.ConstW(size), type.wordtype);
 	    // LLVM wants count to be register width
@@ -1305,14 +1320,23 @@ package llvm
     proc Abs(node: Ast)
     {   var rhs, lhs: Ast;
 
-	rhs = node@.child[0];
-	lhs = ast.New1(NEG, rhs@.type, rhs);
-	node@.child[0] = ast.New2(SLT, type.booltype, rhs,
-				       ast.Const(rhs@.type, 0));
-	node = ast.Child(node, lhs);    // must return same node
-	node = ast.Child(node, rhs);    // must return same node
-	node@.op = IFEXPR;
-	GenSub(node);
+	// FIXME - use llvm.fabs.T for float
+	if node@.type.kind == FLOAT then
+	{   GenSub(node@.child[0]);
+	    node@.seqno = Tseqno;  Tseqno += 1;
+	    Print("\t%N = call %T @llvm.fabs.%G(%T %0N)\n", node);
+	    UseIntrinsic(FABS, node@.type.width, node@.type);
+	}
+	else
+	{   rhs = node@.child[0];
+	    lhs = ast.New1(NEG, rhs@.type, rhs);
+	    node@.child[0] = ast.New2(SLT, type.booltype, rhs,
+					   ast.Const(rhs@.type, 0));
+	    node = ast.Child(node, lhs);    // must return same node
+	    node = ast.Child(node, rhs);    // must return same node
+	    node@.op = IFEXPR;
+	    GenSub(node);
+	}
     }
 
     proc MinMax(node: Ast)
@@ -1326,6 +1350,8 @@ package llvm
 	is SMAX then op = SGT;
 	is UMIN then op = ULT;
 	is UMAX then op = UGT;
+	is FMIN then op = FLT;
+	is FMAX then op = FGT;
 	node@.child[0] = ast.New2(op, type.booltype, lhs, rhs);
 	node@.child[1] = lhs;
 	node = ast.Child(node, rhs);    // must return same node
@@ -1354,7 +1380,7 @@ package llvm
 	rhs = ast.ExtendT(rhs, t);
 	nlhs = ast.New2(lop, t, lhs, rhs);
 	nrhs = ast.New2(rop, t, lhs,
-	    ast.OpAdd(SUB, ast.Const(t, lhs@.type@.size), rhs, t));
+	    ast.OpBinary(SUB, ast.Const(t, lhs@.type@.size), rhs, t));
 	node@.op = OR;
 	node@.child[0] = nlhs;
 	node@.child[1] = nrhs;
@@ -1825,7 +1851,7 @@ package llvm
 	{   if shft == 0 then
 		shft = tree@.child[1];
 	    else
-		shft = ast.OpAdd(ADD, shft, tree@.child[1], type.wordtype);
+		shft = ast.OpBinary(ADD, shft, tree@.child[1], type.wordtype);
 	    tree = tree@.child[0];
 	}
 	// extract works at wordtype, force it
@@ -1849,7 +1875,7 @@ package llvm
 	{   if shft == 0 then
 		shft = lhs@.child[1];
 	    else
-		shft = ast.OpAdd(ADD, shft, lhs@.child[1], type.wordtype);
+		shft = ast.OpBinary(ADD, shft, lhs@.child[1], type.wordtype);
 	    lhs = lhs@.child[0];
 	}
 	// insert works at wordtype, force it
@@ -2083,7 +2109,7 @@ f.flush();
 	    UnaryOp(node);
 	is CLZ, CLZNZ, CTZ, CTZNZ, POP, BITREV, SQRT then UnaryOp(node);
 	is ABS then Abs(node);
-	is UMIN, UMAX, SMIN, SMAX then MinMax(node);
+	is UMIN, UMAX, SMIN, SMAX, FMIN, FMAX then MinMax(node);
 	is ROL, ROR then Rotate(node);
 	is ZLEN then ZLen(node);
 	is ADD then BinaryOp(node, "add");

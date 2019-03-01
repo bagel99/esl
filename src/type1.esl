@@ -24,6 +24,7 @@ package type
 	size:	BitSize;	// size in bits
 	width:  BitSize;	// size in bits when in memory
 	align:	BitSize;	// alignment in bits when in memory
+	scale:  _int16;		// scale for fixed point
 	dbtag:	_uint16;	// tag for debug information
 	antag:  _uint16;	// tag for anonymous types (used by llvm)
 	kind:	TypeT;		// ENUM, UINT, ...

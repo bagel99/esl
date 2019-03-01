@@ -156,7 +156,7 @@ package lex
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
 	KINLINE,KNOINLINE,KINTR,KWEAK,
 	// type properties begin here
-	KMIN,	KMAX,	KBITSZ,	KMEMSZ,	KLEN
+	KMIN,	KMAX,	KBITSZ,	KFRACSZ,KMEMSZ,	KLEN
     );
     const keywords:[TokenT]@[]Char =
     {	[NONE] =	"",		// none
@@ -257,6 +257,7 @@ package lex
 	[KMIN] =	"min",		// properties
 	[KMAX] =	"max",
 	[KBITSZ] =	"bits",
+	[KFRACSZ] =     "fbits",
 	[KMEMSZ] =	"size",
 	[KLEN]=		"len"
     };

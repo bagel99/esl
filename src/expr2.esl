@@ -25,6 +25,16 @@ package expr
 			    tree = ast.Const(t@.base, t.lo);
 			else lex.Error(BADLEN);
 		    }
+		    elif t@.kind == FLOAT then
+		    {	if t@.size == 32 then
+			{   tree = ast.Const(t, 117549435);
+			    tree@.fscale = 46;
+			}
+			else
+			{   tree = ast.Const(t, 22250738585072014);
+			    tree@.fscale = 324;
+			}
+		    }
 		    else
 			 tree = ast.Const(t, t@.lo);
 		}
@@ -33,6 +43,16 @@ package expr
 		    {   if !t@.flex then
 			    tree = ast.Const(t@.base, t.hi);
 			else lex.Error(BADLEN);
+		    }
+		    elif t@.kind == FLOAT then
+		    {	if t@.size == 32 then
+			{   tree = ast.Const(t, 340282347);
+			    tree@.fscale = -30;
+			}
+			else
+			{   tree = ast.Const(t, 17976931348623157);
+			    tree@.fscale = -292;
+			}
 		    }
 		    else
 			tree = ast.Const(t, t@.hi);
@@ -636,7 +656,7 @@ package expr
 	is SLICE then
 	{   size = ast.ConstW(node@.type@.base@.base@.width/target.ByteSize);
 	    // LLVM wants multiply to be word sized
-	    size = ast.OpMul(MUL, ast.ExtendT(node@.child[2], type.wordtype),
+	    size = ast.OpBinary(MUL, ast.ExtendT(node@.child[2], type.wordtype),
 			size, type.wordtype);
 	}
 	else
@@ -674,11 +694,11 @@ package expr
 	    ctree = GetOffset(node@.child[0]);
 	    // assert node@.child[0]@.type@.base@.kind == ARRAY
 	    tree = ast.ConstW(node@.child[0]@.type@.base@.base@.width / target.ByteSize);
-	    tree = ast.OpMul(MUL, ast.ExtendT(node@.child[1], type.wordtype),
+	    tree = ast.OpBinary(MUL, ast.ExtendT(node@.child[1], type.wordtype),
 			tree, type.wordtype);
 	}
 	if tree != 0 && ctree != 0 then
-	    tree = ast.OpAdd(ADD, tree, ctree, type.wordtype);
+	    tree = ast.OpBinary(ADD, tree, ctree, type.wordtype);
 //err.str("GetOffset: final="); err.uint(offset); err.nl();
 	return tree;
     }
@@ -772,6 +792,13 @@ ast.Dump(tree);
 	return false;
     }
 
+    proc IsFloatBinOp(lhs: Ast, rhs: Ast): boolean
+    {
+	if lhs@.type@.kind == FLOAT || rhs@.type@.kind == FLOAT then
+	    return true;
+	return false;
+    }
+
     proc FindFlexSize(t: Type): type.BitSize
     {   var size: type.BitSize;
 	var bt: Type;
@@ -810,9 +837,9 @@ ast.Dump(tree);
 	    if !t@.flex then
 		lex.Error(NOSIZE);
 	    temp = Const(type.wordtype);
-	    temp = ast.OpMul(MUL, temp,
+	    temp = ast.OpBinary(MUL, temp,
 		ast.ConstW(FindFlexSize(t)), type.wordtype);
-	    size = ast.OpAdd(ADD, size, temp, type.wordtype);
+	    size = ast.OpBinary(ADD, size, temp, type.wordtype);
 	    tok = lex.Expect(PEND);
 	}
 	else if t@.flex then
@@ -845,11 +872,11 @@ ast.Dump(tree);
 	    if !t@.flex then
 		lex.Error(NOSIZE);
 	    temp = Const(type.wordtype);
-	    temp = ast.OpMul(MUL, temp, ast.ConstW(FindFlexSize(t)),
+	    temp = ast.OpBinary(MUL, temp, ast.ConstW(FindFlexSize(t)),
 		type.wordtype);
 	    temp = ast.New2(MUL, type.wordtype, temp,
 		ast.ConstW(FindFlexSize(t)));
-	    size = ast.OpAdd(ADD, size, temp, type.wordtype);
+	    size = ast.OpBinary(ADD, size, temp, type.wordtype);
 	    tok = lex.Expect(PEND);
 	}
 	else if t@.flex then
@@ -958,9 +985,9 @@ ast.Dump(tree);
 		    if !t@.flex then
 			lex.Error(NOSIZE);
 		    temp = Const(type.wordtype);
-		    temp = ast.OpMul(MUL, temp,
+		    temp = ast.OpBinary(MUL, temp,
 			ast.ConstW(FindFlexSize(t)), type.wordtype);
-		    size = ast.OpAdd(ADD, size, temp, type.wordtype);
+		    size = ast.OpBinary(ADD, size, temp, type.wordtype);
 		    tok = lex.Expect(PEND);
 		}
 	    }
@@ -1041,10 +1068,10 @@ ast.Dump(tree);
 		}
 		lhs = ast.New1(ZEXT, dbltype, lhs);
 		lhs@.width = dblsize;
-		lhs = ast.OpShfL(LSL, lhs, ast.ConstW(orgsize), dbltype);
+		lhs = ast.OpBinary(LSL, lhs, ast.ConstW(orgsize), dbltype);
 		rhs = ast.New1(ZEXT, dbltype, rhs);
 		rhs@.width = dblsize;
-		tree = ast.OpLogic(OR, lhs, rhs);
+		tree = ast.OpBinary(OR, lhs, rhs, 0);
 	    }
 	    else
 		lex.ErrorS(OPTYPE, "_splice");
@@ -1260,11 +1287,18 @@ ast.Dump(tree);
 		lex.Expect(COMMA);
 		rhs = Bool(0);
 		if lhs != 0 && rhs != 0 then
-		{   if IsSignedBinOp(lhs, rhs) then
-			if which == MIN then op = SMIN; else op = SMAX;
+		{   if IsFloatBinOp(lhs, rhs) then
+		    {
+			if which == MIN then op = FMIN; else op = FMAX;
+			tree = ast.OpFloat(op, lhs, rhs, et);
+		    }
 		    else
-			if which == MIN then op = UMIN; else op = UMAX;
-		    tree = ast.OpMinMax(op, lhs, rhs);
+		    {	if IsSignedBinOp(lhs, rhs) then
+			    if which == MIN then op = SMIN; else op = SMAX;
+			else
+			    if which == MIN then op = UMIN; else op = UMAX;
+			tree = ast.OpBinary(op, lhs, rhs, et);
+		    }
 		}
 	    }
 	    is LO, HI then
@@ -1274,7 +1308,7 @@ ast.Dump(tree);
 		if tree@.type@.kind == UINT && tree@.type@.size >= 16 then
 		{   hafsize = tree@.type@.size/2;
 		    if which == HI then
-		    {	tree = ast.OpShfR(LSR, tree, ast.ConstW(hafsize),
+		    {	tree = ast.OpBinary(LSR, tree, ast.ConstW(hafsize),
 				    tree@.type);
 		    }
 		    haft = target.utype(hafsize);
@@ -1535,7 +1569,7 @@ type.DumpT(t, false); err.nl();
 		    {   if index@.op == CONST then
 			    index@.valu -= t@.lo;
 			else
-			    index = ast.OpAdd(SUB, index,
+			    index = ast.OpBinary(SUB, index,
 					ast.ConstW(t@.lo), type.wordtype);
 		    }
 		    tok = Token;
@@ -1559,7 +1593,7 @@ type.DumpT(t, false); err.nl();
 			if t@.packed then
 			{
 			    index = ast.ExtendT(index, type.wordtype);
-			    index = ast.OpMul(MUL, index,
+			    index = ast.OpBinary(MUL, index,
 				    ast.ConstW(t@.base@.size), type.wordtype);
 			    tree = ast.New2(FIELD, t@.base, tree, index);
 			    tree@.valu = t@.base@.size;
@@ -1665,7 +1699,7 @@ type.DumpT(t, false); err.nl();
 	    otree = GetOffset(otree);
 	if otree != 0 then
 	{   tree = ast.Cast(tree, type.wordtype);
-	    tree = ast.OpAdd(SUB, tree, otree, type.wordtype);
+	    tree = ast.OpBinary(SUB, tree, otree, type.wordtype);
 	    tree = ast.Cast(tree, t);
 	}
 	return tree;
@@ -1769,10 +1803,15 @@ type.DumpT(t, false); err.nl();
 	    }
 	    is FNUM then
 	    {   if et == 0 then
-		    tree@.type = type.floattype;
-		tree = ast.New(FCON, et);
-		tree@.width = 64;			// FIXME: ?
+		    et = type.floattype;
+		if et@.kind
+		is FLOAT then
+		{   tree = ast.New(FCON, et);
+		    tree@.width = et@.size;
 		    tree@.valu, tree@.fscale = lex.MakeFloat(false);
+		}
+		else
+		    lex.ErrorS(NOTIMPL, "must be float");
 		tok = Next();
 	    }
 	    is ENUM then
@@ -1793,7 +1832,6 @@ type.DumpT(t, false); err.nl();
 	    }
 	    is GBEG then
 		tree = CompositeValue(et);
-
 	}
 	return tree;
     }
@@ -1855,16 +1893,15 @@ type.DumpT(t, false); err.nl();
 		else
 		{   op = mulop[stok];
 		    if op
-		    is AND then tree = ast.OpLogic(op, tree, rhs);
-		    is MUL then tree = ast.OpMul(op, tree, rhs, t);
-		    is DIV, MOD then tree = ast.OpDiv(op, tree, rhs, t);
+		    is AND then tree = ast.OpBinary(op, tree, rhs, 0);
+		    is MUL, DIV, MOD then tree = ast.OpBinary(op, tree, rhs, t);
 		    is LSL then
 		    {   if tree@.type@.kind == SINT then op = ASL;
-			tree = ast.OpShfL(op, tree, rhs, t);
+			tree = ast.OpBinary(op, tree, rhs, t);
 		    }
 		    is LSR then
 		    {   if tree@.type@.kind == SINT then op = ASR;
-			tree = ast.OpShfR(op, tree, rhs, t);
+			tree = ast.OpBinary(op, tree, rhs, t);
 		    }
 		}
 	    }
@@ -1892,10 +1929,10 @@ type.DumpT(t, false); err.nl();
 		    tree = ast.OpFloat(faddop[stok], tree, rhs, t);
 		else
 		{   op = addop[stok];
-		    if op < OR then
-			tree = ast.OpAdd(op, tree, rhs, t);
+		    if stok < OR then
+			tree = ast.OpBinary(op, tree, rhs, t);
 		    else
-			tree = ast.OpLogic(op, tree, rhs);
+			tree = ast.OpBinary(op, tree, rhs, 0);
 		}
 	    }
 	}
@@ -1994,7 +2031,7 @@ type.DumpT(t, false); err.nl();
 			}
 			else
 			    op = ucmpop[savetok];
-			tree = ast.OpCompare(op, tree, rhs);
+			tree = ast.OpBinary(op, tree, rhs, 0);
 		    }
 		    is FLOAT then
 		    {   op = fcmpop[savetok];
@@ -2008,7 +2045,10 @@ type.DumpT(t, false); err.nl();
 			is NE then op = NE;
 			else ok = false;
 			if ok then
-			    tree = ast.OpCompare(op, tree, rhs);
+			{   if rhs@.op == CONST then
+				rhs@.width = Target.ptr.size;
+			    tree = ast.OpBinary(op, tree, rhs, 0);
+			}
 		    }
 		    is RECORD then
 		    {   if NodeKind(rhs) == RECORD &&
@@ -2018,7 +2058,7 @@ type.DumpT(t, false); err.nl();
 			    is NE then op = NE;
 			    else ok = false;
 			    if ok then
-				tree = ast.OpCompare(op, tree, rhs);
+				tree = ast.OpBinary(op, tree, rhs, 0);
 			}
 			else ok = false;
 		    }
@@ -2030,7 +2070,7 @@ type.DumpT(t, false); err.nl();
 				is NE then op = NE;
 				else ok = false;
 				if ok then
-				    tree = ast.OpCompare(op, tree, rhs);
+				    tree = ast.OpBinary(op, tree, rhs, 0);
 			    }
 			    else
 			    {   if savetok
@@ -2044,7 +2084,11 @@ type.DumpT(t, false); err.nl();
 			else ok = false;
 		    }
 		    else ok = false;
-		    if !ok then
+		    if ok then
+		    {   tree@.type = type.booltype;
+			tree@.width = 1;
+		    }
+		    else
 			lex.Error(BADCOMPARE);
 		}
 	    }
@@ -2149,7 +2193,7 @@ type.DumpT(t, false); err.nl();
 	    hi = expr.Bool(t);
 	}
 	else
-	{   hi = ast.OpAdd(SUB, lo, ast.Const(t, 1), t);
+	{   hi = ast.OpBinary(SUB, lo, ast.Const(t, 1), t);
 	    lo = ast.Const(t, 0);
 	}
 	return lo, hi;
