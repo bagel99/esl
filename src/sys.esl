@@ -1,21 +1,22 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 package sys
 {
 	// Interface to Posix system
-	type fildes: _int;
+	type int_t: _int32;	// ABI: C int is 32-bits on 64-bit arch
+	type size_t: _uint32;
+
+	type fildes: int_t;
 	const O_RDONLY = 0;
 	const O_WRONLY = 1;
 	const O_RDWR   = 2;
 	const O_CREAT  = 0o00100;
 	const O_TRUNC  = 0o01000;
-//	proc open(name: @_memory, flags:_uint):_int: external;
-	proc open(name: @_memory, flags:_uint, mode:_uint):_int: external;
+	proc open(name: @_memory, flags:_uint, mode:_uint):int_t: external;
 	proc close(fd:fildes):: external;
-	proc read(fd:fildes, buf:@_memory, len:_uint):_int: external;
-	proc write(fd:fildes, buf:@_memory, len:_uint):_int : external;
-	proc exit(code:_int):: external;
+	proc read(fd:fildes, buf:@_memory, len:_uint):int_t: external;
+	proc write(fd:fildes, buf:@_memory, len:_uint):int_t : external;
+	proc exit(code:int_t):: external;
 	proc memset(ptr:@_memory, val:_uint, len:_uint):: external;
 	proc memcpy(to:@_memory, fm:@_memory, len:_uint):: external;
 	proc malloc(nbytes:_uint):@_memory : external;

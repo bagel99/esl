@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2017, Brian G. Lucas.  See LICENSE file.
 
 package type
 {
@@ -32,8 +31,8 @@ package type
 	kind:	TypeT;		// ENUM, UINT, ...
 	bitorder: BitOrderT;	// lsb, msb
 	memorder: MemOrderT;	// le, be
-	access:	  AccessT;	// access restrictions
-	round:    RoundT;       // rounding mode for fixed point
+	access:	AccessT;	// access restrictions
+	round:	RoundT;		// rounding mode for fixed point
 	generic: boolean;       // requires specialization
 	io:     IoT;		// external state changes (like C volatile)
 	sizeattr:  boolean;	// size attribute specified
@@ -44,17 +43,11 @@ package type
 	noepad: boolean;	// record not padded at end
 	nofpad: boolean;	// record contains unaligned fields
 	flex:   boolean;	// flexible array
-	printed:boolean;	// llvm defined printed	
+	printed:boolean;	// llvm defined printed
 	dumped:	boolean;	// type dump printed
-	final:	boolean;	// type properties are final, do not modify	
+	final:	boolean;	// type properties are final, do not modify
     };
     type Type: @TypeNode;
-
-    type TypeListEntry:
-    {   next:   @TypeListEntry;
-	type:   @TypeNode;
-    };
-    type TypeList: @TypeListEntry;
 
     var unkntype: Type;		// the "unknown" type
     var booltype: Type;

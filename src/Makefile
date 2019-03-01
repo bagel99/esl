@@ -34,8 +34,7 @@ BOOT=main-start-$(ARCH).ll
 boot:	eslc0 eslc1 eslc2 eslc3
 	@if cmp eslc3 eslc2; then \
 	   echo "Success"; \
-	   rm main-start.s main1.s main2.s main3.s; \
-	   rm main1.ll main2.ll main3.ll; \
+	   rm main-start.s main.s main.ll; \
 	else echo "Bootstrap failed"; \
 	fi
 
@@ -56,32 +55,20 @@ main-start.s: $(BOOT)
 eslc0:  main-start.s
 	$(GCC) $(CFLAGS) -o eslc0 main-start.s
 
-main1.ll: main.esl eslc0
-	./eslc0 $(ESLCFLAGS) -m $(ARCH) main.esl >main1.ll
+eslc1:	main.esl eslc0
+	./eslc0 $(ESLCFLAGS) -m $(ARCH) main.esl >main.ll
+	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main.ll
+	$(GCC) $(CFLAGS) -o eslc1 main.s
 
-main1.s: main1.ll
-	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main1.ll
+eslc2:	main.esl eslc1
+	./eslc1 $(ESLCFLAGS) -m $(ARCH) main.esl >main.ll
+	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main.ll
+	$(GCC) $(CFLAGS) -o eslc2 main.s
 
-eslc1:	main1.s
-	$(GCC) $(CFLAGS) -o eslc1 main1.s
-
-main2.ll: main.esl eslc1
-	./eslc1 $(ESLCFLAGS) -m $(ARCH) main.esl >main2.ll
-
-main2.s: main2.ll
-	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main2.ll
-
-eslc2:	main2.s
-	$(GCC) $(CFLAGS) -o eslc2 main2.s
-
-main3.ll: main.esl eslc2
-	./eslc2 $(ESLCFLAGS) -m $(ARCH) main.esl >main3.ll
-
-main3.s: main3.ll
-	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main3.ll
-
-eslc3:	main3.s
-	$(GCC) $(CFLAGS) -o eslc3 main3.s
+eslc3:	main.esl eslc2
+	./eslc2 $(ESLCFLAGS) -m $(ARCH) main.esl >main.ll
+	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main.ll
+	$(GCC) $(CFLAGS) -o eslc3 main.s
 
 start:
 	./eslc3 $(ESLCFLAGS) -m x86 main.esl >main-start-x86.ll
@@ -91,8 +78,5 @@ start:
 	./eslc3 $(ESLCFLAGS) -m aarch64 main.esl >main-start-aarch64.ll
 
 clean:
-	rm -f main-start.s eslc0
-	rm -f main1.ll main1.s eslc1
-	rm -f main2.ll main2.s eslc2
-	rm -f main3.ll main3.s eslc3
+	rm -f main-start.s eslc0 eslc1 eslc2 eslc3
 

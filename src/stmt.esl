@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 package stmt
 {
@@ -379,6 +378,7 @@ package stmt
 			else if tree@.op == SCON &&
 			        t@.hi == tree@.type@.hi-1 then
 			{   // we are allowed to trim the NUL from the string
+err.str("Const SCON dup\n");
 			    tree = ast.Dup(tree);   // dup in case re-using
 			    tree@.type = t;
 			}
@@ -425,7 +425,7 @@ package stmt
 	type constraintT: (IN=10, OUT);	// 0..9 are indirects
 	var constraints: [ArgRange] constraintT;
 	var outputs: [ArgRange]Ast;
-	var tlhead, tltail, tl: type.TypeList;
+	var rs, prevs: Symb;
 
 	tree = ast.New(ASM, 0);
 	tok = Token;
@@ -507,20 +507,19 @@ package stmt
 		    na += 1;
 		}
 		// Set the return value type
-		tlhead = 0;
-		tltail = 0;
+		// Returned values are Symb list on Ast symb.
+		prevs = 0;
 		no = 0;
 		while no < nout do
-		{   tl = type.TypeList(sys.zalloc(type.TypeListEntry?size));
-		    tl@.type = outputs[no]@.type@.base;
-		    if tltail == 0 then
-			tlhead = tl;
-		    else
-			tltail@.next = tl;
-		    tltail = tl;
+		{   rs = symb.New(VAR, symb.anonid, PRIVATE);
+		    rs@.type = outputs[no]@.type@.base;
+		    if tree@.symb == 0 then
+			tree@.symb = rs;
+		    if prevs != 0 then
+			prevs@.next = rs;
+		    prevs = rs;
 		    no += 1;
 		}
-		tree@.type = Type(tlhead);	// WARNING: unioning
 		// Now store the outputs
 		if nout > 0 then
 		{   node = tree;
@@ -542,12 +541,9 @@ package stmt
 			}
 		    }
 		    else
-		    {   // This is a hack because the ASM node overloads type
-			// to point to a TypeList instead of Type, so we need
-			// a node with a real Type.
-			temp = ast.New1(NOP, outputs[0]@.type@.base, node);
-			temp@.width = temp@.type@.width;
-			tree = ast.Child(tree, temp);
+		    {   node@.type = outputs[0]@.type@.base;
+			node@.width = outputs[0]@.type@.base@.width;
+			tree = ast.Child(tree, node);
 		    }
 		}
 	    }
@@ -599,11 +595,11 @@ package stmt
     {   var rhs, tree, lsize, rsize, align: Ast;
 	var lalign, ralign, width: _uint;
 	var tl, tr:Type;
+	var op: ast.Op;
 
+	if optok == ASGNR then op = MOVE; else op = COPY;
 	tl = lhs@.type@.base;
 	rhs = expr.Term(tl);
-//err.str("AssignArray:\nlhs=\n");  ast.Dump(lhs);
-//err.str("rhs=\n");  ast.Dump(rhs);
 	if rhs == 0 then return 0;
 	if rhs@.type == 0 || rhs@.type@.kind != ARRAY then
 	{   lex.Error(NOTARRAY);
@@ -627,7 +623,7 @@ err.str("Assign to packed array\n");
 		width = lhs@.child[0]@.type@.base@.base@.width;
 	    }
 	    else
-	    {   lsize = ast.Const(type.wordtype, lhs@.type@.base@.Span());
+	    {   lsize = ast.ConstW(lhs@.type@.base@.Span());
 		width = lhs@.type@.base@.base@.width;
 	    }
 	    if rhs@.op
@@ -635,18 +631,13 @@ err.str("Assign to packed array\n");
 		rhs = expr.UnLoad(rhs);
 	    is SCON, CLIST then
 		rhs = ast.New1(BYREF, type.MakeRef(rhs@.type), rhs);
-//err.str("adjusted rhs=\n");  ast.Dump(rhs);
-//err.str("\tlalign="); err.uint(lalign);
-//err.str(" lsize=\n"); ast.Dump(lsize);
 	    ralign = expr.GetAlignment(rhs);
-//err.str("\tralign="); err.uint(ralign);
 	    if ralign < lalign then
 		lalign = ralign;
 	    if rhs@.op == SLICE then
 		rsize = rhs@.child[2];
 	    else
-		rsize = ast.Const(type.wordtype, rhs@.type@.base@.Span());
-//err.str(" rsize=\n"); ast.Dump(rsize);
+		rsize = ast.ConstW(rhs@.type@.base@.Span());
 	    if lsize@.op == CONST && lsize@.valu == 0 then
 	    {   if rsize@.op == CONST && rsize@.valu == 0 then
 		    lex.Error(ARRAYCOPY);
@@ -657,19 +648,14 @@ err.str("Assign to packed array\n");
 	    {   if rsize@.op != CONST || rsize@.valu != 0 then
 		    lsize = ast.OpMinMax(UMIN, lsize, rsize);
 	    }
-	    // make sure muliply is on wordtype
-	    lsize = ast.New2(MUL, type.wordtype,
-			     ast.ExtendT(lsize, type.wordtype),
-			     ast.Const(type.wordtype, width/target.ByteSize));
-	    lhs = ArrayFix(lhs);
-	    rhs = ArrayFix(rhs);
-	    if optok == ASGNR then
-		tree = ast.New2(MOVE, lhs@.type, lhs, rhs);
-	    else
-		tree = ast.New2(COPY, lhs@.type, lhs, rhs);
-	    tree = ast.Child(tree, lsize);
-	    align = ast.Const(type.wordtype, lalign);
-	    tree = ast.Child(tree, align);
+	    tree = ast.New4(op, lhs@.type.base,
+			ArrayFix(lhs),
+			ArrayFix(rhs),
+			ast.OpMul(MUL,
+			    ast.ExtendT(lsize, type.wordtype),
+			    ast.ConstW(width/target.ByteSize),
+			    type.wordtype),
+			ast.ConstW(lalign));
 	}
 	return tree;
     }
@@ -685,7 +671,7 @@ err.str("Assign to packed array\n");
 	var op: ast.Op;
 	var tok, optok: TokenT;
 	var nl, nr, i: ast.NSubNodes;
-	var tl: type.TypeList;
+	var tl: Symb;
 
 	tree = ast.New1(STORE, 0, lhs);
 	nl = 1;
@@ -832,52 +818,55 @@ err.str("Assign to packed array\n");
     proc Return(): Ast
     {   var tree, rval: Ast;
 	var t: Type;
-	var tl: type.TypeList;
+	var s: Symb;
 	var tok: TokenT;
 
 	tree = 0;
-	tl = 0;
+	s = 0;
 	if symb.curproc != 0 then
-	    tl = symb.curproc@.retvlist;
+	    s = symb.curproc@.retvlist;
 	else
 	    lex.Error(NOPROC);
 	tree = ast.New(RET, 0);
 	tok = Token;
-	loop
+	if !symb.curproc.retv then   // explicit return values
 	{
-	  exit tok == SEMI;
-	    if tl != 0 then
-		t = tl@.type;
-	    else
-		t = 0;
-	    rval = expr.Bool(t);
-	    if rval != 0 then
-	    {   if tl != 0 then
-		{   if t != 0 then
-		    {   rval = ast.Adjust(rval, t);
-			tree = ast.Child(tree, rval);
-			if t@.kind == REF then
-			{   tree@.type = t@.base;
-			    tree@.width = Target.ptr.size;
+	    loop
+	    {
+	      exit tok == SEMI;
+		if s != 0 then
+		    t = s@.type;
+		else
+		    t = 0;
+		rval = expr.Bool(t);
+		if rval != 0 then
+		{   if s != 0 then
+		    {   if t != 0 then
+			{   rval = ast.Adjust(rval, t);
+			    tree = ast.Child(tree, rval);
+			    if t@.kind == REF then
+			    {   tree@.type = t@.base;
+				tree@.width = Target.ptr.size;
+			    }
+			    else
+				tree@.width = t@.width;
 			}
-			else
-			    tree@.width = t@.width;
 		    }
+		    else	    // no RVs left
+			lex.Error(RETTOOMANY);
 		}
-		else	    // no RVs left
-		    lex.Error(RETTOOMANY);
-	    }
-	    if tl != 0 then tl = tl@.next;
-	    tok = Token;
+		if s != 0 then s = s@.next;
+		tok = Token;
 
-	  exit tok != COMMA;
-	    tok = Next();
-	}
-	if tl != 0 then     // more RVs left
-	    lex.Error(RETTOOFEW);
-	if tree@.num != 0 then	// FIXME: fix in llvm?
-	{   tree@.type = tree@.child[0]@.type;	// first returned value
-	    tree@.width = tree@.child[0]@.width;
+	      exit tok != COMMA;
+		tok = Next();
+	    }
+	    if s != 0 then     // more RVs left
+		lex.Error(RETTOOFEW);
+	    if tree@.num != 0 then	// FIXME: fix in llvm?
+	    {   tree@.type = tree@.child[0]@.type;	// first returned value
+		tree@.width = tree@.child[0]@.width;
+	    }
 	}
 	lex.Expect(SEMI);
 	return tree;
@@ -891,7 +880,8 @@ err.str("Assign to packed array\n");
 	if feature.assert then
 	{   ctree = ast.New1(NOT, 0, ctree);
 	    tree = expr.NewString(symb.curfile@.ident,
-				  zstr.len(symb.curfile@.ident, lex.PathMax));
+				  zstr.len(symb.curfile@.ident, lex.PathMax),
+				  true);
 	    tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
 	    tree = ast.New1(CAST, type.addrtype, tree);
 	    tree = ast.New1(ASSERT, 0, tree);
@@ -1051,9 +1041,9 @@ err.str("Assign to packed array\n");
 		}
 		if to != 0 then
 		    exit = ast.New1(EXIT, 0,
-			     ast.New2(UGT, t, expr.Load(ix), to));
+			     ast.OpCompare(UGT, expr.Load(ix), to));
 		incr = ast.New2(STORE, t, ix,
-			 ast.New2(ADD, t, expr.Load(ix), by));
+			 ast.OpAdd(ADD, expr.Load(ix), by, t));
 	    }
 	    body = Statement();
 	    body = ast.New3(SEQ, 0, exit, body, incr);
@@ -1333,8 +1323,8 @@ symb.DumpS(ns);
     {   var tree: Ast;
 	var tok: TokenT;
 	var t, mt: Type;
-	var s, ms, fs, es: Symb;
-	var ft: type.TypeList;
+	var s, ms, fs, es, rs: Symb;
+	var ft: Symb;
 
 	tree = 0;
 	mt = 0;
@@ -1369,6 +1359,8 @@ symb.DumpS(ns);
 			else lex.Error(NOTTYPE);
 		    }
 		    else lex.ErrorT(EXPECT, ID);
+		    if mt != 0 && mt@.name == 0 then
+			    lex.Error(BADMETHOD);
 		}
 		else lex.ErrorT(EXPECT, COLON);
 		ms@.type = t;
@@ -1403,9 +1395,9 @@ symb.DumpS(ns);
 	    type.DefProc(s, ms);
 	    if s@.forward then
 	    {   // Was forward proc, should check for parm/retv changes
-		if !type.SameSymbList(fs, s@.parmlist) then
+		if !type.SameTypes(fs, s@.parmlist) then
 		    lex.ErrorI(FORWPARM, s@.ident);
-		if !type.SameTypeList(ft, s@.retvlist) then
+		if !type.SameTypes(ft, s@.retvlist) then
 		    lex.ErrorI(FORWRETV, s@.ident);
 	    }
 	    tok = Token;
@@ -1417,12 +1409,17 @@ symb.DumpS(ns);
 	    {   s@.forward = false;
 		symb.curproc = s;
 		es = symb.Push(s@.parmlist, 0);	// make parameters visable
+		if s@.retv then
+		    rs = symb.Append(s@.retvlist);  // make return variables visable
+		else
+		    rs = 0;
 		LoopLevel = 0;
 		tree = Statement();
 		if debug.symb.proc then
 		    symb.Dump(1);
 		symb.Pop();			// remove locals+parameters
 		if es != 0 then es@.next = 0;   // restore parameter list end
+		if rs != 0 then rs@.next = 0;   // same for return variables
 		symb.curproc = 0;
 	        t = s@.type;
 		tree = ast.New1(PROC, t, tree);

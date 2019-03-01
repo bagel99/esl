@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2017, Brian G. Lucas.  See LICENSE file.
 
 package target
 {
@@ -172,7 +171,7 @@ package target
 	while i < Target.nisize && Target.isizes[i].size < bits do
 	    i += 1;
 	return type.uinttypes[i];
-    }   
+    }
 
     proc stype(bits: type.BitSize): Type
     {   var i: 0..IntSizesMax;
@@ -181,7 +180,7 @@ package target
 	while i < Target.nisize && Target.isizes[i].size < bits do
 	    i += 1;
 	return type.inttypes[i];
-    }   
+    }
 }
 // vim: ts=8 sw=4 noet nowrap
 

@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2014, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 package ast
 {
@@ -17,28 +16,28 @@ package ast
 	OFFSET,	INDEX,	SLICE,	BYREF,
 	CAST,
 	CALL,	CALLI,	ASM,
-	SET,
-	COPY,	MOVE,	AEQ,	ANE,	// record and array operators
+	SET,	COPY,	MOVE,	AEQ,	ANE,	// record and array ops
 	GETRV,
 	LOAD,
 	STORE,		// assignment
-	ZEXT,   SEXT,   TRUNC,	BSWAP,   BITREV,
-	NEG,	NOT,	ABS,    SQRT,
+	// unary ops
+	ZEXT,   SEXT,   TRUNC,	BSWAP,	BITREV,
+	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,
+	NEG,	NOT,	ABS,
+	SQRT,	ZLEN,
 	FNEG,   FCVTL,  FCVTS,
 	CVTUF,	CVTIF,  CVTFU,	CVTFI,
-	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,	ZLEN,
-	ROL,    ROR,
-	ADD,    SUB,
-	MUL,    DIV,    MOD,
-	EQ,     NE,
-	ULT,    UGT,    ULE,    UGE,
-	SLT,    SGT,    SLE,    SGE,
-	FEQ,    FNE,    FLT,    FGT,    FLE,    FGE,
-	UMIN,	UMAX,	SMIN,	SMAX,	// temporary, get replaced by expansion
-	LSL,    LSR,	ASL,    ASR,
+	// binary ops
 	AND,    OR,     XOR,
-	BAND,   BOR,	BNOT,
+	ADD,    SUB,	MUL,    DIV,    MOD,
+	UMIN,	UMAX,	SMIN,	SMAX,		 // expand in llvm
+	LSL,    LSR,	ASL,    ASR,	ROL,    ROR,
+	EQ,     NE,	ULT,    UGT,    ULE,    UGE,
+			SLT,    SGT,    SLE,    SGE,
+	FEQ,    FNE,    FLT,    FGT,    FLE,    FGE,
 	FADD,	FSUB,	FMUL,	FDIV,	FREM,
+	FMIN,   FMAX, 				// expand in llvm
+	BAND,   BOR,	BNOT,
 	IFEXPR,		// select expression
 	SEQ,		// sequence
 	LOOP,
@@ -82,6 +81,7 @@ package ast
 	[FEQ]=    2,    [FNE]=    2,
 	[FLT]=	  2,	[FGT]=	  2,    [FLE]=	  2,    [FGE]=	  2,
 	[UMIN]=   3,	[UMAX]=   3,	[SMIN]=   3,	[SMAX]=   3,
+	[FMIN]=   3,	[FMAX]=   3,
 	[LSL]=	  2,    [LSR]=	  2,	[ASL]=	  2,    [ASR]=	  2,
 	[AND]=	  2,    [OR]=	  2,	[XOR]=	  2,
 	[BAND]=	  2,	[BOR]=	  2,	[BNOT]=	  2,
@@ -128,9 +128,15 @@ package ast
 
     proc Dup(from: Ast): Ast
     {   var pa: Ast;
+	var i: _uint;
 
 	pa = Ast(sys.zalloc(AstNode?size + from@.max * Ast?size));
 	pa@ = from@;	// record copy
+	i = 0;
+	while i < from@.num do
+	{   pa@.child[i] = from@.child[i];
+	    i += 1;
+	}
 	pa@.lineno = lex.Lineno();
 	return pa;
     }
@@ -227,6 +233,25 @@ package ast
 	return pa;
     }
 
+    proc New4(op:Op, t:type.Type, pc0:Ast, pc1:Ast, pc2:Ast, pc3: Ast): Ast
+    {   var pa: Ast;
+	var n: NSubNodes;
+
+	n = NumChildDefault[op];
+	if n < 4 then
+	    n = 4;
+	pa = Alloc(op, n);
+	pa@.child[0] = pc0;
+	pa@.child[1] = pc1;
+	pa@.child[2] = pc2;
+	pa@.child[3] = pc3;
+	pa@.num = 4;
+	pa@.type = t;
+	if pc0 != 0 then
+	    pa@.width = pc0@.width;
+	return pa;
+    }
+
     proc Child(pp:Ast, pc:Ast): Ast
     {   var n: NSubNodes;
 
@@ -261,6 +286,15 @@ package ast
 	pa@.valu = value;
 	if t != 0 then
 	    pa@.width = t@.width;
+	return pa;
+    }
+
+    proc ConstW(value: type.Valu): Ast
+    {   var pa: Ast;
+
+	pa = New(CONST, type.wordtype);
+	pa@.valu = value;
+	pa@.width = type.wordtype@.width;
 	return pa;
     }
 
@@ -510,10 +544,11 @@ package ast
 	{   lhs = ForceBoolean(lhs);
 	    rhs = ForceBoolean(rhs);
 	    if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is BOR  then lhs@.valu = lhs@.valu | rhs@.valu;
-		is BAND then lhs@.valu = lhs@.valu & rhs@.valu;
-		tree = lhs;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is BOR  then tree@.valu = tree@.valu | rhs@.valu;
+		is BAND then tree@.valu = tree@.valu & rhs@.valu;
 	    }
 	    else
 		tree = New2(op, type.booltype, lhs, rhs);
@@ -558,7 +593,9 @@ package ast
 	    if rhs@.type.scale != scale then
 		rhs = AdjustFixed(rhs, t);
 	    if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+		if op
 		is ADD then lhs@.valu += rhs@.valu;
 		is SUB then lhs@.valu -= rhs@.valu;
 		tree = Dup(lhs);
@@ -577,9 +614,9 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   result = lhs@.valu << rhs@.valu;
-		tree = Dup(lhs);
-		tree@.valu = result;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        tree@.valu = tree@.valu << rhs@.valu;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
@@ -594,11 +631,11 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is LSR then result = lhs@.valu >> rhs@.valu;
-		is ASR then result = Valu(type.SValu(lhs@.valu) >> rhs@.valu);
-		tree = Dup(lhs);
-		tree@.valu = result;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is LSR then tree@.valu = tree@.valu >> rhs@.valu;
+		is ASR then tree@.valu = Valu(type.SValu(tree@.valu) >> rhs@.valu);
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
@@ -621,8 +658,11 @@ package ast
 //err.str(" rhs="); err.uint16(rhs.type.scale);
 //err.str(" to="); err.uint16(scale); err.nl();
 	    if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   lhs@.valu = lhs@.valu * rhs@.valu;
-		tree = Dup(lhs);
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is MUL then tree@.valu = tree@.valu * rhs@.valu;
+		is LSL,ASL then tree@.valu = tree@.valu << rhs@.valu;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);
@@ -642,12 +682,13 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is DIV then lhs@.valu = lhs@.valu / rhs@.valu;
-		is MOD then lhs@.valu = lhs@.valu % rhs@.valu;
-		is LSR then lhs@.valu = lhs@.valu >> rhs@.valu;
-		is ASR then lhs@.valu = Valu(type.SValu(lhs@.valu) << rhs@.valu);
-		tree = lhs;
+	    {   // new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is DIV then tree@.valu = tree@.valu / rhs@.valu;
+		is MOD then tree@.valu = tree@.valu % rhs@.valu;
+		is LSR then tree@.valu = tree@.valu >> rhs@.valu;
+		is ASR then tree@.valu = Valu(type.SValu(tree@.valu) << rhs@.valu);
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, t);   // FIXME - widen not needed
@@ -663,22 +704,23 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
+	    {   // new CONST in case it is shared, assume LHS
+		tree = ast.Const(lhs@.type, lhs@.valu);
+		if op
 		is UMIN then
-		{   if rhs@.valu < lhs.valu then lhs.valu = rhs.valu;
+		{   if rhs@.valu < lhs.valu then tree.valu = rhs.valu;
 		}
 		is UMAX then
-		{   if rhs@.valu > lhs.valu then lhs.valu = rhs.valu;
+		{   if rhs@.valu > lhs.valu then tree.valu = rhs.valu;
 		}
 		is SMIN then
 		{   if type.SValu(rhs@.valu) < type.SValu(lhs.valu) then
-			lhs.valu = rhs.valu;
+			tree.valu = rhs.valu;
 		}
 		is SMAX then
 		{   if type.SValu(rhs@.valu) > type.SValu(lhs.valu) then
-			lhs.valu = rhs.valu;
+			tree.valu = rhs.valu;
 		}
-		tree = lhs;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, 0);
@@ -694,11 +736,12 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is OR then  lhs@.valu = lhs@.valu | rhs@.valu;
-		is XOR then lhs@.valu = lhs@.valu ^ rhs@.valu;
-		is AND then lhs@.valu = lhs@.valu & rhs@.valu;
-		tree = lhs;
+	    {   // new CONST in case it is shared, assume LHS
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is OR then  tree@.valu = tree@.valu | rhs@.valu;
+		is XOR then tree@.valu = tree@.valu ^ rhs@.valu;
+		is AND then tree@.valu = tree@.valu & rhs@.valu;
 	    }
 	    else
 		tree = OpBinary(op, lhs, rhs, 0);
@@ -713,22 +756,23 @@ package ast
 	tree = 0;
 	if lhs != 0 && rhs != 0 then
 	{   if lhs@.op == CONST && rhs@.op == CONST then  // constant folding
-	    {   if op
-		is EQ then lhs@.valu = _uint(lhs@.valu == rhs@.valu);
-		is NE then lhs@.valu = _uint(lhs@.valu != rhs@.valu);
-		is ULT then lhs@.valu = _uint(lhs@.valu < rhs@.valu);
-		is UGT then lhs@.valu = _uint(lhs@.valu > rhs@.valu);
-		is ULE then lhs@.valu = _uint(lhs@.valu <= rhs@.valu);
-		is UGE then lhs@.valu = _uint(lhs@.valu >= rhs@.valu);
+	    {   // new CONST in case it is shared, assume LHS
+		tree = ast.Const(lhs@.type, lhs@.valu);
+	        if op
+		is EQ then  tree@.valu = _uint(tree@.valu == rhs@.valu);
+		is NE then  tree@.valu = _uint(tree@.valu != rhs@.valu);
+		is ULT then tree@.valu = _uint(tree@.valu < rhs@.valu);
+		is UGT then tree@.valu = _uint(tree@.valu > rhs@.valu);
+		is ULE then tree@.valu = _uint(tree@.valu <= rhs@.valu);
+		is UGE then tree@.valu = _uint(tree@.valu >= rhs@.valu);
 		is SLT then
-		    lhs@.valu = _uint(type.SValu(lhs@.valu) < type.SValu(rhs@.valu));
+		    tree@.valu = _uint(type.SValu(tree@.valu) < type.SValu(rhs@.valu));
 		is SGT then
-		    lhs@.valu = _uint(type.SValu(lhs@.valu) > type.SValu(rhs@.valu));
+		    tree@.valu = _uint(type.SValu(tree@.valu) > type.SValu(rhs@.valu));
 		is SLE then
-		    lhs@.valu = _uint(type.SValu(lhs@.valu) <= type.SValu(rhs@.valu));
+		    tree@.valu = _uint(type.SValu(tree@.valu) <= type.SValu(rhs@.valu));
 		is SGE then
-		    lhs@.valu = _uint(type.SValu(lhs@.valu) >= type.SValu(rhs@.valu));
-		tree = lhs;
+		    tree@.valu = _uint(type.SValu(tree@.valu) >= type.SValu(rhs@.valu));
 	    }
 	    else
 	    {   // FIXME: all the kinds should be examined for legality
@@ -747,14 +791,14 @@ package ast
 	return tree;
     }
 
-    // FADD, FSUB, FMUL, FDIV, FREM
+    // FADD, FSUB, FMUL, FDIV, FREM, FMIN, FMAX
     proc OpFloat(op: Op, lhs: Ast, rhs: Ast, t: Type): Ast
     {   var tree: Ast;
 	var sl, sr: type.BitSize;
 
 	// LHS known to be FLOAT, so must the RHS
 	if rhs@.type@.kind != FLOAT then
-	{   lex.Error(OPTYPE);
+	{   lex.ErrorS(OPTYPE, "floating point operation");
 	    return lhs;
 	}
 	tree = 0;
@@ -1176,6 +1220,7 @@ err.nl();
 	[FLE]=   "FLE",		[FGE]=   "FGE",
 	[UMIN]=  "UMIN",	[UMAX]=  "UMAX",
 	[SMIN]=  "SMIN",	[SMAX]=  "SMAX",
+	[FMIN]=  "FMIN",	[FMAX]=  "FMAX",
 	[LSL]=   "LSL",		[LSR]=   "LSR",
 	[ASL]=   "ASL",		[ASR]=   "ASR",
 	[AND]=   "AND",		[OR]=    "OR",		[XOR]=   "XOR",

@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 // Convert AST to LLVM assembly
 import bout;
@@ -13,7 +12,7 @@ package llvm
     var  f: bout.pBufIO;
     proc PType(t: Type);					// forward
     proc PName(s: Symb);					// forward
-    proc PRetvType(tl: type.TypeList, extend: boolean);		// forward
+    proc PRetvType(rs: Symb, extend: boolean);			// forward
     proc PParmTypes(s: Symb);					// forward
 }
 
@@ -33,7 +32,7 @@ package llvm
     var loopexit: seqnoT;	// label sequence number for this loop exit
     type Intrinsics:
     (   MEMCPY, MEMMOVE, MEMSET, MEMCMP, ZLEN, BSWAP, BITREV,
-	CLZ, CTZ, POP, SQRTF, SQRTI, SQRTQ,
+	CLZ, CTZ, POP, SQRTF, FABS, SQRTI, SQRTQ,
 	ASSERT,   END
     );
     type IntrinsicUse:
@@ -116,6 +115,13 @@ package llvm
 			piu = piu@.next;
 		    } while piu != 0;
 		}
+		is FABS then
+		{   do
+		    {   dummy.type = piu@.type;
+			Print("declare %K @llvm.fabs.%G(%K)\n", dummy);
+			piu = piu@.next;
+		    } while piu != 0;
+		}
 		is MEMCMP then
 		{   do
 		    {   dummy.type = piu@.type;
@@ -126,7 +132,8 @@ package llvm
 		is ZLEN then
 		{   do
 		    {   dummy.type = piu@.type;
-			Print("declare %W @memlen%*A(%K)\n", dummy);
+			dummy.width = piu@.size;
+			Print("declare %W @memlen%X(%K)\n", dummy);
 			piu = piu@.next;
 		    } while piu != 0;
 		}
@@ -210,7 +217,6 @@ package llvm
 	f.str("}");
 	if t@.noepad || t@.nofpad then
 	    f.chr('>');
-	 
     }
 
     proc PWidth(t: Type)
@@ -298,6 +304,13 @@ package llvm
 	}
     }
 
+    proc PFType(t: Type)
+    {
+	if t@.size
+	is 32 then f.str("f32");
+	is 64 then f.str("f64");
+    }
+
     proc PDerefType(t: Type)
     {
 	if t != 0 then
@@ -308,7 +321,7 @@ package llvm
 		lex.ErrorS(COMPILER, "Illegal PDerefType");
 	}
     }
-    
+
     proc PExtend(t: Type)
     {
 	if t != 0 then
@@ -327,22 +340,22 @@ package llvm
 	}
     }
 
-    proc PRetvType(tl: type.TypeList, extend: boolean)
+    proc PRetvType(rs: Symb, extend: boolean)
     {   var t: Type;
 
-	if tl != 0 then
-	{   if  tl@.next != 0 then		// has multiple returned values
+	if rs != 0 then
+	{   if  rs@.next != 0 then		// has multiple returned values
 	    {   f.str(" { ");
 		loop
-		{   PType(tl@.type);
-		    tl = tl@.next;
-		  exit tl == 0;
+		{   PType(rs@.type);
+		    rs = rs@.next;
+		  exit rs == 0;
 		    f.str(", ");
 		}
 		f.str(" }");
 	    }
 	    else				// single returned value
-	    {   t = tl@.type;
+	    {   t = rs@.type;
 		if extend then PExtend(t);
 		f.chr(' ');
 		PType(t);
@@ -351,7 +364,7 @@ package llvm
 	else					// has no returned value
 	    f.str(" void");
     }
-    
+
     proc PParmTypes(s: Symb)
     {
 	f.chr('(');
@@ -363,7 +376,7 @@ package llvm
 	}
 	f.chr(')');
     }
- 
+
     proc ConstantRef(node: Ast)
     {   var v: type.Valu;
 
@@ -380,7 +393,7 @@ package llvm
 	    f.chr(')');
 	}
     }
-	
+
     proc NodeType(node: Ast)
     {
 	if node@.type@.kind
@@ -408,7 +421,7 @@ package llvm
 	f.str(bs@.ident);
 	f.chr(package_delimiter);
     }
-    
+
     proc PName(s: Symb)
     {
 	if s@.linkage
@@ -458,6 +471,12 @@ package llvm
 	f.uint(n-1);
     }
 
+    proc PLocalName(s: @[]_byte)
+    {
+	f.chr('%');
+	f.str(s);
+    }
+
     proc NodeName(node: Ast)
     {   var s: Symb;
 
@@ -468,6 +487,8 @@ package llvm
 	    f.str("__NoName__");
     }
 
+    // FIXME - this doesn't give bit exact results for float64.
+    // Replace with a better algorithm.
     proc PFloat(node: Ast)
     {   var tmp, ten: _float64;
 	var scl: _int;
@@ -476,12 +497,10 @@ package llvm
 	tmp = _float64*(_int64(node@.valu));
 	scl = node@.fscale;
 	if scl > 0 then
-	{   ten = 1.0;
-	    do
-	    {   ten = ten * 10.0;
+	{   do
+	    {   tmp = tmp / 10.0;
 		scl -= 1;
 	    } while scl != 0;
-	    tmp = tmp / ten;
 	}
 	elif scl < 0 then
 	{   do
@@ -562,6 +581,7 @@ package llvm
 		}
 		if c
 		is 'K' then PType(t);
+		is 'G' then PFType(t);
 		is 'A' then PAlign(t);
 		is 'B' then PWidth(t);
 		is 'F' then PScale(t);
@@ -570,6 +590,7 @@ package llvm
 		is 'I' then NodeName(node);
 		is 'N' then NodeSrc(node);
 		is 'D' then NodeDst(node);
+		is 'X' then f.uint32(node@.width);
 		is 'W' then PType(type.wordtype);	// target word type
 		is 'S' then // string name
 		{   f.chr('@');
@@ -649,7 +670,7 @@ package llvm
 		    PRecordType(t);
 		f.nl();
 	    }
-	}		
+	}
     }
 
     proc DclProc(node: Ast, isdefine: boolean)
@@ -827,19 +848,22 @@ package llvm
 	    if s@.linkage
 	    is LOCAL then
 	    {   Print("\t%I = alloca %K", node);
-		if rhs != 0 then     // initialized local
-		{   if node@.type@.kind <= REF then // scalar
+		if node@.type@.kind <= REF || // scalar
+		    node@.type@.packed then
+		{   if rhs == 0 && feature.zerol then
+			rhs = ast.Const(node@.type, 0);
+		    if rhs != 0 then     // initialized local
 		    {   f.nl();
 			// FIXME: Print("store %T %N", rhs);
 			GenSub(rhs);
-			f.chr('\t');
-			f.str("store ");
+			f.str("\tstore ");
 			NodeType(rhs); f.chr(' ');
 			NodeSrc(rhs);
 			Print(", %K* %D", node);
 		    }
-		    else lex.ErrorS(NOTIMPL, "initialized local composites");
 		}
+		elif rhs != 0 then
+		    lex.ErrorS(NOTIMPL, "initialized local composites");
 	    }
 	    is NORMAL then
 	    {   Print("%I = internal global %K ", node);
@@ -912,7 +936,7 @@ package llvm
 	    return true;
 	}
 	is CLIST then
-	{   DclAggregate(node);        
+	{   DclAggregate(node);
 	    return true;
 	}
 	return false;
@@ -969,7 +993,7 @@ package llvm
 	f.str("label %");
 	PLabel(n);
     }
-	
+
     proc Branch(n: seqnoT)
     {
 	f.str("\tbr ");
@@ -1121,7 +1145,7 @@ package llvm
 	else				// no "with" clause
 	    BranchConditional(node@.child[0], loopexit, labfalse);
 	Label(labfalse);		// come here if continuing
-	return false;	
+	return false;
     }
 
     proc Conditional(node: Ast, isand: boolean): boolean
@@ -1285,10 +1309,11 @@ package llvm
 	    GenSub(node@.child[0]);
 	    GenSub(node@.child[1]);
 	    // calculate the number of chunks to be compared
-	    node@.child[2] = ast.New2(DIV, type.wordtype,
-			       ast.New2(MUL, type.wordtype, node@.child[2],
-				 ast.Const(type.wordtype, elsize)),
-			       ast.Const(type.wordtype, size));
+	    // FIXME - change to ast.Div(Div, and ast.Mul(MUL,
+	    node@.child[2] = ast.OpDiv(DIV,
+			       ast.OpMul(MUL, node@.child[2],
+				 ast.ConstW(elsize), type.wordtype),
+			       ast.ConstW(size), type.wordtype);
 	    // LLVM wants count to be register width
 	    node@.child[2] = ast.ExtendT(node@.child[2], type.wordtype);
 	    GenSub(node@.child[2]);
@@ -1309,14 +1334,23 @@ package llvm
     proc Abs(node: Ast)
     {   var rhs, lhs: Ast;
 
-	rhs = node@.child[0];
-	lhs = ast.New1(NEG, rhs@.type, rhs);
-	node@.child[0] = ast.New2(SLT, type.booltype, rhs,
-				       ast.Const(rhs@.type, 0));
-	node = ast.Child(node, lhs);    // must return same node
-	node = ast.Child(node, rhs);    // must return same node
-	node@.op = IFEXPR;
-	GenSub(node);
+	// FIXME - use llvm.fabs.T for float
+	if node@.type.kind == FLOAT then
+	{   GenSub(node@.child[0]);
+	    node@.seqno = Tseqno;  Tseqno += 1;
+	    Print("\t%N = call %T @llvm.fabs.%G(%T %0N)\n", node);
+	    UseIntrinsic(FABS, node@.type.width, node@.type);
+	}
+	else
+	{   rhs = node@.child[0];
+	    lhs = ast.New1(NEG, rhs@.type, rhs);
+	    node@.child[0] = ast.New2(SLT, type.booltype, rhs,
+					   ast.Const(rhs@.type, 0));
+	    node = ast.Child(node, lhs);    // must return same node
+	    node = ast.Child(node, rhs);    // must return same node
+	    node@.op = IFEXPR;
+	    GenSub(node);
+	}
     }
 
     proc MinMax(node: Ast)
@@ -1330,6 +1364,8 @@ package llvm
 	is SMAX then op = SGT;
 	is UMIN then op = ULT;
 	is UMAX then op = UGT;
+	is FMIN then op = FLT;
+	is FMAX then op = FGT;
 	node@.child[0] = ast.New2(op, type.booltype, lhs, rhs);
 	node@.child[1] = lhs;
 	node = ast.Child(node, rhs);    // must return same node
@@ -1358,8 +1394,7 @@ package llvm
 	rhs = ast.ExtendT(rhs, t);
 	nlhs = ast.New2(lop, t, lhs, rhs);
 	nrhs = ast.New2(rop, t, lhs,
-	    ast.New2(SUB, t,
-	                  ast.Const(t, lhs@.type@.size), rhs));   
+	    ast.OpAdd(SUB, ast.Const(t, lhs@.type@.size), rhs, t));
 	node@.op = OR;
 	node@.child[0] = nlhs;
 	node@.child[1] = nrhs;
@@ -1459,12 +1494,12 @@ package llvm
 	}
 	PEndLine(node);
 	return false;
-	
+
     }
 
     proc PStringCon(node: Ast)
     {   var n: StringRange;
-    
+
 	if node == 0 then
 	    f.str("\"\"");
 	else
@@ -1472,21 +1507,21 @@ package llvm
 	    PString(node@.symb@.ident, n, false);
 	}
     }
-	    
+
     proc GetRV(node: Ast)
-    {   var tl: type.TypeList;
-	var ps: Symb;
+    {   var rs: Symb;
 
 	if node@.valu == 0 then
 	    GenSub(node@.child[0]);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = extractvalue ", node);
-	ps = node@.child[0]@.symb;
-	if ps != 0 then
-	    tl = ps@.retvlist;
-	else
-	    tl = type.TypeList(node@.child[0]@.type);	// hack
-	PRetvType(tl, false);
+	rs = node@.child[0]@.symb;
+	if node@.child[0]@.op != ASM then
+	{   // rs is proc symbol
+	    if rs != 0 then
+		rs = rs@.retvlist;
+	}
+	PRetvType(rs, false);
 	Print(" %0N, ", node);
 	f.uint32(_uint32(node@.valu));
 	f.nl();
@@ -1502,12 +1537,12 @@ package llvm
 	    i += 1;
 	}
 	f.chr('\t');
-	if node@.type != 0 then		// has return value
+	if node@.symb != 0 then		// has return value
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
 	f.str("call");
-	PRetvType(type.TypeList(node@.type), false);
+	PRetvType(node@.symb, false);
 	f.str(" asm sideeffect ");
 	PStringCon(node@.child[0]);
 	f.str(", ");
@@ -1528,18 +1563,17 @@ package llvm
 
     // Declare parameter types and return value types
     proc DclParmRetv(ps: Symb)
-    {   var tl: type.TypeList;
-        var s: Symb;
+    {   var s, rs: Symb;
 
 	s = ps@.parmlist;
 	while s != 0 do
 	{   DclType(s@.type);
 	    s = s@.next;
 	}
-	tl = ps@.retvlist;
-	while tl != 0 do
-	{   DclType(tl@.type);
-	    tl = tl@.next;
+	rs = ps@.retvlist;
+	while rs != 0 do
+	{   DclType(rs@.type);
+	    rs = rs@.next;
 	}
     }
 
@@ -1552,7 +1586,7 @@ package llvm
 	    i += 1;
 	}
 	f.chr('\t');
-	if node@.type != 0 && node@.type@.kind != UTYPE then // has return value
+	if node@.symb@.retvlist != 0 then       // has return value(s)
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
@@ -1641,8 +1675,7 @@ package llvm
     }
 
     proc Procedure(node: Ast)
-    {   var s, ps: Symb;
-	var tl: type.TypeList;
+    {   var s, ps, rs: Symb;
 	var i: ast.NSubNodes;
 
 	ps = node@.symb;
@@ -1669,37 +1702,46 @@ package llvm
 	    Lseqno = 0;
 	    Label(Lseqno);  Lseqno += 1;
 	    // allocate returned values
-	    tl = ps@.retvlist;
+	    rs = ps@.retvlist;
 	    i = 0;
-	    while tl != 0 do
+	    while rs != 0 do
 	    {   f.chr('\t');
-		PRetValName(i);
+		if ps@.retv then
+		    PLocalName(rs@.ident);
+		else
+		    PRetValName(i);
 		f.str(" = alloca ");
-		PType(tl@.type);
+		PType(rs@.type);
 		f.nl();
+		if ps@.retv then
+		{   f.str("\tstore ");
+		    PType(rs@.type);
+		    f.chr(' ');
+		    DefaultInitializer(rs@.type);
+		    f.chr(',');
+		    PType(rs@.type);
+		    f.str("* ");
+		    PLocalName(rs@.ident);
+		    f.nl();
+		}
 		i += 1;
-		tl = tl@.next;
+		rs = rs@.next;
 	    }
-	    // allocate parameters
+	    // allocate and load parameters
 	    s = ps@.parmlist;
 	    while s != 0 do
 	    {   f.str("\t%"); f.str(s@.ident);
 		f.str(" = alloca ");
 		PType(s@.type);
 		f.nl();
-		s = s@.next;
-	    }
-	    s = ps@.parmlist;
-	    while s != 0 do
-	    {
 		f.str("\tstore ");
 		PType(s@.type);
-		f.str(" %");
-		f.str(s@.ident);
+		f.chr(' ');
+		PLocalName(s@.ident);
 		f.str("$, ");
 		PType(s@.type);
-		f.str("* %");
-		f.str(s@.ident);
+		f.str("* ");
+		PLocalName(s@.ident);
 		f.nl();
 		if feature.gflag then llvmdb.DefVar(s);
 		s = s@.next;
@@ -1709,29 +1751,32 @@ package llvm
 		PEndLine(node);
 	    }
 	    f.str("return:\n");
-	    tl = ps@.retvlist;
-	    if tl != 0 then
+	    rs = ps@.retvlist;
+	    if rs != 0 then
 	    {   // load up returned values
 		i = 0;
-		while tl != 0 do
+		while rs != 0 do
 		{   f.chr('\t');
 		    PTempName(Tseqno+i);
 		    f.str(" = load ");
 		    if feature.syntax37 then
-		    {   PType(tl@.type);
+		    {   PType(rs@.type);
 		        f.str(", ");
 		    }
-		    PType(tl@.type);
+		    PType(rs@.type);
 		    f.str("* ");
-		    PRetValName(i);
+		    if symb.IsAnon(rs@.ident) then
+			PRetValName(i);
+		    else
+			PLocalName(rs@.ident);
 //		    PEndLine(node);	//FIXME: wrong line number
 		    f.nl();
 		    i += 1;
-		    tl = tl@.next;
+		    rs = rs@.next;
 		}
-		tl = ps@.retvlist;
+		rs = ps@.retvlist;
 		i = 0;
-		if tl@.next != 0 then   // multiple returned values
+		if rs@.next != 0 then   // multiple returned values
 		{   // first, must insert each value into aggregate
 		    loop
 		    {   f.str("\t%mrv"); f.uint(i);
@@ -1743,15 +1788,15 @@ package llvm
 			{   f.str(" %mrv"); f.uint(i-1);
 			}
 			f.chr(',');
-			PType(tl@.type);
+			PType(rs@.type);
 			f.chr(' ');
 			PTempName(Tseqno+i);
 			f.chr(',');
 			f.uint(i);
 			f.nl();
 			i += 1;
-			tl = tl@.next;
-		      exit tl == 0;
+			rs = rs@.next;
+		      exit rs == 0;
 		    }
 		    // finally return the aggregate
 		    f.str("\tret ");
@@ -1760,7 +1805,7 @@ package llvm
 		}
 		else		    // only one returned value
 		{   f.str("\tret ");
-		    PType(tl@.type);
+		    PType(rs@.type);
 		    f.chr(' ');
 		    PTempName(Tseqno+i);
 		}
@@ -1819,14 +1864,14 @@ package llvm
     proc FieldExtract(node: Ast)
     {   var tree, mask, shft: Ast;
 
-	mask = ast.Const(type.wordtype, (1<<_uint(node.valu))-1);
+	mask = ast.ConstW((1<<_uint(node.valu))-1);
 	shft = 0;
 	tree = node;
 	while tree@.op == FIELD do
 	{   if shft == 0 then
 		shft = tree@.child[1];
 	    else
-		shft = ast.New2(ADD, type.wordtype, shft, tree@.child[1]);
+		shft = ast.OpAdd(ADD, shft, tree@.child[1], type.wordtype);
 	    tree = tree@.child[0];
 	}
 	// extract works at wordtype, force it
@@ -1844,13 +1889,13 @@ package llvm
     proc FieldInsert(lhs: Ast, rhs: Ast): Ast, Ast
     {   var temp, mask, shft: Ast;
 
-	mask = ast.Const(type.wordtype, (1<<_uint(lhs.valu))-1);
+	mask = ast.ConstW((1<<_uint(lhs.valu))-1);
 	shft = 0;
 	while lhs@.op == FIELD do
 	{   if shft == 0 then
 		shft = lhs@.child[1];
 	    else
-		shft = ast.New2(ADD, type.wordtype, shft, lhs@.child[1]);
+		shft = ast.OpAdd(ADD, shft, lhs@.child[1], type.wordtype);
 	    lhs = lhs@.child[0];
 	}
 	// insert works at wordtype, force it
@@ -1878,7 +1923,7 @@ package llvm
 	    lex.ErrorS(COMPILER, "FieldInsert LOAD not found");
 	return lhs, rhs;
     }
-	
+
     proc Load(load: Ast)
     {   var offs: Ast;
 
@@ -2060,7 +2105,7 @@ f.flush();
 	    f.chr('\t'); PTempName(nextseqno);
 	    Print(" = bitcast %**K* %N to %T\n", node);
 	    node@.seqno = nextseqno;
-	}	
+	}
 	is CAST then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
@@ -2076,7 +2121,7 @@ f.flush();
 		else
 		    Print("\t%N = bitcast %0K %0N to %K\n", node);
 	    }
-	}	
+	}
 	is ZEXT then  ChangeSize(node, "zext");
 	is SEXT then  ChangeSize(node, "sext");
 	is TRUNC then ChangeSize(node, "trunc");
@@ -2084,7 +2129,7 @@ f.flush();
 	    UnaryOp(node);
 	is CLZ, CLZNZ, CTZ, CTZNZ, POP, BITREV, SQRT then UnaryOp(node);
 	is ABS then Abs(node);
-	is UMIN, UMAX, SMIN, SMAX then MinMax(node);
+	is UMIN, UMAX, SMIN, SMAX, FMIN, FMAX then MinMax(node);
 	is ROL, ROR then Rotate(node);
 	is ZLEN then ZLen(node);
 	is ADD then BinaryOp(node, "add");

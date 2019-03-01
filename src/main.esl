@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
 
 var debug:
     {	symb:
@@ -14,15 +13,16 @@ var debug:
     };
 var feature:
     {   size:  (NO, YES, MIN);
-	unused:boolean;
-	mflag: boolean;
-	gflag: boolean;
-	trunc: boolean;
-	tcall: boolean;
-	ambig: boolean;
-	assert:boolean;
-	bounds:boolean;
-	debug: _uint8;		// debug version 1 or 2
+	unused:boolean;		// warn if variable unused
+	mflag: boolean;		// -M only generate Makefile stuff
+	gflag: boolean;		// -g generate debug stuff
+	trunc: boolean;		// warn on truncation
+	tcall: boolean;		// indicate tail code in IR
+	ambig: boolean;		// warn if assignment or call ambiguous
+	assert:boolean;		// generate code for assert statements
+	retv:  boolean;		// warn if old syntax for multiple return
+	zerol: boolean;		// zero local scalar variables
+	debug: _uint8;		// debug version
 	syntax37: boolean;      // use new load, getelementprt IR syntax in 3.7
     };
 
@@ -68,7 +68,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
     i = 1;
     while i < argc && argv[i]@[0] == '-' do
     {   if argv[i]@[1]
-	is 'D' then 
+	is 'D' then
 	{   if argv[i]@[2]
 	    is 'a' then debug.ast = true;
 	    is 's' then     // symbols except outermost
@@ -88,7 +88,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 		    debug.tests[argv[i]@[3] - '0'] = true;
 	    }
 	}
-	is 'm' then 
+	is 'm' then
 	{   if argv[i]@[2] != 0 then
 		targetarch = argv[i]@[2:];
 	    else
@@ -105,17 +105,18 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 		outfile = argv[i];
 	    }
 	}
-	is 'O' then 
+	is 'O' then
 	{   if argv[i]@[2]
 	    is 's' then feature.size = YES;
 	    is 'z' then feature.size = MIN;
 	}
-	is 'F' then 
+	is 'F' then
 	{   if argv[i]@[2]
 	    is 'u' then feature.unused = true;
 	    is 't' then feature.trunc = true;
 	    is 'c' then feature.tcall = true;
 	    is 'a' then feature.ambig = true;
+	    is 'r' then feature.retv = true;
 	}
 	is 'M' then feature.mflag = true;
 	is 'g' then feature.gflag = true;
@@ -130,7 +131,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	is 'A' then
 	{   if argv[i]@[2]
 	    is 'a' then feature.assert = true;
-	    is 'b' then feature.bounds = true;
+	    is 'z' then feature.zerol = true;
 	}
 	i += 1;
     }

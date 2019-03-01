@@ -1,5 +1,4 @@
-// Copyright (c) 2009-2011, Brian G. Lucas.  See LICENSE file.
-// $Id$
+// Copyright (c) 2009-2017, Brian G. Lucas.  See LICENSE file.
 
 package type
 {
@@ -44,7 +43,7 @@ package type
     // FIXME - move to symb
     proc PPkgPfx(f:sys.fildes, s: Symb)
     {   if s@.package != 0 then PPkgPfx(f, s@.package);    // recursive
-	f.str(s@.ident); 
+	f.str(s@.ident);
 	f.chr('.');
     }
     // FIXME - move to symb
@@ -64,23 +63,12 @@ package type
 	    f = f@.next;
 	}
     }
-	
+
     proc Def(tok: TokenT, bt: Type): Type;		// forward
     proc ParmList(procs: Symb, meths: Symb);		// forward
     proc Compat(t1: Type, t2: Type): boolean;		// forward
 
-    proc SameTypeList(al: TypeList, bl: TypeList): boolean
-    {
-	while al != 0 && bl != 0 do
-	{   if !Compat(al.type, bl.type) then return false;
-	    al = al.next;
-	    bl = bl.next;
-	}
-	return al == 0 && bl == 0;  // must both be at the end of the list
-    }
-
-    // FIXME: could use SameTypeList() if SymbNode extends from TypeListEntry
-    proc SameSymbList(as: Symb, bs: Symb): boolean
+    proc SameTypes(as: Symb, bs: Symb): boolean
     {
 	while as != 0 && bs != 0 do
 	{   if !Compat(as.type, bs.type) then return false;
@@ -111,8 +99,8 @@ package type
 	is ARRAY then
 	    return Same(t1@.base, t2@.base) && SameIndex(t1, t2);
 	is REFPROC then
-	    return SameSymbList(t1@.list@.parmlist, t2@.list@.parmlist) &&
-	           SameTypeList(t1@.list@.retvlist, t2@.list@.retvlist);
+	    return SameTypes(t1@.list@.parmlist, t2@.list@.parmlist) &&
+		   SameTypes(t1@.list@.retvlist, t2@.list@.retvlist);
 	return false;
     }
 
@@ -127,7 +115,7 @@ package type
 	if t2@.atbase != 0 then return Compat(t1, t2@.atbase);
 	if t2@.kind
 	is UINT, SINT then return true;
-	is ENUM then 
+	is ENUM then
 	{   var bt1, bt2: Type;
 	    // must have same base type
 	    bt1 = t1;
@@ -140,7 +128,7 @@ package type
 	    // if t2 is a superset of t1 then they are compatable
 	    return t2@.lo <= t1@.lo && t1@.hi <= t2@.hi;
 	}
-	is RECORD then 
+	is RECORD then
 	{   // if t2 is same as, or derived from, t1 then they are compatable
 	    if t2@.base != 0 then return Compat(t1, t2@.base);
 	    return false;
@@ -149,8 +137,8 @@ package type
 	is ARRAY then
 	    return Same(t1@.base, t2@.base) && SameIndex(t1, t2);
 	is REFPROC then
-	    return SameSymbList(t1@.list@.parmlist, t2@.list@.parmlist) &&
-	           SameTypeList(t1@.list@.retvlist, t2@.list@.retvlist);
+	    return SameTypes(t1@.list@.parmlist, t2@.list@.parmlist) &&
+	           SameTypes(t1@.list@.retvlist, t2@.list@.retvlist);
 	return false;
     }
 
@@ -197,7 +185,7 @@ package type
 	nt@.final = false;
 	return nt;
     }
-	
+
     proc ChangeOrder(told: Type, neworder: MemOrderT): Type
     {   var t: Type;
 
@@ -228,7 +216,7 @@ package type
 	if tok == PBEG then
 	{   tok = Next();
 	    if tok == STR then
-	    {   s@.altsymb = symb.NewString(lex.StringBuf, lex.StringLen);
+	    {   s@.altsymb = symb.NewString(lex.StringBuf, lex.StringLen, false);
 		tok = Next();
 	    }
 	    else if constok then
@@ -238,7 +226,7 @@ package type
 	    lex.Expect(PEND);
 	}
     }
-    
+
     proc XSection(s: Symb)
     {   var tok: TokenT;
 
@@ -246,7 +234,7 @@ package type
 	if tok == PBEG then
 	{   tok = Next();
 	    if tok == STR then
-	    {   s@.section = symb.NewString(lex.StringBuf, lex.StringLen);
+	    {   s@.section = symb.NewString(lex.StringBuf, lex.StringLen, false);
 	    	tok = Next();
 	    	lex.Expect(PEND);
 	    	return;
@@ -254,15 +242,15 @@ package type
 	}
 	lex.Error(SECTNAME);
     }
-    
+
     const tattrlist:[]TokenT =
     {	KPACK, KNOPAD,
 	KLSB, KMSB,
 	KLE, KBE,
 	KRO, KWO,
 	KINPUT, KOUTPUT,KIO,
-	KRNDDN, KRNDUP, KRNDTZ, KRNDFZ, KRNDNS, KRNDNL, KRNDNE, KRNDNO,
 	KMEMSZ, KBITSZ, KALIGN,
+	KRNDDN, KRNDUP, KRNDTZ, KRNDFZ, KRNDNS, KRNDNL, KRNDNE, KRNDNO,
 	NONE
     };
     proc Attributes(s: Symb, t: Type,  sattrlist:@[]TokenT): Type
@@ -307,7 +295,7 @@ package type
 		    is KINPUT then  t@.io.in = true;
 		    is KOUTPUT then t@.io.out = true;
 		    is KIO then     t@.io = {true, true};
-		    is KMEMSZ then 
+		    is KMEMSZ then
 		    {   if tok == PBEG then
 			{   tok = Next();
 			    t@.width = BitSize(expr.ConstValue(type.wordtype) *
@@ -315,16 +303,16 @@ package type
 			    t@.widthattr = true;
 			    lex.Expect(PEND);
 			}
-		    }		
-		    is KBITSZ then 
+		    }
+		    is KBITSZ then
 		    {   if tok == PBEG then
 			{   tok = Next();
 			    t@.size = BitSize(expr.ConstValue(type.wordtype));
 			    t@.sizeattr = true;
 			    lex.Expect(PEND);
 			}
-		    }		
-		    is KALIGN then 
+		    }
+		    is KALIGN then
 		    {   if tok == PBEG then
 			{   tok = Next();
 			    t@.align = BitSize(expr.ConstValue(type.wordtype) *
@@ -334,7 +322,7 @@ package type
 			    t@.alignattr = true;
 			    lex.Expect(PEND);
 			}
-		    }		
+		    }
 		}
 		else
 		{   // Not a type attribute
@@ -347,7 +335,7 @@ package type
 			    if atok
 			    is KINLINE then  s@.linkage = INLINE;
 			    is KNOINLINE then s@.linkage = NOINLINE;
-			    is KGLOBAL then 
+			    is KGLOBAL then
 			    {   if s@.linkage != WEAK then
 				    s@.linkage = GLOBAL;
 				XLinkage(s, false);
@@ -356,7 +344,7 @@ package type
 			    {   s@.linkage = WEAK;
 				XLinkage(s, false);
 			    }
-			    is KEXTERN then 
+			    is KEXTERN then
 			    {   s@.linkage = EXTERN;
 				XLinkage(s, true);
 			    }
@@ -445,8 +433,8 @@ package type
 	s@.ispad = true;
 	s@.next = prev@.next;
 	prev@.next = s;
-	index += 1;    
-	return index;	
+	index += 1;
+	return index;
     }
 
     proc BitFieldPad(prev: Symb, pad: BitSize, index: symb.OffsT): symb.OffsT
@@ -463,8 +451,8 @@ package type
 	s@.ispad = true;
 	s@.next = prev@.next;
 	prev@.next = s;
-	index += 1;    
-	return index;	
+	index += 1;
+	return index;
     }
 
     proc ForcePacked(t: Type): Type
@@ -519,14 +507,14 @@ package type
 	    if t@.kind
 	    is UTYPE then
 		align = t@.align;   // code below depends on this
-	    is ENUM, UINT then 
+	    is ENUM, UINT then
 	    {   if t@.size == 0 then
 		    t@.size = bitsize(t@.hi);
 		if t@.width == 0 then
 		    t@.width = target.isize(t@.size);
 		align = target.ialign(t@.size);
 	    }
-	    is SINT then 
+	    is SINT then
 	    {   if t@.size == 0 then
 		{   tlo = bitsize(~t@.lo);
 		    thi = bitsize(t@.hi);
@@ -543,7 +531,7 @@ package type
 	    {   t@.width = t@.size;
 		align = target.ialign(t@.size); // FIXME - falign?
 	    }
-	    is REF then 
+	    is REF then
 	    {   // Make sure anonymous base types are final
 		if t@.base != 0 && t@.base@.name == 0 then
 		    Final(t@.base);
@@ -551,12 +539,12 @@ package type
 		t@.width = Target.ptr.size;
 		align = Target.ptr.align;
 	    }
-	    is REFPROC then 
+	    is REFPROC then
 	    {   t@.size  = Target.ptr.size;
 		t@.width = Target.ptr.size;
 		align = Target.ptr.align;
 	    }
-	    is RECORD then 
+	    is RECORD then
 	    {   index = 0;
 		offs = 0;
 		align = 0;
@@ -673,7 +661,7 @@ package type
 		if t@.packed && target.isize(t@.size) == 0 then
 		    lex.Error(BADPCKREC);
 	    }
-	    is ARRAY then 
+	    is ARRAY then
 	    {   if t@.base != 0 then
 		{   Final(t@.base);
 		    if t@.packed then
@@ -837,7 +825,7 @@ err.nl();
 	    if vlo != 0 && vhi != 0 then
 	    {   if vlo@.op == CONST && vhi@.op == CONST then
 		{   if vlo@.type@.kind
-		    is ENUM, UINT, SINT then 
+		    is ENUM, UINT, SINT then
 		    {   t = type.New(vlo@.type@.kind);
 			t@.lo = vlo@.valu;
 			t@.hi = vhi@.valu;
@@ -886,7 +874,7 @@ err.nl();
 	{   // look ahead before dealing with ident
 	    tok = Next();
 	    if tok
-	    is COLON then 
+	    is COLON then
 	    {   if !symb.IsUniqueLocal(t@.list, lex.Ident) then
 		    lex.ErrorI(DEFID, lex.Ident);
 		s = symb.New(FIELD, lex.Ident, PRIVATE);
@@ -944,9 +932,8 @@ err.nl();
     }
 
     proc DefProc(procs: Symb, meths: Symb)
-    {   var s, prevs: Symb;
+    {   var s, rs, prevs: Symb;
 	var t: Type;
-	var tl, tlprev: TypeList;
 	var tok: TokenT;
 
 	tok = Token;
@@ -993,26 +980,61 @@ if debug.tests[2] then {
 	    tok = lex.Expect(PEND);
 	}
 	else lex.ErrorT(EXPECT, PBEG);
-	if tok == COLON then	// parse returned value type
+	if tok
+	is COLON then   // parse return value(s) type
 	{   tok = Next();
 	    if tok != COLON then    // not an empty return type
-	    {   tlprev = 0;
+	    {   prevs = 0;
 		loop
 		{   t = type.Def(tok, 0);
 		    type.Final(t);
-		    tl = TypeList(sys.zalloc(TypeListEntry?size));
-		    tl@.type = t;
-		    if tlprev == 0 then
-			procs@.retvlist = tl;
-		    else
-			tlprev@.next = tl;
-		    tlprev = tl; 
+		    rs = symb.New(VAR, symb.anonid, PRIVATE);
+		    rs@.type = t;
+		    if procs@.retvlist == 0 then
+			procs@.retvlist = rs;
+		    if prevs != 0 then
+			prevs@.next = rs;
+		    prevs = rs;
 		    tok = Token;
 		  exit tok != COMMA;
 		    tok = Next();
 		}
+		if procs@.retvlist.next != 0 && feature.retv then
+		    lex.Error(OLDRETV);
 		procs@.type = procs@.retvlist@.type;	// first ret type
 	    }
+	}
+	is PBEG then    // parse return value(s), new syntax
+	{   tok = Next();
+	    prevs = 0;
+	    loop
+	    {   if tok == ID then
+		{   if !symb.IsUniqueLocal(procs@.parmlist, lex.Ident) then
+			lex.ErrorI(DEFID, lex.Ident);
+		    rs = symb.New(VAR, lex.Ident, PRIVATE);
+		    tok = Next();
+		    rs@.linkage = LOCAL;    // FIXME - is this OK
+		    t = unkntype;
+		    if tok == COLON then
+		    {   tok = Next();
+			t = type.Def(tok, 0);
+			type.Final(t);
+			tok = Token;
+		    }
+		    else lex.ErrorT(EXPECT, COLON);
+		    rs@.type = t;
+		    if procs@.retvlist == 0 then
+			procs@.retvlist = rs;
+		    if prevs != 0 then
+			prevs@.next = rs;
+		    prevs = rs;
+		}
+		else lex.Error(EXPECTID);
+	      exit tok != COMMA;
+		tok = Next();
+	    }
+	    tok = lex.Expect(PEND);
+	    procs@.retv = true;
 	}
     }
 
@@ -1144,14 +1166,14 @@ if debug.tests[2] then {
 
 	t = unkntype;		// in case all goes wrong
 	if tok
-	is NUM, PLUS, MINUS then 
+	is NUM, PLUS, MINUS then
 	{   vlo = expr.Bool(0);
 	    t = Range(vlo);
 	}
-	is ID then 
+	is ID then
 	{   s = symb.Find(lex.Ident);
 	    if s != 0 then
-	    {   if s@.kind 
+	    {   if s@.kind
 		is TYPE then
 		{   tok = Next();
 		    if tok == DOT then  // enum const, start of range
@@ -1177,7 +1199,7 @@ if debug.tests[2] then {
 		{   vlo = expr.Bool(0);
 		    t = Range(vlo);
 		}
-		else 
+		else
 		{   tok = Next();
 		    lex.Error(NOTTYPE);
 		}
@@ -1215,11 +1237,11 @@ if debug.tests[2] then {
 	t = New(kind);
 	t@.size = size;
 	if kind
-	is ENUM, UINT then 
+	is ENUM, UINT then
 	{   t@.lo = 0;
 	    t@.hi = (((1 << (size-1)) - 1) << 1) | 1;
 	}
-	is SINT then 
+	is SINT then
 	{   t@.hi = (1 << (size-1)) - 1;
 	    t@.lo = ~t@.hi;
 	}
@@ -1249,7 +1271,7 @@ if debug.tests[2] then {
 		err.str(t@.name@.ident);
 	    else
 	    {   if t@.kind
-		is UINT then 
+		is UINT then
 		{   if t@.scale == 0 then
 		    {   err.uint64(t@.lo);
 		        err.str(".."); err.uint64(t@.hi);
@@ -1259,7 +1281,7 @@ if debug.tests[2] then {
 			err.chr(','); err.int(t@.scale); err.chr(')');
 		    }
 		}
-		is SINT then 
+		is SINT then
 		{   if t@.scale == 0 then
 		    {   err.int64(_int64(t@.lo));
 		        err.str(".."); err.int64(_int64(t@.hi));
@@ -1269,7 +1291,7 @@ if debug.tests[2] then {
 			err.chr(','); err.int(t@.scale); err.chr(')');
 		    }
 		}
-		is ENUM then 
+		is ENUM then
 		{   err.chr('(');
 		    s = t@.list;
 		    while s != 0 do
@@ -1284,7 +1306,7 @@ if debug.tests[2] then {
 		}
 		is FLOAT then
 		    err.str("<float>");
-		is RECORD then 
+		is RECORD then
 		{   err.str("{\n");
 		    offs = 0;
 		    s = t@.list;
@@ -1309,7 +1331,7 @@ if debug.tests[2] then {
 		    }
 		    err.chr('}');
 		}
-		is ARRAY then 
+		is ARRAY then
 		{   err.chr('[');
 		    if t@.flex then
 			err.chr('*');
@@ -1323,14 +1345,14 @@ if debug.tests[2] then {
 		    err.chr(']');
 		    Dump2(t@.base, indent, full);
 		}
-		is REF then 
+		is REF then
 		{   err.chr('@');
 		    if t@.base != 0 && t@.base@.name != 0 then
 			err.str(t@.base@.name@.ident);
 		    else
 			Dump2(t@.base, indent, full);
 		}
-		is REFPROC then 
+		is REFPROC then
 		{   err.str("@_");
 		    symb.DumpFormals(t@.list@.parmlist);
 		    symb.DumpReturns(t@.list@.retvlist);
