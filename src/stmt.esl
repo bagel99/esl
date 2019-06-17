@@ -706,6 +706,7 @@ err.str("Assign to packed array\n");
 		    else
 		    {   lex.ErrorS(COMPILER, "Assign LHS not REF");
 			ast.Dump(lhs);
+			return 0;   // FIXME - rude, avoid segfault
 		    }
 		}
 		if t != 0 && t@.kind == RECORD && !t@.packed then

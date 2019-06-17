@@ -734,7 +734,7 @@ package llvmdb
 	    llvm.PName(ps);
 	PTerminator(COMMA);
 */
-	f.str("variables: ");  PMetaRef(nullmeta, NONE);
+	f.str("retainedNodes: ");  PMetaRef(nullmeta, NONE);
 	f.str(")\n");
 	ps@.dbtag = subr;	// save tag
 	ps@.next = 0;		// and add to subprogram list

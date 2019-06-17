@@ -644,7 +644,7 @@ package lex
 	    is DOT then
 		if c
 		is '.' then { tok = RANGE; i += 1; }
-		is '0'..'9' then { k = 0; state = DECD; }
+		is '0'..'9' then { StringBuf[0] = c-'0'; k = 1; state = DECF; }
 		else    tok = DOT;
 	    is PLUS then
 		if c

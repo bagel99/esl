@@ -128,6 +128,7 @@ package type
 	    // if t2 is a superset of t1 then they are compatable
 	    return t2@.lo <= t1@.lo && t1@.hi <= t2@.hi;
 	}
+	is FLOAT then return true;
 	is RECORD then
 	{   // if t2 is same as, or derived from, t1 then they are compatable
 	    if t2@.base != 0 then return Compat(t1, t2@.base);

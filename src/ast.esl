@@ -753,7 +753,7 @@ package ast
 		tree = ExtendT(tree, to);
 	}
 	is FLOAT then
-	{
+	{   ok = type.Compat(fm, to);
 	    if to@.width != tree@.width then
 		tree = ExtendT(tree, to);
 	}
