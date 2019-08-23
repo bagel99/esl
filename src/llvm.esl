@@ -477,25 +477,9 @@ package llvm
     // FIXME - this doesn't give bit exact results for float64.
     // Replace with a better algorithm.
     proc PFloat(node: Ast)
-    {   var tmp, ten: _float64;
-	var scl: _int;
-	var hex: _uint64;
+    {   var hex: _uint64;
 
-	tmp = _float64*(_int64(node@.valu));
-	scl = node@.fscale;
-	if scl > 0 then
-	{   do
-	    {   tmp = tmp / 10.0;
-		scl -= 1;
-	    } while scl != 0;
-	}
-	elif scl < 0 then
-	{   do
-	    {   tmp = tmp * 10.0;
-		scl += 1;
-	    } while scl != 0;
-	}
-	hex = _uint64(tmp);
+	hex = node@.valu;
 	if node@.type@.size == 32 then
 	{   if hex & 0x1000_0000 != 0 then
 		hex += 0x2000_0000;

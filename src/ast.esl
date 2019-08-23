@@ -99,7 +99,6 @@ package ast
 	op:	Op;		// what kind of node is this
 	num:	NSubNodes;	// number of subnodes
 	max:	NSubNodes;	// maximum allocated slots for subnode
-	fscale: _int16;		// see below
 	lineno:	_uint16;	// source code line number
 	seqno:	_uint16;	// used by LLVM
 	width:	type.BitSize;	// current width in bits
@@ -108,9 +107,6 @@ package ast
 	valu:	type.Valu;
 	child:	[]@AstNode;
     };
-    // fscale is the decimal scaling for floating point constants,
-    // or binary scaling for fixed point constants.
-
     type Ast: @AstNode;
 
     var Null: Ast;
@@ -156,7 +152,6 @@ package ast
 	// Record copy?
 	pn@.op =    po@.op;
 	pn@.width = po@.width;
-	pn@.fscale= po@.fscale;
 	pn@.lineno= po@.lineno;
 	pn@.num =   po@.num;
 	pn@.seqno = po@.seqno;
@@ -429,8 +424,21 @@ package ast
 	}
 	is FLOAT then
 	{   if tree@.type@.kind == UINT then
-	    {   tree = New1(CAST, to, tree);
-		tree@.width = to@.width;
+	    {	if tree@.op == CONST then
+		{   var val: _uint64;
+		    val = tree@.valu;
+		    if to@.size == 32 then
+		    {	// Must convert to internal 64 bit form
+			val = ((val << 32) & 0xFF800000_00000000) |
+			      ((val << 29) & 0x000FFFFF_00000000);
+		    }
+		    tree = New(FCON, to);
+		    tree.valu = val;
+		}
+		else
+		{   tree = New1(CAST, to, tree);
+		    tree@.width = to@.width;
+		}
 	    }
 	    else
 		lex.Error(BADCAST);
@@ -525,7 +533,7 @@ package ast
 		tree = rhs;
 	    }
 	    elif rhs@.op == FCON && op == FNEG then
-	    {   rhs@.valu = type.Valu(-rhs@.valu);
+	    {   rhs@.valu = _uint64(-_float64(rhs@.valu));
 		tree =  rhs;
 	    }
 	    else
@@ -637,17 +645,36 @@ package ast
 	}
 	tree = 0;
 	// FIXME - constant folding
+	if lhs@.op == FCON then
+	{   if rhs@.op == FCON then
+	    {	// new CONST in case it is shared
+		tree = ast.Const(lhs@.type, lhs.valu);
+		if op
+		is FADD then
+		    tree.valu = _uint64(_float64(lhs.valu) + _float64(rhs.valu));
+		is FSUB then
+		    tree.valu = _uint64(_float64(lhs.valu) - _float64(rhs.valu));
+		is FMUL then
+		    tree.valu = _uint64(_float64(lhs.valu) * _float64(rhs.valu));
+		is FDIV then
+		    tree.valu = _uint64(_float64(lhs.valu) / _float64(rhs.valu));
+		is FMIN then
+		    tree.valu = _uint64(_min(_float64(lhs.valu),_float64(rhs.valu)));
+		is FMAX then
+		    tree.valu = _uint64(_min(_float64(lhs.valu),_float64(rhs.valu)));
+		else	// FREM not supported
+		    lex.Error(OPTYPE);
+		return tree;
+	    }
+	    else	// lhs is FCON so change width to that of rhs
+		lhs@.width = rhs@.width;
+	}
 	sl = lhs@.width;
 	sr = rhs@.width;
 	// make LHS as wide as result wants it
 	if t != 0 && t@.width > sl then
 	{   lhs = ExtendT(lhs, t);
 	    sl = t@.width;
-	}
-	// if lhs is FCON then change width to that of rhs
-	if lhs@.op == FCON then
-	{   lhs@.width = rhs@.width;
-	    sl = lhs@.width;
 	}
 	if sl > sr then
 	    rhs = ExtendT(rhs, lhs@.type);
@@ -879,16 +906,10 @@ err.nl();
 		err.int64(_int64(node@.valu));
 	    else
 		err.uint64(node@.valu);
-	    if node@.fscale != 0 then
-	    {   err.str(" scl=");
-		err.int16(node@.fscale);
-	    }
 	}
 	is FCON then
 	{   err.str(" val=");
-	    err.uint64(node@.valu);
-	    err.str(" scl=");
-	    err.int16(node@.fscale);
+	    err.hex64(node@.valu);
 	}
 	is SCON then
 	{   err.str(" id ");

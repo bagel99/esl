@@ -25,16 +25,6 @@ package expr
 			    tree = ast.Const(t@.base, t.lo);
 			else lex.Error(BADLEN);
 		    }
-		    elif t@.kind == FLOAT then
-		    {	if t@.size == 32 then
-			{   tree = ast.Const(t, 117549435);
-			    tree@.fscale = 46;
-			}
-			else
-			{   tree = ast.Const(t, 22250738585072014);
-			    tree@.fscale = 324;
-			}
-		    }
 		    else
 			 tree = ast.Const(t, t@.lo);
 		}
@@ -43,16 +33,6 @@ package expr
 		    {   if !t@.flex then
 			    tree = ast.Const(t@.base, t.hi);
 			else lex.Error(BADLEN);
-		    }
-		    elif t@.kind == FLOAT then
-		    {	if t@.size == 32 then
-			{   tree = ast.Const(t, 340282347);
-			    tree@.fscale = -30;
-			}
-			else
-			{   tree = ast.Const(t, 17976931348623157);
-			    tree@.fscale = -292;
-			}
 		    }
 		    else
 			tree = ast.Const(t, t@.hi);
@@ -1808,7 +1788,7 @@ type.DumpT(t, false); err.nl();
 		is FLOAT then
 		{   tree = ast.New(FCON, et);
 		    tree@.width = et@.size;
-		    tree@.valu, tree@.fscale = lex.MakeFloat(false);
+		    tree@.valu = _uint64(lex.MakeFloat(false));
 		}
 		else
 		    lex.ErrorS(NOTIMPL, "must be float");
@@ -1819,7 +1799,7 @@ type.DumpT(t, false); err.nl();
 		    et = type.floattype;
 		tree = ast.New(FCON, et);
 		tree@.width = 64;			// FIXME: ?
-		tree@.valu, tree@.fscale = lex.MakeFloat(true);
+		    tree@.valu = _uint64(lex.MakeFloat(true));
 		tok = Next();
 	    }
 	    is STR then

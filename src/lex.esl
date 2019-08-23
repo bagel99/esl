@@ -431,27 +431,44 @@ package lex
 	f@.nchar = BufRange(k);
     }
 
-    proc MakeFloat(hasexp: boolean): _uint64, _int16
+    proc MakeFloat(hasexp: boolean): _float64
     {   var n, t: _uint64;
 	var s: _int16;
 	var i: _uint;
+	var f: _float64;
 
 	n = Number;
-	s = StringLen;
-//err.str("MakeFloat: n="); err.uint64(Number); err.str(" k="); err.uint16(s); err.nl();
-	if s > 0 then
-	{   for i from 0 to s-1 do
+//err.str("MakeFloat: n="); err.uint64(Number); err.str(" k="); err.uint16(s);
+//if hasexp then { err.str(" s="); err.int16(Scale); }
+	if StringLen > 0 then
+	{   i = 0;
+	    loop
 	    {   t = (n * 10) + StringBuf[i];
-		if t < n then
-		{   lex.Error(LONGFRAC);
-		    t = 0;
-		}
+	      exit t > 0x20_0000_0000_0000;	// 2^53
 		n = t;
+		i += 1;
+	      exit i == StringLen;
 	    }
 	}
+	s = i;	// size of fraction really used
 	if hasexp then
 	    s -= Scale;
-	return n, s;
+//err.str(" n'="); err.uint64(n); err.str(" s'="); err.int16(s);
+	f = _float64*(_uint64(n));
+	if s > 0 then
+	{   do
+	    {	f = f / 10.0;
+		s -= 1;
+	    } while s != 0;
+	}
+	else if s < 0 then
+	{   do
+	    {	f = f * 10.0;
+		s += 1;
+	    } while s != 0;
+	}
+//err.str(" f="); err.hex64(_uint64(f)); err.nl();
+	return f;
     }
 
     proc MakeNum(k: _uint, base: _uint)

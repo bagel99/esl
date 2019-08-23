@@ -950,13 +950,12 @@ err.nl();
 			    tok = Token;
 			}
 			else lex.ErrorT(EXPECT, COLON);
-if debug.tests[2] then {
 			if t@.kind
 			is ARRAY, RECORD then
-			{   if !t@.packed then
-				lex.ErrorS(NOTIMPL, "Aggregate parameter by value not allowed");
+			{   // FIXME - this is kind of arbitrary
+			    if t@.size > 4 * Target.regsize then
+				lex.ErrorS(NOTIMPL, "Large aggregate as formal parameter");
 			}
-}
 			s@.type = t;
 			if procs@.parmlist == 0 then
 			    procs@.parmlist = s;
@@ -1160,6 +1159,16 @@ if debug.tests[2] then {
 	{   t@.hi = (1 << (size-1)) - 1;
 	    t@.lo = ~t@.hi;
 	}
+	is FLOAT then
+	{   if size == 32 then
+	    {   t@.hi = 0x47EFFFFFE0000000;
+		t@.lo = 0x3810000000000000;
+	    }
+	    else 	// size = 64
+	    {   t@.hi = 0x7FEFFFFFFFFFFFFF;
+		t@.lo = 0x0010000000000000;
+	    }
+	}
 	Final(t);
 	levelsave = symb.level;
 	symb.level = 0;
@@ -1187,24 +1196,11 @@ if debug.tests[2] then {
 	    else
 	    {   if t@.kind
 		is UINT then
-		{   if t@.scale == 0 then
-		    {   err.uint64(t@.lo);
-		        err.str(".."); err.uint64(t@.hi);
-		    }
-		    else
-		    {   err.str("_ufix("); err.uint(t@.width);
-			err.chr(','); err.int(t@.scale); err.chr(')');
-		    }
+		{   err.uint64(t@.lo); err.str(".."); err.uint64(t@.hi);
 		}
 		is SINT then
-		{   if t@.scale == 0 then
-		    {   err.int64(_int64(t@.lo));
-		        err.str(".."); err.int64(_int64(t@.hi));
-		    }
-		    else
-		    {   err.str("_sfix("); err.uint(t@.width);
-			err.chr(','); err.int(t@.scale); err.chr(')');
-		    }
+		{   err.int64(_int64(t@.lo));
+		    err.str(".."); err.int64(_int64(t@.hi));
 		}
 		is ENUM then
 		{   err.chr('(');
