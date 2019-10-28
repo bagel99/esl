@@ -1,9 +1,10 @@
 import sys;
 import out;
-const err: out.OutFD = sys.fderr;
 
 proc assert(why: _uint, file: @[]_byte, line: _uint): : global("_assert")
 {
+    const err: out.OutFD = sys.fderr;
+
     if why
     is 0 then err.str("assert failed");
     err.str(" at line ");

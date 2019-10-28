@@ -1593,6 +1593,14 @@ type.DumpT(t, false); err.nl();
 		    lex.Error(NOTARRAY);
 		tok = lex.Expect(AEND);
 	    }
+	    is PBEG then
+	    {	if t@.kind == REFPROC then
+		{   // Implicit deref of REFPROC
+		    tree = Call(t@.list, tree, 0);
+		    tok = Token;
+		}
+		else done = true;
+	    }
 	    else done = true;
 	}
 	return tree;

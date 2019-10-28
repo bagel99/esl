@@ -29,7 +29,12 @@ package type
 	while f != 0 do
 	{   fn = f@.next;
 	    if s == f@.symb then
-	    {   f@.type@.base = bt;
+	    {
+		f@.type@.base = bt;
+		if bt@.kind == REF && bt@.base@.name == s then
+		{   lex.ErrorI(RECURSIVE, s@.ident);
+		    f@.type@.base = type.unkntype;
+		}
 		if fp != 0 then fp@.next = fn; else fwdlist = fn;
 		// free(f)
 	    }

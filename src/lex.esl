@@ -21,7 +21,7 @@ package lex
 	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
-	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,
+	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,	RECURSIVE,
 	PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
 	LONGNUM,    LONGFRAC,
 	PROGERROR,  // error statement
@@ -122,6 +122,7 @@ package lex
 	[RETTOOMANY] =  "Too many return values",
 	[BADLEN] =      "Not an array or array with flexible length",
 	[BOUNDSERR] =   "Array bounds error",
+	[RECURSIVE] =	"Illegal recursive type: ",
 	[PACKARRAY] =   "Arg for _packXX/_unpkXX must be array/slice of bytes",
 	[PACKFIXED] =   "Array for _packXX/_unpkXX must have fixed size",
 	[PACKSIZE] =    "Array for _packXX/_unpkXX to large for target machine",

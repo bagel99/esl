@@ -97,7 +97,8 @@ package target
 	{   "s390x",    "systemz-unknown-linux",	Model64BEA },
 	{   "systemz",  "systemz-unknown-linux",	Model64BEA },
 	{   "aarch64",  "aarch64-unknown-linux",	Model64LEU },
-	{   "riscv",    "riscv-unknown-linux",		Model32LEU },
+	{   "riscv",    "riscv32-unknown-linux",	Model32LEU },
+	{   "riscv32",  "riscv32-unknown-linux",	Model32LEU },
 	{   "riscv64",  "riscv64-unknown-linux",	Model64LEU },
  	{   "msp430", "msp430-generic-generic",		Model16LEA }
     };
