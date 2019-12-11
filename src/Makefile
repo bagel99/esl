@@ -7,8 +7,8 @@ SRC =	main.esl lex.esl type1.esl type2.esl symb1.esl symb2.esl \
 # to convert a .ll into a .s for the target machine.
 LLVM=./llvm
 LLVMFLAGS= -I		# no inlining to ease debugging
-
-ESLCFLAGS= -L3.8.0	# uses release 3.7.0 IR syntax
+LLVMVERSION= $(shell $(LLVM) -V)
+ESLCFLAGS= -L$(LLVMVERSION)
 
 # C compiler is used only to run the assembler and linker
 GCC=	cc
