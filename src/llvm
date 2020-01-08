@@ -9,11 +9,14 @@ then
 elif [ -x /bin/llc ]
 then
   LLVM=/bin
+elif [ -x /usr/local/opt/llvm/bin/llc ]
+then
+  LLVM=/usr/local/opt/llvm/bin
 elif [ -x /usr/local/bin/llc ]
 then
   LLVM=/usr/local/bin
 else
-   echo "Can't find LLVM executable llc in /bin or /usr/bin or /usr/local/bin!"
+   echo "Can't find LLVM executable llc in /bin or /usr/bin or /usr/local/bin or /usr/local/opt/llvm/bin!"
    echo "If it is somewhere else, fix the script 'llvm'."
    exit 1
 fi
@@ -22,12 +25,13 @@ ARCH=
 INLINE=
 OPT=-O3		#default
 TRIPLE=
-while getopts "Im:O:" flags
+while getopts "Im:O:V" flags
 do
   case $flags in
     I) INLINE="-disable-inlining" ;; 	# disable inlining
     m) ARCH=$OPTARG ;;
     O) OPT="-O$OPTARG" ;;
+    V) $LLVM/llc --version | sed -n -e 's/.*LLVM version \([0-9.]*\).*/\1/p'; exit 0 ;;
     *) echo "bad flag"; exit 1 ;;
   esac
 done
