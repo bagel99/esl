@@ -21,7 +21,7 @@ package lex
 	ARGSLO,     ARGSHI,     PARMTYPE,   INITHI,     BADCONST,   EXPCONST,
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
-	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,	RECURSIVE,
+	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,	RECURSIVE,  BADCONV,
 	PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
 	LONGNUM,    LONGFRAC,
 	PROGERROR,  // error statement
@@ -84,6 +84,7 @@ package lex
 	[BADMETHOD] =	"Method base type must have name",
 	[WANTUINT] =	"Unsigned integer expression required",
 	[BADCAST] =	"Illegal cast",
+	[BADCONV] =	"Illegal conversion",
 	[UNDFCOMPV] =	"Missing type for composite value",
 	[BADCOMPV] =	"Illegal type for composite value",
 	[PROPID] =	"Missing or undefined property identifier",

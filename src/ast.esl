@@ -509,18 +509,22 @@ package ast
     }
 
     proc Cast(tree: Ast, to: Type): Ast
-    {
+    {   var ok: boolean;
+	var fm: Type;
+
 	if tree == 0 then return tree;
+	fm = tree@.type;
+	ok = true;
 	if to@.kind
 	is ENUM then
-	{   if tree@.type@.kind
+	{   if fm@.kind
 	    is ENUM, UINT then			// ENUM, UINT -> ENUM
 		tree = ExtendCast(tree, to);
 	    else
-		lex.Error(BADCAST);
+		ok = false;
 	}
 	is UINT then
-	{   if tree@.type@.kind
+	{   if fm@.kind
 	    is ENUM, UINT, SINT then		// ENUM|UINT|SINT -> UINT
 		tree = ExtendCast(tree, to);
 	    is REF then				// REF -> UINT
@@ -528,27 +532,27 @@ package ast
 		tree@.width = to@.size;	// FIXME: width?
 	    }
 	    is RECORD, ARRAY then		// PACKED -> UINT
-	    {   if tree@.type@.packed && tree@.width == to@.size then
+	    {   if fm@.packed && tree@.width == to@.size then
 		    tree@.type = to;
 		else
-		    lex.Error(BADCAST);
+		    ok = false;
 	    }
 	    is FLOAT then
 	    {   tree = New1(CAST, to, tree);
 		tree@.width = to@.width;
 	    }
 	    else
-		lex.Error(BADCAST);
+		ok = false;
 	}
 	is SINT then
-	{   if tree@.type@.kind
+	{   if fm@.kind
 	    is UINT, SINT then			// UINT|SINT -> SINT
 		tree = ExtendCast(tree, to);
 	    else
-		lex.Error(BADCAST);
+		ok = false;
 	}
 	is FLOAT then
-	{   if tree@.type@.kind == UINT then
+	{   if fm@.kind == UINT then
 	    {	if tree@.op == CONST then
 		{   var val: _uint64;
 		    val = tree@.valu;
@@ -566,10 +570,10 @@ package ast
 		}
 	    }
 	    else
-		lex.Error(BADCAST);
+		ok = false;
 	}
 	is REF then
-	{   if tree@.type@.kind
+	{   if fm@.kind
 	    is REF then				// REF -> REF
 	    {   tree = New1(CAST, to, tree);
 		tree@.width = Target.ptr.size;
@@ -588,16 +592,21 @@ package ast
 		    tree@.width = to@.size;	// width?
 		}
 		else
-		    lex.Error(BADCAST);
+		    ok = false;
 	    }
 	    else
-		lex.Error(BADCAST);
+		ok = false;
 	}
 	is RECORD, ARRAY then
-	{   if to@.packed && tree@.type@.kind == UINT then
+	{   if to@.packed && fm@.kind == UINT then
 		tree = ExtendCast(tree, to);
 	    else
-		lex.Error(BADCAST);
+		ok = false;
+	}
+	if !ok then
+	{   lex.Error(BADCAST);
+err.str("fm="); type.DumpT(fm, false);
+err.str("\nto="); type.DumpT(to, false); err.nl();
 	}
 	return tree;
     }

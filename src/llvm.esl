@@ -416,7 +416,7 @@ package llvm
 	{   f.chr('%');
 	    f.str(s@.ident);
 	}
-	is NORMAL, INLINE then
+	is NORMAL, INLINE, NOINLINE then
 	{   f.chr('@');
 	    if s@.kind == PROC && s@.bound then
 		PMethod(s);
@@ -649,7 +649,7 @@ package llvm
 	ps = node@.symb;
 	if isdefine then f.str("define"); else f.str("declare");
 	if ps@.linkage
-	is NORMAL, INLINE then f.str(" internal");
+	is NORMAL, INLINE, NOINLINE then f.str(" internal");
 	is WEAK then f.str(" weak");
 	is EXTERN then f.str(" external");
 	PRetvType(ps@.retvlist, true);

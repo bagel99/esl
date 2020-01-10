@@ -47,6 +47,7 @@ package symb
     var  curfile: Symb;		// current file
     var  curpack: Symb;		// current package, 0 if not in a package
     var  curproc: Symb;		// current procedure, 0 if not in a procedure
+    var  savpack: Symb;	// if we need to keep package context
     var  libnew, libnewnz, libdel: Symb;
     type symblist:
     {   frst:	Symb;
@@ -216,7 +217,7 @@ package symb
 	return s;
     }
 
-    proc FindPackage(ps: Symb): Symb
+    proc FindPackage(ps: Symb): Symb, Symb
     {   var s, fs: Symb;
 	var tok: TokenT;
 	var i: _uint;
@@ -240,7 +241,7 @@ package symb
 	    tok = Next();
 	    ps = s;
 	}
-	return s;
+	return s, ps;
     }
 
     proc FindTop(name: @lex.Identifier): Symb
@@ -263,10 +264,32 @@ package symb
     proc Find(name: @lex.Identifier): Symb
     {   var s: Symb;
 
+	if savpack != 0 then
+	{   s = FindLocal(savpack@.symblist, name);
+	    savpack = 0;
+	}
+	else
+	{   s = FindTop(name);
+	    if s != 0 && s@.kind == PACK then
+		s, _ = FindPackage(s);
+	}
+	return s;
+    }
+
+    proc FindKeep(name: @lex.Identifier): Symb
+    {   var s, ps: Symb;
+
 	s = FindTop(name);
 	if s != 0 && s@.kind == PACK then
-	    s = FindPackage(s);
+	{   s, ps = FindPackage(s);
+	    savpack = ps;
+	}
 	return s;
+    }
+
+    proc ClearKeep()
+    {
+	savpack = 0;
     }
 
     proc FindKind(name: @lex.Identifier, kind:SymbT): Symb

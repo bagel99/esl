@@ -1178,28 +1178,63 @@ ast.Dump(tree);
     {   var tree: Ast;
         var to, fm: TypeT;
         var op: ast.Op;
+	var ok: boolean;
 
 	tree = Bool(0);
 	if tree != 0 && t != 0 then
 	{   to = t@.kind;
 	    fm = tree@.type@.kind;
-	    // FIXME - much more needed here
+	    ok = false;
 	    op = NULL;
 	    if to
 	    is  FLOAT then
 	    {   if fm
-		is UINT then op = CVTUF;
-		is SINT then op = CVTIF;
+		is UINT then
+		{   if tree.op == CONST then
+		    {	tree.op = FCON;
+			tree.valu = type.Valu(_float64*(tree.valu));
+		    }
+		    else op = CVTUF;
+		    ok = true;
+		}
+		is SINT then
+		{   if tree.op == CONST then
+		    {	tree.op = FCON;
+			tree.valu = type.Valu(_float64*(type.Valu(tree.valu)));
+		    }
+		    else op = CVTIF;
+		    ok = true;
+		}
 	    }
 	    is UINT then
-	    {   if fm == FLOAT then op = CVTFU;
+	    {   if fm == FLOAT then
+		{   if tree.op == FCON then
+		    {   tree.op = CONST;
+			tree.valu = type.Valu*(_float64(tree.valu));
+			// FIXME: what if const is negative?
+		    }
+		    else op = CVTFU;
+		    ok = true;
+		}
 	    }
 	    is SINT then
-	    {   if fm == FLOAT then op = CVTFI;
+	    {   if fm == FLOAT then
+		{   if tree.op == FCON then
+		    {   tree.op = CONST;
+			tree.valu = type.Valu*(_float64(tree.valu));
+		    }
+		    else op = CVTFI;
+		    ok = true;
+		}
 	    }
-	    if op != NULL then
-	    {   tree = ast.New1(op, t, tree);
+	    if ok then
+	    {	if op != NULL then
+		    tree = ast.New1(op, t, tree);
+		tree@.type = t;
 		tree@.width = t@.width;
+	    }
+	    else
+	    {	lex.Error(BADCONV);
 	    }
 	}
         return tree;
@@ -1915,13 +1950,14 @@ type.DumpT(t, false); err.nl();
 	      exit rhs == 0;
 		if tree@.type@.kind == FLOAT then
 		    tree = ast.OpFloat(faddop[stok], tree, rhs, t);
-		else
+		elif tree@.type@.kind <= SINT then
 		{   op = addop[stok];
 		    if stok < OR then
 			tree = ast.OpBinary(op, tree, rhs, t);
 		    else
 			tree = ast.OpBinary(op, tree, rhs, 0);
 		}
+		else lex.ErrorS(OPTYPE, "add/sub/or/xor");
 	    }
 	}
 	return tree;

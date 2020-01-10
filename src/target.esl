@@ -100,7 +100,10 @@ package target
 	{   "riscv",    "riscv32-unknown-linux",	Model32LEU },
 	{   "riscv32",  "riscv32-unknown-linux",	Model32LEU },
 	{   "riscv64",  "riscv64-unknown-linux",	Model64LEU },
- 	{   "msp430", "msp430-generic-generic",		Model16LEA }
+	{   "msp430", 	"msp430-generic-generic",	Model16LEA },
+	{   "sparc",	"sparc-unknown-linux",		Model32BEA },
+	{   "sparcv9",	"sparcv9-unknown-linux",	Model64BEA },
+	{   "my66000",	"my66000-unknown-linux",	Model64LEU }
     };
 
     var Target: @ModelT;

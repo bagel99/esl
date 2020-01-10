@@ -1031,6 +1031,7 @@ err.nl();
 	    }
 	    tok = lex.Expect(PEND);
 	    procs@.retv = true;
+	    procs@.type = procs@.retvlist@.type;	// first ret type
 	}
     }
 
@@ -1095,11 +1096,17 @@ err.nl();
 	    t = Range(vlo);
 	}
 	is ID then
-	{   s = symb.Find(lex.Ident);
+	{   // This is ugly.  We must lookup the symbol to see if it
+	    // is a TYPE.  This will strip all the package prefixes.
+	    // But if it is a CONSTANT, we call expr.Bool() which
+	    // expects the package prefixes to be there when it
+	    // does a lookup.
+	    s = symb.FindKeep(lex.Ident);
 	    if s != 0 then
 	    {   if s@.kind
 		is TYPE then
 		{   tok = Next();
+		    symb.ClearKeep();
 		    if tok == DOT then  // enum const, start of range
 		    {   tok = Next();
 			vlo = expr.EnumConst(s@.type);
