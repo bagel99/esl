@@ -1,0 +1,79 @@
+#!/bin/sh +x
+
+show_help ()
+{
+    cat <<EOF
+Usage: llvm_ll [OPTION] ... [FILE]
+Run FILE through the LLVM backend
+  -I set inline option
+  -m set arch option
+  -O set passname option
+  -V print LLVM version
+  -h print this message
+
+Examples:
+  llvm_ll -V
+  llvm_ll -O3 file
+EOF
+}
+
+llvm_version ()
+{
+    llc --version | awk 'FNR == 2 { print $3 }'
+}
+
+triple=
+arch=
+passname=
+attr=
+cpu=
+debug=
+infile=
+outfile=
+
+while getopts Im:O:V f
+do
+    case $f in
+	I)
+	    inline=-disable-inlining
+	    ;;
+	m)
+	    arch="$OPTARG"
+	    ;;
+	O)
+	    passname="-O$OPTARG"
+	    ;;
+	V) 
+	    llvm_version
+	    exit
+	    ;;
+    esac
+done
+shift "$((OPTIND-1))"
+
+[ -r "$1" ] || show_help
+
+infile="$1"
+outfile="$(basename "$infile" .ll)"
+
+[ -z "$arch" ] && arch="$(uname -m)"
+
+case "$arch" in
+    i686)
+	arch=x86
+	;;
+    x86_64)
+	arch=x86-64
+	;;
+    s390x)
+	arch=systemz
+	;;
+    armv7l)
+	arch=arm
+	cpu=-mcpu=cortex-a7
+	attr=-mattr=-neon,-vfp4,+vfp3,+d16
+	;;
+esac
+    
+opt ${passname} ${inline} -o - "$infile" |
+    llc ${debug} -march=${arch} ${triple} ${cpu} ${attr} ${passname} -asm-verbose=0 -o "$outfile.s"
