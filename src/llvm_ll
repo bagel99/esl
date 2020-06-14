@@ -24,7 +24,7 @@ llvm_version ()
 
 triple=
 arch=
-passname=
+passname=-03
 attr=
 cpu=
 debug=
@@ -47,16 +47,26 @@ do
 	    llvm_version
 	    exit
 	    ;;
+	*)
+	    show_help
+	    exit
     esac
 done
 shift "$((OPTIND-1))"
 
-[ -r "$1" ] || show_help
+if [ -r "$1" ]
+then
+    infile="$1"
+    outfile="$(basename "$infile" .ll)"
+else
+    show_help
+    exit
+fi
 
-infile="$1"
-outfile="$(basename "$infile" .ll)"
-
-[ -z "$arch" ] && arch="$(uname -m)"
+if [ -z "$arch" ]
+then
+    arch="$(uname -m)"
+fi
 
 case "$arch" in
     i686)
@@ -74,6 +84,11 @@ case "$arch" in
 	attr=-mattr=-neon,-vfp4,+vfp3,+d16
 	;;
 esac
-    
-opt ${passname} ${inline} -o - "$infile" |
-    llc ${debug} -march=${arch} ${triple} ${cpu} ${attr} ${passname} -asm-verbose=0 -o "$outfile.s"
+
+if [ "$(uname -s)" = 'Darwin' ]
+then
+    triple='-mtriple=x86_64-apple-darwin'
+fi
+
+opt "$passname" ${inline} -o - "$infile" |
+    llc ${debug} -march=${arch} ${triple} ${cpu} ${attr} "$passname" -asm-verbose=0 -o "$outfile.s"
