@@ -1405,7 +1405,7 @@ package llvm
 	is NEG then
 	    Print("\t%N = sub %0T 0, %0N", node);
 	is FNEG then
-	    Print("\t%N = fsub %0T 0.0, %0N", node);
+	    Print("\t%N = fneg %0T %0N", node);
 	is FCVTL then
 	    Print("\t%N = fpext %0T %0N to %T", node);
 	is FCVTS then
@@ -2172,9 +2172,14 @@ f.flush();
 	}
 	f.str("target datalayout = \"");
 	if Target.memorder == BE then f.str("E"); else f.str("e");
+	if Target.stkalign != 0 then
+	{   f.str("-S"); f.uint(Target.stkalign);
+	}
 	f.str("-p:");  f.uint(Target.ptr.size);
 	f.str(":");    f.uint(Target.ptr.align);
 	f.str(":");    f.uint(Target.ptr.align);
+	f.str("-a:");  f.uint(Target.rec.size);
+	f.str(":");    f.uint(Target.rec.align);
 	f.str("-i1:"); f.uint(Target.isizes[0].align);
 	f.str(":");    f.uint(Target.isizes[0].align);
 	i = 0;

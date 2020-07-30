@@ -73,7 +73,7 @@ package out
 
     proc (o: fildes) hex64(in: _uint64)
     {   var buf: [16]_byte;
-	var i: 0..15;
+	var i: _uint;
 
 	i = 15;
 	loop

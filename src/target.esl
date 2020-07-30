@@ -16,8 +16,10 @@ package target
 	bitorder:   type.BitOrderT;
 	regsize:    0..255;		// width of integer registers
 	mustalign:  boolean;
+	stkalign:   0..255;
 	nisize:     0..IntSizesMax-1;
-	ptr:	    SizeAlign;
+	ptr:	    SizeAlign;  // for pointers
+	rec:	    SizeAlign;  // for aggregates (records)
 	isizes:     [IntSizesMax]SizeAlign;
     };
     type TargetT:
@@ -31,45 +33,45 @@ package target
     var   TargetName: @[]Char;
     var   Triple:     @[]Char;
     const Model32LEU: ModelT =  // 32-bit little-endian no-alignment
-    {   LE, LSB, 32, false,
+    {   LE, LSB, 32, false, 32,
 	4,
-	{32, 32},
+	{32, 32}, {0, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
     const Model32LEA: ModelT =  // 32-bit little-endian partial alignment
-    {   LE, LSB, 32, true,
+    {   LE, LSB, 32, true, 32,
 	4,
-	{32, 32},
+	{32, 32}, {0, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
     const Model32LEF: ModelT =  // 32-bit little-endian full alignment
-    {   LE, LSB, 32, true,
+    {   LE, LSB, 32, true, 32,
 	4,
-	{32, 32},
+	{32, 32}, {0, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,64}, {0,0}, {0,0}  }
     };
-    const Model64LEU: ModelT =  // 64-bit little-endian no-alignment
-    {   LE, LSB, 64, false,
-	5,
-	{64, 64},
-	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,64}, {0,0}  }
-    };
     const Model32BEA: ModelT =  // 32-bit big-endian partial alignment
-    {   BE, MSB, 32, true,
+    {   BE, MSB, 32, true, 32,
 	4,
-	{32, 32},
+	{32, 32}, {0, 32},
 	{   {8, 8}, {16,16}, {32,32}, {64,32}, {0,0}, {0,0}  }
     };
-    const Model64BEA: ModelT =  // 64-bit big-endian strict alignment
-    {   BE, MSB, 64, true,
+    const Model64LEU: ModelT =  // 64-bit little-endian no-alignment
+    {   LE, LSB, 64, false, 0,
 	5,
-	{64, 64},
+	{64, 64}, {0, 64},
+	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,64}, {0,0}  }
+    };
+    const Model64BEA: ModelT =  // 64-bit big-endian strict alignment
+    {   BE, MSB, 64, true, 64,
+	5,
+	{64, 64}, {0, 64},
 	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,128}, {0,0}  }
     };
     const Model16LEA: ModelT =  // 16-bit little-endian strict alignment
-    {   LE, LSB, 16, true,
+    {   LE, LSB, 16, true, 16,
 	3,
-	{16, 16},
+	{16, 16}, {0, 16},
 	{   {8, 8}, {16,16}, {32,16}, {0,0}, {0,0}, {0,0}  }
     };
 
@@ -103,6 +105,7 @@ package target
 	{   "msp430", 	"msp430-generic-generic",	Model16LEA },
 	{   "sparc",	"sparc-unknown-linux",		Model32BEA },
 	{   "sparcv9",	"sparcv9-unknown-linux",	Model64BEA },
+	{   "mcore",	"mcore-unknown-unknown",	Model32BEA },
 	{   "my66000",	"my66000-unknown-linux",	Model64LEU }
     };
 

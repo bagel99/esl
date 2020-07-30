@@ -567,13 +567,22 @@ err.str("Const SCON dup\n");
 	tree = expr.Term(t);
 	if tree == 0 then return 0;
 	if t@.packed then    // FIXME: not possible?
-	    tree = CheckSwap(lhs, tree);
-	else if tree@.op == CLIST then
-	{   tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
-	    tree = ast.New1(LOAD, tree@.type@.base, tree);
+	{   tree = CheckSwap(lhs, tree);
+	    tree = ast.New2(STORE, 0, lhs, tree);
 	}
-	// FIXME: copy or store depending on size?
-	tree = ast.New2(STORE, 0, lhs, tree);
+	else
+	{   if tree@.op == CLIST then
+	    {   tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
+		tree = ast.New1(LOAD, tree@.type@.base, tree);
+	    }
+	    else
+	    {	// must be a LOAD?
+		tree = expr.UnLoad(tree);
+	    }
+	    tree = ast.New4(COPY, 0, lhs, tree,
+			expr.GetSize(lhs),
+			ast.ConstW(expr.GetAlignment(lhs)));
+	}
 	return tree;
     }
 

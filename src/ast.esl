@@ -274,15 +274,7 @@ package ast
 		size = 2 * size;
 	}
 	pn = Alloc(po@.op, size);
-	// Record copy?
-	pn@.op =    po@.op;
-	pn@.width = po@.width;
-	pn@.lineno= po@.lineno;
-	pn@.num =   po@.num;
-	pn@.seqno = po@.seqno;
-	pn@.valu =  po@.valu;
-	pn@.type =  po@.type;
-	pn@.symb =  po@.symb;
+	pn@ = po@;	// record copy
 	i = 0;
 	while i < po@.max do
 	{   pn@.child[i] = po@.child[i];
@@ -662,7 +654,7 @@ err.str("\nto="); type.DumpT(to, false); err.nl();
 		    else
 			rhs@.valu = _ctznz(rhs@.valu);
 		}
-		is POP  then rhs@.valu = popcnt(rhs@.valu);
+		is POP  then rhs@.valu = _pop(rhs@.valu);
 		else lex.ErrorS(COMPILER, "Unhandled unary operation");
 		tree = rhs;
 	    }
@@ -795,7 +787,7 @@ err.str("\nto="); type.DumpT(to, false); err.nl();
 		is FMIN then
 		    tree.valu = _uint64(_min(_float64(lhs.valu),_float64(rhs.valu)));
 		is FMAX then
-		    tree.valu = _uint64(_min(_float64(lhs.valu),_float64(rhs.valu)));
+		    tree.valu = _uint64(_max(_float64(lhs.valu),_float64(rhs.valu)));
 		else	// FREM not supported
 		    lex.Error(OPTYPE);
 		return tree;
