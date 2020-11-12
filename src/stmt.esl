@@ -571,17 +571,22 @@ err.str("Const SCON dup\n");
 	    tree = ast.New2(STORE, 0, lhs, tree);
 	}
 	else
-	{   if tree@.op == CLIST then
+	{   if tree@.op
+	    is CLIST then
 	    {   tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
 		tree = ast.New1(LOAD, tree@.type@.base, tree);
+		tree = ast.New2(STORE, 0, lhs, tree);
 	    }
-	    else
-	    {	// must be a LOAD?
-		tree = expr.UnLoad(tree);
-	    }
-	    tree = ast.New4(COPY, 0, lhs, tree,
+	    is CALL then
+		tree = ast.New2(STORE, 0, lhs, tree);
+	    is LOAD then
+	    {	tree = expr.UnLoad(tree);
+		tree = ast.New4(COPY, 0, lhs, tree,
 			expr.GetSize(lhs),
 			ast.ConstW(expr.GetAlignment(lhs)));
+	    }
+	    else
+		lex.ErrorS(COMPILER, "Unexpected RHS in AssignRecord");
 	}
 	return tree;
     }

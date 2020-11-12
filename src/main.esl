@@ -23,7 +23,7 @@ var feature:
 	retv:  boolean;		// warn if old syntax for multiple return
 	zerol: boolean;		// zero local scalar variables
 	debug: _uint8;		// debug version
-	syntax37: boolean;      // use new load, getelementprt IR syntax in 3.7
+	version: _uint8;
     };
 
 import sys;
@@ -148,32 +148,22 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	}
     }
     // Check for LLVM backend version
-    var goodversion: boolean = true;    // assume OK
-    feature.debug = 6;			// assume the latest
-    feature.syntax37 = true;		// assume the latest
     if llvmversion != 0 then
-    {   if llvmversion[0]
-        is '3' then
-        {   if llvmversion[1] == '.' then
-	    {   if llvmversion[2]
-		is '4', '5' then { feature.debug = 1; feature.syntax37 = false; }
-		is '6' then      { feature.debug = 2; feature.syntax37 = false; }
-		is '7' then      { feature.debug = 3; feature.syntax37 = true; }
-		is '8' then      { feature.debug = 4; feature.syntax37 = true; }
-		is '9' then      { feature.debug = 5; feature.syntax37 = true; }
-		else goodversion = false;
-	    }
-	    else goodversion = false;
+    {   feature.version = 0;
+        var j: _uint = 0;
+        while llvmversion[j] >= '0' && llvmversion[j] <= '9' do
+	{   feature.version = (feature.version * 10) + (llvmversion[j]-'0');
+	    j += 1;
 	}
-	is '4', '5', '6', '7', '8', '9' then
-	    { feature.debug = 6; feature.syntax37 = true; }
     }
-    if !goodversion then
+    else feature.version = 9;	// assume some default version
+    if feature.version < 4 then
     {   err.str("Unsupported LLVM backend version: ");
-        err.str(llvmversion);
+        err.uint8(feature.version);
 	err.nl();
 	return 2;
     }
+    feature.debug = 6;			// assume the latest
     if feature.gflag && feature.debug < 5 then
     {   err.str("Debug information not supported for LLVM version: ");
         err.str(llvmversion);

@@ -106,6 +106,7 @@ package target
 	{   "sparc",	"sparc-unknown-linux",		Model32BEA },
 	{   "sparcv9",	"sparcv9-unknown-linux",	Model64BEA },
 	{   "mcore",	"mcore-unknown-unknown",	Model32BEA },
+	{   "csky",     "csky-unknown-unknown",		Model32LEA },
 	{   "my66000",	"my66000-unknown-linux",	Model64LEU }
     };
 

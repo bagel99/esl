@@ -16,7 +16,8 @@ package ast
 	SET,	COPY,	MOVE,	AEQ,	ANE,	// record and array ops
 	GETRV,	LOAD,	STORE,
 	// unary ops
-	ZEXT,   SEXT,   TRUNC,	BSWAP,	BITREV,
+	ZEXT,   SEXT,   TRUNC,	ZEXTB,	SEXTB,	TRUNCB,
+	BSWAP,	BITREV,
 	CLZ,	CLZNZ,	CTZ,	CTZNZ,	POP,
 	NEG,	NOT,	ABS,	SQRT,	ZLEN,
 	FNEG,   FCVTL,  FCVTS,
@@ -24,13 +25,13 @@ package ast
 	// binary ops
 	AND,    OR,     XOR,
 	ADD,    SUB,	MUL,    DIV,    MOD,
-	UMIN,	UMAX,	SMIN,	SMAX,		 // expand in llvm
+	UMIN,	UMAX,	SMIN,	SMAX,		// sequential
 	LSL,    LSR,	ASL,    ASR,	ROL,    ROR,
 	EQ,     NE,	ULT,    UGT,    ULE,    UGE,
 			SLT,    SGT,    SLE,    SGE,
 	FEQ,    FNE,    FLT,    FGT,    FLE,    FGE,
 	FADD,	FSUB,	FMUL,	FDIV,	FREM,
-	FMIN,   FMAX, 				// expand in llvm
+	FMIN,   FMAX, 				// sequential
 	BAND,   BOR,	BNOT,
 	IFEXPR,		// select expression
 	SEQ,	LOOP,	EXIT,
@@ -54,6 +55,7 @@ package ast
 	[COPY]=   4,	[MOVE]=   4,	[AEQ]=    4,	[ANE]=    4,
 	[GETRV]=  1,	[LOAD]=   1,	[STORE]=  2,
 	[ZEXT]=   1,	[SEXT]=   1,	[TRUNC]=  1,
+	[ZEXTB]=   1,	[SEXTB]=   1,	[TRUNCB]=  1,
 	[BSWAP]=  1,    [BITREV]= 1,
 	[CLZ]=    1,	[CLZNZ]=  1,	[CTZ]=    1,	[CTZNZ]=  1,
 	[POP]=    1,	[NEG]=    1,	[NOT]=    1,	[ABS]=	  3,
@@ -118,6 +120,7 @@ package ast
 	[GETRV]= "GETRV",
 	[LOAD]=  "LOAD",	[STORE]= "STORE",
 	[ZEXT]=  "ZEXT",	[SEXT]=  "SEXT",	[TRUNC]= "TRUNC",
+	[ZEXTB]= "ZEXTB",	[SEXTB]= "SEXTB",	[TRUNCB]="TRUNCB",
 	[BSWAP]= "BSWAP",	[BITREV]="BITREV",
 	[CLZ]=   "CLZ",		[CLZNZ]= "CLZNZ",
 	[CTZ]=   "CTZ",		[CTZNZ]= "CTZNZ",
