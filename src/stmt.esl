@@ -999,6 +999,7 @@ err.str("Assign to packed array\n");
 	var t: Type;
 	var tok: TokenT;
 	var s: Symb;
+	var op: ast.Op;
 
 	tree = 0;
 	tok = Token;
@@ -1006,6 +1007,7 @@ err.str("Assign to packed array\n");
 	{   s = symb.Find(lex.Ident);
 	    if s != 0 && s@.kind == VAR then
 	    {   t = s@.type;
+		if t@.kind == SINT then op = SGT; else op = UGT;
 		ix = ast.New(VAR, type.MakeRef(s@.type));
 		ix.symb = s;
 	    }
@@ -1028,6 +1030,11 @@ err.str("Assign to packed array\n");
 		fm = expr.Bool(t);
 		lex.Expect(KTO);
 		to = expr.Bool(t);
+		if to@.op == SUB && to@.child[1]@.op == CONST &&
+		    to@.child[1]@.valu == 1 then
+		{   to = to@.child[0];
+		    if op == UGT then op = UGE; else op = SGE;
+		}
 		tok = lex.Keyword(bylist);
 		if tok == KBY then
 		{   tok = Next();
@@ -1051,7 +1058,7 @@ err.str("Assign to packed array\n");
 		}
 		if to != 0 then
 		    exit = ast.New1(EXIT, 0,
-			     ast.OpBinary(UGT, expr.Load(ix), to, t));
+			     ast.OpBinary(op, expr.Load(ix), to, t));
 		incr = ast.New2(STORE, t, ix,
 			 ast.OpBinary(ADD, expr.Load(ix), by, t));
 	    }

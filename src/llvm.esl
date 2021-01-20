@@ -1853,13 +1853,16 @@ package llvm
 	tree = ast.ExtendT(tree, type.wordtype);
 	if shft@.op != CONST || shft@.valu != 0 then    // FIXME - necessary?
 	    tree = ast.New2(LSR, type.wordtype, tree, shft);
+	// truncate to size just extracted
 	tree = ast.New1(TRUNCB, node@.type, tree);
+	// extend to wordtype, zero extend or sign extend
 	if node@.type@.kind == SINT then
 	    tree = ast.New1(SEXTB, type.wordtype, tree);
 	else
 	    tree = ast.New1(ZEXTB, type.wordtype, tree);
-	// now narrow to extracted type size
-	tree = ast.ExtendT(tree, node@.type);
+	// now narrow to extracted type width
+	if tree@.type@.width != node@.type@.width then
+	    tree = ast.ExtendT(tree, node@.type);
 	GenSub(tree);
 	node@.child[0] = tree;
 	node@.seqno = tree@.seqno;
