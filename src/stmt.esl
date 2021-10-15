@@ -660,12 +660,12 @@ err.str("Assign to packed array\n");
 	    }
 	    else
 	    {   if rsize@.op != CONST || rsize@.valu != 0 then
-		    lsize = ast.OpBinary(UMIN, lsize, rsize, 0);
+		    lsize = ast.OpMinMax(UMIN, lsize, rsize);
 	    }
 	    tree = ast.New4(op, lhs@.type.base,
 			ArrayFix(lhs),
 			ArrayFix(rhs),
-			ast.OpBinary(MUL,
+			ast.OpMul(MUL,
 			    ast.ExtendT(lsize, type.wordtype),
 			    ast.ConstW(width/target.ByteSize),
 			    type.wordtype),
@@ -771,7 +771,12 @@ err.str("Assign to packed array\n");
 						lrhs, rhs, lrhs@.type);
 				    else
 				    {   op = ops[optok];
-					rhs = ast.OpBinary(op, lrhs, rhs, 0);
+					if op < OR then
+					    rhs = ast.OpAdd(op,
+						    lrhs, rhs, 0);
+					else
+					    rhs = ast.OpLogic(op,
+						    lrhs, rhs);
 				    }
 				}
 				if lhs != 0 then
@@ -1058,9 +1063,9 @@ err.str("Assign to packed array\n");
 		}
 		if to != 0 then
 		    exit = ast.New1(EXIT, 0,
-			     ast.OpBinary(op, expr.Load(ix), to, t));
+			     ast.OpCompare(op, expr.Load(ix), to));
 		incr = ast.New2(STORE, t, ix,
-			 ast.OpBinary(ADD, expr.Load(ix), by, t));
+			 ast.OpAdd(ADD, expr.Load(ix), by, t));
 	    }
 	    body = Statement();
 	    body = ast.New3(SEQ, 0, exit, body, incr);
@@ -1422,9 +1427,9 @@ symb.DumpS(ns);
 	    {   type.ProcAttributes(s);
 		tok = Token;
 	    }
+	    s@.forward = false;
 	    if tok != SEMI then
-	    {   s@.forward = false;
-		symb.curproc = s;
+	    {   symb.curproc = s;
 		es = symb.Push(s@.parmlist, 0);	// make parameters visable
 		if s@.retv then
 		    rs = symb.Append(s@.retvlist);  // make return variables visable
@@ -1449,7 +1454,10 @@ symb.DumpS(ns);
 	    else
 	    {   tok = Next();
 		if s@.linkage
-		is EXTERN, FIXED then s@.forward = false;
+		is EXTERN, FIXED then
+		{   tree = ast.New1(PROC, s@.type, 0);
+		    tree@.symb = s;
+		}
 		else s@.forward = true;
 	    }
 	}

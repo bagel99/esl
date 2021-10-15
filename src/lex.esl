@@ -157,6 +157,7 @@ package lex
 	KRO,	KWO,	KINPUT,	KOUTPUT,KIO,    KAT,
 	KEXTERN,KGLOBAL,KSECTION,KALIGN,
 	KINLINE,KNOINLINE,KINTR,KWEAK,
+	KWRAP,	KSAT,	KTRAP,
 	// type properties begin here
 	KMIN,	KMAX,	KBITSZ,	KFRACSZ,KMEMSZ,	KLEN
     );
@@ -256,6 +257,9 @@ package lex
 	[KNOINLINE] =   "noinline",
 	[KINTR] =	"interrupt",
 	[KWEAK] =       "weak",
+	[KWRAP] =	"wrap",
+	[KSAT] =	"sat",
+	[KTRAP] =	"trap",
 	[KMIN] =	"min",		// properties
 	[KMAX] =	"max",
 	[KBITSZ] =	"bits",

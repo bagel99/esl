@@ -9,6 +9,7 @@ package type
     type MemOrderT: (NATIVE, BE, LE);
     type AccessT: (RW, RO, WO);
     type IoT: { in: boolean; out: boolean; }: packed;
+    type WrapT: (NONE, WRAP, SAT, TRAP);
     type BitSize: 0..0xFFFFFFFF;
     type TypeNode:
     {
@@ -31,6 +32,7 @@ package type
 	memorder: MemOrderT;	// le, be
 	access:	AccessT;	// access restrictions
 	io:     IoT;		// external state changes (like C volatile)
+	wrap:   WrapT;		// overflow (wrap) attribute
 	sizeattr:  boolean;	// size attribute specified
 	widthattr: boolean;	// width attribute specified
 	alignattr: boolean;	// align attribute specified

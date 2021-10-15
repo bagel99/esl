@@ -200,7 +200,7 @@ package llvm
     // FIXME - make a feature switch?
     const usewidth = false;     // use type width otherwise type size
     const usebitsize = false;   // use size as is
-    const usebytesize = true;   // use next larger byte size
+    const usebytesize = false;	// use next larger byte size
 				// otherwise use next larger natural size
     proc PScalarSize(t: Type)
     {   var size: type.BitSize;
@@ -210,7 +210,7 @@ package llvm
 	else
 	    size = t@.size;
 	if !usebitsize then
-	{   if usebytesize then
+	{   if t@.unalgn || usebytesize then
 		size = ((size+7)/8) * 8;
 	    else
 		size = target.isize(size);
@@ -622,10 +622,14 @@ package llvm
 	}
     }
 
-    proc DclProc(node: Ast, isdefine: boolean)
+    proc DclProc(node: Ast)
     {   var s, ps: Symb;
+	var isdefine: boolean = true;
 
 	ps = node@.symb;
+	if ps@.linkage
+	is EXTERN then isdefine = false;
+	is FIXED then return;	// never referred to by name?
 	if isdefine then f.str("define"); else f.str("declare");
 	if ps@.linkage
 	is NORMAL, INLINE, NOINLINE then f.str(" internal");
@@ -647,6 +651,7 @@ package llvm
 	    f.str(", ");
 	}
 	f.str(")");
+	ps@.declared = true;
     }
 
     proc PString(s:@[]_byte, n:0..lex.StringMax, prefix: boolean)
@@ -1250,8 +1255,8 @@ package llvm
 	    GenSub(node@.child[1]);
 	    // calculate the number of chunks to be compared
 	    // FIXME - change to ast.Div(Div, and ast.Mul(MUL,
-	    node@.child[2] = ast.OpBinary(DIV,
-			       ast.OpBinary(MUL, node@.child[2],
+	    node@.child[2] = ast.OpDiv(DIV,
+			       ast.OpMul(MUL, node@.child[2],
 				 ast.ConstW(elsize), type.wordtype),
 			       ast.ConstW(size), type.wordtype);
 	    // LLVM wants count to be register width
@@ -1375,7 +1380,7 @@ package llvm
 	rhs = ast.ExtendT(rhs, t);
 	nlhs = ast.New2(lop, t, lhs, rhs);
 	nrhs = ast.New2(rop, t, lhs,
-	    ast.OpBinary(SUB, ast.Const(t, lhs@.type@.size), rhs, t));
+	    ast.OpAdd(SUB, ast.Const(t, lhs@.type@.size), rhs, t));
 	node@.op = OR;
 	node@.child[0] = nlhs;
 	node@.child[1] = nrhs;
@@ -1635,15 +1640,32 @@ package llvm
 		ps = node@.symb;
 		if ps@.linkage == EXTERN && !ps@.declared then
 		{   DclParmRetv(ps);
-		    DclProc(node, false);
+		    DclProc(node);
 		    f.chr('\n');
-		    ps@.declared = true;
 		}
 	    }
 	    is ASM then return;     // ignore SCONs under an ASM
 	    i = 0;
 	    while i < node@.num do
 	    {   DclProcSearch(node@.child[i]);
+		i += 1;
+	    }
+	}
+    }
+
+    // Declare all the vars in Ast (only LOCAL ones remaining)
+    proc DclLocal(node: Ast)
+    {   var i: ast.NSubNodes;
+
+	if node != 0 then
+	{   if node@.op == DCLVAR then	// assert only LOCALs left
+	    {   DclVar(node);
+		node@.op = NULL;
+		return;
+	    }
+	    i = 0;
+	    while i < node@.num do
+	    {   DclLocal(node@.child[i]);
 		i += 1;
 	    }
 	}
@@ -1660,10 +1682,14 @@ package llvm
 	    // and DCLCONs are moved outside
 	    DclProcSearch(node@.child[0]);
 	    // Now declare the procedure with its parameters
-	    DclProc(node, true);
+	    DclProc(node);
 	    if ps@.linkage
 	    is INLINE then f.str(" alwaysinline");
 	    is NOINLINE then f.str(" noinline");
+	    is EXTERN, FIXED then
+	    {	f.nl();
+		return;	// no code follows
+	    }
 	    if feature.size != NO then
 	    {   if feature.size == MIN then
 		    f.str(" minsize");
@@ -1721,6 +1747,8 @@ package llvm
 		if feature.gflag then llvmdb.DefVar(s);
 		s = s@.next;
 	    }
+	    // allocate all locals (including nested) at the top
+	    DclLocal(node@.child[0]);
 	    if !GenSub(node@.child[0]) then
 	    {   f.str("\tbr label %return");
 		PEndLine(node);
@@ -1846,7 +1874,7 @@ package llvm
 	{   if shft == 0 then
 		shft = tree@.child[1];
 	    else
-		shft = ast.OpBinary(ADD, shft, tree@.child[1], type.wordtype);
+		shft = ast.OpAdd(ADD, shft, tree@.child[1], type.wordtype);
 	    tree = tree@.child[0];
 	}
 	// extract works at wordtype, force it
@@ -1877,7 +1905,7 @@ package llvm
 	{   if shft == 0 then
 		shft = lhs@.child[1];
 	    else
-		shft = ast.OpBinary(ADD, shft, lhs@.child[1], type.wordtype);
+		shft = ast.OpAdd(ADD, shft, lhs@.child[1], type.wordtype);
 	    lhs = lhs@.child[0];
 	}
 	// insert works at wordtype, force it
