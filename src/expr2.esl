@@ -1881,7 +1881,10 @@ type.DumpT(t, false); err.nl();
 	      exit tok < STAR || tok > AND;
 	        stok = tok;
 		tok = Next();
-		rhs = Unary(tree@.type);
+		if stok >= SHL && stok <= SHR then
+		    rhs = Unary(0);	// don't force type on shifts
+		else
+		    rhs = Unary(tree@.type);
 	      exit rhs == 0;
 		if tree@.type@.kind == FLOAT then
 		    tree = ast.OpFloat(fmulop[stok], tree, rhs, t);

@@ -1658,7 +1658,8 @@ package llvm
     {   var i: ast.NSubNodes;
 
 	if node != 0 then
-	{   if node@.op == DCLVAR then	// assert only LOCALs left
+	{   if node@.op == DCLVAR &&	// assert only LOCALs left
+	       node@.child[0] == 0 then	// and not initialized
 	    {   DclVar(node);
 		node@.op = NULL;
 		return;
