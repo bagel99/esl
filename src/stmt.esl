@@ -1383,6 +1383,11 @@ symb.DumpS(ns);
 		    else lex.ErrorT(EXPECT, ID);
 		    if mt != 0 && mt@.name == 0 then
 			    lex.Error(BADMETHOD);
+		    tok = Token;
+		    if tok == COLON then
+		    {	type.ParamAttributes(ms, t);
+			tok = Token;
+		    }
 		}
 		else lex.ErrorT(EXPECT, COLON);
 		ms@.type = t;

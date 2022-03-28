@@ -405,6 +405,24 @@ package type
 	s@.type = t;
     }
 
+    // Parameter attributes are singular, can't use Attributes()
+    const aattrlist: [4]TokenT = { KINPUT, KOUTPUT, KIO };
+    proc ParamAttributes(s: Symb, t: Type)
+    {   var tok, atok: TokenT;
+
+	tok = Next();
+	if tok == ID then
+	{   atok = lex.Keyword(aattrlist);
+	    if atok != tok then
+	    {	if atok
+		is KINPUT then  t@.io.in = true;
+		is KOUTPUT then t@.io.out = true;
+		is KIO then     t@.io = {true, true};
+		tok = Next();
+	    }
+	}
+    }
+
     proc bitsize(x: _uint64): _uint
     {
 	if x == 0 then return 1;
@@ -958,8 +976,12 @@ err.nl();
 			if tok == COLON then
 			{   tok = Next();
 			    t = type.Def(tok, 0);
-			    type.Final(t);
 			    tok = Token;
+			    if tok == COLON then
+			    {	ParamAttributes(s, t);
+				tok = Token;
+			    }
+			    type.Final(t);
 			}
 			else lex.ErrorT(EXPECT, COLON);
 			if t@.kind

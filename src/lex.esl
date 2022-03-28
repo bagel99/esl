@@ -446,9 +446,9 @@ package lex
 	n = Number;
 //err.str("MakeFloat: n="); err.uint64(Number); err.str(" k="); err.uint16(s);
 //if hasexp then { err.str(" s="); err.int16(Scale); }
+	i = 0;
 	if StringLen > 0 then
-	{   i = 0;
-	    loop
+	{   loop
 	    {   t = (n * 10) + StringBuf[i];
 	      exit t > 0x20_0000_0000_0000;	// 2^53
 		n = t;
