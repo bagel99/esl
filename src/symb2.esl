@@ -276,6 +276,7 @@ package symb
 	{   err.str("undefined "); err.str(s@.ident);
 	}
 	if s@.forward then err.str(" (forward)");
+	if !s@.visible then err.str(" (invisible)");
 	err.nl();
     }
 

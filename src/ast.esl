@@ -748,8 +748,11 @@ err.str("\nto="); type.DumpT(to, false); err.nl();
 		    {   if op == EQ || op == NE then
 			    rhs@.width = Target.ptr.size;
 		    }
+		    // Do this here to skip extending stuff
+		    tree = New2(op, lhs@.type, lhs, rhs);
 		}
-		tree = OpBinary(op, lhs, rhs, 0);
+		else
+		    tree = OpBinary(op, lhs, rhs, 0);
 	    }
 	    tree@.type = type.booltype;
 	    tree@.width = 1;

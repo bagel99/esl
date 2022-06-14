@@ -263,9 +263,17 @@ package stmt
     {   var node: Ast;
 
 	s@.type = t;
+	symb.MakeVisible(s);
 	node = ast.New(DCLVAR, t);
 	if iv != 0 then
-	    node = ast.Child(node, iv);
+	{   // Check for valid compile-time constant
+	    if s@.linkage != LOCAL &&
+		    !(iv@.op == CONST || iv@.op == FCON ||
+		      iv@.op == CLIST || iv@.op == VAR) then
+		lex.Error(EXPCONST);
+	    else
+		node = ast.Child(node, iv);
+	}
 	node@.width = t@.width;
 	node@.symb = s;
 	return node;
@@ -280,14 +288,14 @@ package stmt
 	tree = 0;
 	tok = Token;
 	if tok == ID then
-	{   s = symb.New(VAR, lex.Ident, VISIBLE);
+	{   s = symb.New(VAR, lex.Ident, DELAYED);
 	    ss = s;
 	    tok = Next();
 	    // Warning: this works because the symbols list is singly linked
 	    while tok == COMMA do
 	    {   tok = Next();
 		if tok == ID then
-		{   s = symb.New(VAR, lex.Ident, VISIBLE);
+		{   s = symb.New(VAR, lex.Ident, DELAYED);
 		    tok = Next();
 		}
 		else
@@ -352,7 +360,7 @@ package stmt
 	tree = 0;
 	tok = Token;
 	if tok == ID then
-	{   s = symb.New(CONSTANT, lex.Ident, VISIBLE);
+	{   s = symb.New(CONSTANT, lex.Ident, DELAYED);
 	    s@.const = ast.Null;	// in case a legal value is not parsed
 	    tok = Next();
 	    t = 0;
@@ -397,6 +405,7 @@ err.str("Const SCON dup\n");
 	    else
 		lex.Error(BADCONST);
 	    s@.type = t;
+	    symb.MakeVisible(s);
 	}
 	else
 	    lex.Error(EXPECTID);
@@ -1398,7 +1407,7 @@ symb.DumpS(ns);
 	if tok == ID then
 	{
 	    if mt != 0 then
-	    {   s = symb.FindMethod(mt@.meths, lex.Ident);
+	    {   s = symb.FindPrivate(mt@.meths, lex.Ident);
 		if s != 0 then
 		{   if !s.forward then
 			lex.ErrorI(DEFID, lex.Ident);
@@ -1641,6 +1650,10 @@ symb.DumpS(ns);
 	is ID then
 	{   s = symb.New(STRING, lex.Ident, PRIVATE);
 	    tok = Next();       // flush ID
+	}
+	is STR then
+	{   tree = expr.String();
+	    s = tree@.symb;
 	}
 	is PBEG then
 	{   tok = Next();

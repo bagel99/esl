@@ -29,6 +29,7 @@ package symb
 	dbtag:    _uint16;	// tag for debug information
 	kind:	  SymbT;	// TYPE, VAR, ...
 	linkage:  LinkT;	// LOCAL, NORMAL, ...
+	visible:  boolean;
 	forward:  boolean;	// forward declared
 	retv:     boolean;      // uses variables for return values
 	bound:    boolean;	// is a bound procedure
@@ -99,11 +100,7 @@ package symb
     // Install symbol in symbol table
     proc MakeVisible(s: Symb)
     {
-	if symbs[level].frst == 0 then
-	    symbs[level].frst = s;
-	else
-	    symbs[level].last@.next = s;
-	symbs[level].last = s;
+	s@.visible = true;
     }
 
     proc New(kind: SymbT, name: @lex.Identifier, vis: Visibility): Symb
@@ -139,8 +136,14 @@ package symb
 	    s@.package = 0;
 	}
 	s@.lineno = lex.Lineno();
-	if vis == VISIBLE then	// install in symbol table now
-	    MakeVisible(s);
+	s@.visible = (vis != DELAYED);
+	if vis != PRIVATE then	// install in symbol table now
+	{   if symbs[level].frst == 0 then
+		symbs[level].frst = s;
+	    else
+		symbs[level].last@.next = s;
+	    symbs[level].last = s;
+	}
 	return s;
     }
 
@@ -198,7 +201,7 @@ package symb
 
 	s = as;
 	while s != 0 do
-	{   if zstr.eq(s@.ident, name, lex.IdentMax) then
+	{   if s@.visible && zstr.eq(s@.ident, name, lex.IdentMax) then
 	    {   if s@.kind == ALIAS then
 		    s = s@.symblist;
 		return s;
@@ -208,7 +211,7 @@ package symb
 	return s;
     }
 
-    proc FindMethod(as: Symb, name: @lex.Identifier): Symb
+    proc FindPrivate(as: Symb, name: @lex.Identifier): Symb
     {   var s: Symb;
 
 	s = as;
@@ -328,6 +331,7 @@ package symb
 	if s == 0 then
 	    s = New(USYMB, ImportSymbol, VISIBLE);
 	t = NewString(name, zstr.len(name, 256), false);
+	MakeVisible(t);
 	t.next = s.symblist;
 	s.symblist = t;
 	return t.ident;

@@ -108,14 +108,11 @@ package expr
 	var tree: Ast;
 
 	// assert t@.kind == ENUM
-	s = t@.list;
-	while s != 0 do
-	{   if zstr.eq(s@.ident, lex.Ident, lex.IdentMax) then
-	    {   tree = ast.Dup(s@.const);
-		tree@.width = s@.const@.type@.width;
-		return tree;
-	    }
-	    s = s@.next;
+	s = symb.FindPrivate(t@.list, lex.Ident);
+	if s != 0 then
+	{   tree = ast.Dup(s@.const);
+	    tree@.width = s@.const@.type@.width;
+	    return tree;
 	}
 	lex.ErrorI(UNDEFID, lex.Ident);
 	return 0;
@@ -1478,7 +1475,7 @@ ast.Dump(tree);
 			s = 0;
 			loop
 			{ exit bt == 0;
-			    s = symb.FindMethod(bt@.meths, lex.Ident);
+			    s = symb.FindPrivate(bt@.meths, lex.Ident);
 			  exit s != 0;
 			    bt = bt@.base;
 			}
@@ -1726,13 +1723,18 @@ type.DumpT(t, false); err.nl();
 	s = savedsym;
 	savedsym = 0;
 	if s == 0 && tok == ID then
-	{   s = symb.Find(lex.Ident);
+	{   if et != 0 && et@.kind == ENUM then	// enum context
+	    {	s = symb.FindPrivate(et@.list, lex.Ident);
+		if s != 0 then
+		{   tree = ast.Dup(s@.const);
+		    tree@.width = s@.const@.type@.width;
+		    tok = Next();
+		    return tree;
+		}
+	    }
+	    s = symb.Find(lex.Ident);
 	    if s == 0 then
-	    {
-		if et != 0 && et@.kind == ENUM then	// enum context
-		    tree = EnumConst(et);
-		else
-		    lex.ErrorI(UNDEFID, lex.Ident);
+	    {	lex.ErrorI(UNDEFID, lex.Ident);
 		tok = Next();
 		return tree;
 	    }
@@ -1990,14 +1992,20 @@ type.DumpT(t, false); err.nl();
 
     proc NodeKind(node: Ast): TypeT
     {   var kind: TypeT;
+	var t: Type;
 
+//ast.Dump(node);
+	t = node@.type;
 	if node@.op
 	is VAR, SLICE, INDEX, OFFSET then
-	    kind = node@.type@.base@.kind;
+	{   if t@.kind == REFPROC then
+		kind = REFPROC;
+	    else	// assume REF
+		kind = t@.base@.kind;
+	}
 	else
-	    kind = node@.type@.kind;
+	    kind = t@.kind;
 //err.str("NodeKind kind="); err.str(type.KindName[kind]); err.nl();
-//ast.Dump(node);
 	return kind;
     }
 
