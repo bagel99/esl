@@ -22,7 +22,7 @@ package lex
 	BADIMPORT,  NOTVAR,     BADFLEX,    FORWNOFIX,  BADFOR,     SECTNAME,
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
 	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,	RECURSIVE,  BADCONV,
-	PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
+	RANGEERR,   PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
 	LONGNUM,    LONGFRAC,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
@@ -124,6 +124,7 @@ package lex
 	[BADLEN] =      "Not an array or array with flexible length",
 	[BOUNDSERR] =   "Array bounds error",
 	[RECURSIVE] =	"Illegal recursive type: ",
+	[RANGEERR] =    "Value out of range for operation",
 	[PACKARRAY] =   "Arg for _packXX/_unpkXX must be array/slice of bytes",
 	[PACKFIXED] =   "Array for _packXX/_unpkXX must have fixed size",
 	[PACKSIZE] =    "Array for _packXX/_unpkXX to large for target machine",

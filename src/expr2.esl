@@ -1002,6 +1002,14 @@ ast.Dump(tree);
 	}
 	else
 	    lex.ErrorT(EXPECT, COMMA);
+	if shft.op == CONST then
+	{   if shft.valu >= tree@.width then
+	    {   lex.Error(RANGEERR);
+		return tree;
+	    }
+	    elif shft.valu == 0 then
+		return tree;
+	}
 	if right then op = ROR; else op = ROL;
 	tree = ast.New2(op, tree@.type, tree, shft);
 	return tree;
@@ -1123,7 +1131,7 @@ ast.Dump(tree);
         var tok: TokenT;
 
 	arg, ta, tn = GetArrayArg();
-	if tok != COMMA then
+	if Token != COMMA then
 	{   lex.ErrorT(EXPECT, COMMA);
 	    return 0;
 	}
@@ -1658,7 +1666,10 @@ type.DumpT(t, false); err.nl();
 		    tree = RefProc(s);
 	    }
 	}
-	else lex.ErrorI(BADID, s@.ident);	// FIXME - need better message
+	else
+	{   lex.ErrorI(BADID, s@.ident);	// FIXME - need better message
+	    return 0;
+	}
 	tree = Suffix(tree, et);
 	return tree;
     }

@@ -15,6 +15,9 @@ then
 elif [ -x /usr/local/bin/llc ]
 then
   LLVM=/usr/local/bin
+elif [ -x $HOME/bin/llc ]
+then
+  LLVM=$HOME/bin/llc
 else
    echo "Can't find LLVM executable llc in /bin or /usr/bin or /usr/local/bin or /usr/local/opt/llvm/bin!"
    echo "If it is somewhere else, fix the script 'llvm'."
@@ -25,17 +28,19 @@ ARCH=
 INLINE=
 OPT=-O3		#default
 TRIPLE=
-while getopts "Im:O:V" flags
+OPTS=""
+while getopts "Im:O:Vp" flags
 do
   case $flags in
     I) INLINE="-disable-inlining" ;; 	# disable inlining
     m) ARCH=$OPTARG ;;
     O) OPT="-O$OPTARG" ;;
+    p) OPTS="$OPTS --relocation-model=pic" ;;
     V) $LLVM/llc --version | sed -n -e 's/.*LLVM version \([0-9.]*\).*/\1/p'; exit 0 ;;
     *) echo "bad flag"; exit 1 ;;
   esac
 done
-if [ "$ARCH" == "" ]
+if [ x"$ARCH" = "x" ]
 then	# target same as host
   ARCH=`uname -m`
 fi
@@ -54,5 +59,5 @@ shift $(($OPTIND-1))
 file=$1
 j=`basename $file .ll`
 $LLVM/opt ${OPT} ${INLINE} -o - $file | \
-$LLVM/llc ${DEBUG} -march=${ARCH} ${TRIPLE} ${CPU} ${ATTR} ${OPT} -asm-verbose=0 -o ${j}.s
+$LLVM/llc ${DEBUG} -march=${ARCH} ${TRIPLE} ${CPU} ${ATTR} ${OPT} ${OPTS} -asm-verbose=0 -o ${j}.s
 

@@ -22,6 +22,8 @@ var feature:
 	assert:boolean;		// generate code for assert statements
 	retv:  boolean;		// warn if old syntax for multiple return
 	zerol: boolean;		// zero local scalar variables
+	noinl: boolean;		// disable all inlining
+	genptr:boolean;		// generate generic pointer "ptr"
 	debug: _uint8;		// debug version
 	version: _uint8;
     };
@@ -132,6 +134,7 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	{   if argv[i]@[2]
 	    is 'a' then feature.assert = true;
 	    is 'z' then feature.zerol = true;
+	    is 'i' then feature.noinl = true;
 	}
 	i += 1;
     }
@@ -170,6 +173,8 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	err.nl();
 	feature.gflag = false;
     }
+    if feature.version > 15 then
+	feature.genptr = true;
     if !target.set(targetarch) then
     {   err.str("Unsupported target: ");
 	if targetarch != 0 then

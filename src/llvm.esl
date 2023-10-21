@@ -223,6 +223,16 @@ package llvm
 	f.chr('i'); f.uint(t@.size);
     }
 
+    proc PRefType(t: Type)
+    {
+	if feature.genptr then
+	    f.str("ptr");
+	else
+	{   PType(t);
+	    f.chr('*');
+	}
+    }
+
     proc PType(t: Type)
     {   var size: type.BitSize;
 
@@ -235,10 +245,7 @@ package llvm
 		is 32 then f.str("float");
 		is 64 then f.str("double");
 	    }
-	    is REF then
-	    {   PType(t@.base);
-		f.chr('*');
-	    }
+	    is REF then	PRefType(t@.base);
 	    is RECORD then
 	    {   // LLVM doesn't do bit pack records, handle as integers
 		if t@.packed then PScalarSize(t);
@@ -371,6 +378,16 @@ package llvm
 //if node@.width != node@.type.width then
 //{   err.str("Node width disagreement\n"); ast.Dump(node); }
 	    f.str("i"); f.uint(node@.width);
+	}
+    }
+
+    proc NodeRefType(node: Ast)
+    {
+	if feature.genptr then
+	    f.str("ptr");
+	else
+	{   NodeType(node);
+	    f.chr('*');
 	}
     }
 
@@ -536,6 +553,7 @@ package llvm
 		is 'C' then PBitSize(t);
 		is 'R' then PDerefType(t);
 		is 'T' then NodeType(node);
+		is 'U' then NodeRefType(node);
 		is 'I' then NodeName(node);
 		is 'N' then NodeSrc(node);
 		is 'D' then NodeDst(node);
@@ -804,7 +822,7 @@ package llvm
 			f.str("\tstore ");
 			NodeType(rhs); f.chr(' ');
 			NodeSrc(rhs);
-			Print(", %K* %D", node);
+			Print(", %U %D", node);
 		    }
 		}
 		elif rhs != 0 then
@@ -1684,13 +1702,14 @@ package llvm
 	    DclProcSearch(node@.child[0]);
 	    // Now declare the procedure with its parameters
 	    DclProc(node);
-	    if ps@.linkage
-	    is INLINE then f.str(" alwaysinline");
-	    is NOINLINE then f.str(" noinline");
-	    is EXTERN, FIXED then
+	    if ps@.linkage == EXTERN || ps@.linkage == FIXED then
 	    {	f.nl();
 		return;	// no code follows
 	    }
+	    if feature.noinl || ps@.linkage == NOINLINE then
+		f.str(" noinline");
+	    elif ps@.linkage == INLINE then
+		f.str(" alwaysinline");
 	    if feature.size != NO then
 	    {   if feature.size == MIN then
 		    f.str(" minsize");
@@ -1721,8 +1740,8 @@ package llvm
 		    f.chr(' ');
 		    DefaultInitializer(rs@.type);
 		    f.chr(',');
-		    PType(rs@.type);
-		    f.str("* ");
+		    PRefType(rs@.type);
+		    f.chr(' ');
 		    PLocalName(rs@.ident);
 		    f.nl();
 		}
@@ -1741,8 +1760,8 @@ package llvm
 		f.chr(' ');
 		PLocalName(s@.ident);
 		f.str("$, ");
-		PType(s@.type);
-		f.str("* ");
+		PRefType(s@.type);
+		f.chr(' ');
 		PLocalName(s@.ident);
 		f.nl();
 		if feature.gflag then llvmdb.DefVar(s);
@@ -1765,8 +1784,8 @@ package llvm
 		    f.str(" = load ");
 		    PType(rs@.type);
 		    f.str(", ");
-		    PType(rs@.type);
-		    f.str("* ");
+		    PRefType(rs@.type);
+		    f.chr(' ');
 		    if symb.IsAnon(rs@.ident) then
 			PRetValName(i);
 		    else
@@ -1948,7 +1967,7 @@ package llvm
 		f.str("volatile ");
 	    PType(load@.type);
 	    f.str(", ");
-	    Print("%T* %0N", load);
+	    Print("%U %0N", load);
 	    if offs@.type@.base@.unalgn then
 	    {   f.str(", align ");
 		f.uint64(offs@.type@.base@.align/target.ByteSize);
@@ -2009,7 +2028,7 @@ package llvm
 	    while i < node@.num do
 	    {   rnode = node@.child[i];
 		GenSub(rnode);
-		Print("\tstore %T %N, %T* ", rnode);
+		Print("\tstore %T %N, %U ", rnode);
 		PRetValName(i);
 		PEndLine(node);
 		i += 1;

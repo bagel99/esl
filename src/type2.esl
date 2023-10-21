@@ -683,8 +683,10 @@ package type
 	    is ARRAY then
 	    {   if t@.base != 0 then
 		{   // memorder applies to base, not the array
-		    t@.base.memorder = t@.memorder;
-		    t@.memorder = NATIVE;
+		    if t@.memorder != Target.memorder then
+		    {	t@.base = ChangeOrder(t@.base, t@.memorder);
+			t@.memorder = Target.memorder;
+		    }
 		    Final(t@.base);
 		    if t@.packed then
 			t@.base = ForcePacked(t@.base);

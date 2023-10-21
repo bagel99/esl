@@ -6,7 +6,9 @@ SRC =	main.esl lex.esl type1.esl type2.esl symb1.esl symb2.esl \
 # LLVM is a program or script that runs the LLVM backend
 # to convert a .ll into a .s for the target machine.
 LLVM=./llvm
-LLVMFLAGS= -I		# no inlining to ease debugging
+# If linking fails due to lack of PIE mode use the following
+#LLVMFLAGS=-p
+LLVMFLAGS=
 LLVMVERSION= $(shell $(LLVM) -V)
 ESLCFLAGS= -L$(LLVMVERSION)
 
