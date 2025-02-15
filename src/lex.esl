@@ -152,7 +152,7 @@ package lex
 	KRET,   KIF,	KWHILE,				// must be contiguous
 	KFOR,	KLOOP,	KEXIT,
 	KTHEN,	KELIF,  KELSE,	KIS,    KDO,	KWITH,  KAS,
-	KIN,	KFROM,	KTO,    KBY,			// for loop support
+	KIN,	KFROM,	KTO,    KDOWNTO,KBY,		// for loop support
 	// attributes begin here
 	KPACK,	KNOPAD,	KLSB,	KMSB,	KLE,	KBE,
 	KRO,	KWO,	KINPUT,	KOUTPUT,KIO,    KAT,
@@ -237,6 +237,7 @@ package lex
 	[KIN] =		"in",
 	[KFROM] =	"from",
 	[KTO] =		"to",
+	[KDOWNTO] =	"downto",
 	[KBY] =		"by",
 	[KPACK] =	"packed",       // attributes for types
 	[KNOPAD] =	"nopad",

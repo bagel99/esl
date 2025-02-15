@@ -932,8 +932,8 @@ ast.Dump(tree);
 	return tree;
     }
 
-    proc Zero(): Ast
-    {   var tree, temp, size: Ast;
+    proc Set(withzero: boolean): Ast
+    {   var tree, temp, size, from: Ast;
 	var t: Type;
 	var align: _uint;
 	var tok: TokenT;
@@ -973,9 +973,19 @@ ast.Dump(tree);
 	    {   size = GetSize(tree);
 		align = GetAlignment(tree);
 	    }
+	    if withzero then
+		from = ast.Const(type.bytetype, 0);
+	    else
+	    {	if Token == COMMA then
+		{   tok = Next();
+		    from = Bool(0);
+		    // FIXME - check that type can be cast as i8
+		}
+		else
+		    lex.ErrorT(EXPECT, COMMA);
+	    }
 	    tree = ast.New4(SET, type.unkntype, tree,
-			    ast.Const(type.bytetype, 0), size,
-			    ast.Const(type.bytetype, align));
+			    from, size, ast.Const(type.bytetype, align));
 	}
 	return tree;
     }
@@ -1345,7 +1355,8 @@ ast.Dump(tree);
 	    is PACKBE then tree = Pack(BE);
 	    is UNPKLE then tree = Unpk(LE);
 	    is UNPKBE then tree = Unpk(BE);
-	    is ZERO   then tree = Zero();
+	    is ZERO   then tree = Set(true);
+	    is SET    then tree = Set(false);
 	    is NEW    then tree = New();
 	    is DEL    then tree = Delete();
 	    else

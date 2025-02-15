@@ -239,6 +239,11 @@ package ast
 	DumpSub(tree, 0);
     }
 
+    proc IsConstVal(p: Ast, val: Valu): boolean
+    {
+	return p@.op == CONST && p@.valu == val;
+    }
+
     proc Alloc(op:Op, nc:NSubNodes): Ast
     {   var pa: Ast;
 

@@ -1169,6 +1169,7 @@ package llvm
 	// LLVM wants i8* type
 	node@.child[0] = ast.Cast(node@.child[0], pbytetype);
 	GenSub(node@.child[0]);
+	node@.child[1] = ast.Cast(node@.child[1], type.bytetype);
 	GenSub(node@.child[1]);
 	// LLVM wants count to be register width
 	node@.child[2] = ast.ExtendT(node@.child[2], type.wordtype);
@@ -1419,6 +1420,7 @@ package llvm
 	t = type.MakeRef(t);
 //err.str("at="); type.DumpT(at, true);  err.nl();
 //err.str("bt="); type.DumpT(bt, true);  err.nl();
+//err.str("t="); type.DumpT(t, true);  err.nl();
 //err.str("t="); type.DumpT(t, true);  err.nl();
 	node@.child[0]= ast.Cast(node@.child[0], t);
 	GenSub(node@.child[0]);
