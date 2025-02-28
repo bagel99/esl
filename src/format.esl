@@ -1,0 +1,309 @@
+/*
+ * Routines to generate ASTs for to call run-time formatting routines.
+ */
+
+import fmtdef;	// definitions
+
+package format
+{
+    const descid = "_desc";
+    alias fmt.FmtSpec as FmtSpec;
+
+    proc GetDigits(s: @[]_byte) (n: _uint, valu: _uint)
+    {
+	valu = 0;
+	n = 0;
+	while s[n] >= '0' && s[n] <= '9' do
+	{   valu = valu * 10 + (s[n] - '0');
+	    n += 1;
+	}
+    }
+
+    proc ParseFmtSpec(s: @[]_byte) (i: _uint, spec: FmtSpec)
+    {   var align: _byte = 0;
+	var n: _uint;
+	var valu: _uint;
+
+	spec = fmt.FmtDefault;
+	align = 0;
+	if s[0] == '<' || s[0] == '>' || s[0] == '^' then
+	{   spec.pad = ' ';
+	    align = s[0];
+	    i += 1;
+	}
+	elif s[1] == '<' || s[1] == '>'|| s[0] == '^' then
+	{   spec.pad = s[0];
+	    align = s[1];
+	    i += 2;
+	}
+	if align
+	is '<' then spec.align = LEFT;
+	is '>' then spec.align = RIGHT;
+	is '^' then spec.align = CENTER;
+	else spec.align = NONE;
+	if s[i] == '+' then
+	{   spec.sign = true;
+	    i += 1;
+	}
+	if s[i] == fmt.FPFX then
+	{   spec.prefix = true;
+	    i += 1;
+	}
+	if s[i] == '0' then
+	{   spec.zeros = true;
+	    i += 1;
+	}
+	n, valu = GetDigits(s[i:]);
+	if n > 0 then
+	{   spec.width = valu;
+	    i += n;
+	}
+	if s[i] == '.' then
+	{   i += 1;
+	    n, valu = GetDigits(s[i:]);
+	    if n > 0 then		// FIXME - if no precision digits?
+	    {   spec.prec = valu;
+		i += n;
+	    }
+	}
+	if s[i]
+	is 'd' then spec.ftype = DEC;
+	is 'b' then spec.ftype = BIN;
+	is 'o' then spec.ftype = OCT;
+	is 'x' then spec.ftype = LHEX;
+	is 'X' then spec.ftype = UHEX;
+	is 'p' then spec.ftype = PTR;
+	is 'c' then spec.ftype = CHR;
+	is 's' then spec.ftype = STR;
+	is 'f' then spec.ftype = FLT;
+	is 'e' then spec.ftype = EXP;
+	else        { spec.ftype = NONE; i -= 1; }
+	i += 1;
+	return;
+    }
+
+    proc GetNextFmtSpec(s: @_memory)
+	(gotformat: boolean,
+	 np: _uint,		// num of chars to output
+	 nn: _uint,		// num of chars scanned
+	 spec: FmtSpec)
+    {   var i, k, n: _uint;
+
+	gotformat = false;
+	i = 0;
+	k = 0;
+	while s[i] != 0 do
+	{   if s[i] == fmt.FBEG then
+	    {   i += 1;
+		if s[i] != fmt.FBEG then	// single FBEG
+		{   n, spec = ParseFmtSpec(s[i:]);
+		    i += n;
+		    k += n+1;
+		    if s[i] != fmt.FEND then
+		    {
+			// FIXME - what error message
+		    }
+		    gotformat = true;
+		}
+		np = i - k;		// just output up to here
+		nn = i + 1;		// and skip one char
+		return;
+	    }
+	    i += 1;
+	}
+	np = i - k;		// just output up to here
+	nn = i + 1;		// and skip one char
+	return;
+    }
+
+    var symblist: Symb = 0;
+    var symbdesc:  Symb = 0;
+
+    proc FindFormatSymbols(): boolean
+    {   var s: Symb;
+	var t: Type;
+
+	s = symb.FindTop("fmt");
+	if s == 0 || s@.kind != PACK then
+	{   err.str("Unable to find 'fmt' package. Perhaps not imported\n");
+	    return false;
+	}
+	s = symb.FindLocal(s@.symblist, "Desc");
+	if s == 0 then
+	{   err.str("Unable to find 'Desc' in package\n");
+	    return false;
+	}
+	symbdesc = s;
+//err.str("Desc type: "); type.DumpT(s@.type, true); err.nl();
+	symblist = s@.type@.meths;
+	return true;
+    }
+
+    proc GetDescField(bd: Ast, name: @[]_byte) (tree: Ast, t: Type)
+    {	var s: Symb;
+
+	s = symb.FindLocal(symbdesc@.type@.list, name);
+	t = s@.type;
+	tree = expr.Load(bd);
+	tree = ast.New1(OFFSET, type.MakeRef(t), tree);
+	tree@.valu = s.addr;
+    }
+
+    proc Start(buf: Ast, len: _uint) (bd: Ast, tree: Ast)
+    {   var s: Symb;
+	var td, t: Type;
+	var init, desc: Ast;
+
+//err.str("Start len="); err.uint(len); err.nl();
+if len <= 1 then len = 256;	// FIXME TEMP
+	if !FindFormatSymbols() then return;
+	td = symbdesc@.type;			// Desc
+	// Generate desc
+	s = symb.New(VAR, descid, DELAYED);
+	tree = stmt.VarNew(s, td, 0);
+	tree = ast.New1(SEQ, 0, tree);
+	desc = ast.Var(s, type.MakeRef(td));
+//err.str("Start desc=\n"); ast.Dump(desc);
+	// Generate bd
+	s = symb.New(VAR, "_bd", DELAYED);
+	t = type.MakeRef(td);			// @Desc
+	init = stmt.VarNew(s, t, 0);
+	tree = ast.Child(tree, init);
+	bd = ast.New(VAR, type.ForceRef(t));
+	bd@.symb = s;
+//err.str("Start bd=\n"); ast.Dump(bd);
+	init = ast.New2(STORE, t, bd, ast.Adjust(desc, t));
+	tree = ast.Child(tree, init);
+	// Generate initialization of desc
+	init, t = GetDescField(bd, "buf");
+	init = ast.New2(STORE, t, init, buf);
+	tree = ast.Child(tree, init);
+	init, t = GetDescField(bd, "rem");
+	init = ast.New2(STORE, t, init, ast.Const(t, len));
+	tree = ast.Child(tree, init);
+	init, t = GetDescField(bd, "len");
+	init = ast.New2(STORE, t, init, ast.Const(t, len));
+	tree = ast.Child(tree, init);
+//err.str("start=\n"); ast.Dump(tree);
+	return;
+    }
+
+    proc End(bd: Ast): Ast
+    {	var tree, len, rem: Ast;
+	var s: Symb;
+
+	rem, _ = GetDescField(bd, "rem");
+	rem = expr.Load(rem);
+	rem = ast.ExtendT(rem, type.wordtype);
+	len, _ = GetDescField(bd, "len");
+	len = expr.Load(len);
+	len = ast.ExtendT(len, type.wordtype);
+	len = ast.New2(SUB, type.wordtype, len, rem);
+	tree, _ = GetDescField(bd, "buf");
+	tree = expr.Load(tree);
+	tree = ast.New2(INDEX, type.MakeRef(tree@.type@.base), tree, len);
+	tree = ast.New2(STORE, type.bytetype, tree,
+			ast.Const(type.bytetype, 0));
+//err.str("end=\n"); ast.Dump(tree);
+	return tree;
+    }
+
+    proc GenCall(bd: Ast, exp: Ast, extra: _uint, name: @[]_byte): Ast
+    {	var desc, tree: Ast;
+	var s: Symb;
+
+	if symblist == 0 && !FindFormatSymbols() then return 0;
+	s = symb.FindPrivate(symblist, name);
+	if s == 0 then
+	{
+err.str("Lookup: "); err.str(name); err.nl();
+	    lex.ErrorS(COMPILER, "No fmt routine found\n");
+	    return 0;
+	}
+	desc = expr.Load(bd);
+	desc = ast.New1(BYREF, type.MakeRef(desc@.type), desc);
+	tree = ast.New3(CALL, 0, desc, exp, ast.ConstW(extra));
+	tree@.symb = s;
+	return tree;
+    }
+
+    proc String(bd: Ast, s: @[]_byte, w: _uint): Ast
+    {	var str, tree: Ast;
+
+	str = expr.NewString(s, w, false);
+	str = ast.New1(BYREF, type.MakeRef(str@.type), str);
+	tree = GenCall(bd, str, w, "string");
+	return tree;
+    }
+
+    proc GenConvert(bd: Ast, exp: Ast, spec: FmtSpec): Ast
+    {	var tree: Ast;
+	var s: Symb;
+	var namefmt: @[]_byte;
+
+	if spec.ftype
+	is STR then
+	    namefmt = "strfmt";
+	is CHR then
+	    namefmt = "chrfmt";
+	is PTR then
+	    namefmt = "ptrfmt";
+	is UHEX, LHEX then
+	    namefmt = "hexfmt";
+	is OCT then
+	    namefmt = "octfmt";
+	is BIN then
+	    namefmt = "binfmt";
+	is DEC then
+	{   if exp@.type@.kind == SINT then
+		namefmt = "sdecfmt";
+	    else
+		namefmt = "udecfmt";
+	}
+	is FLT then
+	{   if exp@.type@.kind == FLOAT then
+		namefmt = "dfltfmt";
+	    else
+	    {	lex.Error(OPTYPE);
+		return 0;
+	    }
+	}
+	is EXP then
+	{   if exp@.type@.kind == FLOAT then
+		namefmt = "dexpfmt";
+	    else
+	    {	lex.Error(OPTYPE);
+		return 0;
+	    }
+	}
+	else
+	{   lex.ErrorS(COMPILER, "Format type not yet implemented\n");
+	    return 0;
+	}
+	tree = GenCall(bd, exp, _uint(spec), namefmt);
+	return tree;
+    }
+
+    proc NextFormat(bd: Ast, fmtstr: @[]_byte, i: _uint, exp: Ast): _uint, Ast
+    {	var gotspec: boolean;
+	var nout: _uint;	// number of chars to be output
+	var n:	  _uint;
+	var spec: fmt.FmtSpec;
+	var fix, cvt: Ast;
+
+	gotspec, nout, n, spec = format.GetNextFmtSpec(fmtstr[i:]);
+	fix = 0;
+	if nout > 0 then
+	{   fix = format.String(bd, fmtstr[i:], nout);
+	}
+	if gotspec then
+	{   if exp != 0 then
+	    {	cvt = format.GenConvert(bd, exp, spec);
+		fix = ast.New2(SEQ, 0, fix, cvt);
+	    }
+	    else lex.Error(FMTNOEXPR);
+	}
+	elif exp != 0 then lex.Error(FMTNOSPEC);
+	return n, fix;
+    }
+}
