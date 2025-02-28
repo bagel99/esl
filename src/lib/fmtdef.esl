@@ -1,0 +1,93 @@
+/*
+ * Definitions for format and print
+ */
+
+package fmt
+{
+    type FmtType: (NONE, CHR, STR, DEC, BIN, OCT, LHEX, UHEX, PTR, FLT, EXP);
+    type AlignType: (NONE, LEFT, RIGHT, CENTER);
+    type FmtSpec:
+    {   ftype:	FmtType;	// 0..3
+	align:	AlignType;	// 4..5
+	_:      0..3;		// 6..7
+	pad:	_byte;		// 8..15
+	width:	_uint8;		// 16..23
+	prec:	_uint8;		// 24..31
+	sign:	boolean;	// 32
+	prefix:	boolean;	// 33
+	zeros:	boolean;	// 34
+    }: packed, lsb;
+
+    type Desc:
+    {   buf:  @_memory;
+	len:  _uint16;
+	rem:  _uint16;
+	fd:   _int32;
+    };
+    type pDesc: @Desc;
+
+    const FmtDefault: FmtSpec =
+    {   .ftype=	NONE,
+	.align=	NONE,
+	.pad=	' ',
+	.width=	0,
+	.prec=	0,
+	.sign=	false,
+	.prefix=false,
+	.zeros=	false
+    };
+
+    const FBEG: _byte = '[';
+    const FEND: _byte = ']';
+    const FPFX: _byte = '!';
+
+    /*
+     * The following are forwards resolved in fmtcvt.
+     */
+    proc (bd: pDesc) string(s: @[]_byte, n: _uint);
+    proc (bd: pDesc) chrfmt(c: _byte, spec: FmtSpec);
+    proc (bd: pDesc) strfmt(s: @[]_byte, spec: FmtSpec);
+    proc (bd: pDesc) binfmt(n: _uint, spec: FmtSpec);
+    proc (bd: pDesc) octfmt(n: _uint, spec: FmtSpec);
+    proc (bd: pDesc) hexfmt(n: _uint, spec: FmtSpec);
+    proc (bd: pDesc) ptrfmt(n: _uint, spec: FmtSpec);
+    proc (bd: pDesc) udecfmt(n: _uint, spec: FmtSpec);
+    proc (bd: pDesc) sdecfmt(sn: _int, spec: FmtSpec);
+    proc (bd: pDesc) dfltfmt(x: _float64, spec: FmtSpec);
+    proc (bd: pDesc) dexpfmt(x: _float64, spec: FmtSpec);
+
+    // FIXME - only 0 ... 99;
+    proc PutDigits(buf: @[]_byte, n: _uint): _uint
+    {
+	if n <= 9 then
+	{   buf[0] = n + '0';
+	    return 1;
+	}
+	buf[1] = (n % 10) + '0';
+	buf[0] = (n / 10) + '0';
+
+    }
+    proc PrintFmtSpec(buf: @[16]_byte, spec: @FmtSpec): _uint
+    {   var i: _uint;
+	const typechar: [FmtType]_byte =
+	    {'?', 'd', 'b', 'o', 'x', 'X', 'p', 'c', 's', 'f', 'e' };
+	const alignchar: [AlignType]_byte = { '?', '<', '>', '^' };
+	i = 0;
+	if spec.align != NONE then
+	{   buf[i] = spec.pad;
+	    buf[i+1] = alignchar[spec.align];
+	    i += 2;
+	}
+	if spec.sign then             { buf[i] = '+';      i += 1; }
+	if spec.prefix then           { buf[i] = FPFX;     i += 1; }
+	if spec.zeros then            { buf[i] = '0';      i += 1; }
+	if spec.width > 0 then
+	    i +=PutDigits(buf[i:], spec.width);
+	if spec.prec > 0 then
+	{	buf[i] = '.'; i += 1;
+		i += PutDigits(buf[i:], spec.prec);
+	}
+	buf[i] = typechar[spec.ftype];
+	return i+1;
+    }
+}

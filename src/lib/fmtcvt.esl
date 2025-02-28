@@ -1,0 +1,492 @@
+/*
+ * Run-time routines for format and print
+ */
+
+package fmt
+{
+    const PowersOf10: []_uint64=
+    {   1, 10, 100, 1_000, 10_000, 100_000, 1_000_000, 10_000_000, 100_000_000,
+	1_000_000_000, 10_000_000_000, 100_000_000_000, 1_000_000_000_000,
+	10_000_000_000_000, 100_000_000_000_000, 1_000_000_000_000_000,
+	10_000_000_000_000_000, 100_000_000_000_000_000,
+	1_000_000_000_000_000_000, 10_000_000_000_000_000_000
+    };
+
+    // Returns pointer to buffer offset with enough space
+    // and decrements the length of remaining space.
+    proc (bd: pDesc) need(n: _uint): @_memory
+    {   var k: _uint;
+
+	if n > bd.rem then
+	    bd.flush();
+	if n > bd.len then
+	    return 0;
+	k = bd.rem;
+	bd.rem = k - n;
+	return bd.buf[bd.len-k:];
+    }
+
+    proc dopad(buf: @_memory, tw:_uint, cw: _uint, align: AlignType, pad:_byte)
+    {   var pl, pr: _uint;
+
+	pl = 0;
+	pr = 0;
+	if align
+	is RIGHT  then pl = tw - cw;
+	is LEFT   then pr = tw - cw;
+	is CENTER then { pl = (tw - cw)/2; pr = (tw - cw + 1)/2; }
+	if pl > 0 then
+	    _set(buf[0:pl], pad);
+	if pr > 0 then
+	    _set(buf[pl+cw:pr], pad);
+    }
+
+    // Returns a pointer where the payload should go
+    // and updated length of payload (might be truncated).
+    proc (bd: pDesc) padding(cw: _uint, defalign: AlignType,
+		 spec: FmtSpec): @_memory, _uint, _uint
+    {   var sw, tw, zw, pl, pr: _uint;
+	var buf: @_memory;
+
+	sw = spec.width;		// spec width
+	if sw == 0 then tw = cw; else tw = sw;
+	if tw < cw then cw = tw;	// maybe truncated
+//fde.str("tw="); fde.uint(tw); fde.str(" sw="); fde.uint(sw);
+//fde.str(" cw="); fde.uint(cw); fde.nl();
+	buf = bd.need(tw);
+	zw = 0;
+	pl = 0;
+	if spec.zeros then			// don't pad here
+	    zw = tw - cw;
+	elif tw > cw then			// do padding here
+	{   pr = 0;
+	    if spec.align == NONE then spec.align = defalign;
+	    if spec.align
+	    is RIGHT  then pl = tw - cw;
+	    is LEFT   then pr = tw - cw;
+	    is CENTER then { pl = (tw - cw)/2; pr = (tw - cw + 1)/2; }
+	    if pl > 0 then
+		_set(buf[0:pl], spec.pad);
+	    if pr > 0 then
+		_set(buf[pl+cw:pr], spec.pad);
+	}
+	return buf[pl:], cw, zw;
+    }
+
+    proc (bd: pDesc) string(s: @[]_byte, n: _uint)
+    {   var buf: @_memory;
+
+	buf = bd.need(n);
+	buf[0:n] = s@;
+    }
+    /*
+     * chr
+     */
+    proc chrwid(c: _byte): _uint
+    {
+	return 1;
+    }
+
+    proc chrcvt(buf: @_memory, w: _uint, c: _byte)
+    {
+	if w > 0 then
+	    buf[0] = c;
+    }
+
+    proc (bd: pDesc) chrfmt(c: _byte, spec: FmtSpec)
+    {   var nw: _uint;
+	var buf: @_memory;
+
+	nw = chrwid(c);
+	buf, nw = bd.padding(nw, LEFT, spec);
+	chrcvt(buf[0:], nw, c);
+    }
+
+    /*
+     * str
+     */
+    proc strwid(s: @[]_byte): _uint
+    {
+	return _zlen(s@);
+    }
+
+    proc strcvt(buf: @_memory, w: _uint, s: @[]_byte)
+    {
+	buf[0:w] = s[0:w];
+    }
+
+    proc (bd: pDesc) strfmt(s: @[]_byte, spec: FmtSpec)
+    {   var nw: _uint;
+	var buf: @_memory;
+
+	nw = strwid(s);
+	buf, nw, _ = bd.padding(nw, LEFT, spec);
+	strcvt(buf[0:], nw, s);
+    }
+
+    /*
+     * bin
+     */
+    proc binwid(n: _uint): _uint
+    {
+    	if n == 0 then return 1;
+	return 64 - _clz(n);
+    }
+
+    proc bincvt(buf: @_memory, w: _uint, n: _uint)
+    {
+	loop
+	{   w = w-1;
+	    buf[w] = (n&1) + '0';
+	  exit w == 0;
+	    n = n >> 1;
+	}
+    }
+
+    proc (bd: pDesc) binfmt(n: _uint, spec: FmtSpec)
+    {   var nw, xw, tw, cw, zw, i: _uint;
+	var buf: @_memory;
+
+	xw = 0;			// extra width
+	nw = binwid(n);
+	if spec.prefix then xw += 2;
+	buf, cw, zw = bd.padding(nw + xw, RIGHT, spec);
+	tw = zw + cw;
+	i = 0;
+	if spec.prefix then
+	{   buf[0:2] = '0b';
+	    i += 2;
+	}
+	if zw > 0 then
+	{   _set(buf[i:zw], '0');
+	    i += zw;
+	}
+	bincvt(buf[i:], tw-i, n);
+    }
+
+    /*
+     * oct
+     */
+    proc octwid(n: _uint): _uint
+    {
+    	if n == 0 then return 1;
+    	return (66 - _clz(n)) / 3;
+    }
+
+    proc octcvt(buf: @_memory, w: _uint, n: _uint)
+    {
+	loop
+	{   w = w-1;
+	    buf[w] = (n&7) + '0';
+	  exit w == 0;
+	    n = n >> 3;
+	}
+    }
+
+    proc (bd: pDesc) octfmt(n: _uint, spec: FmtSpec)
+    {   var nw, tw, xw, cw, zw, i: _uint;
+	var buf: @_memory;
+
+	xw = 0;			// extra width
+	nw = octwid(n);
+	if spec.prefix then xw += 2;
+	buf, cw, zw = bd.padding(nw+xw, RIGHT, spec);
+	tw = zw + cw;
+	i = 0;
+	if spec.prefix then
+	{   buf[0:2] = '0o';
+	    i += 2;
+	}
+	if zw > 0 then
+	{   _set(buf[i:zw], '0');
+	    i += zw;
+	}
+	octcvt(buf[i:], tw-i, n);
+    }
+
+    /*
+     * hex
+     */
+    const hexchr: [16]_byte =
+	{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+
+    proc hexwid(n: _uint): _uint
+    {
+    	if n == 0 then return 1;
+    	return (67 - _clz(n)) / 4;
+    }
+
+    proc hexcvt(buf: @_memory, w: _uint, n: _uint)
+    {
+	loop
+	{   w = w-1;
+	    buf[w] = hexchr[_uint(n)&0xF];
+	  exit w == 0;
+	    n = n >> 4;
+	}
+    }
+
+    proc (bd: pDesc) hexfmt(n: _uint, spec: FmtSpec)
+    {   var nw, xw, tw, cw, zw, i: _uint;
+	var buf: @_memory;
+
+	xw = 0;			// extra width
+	nw = hexwid(n);
+	if spec.prefix then xw += 2;
+	buf, cw, zw = bd.padding(nw + xw, RIGHT, spec);
+	tw = zw + cw;
+	i = 0;
+	if spec.prefix then
+	{   buf[i:2] = '0x';
+	    i += 2;
+	}
+	if zw > 0 then
+	{   _set(buf[i:zw], '0');
+	    i += zw;
+	}
+	hexcvt(buf[i:], tw-i, n);
+   }
+
+    /*
+     * ptr
+     */
+    proc ptrwid(): _uint
+    {
+	return _uintptr?size * 2;
+    }
+
+    proc (bd: pDesc) ptrfmt(n: _uint, spec: FmtSpec)
+    {   var nw, xw, tw, cw, zw, i: _uint;
+	var buf: @_memory;
+
+	spec.zeros = true;
+	xw = 2;		// always do the prefix
+	nw = ptrwid();
+	buf, cw, zw = bd.padding(nw + xw, RIGHT, spec);
+	tw = zw + cw;
+	buf[0:2] = '0x';
+	i = 2;
+	_set(buf[2:zw], '0');
+	hexcvt(buf[2+zw:], tw-2+zw, n);
+    }
+
+    /*
+     * dec
+     */
+    proc decwid(n: _uint): _uint
+    {   var k: _uint;
+
+    	if n == 0 then return 1;
+	k = (65-_clz(n)) * 1233 >> 12;
+	k = k + 1 - _uint(n < PowersOf10[k]);	// cast boolean to unsigned
+	return k;
+    }
+
+    proc deccvt(buf: @_memory, w: _uint, n: _uint): _uint
+    {	var i: _uint;
+
+	i = w-1;
+	if n == 0 then
+	    buf[i] = '0';
+	else
+	{   while n != 0 do
+	    {   buf[i] = _byte((n % 10) + '0');
+		n = n / 10;
+		i -= 1;
+	    }
+	}
+	return i;
+    }
+
+    proc (bd: pDesc) udecfmt(n: _uint, spec: FmtSpec)
+    {   var nw, xw, tw, cw, zw, i: _uint;
+	var buf: @_memory;
+
+	xw = 0;			// extra width
+	nw = decwid(n);
+	if spec.sign then xw += 1;
+	buf, cw, zw = bd.padding(nw + xw, RIGHT, spec);
+	tw = zw + cw;
+	i = 0;
+	if spec.sign then
+	{   buf[0] = '+';
+	    i += 1;
+	}
+	if zw > 0 then
+	{   _set(buf[i:zw], '0');
+	    i += zw;
+	}
+	deccvt(buf[i:], tw-i, n);
+    }
+
+    proc (bd: pDesc) sdecfmt(sn: _int, spec: FmtSpec)
+    {   var nw, xw, tw, cw, zw, i: _uint;
+	var buf: @_memory;
+	var n: _uint;
+	var sign: _byte = 0;
+
+	xw = 0;			// extra width
+	if sn < 0 then
+	{   sign = '-';
+	    sn = -sn;
+	}
+	elif spec.sign then
+	    sign = '+';
+	n = _uint(sn);
+	nw = decwid(n);
+	if sign != 0 then xw += 1;
+	buf, cw, zw = bd.padding(nw + xw, RIGHT, spec);
+	tw = zw + cw;
+	i = 0;
+	if sign != 0 then
+	{   buf[0] = sign;
+	    i += 1;
+	}
+	if zw > 0 then
+	{   _set(buf[i:zw], '0');
+	    i += zw;
+	}
+	deccvt(buf[i:], tw-i, n);
+    }
+
+    import float;
+
+    proc (bd: pDesc) dfltfmt(x: _float64, spec: FmtSpec)
+    {	var tw, sw, pw, nw, xw, zw, i: _uint;
+	var buf: @_memory;
+	var sign: _byte = 0;
+	var n: _uint64;
+
+	if x.getSign() != 0 then
+	    sign = '-';
+	elif spec.sign then
+	    sign = '+';
+	sw = spec.width;
+	pw = spec.prec;
+	xw = 1;			// extra width, decimal point
+	i = 0;
+	if x.isNaN() then
+	{   buf, _, _ = bd.padding(3, RIGHT, spec);
+	    buf[0:3] = 'NaN';
+	}
+	elif x.isInf() then
+	{   buf, _, _ = bd.padding(4, RIGHT, spec);
+	    if sign == 0 then sign = '+';
+	    buf[0] = sign;
+	    i += 1;
+	    buf[1:3] = 'Inf';
+	}
+	else
+	{   x = _abs(x);
+	    n = _uint64*(x);
+//fde.str("ni="); fde.uint64(n); fde.nl();
+	    nw = decwid(n);
+//fde.str("sign="); fde.hex8(sign); fde.nl();
+	    if sign != 0 then xw += 1;
+//fde.str("nw="); fde.uint(nw); fde.str(" sw="); fde.uint(sw);
+//fde.str(" pw="); fde.uint(pw); fde.str(" xw="); fde.uint(xw); fde.nl();
+	    if sw == 0 then sw = nw;
+	    tw = nw + pw + xw;
+	    buf, tw, zw = bd.padding(tw, RIGHT, spec);
+//fde.str("tw="); fde.uint(tw); fde.str(" zw="); fde.uint(zw); fde.nl();
+	    if sign != 0 then
+	    {   buf[0] = sign;
+		i += 1;
+	    }
+	    if zw > 0 then
+	    {   _set(buf[i:zw], '0');
+		i += zw;
+	    }
+	    if nw > sw then
+		_set(buf[i:sw], '?');
+	    else
+	    {	deccvt(buf[i:], nw, n);
+		i += nw;
+		buf[i] = '.';
+		i += 1;
+		if pw > 0 then
+		{   x -= _float64*(n);	// leave only the fraction
+//fde.str("pw="); fde.uint(pw); fde.str(" P10="); fde.uint64(PowersOf10[pw]);
+//fde.str(" nr="); fde.uint64(n);
+		    n = _uint64*(x * _float64*(PowersOf10[pw]));
+		    nw = decwid(n);
+//fde.str(" nf="); fde.uint64(n); fde.nl();
+//fde.str("nw="); fde.uint(nw); fde.str(" pw="); fde.uint(pw); fde.nl();
+		    deccvt(buf[i:], nw, n);
+		    i += nw;
+		    if pw > nw then
+			_set(buf[i:pw-nw], '0');
+		}
+	    }
+	}
+    }
+
+    proc (bd: pDesc) dexpfmt(x: _float64, spec: FmtSpec)
+    {	var nw, sw, pw, xw, nwe: _uint;
+	var i: _uint;
+	var buf: @_memory;
+	var sign: _byte = 0;
+	var signe: _byte = 0;
+	var n: _uint64;
+	var e2, e10: _int;
+
+	if x < 0.0 then
+	    sign = '-';
+	elif spec.sign then
+	    sign = '+';
+	sw = spec.width;
+	pw = spec.prec;
+	x = _abs(x);
+	e2 = x.getTrueExp();
+//	var t: _int;
+//	t = (e2 * 1000) / 3317;
+//fde.str(" n="); fde.hex64(n); fde.nl();
+	e10 = 0;
+	// FIXME - find a better way to scale rather than brute force
+	if e2 < 0 then
+	{   while x < 1.0 do
+	    {	x = x * 10.0;
+		e10 -= 1;
+	    }
+	}
+	else
+	{   while x >= 10.0 do
+	    {	x = x / 10.0;
+		e10 += 1;
+	    }
+	}
+//fde.str("e2="); fde.int(e2); //fde.str(" t="); fde.int(t);
+//fde.str(" e10="); fde.int(e10); fde.nl();
+	if e10 < 0 then signe = '-'; else signe = '+';
+	e10 = _abs(e10);
+	nwe = decwid(e10);
+	xw = 4;		// [1-9].e[+-]
+	if sign != 0 then xw += 1;
+	if nwe == 1 then xw += 1;
+//fde.str("sw="); fde.uint(sw); fde.str(" pw="); fde.uint(pw);
+//fde.str(" nw="); fde.uint(nw); fde.str(" xw="); fde.uint(xw); fde.nl();
+	buf, _, _ = bd.padding(pw+xw+nwe, RIGHT, spec);
+	n = _uint64*(x);	// n should be 1..9
+	i = 0;
+	if sign != 0 then
+	{   buf[0] = sign; i += 1;
+	}
+	buf[i] = n + '0';  i += 1;
+	buf[i] = '.';	   i += 1;
+	if pw > 0 then
+	{   x -= _float64*(n);	// leave only the fraction
+	    n = _uint64*(x * _float64*(PowersOf10[pw]));
+	    nw = decwid(n);
+	    deccvt(buf[i:], nw, n); i += nw;
+	    if pw > nw then
+	    {	_set(buf[i:pw-nw], '0'); i += pw-nw;
+	    }
+	}
+	buf[i] = 'e';   i += 1;
+	buf[i] = signe;	i += 1;
+	if nwe == 1 then
+	{   buf[i] = '0'; i+= 1;
+	}
+	deccvt(buf[i:], nwe, e10);
+    }
+}

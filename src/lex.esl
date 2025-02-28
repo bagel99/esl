@@ -24,6 +24,7 @@ package lex
 	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,	RECURSIVE,  BADCONV,
 	RANGEERR,   PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
 	LONGNUM,    LONGFRAC,
+	FMTNOSPEC,  FMTNOEXPR,	FMTNOPACK,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -131,6 +132,9 @@ package lex
 	[PACKUINT] =    "Scalar for _packXX must be unsigned int",
 	[LONGNUM] =     "Too many digits in number",
 	[LONGFRAC] =    "Too many digits in fractional part",
+	[FMTNOSPEC] =	"Format lacks spec for expression",
+	[FMTNOEXPR] =	"Format has expression with a spec",
+	[FMTNOPACK] =	"Unable to find 'fmt' package - perhaps not imported",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
@@ -150,7 +154,7 @@ package lex
 	KPROC,	KPACKAGE,
 	KASM,   KASSERT,KCALL,
 	KRET,   KIF,	KWHILE,				// must be contiguous
-	KFOR,	KLOOP,	KEXIT,
+	KFOR,	KLOOP,	KEXIT,	KFORMAT,KPRINT,
 	KTHEN,	KELIF,  KELSE,	KIS,    KDO,	KWITH,  KAS,
 	KIN,	KFROM,	KTO,    KDOWNTO,KBY,		// for loop support
 	// attributes begin here
@@ -227,6 +231,8 @@ package lex
 	[KFOR] =	"for",
 	[KLOOP] =	"loop",
 	[KEXIT] =	"exit",
+	[KFORMAT] =	"format",
+	[KPRINT] =	"print",
 	[KTHEN] =	"then",
 	[KELIF] =       "elif",
 	[KELSE] =	"else",
@@ -391,6 +397,10 @@ package lex
 	err.chr('\'');
 	err.str(keywords[tok]);
 	err.chr('\'');
+	err.str(" got '");
+	err.str(keywords[Token]);
+	err.chr('\'');
+
 	err.nl();
     }
 

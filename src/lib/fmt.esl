@@ -1,0 +1,11 @@
+import fmtdef;
+
+package fmt
+{
+    proc (bd: pDesc) flush()
+    {
+	bd.rem = bd.len;
+    }
+}
+
+import fmtcvt;

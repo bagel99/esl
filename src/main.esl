@@ -30,6 +30,7 @@ var feature:
 
 import sys;
 import zstr;
+const COMPILER_NO_LIB: boolean = true;	// don't rely on arch libraries
 import out;
 const err: out.fildes = 2;      // error file descriptor for messages
 const msg: out.fildes = 1;      // normal file descriptor for messages

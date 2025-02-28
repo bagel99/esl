@@ -58,17 +58,17 @@ eslc0:  main-start.s
 	$(GCC) $(CFLAGS) -o eslc0 main-start.s
 
 eslc1:	main.esl eslc0
-	./eslc0 $(ESLCFLAGS) -m $(ARCH) main.esl >main.ll
+	./eslc0 $(ESLCFLAGS) -m $(ARCH) -Ilib main.esl >main.ll
 	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main.ll
 	$(GCC) $(CFLAGS) -o eslc1 main.s
 
 eslc2:	main.esl eslc1
-	./eslc1 $(ESLCFLAGS) -m $(ARCH) main.esl >main.ll
+	./eslc1 $(ESLCFLAGS) -m $(ARCH) -Ilib main.esl >main.ll
 	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main.ll
 	$(GCC) $(CFLAGS) -o eslc2 main.s
 
 eslc3:	main.esl eslc2
-	./eslc2 $(ESLCFLAGS) -m $(ARCH) main.esl >main.ll
+	./eslc2 $(ESLCFLAGS) -m $(ARCH) -Ilib main.esl >main.ll
 	$(LLVM) -m $(ARCH) $(LLVMFLAGS) main.ll
 	$(GCC) $(CFLAGS) -o eslc3 main.s
 

@@ -189,9 +189,17 @@ package ast
 	is SCON then
 	{   err.str(" id ");
 	    err.uint32(_uint32(node@.valu));
-	    err.str(" val=\"");
-	    err.strn(node@.symb@.ident, node@.type.Span()-1);
-	    err.chr('"');
+	    err.str(" val=");
+	    if node@.symb@.ispad then
+	    {	err.chr('\'');
+		err.strn(node@.symb@.ident, node@.type.Span());
+		err.chr('\'');
+	    }
+	    else
+	    {	err.chr('"');
+		err.strn(node@.symb@.ident, node@.type.Span()-1);
+		err.chr('"');
+	    }
 	}
 	is DCLVAR, VAR, PROC, CALL, FILE, PACKAGE then
 	{
@@ -418,6 +426,15 @@ package ast
 	return pa;
     }
 
+    proc Var(s: Symb, t: Type): Ast
+    {	var tree: Ast;
+
+	tree = ast.New(VAR, t);
+	tree@.symb = s;
+	tree@.width = t@.width;
+	return tree;
+    }
+
     proc OpIfExpr(ctree: Ast, ttree: Ast, ftree: Ast, t: Type): Ast
     {   var tree: Ast;
 
@@ -610,8 +627,8 @@ package ast
 	}
 	if !ok then
 	{   lex.Error(BADCAST);
-err.str("fm="); type.DumpT(fm, false);
-err.str("\nto="); type.DumpT(to, false); err.nl();
+err.str("to="); type.DumpT(to, false); err.nl();
+err.str("fm="); Dump(tree);
 	}
 	return tree;
     }

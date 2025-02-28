@@ -6,7 +6,6 @@
  */
 
 import sys;
-import zstr;
 
 package out
 {
@@ -27,7 +26,10 @@ package out
     proc (o: fildes) str(s:@[]_byte)
     {   var n: _uint;
 
-	n = zstr.len(s, 0xFFFF);
+	if _defined(COMPILER_NO_LIB) then
+	    n = zstr.len(s, 0xFFFF);
+	else
+	    n = _zlen(s@);
 	sys.write(o, s, n);
     }
 

@@ -166,19 +166,27 @@ package type
 	return t;
     }
 
+    proc ForceRef(bt: Type): Type
+    {   var t: Type;
+
+	t = New(REF);
+	t@.base = bt;
+	t@.memorder = Target.memorder;
+	t@.bitorder = Target.bitorder;
+	t@.size  = Target.ptr.size;
+	t@.width = Target.ptr.size;
+	t@.align = Target.ptr.align;
+	t@.reftype = t;
+	Final(t);
+	return t;
+    }
+
     proc MakeRef(bt: Type): Type
     {   var t: Type;
 
 	t = bt@.reftype;
 	if t == 0 then
-	{   t = New(REF);
-	    t@.base = bt;
-	    t@.memorder = Target.memorder;
-	    t@.size  = Target.ptr.size;
-	    t@.width = Target.ptr.size;
-	    t@.align = Target.ptr.align;
-	    t@.reftype = t;
-	}
+	    t = ForceRef(bt);
 	return t;
     }
 
@@ -1222,8 +1230,8 @@ err.nl();
 	return t;
     }
 
-    const bitorderstr:[BitOrderT]@[]Char = {"", "msb", "lsb"};
-    const memorderstr:[MemOrderT]@[]Char = {"", "be", "le"};
+    const bitorderstr:[BitOrderT]@[]Char = {"native", "msb", "lsb"};
+    const memorderstr:[MemOrderT]@[]Char = {"native", "be", "le"};
     const accessstr:[AccessT]@[]Char = {"RW", "RO", "WO"};
     const wrapstr:[WrapT]@[]Char = {"", "wrap", "sat", "trap"};
     const blanks:[]_byte =
@@ -1312,9 +1320,9 @@ err.nl();
 		}
 		is REF then
 		{   err.chr('@');
-		    if t@.base != 0 && t@.base@.name != 0 then
-			err.str(t@.base@.name@.ident);
-		    else
+//		    if t@.base != 0 && t@.base@.name != 0 && !full then
+//			err.str(t@.base@.name@.ident);
+//		    else
 			Dump2(t@.base, indent, full);
 		}
 		is REFPROC then
@@ -1330,27 +1338,28 @@ err.nl();
 		err.uint(t@.width);
 		err.chr(':');
 		err.uint(t@.align);
-		err.str(" attr=");
+		err.str(" attr:");
 		if t@.unalgn then err.str("unalgn ");
 		if t@.packed then err.str("packed ");
 		if t@.noepad then err.str("noepad ");
 		if t@.nofpad then err.str("nofpad ");
 		if t@.memorder != Target.memorder then
-		{   err.chr(':'); err.str(memorderstr[t@.memorder]);
+		{   err.str("mo="); err.str(memorderstr[t@.memorder]); err.chr(' ');
 		}
 		if t@.bitorder != Target.bitorder then
-		{   err.chr(':'); err.str(bitorderstr[t@.bitorder]);
+		{   err.str("bo="); err.str(bitorderstr[t@.bitorder]); err.chr(' ');
 		}
 		if t@.access != RW then
-		{   err.chr(':'); err.str(accessstr[t@.access]);
+		{   err.str("ac="); err.str(accessstr[t@.access]); err.chr(' ');
 		}
 		if t@.io != {} then
-		{   err.chr(':');
+		{   err.str("io=");
 		    if t@.io.in  then err.chr('I');
 		    if t@.io.out then err.chr('O');
+		    err.chr(' ');
 		}
 		if t@.wrap != NONE then
-		{   err.chr(':');  err.str(wrapstr[t@.wrap]);
+		{   err.str("wp=");  err.str(wrapstr[t@.wrap]); err.chr(' ');
 		}
 		t@.dumped = true;
 		if t@.meths != 0 then

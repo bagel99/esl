@@ -615,20 +615,17 @@ err.str("Const SCON dup\n");
 	return tree;
     }
 
-    proc AssignArray(lhs:Ast, optok: TokenT): Ast
-    {   var rhs, tree, lsize, rsize, align: Ast;
+    proc AssignArray(lhs:Ast, rhs:Ast, op:ast.Op): Ast
+    {   var tree, lsize, rsize, align: Ast;
 	var lalign, ralign, width: _uint;
 	var tl, tr:Type;
-	var op: ast.Op;
 
-	if optok == ASGNR then op = MOVE; else op = COPY;
-	tl = lhs@.type@.base;
-	rhs = expr.Term(tl);
 	if rhs == 0 then return 0;
 	if rhs@.type == 0 || rhs@.type@.kind != ARRAY then
 	{   lex.Error(NOTARRAY);
 	    return 0;
 	}
+	tl = lhs@.type@.base;
 	if tl@.packed then	// FIXME: not possible?
 	{
 err.str("Assign to packed array\n");
@@ -672,6 +669,10 @@ err.str("Assign to packed array\n");
 	    {   if rsize@.op != CONST || rsize@.valu != 0 then
 		    lsize = ast.OpMinMax(UMIN, lsize, rsize);
 	    }
+//err.str("width="); err.uint(width); err.nl();
+//err.str("lsize="); ast.Dump(lsize);
+//err.str("lalign="); err.uint(lalign); err.nl();
+
 	    tree = ast.New4(op, lhs@.type.base,
 			ArrayFix(lhs),
 			ArrayFix(rhs),
@@ -742,7 +743,10 @@ err.str("Assign to packed array\n");
 		}
 		else if t != 0 && t@.kind == ARRAY && !t@.packed then
 		{   if optok <= ASGNR && nl == 1 then
-			tree = AssignArray(lhs, optok);
+		    {	if optok == ASGNR then op = MOVE; else op = COPY;
+			rhs = expr.Term(lhs@.type@.base);
+			tree = AssignArray(lhs, rhs, op);
+		    }
 		    else
 			lex.Error(ILLASSIGN);
 		    nr += 1;
@@ -1275,9 +1279,117 @@ symb.DumpS(ns);
 	return 0;
     }
 
+import format;
+
+    proc ParseFormat(bd: Ast): Ast
+    {   var tok: TokenT;
+	var tree, fmt, rtf, exp: Ast;
+	var fmtstr: @[]_byte;
+	var fmtlen: _uint;
+
+	lex.Expect(COMMA);
+	tok = Token;
+	if tok == STR then
+	{   fmt = expr.String();
+	    fmtstr = fmt@.symb@.ident;
+	    fmtlen = fmt@.type.Span();
+	}
+	else lex.ErrorT(EXPECT, STR);
+	tok = Token;
+	var i: _uint = 0;	// where we are in the format string
+	var n: _uint;		// how much of the format string we just used
+	tree = ast.New(SEQ, 0);
+	while tok == COMMA do
+	{   tok = lex.Next();
+	    exp = expr.Bool(0);
+	    n, rtf = format.NextFormat(bd, fmtstr, i, exp);
+	    i += n;
+	    tree = ast.Child(tree, rtf);
+	    tok = Token;
+	}
+	if i < fmtlen then
+	{   n, rtf = format.NextFormat(bd, fmtstr, i, 0);
+	    tree = ast.Child(tree, rtf);
+	}
+	return tree;
+    }
+
+    proc FormatStmt(): Ast
+    {   var tok: TokenT;
+	var s: Symb;
+	var t, bt: Type;
+	var buf, bd, end, start, len, tree: Ast;
+	var fmtstr: @[]_byte;
+	var fmtlen, buflen: _uint;
+	var needload: boolean = false;
+
+//err.str("FormatStmt beg\n");
+	buf = expr.GetLHS(0);
+//err.str("buf1=\n"); ast.Dump(buf);
+	// FIXME - check for array of bytes
+	s = buf@.symb;
+	t = buf@.type;
+	bt = t@.base;
+	if bt@.kind == REF then
+	{   bt = bt@.base;
+	    needload = true;
+	}
+	if bt@.kind != ARRAY then
+	{   lex.Error(OPTYPE);
+	    return 0;
+	}
+	buflen = 0;
+	// The following is similar to expr.GetSizeSpec()
+	tok = Token;
+	if tok == PBEG then
+	{   tok = Next();
+	    len = expr.Const(type.wordtype);
+	    // assert len.op == CONST
+	    buflen = len.valu;
+//err.str("len=\n"); ast.Dump(len);
+	    tok = lex.Expect(PEND);
+	}
+	if bt@.flex then
+	{   if buflen == 0 then
+		lex.Error(NEEDSIZE);
+	}
+	else
+	    buflen = bt.Span();
+//err.str("buflen="); err.uint(buflen); err.nl();
+	t.reftype = 0;		// force REF
+	t = type.MakeRef(t);
+//err.str("t1="); type.DumpT(t, true); err.nl();
+	buf = ast.Var(s, t);
+	if needload then
+	    buf = expr.Load(buf);
+//err.str("buf2=\n"); ast.Dump(buf);
+	bd, start = format.Start(buf, buflen);
+	if bd == 0 then	// fatal problems
+	{   lex.Skip(skipstmt);
+	    return 0;
+	}
+	tree = ParseFormat(bd);
+	end = format.End(bd);
+	tree = ast.New3(SEQ, 0, start, tree, end);
+//err.str("FormatStmt end\n");
+//ast.Dump(tree);
+	return tree;
+    }
+
+    proc PrintStmt(): Ast
+    {   var tok: TokenT;
+	var bd, fmt, exp, ctr, rtf, tree: Ast;
+	var fmtstr: @[]_byte;
+	var fmtlen: _uint;
+
+	bd = expr.GetLHS(0);
+	tree = ParseFormat(bd);
+	return tree;
+    }
+
     const stmtlist:[]TokenT =
     { KTYPE, KVAR, KCONST, KIF, KWHILE, KLOOP, KDO, KFOR, KEXIT, KRET,
-      KASM, KALIAS, KERROR, KCALL, KASSERT, NONE };
+      KASM, KALIAS, KERROR, KCALL, KASSERT, KFORMAT, KPRINT, NONE };
 
     proc Statement(): Ast
     {   var tree, stree: Ast;
@@ -1351,6 +1463,8 @@ symb.DumpS(ns);
 		tree = AssignOrCall(s);
 	    }
 	    is KASSERT then tree = Assert();
+	    is KFORMAT then tree = FormatStmt();
+	    is KPRINT  then tree = PrintStmt();
 	    is SEMI then    {}		// ignore extra semicolons
 	    else lex.ErrorT(BADSTMTT, tok);
 	}

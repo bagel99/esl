@@ -65,6 +65,7 @@ package expr
 	t@.hi = n-1;
 	t@.align = t@.base@.align;
 	t@.memorder = Target.memorder;
+	t@.bitorder = Target.bitorder;
 	tree = ast.New(SCON, t);
 	tree@.symb = symb.NewString(s, n, !nul);
 	strid += 1;

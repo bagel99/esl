@@ -1,0 +1,53 @@
+// Copyright (c) 2025, Brian G. Lucas.  See LICENSE file.
+
+// Formatted buffered output for print statement.
+// Assumes target wordsize is 32-bits or more.
+
+import sys;
+
+import fmtdef;
+
+package prt
+{
+    type fildes: sys.fildes;
+    const fdo: fildes = 1;
+    const fde: fildes = 2;
+
+    const MinBufSize = 32;
+    alias fmt.pDesc as pDesc;
+
+    // FIXME - should this sys.open the fildes?
+    proc open(fd: sys.fildes, sz: _uint): pDesc
+    {   var bd: pDesc;
+
+	sz = _max(sz, MinBufSize);
+	bd = _new(fmt.Desc);
+	if bd != 0 then
+	{   bd.buf = _new(_memory(sz));
+	    if bd.buf != 0 then
+	    {   bd.len = sz;
+		bd.rem = sz;
+		bd.fd = fd;
+		return bd;
+	    }
+	    _delete(bd);
+	}
+	return 0;
+    }
+
+    proc (bd: pDesc) flush()
+    {
+	sys.write(bd.fd, bd.buf, bd.len - bd.rem);
+	bd.rem = bd.len;
+    }
+
+    proc close(bd: pDesc)
+    {
+	bd.flush();
+	_delete(bd.buf(bd.len));
+	_delete(bd);
+    }
+}
+
+import fmtcvt;
+
