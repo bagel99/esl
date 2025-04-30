@@ -121,7 +121,6 @@ package format
 
     proc FindFormatSymbols(): boolean
     {   var s: Symb;
-	var t: Type;
 
 	s = symb.FindTop("fmt");
 	if s == 0 || s@.kind != PACK then
@@ -134,7 +133,6 @@ package format
 	    return false;
 	}
 	symbdesc = s;
-//err.str("Desc type: "); type.DumpT(s@.type, true); err.nl();
 	symblist = s@.type@.meths;
 	return true;
     }
@@ -188,22 +186,22 @@ if len <= 1 then len = 256;	// FIXME TEMP
 	return;
     }
 
-    proc End(bd: Ast): Ast
-    {	var tree, len, rem: Ast;
+    proc End(bd: Ast, isprint: boolean): Ast
+    {	var tree, desc: Ast;
 	var s: Symb;
+	var name: @[]_byte;
 
-	rem, _ = GetDescField(bd, "rem");
-	rem = expr.Load(rem);
-	rem = ast.ExtendT(rem, type.wordtype);
-	len, _ = GetDescField(bd, "len");
-	len = expr.Load(len);
-	len = ast.ExtendT(len, type.wordtype);
-	len = ast.New2(SUB, type.wordtype, len, rem);
-	tree, _ = GetDescField(bd, "buf");
-	tree = expr.Load(tree);
-	tree = ast.New2(INDEX, type.MakeRef(tree@.type@.base), tree, len);
-	tree = ast.New2(STORE, type.bytetype, tree,
-			ast.Const(type.bytetype, 0));
+	if isprint then name = "mayflush"; else name = "nulterm";
+	if symblist == 0 && !FindFormatSymbols() then return 0;
+	s = symb.FindPrivate(symblist, name);
+	if s == 0 then
+	{   lex.ErrorS(COMPILER, "No format end routine found\n");
+	    return 0;
+	}
+	desc = expr.Load(bd);
+	desc = ast.New1(BYREF, type.MakeRef(desc@.type), desc);
+	tree = ast.New1(CALL, 0, desc);
+	tree@.symb = s;
 //err.str("end=\n"); ast.Dump(tree);
 	return tree;
     }
@@ -215,9 +213,7 @@ if len <= 1 then len = 256;	// FIXME TEMP
 	if symblist == 0 && !FindFormatSymbols() then return 0;
 	s = symb.FindPrivate(symblist, name);
 	if s == 0 then
-	{
-err.str("Lookup: "); err.str(name); err.nl();
-	    lex.ErrorS(COMPILER, "No fmt routine found\n");
+	{   lex.ErrorS(COMPILER, "No fmt routine found\n");
 	    return 0;
 	}
 	desc = expr.Load(bd);
@@ -238,43 +234,57 @@ err.str("Lookup: "); err.str(name); err.nl();
 
     proc GenConvert(bd: Ast, exp: Ast, spec: FmtSpec): Ast
     {	var tree: Ast;
-	var s: Symb;
 	var namefmt: @[]_byte;
+	type GoodTypes: [type.TypeT]boolean: packed;
+	const chrtypes: GoodTypes = { [ENUM]=true, [UINT]=true };
+	const unstypes: GoodTypes = { [ENUM]=true, [UINT]=true };
+	const flttypes: GoodTypes = { [FLOAT]=true };
+	const ptrtypes: GoodTypes = { [REF]=true, [REFPROC]=true };
+	const fmtproc: [fmt.FmtType] @[]_byte =
+	{ [NONE] = 0,
+	  [CHR]="chrfmt",
+	  [STR]="strfmt",
+	  [DEC]="udecfmt",
+	  [BIN]="binfmt",
+	  [OCT]="octfmt",
+	  [LHEX]="hexfmt",
+	  [UHEX]="hexfmt",	// FIXME
+	  [PTR]="ptrfmt",
+	  [FLT]="dfltfmt",
+	  [EXP]="dexpfmt"
+	};
 
+	namefmt = fmtproc[spec.ftype];
 	if spec.ftype
 	is STR then
-	    namefmt = "strfmt";
+	{  if exp@.type@.kind != REF ||
+	      exp@.type@.base@.kind != ARRAY ||
+	      exp@.type@.base@.base != type.bytetype then
+		lex.ErrorS(OPTYPE, "format spec");
+	}
 	is CHR then
-	    namefmt = "chrfmt";
-	is PTR then
-	    namefmt = "ptrfmt";
-	is UHEX, LHEX then
-	    namefmt = "hexfmt";
-	is OCT then
-	    namefmt = "octfmt";
-	is BIN then
-	    namefmt = "binfmt";
+	{   if !chrtypes[exp@.type@.kind] then
+		lex.ErrorS(OPTYPE, "format spec");
+	}
+	is UHEX, LHEX, OCT, BIN then
+	{   if !unstypes[exp@.type@.kind] then
+		lex.ErrorS(OPTYPE, "format spec");
+	}
 	is DEC then
 	{   if exp@.type@.kind == SINT then
 		namefmt = "sdecfmt";
 	    else
-		namefmt = "udecfmt";
-	}
-	is FLT then
-	{   if exp@.type@.kind == FLOAT then
-		namefmt = "dfltfmt";
-	    else
-	    {	lex.Error(OPTYPE);
-		return 0;
+	    {	if !unstypes[exp@.type@.kind] then
+		    lex.ErrorS(OPTYPE, "format spec");
 	    }
 	}
-	is EXP then
-	{   if exp@.type@.kind == FLOAT then
-		namefmt = "dexpfmt";
-	    else
-	    {	lex.Error(OPTYPE);
-		return 0;
-	    }
+	is PTR then
+	{   if !ptrtypes[exp@.type@.kind] then
+		lex.ErrorS(OPTYPE, "format spec");
+	}
+	is FLT, EXP then
+	{   if !flttypes[exp@.type@.kind] then
+		lex.ErrorS(OPTYPE, "format spec");
 	}
 	else
 	{   lex.ErrorS(COMPILER, "Format type not yet implemented\n");

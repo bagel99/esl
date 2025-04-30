@@ -450,6 +450,13 @@ package ast
 	return tree;
     }
 
+    proc IsMultiCall(rhs: Ast): boolean
+    {
+	return (rhs@.op == CALL || rhs@.op == CALLI) &&
+		rhs@.symb@.retvlist != 0 &&
+		rhs@.symb@.retvlist@.next != 0;
+    }
+
     proc CheckConstTruncate(node: Ast, size: type.BitSize)
     {
 	// assert node@.op == CONST

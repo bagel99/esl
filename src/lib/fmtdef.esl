@@ -18,11 +18,16 @@ package fmt
 	zeros:	boolean;	// 34
     }: packed, lsb;
 
+    type DescFlags:
+    {	flush:  boolean;
+    }: packed, lsb, bits(16);
+
     type Desc:
-    {   buf:  @_memory;
-	len:  _uint16;
-	rem:  _uint16;
-	fd:   _int32;
+    {   buf:	@_memory;
+	len:	_uint16;
+	rem:	_uint16;
+	fd:	_int16;
+	flags:	DescFlags;
     };
     type pDesc: @Desc;
 

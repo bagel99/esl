@@ -35,10 +35,21 @@ package prt
 	return 0;
     }
 
+    proc (bd: pDesc) setflush(what: boolean)
+    {
+	bd.flags.flush = what;
+    }
+
     proc (bd: pDesc) flush()
     {
 	sys.write(bd.fd, bd.buf, bd.len - bd.rem);
 	bd.rem = bd.len;
+    }
+
+    proc (bd: pDesc) mayflush()
+    {
+	if bd.flags.flush then
+	    bd.flush();
     }
 
     proc close(bd: pDesc)

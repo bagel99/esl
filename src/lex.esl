@@ -55,7 +55,7 @@ package lex
 	[EXPECTID] =	"Expected identifier",
 	[UNDEFID] =	"Undefined identifier: ",
 	[DEFID] =	"Identifier already in use: ",
-	[UNDEFFIELD] =	"Undefined field: ",
+	[UNDEFFIELD] =	"Undefined field or method: ",
 	[BADID] =	"Unexpected identifier: ",
 	[BADREF] =	"Cannot dereference incomplete type",
 	[BADINDEX] =	"Illegal index specification",
@@ -398,9 +398,11 @@ package lex
 	err.str(keywords[tok]);
 	err.chr('\'');
 	err.str(" got '");
-	err.str(keywords[Token]);
+	if Token == ID then
+	    err.str(Ident);
+	else
+	    err.str(keywords[Token]);
 	err.chr('\'');
-
 	err.nl();
     }
 

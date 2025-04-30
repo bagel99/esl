@@ -754,9 +754,7 @@ err.str("Assign to packed array\n");
 		else
 		{   rhs = expr.Bool(t);	// right-hand side
 		    if rhs != 0 then
-		    {   if (rhs@.op == CALL || rhs@.op == CALLI) &&
-			    rhs@.symb@.retvlist != 0 &&
-			    rhs@.symb@.retvlist@.next != 0 then
+		    {   if ast.IsMultiCall(rhs) then
 			{   // call that returns multiple values
 			    tl = rhs@.symb@.retvlist;
 			    i = 0;
@@ -918,6 +916,7 @@ err.str("Assign to packed array\n");
 	    tree = ast.New3(IF, 0, ctree, tree, 0);
 	    return tree;
 	}
+	lex.Expect(SEMI);
 	return 0;
     }
 
@@ -1137,6 +1136,7 @@ err.str("Assign to packed array\n");
 	tree = ast.New1(LOOP, 0, tree);
 	if LoopLevel > 0 then
 	    LoopLevel -= 1;
+	lex.Expect(SEMI);
 	return tree;
     }
 
@@ -1281,7 +1281,7 @@ symb.DumpS(ns);
 
 import format;
 
-    proc ParseFormat(bd: Ast): Ast
+    proc ParseFormat(bd: Ast): Ast, boolean
     {   var tok: TokenT;
 	var tree, fmt, rtf, exp: Ast;
 	var fmtstr: @[]_byte;
@@ -1311,7 +1311,7 @@ import format;
 	{   n, rtf = format.NextFormat(bd, fmtstr, i, 0);
 	    tree = ast.Child(tree, rtf);
 	}
-	return tree;
+	return tree, fmtstr[fmtlen-2] == '\n';
     }
 
     proc FormatStmt(): Ast
@@ -1319,13 +1319,10 @@ import format;
 	var s: Symb;
 	var t, bt: Type;
 	var buf, bd, end, start, len, tree: Ast;
-	var fmtstr: @[]_byte;
-	var fmtlen, buflen: _uint;
+	var buflen: _uint;
 	var needload: boolean = false;
 
-//err.str("FormatStmt beg\n");
 	buf = expr.GetLHS(0);
-//err.str("buf1=\n"); ast.Dump(buf);
 	// FIXME - check for array of bytes
 	s = buf@.symb;
 	t = buf@.type;
@@ -1346,7 +1343,6 @@ import format;
 	    len = expr.Const(type.wordtype);
 	    // assert len.op == CONST
 	    buflen = len.valu;
-//err.str("len=\n"); ast.Dump(len);
 	    tok = lex.Expect(PEND);
 	}
 	if bt@.flex then
@@ -1355,35 +1351,34 @@ import format;
 	}
 	else
 	    buflen = bt.Span();
-//err.str("buflen="); err.uint(buflen); err.nl();
 	t.reftype = 0;		// force REF
 	t = type.MakeRef(t);
-//err.str("t1="); type.DumpT(t, true); err.nl();
 	buf = ast.Var(s, t);
 	if needload then
 	    buf = expr.Load(buf);
-//err.str("buf2=\n"); ast.Dump(buf);
 	bd, start = format.Start(buf, buflen);
 	if bd == 0 then	// fatal problems
 	{   lex.Skip(skipstmt);
 	    return 0;
 	}
-	tree = ParseFormat(bd);
-	end = format.End(bd);
+	tree, _ = ParseFormat(bd);
+	end = format.End(bd, false);
 	tree = ast.New3(SEQ, 0, start, tree, end);
-//err.str("FormatStmt end\n");
-//ast.Dump(tree);
+	lex.Expect(SEMI);
 	return tree;
     }
 
     proc PrintStmt(): Ast
-    {   var tok: TokenT;
-	var bd, fmt, exp, ctr, rtf, tree: Ast;
-	var fmtstr: @[]_byte;
-	var fmtlen: _uint;
+    {   var bd, end, tree: Ast;
+	var nlterm: boolean;
 
 	bd = expr.GetLHS(0);
-	tree = ParseFormat(bd);
+	tree, nlterm = ParseFormat(bd);
+	if nlterm then
+	{   end = format.End(bd, true);
+	    tree = ast.New2(SEQ, 0, tree, end);
+	}
+	lex.Expect(SEMI);
 	return tree;
     }
 
@@ -1465,8 +1460,12 @@ import format;
 	    is KASSERT then tree = Assert();
 	    is KFORMAT then tree = FormatStmt();
 	    is KPRINT  then tree = PrintStmt();
-	    is SEMI then    {}		// ignore extra semicolons
-	    else lex.ErrorT(BADSTMTT, tok);
+	    else
+	    {   if tok != SEMI then
+		{   lex.ErrorT(BADSTMTT, tok);
+		    tok = lex.Skip(skiplist);
+		}
+	    }
 	}
 	return tree;
     }
@@ -1884,10 +1883,7 @@ import format;
 	{   if tok == SEMI then
 		tok = Next();
 	    else
-	    {   if tok == ID then
-		    lex.ErrorI(BADSTMTI, lex.Ident);
-		else
-		    lex.ErrorT(BADSTMTT, tok);
+	    {   lex.ErrorT(BADSTMTT, tok);
 		tok = lex.Skip(skiplist);
 	    }
 	}

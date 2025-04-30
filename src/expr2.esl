@@ -1402,9 +1402,32 @@ ast.Dump(tree);
 		    }
 		    arg = Bool(s@.type);
 		    if arg != 0 then
-			arg = ast.Adjust(arg, s@.type);
-		    tree = ast.Child(tree, arg);
-		    s = s@.next;
+		    {   if ast.IsMultiCall(arg) then
+			{   // call that returns multiple values
+			    var rvlst: Symb;
+			    var argi: Ast;
+			    var i: _uint;
+			    rvlst = arg@.symb@.retvlist;
+			    i = 0;
+			    loop
+			    {	argi = ast.New1(GETRV, rvlst@.type, arg);
+				argi@.width = rvlst@.type@.width;
+				argi.valu = i;
+				argi = ast.Adjust(argi, s@.type);
+				tree = ast.Child(tree, argi);
+				s = s@.next;
+				rvlst = rvlst@.next;
+			      exit rvlst == 0 || s == 0;
+				i += 1;
+			    }
+			}
+			else	// single value
+			{
+			    arg = ast.Adjust(arg, s@.type);
+			    tree = ast.Child(tree, arg);
+			    s = s@.next;
+			}
+		    }
 		    tok = Token;
 		  exit tok != COMMA;
 		    tok = Next();
@@ -1543,14 +1566,20 @@ ast.Dump(tree);
 				    }
 				}
 				else
-				    lex.ErrorS(UNDEFFIELD, lex.Ident);
+				{   lex.ErrorS(UNDEFFIELD, lex.Ident);
+				    tree = 0;	// give up
+				}
 				tok = Next();
 			    }
 			    else
-{
-				lex.Error(NOTRECORD);
-type.DumpT(t, false); err.nl();
-}
+			    {	if tok == ID then
+				{   lex.ErrorS(UNDEFFIELD, lex.Ident);
+				    tok = Next();
+				}
+				else
+				    lex.Error(NOTRECORD);
+				tree = 0;	// give up
+			    }
 			}
 		    }
 		    else lex.Error(EXPECTID);

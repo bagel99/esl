@@ -79,6 +79,14 @@ package fmt
 	buf = bd.need(n);
 	buf[0:n] = s@;
     }
+
+    proc (bd: pDesc) nulterm()
+    {   var buf: @_memory;
+
+	buf = bd.need(1);
+	buf[0] = 0;
+    }
+
     /*
      * chr
      */
