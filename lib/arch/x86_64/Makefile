@@ -5,8 +5,8 @@ LIB=    ../..
 
 OBJS=	assert.o \
 	sqrti2.o sqrti4.o sqrti8.o \
-	memcmp.o memlen.o
-	
+	memcmp.o memlen.o mem.o
+
 all:	lib.a
 
 lib.a:	$(OBJS)

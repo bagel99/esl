@@ -4,7 +4,8 @@
 
 package fmt
 {
-    type FmtType: (NONE, CHR, STR, DEC, BIN, OCT, LHEX, UHEX, PTR, FLT, EXP);
+    type FmtType:
+	(NONE, CHR, STR, BOOL, DEC, BIN, OCT, LHEX, UHEX, PTR, FLT, EXP, CUST);
     type AlignType: (NONE, LEFT, RIGHT, CENTER);
     type FmtSpec:
     {   ftype:	FmtType;	// 0..3
@@ -42,6 +43,12 @@ package fmt
 	.zeros=	false
     };
 
+    const FmtChar: [FmtType]_byte =
+    {	[NONE]='?', [CHR]='c', [STR]='s', [BOOL]='t', [DEC]='d', [BIN]='b',
+	[OCT]='o', [LHEX]='x', [UHEX]='X', [PTR]='p', [FLT]='f', [EXP]='e',
+	[CUST]='%'
+    };
+
     const FBEG: _byte = '[';
     const FEND: _byte = ']';
     const FPFX: _byte = '!';
@@ -49,9 +56,10 @@ package fmt
     /*
      * The following are forwards resolved in fmtcvt.
      */
-    proc (bd: pDesc) string(s: @[]_byte, n: _uint);
+    proc (bd: pDesc) string(s: _address, n: _uint);
     proc (bd: pDesc) chrfmt(c: _byte, spec: FmtSpec);
-    proc (bd: pDesc) strfmt(s: @[]_byte, spec: FmtSpec);
+    proc (bd: pDesc) strfmt(s: _address, spec: FmtSpec);
+    proc (bd: pDesc) strnfmt(s: _address, spec: FmtSpec, n: _uint);
     proc (bd: pDesc) binfmt(n: _uint, spec: FmtSpec);
     proc (bd: pDesc) octfmt(n: _uint, spec: FmtSpec);
     proc (bd: pDesc) hexfmt(n: _uint, spec: FmtSpec);
@@ -74,8 +82,6 @@ package fmt
     }
     proc PrintFmtSpec(buf: @[16]_byte, spec: @FmtSpec): _uint
     {   var i: _uint;
-	const typechar: [FmtType]_byte =
-	    {'?', 'd', 'b', 'o', 'x', 'X', 'p', 'c', 's', 'f', 'e' };
 	const alignchar: [AlignType]_byte = { '?', '<', '>', '^' };
 	i = 0;
 	if spec.align != NONE then
@@ -92,7 +98,7 @@ package fmt
 	{	buf[i] = '.'; i += 1;
 		i += PutDigits(buf[i:], spec.prec);
 	}
-	buf[i] = typechar[spec.ftype];
+	buf[i] = FmtChar[spec.ftype];
 	return i+1;
     }
 }

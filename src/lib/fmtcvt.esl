@@ -49,8 +49,7 @@ package fmt
 	var buf: @_memory;
 
 	sw = spec.width;		// spec width
-	if sw == 0 then tw = cw; else tw = sw;
-	if tw < cw then cw = tw;	// maybe truncated
+	if sw == 0 then tw = cw; else tw = _max(sw, cw);
 //fde.str("tw="); fde.uint(tw); fde.str(" sw="); fde.uint(sw);
 //fde.str(" cw="); fde.uint(cw); fde.nl();
 	buf = bd.need(tw);
@@ -123,11 +122,18 @@ package fmt
 	buf[0:w] = s[0:w];
     }
 
-    proc (bd: pDesc) strfmt(s: @[]_byte, spec: FmtSpec)
+    proc (bd: pDesc) strfmt(s:_address, spec: FmtSpec)
     {   var nw: _uint;
 	var buf: @_memory;
 
 	nw = strwid(s);
+	buf, nw, _ = bd.padding(nw, LEFT, spec);
+	strcvt(buf[0:], nw, s);
+    }
+
+    proc (bd: pDesc) strnfmt(s: _address, spec: FmtSpec, nw: _uint)
+    {   var buf: @_memory;
+
 	buf, nw, _ = bd.padding(nw, LEFT, spec);
 	strcvt(buf[0:], nw, s);
     }
@@ -215,8 +221,10 @@ package fmt
     /*
      * hex
      */
-    const hexchr: [16]_byte =
+    const hexuchr: [16]_byte =
 	{'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+    const hexlchr: [16]_byte =
+	{'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
 
     proc hexwid(n: _uint): _uint
     {
@@ -224,11 +232,21 @@ package fmt
     	return (67 - _clz(n)) / 4;
     }
 
-    proc hexcvt(buf: @_memory, w: _uint, n: _uint)
+    proc hexucvt(buf: @_memory, w: _uint, n: _uint)
     {
 	loop
 	{   w = w-1;
-	    buf[w] = hexchr[_uint(n)&0xF];
+	    buf[w] = hexuchr[_uint(n)&0xF];
+	  exit w == 0;
+	    n = n >> 4;
+	}
+    }
+
+    proc hexlcvt(buf: @_memory, w: _uint, n: _uint)
+    {
+	loop
+	{   w = w-1;
+	    buf[w] = hexlchr[_uint(n)&0xF];
 	  exit w == 0;
 	    n = n >> 4;
 	}
@@ -252,7 +270,10 @@ package fmt
 	{   _set(buf[i:zw], '0');
 	    i += zw;
 	}
-	hexcvt(buf[i:], tw-i, n);
+	if spec.ftype == UHEX then
+	    hexucvt(buf[i:], tw-i, n);
+	else
+	    hexlcvt(buf[i:], tw-i, n);
    }
 
     /*
@@ -275,7 +296,7 @@ package fmt
 	buf[0:2] = '0x';
 	i = 2;
 	_set(buf[2:zw], '0');
-	hexcvt(buf[2+zw:], tw-2+zw, n);
+	hexucvt(buf[2+zw:], tw-2+zw, n);
     }
 
     /*
@@ -290,20 +311,14 @@ package fmt
 	return k;
     }
 
-    proc deccvt(buf: @_memory, w: _uint, n: _uint): _uint
+    proc deccvt(buf: @_memory, w: _uint, n: _uint)
     {	var i: _uint;
 
-	i = w-1;
-	if n == 0 then
-	    buf[i] = '0';
-	else
-	{   while n != 0 do
-	    {   buf[i] = _byte((n % 10) + '0');
-		n = n / 10;
-		i -= 1;
-	    }
+	while w > 0 do
+	{   w -= 1;
+	    buf[w] = _byte((n % 10) + '0');
+	    n = n / 10;
 	}
-	return i;
     }
 
     proc (bd: pDesc) udecfmt(n: _uint, spec: FmtSpec)
@@ -355,6 +370,15 @@ package fmt
 	    i += zw;
 	}
 	deccvt(buf[i:], tw-i, n);
+    }
+
+    proc (bd: pDesc) boolfmt(x: boolean, spec: FmtSpec)
+    {   var nw, tw: _uint;
+	var buf: @_memory;
+
+	if x then nw = 4; else nw = 5;
+	buf, tw, _ = bd.padding(nw, RIGHT, spec);
+	if x then buf[0:tw] = 'true'; else buf[0:tw] = 'false';
     }
 
     import float;

@@ -24,7 +24,7 @@ package lex
 	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,	RECURSIVE,  BADCONV,
 	RANGEERR,   PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
 	LONGNUM,    LONGFRAC,
-	FMTNOSPEC,  FMTNOEXPR,	FMTNOPACK,
+	FMTNOSPEC,  FMTNOEXPR,	FMTNOPACK,  FMTNOARGS,  FMTBADARG,  FMTNOFIND,
 	PROGERROR,  // error statement
 	COMPILER    // internal compiler error
     );
@@ -133,8 +133,11 @@ package lex
 	[LONGNUM] =     "Too many digits in number",
 	[LONGFRAC] =    "Too many digits in fractional part",
 	[FMTNOSPEC] =	"Format lacks spec for expression",
-	[FMTNOEXPR] =	"Format has expression with a spec",
+	[FMTNOEXPR] =	"Format has expression without a spec",
 	[FMTNOPACK] =	"Unable to find 'fmt' package - perhaps not imported",
+	[FMTNOARGS] =	"Custom format routine has wrong number of arguments",
+	[FMTBADARG] =	"Custom format routine argument types are wrong",
+	[FMTNOFIND] =	"Can not find format routine named: ",
 	[PROGERROR] =   "Program defined error: ",
 	[COMPILER] =    "Internal compiler error: "
     };
