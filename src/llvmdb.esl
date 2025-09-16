@@ -4,12 +4,12 @@
  * Use clang's calls to DIBuilder routines (llvm/lib/Analysis/DIBuilder.cpp)
  * in clang/lib/CodeGen/CGDebuginfo.cpp as a reference.
  *
- * Copyright (c) 2010-2017, Brian G. Lucas.  See LICENSE file.
+ * Copyright (c) 2010-2025, Brian G. Lucas.  See LICENSE file.
  */
 
 package llvmdb
 {
-    alias llvm.f as f;
+    alias llvm.bdo as bdo;
     type DW_TAG:
     (
 	Array=1,
@@ -90,65 +90,56 @@ package llvmdb
     proc PTerminator(term: TermT)
     {
 	if term
-	is BRACE then f.str("}\n");
-	is COMMA then f.str(", ");
-	is PAREN then f.str(" )");
+	is BRACE then print bdo, "}\n";
+	is COMMA then print bdo, ", ";
+	is PAREN then print bdo, " )";
     }
 
     proc PSeq(n: seqnoT)
     {
-	f.chr(meta);
-	f.uint(n);
+	print bdo, "[c][d]", meta, n;
     }
+
     proc PMetaSeq(n: seqnoT)
     {
-	PSeq(n);
-	f.str(" = !");
+	print bdo, "[c][d] = !", meta, n;
     }
 
     proc PMetaSeqD(n: seqnoT)
     {
-	PSeq(n);
-	f.str(" = distinct !");
+	print bdo, "[c][d] = distinct !", meta, n;
     }
 
     proc PStart(n: seqnoT, name: @[]_byte)
     {
-        PMetaSeq(n);
-        f.str(name);
-        f.chr('(');
+	print bdo, "[c][d] = ![s](", meta, n, name;
     }
 
     proc PStartDistinct(n: seqnoT, name: @[]_byte)
     {
-        PMetaSeqD(n);
-        f.str(name);
-        f.chr('(');
+	print bdo, "[c][d] = distinct ![s](", meta, n, name;
     }
 
     proc PString(s: @[]_byte, term: TermT)
     {
-        f.str(s);
+	print bdo, "[s]", s;
 	PTerminator(term);
     }
 
     proc PQString(s: @[]_byte, term: TermT)
     {
-        f.chr('"');
-        f.str(s);
-        f.chr('"');
+	print bdo, "\"[s]\"", s;
 	PTerminator(term);
     }
 
     proc PStringD(s1: @[]_byte, s2: @[]_byte, delim: _byte, term: TermT)
     {
-        f.chr('"');
+        print bdo, "\"";
 	if s1 != 0 then
-	{   f.str(s1);
-	    f.chr(delim);
-	}
-	if s2 != 0 then f.str(s2);
-	f.chr('"');
+	    print bdo, "[s][c]", s1, delim;
+	if s2 != 0 then
+	    print bdo, "[s]", s2;
+        print bdo, "\"";
 	PTerminator(term);
     }
 
@@ -174,55 +165,49 @@ package llvmdb
 
     proc PUint(n: _uint, term: TermT)
     {
-	f.uint(n);
+	print bdo, "[d]", n;
 	PTerminator(term);
     }
 
     proc PMetaString(s: @[]_byte, term: TermT)
     {
-	f.chr('!');
-        f.chr('"');
-        f.str(s);
-        f.chr('"');
+	print bdo, "[!\"[s]\"", s;
 	PTerminator(term);
     }
 
     proc PMetaRef(n: seqnoT, term: TermT)
     {
-	f.chr('!');
-	f.uint(n);
+	print bdo, "![d]", n;
 	PTerminator(term);
     }
 
     proc PListStart(n: seqnoT)
     {
 	PMetaSeq(n);
-	f.chr('{');
+	print bdo, "{";
     }
 
     proc PNull(term: TermT)
     {
-	f.str("null");
+	print bdo, "null";
 	PTerminator(term);
     }
 
     proc PBoolean(b: boolean, term: TermT)
     {
-	if b then f.str("true"); else f.str("false");
+	if b then print bdo, "true"; else print bdo, "false";
 	PTerminator(term);
     }
 
     proc P32(v: _uint32, term: TermT)
     {
-	f.str("i32 ");
-	f.uint32(v);
+	print bdo, "i32 [d]", v;
 	PTerminator(term);
     }
 
     proc P64(v: _uint64, term: TermT)
     {
-	f.str("i64 ");
-	f.uint64(v);
+	print bdo, "i64 ", v;
 	PTerminator(term);
     }
 
@@ -279,24 +264,23 @@ package llvmdb
 	seqno += 1;  tagt = seqno;
 	PStart(tagt, "DIBasicType");
 	if t@.name != 0 then
-	{   f.str("name: ");  PQString(t@.name@.ident, COMMA);
-	}
-	f.str("size: ");  PUint(t@.width, COMMA);
-	f.str("align: ");  PUint(t@.align, COMMA);
-	f.str("encoding: DW_ATE_");
+	    print bdo, "name: \"[s]\", ", t@.name@.ident;
+	print bdo, "size: [d], align: [d], encoding: DW_ATE_",
+	    t@.width, t@.align;
 	if t@.kind
 	is ENUM, UINT then
 	{   // FIXME: check for boolean
-	    if t == type.booltype then f.str("boolean");
-	    elif t@.width <= 8 then f.str("unsigned_char");
-	    else f.str("unsigned");
+	    if t == type.booltype then print bdo, "boolean";
+	    elif t@.width <= 8 then print bdo, "unsigned_char";
+	    else print bdo, "unsigned";
 	}
 	is SINT then
-	{   if t@.width <= 8 then f.str("signed_char"); else f.str("signed");
+	{   if t@.width <= 8 then print bdo, "signed_char";
+			     else print bdo, "signed";
 	}
-	is REF then f.str("address");
-	is FLOAT then f.str("float");
-	f.str(")\n");
+	is REF then print bdo, "address";
+	is FLOAT then print bdo, "float";
+	print bdo, ")\n";
 	return tagt;
     }
 
@@ -304,34 +288,27 @@ package llvmdb
 			dwat: @[]_byte, t:Type)
     {
 	PStart(tag, "DICompositeType");
-        f.str("tag: DW_TAG_");  PString(dwat, COMMA);
+	print bdo, "tag: DW_TAG_[s], ", dwat;
 	if t@.name != 0 then
-	{   f.str("name: ");  PName(t@.name, COMMA);
+	{   print bdo, "name: "; PName(t@.name, COMMA);
 	}
-	f.str("file: ");  PMetaRef(filenamedir, COMMA);
+	print bdo, "file: ![d], ", filenamedir;
 	if t@.name != 0 then
-	{   f.str("line: ");  PUint(t@.name@.lineno, COMMA);
-	}
-	f.str("size: ");  PUint(t@.width, COMMA);
-	f.str("align: ");  PUint(t@.align, NONE);
+	    print bdo, "line: [d], ", t@.name@.lineno;
+	print bdo, "size: [d], align: [d]", t@.width, t@.align;
 	// FIXME - more to come
 	if from != 0 then
-	{   f.str(", baseType: ");  PMetaRef(from, NONE);
-	}
+	    print bdo, ", baseType: ![d]", from;
 	if members != 0 then
-	{   f.str(", elements: ");  PMetaRef(members, NONE);
-	}
-	f.str(")\n");
+	    print bdo, ", elements: ![d]", members;
+	print bdo, ")\n";
     }
 
     proc PDerivedType(tag: seqnoT, from: seqnoT, dwat: @[]_byte, t:Type)
     {
         PStart(tag, "DIDerivedType");
-        f.str("tag: DW_TAG_");  PString(dwat, COMMA);
-        f.str("baseType: ");  PMetaRef(from, COMMA);
-        f.str("size: ");  PUint(t@.width, COMMA);
-        f.str("align: ");  PUint(t@.align, NONE);
-        f.str(")\n");
+	print bdo, "tag: DW_TAG_[s], baseType: ![d], size: [d], align: [d])\n",
+	    dwat, from, t@.width, t@.align;
     }
 
     proc DefSubRange(t: Type, signed: boolean): seqnoT
@@ -367,11 +344,10 @@ package llvmdb
 	seqno += 1;  tagr = seqno;
 	// emit Subrange
 	PStart(tagr, "DISubrange");
-	f.str("count: ");  PUint(hi-lo+1, NONE);
+	print bdo, "count: [d]", hi-lo+1;
 	if lo != 0 then
-	{   f.str(", lowerBound: ");  PUint(lo, NONE);
-	}
-	f.str(")\n");
+	    print bdo, ", lowerBound: [d]", lo;
+	print bdo, ")\n";
 	return tagr;
     }
 
@@ -380,9 +356,8 @@ package llvmdb
 
 	seqno += 1;  tagc = seqno;
 	PStart(tagc, "DIEnumerator");
-	f.str("name: ");  PQString(s@.ident, COMMA);
-	f.str("value: ");  PUint(s@.const@.valu, NONE);
-	f.str(")\n");
+	print bdo, "name: \"[s]\", value: [d])\n",
+	    s@.ident, s@.const@.valu;
 	return tagc;
     }
 
@@ -529,10 +504,8 @@ package llvmdb
 	while ln != 0 do
 	{
 	    PStart(ln@.tag, "DILocation");
-	    f.str("line: ");  PUint(ln@.lineno, COMMA);
-	    f.str("column: ");  PUint(0, COMMA);
-	    f.str("scope: ");  PMetaRef(ln@.context, NONE);
-	    f.str(")\n");
+	    print bdo, "line: [d], column: [d], scope: ![d])\n",
+		ln@.lineno, 0, ln@.context;
 	    ln = ln@.next;
 	}
 	lnhead = 0;
@@ -558,7 +531,7 @@ package llvmdb
 		lntail@.next = ln;
 	    lntail = ln;
 	}
-	f.str(", !dbg ");
+	print bdo, ", !dbg ";
 	PSeq(tag);
     }
 
@@ -570,17 +543,14 @@ package llvmdb
 	if s@.linkage
 	is LOCAL, FORMAL then
 	{
-	    f.str("\tcall void @llvm.dbg.declare(metadata ");
+	    print bdo, "\tcall void @llvm.dbg.declare(metadata ";
 	    llvm.PType(s@.type);
-	    f.str("* ");
+	    print bdo, "* ";
 	    llvm.PName(s);
-	    f.str(", metadata !");
-	    f.uint(seqno);
-	    f.str(", metadata !");
-	    f.uint(expr);
-	    f.chr(')');
+	    print bdo, ", metadata ![d], metadata ![d])",
+		seqno, expr;
 	    PLine(s@.lineno);
-	    f.nl();
+	    print bdo, "\n";
 	    if s@.linkage != FORMAL then
 	    {   s@.next = 0;
 		if lvtail == 0 then
@@ -598,35 +568,31 @@ package llvmdb
 		seqno += 1;
 		etag = seqno;
 		if s@.linkage != FIXED then
-		{   f.str(", !dbg ");  PMetaRef(etag, NONE);
-		}
-		f.nl();
+		    print bdo, ", !dbg ![d]", etag;
+		print bdo, "\n";
 		ttag = DefType(s@.type);
 		PStart(etag, "DIGlobalVariableExpression");
-		f.str("var: ");  PMetaRef(vtag, COMMA);
-		f.str("expr: !DIExpression())\n");
+		print bdo, "var: ![d], expr: !DIExpression())\n", vtag;
 		s@.dbtag = etag;     // replace with indirect thru GVE
 	    }
 	    else
-	    {   f.nl();
+	    {   print bdo, "\n";
 		ttag = DefType(s@.type);
 	    }
 	    PStartDistinct(vtag, "DIGlobalVariable");
 //	    PStart(s@.dbtag, "DIGlobalVariable");
-	    f.str("name: ");  PFullName(s, COMMA);
-	    f.str("scope: ");  PMetaRef(0, COMMA);
-	    f.str("file: ");  PMetaRef(filenamedir, COMMA);
-	    f.str("line: ");  PUint(s@.lineno, COMMA);
-	    f.str("type: ");  PMetaRef(ttag, COMMA);
-	    f.str("isLocal: ");  PBoolean(s@.linkage == NORMAL, COMMA);
-	    f.str("isDefinition: ");  PBoolean(s@.linkage != EXTERN, NONE);
+	    print bdo, "name: ";  PFullName(s, COMMA);
+	    print bdo, "scope: ![d], file: ![d], line: [d], type: ![d], ",
+		0, filenamedir, s@.lineno, ttag;
+	    print bdo, "isLocal: ";  PBoolean(s@.linkage == NORMAL, COMMA);
+	    print bdo, "isDefinition: ";  PBoolean(s@.linkage != EXTERN, NONE);
 	    if feature.debug < 6 then
-	    {   f.str(", variable: ");
+	    {   print bdo, ", variable: ";
 		llvm.PType(s@.type);
-		f.str("* ");
+		print bdo, "* ";
 		llvm.PName(s);
 	    }
-	    f.str(")\n");
+	    print bdo, ")\n";
 	    // We are re-using the next field in Symb,
 	    // we are done using it, right?
 	    s@.next = 0;
@@ -685,8 +651,7 @@ package llvmdb
 	}
 	// emit SubroutineType
 	PStart(stag, "DISubroutineType");
-	f.str("types: ");  PMetaRef(list, NONE);
-	f.str(")\n");
+	print bdo, "types: ![d])\n", list;
     }
 
     proc ProcStart(ps: Symb)
@@ -707,35 +672,31 @@ package llvmdb
 	    PStartDistinct(subr, "DISubprogram");
 	else
 	    PStart(subr, "DISubprogram");
-	f.str("name: ");  PFullName(ps, COMMA);
-	f.str("scope: ");  PMetaRef(filenamedir, COMMA);
-	f.str("file: ");  PMetaRef(filenamedir, COMMA);
-	f.str("line: ");  PUint(ps@.lineno, COMMA);
-	f.str("type: ");  PMetaRef(stype, COMMA);
-	f.str("isLocal: ");  PBoolean(ps@.linkage != GLOBAL, COMMA);
-	f.str("isDefinition: ");  PBoolean(isdef, COMMA);
-	f.str("scopeLine: ");  PUint(ps@.lineno+1, COMMA);
+	print bdo, "name: ";  PFullName(ps, COMMA);
+	print bdo, "scope: ![d], file: ![d], line: [d], type: ![d], ",
+	    filenamedir, filenamedir, ps@.lineno, stype;
+	print bdo, "isLocal: ";  PBoolean(ps@.linkage != GLOBAL, COMMA);
+	print bdo, "isDefinition: ";  PBoolean(isdef, COMMA);
+	print bdo, "scopeLine: [d], ", ps@.lineno+1;
 	if ps@.parmlist != 0 then
-	{   f.str("flags: ");  PString("DIFlagPrototyped", COMMA);
-	}
-	f.str("isOptimized: ");  PBoolean(false, COMMA);
-	f.str("unit: "); PMetaRef(unit, COMMA);
+	    print bdo, "flags: DIFlagPrototyped, ";
+	print bdo, "isOptimized: ";  PBoolean(false, COMMA);
+	print bdo, "unit: ![d], ", unit;
 /*
-	f.str("function: ");
+	print bdo, "function: ";
 	    llvm.PRetvType(ps@.retvlist, false);
-	    f.str(" (");
+	    print bdo, " (";
 	    s = ps@.parmlist;
 	    while s != 0 do
 	    {   llvm.PType(s@.type);
 		s = s@.next;
-		if s != 0 then f.str(", ");
+		if s != 0 then print bdo, ", ";
 	    }
-	    f.str(")* ");
+	    print bdo, ")* ";
 	    llvm.PName(ps);
 	PTerminator(COMMA);
 */
-	f.str("retainedNodes: ");  PMetaRef(nullmeta, NONE);
-	f.str(")\n");
+	print bdo, "retainedNodes: ![d])\n", nullmeta;
 	ps@.dbtag = subr;	// save tag
 	ps@.next = 0;		// and add to subprogram list
 	if sptail == 0 then
@@ -761,13 +722,10 @@ package llvmdb
 		stag = seqno;
 	    }
 	    PStart(stag, "DILocalVariable");
-	    f.str("name: ");  PName(s, COMMA);
-	    f.str("arg: ");  PUint(argno, COMMA);
-	    f.str("scope: ");  PMetaRef(subr, COMMA);
-	    f.str("file: ");  PMetaRef(filenamedir, COMMA);
-	    f.str("line: ");  PUint(s@.lineno, COMMA);
-	    f.str("type: ");  PMetaRef(ttag, NONE);
-	    f.str(")\n");
+	    print bdo, "name: ";  PName(s, COMMA);
+	    print bdo,
+		"arg: [d], scope: ![d], file: ![d], line: [d], type: ![d])\n",
+		argno, subr, filenamedir, s@.lineno, ttag;
 	    s = s@.next;
 	}
 	// output return variable descriptors
@@ -781,12 +739,9 @@ package llvmdb
 		    stag = seqno;
 		}
 		PStart(stag, "DILocalVariable");
-		f.str("name: ");  PName(s, COMMA);
-		f.str("scope: ");  PMetaRef(subr, COMMA);
-		f.str("file: ");  PMetaRef(filenamedir, COMMA);
-		f.str("line: ");  PUint(s@.lineno, COMMA);
-		f.str("type: ");  PMetaRef(ttag, NONE);
-		f.str(")\n");
+		print bdo, "name: ";  PName(s, COMMA);
+		print bdo, "scope: ![d], file: ![d], line: [d], type: ![d])\n",
+		    subr, filenamedir, s@.lineno, ttag;
 		s = s@.next;
 	    }
 	}
@@ -796,12 +751,9 @@ package llvmdb
 	{   ttag = DefType(s@.type);
 	    stag = s@.dbtag;
 	    PStart(stag, "DILocalVariable");
-	    f.str("name: ");  PName(s, COMMA);
-	    f.str("scope: ");  PMetaRef(subr, COMMA);
-	    f.str("file: ");  PMetaRef(filenamedir, COMMA);
-	    f.str("line: ");  PUint(s@.lineno, COMMA);
-	    f.str("type: ");  PMetaRef(ttag, NONE);
-	    f.str(")\n");
+	    print bdo, "name: ";  PName(s, COMMA);
+	    print bdo, "scope: ![d], file: ![d], line: [d], type: ![d])\n",
+		subr, filenamedir, s@.lineno, ttag;
 	    s = s@.next;
 	}
 	// output line number descriptors
@@ -836,9 +788,7 @@ package llvmdb
 	    dir[i] = 0;
 	}
 	PStart(seqno, "DIFile");
-	f.str("filename: ");  PQString(file, COMMA);
-	f.str("directory: ");  PQString(dir, NONE);
-	f.str(")\n");
+	print bdo, "filename: \"[s]\", directory: \"[s]\")\n", file, dir;
 	if i < lex.PathMax then
 	    dir[i] = '/';   // restore last '/'
     }
@@ -876,22 +826,21 @@ package llvmdb
 //	seqno += 1;  imported = seqno;
 	seqno += 1;  expr = seqno;
 	// emit anchor
-    	f.str("!llvm.dbg.cu = !{!"); f.uint(unit); f.str("}\n");
-	f.str("!llvm.module.flags = !{!1, !2}\n");
-	f.str("!1 = !{i32 2, !\"Dwarf Version\", i32 4}\n");
-	f.str("!2 = !{i32 2, !\"Debug Info Version\", ");
+	print bdo, "!llvm.dbg.cu = !{![d]}\n", unit;
+	print bdo, "!llvm.module.flags = !{!1, !2}\n";
+	print bdo, "!1 = !{i32 2, !\"Dwarf Version\", i32 4}\n";
+	print bdo, "!2 = !{i32 2, !\"Debug Info Version\", ";
 	debugversion = 3;
 	P32(debugversion, BRACE);
 	// emit Compile Unit
 	PStartDistinct(unit, "DICompileUnit");
-	f.str("language: ");  f.str("DW_LANG_C99");     // FIXME
-	f.str(", file: ");  PMetaRef(filenamedir, COMMA);
-	f.str("producer: ");  PQString("ESL Compiler", COMMA);
-	f.str("isOptimized: ");  PBoolean(false, COMMA);   // FIXME
-	f.str("runtimeVersion: ");  PUint(0, COMMA);
-	f.str("emissionKind: "); f.str("FullDebug, ");
-	f.str("globals: ");  PMetaRef(globals, NONE);
-	f.str(")\n");
+	print bdo, "language: DW_LANG_C99, ";     // FIXME
+	print bdo, "file: ![d], ", filenamedir;
+	print bdo, "producer: \"ESL Compiler\", ";
+	print bdo, "isOptimized: ";  PBoolean(false, COMMA);   // FIXME
+	print bdo, "runtimeVersion: [d], ", 0;
+	print bdo, "emissionKind: FullDebug, ";
+	print bdo, "globals: ![d])\n", globals;
 	// file name and directory will be output later
 	// but we must make sure it is tagged with the number
 	// we already referenced
@@ -900,9 +849,10 @@ package llvmdb
 //	filenest[0] = filenamedir;
 //	fileinx = 1;
 	// null meta
-	PMetaSeq(nullmeta);   f.str("{}\n");
+	PMetaSeq(nullmeta);   print bdo, "{}\n";
 	// null expression
-	PStart(expr, "DIExpression");  f.str(")\n");
+	PStart(expr, "DIExpression");
+	print bdo, ")\n";
     }
 
     proc ProgFinish()
@@ -943,7 +893,9 @@ package llvmdb
 	}
 	else
 	    PTerminator(BRACE);
-	f.str("declare void @llvm.dbg.declare(metadata, metadata, metadata) nounwind readnone\n");
+	print bdo,
+	    "declare void @llvm.dbg.declare(metadata, metadata, metadata) "
+	    "nounwind readnone\n";
     }
 }
 // vim: ts=8 sw=4 noet nowrap

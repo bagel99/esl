@@ -1,5 +1,5 @@
-target datalayout = "E-S64-p:64:64:64-a:0:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-i128:128:128"
-target triple = "systemz-unknown-linux"
+target datalayout = "e-p:64:64:64-a:0:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-i128:64:64"
+target triple = "x86_64-unknown-linux-gnu"
 %A.1 = type {i8, i8, i8, i8}
 %A.2 = type {%A.1, i8, i8, [10 x i8]}
 @debug = global %A.2 zeroinitializer, align 1
@@ -12054,10 +12054,10 @@ L.21:
 	%47 = getelementptr %type_TypeNode, ptr %46, i64 0, i32 18
 	%48 = load i8, ptr %47
 	%49 = zext i8 %48 to i64
-	%50 = shl i64 1, 7
+	%50 = shl i64 1, 0
 	%51 = xor i64 %50, -1
 	%52 = and i64 %49, %51
-	%53 = shl i64 1, 7
+	%53 = shl i64 1, 0
 	%54 = or i64 %52, %53
 	%55 = trunc i64 %54 to i8
 	store i8 %55, ptr %47
@@ -12067,10 +12067,10 @@ L.22:
 	%57 = getelementptr %type_TypeNode, ptr %56, i64 0, i32 18
 	%58 = load i8, ptr %57
 	%59 = zext i8 %58 to i64
-	%60 = shl i64 1, 6
+	%60 = shl i64 1, 1
 	%61 = xor i64 %60, -1
 	%62 = and i64 %59, %61
-	%63 = shl i64 1, 6
+	%63 = shl i64 1, 1
 	%64 = or i64 %62, %63
 	%65 = trunc i64 %64 to i8
 	store i8 %65, ptr %57
@@ -12078,7 +12078,7 @@ L.22:
 L.23:
 	%66 = load ptr, ptr %t
 	%67 = getelementptr %type_TypeNode, ptr %66, i64 0, i32 18
-	store i8 192, ptr %67
+	store i8 3, ptr %67
 	br label %L.12
 L.24:
 	%68 = load ptr, ptr %t
@@ -12413,10 +12413,10 @@ L.7:
 	%11 = getelementptr %type_TypeNode, ptr %10, i64 0, i32 18
 	%12 = load i8, ptr %11
 	%13 = zext i8 %12 to i64
-	%14 = shl i64 1, 7
+	%14 = shl i64 1, 0
 	%15 = xor i64 %14, -1
 	%16 = and i64 %13, %15
-	%17 = shl i64 1, 7
+	%17 = shl i64 1, 0
 	%18 = or i64 %16, %17
 	%19 = trunc i64 %18 to i8
 	store i8 %19, ptr %11
@@ -12426,10 +12426,10 @@ L.8:
 	%21 = getelementptr %type_TypeNode, ptr %20, i64 0, i32 18
 	%22 = load i8, ptr %21
 	%23 = zext i8 %22 to i64
-	%24 = shl i64 1, 6
+	%24 = shl i64 1, 1
 	%25 = xor i64 %24, -1
 	%26 = and i64 %23, %25
-	%27 = shl i64 1, 6
+	%27 = shl i64 1, 1
 	%28 = or i64 %26, %27
 	%29 = trunc i64 %28 to i8
 	store i8 %29, ptr %21
@@ -12437,7 +12437,7 @@ L.8:
 L.9:
 	%30 = load ptr, ptr %t
 	%31 = getelementptr %type_TypeNode, ptr %30, i64 0, i32 18
-	store i8 192, ptr %31
+	store i8 3, ptr %31
 	br label %L.6
 L.5:
 	br label %L.6
@@ -15805,26 +15805,25 @@ L.56:
 	%271 = getelementptr %type_TypeNode, ptr %270, i64 0, i32 18
 	%272 = load i8, ptr %271
 	%273 = zext i8 %272 to i64
-	%274 = lshr i64 %273, 7
-	%275 = trunc i64 %274 to i1
-	%276 = zext i1 %275 to i64
-	%277 = trunc i64 %276 to i8
-	%278 = icmp ne i8 %277, 0
-	br i1 %278, label %L.58, label %L.57
+	%274 = trunc i64 %273 to i1
+	%275 = zext i1 %274 to i64
+	%276 = trunc i64 %275 to i8
+	%277 = icmp ne i8 %276, 0
+	br i1 %277, label %L.58, label %L.57
 L.58:
 	call void @sys_fildes_chr(i32 2, i8 73)
 	br label %L.57
 L.57:
-	%279 = load ptr, ptr %t
-	%280 = getelementptr %type_TypeNode, ptr %279, i64 0, i32 18
-	%281 = load i8, ptr %280
-	%282 = zext i8 %281 to i64
-	%283 = lshr i64 %282, 6
-	%284 = trunc i64 %283 to i1
-	%285 = zext i1 %284 to i64
-	%286 = trunc i64 %285 to i8
-	%287 = icmp ne i8 %286, 0
-	br i1 %287, label %L.60, label %L.59
+	%278 = load ptr, ptr %t
+	%279 = getelementptr %type_TypeNode, ptr %278, i64 0, i32 18
+	%280 = load i8, ptr %279
+	%281 = zext i8 %280 to i64
+	%282 = lshr i64 %281, 1
+	%283 = trunc i64 %282 to i1
+	%284 = zext i1 %283 to i64
+	%285 = trunc i64 %284 to i8
+	%286 = icmp ne i8 %285, 0
+	br i1 %286, label %L.60, label %L.59
 L.60:
 	call void @sys_fildes_chr(i32 2, i8 79)
 	br label %L.59
@@ -15832,53 +15831,53 @@ L.59:
 	call void @sys_fildes_chr(i32 2, i8 32)
 	br label %L.55
 L.55:
-	%288 = load ptr, ptr %t
-	%289 = getelementptr %type_TypeNode, ptr %288, i64 0, i32 19
-	%290 = load i8, ptr %289
-	%291 = icmp ne i8 %290, 0
-	br i1 %291, label %L.62, label %L.61
+	%287 = load ptr, ptr %t
+	%288 = getelementptr %type_TypeNode, ptr %287, i64 0, i32 19
+	%289 = load i8, ptr %288
+	%290 = icmp ne i8 %289, 0
+	br i1 %290, label %L.62, label %L.61
 L.62:
-	%292 = getelementptr [4 x i8], ptr @S.690
-	%293 = bitcast ptr %292 to ptr
-	call void @sys_fildes_str(i32 2, ptr %293)
-	%294 = load ptr, ptr %t
-	%295 = getelementptr %type_TypeNode, ptr %294, i64 0, i32 19
-	%296 = load i8, ptr %295
-	%297 = zext i8 %296 to i64
-	%298 = getelementptr [4 x ptr], ptr @type_wrapstr, i64 0, i64 %297
-	%299 = load ptr, ptr %298
-	%300 = bitcast ptr %299 to ptr
-	call void @sys_fildes_str(i32 2, ptr %300)
+	%291 = getelementptr [4 x i8], ptr @S.690
+	%292 = bitcast ptr %291 to ptr
+	call void @sys_fildes_str(i32 2, ptr %292)
+	%293 = load ptr, ptr %t
+	%294 = getelementptr %type_TypeNode, ptr %293, i64 0, i32 19
+	%295 = load i8, ptr %294
+	%296 = zext i8 %295 to i64
+	%297 = getelementptr [4 x ptr], ptr @type_wrapstr, i64 0, i64 %296
+	%298 = load ptr, ptr %297
+	%299 = bitcast ptr %298 to ptr
+	call void @sys_fildes_str(i32 2, ptr %299)
 	call void @sys_fildes_chr(i32 2, i8 32)
 	br label %L.61
 L.61:
-	%301 = load ptr, ptr %t
-	%302 = getelementptr %type_TypeNode, ptr %301, i64 0, i32 29
-	store i8 1, ptr %302
-	%303 = load ptr, ptr %t
-	%304 = getelementptr %type_TypeNode, ptr %303, i64 0, i32 5
-	%305 = load ptr, ptr %304
-	%306 = icmp ne ptr %305, null
-	br i1 %306, label %L.64, label %L.63
+	%300 = load ptr, ptr %t
+	%301 = getelementptr %type_TypeNode, ptr %300, i64 0, i32 29
+	store i8 1, ptr %301
+	%302 = load ptr, ptr %t
+	%303 = getelementptr %type_TypeNode, ptr %302, i64 0, i32 5
+	%304 = load ptr, ptr %303
+	%305 = icmp ne ptr %304, null
+	br i1 %305, label %L.64, label %L.63
 L.64:
-	%307 = load ptr, ptr %t
-	%308 = getelementptr %type_TypeNode, ptr %307, i64 0, i32 5
-	%309 = load ptr, ptr %308
-	store ptr %309, ptr %s
-	%310 = getelementptr [13 x i8], ptr @S.691
-	%311 = bitcast ptr %310 to ptr
-	call void @sys_fildes_str(i32 2, ptr %311)
+	%306 = load ptr, ptr %t
+	%307 = getelementptr %type_TypeNode, ptr %306, i64 0, i32 5
+	%308 = load ptr, ptr %307
+	store ptr %308, ptr %s
+	%309 = getelementptr [13 x i8], ptr @S.691
+	%310 = bitcast ptr %309 to ptr
+	call void @sys_fildes_str(i32 2, ptr %310)
 	br label %L.65
 L.65:
+	%311 = load ptr, ptr %s
+	call void @symb_DumpS(ptr %311)
 	%312 = load ptr, ptr %s
-	call void @symb_DumpS(ptr %312)
-	%313 = load ptr, ptr %s
-	%314 = getelementptr %symb_SymbNode, ptr %313, i64 0, i32 0
-	%315 = load ptr, ptr %314
-	store ptr %315, ptr %s
-	%316 = load ptr, ptr %s
-	%317 = icmp eq ptr %316, null
-	br i1 %317, label %L.66, label %L.67
+	%313 = getelementptr %symb_SymbNode, ptr %312, i64 0, i32 0
+	%314 = load ptr, ptr %313
+	store ptr %314, ptr %s
+	%315 = load ptr, ptr %s
+	%316 = icmp eq ptr %315, null
+	br i1 %316, label %L.66, label %L.67
 L.67:
 	call void @sys_fildes_chr(i32 2, i8 9)
 	br label %L.65
@@ -15889,9 +15888,9 @@ L.63:
 L.6:
 	br label %L.1
 L.3:
-	%318 = getelementptr [4 x i8], ptr @S.692
-	%319 = bitcast ptr %318 to ptr
-	call void @sys_fildes_str(i32 2, ptr %319)
+	%317 = getelementptr [4 x i8], ptr @S.692
+	%318 = bitcast ptr %317 to ptr
+	call void @sys_fildes_str(i32 2, ptr %318)
 	br label %L.1
 L.1:
 	br label %return
@@ -43083,60 +43082,59 @@ L.0:
 	%19 = getelementptr %type_TypeNode, ptr %18, i64 0, i32 18
 	%20 = load i8, ptr %19
 	%21 = zext i8 %20 to i64
-	%22 = lshr i64 %21, 7
-	%23 = trunc i64 %22 to i1
-	%24 = zext i1 %23 to i64
-	%25 = trunc i64 %24 to i8
-	%26 = icmp ne i8 %25, 0
-	br i1 %26, label %L.2, label %L.1
+	%22 = trunc i64 %21 to i1
+	%23 = zext i1 %22 to i64
+	%24 = trunc i64 %23 to i8
+	%25 = icmp ne i8 %24, 0
+	br i1 %25, label %L.2, label %L.1
 L.2:
-	%27 = load ptr, ptr @llvm_f
-	%28 = getelementptr [10 x i8], ptr @S.1144
-	%29 = bitcast ptr %28 to ptr
-	call void @bout_BufIO_str(ptr %27, ptr %29)
+	%26 = load ptr, ptr @llvm_f
+	%27 = getelementptr [10 x i8], ptr @S.1144
+	%28 = bitcast ptr %27 to ptr
+	call void @bout_BufIO_str(ptr %26, ptr %28)
 	br label %L.1
 L.1:
-	%30 = load ptr, ptr %load
-	%31 = getelementptr %ast_AstNode, ptr %30, i64 0, i32 9
-	%32 = load ptr, ptr %31
-	call void @llvm_PType(ptr %32)
-	%33 = load ptr, ptr @llvm_f
-	%34 = getelementptr [3 x i8], ptr @S.1145
-	%35 = bitcast ptr %34 to ptr
-	call void @bout_BufIO_str(ptr %33, ptr %35)
-	%36 = getelementptr [7 x i8], ptr @S.1146
-	%37 = bitcast ptr %36 to ptr
-	%38 = load ptr, ptr %load
-	call void @llvm_Print(ptr %37, ptr %38)
-	%39 = load ptr, ptr %offs
-	%40 = getelementptr %ast_AstNode, ptr %39, i64 0, i32 9
-	%41 = load ptr, ptr %40
-	%42 = getelementptr %type_TypeNode, ptr %41, i64 0, i32 0
-	%43 = load ptr, ptr %42
-	%44 = getelementptr %type_TypeNode, ptr %43, i64 0, i32 24
-	%45 = load i8, ptr %44
-	%46 = icmp ne i8 %45, 0
-	br i1 %46, label %L.4, label %L.3
+	%29 = load ptr, ptr %load
+	%30 = getelementptr %ast_AstNode, ptr %29, i64 0, i32 9
+	%31 = load ptr, ptr %30
+	call void @llvm_PType(ptr %31)
+	%32 = load ptr, ptr @llvm_f
+	%33 = getelementptr [3 x i8], ptr @S.1145
+	%34 = bitcast ptr %33 to ptr
+	call void @bout_BufIO_str(ptr %32, ptr %34)
+	%35 = getelementptr [7 x i8], ptr @S.1146
+	%36 = bitcast ptr %35 to ptr
+	%37 = load ptr, ptr %load
+	call void @llvm_Print(ptr %36, ptr %37)
+	%38 = load ptr, ptr %offs
+	%39 = getelementptr %ast_AstNode, ptr %38, i64 0, i32 9
+	%40 = load ptr, ptr %39
+	%41 = getelementptr %type_TypeNode, ptr %40, i64 0, i32 0
+	%42 = load ptr, ptr %41
+	%43 = getelementptr %type_TypeNode, ptr %42, i64 0, i32 24
+	%44 = load i8, ptr %43
+	%45 = icmp ne i8 %44, 0
+	br i1 %45, label %L.4, label %L.3
 L.4:
-	%47 = load ptr, ptr @llvm_f
-	%48 = getelementptr [9 x i8], ptr @S.1147
-	%49 = bitcast ptr %48 to ptr
-	call void @bout_BufIO_str(ptr %47, ptr %49)
-	%50 = load ptr, ptr @llvm_f
-	%51 = load ptr, ptr %offs
-	%52 = getelementptr %ast_AstNode, ptr %51, i64 0, i32 9
-	%53 = load ptr, ptr %52
-	%54 = getelementptr %type_TypeNode, ptr %53, i64 0, i32 0
-	%55 = load ptr, ptr %54
-	%56 = getelementptr %type_TypeNode, ptr %55, i64 0, i32 11
-	%57 = load i32, ptr %56
-	%58 = zext i32 %57 to i64
-	%59 = udiv i64 %58, 8
-	call void @bout_BufIO_uint64(ptr %50, i64 %59)
+	%46 = load ptr, ptr @llvm_f
+	%47 = getelementptr [9 x i8], ptr @S.1147
+	%48 = bitcast ptr %47 to ptr
+	call void @bout_BufIO_str(ptr %46, ptr %48)
+	%49 = load ptr, ptr @llvm_f
+	%50 = load ptr, ptr %offs
+	%51 = getelementptr %ast_AstNode, ptr %50, i64 0, i32 9
+	%52 = load ptr, ptr %51
+	%53 = getelementptr %type_TypeNode, ptr %52, i64 0, i32 0
+	%54 = load ptr, ptr %53
+	%55 = getelementptr %type_TypeNode, ptr %54, i64 0, i32 11
+	%56 = load i32, ptr %55
+	%57 = zext i32 %56 to i64
+	%58 = udiv i64 %57, 8
+	call void @bout_BufIO_uint64(ptr %49, i64 %58)
 	br label %L.3
 L.3:
-	%60 = load ptr, ptr %load
-	call void @llvm_PEndLine(ptr %60)
+	%59 = load ptr, ptr %load
+	call void @llvm_PEndLine(ptr %59)
 	br label %return
 return:
 	ret void
@@ -43276,7 +43274,7 @@ L.12:
 	%83 = getelementptr %type_TypeNode, ptr %82, i64 0, i32 18
 	%84 = load i8, ptr %83
 	%85 = zext i8 %84 to i64
-	%86 = lshr i64 %85, 6
+	%86 = lshr i64 %85, 1
 	%87 = trunc i64 %86 to i1
 	%88 = zext i1 %87 to i64
 	%89 = trunc i64 %88 to i8

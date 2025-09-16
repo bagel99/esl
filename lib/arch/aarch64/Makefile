@@ -1,33 +1,37 @@
-AS=	aarch64-linux-gnu-as
-LD=	aarch64-linux-gnu-ld
-DUMP= 	aarch64-linux-gnu-objdump
-NM=	aarch64-linux-gnu-nm
-ESLC=	eslc
-OPT=	-O3
+ARCH=aarch64
 
-OBJS=	memset.o memlen.o memcpy.o memcmp.o mem.o
+OBJS=	assert.o memset.o memlen.o memcpy.o memcmp.o mem.o \
+		sqrti2.o sqrti4.o sqrti8.o
 
-%.o: %.S
-	$(AS) -o $@ $<
+all:	lib.a
 
-%.dis: %.out
-	$(DUMP) -d $< >$@
+lib.a:	$(OBJS)
+	ar cr lib.a $(OBJS)
 
-%.map: %.out
-	$(NM) -n $< >$@
+assert.o: ../generic/assert.c
+	gcc -O3 -c ../generic/assert.c -o assert.o
 
-%.out: %.o
-#	$(GCC) -Wl,-M -nostdlib -nostartfiles crt0.o $< memset.o -o $@
-	$(LD) -Ttest.ld crt0.o $< lib.a -o $@
+sqrti2.o: ../generic/sqrti2.c
+	gcc -O3 -c ../generic/sqrti2.c -o sqrti2.o
 
-%.s: %.esl
-	$(ESLC) -maarch64 $<
+sqrti4.o: ../generic/sqrti4.c
+	gcc -O3 -c ../generic/sqrti4.c -o sqrti4.o
 
-all:	crt0.o lib.a
+sqrti8.o: ../generic/sqrti8.c
+	gcc -O3 -c ../generic/sqrti8.c -o sqrti8.o
 
-lib.a:	$(OBJS)	
-	$(AR) r lib.a $(OBJS)
+memset.o: memset.S
+	gcc -c memset.S -o memset.o
+
+memcmp.o: memcmp.S
+	gcc -c memcmp.S -o memcmp.o
+
+memlen.o: memlen.S
+	gcc -c memlen.S -o memlen.o
+
+memcpy.o: memcpy.S
+	gcc -c memcpy.S -o memcpy.o
 
 clean:
-	rm -f *.o *.a
+	rm -f lib.a *.s *.o
 

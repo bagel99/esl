@@ -1299,16 +1299,20 @@ import format;
 	var i: _uint = 0;	// where we are in the format string
 	var n: _uint;		// how much of the format string we just used
 	tree = ast.New(SEQ, 0);
-	while tok == COMMA do
-	{   tok = lex.Next();
-	    exp = expr.Bool(0);
-	    n, rtf = format.NextFormat(bd, fmtstr, i, exp);
+	var nextarg: boolean = true;
+	while i < fmtlen do
+	{
+	    if nextarg then
+	    {	if tok == COMMA then
+		{   tok = lex.Next();
+		    exp = expr.Bool(0);
+		    tok = Token;
+		}
+		else
+		    exp = 0;
+	    }
+	    n, rtf, nextarg = format.NextFormat(bd, fmtstr, i, exp);
 	    i += n;
-	    tree = ast.Child(tree, rtf);
-	    tok = Token;
-	}
-	if i < fmtlen then
-	{   n, rtf = format.NextFormat(bd, fmtstr, i, 0);
 	    tree = ast.Child(tree, rtf);
 	}
 	return tree, fmtstr[fmtlen-2] == '\n';

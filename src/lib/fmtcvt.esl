@@ -284,7 +284,7 @@ package fmt
 	return _uintptr?size * 2;
     }
 
-    proc (bd: pDesc) ptrfmt(n: _uint, spec: FmtSpec)
+    proc (bd: pDesc) ptrfmt(p: _address, spec: FmtSpec)
     {   var nw, xw, tw, cw, zw, i: _uint;
 	var buf: @_memory;
 
@@ -296,7 +296,7 @@ package fmt
 	buf[0:2] = '0x';
 	i = 2;
 	_set(buf[2:zw], '0');
-	hexucvt(buf[2+zw:], tw-2+zw, n);
+	hexucvt(buf[2+zw:], tw-2+zw, _uintptr(p));
     }
 
     /*
@@ -381,7 +381,7 @@ package fmt
 	if x then buf[0:tw] = 'true'; else buf[0:tw] = 'false';
     }
 
-    import float;
+    import _float;
 
     proc (bd: pDesc) dfltfmt(x: _float64, spec: FmtSpec)
     {	var tw, sw, pw, nw, xw, zw, i: _uint;
@@ -389,7 +389,7 @@ package fmt
 	var sign: _byte = 0;
 	var n: _uint64;
 
-	if x.getSign() != 0 then
+	if getSign(x) != 0 then
 	    sign = '-';
 	elif spec.sign then
 	    sign = '+';
@@ -397,11 +397,11 @@ package fmt
 	pw = spec.prec;
 	xw = 1;			// extra width, decimal point
 	i = 0;
-	if x.isNaN() then
+	if isNaN(x) then
 	{   buf, _, _ = bd.padding(3, RIGHT, spec);
 	    buf[0:3] = 'NaN';
 	}
-	elif x.isInf() then
+	elif isInf(x) then
 	{   buf, _, _ = bd.padding(4, RIGHT, spec);
 	    if sign == 0 then sign = '+';
 	    buf[0] = sign;
@@ -469,7 +469,7 @@ package fmt
 	sw = spec.width;
 	pw = spec.prec;
 	x = _abs(x);
-	e2 = x.getTrueExp();
+	e2 = getTrueExp(x);
 //	var t: _int;
 //	t = (e2 * 1000) / 3317;
 //fde.str(" n="); fde.hex64(n); fde.nl();

@@ -1,5 +1,5 @@
 target datalayout = "E-S64-p:64:64:64-a:0:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-i128:128:128"
-target triple = "systemz-unknown-linux"
+target triple = "ppc64-unknown-linux"
 %A.1 = type {i8, i8, i8, i8}
 %A.2 = type {%A.1, i8, i8, [10 x i8]}
 @debug = global %A.2 zeroinitializer, align 1

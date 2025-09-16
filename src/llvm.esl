@@ -1,15 +1,16 @@
-// Copyright (c) 2009-2018, Brian G. Lucas.  See LICENSE file.
+// Copyright (c) 2009-2025, Brian G. Lucas.  See LICENSE file.
 
 // Convert AST to LLVM assembly
-import bout;
+import prt;
+
 package llvm
 {
+    var bdo: prt.pDesc;
     alias lex.StringRange as StringRange;
     const package_delimiter:Char = '_';
     const anon_prefix: []Char = "A.";
     const scon_prefix: []Char = "S.";
     type file: sys.fildes;
-    var  f: bout.pBufIO;
     proc PType(t: Type);					// forward
     proc PName(s: Symb);					// forward
     proc PRetvType(rs: Symb, extend: boolean);			// forward
@@ -138,32 +139,31 @@ package llvm
     proc PEndLine(node: Ast)
     {
 	if feature.gflag then llvmdb.PLine(node@.lineno);
-	f.nl();
+	print bdo, "\n";
     }
 
     proc PPkgPfx(s: Symb)
     {   if s@.package != 0 then PPkgPfx(s@.package);    // recursive
-	f.str(s@.ident);
-	f.chr(package_delimiter);
+	print bdo, "[s][c]", s@.ident, package_delimiter;
     }
 
     proc PTypeName(t: Type)
     {   var s: Symb;
 
-	f.str("%");
+	print bdo, "%";
 	s = t@.name;
 	if s != 0 then
 	{   if s@.package != 0 then
 		PPkgPfx(s@.package);
-	    f.str(s@.ident);
+	    print bdo, "[s]", s@.ident;
 	}
 	else
-	{   f.str(anon_prefix);
+	{   print bdo, "[s]", anon_prefix;
 	    if t@.antag == 0 then
 	    {   Aseqno += 1;
 		t@.antag = Aseqno;
 	    }
-	    f.uint16(t@.antag);
+	    print bdo, "[d]", t@.antag;
 	}
     }
 
@@ -171,30 +171,18 @@ package llvm
     {   var s: Symb;
 
 	if t@.noepad || t@.nofpad then
-	    f.chr('<');
-	f.str("{");
+	    print bdo, "<";
+	print bdo, "{";
 	s = t@.list;
 	while s != 0 do
 	{   PType(s@.type);
 	    s = s@.next;
 	  exit s == 0;
-	    f.str(", ");
+	    print bdo, ", ";
 	}
-	f.str("}");
+	print bdo, "}";
 	if t@.noepad || t@.nofpad then
-	    f.chr('>');
-    }
-
-    proc PWidth(t: Type)
-    {
-	if t != 0 then
-	    f.uint(t@.width/target.ByteSize);
-    }
-
-    proc PAlign(t: Type)
-    {
-	if t != 0 then
-	    f.uint(t@.align/target.ByteSize);
+	    print bdo, ">";
     }
 
     // FIXME - make a feature switch?
@@ -215,21 +203,16 @@ package llvm
 	    else
 		size = target.isize(size);
 	}
-	f.chr('i'); f.uint(size);
-    }
-
-    proc PBitSize(t: Type)
-    {
-	f.chr('i'); f.uint(t@.size);
+	print bdo, "i[d]", size;
     }
 
     proc PRefType(t: Type)
     {
 	if feature.genptr then
-	    f.str("ptr");
+	    print bdo, "ptr";
 	else
 	{   PType(t);
-	    f.chr('*');
+	    print bdo, "*";
 	}
     }
 
@@ -242,8 +225,8 @@ package llvm
 	    is FLOAT then
 	    {
 		if t@.size
-		is 32 then f.str("float");
-		is 64 then f.str("double");
+		is 32 then print bdo, "float";
+		is 64 then print bdo, "double";
 	    }
 	    is REF then	PRefType(t@.base);
 	    is RECORD then
@@ -260,27 +243,18 @@ package llvm
 	    {   // LLVM doesn't do bit pack arrays, handle as integers
 		if t@.packed then PScalarSize(t);
 		else
-		{   f.chr('[');
-		    f.uint32(t.Span());
-		    f.str(" x ");
+		{   print bdo, "[[[d] x ", t.Span();
 		    PType(t@.base);
-		    f.chr(']');
+		    print bdo, "]";
 		}
 	    }
 	    is REFPROC then
 	    {   PRetvType(t@.list@.retvlist, false);
-		f.chr(' ');
+		print bdo, " ";
 		PParmTypes(t@.list@.parmlist);
-		f.chr('*');
+		print bdo, "*";
 	    }
 	}
-    }
-
-    proc PFType(t: Type)
-    {
-	if t@.size
-	is 32 then f.str("f32");
-	is 64 then f.str("f64");
     }
 
     proc PDerefType(t: Type)
@@ -304,9 +278,9 @@ package llvm
 		if size < type.wordtype@.size then
 		{
 		    if t@.kind == SINT then
-			f.str(" signext");
+			print bdo, " signext";
 		    else
-			f.str(" zeroext");
+			print bdo, " zeroext";
 		}
 	    }
 	}
@@ -317,36 +291,36 @@ package llvm
 
 	if rs != 0 then
 	{   if  rs@.next != 0 then		// has multiple returned values
-	    {   f.str(" { ");
+	    {   print bdo, " { ";
 		loop
 		{   PType(rs@.type);
 		    rs = rs@.next;
 		  exit rs == 0;
-		    f.str(", ");
+		    print bdo, ", ";
 		}
-		f.str(" }");
+		print bdo, " }";
 	    }
 	    else				// single returned value
 	    {   t = rs@.type;
 		if extend then PExtend(t);
-		f.chr(' ');
+		print bdo, " ";
 		PType(t);
 	    }
 	}
 	else					// has no returned value
-	    f.str(" void");
+	    print bdo, " void";
     }
 
     proc PParmTypes(s: Symb)
     {
-	f.chr('(');
+	print bdo, "(";
 	while s != 0 do
 	{   PType(s@.type);
 	    s = s@.next;
 	  exit s == 0;
-	    f.str(", ");
+	    print bdo, ", ";
 	}
-	f.chr(')');
+	print bdo, ")";
     }
 
     proc ConstantRef(node: Ast)
@@ -354,15 +328,13 @@ package llvm
 
 	v = node@.valu;
 	if v == 0 then
-	    f.str("null");
+	    print bdo, "null";
 	else
-	{   f.str("inttoptr(");
+	{   print bdo, "inttoptr(";
 	    PType(type.wordtype);
-	    f.chr(' ');
-	    f.uint64(v);
-	    f.str(" to ");
+	    print bdo, " [d] to ", v;
 	    PType(node@.type);
-	    f.chr(')');
+	    print bdo, ")";
 	}
     }
 
@@ -370,24 +342,24 @@ package llvm
     {
 	if node@.type@.kind
 	is UTYPE then
-	    f.str("void");
+	    print bdo, "void";
 	is FLOAT, REF, ARRAY, RECORD, REFPROC then
 	    PType(node@.type);
 	else
 	{
 //if node@.width != node@.type.width then
 //{   err.str("Node width disagreement\n"); ast.Dump(node); }
-	    f.str("i"); f.uint(node@.width);
+	    print bdo, "i[d]", node@.width;
 	}
     }
 
     proc NodeRefType(node: Ast)
     {
 	if feature.genptr then
-	    f.str("ptr");
+	    print bdo, "ptr";
 	else
 	{   NodeType(node);
-	    f.chr('*');
+	    print bdo, "*";
 	}
     }
 
@@ -400,63 +372,46 @@ package llvm
 	bs = bt@.name;
 	if bs@.package != 0 then
 	    PPkgPfx(bs@.package);
-	f.str(bs@.ident);
-	f.chr(package_delimiter);
+	print bdo, "[s][c]", bs@.ident, package_delimiter;
     }
 
     proc PName(s: Symb)
     {
 	if s@.linkage
 	is FORMAL, LOCAL then
-	{   f.chr('%');
-	    f.str(s@.ident);
-	}
+	    print bdo, "%[s]", s@.ident;
 	is NORMAL, INLINE, NOINLINE then
-	{   f.chr('@');
+	{   print bdo, "@";
 	    if s@.kind == PROC && s@.bound then
 		PMethod(s);
 	    else
 	    {   if s@.package != 0 then
 		    PPkgPfx(s@.package);
 	    }
-	    f.str(s@.ident);
+	    print bdo, "[s]", s@.ident;
 	}
 	is GLOBAL, WEAK, EXTERN then
-	{   f.chr('@');
+	{   print bdo, "@";
             if s@.altsymb != 0 then
-                f.str(s@.altsymb@.ident);
+                print bdo, "[s]", s@.altsymb@.ident;
 	    else
 	    {   if s@.kind == PROC && s@.bound then
 		    PMethod(s);
-		f.str(s@.ident);
+		print bdo, "[s]", s@.ident;
 	    }
 	}
 	is FIXED then
-	{   f.str("inttoptr(");
+	{   print bdo, "inttoptr(";
 	    PType(type.wordtype);
-	    f.chr(' ');
-	    f.uint64(s@.xaddr);
-	    f.str(" to ");
+	    print bdo, " [d] to ", s@.xaddr;
 	    if s@.kind == PROC then
 	    {   PRetvType(s@.retvlist, true);
 		PParmTypes(s@.parmlist);
 	    }
 	    else
 		PType(s@.type);
-	    f.str("*)");
+	    print bdo, "*)";
 	}
-    }
-
-    proc PTempName(n: seqnoT)
-    {
-	f.chr('%');
-	f.uint(n-1);
-    }
-
-    proc PLocalName(s: @[]_byte)
-    {
-	f.chr('%');
-	f.str(s);
     }
 
     proc NodeName(node: Ast)
@@ -466,7 +421,7 @@ package llvm
 	if s != 0 then
 	    PName(s);
 	else
-	    f.str("__NoName__");
+	    print bdo, "__NoName__";
     }
 
     // FIXME - this doesn't give bit exact results for float64.
@@ -480,8 +435,7 @@ package llvm
 		hex += 0x2000_0000;
 	    hex = hex & 0xFFFF_FFFF_E000_0000;
 	}
-        f.str("0x");
-        f.hex64(hex);
+	print bdo, "[!018X]", hex;
     }
 
     proc NodeDst(node: Ast)
@@ -493,7 +447,7 @@ package llvm
 	    ConstantRef(node);
 	}
 	is VAR, DCLVAR then NodeName(node);
-	else PTempName(node@.seqno);
+ 	else print bdo, "%[d]", node@.seqno - 1;
     }
 
     proc NodeSrc(node: Ast)
@@ -501,19 +455,16 @@ package llvm
 	if node@.op
 	is CONST then
 	{   if node@.type@.kind
-	    is ENUM, UINT then f.uint64(node@.valu);
-	    is SINT then       f.int64(_int64(node@.valu));
+	    is ENUM, UINT then print bdo, "[d]", node@.valu;
+	    is SINT then       print bdo, "[d]", _int64(node@.valu);
 	    is REF, REFPROC then ConstantRef(node);
-	    is ARRAY, RECORD then f.uint64(node@.valu);	    // packed?
+	    is ARRAY, RECORD then print bdo, "[d]", node@.valu;	    // packed?
 	}
 	is FCON then PFloat(node);
 	is SCON, CLIST then
-	{   f.chr('@');
-	    f.str(scon_prefix);
-	    f.uint32(_uint32(node@.valu));
-	}
+	    print bdo, "@[s][d]", scon_prefix, _uint32(node@.valu);
 	is VAR then NodeName(node);
-	else        PTempName(node@.seqno);
+ 	else print bdo, "%[d]", node@.seqno - 1;
     }
 
     proc Print(fmt: @[]Char, anode: Ast)
@@ -547,35 +498,41 @@ package llvm
 		}
 		if c
 		is 'K' then PType(t);
-		is 'G' then PFType(t);
-		is 'A' then PAlign(t);
-		is 'B' then PWidth(t);
-		is 'C' then PBitSize(t);
+		is 'G' then
+		{   if t@.size
+		    is 32 then print bdo, "f32";
+		    is 64 then print bdo, "f64";
+		}
+		is 'A' then
+		{   if t != 0 then
+			print bdo, "[d]", t@.align/target.ByteSize;
+		}
+		is 'B' then
+		{   if t != 0 then
+		    print bdo, "[d]", t@.width/target.ByteSize;
+		}
+		is 'C' then print bdo, "i[d]", t@.size;
 		is 'R' then PDerefType(t);
 		is 'T' then NodeType(node);
 		is 'U' then NodeRefType(node);
 		is 'I' then NodeName(node);
 		is 'N' then NodeSrc(node);
 		is 'D' then NodeDst(node);
-		is 'X' then f.uint32(node@.width);
+		is 'X' then print bdo, "[d]", node@.width;
 		is 'W' then PType(type.wordtype);	// target word type
 		is 'S' then // string name
-		{   f.chr('@');
-		    f.str(scon_prefix);
-		    f.uint32(_uint32(node@.valu));
-		}
-		is '%' then f.chr(c);
+		    print bdo, "@[s][d]", scon_prefix, _uint32(node@.valu);
+		is '%' then print bdo, "[c]", c;
 	    }
 	    else
-		f.chr(c);
+		print bdo, "[c]", c;
 	    i += 1;
 	}
     }
 
     proc PRetValName(n: ast.NSubNodes)
     {
-	f.str("%rv.");
-	f.uint(n);
+	print bdo, "%rv.[d]", n;
     }
 
     proc Alignment(t: Type)
@@ -583,9 +540,7 @@ package llvm
 
 	n = t@.align;
 	if n >= target.ByteSize then
-	{   f.str(", align ");
-	    f.uint(n / target.ByteSize);
-	}
+	    print bdo, ", align [d]", n / target.ByteSize;
     }
 
     proc Section(s: Symb, comma: boolean)
@@ -593,18 +548,13 @@ package llvm
 	if s != 0 then
 	{
 	    if comma then
-	    {
-		f.str(",");
-	    }
-	    f.str(" section \"");
-	    f.str(s@.ident);
-	    f.str("\"");
+		print bdo, ",";
+	    print bdo, " section \"[s]\"", s@.ident;
 	}
     }
 
     proc DclType(t: Type)
     {   var s: Symb;
-	var size: type.BitSize;
 
 	if t != 0 && !t@.printed then
 	{   if t@.kind
@@ -627,15 +577,14 @@ package llvm
 		}
 		// now deal with the record
 		PTypeName(t);
-		f.str(" = type ");
+		print bdo, " = type ";
 		if t@.packed then
 		{   // LLVM doesn't do bit pack records, handle as integers
-		    size = target.isize(t@.size);
-		    f.str("i"); f.uint(size);
+		    print bdo, "i[d]", target.isize(t@.size);
 		}
 		else
 		    PRecordType(t);
-		f.nl();
+		print bdo, "\n";
 	    }
 	}
     }
@@ -648,11 +597,11 @@ package llvm
 	if ps@.linkage
 	is EXTERN then isdefine = false;
 	is FIXED then return;	// never referred to by name?
-	if isdefine then f.str("define"); else f.str("declare");
+	if isdefine then print bdo, "define"; else print bdo, "declare";
 	if ps@.linkage
-	is NORMAL, INLINE, NOINLINE then f.str(" internal");
-	is WEAK then f.str(" weak");
-	is EXTERN then f.str(" external");
+	is NORMAL, INLINE, NOINLINE then print bdo, " internal";
+	is WEAK then print bdo, " weak";
+	is EXTERN then print bdo, " external";
 	PRetvType(ps@.retvlist, true);
 	Print(" %I(", node);
 	s = ps@.parmlist;
@@ -660,15 +609,12 @@ package llvm
 	{   PType(s@.type);
 	    PExtend(s@.type);
 	    if isdefine then
-	    {   f.str(" %");
-		f.str(s@.ident);
-		f.chr('$');
-	    }
+		print bdo, " %[s]$", s@.ident;
 	    s = s@.next;
 	  exit s == 0;
-	    f.str(", ");
+	    print bdo, ", ";
 	}
-	f.str(")");
+	print bdo, ")";
 	ps@.declared = true;
     }
 
@@ -676,35 +622,33 @@ package llvm
     {   var i: 0..lex.StringMax;
 	var c: Char;
 
-	if prefix then f.chr('c');
-	f.chr('"');
+	if prefix then print bdo, "c";
+	print bdo,"\"";
 	i = 0;
 	while i < n do
 	{   c = s[i];
 	    if c < ' ' || c >= 0x7F || c == '"' || c == '\\' then
-	    {   f.chr('\\');
-		f.hex8(c);
-	    }
+		print bdo, "\\[02X]", c;
 	    else
-		f.chr(c);
+		print bdo, "[c]", c;
 	    i += 1;
 	}
-	f.chr('"');
+	print bdo, "\"";
     }
 
     proc DefaultInitializer(t: Type)
     {
 	if t@.kind
 	is ENUM, UINT, SINT then
-	    f.uint(0);
+	    print bdo, "0";
 	is FLOAT then
-	    f.str("0.0");
+	    print bdo, "0.0";
 	is REF then
-	    f.str("zeroinitializer");   // FIXME: "null" ?
+	    print bdo, "zeroinitializer";   // FIXME: "null" ?
 	is ARRAY, RECORD then
-	    f.str("zeroinitializer");
+	    print bdo, "zeroinitializer";
 	is REFPROC then
-	    f.str("null");
+	    print bdo, "null";
     }
 
     proc Constant(node: Ast)
@@ -718,14 +662,14 @@ package llvm
 	    is CONST then
 	    {   if t@.kind
 		is REF, REFPROC then ConstantRef(node);
-		is SINT then f.int64(_int64(node@.valu));
+		is SINT then print bdo, "[d]", _int64(node@.valu);
 		is ARRAY, RECORD then
 		{   if t.packed then
-			f.uint64(node@.valu);
+			print bdo, "[d]", node@.valu;
 		    else
-			f.str("zeroinitializer");
+			print bdo, "zeroinitializer";
 		}
-		else         f.uint64(node@.valu);
+		else         print bdo, "[d]", node@.valu;
 	    }
 	    is FCON then PFloat(node);
 	    is SCON then
@@ -739,35 +683,35 @@ package llvm
 	    {   if t@.kind
 		is RECORD then
 		{   if t@.noepad || t@.nofpad then
-			f.chr('<');
-		    f.str("{ ");
+			print bdo, "<";
+		    print bdo, "{ ";
 		    i = 0;
 		    loop
 		    {
 		        PType(node@.child[i]@.type);
-			f.str(" ");
+			print bdo, " ";
 			Constant(node@.child[i]);
 			i += 1;
 		      exit i >= node@.num;
-			f.str(", ");
+			print bdo, ", ";
 		    }
-		    f.str(" }");
+		    print bdo, " }";
 		    if t@.noepad || t@.nofpad then
-			f.chr('>');
+			print bdo, ">";
 		}
 		is ARRAY then
-		{   f.str("[ ");
+		{   print bdo, "[[ ";
 		    i = 0;
 		    loop
 		    {
 		        PType(node@.child[i]@.type);
-			f.str(" ");
+			print bdo, " ";
 			Constant(node@.child[i]);
 			i += 1;
 		      exit i >= node@.num;
-			f.str(", ");
+			print bdo, ", ";
 		    }
-		    f.str(" ]");
+		    print bdo, " ]";
 		}
 	    }
 	    is BYREF then
@@ -816,11 +760,12 @@ package llvm
 		{   if rhs == 0 && feature.zerol then
 			rhs = ast.Const(node@.type, 0);
 		    if rhs != 0 then     // initialized local
-		    {   f.nl();
+		    {   print bdo, "\n";;
 			// FIXME: Print("store %T %N", rhs);
 			GenSub(rhs);
-			f.str("\tstore ");
-			NodeType(rhs); f.chr(' ');
+			print bdo, "\tstore ";
+			NodeType(rhs);
+			print bdo, " ";
 			NodeSrc(rhs);
 			Print(", %U %D", node);
 		    }
@@ -860,7 +805,7 @@ package llvm
 	    if feature.gflag then
 		llvmdb.DefVar(s);
 	    else
-		f.nl();
+		print bdo, "\n";
 	}
     }
 
@@ -875,11 +820,9 @@ package llvm
 	if node@.type != 0 then
 	    n = StringRange(node@.type.Span());
 	else    // no type
-	{
 	    n = zstr.len(node@.symb@.ident, lex.StringMax);
-	}
 	PString(node@.symb@.ident, n, true);
-	f.nl();
+	print bdo, "\n";
     }
 
     proc DclAggregate(node: Ast)
@@ -888,7 +831,7 @@ package llvm
 	Print("%S = internal constant %K ", node);
 	Constant(node);
 	// FIXME: Alignment(node@.type)?
-	f.nl();
+	print bdo, "\n";
     }
 
     proc ConstByRef(node: Ast): boolean
@@ -935,42 +878,41 @@ package llvm
 	    Alignment(s@.type);
 	    Section(s@.section, true);
 	}
-	f.nl();
+	print bdo, "\n";
     }
 
     proc PLabel(n: seqnoT)
     {
-	f.str("L.");
-	f.uint(n);
+	print bdo, "L.[d]", n;
     }
 
     proc Label(n: seqnoT)
     {
 	PLabel(n);
-	f.str(":\n");
+	print bdo, ":\n";
 	labthis = n;
     }
 
     proc RefLabel(n: seqnoT)
     {
-	f.str("label %");
+	print bdo, "label %";
 	PLabel(n);
     }
 
     proc Branch(n: seqnoT)
     {
-	f.str("\tbr ");
+	print bdo, "\tbr ";
 	RefLabel(n);
-	f.nl();
+	print bdo, "\n";
     }
 
     proc BranchConditional(node: Ast, ntrue: seqnoT, nfalse: seqnoT)
     {
-	f.str("\tbr i1 ");
+	print bdo, "\tbr i1 ";
 	NodeSrc(node);
-	f.str(", ");
+	print bdo, ", ";
 	RefLabel(ntrue);
-	f.str(", ");
+	print bdo, ", ";
 	RefLabel(nfalse);
 	PEndLine(node);
     }
@@ -979,11 +921,9 @@ package llvm
     {
 	GenSub(node@.child[0]);
 	Print("\tcall void @_assert(%W ", node);
-	f.uint64(node@.valu);
+	print bdo, "[d]", node@.valu;
 	Print(", [0 x i8]* %N, %W ", node@.child[0]);
-	f.str("");
-	f.uint16(node@.lineno);
-	f.str(")\n");
+	print bdo, "[d])\n", node@.lineno;
 	UseIntrinsic(ASSERT, 0, 0);
     }
 
@@ -1025,7 +965,7 @@ package llvm
 	labend = Lseqno;  Lseqno += 1;
 	Print("\tswitch %T %N, ", node@.child[0]);
 	RefLabel(labelse);
-	f.str(" [\n");
+	print bdo, " [[\n";
 	// first pass through all the "is" nodes to generate labels
 	i = 1;
 	while i < node@.num -1 do
@@ -1047,10 +987,9 @@ package llvm
 		    }
 		    while lo <= hi do
 		    {   Print("\t\t%0T ", node);
-			f.uint32(_uint32(lo));
-			f.str(", ");
+			print bdo, "[d], ", _uint32(lo);
 			RefLabel(isnode@.seqno);
-			f.nl();
+			print bdo, "\n";
 			lo += 1;
 		    }
 		    j += 1;
@@ -1058,7 +997,7 @@ package llvm
 	    }
 	    i += 1;
 	}
-	f.str("\t]\n");
+	print bdo, "\t]\n";
 	// second pass through all the "is" nodes to generate the code
 	i = 1;
 	while i < node@.num -1 do
@@ -1129,14 +1068,12 @@ package llvm
 	Label(labend);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = phi i1 [ ", node);
-	if isand then f.str("false"); else f.str("true");
-	f.str(", %");
+	if isand then print bdo, "false"; else print bdo, "true";
+	print bdo, ", %";
 	PLabel(lablhs);
-	f.str(" ], [ ");
-	PTempName(node@.child[1]@.seqno);
-	f.str(", %");
+	print bdo, " ], [[ %[d], %", node@.child[1]@.seqno - 1;
 	PLabel(labrhs);
-	f.str(" ]\n");
+	print bdo, " ]\n";
 	return false;
     }
 
@@ -1501,7 +1438,7 @@ package llvm
     {   var n: StringRange;
 
 	if node == 0 then
-	    f.str("\"\"");
+	    print bdo, "\"\"";
 	else
 	{   n = StringRange(zstr.len(node@.symb@.ident, lex.StringMax));
 	    PString(node@.symb@.ident, n, false);
@@ -1523,8 +1460,7 @@ package llvm
 	}
 	PRetvType(rs, false);
 	Print(" %0N, ", node);
-	f.uint32(_uint32(node@.valu));
-	f.nl();
+	print bdo, "[d]\n", _uint32(node@.valu);
     }
 
     // FIXME: re-factor to merge stuff with Call()
@@ -1536,18 +1472,18 @@ package llvm
 	{   GenSub(node@.child[i]);
 	    i += 1;
 	}
-	f.chr('\t');
+	print bdo, "\t";
 	if node@.symb != 0 then		// has return value
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
-	f.str("call");
+	print bdo, "call";
 	PRetvType(node@.symb, false);
-	f.str(" asm sideeffect ");
+	print bdo, " asm sideeffect ";
 	PStringCon(node@.child[0]);
-	f.str(", ");
+	print bdo, ", ";
 	PStringCon(node@.child[1]);
-	f.str(" (");
+	print bdo, " (";
 	i = 2;
 	if node@.num > i then
 	{   loop
@@ -1555,10 +1491,10 @@ package llvm
 		Print("%T %N", node@.child[i]);
 		i += 1;
 	      exit i >= node@.num;
-		f.str(", ");
+		print bdo, ", ";
 	    }
 	}
-	f.str(")\n");
+	print bdo, ")\n";
     }
 
     // Declare parameter types and return value types
@@ -1585,13 +1521,13 @@ package llvm
 	{   GenSub(node@.child[i]);
 	    i += 1;
 	}
-	f.chr('\t');
+	print bdo, "\t";
 	if node@.symb@.retvlist != 0 then       // has return value(s)
 	{   node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("%N = ", node);
 	}
-	if feature.tcall then f.str("tail ");
-	f.str("call");
+	if feature.tcall then print bdo, "tail ";
+	print bdo, "call";
 	PRetvType(node@.symb@.retvlist, false);
 	if indirect then
 	{   Print(" %0N(", node);
@@ -1607,10 +1543,10 @@ package llvm
 		Print("%T %N", node@.child[i]);
 		i += 1;
 	      exit i >= node@.num;
-		f.str(", ");
+		print bdo, ", ";
 	    }
 	}
-	f.str(")\n");
+	print bdo, ")\n";
 	if node@.symb@.forward then
 	    lex.ErrorI(FORWPROC, node@.symb@.ident);
     }
@@ -1661,7 +1597,7 @@ package llvm
 		if ps@.linkage == EXTERN && !ps@.declared then
 		{   DclParmRetv(ps);
 		    DclProc(node);
-		    f.chr('\n');
+		    print bdo, "\n";
 		}
 	    }
 	    is ASM then return;     // ignore SCONs under an ASM
@@ -1705,21 +1641,21 @@ package llvm
 	    // Now declare the procedure with its parameters
 	    DclProc(node);
 	    if ps@.linkage == EXTERN || ps@.linkage == FIXED then
-	    {	f.nl();
+	    {	print bdo, "\n";
 		return;	// no code follows
 	    }
 	    if feature.noinl || ps@.linkage == NOINLINE then
-		f.str(" noinline");
+		print bdo, " noinline";
 	    elif ps@.linkage == INLINE then
-		f.str(" alwaysinline");
+		print bdo, " alwaysinline";
 	    if feature.size != NO then
 	    {   if feature.size == MIN then
-		    f.str(" minsize");
-		f.str(" optsize");
+		    print bdo, " minsize";
+		print bdo, " optsize";
 	    }
-	    f.str(" nounwind");
+	    print bdo, " nounwind";
 	    Section(ps@.section, false);
-	    f.str(" {\n");
+	    print bdo, " {\n";
 	    Pseqno += 1;
 	    Tseqno = 1;
 	    Lseqno = 0;
@@ -1728,24 +1664,22 @@ package llvm
 	    rs = ps@.retvlist;
 	    i = 0;
 	    while rs != 0 do
-	    {   f.chr('\t');
+	    {   print bdo, "\t";
 		if ps@.retv then
-		    PLocalName(rs@.ident);
+		    print bdo, "%[s]", rs@.ident;
 		else
 		    PRetValName(i);
-		f.str(" = alloca ");
+		print bdo, " = alloca ";
 		PType(rs@.type);
-		f.nl();
+		print bdo, "\n";
 		if ps@.retv then
-		{   f.str("\tstore ");
+		{   print bdo, "\tstore ";
 		    PType(rs@.type);
-		    f.chr(' ');
+		    print bdo, " ";
 		    DefaultInitializer(rs@.type);
-		    f.chr(',');
+		    print bdo, ",";
 		    PRefType(rs@.type);
-		    f.chr(' ');
-		    PLocalName(rs@.ident);
-		    f.nl();
+		    print bdo, " %[s]\n", rs@.ident;
 		}
 		i += 1;
 		rs = rs@.next;
@@ -1753,47 +1687,39 @@ package llvm
 	    // allocate and load parameters
 	    s = ps@.parmlist;
 	    while s != 0 do
-	    {   f.str("\t%"); f.str(s@.ident);
-		f.str(" = alloca ");
+	    {   print bdo, "\t%[s] = alloca ", s@.ident;
 		PType(s@.type);
-		f.nl();
-		f.str("\tstore ");
+		print bdo, "\n\tstore ";
 		PType(s@.type);
-		f.chr(' ');
-		PLocalName(s@.ident);
-		f.str("$, ");
+		print bdo, " %[s]$, ", s@.ident;
 		PRefType(s@.type);
-		f.chr(' ');
-		PLocalName(s@.ident);
-		f.nl();
+		print bdo, " %[s]\n", s@.ident;
 		if feature.gflag then llvmdb.DefVar(s);
 		s = s@.next;
 	    }
 	    // allocate all locals (including nested) at the top
 	    DclLocal(node@.child[0]);
 	    if !GenSub(node@.child[0]) then
-	    {   f.str("\tbr label %return");
+	    {   print bdo, "\tbr label %return";
 		PEndLine(node);
 	    }
-	    f.str("return:\n");
+	    print bdo, "return:\n";
 	    rs = ps@.retvlist;
 	    if rs != 0 then
 	    {   // load up returned values
 		i = 0;
 		while rs != 0 do
-		{   f.chr('\t');
-		    PTempName(Tseqno+i);
-		    f.str(" = load ");
+		{   print bdo, "\t%[d] = load ", Tseqno+i-1;
 		    PType(rs@.type);
-		    f.str(", ");
+		    print bdo, ", ";
 		    PRefType(rs@.type);
-		    f.chr(' ');
+		    print bdo, " ";
 		    if symb.IsAnon(rs@.ident) then
 			PRetValName(i);
 		    else
-			PLocalName(rs@.ident);
+			print bdo, "%[s]", rs@.ident;
 //		    PEndLine(node);	//FIXME: wrong line number
-		    f.nl();
+		    print bdo, "\n";
 		    i += 1;
 		    rs = rs@.next;
 		}
@@ -1802,41 +1728,34 @@ package llvm
 		if rs@.next != 0 then   // multiple returned values
 		{   // first, must insert each value into aggregate
 		    loop
-		    {   f.str("\t%mrv"); f.uint(i);
-			f.str(" = insertvalue");
+		    {   print bdo, "\t%mrv[d] = insertvalue", i;
 			PRetvType(ps@.retvlist, false);
 			if i == 0 then
-			    f.str(" undef");
+			    print bdo, " undef";
 			else
-			{   f.str(" %mrv"); f.uint(i-1);
-			}
-			f.chr(',');
+			    print bdo, " %mrv[d]", i-1;
+			print bdo, ",";
 			PType(rs@.type);
-			f.chr(' ');
-			PTempName(Tseqno+i);
-			f.chr(',');
-			f.uint(i);
-			f.nl();
+			print bdo, " %[d],[d]\n", Tseqno+i-1, i;
 			i += 1;
 			rs = rs@.next;
 		      exit rs == 0;
 		    }
 		    // finally return the aggregate
-		    f.str("\tret ");
+		    print bdo, "\tret ";
 		    PRetvType(ps@.retvlist, false);
-		    f.str(" %mrv"); f.uint(i-1);
+		    print bdo, " %mrv[d]", i-1;
 		}
 		else		    // only one returned value
-		{   f.str("\tret ");
+		{   print bdo, "\tret ";
 		    PType(rs@.type);
-		    f.chr(' ');
-		    PTempName(Tseqno+i);
+		    print bdo, " %[d]", Tseqno+i-1;
 		}
 	    }
 	    else
-		f.str("\tret void");
+		print bdo, "\tret void";
 	    PEndLine(node);
-	    f.str("}\n");
+	    print bdo, "}\n";
 	}
     }
 
@@ -1847,7 +1766,7 @@ package llvm
 	GenSub(node@.child[1]);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = ", node);
-	f.str(op);
+	print bdo, "[s]", op;
 	Print(" %T %0N, %1N", node);
 	PEndLine(node);
 	return false;
@@ -1868,7 +1787,7 @@ package llvm
 	GenSub(node@.child[1]);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = ", node);
-	f.str(op);
+	print bdo, "[s]", op;
 	Print(" %0T %0N, %1N", node);
 	PEndLine(node);
 	return true;
@@ -1879,7 +1798,7 @@ package llvm
 	GenSub(node@.child[0]);
 	node@.seqno = Tseqno;  Tseqno += 1;
 	Print("\t%N = ", node);
-	f.str(op);
+	print bdo, "[s]", op;
 	if usebitsize then
 	    Print(" %0C %0N to %C", node);
 	else
@@ -1966,13 +1885,13 @@ package llvm
 	    load@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = load ", load);
 	    if offs@.type@.base@.io.in then
-		f.str("volatile ");
+		print bdo, "volatile ";
 	    PType(load@.type);
-	    f.str(", ");
+	    print bdo, ", ";
 	    Print("%U %0N", load);
 	    if offs@.type@.base@.unalgn then
-	    {   f.str(", align ");
-		f.uint64(offs@.type@.base@.align/target.ByteSize);
+	    {   print bdo, ", align [d]",
+		    offs@.type@.base@.align/target.ByteSize;
 	    }
 	    PEndLine(load);
 	}
@@ -2004,16 +1923,15 @@ package llvm
 	    rhs = store@.child[n+i];
 	    if lhs != 0 then
 	    {   GenSub(lhs);	// then lhs
-		f.chr('\t');
-		f.str("store ");
+		print bdo, "\tstore ";
 		if lhs@.type@.base@.io.out then
-		    f.str("volatile ");
-		NodeType(rhs); f.chr(' ');
+		    print bdo, "volatile ";
+		NodeType(rhs); print bdo, " ";
 		NodeSrc(rhs);
 		Print(", %K %D", lhs);
 		if lhs@.type@.base@.unalgn then
-		{   f.str(", align ");
-		    f.uint64(lhs@.type@.base@.align/target.ByteSize);
+		{   print bdo, ", align [d]",
+			lhs@.type@.base@.align/target.ByteSize;
 		}
 		PEndLine(store);
 	    }
@@ -2037,7 +1955,7 @@ package llvm
 	    }
 	    node@.seqno = node@.child[0]@.seqno;
 	}
-	f.str("\tbr label %return");
+	print bdo, "\tbr label %return";
 	PEndLine(node);
 	return true;	// always terminates a block
     }
@@ -2075,7 +1993,7 @@ package llvm
 	{   if feature.gflag then llvmdb.ProcStart(node@.symb@);
 	    Procedure(node);
 	    if feature.gflag then llvmdb.ProcFinish(node@.symb@);
-f.flush();
+bdo.flush();
 	}
 	is DCLVAR then DclVar(node);
 	is DCLCON then DclCon(node);
@@ -2098,8 +2016,7 @@ f.flush();
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    Print("\t%N = getelementptr %0R, %0K %0N, %W 0, i32 ", node);
-	    f.uint32(_uint32(node@.valu));
-	    f.nl();
+	    print bdo, "[d]\n", _uint32(node@.valu);
 	}
 	is INDEX then
 	{   GenSub(node@.child[0]);
@@ -2120,7 +2037,7 @@ f.flush();
 	    node@.seqno = Tseqno;  Tseqno += 1;
 	    nextseqno = Tseqno; Tseqno += 1;
 	    Print("\t%N = getelementptr %0R, %0T %0N, %W 0, %1T %1N\n", node);
-	    f.chr('\t'); PTempName(nextseqno);
+	    print bdo, "\t%[d]", nextseqno-1;
 	    Print(" = bitcast %**K* %N to %T\n", node);
 	    node@.seqno = nextseqno;
 	}
@@ -2218,8 +2135,9 @@ f.flush();
 
     proc Gen(fd: file, tree: Ast)
     {   var i: 0..target.IntSizesMax;
+	var endian: _byte;
 
-	f = bout.buffer(fd, 4096);;
+	bdo = prt.open(fd, 4096);
 	// These pointer types might be useful to other packages.
 	pbytetype = type.MakeRef(type.bytetype);
 	i = 0;
@@ -2227,33 +2145,23 @@ f.flush();
 	{   puinttype[i] = type.MakeRef(type.uinttypes[i]);
 	    i += 1;
 	}
-	f.str("target datalayout = \"");
-	if Target.memorder == BE then f.str("E"); else f.str("e");
+	if Target.memorder == BE then endian = 'E'; else endian = 'e';
+	print bdo, "target datalayout = \"[c]", endian;
 	if Target.stkalign != 0 then
-	{   f.str("-S"); f.uint(Target.stkalign);
-	}
-	f.str("-p:");  f.uint(Target.ptr.size);
-	f.str(":");    f.uint(Target.ptr.align);
-	f.str(":");    f.uint(Target.ptr.align);
-	f.str("-a:");  f.uint(Target.rec.size);
-	f.str(":");    f.uint(Target.rec.align);
-	f.str("-i1:"); f.uint(Target.isizes[0].align);
-	f.str(":");    f.uint(Target.isizes[0].align);
-	i = 0;
-	while i < Target.nisize do
-	{   f.str("-i"); f.uint(Target.isizes[i].size);
-	    f.str(":");  f.uint(Target.isizes[i].align);
-	    f.str(":");  f.uint(Target.isizes[i].align);
-	    i += 1;
-	}
-	f.str("\"\ntarget triple = \"");
-	f.str(target.Triple);
-	f.str("\"\n");
+	    print bdo, "-S[d]", Target.stkalign;
+	print bdo, "-p:[d]:[d]:[d]-a:[d]:[d]-i1:[d]:[d]",
+		Target.ptr.size, Target.ptr.align, Target.ptr.align,
+		Target.rec.size, Target.rec.align,
+		Target.isizes[0].align, Target.isizes[0].align;
+	for i from 0 to Target.nisize-1 do
+	    print bdo, "-i[d]:[d]:[d]",	Target.isizes[i].size,
+		Target.isizes[i].align,	Target.isizes[i].align;
+	print bdo, "\"\ntarget triple = \"[s]\"\n", target.Triple;
 	if feature.gflag then llvmdb.ProgStart(tree@.symb@, false);
 	GenSub(tree);
 	DeclareIntrinsics();
 	if feature.gflag then llvmdb.ProgFinish();
-	f.flush();
+	bdo.flush();
     }
 }
 // vim: ts=8 sw=4 noet nowrap

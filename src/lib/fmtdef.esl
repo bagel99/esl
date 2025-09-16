@@ -17,7 +17,7 @@ package fmt
 	sign:	boolean;	// 32
 	prefix:	boolean;	// 33
 	zeros:	boolean;	// 34
-    }: packed, lsb;
+    }: packed, lsb, bits(64);
 
     type DescFlags:
     {	flush:  boolean;
@@ -63,7 +63,7 @@ package fmt
     proc (bd: pDesc) binfmt(n: _uint, spec: FmtSpec);
     proc (bd: pDesc) octfmt(n: _uint, spec: FmtSpec);
     proc (bd: pDesc) hexfmt(n: _uint, spec: FmtSpec);
-    proc (bd: pDesc) ptrfmt(n: _uint, spec: FmtSpec);
+    proc (bd: pDesc) ptrfmt(n: _address, spec: FmtSpec);
     proc (bd: pDesc) udecfmt(n: _uint, spec: FmtSpec);
     proc (bd: pDesc) sdecfmt(sn: _int, spec: FmtSpec);
     proc (bd: pDesc) dfltfmt(x: _float64, spec: FmtSpec);

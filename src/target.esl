@@ -62,6 +62,12 @@ package target
 	{64, 64}, {0, 64},
 	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,64}, {0,0}  }
     };
+    const Model64LEA: ModelT =  // 64-bit little-endian alignment
+    {   LE, LSB, 64, true, 0,
+	5,
+	{64, 64}, {0, 64},
+	{   {8, 8}, {16,16}, {32,32}, {64,64}, {128,64}, {0,0}  }
+    };
     const Model64BEA: ModelT =  // 64-bit big-endian strict alignment
     {   BE, MSB, 64, true, 64,
 	5,
@@ -96,6 +102,8 @@ package target
 	{   "bfin",     "bfin-unknown-unknown",		Model32LEA },
 	{   "ppc32",    "ppc32-unknown-linux",		Model32BEA },
 	{   "ppc64",    "ppc64-unknown-linux",		Model64BEA },
+	{   "ppc32le",  "ppc32le-unknown-linux",	Model32LEA },
+	{   "ppc64le",  "ppc64le-unknown-linux",	Model64LEA },
 	{   "s390x",    "systemz-unknown-linux",	Model64BEA },
 	{   "systemz",  "systemz-unknown-linux",	Model64BEA },
 	{   "aarch64",  "aarch64-unknown-linux",	Model64LEU },

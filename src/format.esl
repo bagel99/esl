@@ -93,6 +93,7 @@ package format
 
 	i = 0;
 	k = 0;
+	spec.ftype = NONE;
 	while s[i] != 0 do
 	{   if s[i] == fmt.FBEG then
 	    {   i += 1;
@@ -114,8 +115,10 @@ package format
 		    {
 			// FIXME - what error message
 		    }
+		    nout = i - k - nnam;	// just output up to here
 		}
-		nout = i - k - nnam;		// just output up to here
+		else	// double [[
+		    nout = i - k;
 		ntot = i;
 		return;
 	    }
@@ -234,12 +237,12 @@ if len <= 1 then len = 256;	// FIXME TEMP
 	return s;
     }
 
-    proc GenCall(bd: Ast, exp: Ast, len: Ast, spec: _uint, fmtproc: Symb): Ast
+    proc GenCall(bd: Ast, exp: Ast, len: Ast, spec: FmtSpec, fmtproc: Symb): Ast
     {	var desc, tree: Ast;
 
 	desc = expr.Load(bd);
 	desc = ast.New1(BYREF, type.MakeRef(desc@.type), desc);
-	tree = ast.New3(CALL, 0, desc, exp, ast.ConstW(spec));
+	tree = ast.New3(CALL, 0, desc, exp, ast.ConstW(_uint64(spec)));
 	if len != 0 then
 	    tree = ast.Child(tree, len);
 	tree@.symb = fmtproc;
@@ -290,7 +293,7 @@ if len <= 1 then len = 256;	// FIXME TEMP
 	fmttype = fmtproc.parmlist.next.type;	// 2nd arg type
 //err.str(namefmt); err.str(" => "); type.DumpT(fmttype, false); err.nl();
 	exp = ast.Adjust(exp, fmttype);
-	tree = GenCall(bd, exp, len, _uint(spec), fmtproc);
+	tree = GenCall(bd, exp, len, spec, fmtproc);
 	return tree;
     }
 
@@ -332,25 +335,31 @@ if len <= 1 then len = 256;	// FIXME TEMP
 	}
 //err.str(name);  err.str(" => "); type.DumpT(parm[1]@.type, false); err.nl();
 	exp = ast.Adjust(exp, parm[1]@.type);
-	tree = GenCall(bd, exp, len, _uint(spec), fmtproc);
+	tree = GenCall(bd, exp, len, spec, fmtproc);
 	return tree;
     }
 
-    proc NextFormat(bd: Ast, fmtstr: @[]_byte, i: _uint, exp: Ast): _uint, Ast
+    proc NextFormat(bd: Ast, fmtstr: @[]_byte, i: _uint, exp: Ast):
+	_uint, Ast, boolean
     {	var nout: _uint;	// number of chars to be output
 	var ntot: _uint;	// total chars scanned
 	var nnam: _uint;	// length of custom format name
 	var spec: fmt.FmtSpec;
 	var fix, cvt, len: Ast;
+	var usedarg: boolean;
 
+//err.str("NextFormat i="); err.uint(i); err.str(" fmt=\"");
+//err.str(fmtstr[i:]); err.str("\"\n");
 	nout, ntot, nnam, spec = format.GetNextFmtSpec(fmtstr[i:]);
-//err.str("NextFormat i="); err.uint(i); err.str(" nout="); err.uint(nout);
+//err.str("nout="); err.uint(nout);
 //err.str(" ntot="); err.uint(ntot); err.str(" nnam="); err.uint(nnam); err.nl();
+//err.str("exp="); err.hex(_uintptr(exp)); err.nl();
+	usedarg = false;
 	fix = 0;
 	if nout > 0 then
 	{   fix = format.String(bd, fmtstr[i:], nout);
 	}
-	if ntot > nout then	// there was a spec
+	if spec.ftype != NONE then	// there was a spec
 	{   if exp != 0 then
 	    {	len = 0;
 		if spec.ftype == STR && spec.prefix then
@@ -371,8 +380,8 @@ if len <= 1 then len = 256;	// FIXME TEMP
 		}
 	    }
 	    else lex.Error(FMTNOEXPR);
+	    usedarg = true;
 	}
-	elif exp != 0 then lex.Error(FMTNOSPEC);
-	return ntot+1, fix;
+	return ntot+1, fix, usedarg;
     }
 }

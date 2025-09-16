@@ -1,0 +1,51 @@
+
+    type float64Bits:
+    {	sign:	0..1;			// 1 bit
+	exp:	0..0x7FF;		// 11 bits
+	frac:	0..0xFFFFFFFFFFFFF;	// 52 bits
+    }: packed, msb, bits(64);
+
+    proc isNaN(x: _float64): boolean
+    {   var b: float64Bits = float64Bits(_uint64(x));
+	return b.exp == 0x7FF && b.frac != 0;
+    }
+    proc getSign(x: _float64): _uint
+    {   var b: float64Bits = float64Bits(_uint64(x));
+	return b.sign;
+    }
+    proc getExp(x: _float64): _uint
+    {   var b: float64Bits = float64Bits(_uint64(x));
+	return _uint(b.exp);
+    }
+    proc getTrueExp(x: _float64): _int
+    {   var b: float64Bits = float64Bits(_uint64(x));
+	return _int(b.exp) - 1023;
+    }
+    proc getFrac(x: _float64): _uint
+    {   var b: float64Bits = float64Bits(_uint64(x));
+	return b.frac;
+    }
+    proc getTrueFrac(x: _float64): _uint
+    {   var b: float64Bits = float64Bits(_uint64(x));
+	return b.frac | 0x0010_0000_0000_0000;
+    }
+    proc isZero(x: _float64): boolean
+    {
+	return (_uint64(x) & 0x7FFFFFFF_FFFFFFFF) == 0;
+    }
+    proc isInf(x: _float64): boolean
+    {
+	return (_uint64(x) & 0x7FFFFFFF_FFFFFFFF) == 0x7FF00000_00000000;
+    }
+    proc isPInf(x: _float64): boolean
+    {
+	return _uint64(x) == 0x7FF00000_00000000;
+    }
+    proc isNInf(x: _float64): boolean
+    {
+	return _uint64(x) == 0xFFF00000_00000000;
+    }
+    proc isNeg(x: _float64): boolean
+    {   var b: float64Bits = float64Bits(_uint64(x));
+	return b.sign != 0;
+    }

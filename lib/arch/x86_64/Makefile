@@ -1,37 +1,29 @@
-ESLC=   eslc
 ARCH=	x86_64
-GCC=	gcc
-LIB=    ../..
 
-OBJS=	assert.o \
-	sqrti2.o sqrti4.o sqrti8.o \
-	memcmp.o memlen.o mem.o
+OBJS=	assert.o memcmp.o memlen.o mem.o \
+	sqrti2.o sqrti4.o sqrti8.o
 
 all:	lib.a
 
 lib.a:	$(OBJS)
 	ar cr lib.a $(OBJS)
 
-assert.o: $(LIB)/assert.esl
-	$(ESLC) -m$(ARCH) -I$(LIB) $<
-	gcc -c assert.s -o assert.o
+assert.o: assert.S
+	gcc -c assert.S -o assert.o
 
-sqrti2.o: $(LIB)/sqrti2.esl
-	$(ESLC) -m$(ARCH) -I$(LIB) $<
-	gcc -c sqrti2.s -o sqrti2.o
+sqrti2.o: sqrti2.S
+	gcc -c sqrti2.S -o sqrti2.o
 
-sqrti4.o: $(LIB)/sqrti4.esl
-	$(ESLC) -m$(ARCH) -I$(LIB) $<
-	gcc -c sqrti4.s -o sqrti4.o
+sqrti4.o: sqrti4.S
+	gcc -c sqrti4.S -o sqrti4.o
 
-sqrti8.o: $(LIB)/sqrti8.esl
-	$(ESLC) -m$(ARCH) -I$(LIB) $<
-	gcc -c sqrti8.s -o sqrti8.o
+sqrti8.o: sqrti8.S
+	gcc -c sqrti8.S -o sqrti8.o
 
 memcmp.o: memcmp.S
 	gcc -c memcmp.S -o memcmp.o
 
-memlen.o: memcmp.S
+memlen.o: memlen.S
 	gcc -c memlen.S -o memlen.o
 
 clean:
