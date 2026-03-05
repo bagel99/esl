@@ -129,7 +129,6 @@ package format
 	return;
     }
 
-    var symblist: Symb = 0;
     var symbdesc: Symb = 0;
     var symbspec: Symb = 0;
 
@@ -147,7 +146,6 @@ package format
 	    return false;
 	}
 	symbdesc = s;
-	symblist = s@.type@.meths;
 	s = symb.FindLocal(pkg@.symblist, "FmtSpec");
 	if s == 0 then
 	{   lex.ErrorS(COMPILER, "Unable to find 'FmtSpec' in fmt package\n");
@@ -212,8 +210,8 @@ if len <= 1 then len = 256;	// FIXME TEMP
 	var name: @[]_byte;
 
 	if isprint then name = "mayflush"; else name = "nulterm";
-	if symblist == 0 && !FindFormatSymbols() then return 0;
-	s = symb.FindPrivate(symblist, name);
+	if symbdesc == 0 && !FindFormatSymbols() then return 0;
+	s = symb.FindPrivate(symbdesc@.type@.meths, name);
 	if s == 0 then
 	{   lex.ErrorS(COMPILER, "No format end routine found\n");
 	    return 0;
@@ -229,9 +227,9 @@ if len <= 1 then len = 256;	// FIXME TEMP
     proc FindFmtRoutine(name: @[]_byte): Symb
     {	var s: Symb;
 
-	if symblist == 0 && !FindFormatSymbols() then return 0;
+	if symbdesc == 0 && !FindFormatSymbols() then return 0;
 //err.str("FindFmtRoutine name=\""); err.str(name); err.str("\"\n");
-	s = symb.FindPrivate(symblist, name);
+	s = symb.FindPrivate(symbdesc@.type@.meths, name);
 	if s == 0 then
 	    lex.ErrorS(FMTNOFIND, name);
 	return s;

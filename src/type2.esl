@@ -267,7 +267,7 @@ package type
 	KMEMSZ, KBITSZ, KALIGN,
 	NONE
     };
-    proc Attributes(s: Symb, t: Type,  sattrlist:@[]TokenT): Type
+    proc Attributes(s: Symb, t: Type,  sattrlist:@[]TokenT, sep: TokenT): Type
     {   var tok, atok: TokenT;
 	var at: Type;
 
@@ -382,7 +382,7 @@ package type
 		tok = lex.Skip(askip2);
 	    }
 	    tok = Token;
-	  exit tok != COMMA;
+	  exit tok != sep && tok != COLON;
 	}
 	return t;
     }
@@ -390,45 +390,32 @@ package type
     const nattrlist:[]TokenT = { NONE };
     proc TypeAttributes(t: Type): Type
     {
-	return Attributes(0, t, nattrlist);
+	return Attributes(0, t, nattrlist, COMMA);
     }
 
     const fattrlist:[]TokenT = { KAT, NONE };
     proc FieldAttributes(s: Symb, t: Type): Type
     {
-	return Attributes(s, t, fattrlist);
+	return Attributes(s, t, fattrlist, COMMA);
     }
 
     const vattrlist:[5]TokenT = { KEXTERN, KGLOBAL, KWEAK, KSECTION, NONE };
     proc VarAttributes(s: Symb, t: Type): Type
     {
-	return Attributes(s, t, vattrlist);
+	return Attributes(s, t, vattrlist, COMMA);
     }
 
     const pattrlist:[7]TokenT = { KEXTERN, KGLOBAL, KWEAK, KSECTION, KINLINE, KNOINLINE, NONE };
     proc ProcAttributes(s: Symb)
     {   var t: Type;
 
-	t = Attributes(s, s@.type, pattrlist);
+	t = Attributes(s, s@.type, pattrlist, COMMA);
 	s@.type = t;
     }
 
-    // Parameter attributes are singular, can't use Attributes()
-    const aattrlist: [4]TokenT = { KINPUT, KOUTPUT, KIO };
-    proc ParamAttributes(s: Symb, t: Type)
-    {   var tok, atok: TokenT;
-
-	tok = Next();
-	if tok == ID then
-	{   atok = lex.Keyword(aattrlist);
-	    if atok != tok then
-	    {	if atok
-		is KINPUT then  t@.io.in = true;
-		is KOUTPUT then t@.io.out = true;
-		is KIO then     t@.io = {true, true};
-		tok = Next();
-	    }
-	}
+    proc ParamAttributes(s: Symb, t: Type): Type
+    {
+	return Attributes(s, t, nattrlist, COLON);
     }
 
     proc bitsize(x: _uint64): _uint

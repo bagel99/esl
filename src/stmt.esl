@@ -920,6 +920,32 @@ err.str("Assign to packed array\n");
 	return 0;
     }
 
+    proc CheckSelect(tree: Ast, plo: Ast, phi: Ast): boolean
+    {   var i: _uint;
+	var p, q, lo, hi: Ast;
+	i = 1;
+	while i < tree.num do
+	{   p = tree.child[i];
+	    assert p.op == IS;
+	    q = p.child[0];
+	    if q.op == CONST then
+	    {	lo = q;
+		hi = q;
+	    }
+	    elif q.op == CRANGE then
+	    {	lo = q.child[0];
+		hi = q.child[1];
+		assert lo.op == CONST && hi.op == CONST;
+	    }
+	    else
+		lex.ErrorS(COMPILER, "Bad select tree");
+	    if phi.valu >= lo.valu && plo.valu <= hi.valu then
+		return false;
+	    i += 1;
+	}
+	return true;
+    }
+
     proc If(): Ast
     {   var tree, ctree, stree, vlo, vhi: Ast;
 	var t: Type;
@@ -959,8 +985,19 @@ err.str("Assign to packed array\n");
 			{   if vhi@.op != CONST then
 				lex.Error(EXPCONST);
 			    if vlo != 0 then
-				vlo = ast.New2(CRANGE, vlo@.type, vlo, vhi);
+			    {	if vlo.valu < vhi.valu then
+				{   if !CheckSelect(tree, vlo, vhi) then
+					lex.Error(DUPSEL);
+				    vlo = ast.New2(CRANGE, vlo@.type, vlo, vhi);
+				}
+				else
+				    lex.Error(BADRANGE);
+			    }
 			}
+		    }
+		    else
+		    {   if !CheckSelect(tree, vlo, vlo) then
+			    lex.Error(DUPSEL);
 		    }
 		    ctree = ast.Child(ctree, vlo);
 		    tok = Token;
@@ -1314,6 +1351,7 @@ import format;
 	    n, rtf, nextarg = format.NextFormat(bd, fmtstr, i, exp);
 	    i += n;
 	    tree = ast.Child(tree, rtf);
+	    tok = Token;
 	}
 	return tree, fmtstr[fmtlen-2] == '\n';
     }

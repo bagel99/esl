@@ -23,6 +23,7 @@ package lex
 	BADPCKREC,  BADPCKARR,  NOSIZE,     NEEDSIZE,   BADSIZE,    BADAT,
 	RETTOOFEW,  RETTOOMANY, BADLEN,     BOUNDSERR,	RECURSIVE,  BADCONV,
 	RANGEERR,   PACKARRAY,  PACKFIXED,  PACKSIZE,   PACKUINT,
+	DUPSEL,	    BADRANGE,
 	LONGNUM,    LONGFRAC,
 	FMTNOSPEC,  FMTNOEXPR,	FMTNOPACK,  FMTNOARGS,  FMTBADARG,  FMTNOFIND,
 	PROGERROR,  // error statement
@@ -130,6 +131,8 @@ package lex
 	[PACKFIXED] =   "Array for _packXX/_unpkXX must have fixed size",
 	[PACKSIZE] =    "Array for _packXX/_unpkXX to large for target machine",
 	[PACKUINT] =    "Scalar for _packXX must be unsigned int",
+	[DUPSEL] =      "Duplicate value in select",
+	[BADRANGE] =    "Illegal range",
 	[LONGNUM] =     "Too many digits in number",
 	[LONGFRAC] =    "Too many digits in fractional part",
 	[FMTNOSPEC] =	"Format lacks spec for expression",
