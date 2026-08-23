@@ -206,6 +206,12 @@ package expr
 	    {   ast.CheckConstTruncate(node, fsize);
 		cpart = cpart | ((node@.valu&mask) << offs);
 	    }
+	    elif node@.op == FCON then
+	    {	if node@.type@.size == fsize && fsize == 32 then
+		    cpart = cpart | ((lex.CastToF32(node@.valu)&mask) << offs);
+		else
+		    lex.Error(OPTYPE);
+	    }
 	    else
 	    {   node = ast.Extend(node, tsize, false);
 		node = ast.New2(LSL, bt, node, ast.ConstW(offs));
@@ -366,6 +372,12 @@ package expr
 		if node@.op == CONST then
 		{   ast.CheckConstTruncate(node, fsize);
 		    cpart = cpart | ((node@.valu&mask) << offs);
+		}
+		elif node@.op == FCON then
+		{	if node@.type@.size == fsize && fsize == 32 then
+			cpart = cpart | ((lex.CastToF32(node@.valu)&mask) << offs);
+		    else
+			lex.Error(OPTYPE);
 		}
 		else
 		{   node = ast.Extend(node, tsize, false);
@@ -1021,6 +1033,7 @@ ast.Dump(tree);
 	    elif shft.valu == 0 then
 		return tree;
 	}
+	shft = ast.Adjust(shft, tree@.type);	// LLVM wants count same widtlh
 	if right then op = ROR; else op = ROL;
 	tree = ast.New2(op, tree@.type, tree, shft);
 	return tree;
@@ -1421,9 +1434,11 @@ ast.Dump(tree);
 				i += 1;
 			    }
 			}
-			else	// single value
-			{
-			    arg = ast.Adjust(arg, s@.type);
+			else	// normal value
+			{   if arg.op == CLIST then
+				arg.op = CVALUE;
+			    else
+				arg = ast.Adjust(arg, s@.type);
 			    tree = ast.Child(tree, arg);
 			    s = s@.next;
 			}
@@ -1520,7 +1535,7 @@ ast.Dump(tree);
 			{ exit bt == 0;
 			    s = symb.FindPrivate(bt@.meths, lex.Ident);
 			  exit s != 0;
-			    bt = bt@.base;
+			    bt = bt@.atbase;
 			}
 			if s != 0 then		// method call
 			{   tok = Next();
@@ -2016,9 +2031,9 @@ ast.Dump(tree);
 	if rhs@.op == LOAD && rhs@.type@.kind == ARRAY then	// undo LOAD
 	    rhs = rhs@.child[0];
 	if lhs@.op == CLIST || lhs@.op == SCON then
-	    lhs = ast.New1(BYREF, type.MakeRef(lhs@.type), lhs);
+	    lhs = ast.ByRef(lhs);
 	if rhs@.op == CLIST || rhs@.op == SCON then
-	    rhs = ast.New1(BYREF, type.MakeRef(rhs@.type), rhs);
+	    rhs = ast.ByRef(rhs);
 	lalign = GetAlignment(lhs);
 	ralign = GetAlignment(rhs);
 //err.str("ArrayCompare lalign="); err.uint(lalign);

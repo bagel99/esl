@@ -9,7 +9,7 @@ package ast
 	PACKAGE,	// package boundary
 	DCLVAR,		// variable declaration
 	DCLCON,		// constant declaration (for aggregates)
-	CONST,	FCON,	SCON,	CLIST,	CRANGE,
+	CONST,	FCON,	SCON,	CLIST,	CVALUE,	CRANGE,
 	FIELD,	VAR,
 	OFFSET,	INDEX,	SLICE,	BYREF,
 	CAST,	CALL,	CALLI,	ASM,
@@ -47,7 +47,7 @@ package ast
 	[FILE]=   1,	[PACKAGE]=1,
 	[DCLVAR]= 1,	[DCLCON]= 1,
 	[CONST]=  0,	[FCON]=   0,	[SCON]=   0,
-	[CLIST]=  8,	[CRANGE]= 2,
+	[CLIST]=  8,	[CVALUE]= 8,	[CRANGE]= 2,
 	[FIELD]=  2,    [VAR]=    0,
 	[OFFSET]= 1,	[INDEX]=  2,	[SLICE]=  3,	[BYREF]=  1,
 	[CAST]=   1,	[CALL]=   4,	[CALLI]=  5,	[ASM]=    5,
@@ -107,7 +107,7 @@ package ast
 	[DCLVAR]="DCLVAR",	[DCLCON]="DCLCON",
 	[CONST]= "CONST",	[FCON]=  "FCONST",
 	[SCON]=  "STRCON",
-	[CLIST]= "CLIST",	[CRANGE]="CRANGE",
+	[CLIST]= "CLIST",	[CVALUE]="CVALUE",	[CRANGE]="CRANGE",
 	[FIELD]= "FIELD",	[VAR]=   "VAR",
 	[OFFSET]="OFFSET",	[INDEX]= "INDEX",
 	[SLICE]= "SLICE",	[BYREF]= "BYREF",
@@ -623,6 +623,14 @@ package ast
 		else
 		    ok = false;
 	    }
+	    is REFPROC then			// REFPROC -> REF
+	    {   if to == type.addrtype then
+		{   tree = New1(CAST, to, tree);
+		    tree@.width = Target.ptr.size;
+		}
+		else
+		    ok = false;
+	    }
 	    else
 		ok = false;
 	}
@@ -1009,6 +1017,11 @@ err.str("fm="); Dump(tree);
 	return true;
     }
 
+    proc ByRef(tree: Ast): Ast
+    {
+	return New1(BYREF, type.MakeRef(tree@.type), tree);
+    }
+
     proc CoerceToRef(tree: Ast): Ast
     {
 	if tree@.op == LOAD then
@@ -1018,7 +1031,7 @@ err.str("fm="); Dump(tree);
 	// FIXME: this is very likely wrong
 	if tree@.op
 	is SCON, CLIST then
-	    tree = New1(BYREF, type.MakeRef(tree@.type), tree);
+	    tree = ByRef(tree);
 	is VAR then
 	    {}
 	else

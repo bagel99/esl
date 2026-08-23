@@ -212,12 +212,7 @@ package llvm
 
     proc PRefType(t: Type)
     {
-	if feature.genptr then
-	    print bdo, "ptr";
-	else
-	{   PType(t);
-	    print bdo, "*";
-	}
+	print bdo, "ptr";
     }
 
     proc PType(t: Type)
@@ -359,12 +354,7 @@ package llvm
 
     proc NodeRefType(node: Ast)
     {
-	if feature.genptr then
-	    print bdo, "ptr";
-	else
-	{   NodeType(node);
-	    print bdo, "*";
-	}
+	print bdo, "ptr";
     }
 
     proc PMethod(s: Symb)
@@ -885,6 +875,28 @@ package llvm
 	print bdo, "\n";
     }
 
+    proc CValue(node: Ast)
+    {   var i: ast.NSubNodes;
+	var vnode: Ast;
+	var n: seqnoT;
+
+	i = 0;
+	while i < node@.num do
+	{   vnode = node@.child[i];
+	    n = Tseqno;  Tseqno += 1;
+	    print bdo, "\t%[d] = insertvalue ", n-1;
+	    PType(node@.type);
+	    if i == 0 then
+		print bdo, " poison";
+	    else
+		print bdo, " %[d]", n-2;
+	    Print(", %T %N", vnode);
+	    print bdo, ", [d]\n", i;
+	    i += 1;
+	}
+	node@.seqno = n;
+    }
+
     proc PLabel(n: seqnoT)
     {
 	print bdo, "L.[d]", n;
@@ -1261,62 +1273,39 @@ package llvm
     proc MinMax(node: Ast)
     {   var rhs, lhs: Ast;
 	var op: ast.Op;
-	var useintrinsic: boolean = false;
 
-	if node.op >= UMIN && node.op <= SMAX && feature.version >= 12 then
-	    useintrinsic = true;
-	elif node.op >= FMIN && node.op <= FMAX && feature.version >= 9 then
-	    useintrinsic = true;
 	lhs = node@.child[0];
 	rhs = node@.child[1];
-	if useintrinsic then
-	{   GenSub(lhs);
-	    GenSub(rhs);
-	    node@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = call %T @llvm.", node);
-	    if node@.op
-	    is UMIN then
-	    {	Print("umin.%T", node);
-		UseIntrinsic(UMIN, node@.type@.width, node@.type);
-	    }
-	    is UMAX then
-	    {	Print("umax.%T", node);
-		UseIntrinsic(UMAX, node@.type@.width, node@.type);
-	    }
-	    is SMIN then
-	    {	Print("smin.%T", node);
-		UseIntrinsic(SMIN, node@.type@.width, node@.type);
-	    }
-	    is SMAX then
-	    {	Print("smax.%T", node);
-		UseIntrinsic(SMAX, node@.type@.width, node@.type);
-	    }
-	    is FMIN then
-	    {	Print("minnum.%G", node);
-		UseIntrinsic(FMIN, node@.type@.width, node@.type);
-	    }
-	    is FMAX then
-	    {	Print("maxnum.%G", node);
-		UseIntrinsic(FMAX, node@.type@.width, node@.type);
-	    }
-	    Print("(%T %0N, %T %1N)\n", node);
-
+	GenSub(lhs);
+	GenSub(rhs);
+	node@.seqno = Tseqno;  Tseqno += 1;
+	Print("\t%N = call %T @llvm.", node);
+	if node@.op
+	is UMIN then
+	{	Print("umin.%T", node);
+	    UseIntrinsic(UMIN, node@.type@.width, node@.type);
 	}
-	else
-	{   // Expand into select
-	    if node@.op
-	    is UMIN then op = ULT;
-	    is UMAX then op = UGT;
-	    is SMIN then op = SLT;
-	    is SMAX then op = SGT;
-	    is FMIN then op = FLT;
-	    is FMAX then op = FGT;
-	    node@.child[0] = ast.New2(op, type.booltype, lhs, rhs);
-	    node@.child[1] = lhs;
-	    node = ast.Child(node, rhs);    // must return same node
-	    node@.op = IFEXPR;
-	    GenSub(node);
+	is UMAX then
+	{	Print("umax.%T", node);
+	    UseIntrinsic(UMAX, node@.type@.width, node@.type);
 	}
+	is SMIN then
+	{	Print("smin.%T", node);
+	    UseIntrinsic(SMIN, node@.type@.width, node@.type);
+	}
+	is SMAX then
+	{	Print("smax.%T", node);
+	    UseIntrinsic(SMAX, node@.type@.width, node@.type);
+	}
+	is FMIN then
+	{	Print("minnum.%G", node);
+	    UseIntrinsic(FMIN, node@.type@.width, node@.type);
+	}
+	is FMAX then
+	{	Print("maxnum.%G", node);
+	    UseIntrinsic(FMAX, node@.type@.width, node@.type);
+	}
+	Print("(%T %0N, %T %1N)\n", node);
     }
 
     proc Rotate(node: Ast)
@@ -1873,20 +1862,18 @@ package llvm
 	// LLVM doesn't handle bitfields (packed records or arrays)
 	// so we expand bitfield extract
 	offs = load@.child[0];
-	{   GenSub(offs);
-	    load@.seqno = Tseqno;  Tseqno += 1;
-	    Print("\t%N = load ", load);
-	    if offs@.type@.base@.io.in then
-		print bdo, "volatile ";
-	    PType(load@.type);
-	    print bdo, ", ";
-	    Print("%U %0N", load);
-	    if offs@.type@.base@.unalgn then
-	    {   print bdo, ", align [d]",
-		    offs@.type@.base@.align/target.ByteSize;
-	    }
-	    PEndLine(load);
+	GenSub(offs);
+	load@.seqno = Tseqno;  Tseqno += 1;
+	Print("\t%N = load ", load);
+	if offs@.type@.base@.io.in then
+	    print bdo, "volatile ";
+	PType(load@.type);
+	Print(", %U %0N", load);
+	if offs@.type@.base@.unalgn then
+	{   print bdo, ", align [d]",
+		offs@.type@.base@.align/target.ByteSize;
 	}
+	PEndLine(load);
     }
 
     proc Store(store: Ast)
@@ -1990,6 +1977,7 @@ bdo.flush();
 	is DCLVAR then DclVar(node);
 	is DCLCON then DclCon(node);
 	is VAR, CONST, FCON, SCON, CLIST then {}
+	is CVALUE then CValue(node);
 	is AEQ, ANE then term = ArrayCompare(node);
 	is SET then Set(node);
 	is COPY then Copy(node, false);
@@ -2036,8 +2024,9 @@ bdo.flush();
 	is CAST then
 	{   GenSub(node@.child[0]);
 	    node@.seqno = Tseqno;  Tseqno += 1;
-	    if node@.type@.kind == REF then
-	    {   if node@.child[0]@.type@.kind == REF then
+	    if node@.type@.kind == REF then	// FIXME - REFPROC also?
+	    {   if node@.child[0]@.type@.kind == REF ||
+		   node@.child[0]@.type@.kind == REFPROC then
 		    Print("\t%N = bitcast %0K %0N to %K\n", node);
 		else
 		    Print("\t%N = inttoptr %0T %0N to %T\n", node);

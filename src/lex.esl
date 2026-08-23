@@ -457,6 +457,12 @@ package lex
 	f@.nchar = BufRange(k);
     }
 
+    proc CastToF32(x: _uint64): _uint64
+    {
+	return ((x & 0x03FF_FFFF_FFFF_FFFF) >> 29) |
+	       ((x & 0xC000_0000_0000_0000) >> 32);
+    }
+
     proc MakeFloat(hasexp: boolean): _float64
     {   var n, t: _uint64;
 	var s: _int16;

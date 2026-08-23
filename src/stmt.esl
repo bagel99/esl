@@ -238,11 +238,11 @@ package stmt
 		t = type.Def(tok, bt);
 		if t != 0 then
 		{   if t@.name != 0 then    // must clone named type (methods)
-		    {   var at: Type;
-			at = t;
-			t = type.Clone(at);
-			t@.atbase = at;
+		    {   bt = t;
+			t = type.Clone(bt);
+			t@.meths = 0;
 		    }
+		    t@.atbase = bt;
 		    t@.name = s;
 		}
 		tok = Token;
@@ -583,7 +583,7 @@ err.str("Const SCON dup\n");
 	else
 	{   if tree@.op
 	    is CLIST then
-	    {   tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
+	    {   tree = ast.ByRef(tree);
 		tree = ast.New1(LOAD, tree@.type@.base, tree);
 		tree = ast.New2(STORE, 0, lhs, tree);
 	    }
@@ -606,7 +606,7 @@ err.str("Const SCON dup\n");
 
 	if tree@.op
 	is VAR then
-	    tree = ast.New1(BYREF, tree@.type, tree);
+	    tree = ast.ByRef(tree);
 	is CLIST then
 	    {}
 	at = tree@.type@.base;  // type of array
@@ -651,7 +651,7 @@ err.str("Assign to packed array\n");
 	    is LOAD then
 		rhs = expr.UnLoad(rhs);
 	    is SCON, CLIST then
-		rhs = ast.New1(BYREF, type.MakeRef(rhs@.type), rhs);
+		rhs = ast.ByRef(rhs);
 	    ralign = expr.GetAlignment(rhs);
 	    if ralign < lalign then
 		lalign = ralign;
@@ -869,14 +869,20 @@ err.str("Assign to packed array\n");
 		if rval != 0 then
 		{   if s != 0 then
 		    {   if t != 0 then
-			{   rval = ast.Adjust(rval, t);
-			    tree = ast.Child(tree, rval);
-			    if t@.kind == REF then
-			    {   tree@.type = t@.base;
-				tree@.width = Target.ptr.size;
+			{   if rval.op == CLIST then
+			    {	rval.op = CVALUE;
+				tree = ast.Child(tree, rval);
 			    }
 			    else
-				tree@.width = t@.width;
+			    {	rval = ast.Adjust(rval, t);
+				tree = ast.Child(tree, rval);
+				if t@.kind == REF then
+				{   tree@.type = t@.base;
+				    tree@.width = Target.ptr.size;
+				}
+				else
+				    tree@.width = t@.width;
+			    }
 			}
 		    }
 		    else	    // no RVs left
@@ -909,7 +915,7 @@ err.str("Assign to packed array\n");
 	    tree = expr.NewString(symb.curfile@.ident,
 				  zstr.len(symb.curfile@.ident, lex.PathMax),
 				  true);
-	    tree = ast.New1(BYREF, type.MakeRef(tree@.type), tree);
+	    tree = ast.ByRef(tree);
 	    tree = ast.New1(CAST, type.addrtype, tree);
 	    tree = ast.New1(ASSERT, 0, tree);
 	    tree@.valu = 0;     // FIXME - make an enum

@@ -20,6 +20,9 @@ package sys
     type gid_t: _int;
     type fildes: _int;
     type mode_t: _int;
+    type off_t: _int;       // WARNING - word sized
+    type off64_t: _int64;
+    type ino_t: _uint;      // WARNING - word sized
     const fdin:  fildes = 0;
     const fdout: fildes = 1;
     const fderr: fildes = 2;
@@ -43,12 +46,19 @@ package sys
       SETOWN, GETOWN,
       GETLK64=12, SETLK64, SETLKW64,
       DUPFD_CLOEXEC=1030
-    );
+    ): size(_int?size);
     proc fcntl(fd:fildes, mode:fcmodes, flags:fcflags): _int: external;
     proc open(name: @_memory, flags:fcflags, mode: mode_t):_int: external;
     proc close(fd:fildes):: external;
     proc read(fd:fildes, buf:@_memory, len:_uint):_int: external;
-    proc write(fd:fildes, buf:@_memory, len:_uint):_int : external;
+    proc write(fd:fildes, buf:@_memory, len:_uint):_int: external;
+    proc fstat(fd:fildes, buf:@_memory):_int: external;
+    // WARNING - pipe doesn't work if fildes != _int32
+    proc pipe(pipefd: @[2]_int32): _int: external;
+    proc dup(fd: fildes): fildes: external;
+    proc execvp(file: @[]_byte, argv: @[]@[]_byte): _int: external;
+    proc fork(): pid_t: external;
+    proc wait(status: @_int32): pid_t: external;
 
     type iovec:
     {   base:  _address;
@@ -63,9 +73,6 @@ package sys
         dir:     (IO, IOW, IOR, IOWR);
     }: packed, lsb;
     proc ioctl(fd:fildes, code:ioctl_code, data:@_memory):_int: external;
-    type off_t: _int;       // WARNING - word sized
-    type off64_t: _int64;
-    type ino_t: _uint;      // WARNING - word sized
     type whence_t: (SET, CUR, END): bits(_uint?size);
     proc lseek(fd:fildes, offs:off_t, whence:whence_t): _int:  external;
     proc lseek64(fd:fildes, offs:off64_t, whence:whence_t): _int:  external;
@@ -109,10 +116,10 @@ package sys
     proc pause():: external;
 if _defined(fset_array) then {
     const fdsetsize = 2;
-    type fdset: [fdsetsize]_uint32;	// just up to 64 fildes for now
-    proc select(nfds:_uint, rdfds:@fdset, wrfds:@fdset, exfds:@fdset,
+    type fdset: @[fdsetsize]_uint32;	// just up to 64 fildes for now
+    proc select(nfds:_uint, rdfds:fdset, wrfds:fdset, exfds:fdset,
 	        timeout:@timeval):_int: external;
-    proc (fds: @fdset) Zero ()::inline
+    proc (fds: fdset) Zero ()::inline
     {   var i: _uint;
 	i = 0;
 	while i < fdsetsize do
@@ -120,15 +127,15 @@ if _defined(fset_array) then {
 	    i += 1;
 	}
     }
-    proc (fds: @fdset) Set (fd: fildes)::inline
+    proc (fds: fdset) Set (fd: fildes)::inline
     {
 	fds[fd/_uint32?bits] = fds[fd/_uint32?bits] | (1 << fd%_uint32?bits);
     }
-    proc (fds: @fdset) Set (fd: fildes)::inline
+    proc (fds: fdset) Set (fd: fildes)::inline
     {
 	fds[fd/_uint32?bits] = fds[fd/_uint32?bits] & ~(1 << fd%_uint32?bits);
     }
-    proc (fds: @fdset) IsSet (fd: fildes):boolean:inline
+    proc (fds: fdset) IsSet (fd: fildes):boolean:inline
     {
 	return (fds[fd/_uint32?bits]&(1 << fd%_uint32?bits)) != 0;
     }
@@ -138,22 +145,19 @@ if _defined(fset_array) then {
 	        timeout:@timeval):_int: external;
     proc (fds: @fdset) Zero ()::inline
     {
-	fds = 0;
+	fds@ = 0;
     }
     proc (fds: @fdset) Set (fd: fildes)::inline
-    {   var ufd: _uint;
-	ufd = _uint(fd);
-	fds@ = fds@ | (1 << ufd);
+    {
+	fds@ |= (1 << _uint(fd));
     }
     proc (fds: @fdset) Clr (fd: fildes)::inline
-    {   var ufd: _uint;
-	ufd = _uint(fd);
-	fds@ = fds@ & ~(1 << ufd);
+    {
+	fds@ &= ~(1 << _uint(fd));
     }
-    proc (fds: fdset) IsSet (fd: fildes):boolean:inline
-    {   var ufd: _uint;
-	ufd = _uint(fd);
-	return (fds & (1 << ufd)) != 0;
+    proc (fds: @fdset) IsSet (fd: fildes):boolean:inline
+    {
+	return (fds@ >> _uint(fd)) & 1 != 0;
     }
 }
     proc memset(ptr:@_memory, val:_uint, len:_uint):: external;

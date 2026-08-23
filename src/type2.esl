@@ -1217,6 +1217,10 @@ err.nl();
 	return t;
     }
 
+    const typename: [TypeT]@[]Char =
+    { "undefined", "enum", "uint", "sint", "float", "ref", "array", "record",
+      "refproc"
+    };
     const bitorderstr:[BitOrderT]@[]Char = {"native", "msb", "lsb"};
     const memorderstr:[MemOrderT]@[]Char = {"native", "be", "le"};
     const accessstr:[AccessT]@[]Char = {"RW", "RO", "WO"};
@@ -1310,7 +1314,7 @@ err.nl();
 //		    if t@.base != 0 && t@.base@.name != 0 && !full then
 //			err.str(t@.base@.name@.ident);
 //		    else
-			Dump2(t@.base, indent, full);
+			Dump2(t@.base, indent, false);	// could recurse
 		}
 		is REFPROC then
 		{   err.str("@_");
@@ -1347,6 +1351,18 @@ err.nl();
 		}
 		if t@.wrap != NONE then
 		{   err.str("wp=");  err.str(wrapstr[t@.wrap]); err.chr(' ');
+		}
+		if t@.base != 0 then
+		{   err.str("\n\tbase: ");
+		    Dump2(t@.base, 0, false);
+		}
+		if t@.atbase != 0 then
+		{   err.str("\n\tatbase: ");
+		    Dump2(t@.atbase, 0, false);
+		}
+		if t@.reftype != 0 then
+		{   err.str("\n\treftype: ");
+		    Dump2(t@.reftype, 0, false);
 		}
 		t@.dumped = true;
 		if t@.meths != 0 then

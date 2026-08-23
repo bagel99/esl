@@ -23,7 +23,6 @@ var feature:
 	retv:  boolean;		// warn if old syntax for multiple return
 	zerol: boolean;		// zero local scalar variables
 	noinl: boolean;		// disable all inlining
-	genptr:boolean;		// generate generic pointer "ptr"
 	debug: _uint8;		// debug version
 	version: _uint8;
     };
@@ -160,8 +159,8 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	    j += 1;
 	}
     }
-    else feature.version = 9;	// assume some default version
-    if feature.version < 4 then
+    else feature.version = 16;	// assume some default version
+    if feature.version < 16 then
     {   err.str("Unsupported LLVM backend version: ");
         err.uint8(feature.version);
 	err.nl();
@@ -174,8 +173,6 @@ proc main(argc:_uint, argv:@[]@[]_byte):_int //[[global]]
 	err.nl();
 	feature.gflag = false;
     }
-    if feature.version > 15 then
-	feature.genptr = true;
     if !target.set(targetarch) then
     {   err.str("Unsupported target: ");
 	if targetarch != 0 then

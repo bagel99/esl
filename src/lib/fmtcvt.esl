@@ -417,7 +417,14 @@ package fmt
 	    if sign != 0 then xw += 1;
 //fde.str("nw="); fde.uint(nw); fde.str(" sw="); fde.uint(sw);
 //fde.str(" pw="); fde.uint(pw); fde.str(" xw="); fde.uint(xw); fde.nl();
-	    if sw == 0 then sw = nw;
+	    if sw == 0 then	// no limit on width
+		sw = nw;
+	    if nw > sw then
+	    {	// integer part too big
+		buf = bd.need(sw);
+		_set(buf[0:sw], '?');
+		return;
+	    }
 	    tw = nw + pw + xw;
 	    buf, tw, zw = bd.padding(tw, RIGHT, spec);
 //fde.str("tw="); fde.uint(tw); fde.str(" zw="); fde.uint(zw); fde.nl();
@@ -429,26 +436,22 @@ package fmt
 	    {   _set(buf[i:zw], '0');
 		i += zw;
 	    }
-	    if nw > sw then
-		_set(buf[i:sw], '?');
-	    else
-	    {	deccvt(buf[i:], nw, n);
-		i += nw;
-		buf[i] = '.';
-		i += 1;
-		if pw > 0 then
-		{   x -= _float64*(n);	// leave only the fraction
+	    deccvt(buf[i:], nw, n);
+	    i += nw;
+	    buf[i] = '.';
+	    i += 1;
+	    if pw > 0 then
+	    {   x -= _float64*(n);	// leave only the fraction
 //fde.str("pw="); fde.uint(pw); fde.str(" P10="); fde.uint64(PowersOf10[pw]);
 //fde.str(" nr="); fde.uint64(n);
-		    n = _uint64*(x * _float64*(PowersOf10[pw]));
-		    nw = decwid(n);
+		n = _uint64*(x * _float64*(PowersOf10[pw]));
+		nw = decwid(n);
 //fde.str(" nf="); fde.uint64(n); fde.nl();
 //fde.str("nw="); fde.uint(nw); fde.str(" pw="); fde.uint(pw); fde.nl();
-		    deccvt(buf[i:], nw, n);
-		    i += nw;
-		    if pw > nw then
-			_set(buf[i:pw-nw], '0');
-		}
+		deccvt(buf[i:], nw, n);
+		i += nw;
+		if pw > nw then
+		    _set(buf[i:pw-nw], '0');
 	    }
 	}
     }

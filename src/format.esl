@@ -217,7 +217,7 @@ if len <= 1 then len = 256;	// FIXME TEMP
 	    return 0;
 	}
 	desc = expr.Load(bd);
-	desc = ast.New1(BYREF, type.MakeRef(desc@.type), desc);
+	desc = ast.ByRef(desc);
 	tree = ast.New1(CALL, 0, desc);
 	tree@.symb = s;
 //err.str("end=\n"); ast.Dump(tree);
@@ -239,7 +239,7 @@ if len <= 1 then len = 256;	// FIXME TEMP
     {	var desc, tree: Ast;
 
 	desc = expr.Load(bd);
-	desc = ast.New1(BYREF, type.MakeRef(desc@.type), desc);
+	desc = ast.ByRef(desc);
 	tree = ast.New3(CALL, 0, desc, exp, ast.ConstW(_uint64(spec)));
 	if len != 0 then
 	    tree = ast.Child(tree, len);
@@ -255,7 +255,7 @@ if len <= 1 then len = 256;	// FIXME TEMP
 	if fmtproc == 0 then
 	    return 0;
 	str = expr.NewString(s, w, false);
-	str = ast.New1(BYREF, type.MakeRef(str@.type), str);
+	str = ast.ByRef(str);
 	tree = GenCall(bd, str, 0, w, fmtproc);
 	return tree;
     }
